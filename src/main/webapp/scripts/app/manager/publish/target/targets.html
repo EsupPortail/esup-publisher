@@ -1,0 +1,35 @@
+<div>
+    <h3 translate="manager.publish.targets.title">Targets</h3>
+
+    <div class="panel panel-default">
+        <div class="panel-header">
+            <h4 translate="manager.publish.targets.selected">Selected targets</h4>
+        </div>
+        <div class="panel-body">
+
+            <subject-search-button search-id="targetSubject" subject="search.target" context-key="$parent.publisher.contextKey"
+                                   text="{{ 'entity.action.add' | translate : 'Add' }}"></subject-search-button>
+
+            <ul class="list-group list-unstyled">
+                <li ng-repeat="subject in targets" class="list-group-item">
+                    <subject-infos subject="subject" ng-click="viewSubject(subject)" >
+                        <a href ng-click="remove(subject)" uib-tooltip="{{ 'manager.publish.targets.remove' | translate}}"><i class="glyphicon glyphicon-remove-circle text-danger" ></i></a>&nbsp;
+                    </subject-infos>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+
+    <div class="text-center">
+        <div class="btn-group" role="group">
+            <button type="button" ui-sref="publish.classification" class="btn btn-info">
+                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+            </button>
+            <button type="button" ui-sref="home" class="btn btn-info">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel"> Cancel</span>
+            </button>
+        </div>
+    </div>
+</div>

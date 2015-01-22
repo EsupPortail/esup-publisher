@@ -1,0 +1,37 @@
+{
+    "publisherApp": {
+        "resource" : {
+            "home": {
+                "title": "Resources",
+                "createLabel": "Create a new Resource",
+                "createOrEditLabel": "Create or edit a Resource"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Resource {{ id }}?"
+            },
+            "detail": {
+                "title": "Resource"
+            },
+            "title": "Title",
+            "enclosure": "Enclosure",
+            "endDate": "EndDate",
+            "startDate": "StartDate",
+            "validatedBy": "ValidatedBy",
+            "validatedDate": "ValidatedDate",
+            "status": "Status",
+            "summary": "Summary",
+            "ressourceUrl": "RessourceUrl",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "organization": "organization",
+            "redactor": "redactor",
+            "action": {
+                "publish": "Save and publish",
+                "save": "Save",
+                "goto.ressourceUrl": "Go on the resource"
+            }
+        }
+    }
+}

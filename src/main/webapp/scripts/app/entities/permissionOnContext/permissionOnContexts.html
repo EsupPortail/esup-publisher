@@ -1,0 +1,189 @@
+<div>
+
+    <h2 translate="publisherApp.permissionOnContext.home.title">PermissionOnContext</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#savePermissionOnContextModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.permissionOnContext.home.createLabel">Create a new PermissionOnContext</span>
+    </button>
+    <div class="modal fade" id="savePermissionOnContextModal" tabindex="-1" role="dialog" aria-labelledby="myPermissionOnContextLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myPermissionOnContextLabel" translate="publisherApp.permissionOnContext.home.createOrEditLabel">Create or edit a PermissionOnContext</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="permissionOnContext.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.ctxId">CtxId</label>
+                            <input type="number" class="form-control" name="ctxId"
+                                   ng-model="permissionOnContext.ctxId" required>
+
+                            <div ng-show="editForm.ctxId.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.ctxId.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.ctxId.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.ctxType">CtxType</label>
+                            <input type="text" class="form-control" name="ctxType"
+                                   ng-model="permissionOnContext.ctxType" required>
+
+                            <div ng-show="editForm.ctxType.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.ctxType.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.role">Role</label>
+                            <input type="text" class="form-control" name="role"
+                                   ng-model="permissionOnContext.role" required>
+
+                            <div ng-show="editForm.role.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.role.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.createdBy">CreatedBy</label>
+                            <input type="text" class="form-control" name="createdBy"
+                                   ng-model="permissionOnContext.createdBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.createdDate">CreatedDate</label>
+                            <input type="datetime-local" class="form-control" name="createdDate"
+                                   ng-model="permissionOnContext.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.lastModifiedBy">LastModifiedBy</label>
+                            <input type="text" class="form-control" name="lastModifiedBy"
+                                   ng-model="permissionOnContext.lastModifiedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.permissionOnContext.lastModifiedDate">LastModifiedDate</label>
+                            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                                   ng-model="permissionOnContext.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePermissionOnContextConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(permissionOnContext.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.permissionOnContext.delete.question" translate-values="{id: '{{permissionOnContext.id}}'}">Are you sure you want to delete this PermissionOnContext?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.permissionOnContext.ctxId">CtxId</th>
+                    <th translate="publisherApp.permissionOnContext.ctxType">CtxType</th>
+                    <th translate="publisherApp.permissionOnContext.role">Role</th>
+                    <th translate="publisherApp.permissionOnContext.createdBy">CreatedBy</th>
+                    <th translate="publisherApp.permissionOnContext.createdDate">CreatedDate</th>
+                    <th translate="publisherApp.permissionOnContext.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="publisherApp.permissionOnContext.lastModifiedDate">LastModifiedDate</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="permissionOnContext in permissionOnContexts">
+                    <td><a ui-sref="permissionOnContextDetail({id:permissionOnContext.id})">{{permissionOnContext.id}}</a></td>
+                    <td>{{permissionOnContext.ctxId}}</td>
+                    <td>{{permissionOnContext.ctxType}}</td>
+                    <td>{{permissionOnContext.role}}</td>
+                    <td>{{permissionOnContext.createdBy}}</td>
+                    <td>{{permissionOnContext.createdDate}}</td>
+                    <td>{{permissionOnContext.lastModifiedBy}}</td>
+                    <td>{{permissionOnContext.lastModifiedDate}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="permissionOnContextDetail({id:permissionOnContext.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(permissionOnContext.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(permissionOnContext.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

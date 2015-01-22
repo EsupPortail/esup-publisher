@@ -1,0 +1,33 @@
+{
+    "publisherApp": {
+        "externalFeed" : {
+            "home": {
+                "title": "ExternalFeeds",
+                "createLabel": "Create a new ExternalFeed",
+                "createOrEditLabel": "Create or edit a ExternalFeed"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete ExternalFeed {{ id }}?"
+            },
+            "detail": {
+                "title": "ExternalFeed"
+            },
+            "rssAllowed": "RssAllowed",
+            "name": "Name",
+            "iconUrl": "IconUrl",
+            "lang": "Lang",
+            "ttl": "Ttl",
+            "displayOrder": "DisplayOrder",
+            "accessView": "AccessView",
+            "description": "Description",
+            "defaultDisplayOrder": "DefaultDisplayOrder",
+            "rssUrl": "RssUrl",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "publisher": "publisher",
+            "parent": "parent"
+        }
+    }
+}

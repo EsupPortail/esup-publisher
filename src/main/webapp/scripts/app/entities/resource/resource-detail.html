@@ -1,0 +1,142 @@
+
+<div>
+    <h2><span translate="publisherApp.resource.detail.title">Resource</span> {{resource.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.title">Title</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.title}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.enclosure">Enclosure</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.enclosure}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.endDate">EndDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.endDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.startDate">StartDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.startDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.validatedBy">ValidatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.validatedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.validatedDate">ValidatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.validatedDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.status">Status</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.status}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.summary">Summary</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.summary}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.ressourceUrl">RessourceUrl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.ressourceUrl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.createdBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.createdDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.lastModifiedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.lastModifiedDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.organization">organization</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.organization.name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.resource.redactor">redactor</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{resource.redactor.displayName}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="resource"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

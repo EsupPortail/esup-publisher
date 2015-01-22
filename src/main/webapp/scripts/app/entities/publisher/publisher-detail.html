@@ -1,0 +1,95 @@
+
+<div>
+    <h2><span translate="publisherApp.publisher.detail.title">Publisher</span> {{publisher.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.context.key">Context</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control"
+                               value="{{publisher.context.organization.name}} - {{publisher.context.reader.displayName}} - {{publisher.context.redactor.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.permissionType">PermissionType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.permissionType}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.defaultDisplayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.used">Used</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.used}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.displayOrder">DisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.displayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.createdBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.createdDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.lastModifiedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{publisher.lastModifiedDate}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="publisher"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

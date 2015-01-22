@@ -1,0 +1,185 @@
+<div>
+
+    <h2 translate="publisherApp.subscriber.home.title">Subscriber</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveSubscriberModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.subscriber.home.createLabel">Create a new Subscriber</span>
+    </button>
+    <div class="modal fade" id="saveSubscriberModal" tabindex="-1" role="dialog" aria-labelledby="mySubscriberLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="mySubscriberLabel" translate="publisherApp.subscriber.home.createOrEditLabel">Create or edit a Subscriber</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="subscriber.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.subscriber.ctxId">CtxId</label>
+                            <input type="number" class="form-control" name="ctxId"
+                                   ng-model="subscriber.ctxId" required>
+
+                            <div ng-show="editForm.ctxId.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.ctxId.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.ctxId.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.subscriber.ctxType">CtxType</label>
+                            <input type="text" class="form-control" name="ctxType"
+                                   ng-model="subscriber.ctxType" required>
+
+                            <div ng-show="editForm.ctxType.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.ctxType.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.subscriber.keyId">KeyId</label>
+                            <input type="text" class="form-control" name="keyId"
+                                   ng-model="subscriber.keyId" required>
+
+                            <div ng-show="editForm.keyId.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.keyId.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.subscriber.keyType">KeyType</label>
+                            <input type="text" class="form-control" name="keyType"
+                                   ng-model="subscriber.keyType" required>
+
+                            <div ng-show="editForm.keyType.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.keyType.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.subscriber.subscribeType">SubscribeType</label>
+                            <input type="text" class="form-control" name="subscribeType"
+                                   ng-model="subscriber.subscribeType" required>
+
+                            <div ng-show="editForm.subscribeType.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.subscribeType.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteSubscriberConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(subscriber.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.subscriber.delete.question" translate-values="{id: '{{subscriber.id}}'}">Are you sure you want to delete this Subscriber?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.subscriber.ctxId">CtxId</th>
+                    <th translate="publisherApp.subscriber.ctxType">CtxType</th>
+                    <th translate="publisherApp.subscriber.keyId">KeyId</th>
+                    <th translate="publisherApp.subscriber.keyType">KeyType</th>
+                    <th translate="publisherApp.subscriber.subscribeType">SubscribeType</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="subscriber in subscribers">
+                    <td><a ui-sref="subscriberDetail({id:subscriber.id})">{{subscriber.id}}</a></td>
+                    <td>{{subscriber.ctxId}}</td>
+                    <td>{{subscriber.ctxType}}</td>
+                    <td>{{subscriber.keyId}}</td>
+                    <td>{{subscriber.keyType}}</td>
+                    <td>{{subscriber.subscribeType}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="subscriberDetail({id:subscriber.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(subscriber.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(subscriber.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

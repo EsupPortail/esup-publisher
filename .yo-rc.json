@@ -1,0 +1,19 @@
+{
+  "generator-jhipster": {
+    "baseName": "publisher",
+    "packageName": "org.esupportail.publisher",
+    "packageFolder": "org/esupportail/publisher",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "useCompass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "javaVersion": "7",
+    "rememberMeKey": "8ba3974dc782bb561d5007e970ef267995f4a98b"
+  }
+}

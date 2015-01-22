@@ -1,0 +1,102 @@
+{
+    "manager" : {
+        "contents": {
+            "title": "Publications",
+            "details": {
+                "title": "Publication details",
+                "item" : "Publication",
+                "classifications" : "Classifications",
+                "targets" : "Targets",
+                "publishers" : "Publishing contexts",
+                "publisher" : {
+                    "reader" : "Channel reader :",
+                    "redactor" : "Kind of content :"
+                }
+            },
+            "owned": {
+                "title": "My Publications",
+                "order": "Organized by status :"
+            },
+            "pending": {
+                "title": "Pending Publications"
+            }
+        },
+        "publish": {
+            "title": "Publish",
+            "publisher": {
+                "step": "Context",
+                "title": "Publishing",
+                "reader": "Where publishing :",
+                "redactor": "Way of writing :",
+                "organization": "For Organization :",
+                "selected": "publication in channel {{channel}} in wrinting mode {{writer}} for organization {{organization}}",
+                "emptyList": "You don't have rights defined to publish a content or no one is defined !"
+            },
+            "content": {
+                "step": "Content",
+                "title": "Content",
+                "type": "Kind of Content"
+            },
+            "classification": {
+                "step": "Classification",
+                "title": "Classification",
+                "choice": "Classification to associate of your publication :",
+                "emptyList": "You don't have rights defined on classifications of the selected publishing context or no one is defined !"
+            },
+            "targets": {
+                "step": "Targets",
+                "title": "Peoples Targeted",
+                "emptyList": "You don't have rights to select targeted peoples or no one is defined !",
+                "remove": "Remove the target",
+                "selected": "Targets defined :",
+                "search": "Add a target :",
+                "type": {
+                    "label": "Search on",
+                    "user": "Person",
+                    "group": "Group",
+                    "userfromgroup": "Person from group"
+                },
+                "user.search": {
+                    "label": "Search a person",
+                    "desc": "Search style : NAME Firstname, without accent, enter the maximum of characters, 3 characters minimum",
+                    "placeholder": "Search..."
+                },
+                "results": {
+                    "users": "Users search result"
+                },
+                "filter": {
+                    "label": "Filter :",
+                    "placeholder":"filter"
+                },
+                "pager":{
+                    "nbItems": "Nb items per page :"
+                },
+                "userFromGroup.label": "Select a group to see members: "
+            },
+            "nextStep": "Next Step"
+        },
+        "treeview": {
+            "title" : "Managing Contexts",
+            "details": {
+                "context": {
+                    "properties" : "Properties",
+                    "ORGANIZATION": "Type: Organization",
+                    "PUBLISHER": "Type: Publishing Context",
+                    "CATEGORY": "Type: Category",
+                    "FEED": "Type: Feed",
+                    "ITEM": "Type: Item"
+                },
+                "permissions": "Permissions",
+                "targets": "People Targeted",
+                "actions": "Actions",
+                "search": {
+                    "targets" : {
+                        "user": "Search on user",
+                        "group": "Search on group",
+                        "userFromGroup": "Search on user from group"
+                    }
+                }
+            }
+        }
+    }
+}

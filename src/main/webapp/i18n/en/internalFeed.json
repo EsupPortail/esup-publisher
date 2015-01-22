@@ -1,0 +1,32 @@
+{
+    "publisherApp": {
+        "internalFeed" : {
+            "home": {
+                "title": "InternalFeeds",
+                "createLabel": "Create a new InternalFeed",
+                "createOrEditLabel": "Create or edit a InternalFeed"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete InternalFeed {{ id }}?"
+            },
+            "detail": {
+                "title": "InternalFeed"
+            },
+            "rssAllowed": "RssAllowed",
+            "name": "Name",
+            "iconUrl": "IconUrl",
+            "lang": "Lang",
+            "ttl": "Ttl",
+            "displayOrder": "DisplayOrder",
+            "accessView": "AccessView",
+            "description": "Description",
+            "defaultDisplayOrder": "DefaultDisplayOrder",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "publisher": "publisher",
+            "parent": "parent"
+        }
+    }
+}

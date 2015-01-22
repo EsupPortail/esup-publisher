@@ -1,0 +1,50 @@
+{
+    "publisherApp": {
+        "media" : {
+            "home": {
+                "title": "Medias",
+                "createLabel": "Nouveau média",
+                "createOrEditLabel": "Créer ou éditer un média"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le média {{ id }} ?",
+                "enclosure": "Etes-vous certain de vouloir supprimer ce média (pas de retour arrière possible) ?"
+            },
+            "detail": {
+                "title": "Media"
+            },
+            "title": "Titre",
+            "enclosure": "Média",
+            "enclosure.button": "Sélectionner un média",
+            "endDate": "Date de disparition",
+            "startDate": "Date d'apparition",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Résumé",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "action": {
+                "publish": "Enregistrer et Publier",
+                "save": "Enregistrer"
+            },
+            "inputfile": {
+                "title": "Sélection d'un média",
+                "url.label": "Depuis un lien web",
+                "resizeauto" : "Image découpée automatiquement",
+                "resizecrop" : "Image à découper manuellement",
+                "upload.label": "Depuis un fichier",
+                "upload.button": "Parcourir...",
+                "video": "Média vidéo",
+                "audio": "Média audio",
+                "mediafile": "Fichier"
+            }
+
+        }
+    }
+}
+

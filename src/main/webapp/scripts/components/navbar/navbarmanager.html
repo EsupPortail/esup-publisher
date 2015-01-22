@@ -1,0 +1,70 @@
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/"><span translate="global.title">jhipster</span> <span class="navbar-version">v{{VERSION}}</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav nav-pills navbar-right">
+                <li ui-sref-active="active">
+                    <a ui-sref="home">
+                        <span class="glyphicon glyphicon-home"></span>
+                        <span translate="global.menu.home">Home</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active" class="dropdown pointer">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                        <span>
+                            <span class="glyphicon glyphicon-th-list"></span>
+                            <span translate="global.menu.manager.contents.main">Publishing</span>
+                            <b class="caret"></b>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" ><a ui-sref="owned"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.manager.contents.owned">owned</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="pending"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.manager.contents.pending">pending</span></a></li>
+
+                    </ul>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="treeview">
+                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span translate="global.menu.manager.contexts.main">Contexts</span>
+                    </a>
+                </li>
+                <!--<li ui-sref-active="active" class="dropdown pointer">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
+                                <span>
+                                    <span class="glyphicon glyphicon-tower"></span>
+                                    <span class="hidden-tablet" translate="global.menu.admin.main">Admin</span>
+                                    <b class="caret"></b>
+                                </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>
+                            &#xA0;<span translate="global.menu.admin.metrics">Metrics</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="health"><span class="glyphicon glyphicon-heart"></span>
+                            &#xA0;<span translate="global.menu.admin.health">Health</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="configuration"><span class="glyphicon glyphicon-list-alt"></span>
+                            &#xA0;<span translate="global.menu.admin.configuration">Configuration</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="audits"><span class="glyphicon glyphicon-bell"></span>
+                            &#xA0;<span translate="global.menu.admin.audits">Audits</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="logs"><span class="glyphicon glyphicon-tasks"></span>
+                            &#xA0;<span translate="global.menu.admin.logs">Logs</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="docs"><span class="glyphicon glyphicon-book"></span>
+                            &#xA0;<span translate="global.menu.admin.apidocs">API Docs</span></a></li>
+                        <li ng-show="{{ENV === 'dev'}}"><a href='/console' target="_tab"><span class="glyphicon glyphicon-hdd"></span>
+                            &#xA0;<span translate="global.menu.admin.database">Database</span></a></li>
+                    </ul>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+</nav>

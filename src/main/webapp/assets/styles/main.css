@@ -1,0 +1,421 @@
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+pre { margin-bottom:15px; }
+
+/* for relog button */
+body > .modal.fade.in {
+    background-color: grey;
+}
+
+/* ==========================================================================
+Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
+========================================================================== */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+/* ==========================================================================
+Developement Ribbon
+========================================================================== */
+.development {
+    /*position: absolute;
+    width: 149px;
+    height: 149px;*/
+    top: 0;
+    left: 0;
+    border: 0;
+    /*z-index: 1000;
+    background-image: url("../images/development_ribbon.png");
+    background-position: center center;
+    background-repeat: no-repeat;*/
+    display: block;
+    line-height: 3em;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* ==========================================================================
+Version number in navbar
+========================================================================== */
+.navbar-version {
+    font-size: 10px;
+    color: #ccc
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+.hero-unit {
+    margin: 50px auto 0 auto;
+    width: 300px;
+    font-size: 18px;
+    font-weight: 200;
+    line-height: 30px;
+    background-color: #eee;
+    border-radius: 6px;
+    padding: 60px;
+}
+
+.hero-unit h1 {
+    font-size: 60px;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.error {
+    color: white;
+    background-color: red;
+}
+
+.hipster {
+    display: inline-block;
+    width: 347px;
+    height: 497px;
+    background: url("../images/hipster.png") no-repeat center top;
+    background-size: contain;
+}
+
+/* wait autoprefixer update to allow simple generation of high pixel density media query */
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) {
+    .hipster {
+        background: url("../images/hipster2x.png") no-repeat center top;
+        background-size: contain;
+    }
+}
+
+.hand {
+    cursor: pointer;
+}
+
+#threadDump .popover, #healthCheck .popover {
+    top: inherit;
+    display: block;
+    font-size: 10px;
+    max-width: 1024px;
+}
+
+#healthCheck .popover {
+    margin-left: -50px;
+}
+
+.health-details {
+    min-width: 400px;
+}
+.alert .popover pre {
+    font-size: 10px;
+}
+
+.voffset  { margin-top: 2px; }
+.voffset1 { margin-top: 5px; }
+.voffset2 { margin-top: 10px; }
+.voffset3 { margin-top: 15px; }
+.voffset4 { margin-top: 30px; }
+.voffset5 { margin-top: 40px; }
+.voffset6 { margin-top: 60px; }
+.voffset7 { margin-top: 80px; }
+.voffset8 { margin-top: 100px; }
+.voffset9 { margin-top: 150px; }
+
+/* start Password strength bar style */
+ul#strength {
+    display:inline;
+    list-style:none;
+    margin:0;
+    margin-left:15px;
+    padding:0;
+    vertical-align:2px;
+}
+
+.point:last {
+    margin:0 !important;
+}
+.point {
+    background:#DDD;
+    border-radius:2px;
+    display:inline-block;
+    height:5px;
+    margin-right:1px;
+    width:20px;
+}
+/* end Password strength bar style */
+
+.table-responsive .table .longtext {
+    overflow: hidden;
+    max-width: 50ch;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    max-lines: 2;
+}
+
+.table-responsive .table .verylongtext {
+    overflow: hidden;
+    max-width: 50ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.article-preview .details {
+    background: #DDDDDD none repeat scroll 0 0;
+    border: 1px dashed #c0c0c0;
+    font-size: 1em;
+    margin: 0 0 20px;
+}
+
+.article-preview .details .summary {
+    display: block;
+}
+.article-preview .details .pubInfo  p {
+    margin: 0;
+}
+.article-preview .details .label {
+    color: #808080;
+}
+.article-preview {
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 4px;
+}
+.article-preview legend {
+    width: auto;
+    margin: 0 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+/*.btn-group {
+    padding-top: 20px;
+}*/
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    width:500px;
+    height:350px;
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+
+.evaluator {
+    list-style:none;
+}
+
+.disabled {
+    box-shadow: none;
+    opacity: 0.65;
+}
+
+.list-comma::before {
+    content: ', ';
+}
+.list-comma:first-child::before {
+    content: '';
+}
+
+/* ====================================
+    publish-form-container
+======================================*/
+/* form styling */
+#publish-form-container { border-radius:5px;}
+#publish-form-container .page-header   { margin:0; border-top-left-radius:5px; border-top-right-radius:5px; }
+
+/* numbered buttons */
+#publish-form-container #status-buttons                 {  }
+#publish-form-container #status-buttons a               {
+    color:#003147;
+    display:inline-block;
+    font-size:12px;
+    margin-right:10px;
+    text-align:center;
+    text-transform:uppercase;
+    text-decoration: none;
+}
+#publish-form-container #status-buttons a:hover         { text-decoration:none; }
+#publish-form-container #status-buttons span            { background:#808080; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px; border-radius:50%; color: #ffffff}
+
+/* active buttons */
+#publish-form-container #status-buttons a.active span   { background:#00BC8C; }
+
+/* ANIMATION STYLINGS */
+#publish-form-container form            { position:relative;  overflow:visible; padding:20px; }
+
+/* basic styling for entering and leaving */
+/* left and right added to ensure full width */
+#publish-form-container #publish-form-views.ng-enter,
+#publish-form-container #publish-form-views.ng-leave      {
+    position:absolute;
+    left:30px;
+    right:30px;
+    transition:0.5s all ease;
+    -moz-transition:0.5s all ease;
+    -webkit-transition:0.5s all ease;
+}
+
+#publish-form-container .btn-toolbar {
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* enter animation */
+#publish-form-container #publish-form-views.ng-enter            {
+    -webkit-animation:slideInRight 0.5s both ease;
+    -moz-animation:slideInRight 0.5s both ease;
+    animation:slideInRight 0.5s both ease;
+}
+
+/* leave animation */
+#publish-form-container #publish-form-views.ng-leave            {
+    -webkit-animation:slideOutLeft 0.5s both ease;
+    -moz-animation:slideOutLeft 0.5s both ease;
+    animation:slideOutLeft 0.5s both ease;
+}
+
+#publish-form-container .publish-classification input[type=checkbox] {
+    display: none;
+}
+
+/*
+- Style each label that is directly after the input
+- position: relative; will ensure that any position: absolute children will position themselves in relation to it
+*/
+#publish-form-container .publish-classification input[type=checkbox] + label {
+    height: 8em;
+    width: 8em;
+    background-color: #cccccc;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 8em 8em;
+    display: block;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.4s;
+    border: solid 5px #FFF;
+    box-shadow: 0 0 1px #FFF; /* Soften the jagged edge */
+    text-align: center;
+}
+
+/* Provide a border when hovered and when the checkbox before it is checked */
+#publish-form-container .publish-classification input[type=checkbox] + label:hover,
+#publish-form-container .publish-classification input[type=checkbox]:checked + label {
+    border: solid 5px #F00;
+    box-shadow: 0 0 1px #F00; /* Soften the jagged edge */
+}
+
+/*
+- Create a pseudo element :after when checked and provide a tick
+- Center the content
+*/
+#publish-form-container .publish-classification input[type=checkbox]:checked + label:after {
+    content: '\2714'; /*content is required, though it can be empty - content: '';*/
+    display: block;
+    height: 1em;
+    width: 1em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    color: #FF0000;
+}
+
+/* ==========================================
+    Treeview
+============================================*/
+
+.treeview .tree-browser {
+    padding-bottom: 1em;
+ }
+/*#treeview .context-viewer {
+    padding-left: 50px;
+    overflow: auto;
+}*/
+
+
+/* ========================================
+    Overlay, for spinner, etc...
+===========================================*/
+.overlay {
+    background-color: #333; /*or semitransparent image*/
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    opacity: 0.5;
+}
+
+
+/* ========================================
+    For directives
+===========================================*/
+.subject-infos {
+    display: inline;
+}
+.subject-search {
+    display: inline;
+}
+.fa-users .tooltip-inner {
+    word-break: break-all;
+}
+/* ========================================
+    For ng-animates with ui-router, some transition give problems
+===========================================*/
+/*.content.ng-enter {
+    transition: 0.25s;
+    opacity: 0; }
+.content.ng-enter-active {
+    opacity: 1; }
+.content.ng-leave {
+    transition: 0.25s;
+    opacity: 1; }
+.content.ng-leave-active {
+    opacity: 0; }*/

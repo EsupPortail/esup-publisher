@@ -1,0 +1,30 @@
+{
+    "main": {
+        "title": "Welcome!",
+        "subtitle": "This is your homepage",
+        "logged": {
+            "message": "You are logged in as user \"{{username}}\"."
+        },
+        "question": "If you have any question on JHipster:",
+        "link": {
+            "homepage": "JHipster homepage",
+            "write": {
+                "name": "Publish",
+                "desc": "Publish a content"
+            },
+            "manage": {
+                "name": "Manage",
+                "desc": "Manage contents and publishing contexts"
+            },
+            "admin": {
+                "name": "Administration",
+                "desc": "Super Administrator view"
+            },
+            "stackoverflow": "JHipster on Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "contact": "contact @java_hipster on Twitter"
+        },
+        "like": "If you like JHipster, don't forget to give us a star on",
+        "github": "Github"
+    }
+}

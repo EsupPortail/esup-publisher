@@ -1,0 +1,26 @@
+{
+    "publisherApp": {
+        "permission" : {
+            "home": {
+                "title": "Permissions",
+                "createLabel": "Create a new Permission",
+                "createOrEditLabel": "Create or edit a Permission"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Permission {{ id }}?"
+            },
+            "detail": {
+                "title": "Permission"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Role",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "evaluator": "Evaluator",
+            "advancedMode": "Show or add mpermission in simple or advanced mode"
+        }
+    }
+}

@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="publisherApp.subscriber.detail.title">Subscriber</span> {{subscriber.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.subscriber.ctxId">CtxId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{subscriber.ctxId}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.subscriber.ctxType">CtxType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{subscriber.ctxType}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.subscriber.keyId">KeyId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{subscriber.keyId}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.subscriber.keyType">KeyType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{subscriber.keyType}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.subscriber.subscribeType">SubscribeType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{subscriber.subscribeType}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="subscriber"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

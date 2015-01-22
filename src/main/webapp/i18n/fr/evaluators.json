@@ -1,0 +1,52 @@
+{
+    "publisherApp": {
+        "evaluators" : {
+            "home": {
+                "title": "Évaluateur",
+                "createOrEditLabel": "Créer ou éditer un Evaluateur",
+                "createLabel": "Créer un nouvel Évaluateur"
+            },
+            "add": {
+                "button": "Ajouter",
+                "Operator": "Opérateur Logique",
+                "User": "Personne",
+                "Group": "Groupe",
+                "UserAttribute": "Évaluation attribut utilisateur",
+                "AuthenticatedUsers": "Personnes authentifiées"
+            },
+            "delete": {
+                "question": "Êtes vous sûr de vouloir supprimer cet Évaluateur {{ id }}?",
+                "button": "Supprimer cette élément"
+            },
+            "detail": {
+                "title": "Évaluateur"
+            },
+            "Operator": {
+                "text": "Opérateur Logique",
+                "remove": "Supprimer l'opérateur logique ",
+                "removeChilds": "Supprimer les enfants "
+            },
+            "UserGroup": {
+                "memberOf": "Membres du groupe&nbsp;",
+                "remove": "Supprimer ce groupe"
+            },
+            "UserAttribute": {
+                "subjetIs": "Utilisateur ",
+                "attribute": "Utilisateurs avec l'attribut '{{ attribute }}'",
+                "mode": " est '{{ mode }}'",
+                "value": " la valeur '{{ value }}'",
+                "remove": "Supprimer l'évalution sur cet attribut d'utilisateur",
+                "remove.user": "Supprimer cet utilisateur"
+            },
+            "AuthenticatedUsers": {
+                "text": "Tous les utilisateurs authentifiés",
+                "remove": "Supprimer les utilisateurs authentifiés"
+            },
+            "Unknown": {
+                "text": "Évaluateur inconnu",
+                "remove": "Remove this unknow Evaluator"
+            },
+            "forAdvancedOnly" : "Vous devez être en mode avancé pour voir ces informations !"
+        }
+    }
+}

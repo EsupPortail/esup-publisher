@@ -1,0 +1,11 @@
+{
+    "errors": {
+        "title": "Page d'erreur!",
+        "403": "Vous n'avez pas les droits pour accéder à cette page.",
+        "wrong.subject": "Il est impossible d'obtenir des détails !",
+        "upload" : {
+            "config": "Erreur de configuration sur le serveur",
+            "empty": "Le fichier passé est vide"
+        }
+    }
+}

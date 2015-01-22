@@ -1,0 +1,34 @@
+{
+    "publisherApp": {
+        "classification" : {
+            "home": {
+                "title": "Classifications",
+                "createLabel": "Create a new Classification",
+                "createOrEditLabel": "Create or edit a Classification"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Classification {{ id }}?"
+            },
+            "detail": {
+                "title": "Classification"
+            },
+            "rssAllowed": "RssAllowed",
+            "name": "Name",
+            "iconUrl": "IconUrl",
+            "lang": "Lang",
+            "ttl": "Ttl",
+            "displayOrder": "DisplayOrder",
+            "accessView": "AccessView",
+            "description": "Description",
+            "defaultDisplayOrder": "DefaultDisplayOrder",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "publisher": "Publisher",
+            "type": "Type",
+            "type.CATEGORY" : "Category",
+            "type.TOPIC" : "Topic"
+        }
+    }
+}

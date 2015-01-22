@@ -1,0 +1,143 @@
+<div class="modal fade" id="savePublisherModal" tabindex="-1" role="dialog" aria-labelledby="myPublisherLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="editForm" role="form" novalidate ng-submit="confirmUpdateContext('PUBLISHER')">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!--ng-click="clear()"-->
+                    <h4 class="modal-title" id="myPublisherLabel" translate="publisherApp.publisher.home.createOrEditLabel">Create or edit a Publisher</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" has-role="ROLE_ADMIN">
+                        <label class="control-label" for="id">ID</label>
+                        <input type="text" class="form-control" name="id" id="id"
+                               ng-model="editedContext.id" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="context" translate="publisherApp.publisher.context.key">Context</label>
+                        <input type="text" class="form-control" name="context" id="context"
+                               value="{{editedContext.context.reader.displayName}} - {{editedContext.context.redactor.displayName}}" readonly>
+                    </div>
+
+                    <!--<div class="form-group">
+                        <label class="control-label" for="organization" translate="publisherApp.publisher.context.organization">organization</label>
+                        <select class="form-control" id="organization" name="organization" ng-model="editedContext.context.organization.id"
+                                ng-options="organization.id as organization.displayName for organization in organizations" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                        </select>
+
+                        <div ng-show="editForm.organization.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.organization.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="reader" translate="publisherApp.publisher.context.reader">reader</label>
+                        <select class="form-control" id="reader" name="reader" ng-model="editedContext.context.reader.id"
+                                ng-options="reader.id as reader.displayName for reader in readers" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                        </select>
+
+                        <div ng-show="editForm.reader.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.reader.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="redactor" translate="publisherApp.publisher.context.redactor">redactor</label>
+                        <select class="form-control" id="redactor" name="redactor" ng-model="editedContext.context.redactor.id"
+                                ng-options="redactor.id as redactor.displayName for redactor in redactors" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                        </select>
+
+                        <div ng-show="editForm.redactor.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.redactor.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>-->
+
+                    <div class="form-group">
+                        <label class="control-label" for="permissionType" translate="publisherApp.publisher.permissionType">PermissionType</label>
+                        <select class="form-control" id="permissionType" name="permissionType" ng-model="editedContext.permissionType"
+                                ng-options="permission.name as permission.label | translate for permission in permissionClassList" required ng-readonly="!canManage">
+                        </select>
+
+                        <div ng-show="editForm.permissionType.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.permissionType.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="defaultDisplayOrder" translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</label>
+                        <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="editedContext.defaultDisplayOrder"
+                                ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required ng-readonly="!canManage">
+                        </select>
+                        <!-- <input type="text" class="form-control" name="defaultDisplayOrder"
+                                ng-model="context.defaultDisplayOrder" required>-->
+
+                        <div ng-show="editForm.defaultDisplayOrder.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
+                        <input type="checkbox" class="form-control" id="used" name="used"
+                               ng-model="editedContext.used" ng-readonly="!canManage">
+                        <!--<input type="checkbox" class="form-control" name="used"
+                               ng-model="context.used" required>
+
+                        <div ng-show="editForm.used.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.used.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>-->
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="displayOrder" translate="publisherApp.publisher.displayOrder">DisplayOrder</label>
+                        <input type="number" class="form-control" id="displayOrder" name="displayOrder"
+                               ng-model="editedContext.displayOrder" required min="0" max="99" ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.displayOrder.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                                This field should be more than 0.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="99">
+                                This field cannot be more than 99.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                                This field should be a number.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> <!--ng-click="close()"-->
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="submit" ng-disabled="editForm.$invalid || !canManage" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

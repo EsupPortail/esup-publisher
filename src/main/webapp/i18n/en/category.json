@@ -1,0 +1,37 @@
+{
+    "publisherApp": {
+        "category" : {
+            "home": {
+                "title": "Categorys",
+                "createLabel": "Create a new Category",
+                "createOrEditLabel": "Create or edit a Category"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Category {{ id }}?"
+            },
+            "detail": {
+                "title": "Category"
+            },
+            "rssAllowed": "RssAllowed",
+            "name": "Name",
+            "iconUrl": "IconUrl",
+            "lang": "Lang",
+            "langList": {
+                "fr": "French",
+                "en": "English",
+                "de": "German",
+                "es": "Spanish"
+            },
+            "ttl": "Ttl",
+            "displayOrder": "DisplayOrder",
+            "accessView": "AccessView",
+            "description": "Description",
+            "defaultDisplayOrder": "DefaultDisplayOrder",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "publisher": "publisher"
+        }
+    }
+}

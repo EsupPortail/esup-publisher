@@ -1,0 +1,169 @@
+{
+    "global": {
+        "title": "publisher",
+        "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
+        "menu": {
+            "home": "Accueil",
+            "entities": {
+                "main": "Objets",
+                "organization": "Structure",
+                "filter": "Filtre",
+                "reader": "Lecteur",
+                "redactor": "Rédacteur",
+				"category": "Catégorie",
+                "externalFeed": "Flux RSS Externe",
+                "internalFeed": "Thème",
+                "news": "Nouvelle",
+                "media": "Média",
+                "resource": "Ressource",
+                "publisher": "Contexte de publication",
+                "classification": "Classification",
+                "item": "Publication",
+                "subscriber": "Abonné",
+                "evaluator": "Évaluateur",
+                "permission": "Permission",
+				"operatorEvaluator": "Opérateur d'évaluation",
+                "permissionOnClassificationWithSubjectList": "Permission sur classifications + liste d'utilisateurs",
+                "permissionOnContext": "Permission sur les contextes",
+                "permissionOnSubjects": "Permission sur les utilisateurs",
+                "permissionOnSubjectsWithClassificationList": "Permission sur utilisateurs + liste classifications",
+                "userMultivaluedAttributesEvaluator": "Évaluateur attributs multivalués",
+                "userAttributesEvaluator": "Évaluateur attributs monovalués",
+                "userGroupEvaluator": "Évaluateur sur les groupes",
+                "authenticatedUserEvaluator": "Évaluateur d'utilisateur connecté",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Compte",
+                "settings": "Profil",
+                "password": "Mot de passe",
+                "sessions": "Sessions",
+                "login": "S'authentifier",
+                "logout": "Déconnexion",
+                "register": "Créer un compte"
+            },
+            "admin": {
+                "main": "Administration",
+                "tracker": "Suivi des utilisateurs",
+                "metrics": "Métriques",
+                "health": "Diagnostics",
+                "configuration": "Configuration",
+                "logs": "Logs",
+                "audits": "Audits",
+                "apidocs": "API",
+                "database": "Base de données"
+            },
+            "language": "Langue",
+            "manager": {
+                "contents": {
+                    "main": "Publications",
+                    "owned": "Mes publications",
+                    "pending": "Publications à valider"
+                },
+                "contexts": {
+                    "main": "Contextes"
+                }
+            }
+        },
+        "form": {
+            "username": "Nom d'utilisateur",
+            "username.placeholder": "Votre nom d'utilisateur",
+            "newpassword": "Nouveau mot de passe",
+            "newpassword.placeholder": "Nouveau mot de passe",
+            "confirmpassword": "Confirmation du nouveau mot de passe",
+            "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
+            "email": "Email",
+            "email.placeholder": "Votre email",
+            "selectOne": "Sélectionnez un ...",
+            "multiSelect": {
+                "selectAll"       : "Tout cocher",
+                "selectNone"      : "Tout décocher",
+                "reset"           : "Annuler",
+                "search"          : "filtre de recherche",
+                "nothingSelected" : "Sélectionnez ..."
+            },
+            "inputfile": {
+                "title": "Sélection d'un fichier",
+                "url.label": "Saisie d'un lien web",
+                "upload.label": "Importer un fichier",
+                "upload.button": "Parcourir"
+            }
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
+                "register": "Vous n'avez pas encore de compte ? <a href=\"#/register\">Créer un compte</a>"
+            },
+            "error": {
+                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Votre mot de passe est requis.",
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
+                    "strength": "Robustesse du mot de passe:"
+                },
+                "confirmpassword": {
+                    "required": "Votre confirmation du mot de passe est requis.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
+                },
+                "email": {
+                    "required": "Votre email est requis.",
+                    "minlength": "Votre email doit comporter au moins 5 caractères",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "invalid": "Votre email n'est pas valide."
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "add": "Ajouter",
+            "back": "Retour",
+            "cancel": "Annuler",
+            "edit": "Éditer",
+            "delete": "Supprimer",
+            "save": "Enregistrer",
+            "view": "Voir",
+            "close" : "Fermer",
+            "validate": "Valider"
+        },
+        "detail": {
+            "field": "Champs",
+            "value": "Valeur"
+        },
+        "delete": {
+            "title": "Confirmation de suppression"
+        },
+        "validation": {
+            "required": "Ce champs est obligatoire.",
+            "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
+            "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
+            "min": "Ce champs doit être inférieur à {{min}}.",
+            "max": "Ce champs doit être supérieur à {{max}}.",
+            "mindate": "Ce champs doit être une date après {{min}}.",
+            "maxdate": "Ce champs doit être une date avant {{max}}.",
+            "pattern": "Ce champs doit suivre l'expression régluière {{pattern}}.",
+            "number": "Ce champs doit être un nombre.",
+            "datetimelocal": "Ce champs doit être une date et une heure.",
+            "date": "Ce champs doit être une date valide.",
+            "dateLowerThan":"Ce champ doit être une date antérieur au champ {{field}}",
+            "dateGreaterThan":"Ce champ doit être une date postérieur à aujourd'hui et au champ {{field}}",
+            "url": "Ce champs doit être un URL valide.",
+            "maxduration": "Le temps maximum autorisé pour une vidéo est de {{maxduration}}.",
+            "maxsize": "La taille maximum autorisée d'un fichier est de {{maxsize}}.",
+            "filepattern": "Ce type de média n'est pas autorisé."
+        }
+    },
+    "footer": {
+        "project" : "Publisher"
+    },
+    "wait": {
+        "dialog": "Chargement en cours ..."
+    },
+    "error": {
+        "dialog": "Une erreur est survenue!"
+    }
+}

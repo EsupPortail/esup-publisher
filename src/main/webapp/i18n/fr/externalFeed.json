@@ -1,0 +1,34 @@
+{
+    "publisherApp": {
+        "externalFeed" : {
+            "home": {
+                "title": "Flux RSS externe",
+                "createLabel": "Créer un nouveau flux RSS externe",
+                "createOrEditLabel": "Créer ou éditer un flux RSS externe"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le flux RSS externe {{ id }} ?"
+            },
+            "detail": {
+                "title": "Flux RSS externe"
+            },
+            "rssAllowed": "Autoriser RSS",
+            "name": "Nom",
+            "iconUrl": "Icône",
+            "lang": "Langue",
+            "ttl": "TTL",
+            "displayOrder": "Ordre d'affichage",
+            "accessView": "Type d'accès",
+            "description": "Description",
+            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "rssUrl": "Url du flux RSS",
+            "publisher": "Contexte de publication",
+            "parent": "Catégorie"
+        }
+    }
+}
+

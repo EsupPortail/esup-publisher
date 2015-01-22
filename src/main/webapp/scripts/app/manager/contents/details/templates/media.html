@@ -1,0 +1,46 @@
+<div>
+    <h2><span translate="publisherApp.media.detail.title">Media</span> ({{getItemTypeLabel(item.status) | translate }})</h2>
+    <div class="article-preview">
+        <legend><span translate="publisherApp.item.preview">Preview</span></legend>
+        <article>
+            <header class="">
+                <div class="media-body">
+                    <h1 class="media-heading">{{item.title}}</h1><p><span translate="publisherApp.item.author">Author</span>: <span>{{item.createdBy.displayName}}</span>, <span translate="publisherApp.item.publishDate">Published</span>: <time pubdate="pubdate">{{item.startDate | date:'dd MMMM yyyy'}}</time></p>
+                </div>
+                <div ng-if="item.enclosure" class="img-responsive center-block" ng-show="item.enclosure">
+                    <img class="media-object" ng-src="{{item.enclosure}}" alt="" />
+                </div>
+            </header>
+
+            <!--<details ng-open="open">
+                <summary>{{item.summary}}</summary><p>
+                    <span translate="publisherApp.item.createdBy">CreatedBy</span> <span>{{item.createdBy.displayName}}</span>,
+                    <span translate="publisherApp.item.when">CreatedDate</span> <time>{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                </p><p ng-show="item.lastModifiedDate">
+                    <span translate="publisherApp.item.lastModifiedBy">LastModifiedBy</span> <span>{{item.lastModifiedBy.displayName}}</span>,
+                    <span translate="publisherApp.item.when">LastModifiedDate</span> <time>{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                </p><p ng-show="item.validatedBy">
+                    <span translate="publisherApp.item.validatedBy">ValidatedBy</span> <span>{{item.validatedBy.displayName}}</span>,
+                    <span translate="publisherApp.item.when">ValidatedDate</span> <time>{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                </p>
+            </details>-->
+            <div class="details">
+                <div class="summary" ng-click="showInfo()">
+                    <span ng-if="open" class="glyphicon glyphicon-triangle-bottom">{{item.summary}}</span>
+                    <span ng-if="!open" class="glyphicon glyphicon-triangle-right">{{item.summary}}</span>
+                </div>
+                <div ng-show="open" class="pubInfo">
+                    <p><span class="label" translate="publisherApp.item.createdBy">CreatedBy</span> <span>{{item.createdBy.displayName}}</span>,
+                        <span class="label" translate="publisherApp.item.when">CreatedDate</span> <time>{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                    </p><p ng-show="item.lastModifiedDate">
+                    <span class="label" translate="publisherApp.item.lastModifiedBy">LastModifiedBy</span> <span>{{item.lastModifiedBy.displayName}}</span>,
+                    <span class="label" translate="publisherApp.item.when">LastModifiedDate</span> <time>{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                </p><p ng-show="item.validatedBy">
+                    <span class="label" translate="publisherApp.item.validatedBy">ValidatedBy</span> <span>{{item.validatedBy.displayName}}</span>,
+                    <span class="label" translate="publisherApp.item.when">ValidatedDate</span> <time>{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</time>
+                </p>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>

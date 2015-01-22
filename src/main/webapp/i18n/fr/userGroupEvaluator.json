@@ -1,0 +1,19 @@
+{
+    "publisherApp": {
+        "userGroupEvaluator" : {
+            "home": {
+                "title": "UserGroupEvaluators",
+                "createLabel": "Créer un nouveau UserGroupEvaluator",
+                "createOrEditLabel": "Créer ou éditer un UserGroupEvaluator"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le UserGroupEvaluator {{ id }} ?"
+            },
+            "detail": {
+                "title": "UserGroupEvaluator"
+            },
+            "group": "Group"
+        }
+    }
+}
+

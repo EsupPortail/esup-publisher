@@ -1,0 +1,34 @@
+{
+    "publisherApp": {
+        "classification": {
+            "home": {
+                "title": "Rubriques",
+                "createLabel": "Créer une nouvelle Rubrique",
+                "createOrEditLabel": "Créer ou éditer une Rubrique"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la Rubrique {{ id }} ?"
+            },
+            "detail": {
+                "title": "Rubrique"
+            },
+            "rssAllowed": "Autoriser RSS",
+            "name": "Nom",
+            "iconUrl": "Icône",
+            "lang": "Langue",
+            "ttl": "TTL",
+            "displayOrder": "Ordre d'affichage",
+            "accessView": "Type d'accès",
+            "description": "Description",
+            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "publisher": "Contexte de publication",
+            "type": "Type",
+            "type.CATEGORY" : "Catégorie",
+            "type.TOPIC" : "Thème"
+        }
+    }
+}

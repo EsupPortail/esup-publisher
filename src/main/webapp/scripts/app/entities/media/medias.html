@@ -1,0 +1,267 @@
+<div>
+
+    <h2 translate="publisherApp.media.home.title">Media</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveMediaModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.media.home.createLabel">Create a new Media</span>
+    </button>
+    <div class="modal fade" id="saveMediaModal" tabindex="-1" role="dialog" aria-labelledby="myMediaLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myMediaLabel" translate="publisherApp.media.home.createOrEditLabel">Create or edit a Media</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="media.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.media.title">Title</label>
+                            <input type="text" class="form-control" name="title"
+                                   ng-model="media.title" required ng-minlength="3" ng-maxlength="200">
+
+                            <div ng-show="editForm.title.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                                    This field cannot be longer than 200 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.enclosure">Enclosure</label>
+                            <input type="text" class="form-control" name="enclosure"
+                                   ng-model="media.enclosure" ng-maxlength="2048">
+
+                            <div ng-show="editForm.enclosure.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.enclosure.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                    This field cannot be longer than 2048 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.endDate">EndDate</label>
+                            <input type="date" class="form-control" name="endDate"
+                                   ng-model="media.endDate" required>
+
+                            <div ng-show="editForm.endDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.endDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.startDate">StartDate</label>
+                            <input type="date" class="form-control" name="startDate"
+                                   ng-model="media.startDate" required>
+
+                            <div ng-show="editForm.startDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.startDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.validatedBy">ValidatedBy</label>
+                            <input type="text" class="form-control" name="validatedBy"
+                                   ng-model="media.validatedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.validatedDate">ValidatedDate</label>
+                            <input type="datetime-local" class="form-control" name="validatedDate"
+                                   ng-model="media.validatedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.status">Status</label>
+                            <input type="text" class="form-control" name="status"
+                                   ng-model="media.status">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.summary">Summary</label>
+                            <input type="text" class="form-control" name="summary"
+                                   ng-model="media.summary" required ng-minlength="5" ng-maxlength="512">
+
+                            <div ng-show="editForm.summary.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.createdBy">CreatedBy</label>
+                            <input type="text" class="form-control" name="createdBy"
+                                   ng-model="media.createdBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.createdDate">CreatedDate</label>
+                            <input type="datetime-local" class="form-control" name="createdDate"
+                                   ng-model="media.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.lastModifiedBy">LastModifiedBy</label>
+                            <input type="text" class="form-control" name="lastModifiedBy"
+                                   ng-model="media.lastModifiedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.lastModifiedDate">LastModifiedDate</label>
+                            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                                   ng-model="media.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.media.organization">organization</label>
+                            <select class="form-control" name="organization" ng-model="media.organization.id" ng-options="organization.id as organization.name for organization in organizations">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.redactor">redactor</label>
+                            <select class="form-control" name="redactor" ng-model="media.redactor.id" ng-options="redactor.id as redactor.displayName for redactor in redactors">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteMediaConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(media.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.media.delete.question" translate-values="{id: '{{media.id}}'}">Are you sure you want to delete this Media?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.media.title">Title</th>
+                    <th translate="publisherApp.media.enclosure">Enclosure</th>
+                    <th translate="publisherApp.media.endDate">EndDate</th>
+                    <th translate="publisherApp.media.startDate">StartDate</th>
+                    <th translate="publisherApp.media.validatedBy">ValidatedBy</th>
+                    <th translate="publisherApp.media.validatedDate">ValidatedDate</th>
+                    <th translate="publisherApp.media.status">Status</th>
+                    <th translate="publisherApp.media.summary">Summary</th>
+                    <th translate="publisherApp.media.createdBy">CreatedBy</th>
+                    <th translate="publisherApp.media.createdDate">CreatedDate</th>
+                    <th translate="publisherApp.media.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="publisherApp.media.lastModifiedDate">LastModifiedDate</th>
+                    <th translate="publisherApp.media.organization">organization</th>
+                    <th translate="publisherApp.media.redactor">redactor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="media in medias">
+                    <td><a ui-sref="mediaDetail({id:media.id})">{{media.id}}</a></td>
+                    <td>{{media.title}}</td>
+                    <td>{{media.enclosure}}</td>
+                    <td>{{media.endDate}}</td>
+                    <td>{{media.startDate}}</td>
+                    <td>{{media.validatedBy}}</td>
+                    <td>{{media.validatedDate}}</td>
+                    <td>{{media.status}}</td>
+                    <td>{{media.summary}}</td>
+                    <td>{{media.createdBy}}</td>
+                    <td>{{media.createdDate}}</td>
+                    <td>{{media.lastModifiedBy}}</td>
+                    <td>{{media.lastModifiedDate}}</td>
+                    <td>{{media.organization.name}}</td>
+                    <td>{{media.redactor.displayName}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="mediaDetail({id:media.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(media.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(media.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

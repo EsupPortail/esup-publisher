@@ -1,0 +1,43 @@
+{
+    "publisherApp": {
+        "item" : {
+            "home": {
+                "title": "Publications",
+                "createLabel": "Créer une nouvelle publication",
+                "createOrEditLabel": "Créer ou éditer une publication"
+            },
+            "type": "Type",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la publication {{ id }} ?",
+                "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
+            },
+            "detail": {
+                "title": "Publication"
+            },
+            "title": "Titre",
+            "author": "Auteur",
+            "publishDate": "Publié le",
+            "when": "le",
+            "preview": "Prévisualisation",
+            "enclosure": "Illustration",
+            "startDate": "Date d'apparition",
+            "endDate": "Date de disparition",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Résumé",
+            "body": "Texte",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "action": {
+                "publish": "Publier",
+                "save": "Sauvegarder"
+            }
+        }
+    }
+}
+

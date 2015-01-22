@@ -1,0 +1,78 @@
+
+<div>
+    <h2><span translate="publisherApp.permissionOnSubjects.detail.title">PermissionOnSubjects</span> {{permissionOnSubjects.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.ctxId">CtxId</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.ctxId}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.ctxType">CtxType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.ctxType}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.role">Role</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.role}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.createdBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.createdDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.lastModifiedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.permissionOnSubjects.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{permissionOnSubjects.lastModifiedDate}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="permissionOnSubjects"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

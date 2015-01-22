@@ -1,0 +1,45 @@
+{
+    "publisherApp": {
+        "subject" : {
+            "search": "Search a subject ",
+            "type": {
+                "label": "Search on",
+                "user": "Person",
+                "group": "Group",
+                "userfromgroup": "Person from group"
+            },
+            "user.search": {
+                "label": "Search a person",
+                "desc": "Search style : NAME Firstname, without accent, enter the maximum of characters, 3 characters minimum",
+                "placeholder": "Search..."
+            },
+            "results": {
+                "users": "Users search result"
+            },
+            "filter": {
+                "label": "Filter :",
+                "placeholder":"filter"
+            },
+            "pager":{
+                "nbItems": "Nb items per page :"
+            },
+            "userFromGroup.label": "Select a group to see members: ",
+            "user" : {
+                "detail.title" : "Détails of user",
+                "id" : "Identifier",
+                "displayName" : "User",
+                "ESCOUAI": "Organization(s)",
+                "mail": "email"
+            },
+            "group" : {
+                "detail.title" : "Details of group",
+                "id" : "Identifier",
+                "displayName" : "Display Name",
+                "hasChilds" : "Has group members",
+                "member": "Members",
+                "cn" : "Common Name"
+            }
+        }
+    }
+}
+

@@ -1,0 +1,225 @@
+<div>
+
+    <h2 translate="publisherApp.publisher.home.title">Publisher</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#savePublisherModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.publisher.home.createLabel">Create a new Publisher</span>
+    </button>
+    <div class="modal fade" id="savePublisherModal" tabindex="-1" role="dialog" aria-labelledby="myPublisherLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myPublisherLabel" translate="publisherApp.publisher.home.createOrEditLabel">Create or edit a Publisher</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label" for="id">ID</label>
+                            <input type="text" class="form-control" name="id" id="id"
+                                   ng-model="publisher.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="organization" translate="publisherApp.publisher.context.organization">organization</label>
+                            <select class="form-control" id="organization" name="organization" ng-model="publisher.context.organization.id"
+                                    ng-options="organization.id as organization.displayName for organization in organizations" required>
+                            </select>
+
+                            <div ng-show="editForm.organization.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.organization.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="reader" translate="publisherApp.publisher.context.reader">reader</label>
+                            <select class="form-control" id="reader" name="reader" ng-model="publisher.context.reader.id"
+                                    ng-options="reader.id as reader.displayName for reader in readers" required>
+                            </select>
+
+                            <div ng-show="editForm.reader.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.reader.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="redactor" translate="publisherApp.publisher.context.redactor">redactor</label>
+                            <select class="form-control" id="redactor" name="redactor" ng-model="publisher.context.redactor.id"
+                                    ng-options="redactor.id as redactor.displayName for redactor in redactors" required>
+                            </select>
+
+                            <div ng-show="editForm.redactor.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.redactor.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="permissionType" translate="publisherApp.publisher.permissionType">PermissionType</label>
+                            <select class="form-control" id="permissionType" name="permissionType" ng-model="publisher.permissionType"
+                                    ng-options="permission.name as permission.label | translate for permission in permissionClassList" required>
+                            </select>
+
+                            <div ng-show="editForm.permissionType.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.permissionType.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="defaultDisplayOrder" translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</label>
+                            <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="publisher.defaultDisplayOrder"
+                                    ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required>
+                            </select>
+                           <!-- <input type="text" class="form-control" name="defaultDisplayOrder"
+                                   ng-model="publisher.defaultDisplayOrder" required>-->
+
+                            <div ng-show="editForm.defaultDisplayOrder.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
+                            <input type="checkbox" class="form-control" id="used" name="used"
+                                   ng-model="publisher.used">
+                            <!--<input type="checkbox" class="form-control" name="used"
+                                   ng-model="publisher.used" required>
+
+                            <div ng-show="editForm.used.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.used.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>-->
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="displayOrder" translate="publisherApp.publisher.displayOrder">DisplayOrder</label>
+                            <input type="number" class="form-control" id="displayOrder" name="displayOrder"
+                                   ng-model="publisher.displayOrder" required min="0" max="99">
+
+                            <div ng-show="editForm.displayOrder.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                                    This field should be more than 0.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="99">
+                                    This field cannot be more than 99.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePublisherConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(publisher.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.publisher.delete.question" translate-values="{id: '{{publisher.id}}'}">Are you sure you want to delete this Publisher?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.publisher.context.key">context</th>
+                    <!--<th translate="publisherApp.publisher.context.reader">reader</th>
+                    <th translate="publisherApp.publisher.context.redactor">redactor</th>
+                    <th translate="publisherApp.publisher.context.organization">organization</th>-->
+                    <th translate="publisherApp.publisher.permissionType">PermissionType</th>
+                    <th translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</th>
+                    <th translate="publisherApp.publisher.used">Used</th>
+                    <th translate="publisherApp.publisher.displayOrder">DisplayOrder</th>
+                    <!--<th translate="publisherApp.publisher.createdBy">CreatedBy</th>
+                    <th translate="publisherApp.publisher.createdDate">CreatedDate</th>
+                    <th translate="publisherApp.publisher.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="publisherApp.publisher.lastModifiedDate">LastModifiedDate</th>-->
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="publisher in publishers">
+                    <td><a ui-sref="publisherDetail({id:publisher.id})">{{publisher.id}}</a></td>
+                    <td>{{publisher.context.reader.displayName}} - {{publisher.context.redactor.displayName}} - {{publisher.context.organization.name}}</td>
+                    <td>{{getPermissionClassLabel(publisher.permissionType) | translate}}</td>
+                    <td>{{getDisplayOrderTypeLabel(publisher.defaultDisplayOrder) | translate}}</td>
+                    <td><input type="checkbox" ng-model="publisher.used" disabled/></td>
+                    <td>{{publisher.displayOrder}}</td>
+                    <!--<td>{{publisher.createdBy}}</td>
+                    <td>{{publisher.createdDate}}</td>
+                    <td>{{publisher.lastModifiedBy}}</td>
+                    <td>{{publisher.lastModifiedDate}}</td>-->
+                    <td>
+                        <button type="submit"
+                                ui-sref="publisherDetail({id:publisher.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(publisher.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(publisher.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

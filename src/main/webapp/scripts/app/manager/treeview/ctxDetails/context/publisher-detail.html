@@ -1,0 +1,86 @@
+
+<div>
+    <h3><!--<span translate="publisherApp.publisher.detail.title">Publisher</span>--><span translate="manager.treeview.details.context.properties">Properties</span></h3>
+    <button type="button" can-edit="context.contextKey" class="btn btn-primary" ng-click="updateContext()">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+    </button>
+    <button type="button"  has-role="ROLE_ADMIN" class="btn btn-danger" data-toggle="modal" data-target="#deleteContextConfirmation">
+        <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+    </button>
+    <button type="button" can-create-in="context.contextKey" class="btn btn-primary" ng-click="createContext('CATEGORY')">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="publisherApp.category.home.createLabel">Create a Category</span>
+    </button>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.context.key">Context</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control"
+                               value="{{context.context.reader.displayName}} - {{context.context.redactor.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.permissionType">PermissionType</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getPermissionClassLabel(context.permissionType) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getDisplayOrderTypeLabel(context.defaultDisplayOrder) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.publisher.used">Used</span>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="input-sm form-control" ng-model="context.used" disabled>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/publisher-form.html'"></div>
+
+    <div class="modal fade" id="deleteContextConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDeleteContext(context.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!--ng-click="clear()"-->
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.publisher.delete.question" translate-values="{id: '{{context.context.reader.displayName}} - {{context.context.redactor.displayName}}'}">Are you sure you want to delete this Publisher?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><!--ng-click="clear()"-->
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/category-form.html'"></div>
+</div>

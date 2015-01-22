@@ -1,0 +1,46 @@
+<div ng-cloak>
+    <div class="row">
+        <div class="list-group col-md-8 col-md-offset-2">
+
+            <a ui-sref="publish.publisher" class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-6 text-right">
+                        <i class="fa fa-pencil fa-5x hidden-xs"></i>
+                        <i class="fa fa-pencil fa-2x visible-xs"></i>
+                    </div>
+                    <div class="col-xs-6 text-left">
+                        <h4 class="list-group-item-heading" translate="main.link.write.name">Publish</h4>
+                        <span class="list-group-item-text hidden-xs" translate="main.link.write.desc">Publishing a content</span>
+                    </div>
+                </div>
+            </a>
+
+            <a ui-sref="owned" class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-6 text-right">
+                        <i class="fa fa-wrench fa-5x hidden-xs"></i>
+                        <i class="fa fa-wrench fa-2x visible-xs"></i>
+                    </div>
+                    <div class="col-xs-6 text-left">
+                        <h4 class="list-group-item-heading" translate="main.link.manage.name">Manage</h4>
+                        <span class="list-group-item-text hidden-xs" translate="main.link.manage.desc">Manage the publication context</span>
+                    </div>
+                </div>
+            </a>
+
+            <a ui-sref="administration" class="list-group-item" has-role="ROLE_ADMIN">
+                <div class="row">
+                    <div class="col-xs-6 text-right">
+                        <i class="fa fa-cogs fa-5x hidden-xs"></i>
+                        <i class="fa fa-cogs fa-2x visible-xs"></i>
+                    </div>
+                    <div class="col-xs-6 text-left">
+                        <h4 class="list-group-item-heading" translate="main.link.admin.name">Super Admin</h4>
+                        <span class="list-group-item-text hidden-xs" translate="main.link.admin.desc">Super Admin view</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</div>

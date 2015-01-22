@@ -1,0 +1,24 @@
+{
+    "login": {
+        "title": "Authentication",
+        "form": {
+            "password": "Password",
+            "password.placeholder": "Your password",
+            "rememberme": "Automatic Login",
+            "button": "Authenticate"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again.",
+                "401": "You must be authenticated to access to this page."
+            }
+        },
+        "modal": {
+            "title.timeout": "Session timeout",
+            "relog": {
+                "body": "To work on this application please relog you",
+                "action": "Relog"
+            }
+        }
+    }
+}

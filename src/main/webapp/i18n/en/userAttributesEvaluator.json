@@ -1,0 +1,20 @@
+{
+    "publisherApp": {
+        "userAttributesEvaluator" : {
+            "home": {
+                "title": "UserAttributesEvaluators",
+                "createLabel": "Create a new UserAttributesEvaluator",
+                "createOrEditLabel": "Create or edit a UserAttributesEvaluator"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete UserAttributesEvaluator {{ id }}?"
+            },
+            "detail": {
+                "title": "UserAttributesEvaluator"
+            },
+            "mode": "Mode",
+            "attribute": "Attribute",
+            "value": "Value"
+        }
+    }
+}

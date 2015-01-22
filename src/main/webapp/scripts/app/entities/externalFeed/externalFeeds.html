@@ -1,0 +1,322 @@
+<div>
+
+    <h2 translate="publisherApp.externalFeed.home.title">ExternalFeed</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveExternalFeedModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.externalFeed.home.createLabel">Create a new ExternalFeed</span>
+    </button>
+    <div class="modal fade" id="saveExternalFeedModal" tabindex="-1" role="dialog" aria-labelledby="myExternalFeedLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myExternalFeedLabel" translate="publisherApp.externalFeed.home.createOrEditLabel">Create or edit a ExternalFeed</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="externalFeed.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.rssAllowed">RssAllowed</label>
+                            <input type="checkbox" class="form-control" name="rssAllowed"
+                                   ng-model="externalFeed.rssAllowed">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   ng-model="externalFeed.name" required ng-minlength="3" ng-maxlength="200">
+
+                            <div ng-show="editForm.name.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                                    This field cannot be longer than 200 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.iconUrl">IconUrl</label>
+                            <input type="text" class="form-control" name="iconUrl"
+                                   ng-model="externalFeed.iconUrl" ng-maxlength="2048">
+
+                            <div ng-show="editForm.iconUrl.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.iconUrl.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                    This field cannot be longer than 2048 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.lang">Lang</label>
+                            <input type="text" class="form-control" name="lang"
+                                   ng-model="externalFeed.lang" ng-minlength="2" ng-maxlength="5">
+
+                            <div ng-show="editForm.lang.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.lang.$error.minlength" translate="entity.validation.minlength" translate-value-min="2">
+                                    This field is required to be at least 2 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.lang.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="5">
+                                    This field cannot be longer than 5 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.ttl">Ttl</label>
+                            <input type="number" class="form-control" name="ttl"
+                                   ng-model="externalFeed.ttl" min="900" max="86400">
+
+                            <div ng-show="editForm.ttl.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.ttl.$error.min" translate="entity.validation.min" translate-value-min="900">
+                                    This field should be more than 900.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.ttl.$error.max" translate="entity.validation.max" translate-value-max="86400">
+                                    This field cannot be more than 86400.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.ttl.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.displayOrder">DisplayOrder</label>
+                            <input type="number" class="form-control" name="displayOrder"
+                                   ng-model="externalFeed.displayOrder" required min="0" max="999">
+
+                            <div ng-show="editForm.displayOrder.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                                    This field should be more than 0.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="999">
+                                    This field cannot be more than 999.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.accessView">AccessView</label>
+                            <input type="text" class="form-control" name="accessView"
+                                   ng-model="externalFeed.accessView" required>
+
+                            <div ng-show="editForm.accessView.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.accessView.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.description">Description</label>
+                            <input type="text" class="form-control" name="description"
+                                   ng-model="externalFeed.description" required ng-minlength="5" ng-maxlength="512">
+
+                            <div ng-show="editForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.defaultDisplayOrder">DefaultDisplayOrder</label>
+                            <input type="text" class="form-control" name="defaultDisplayOrder"
+                                   ng-model="externalFeed.defaultDisplayOrder" required>
+
+                            <div ng-show="editForm.defaultDisplayOrder.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.rssUrl">RssUrl</label>
+                            <input type="text" class="form-control" name="rssUrl"
+                                   ng-model="externalFeed.rssUrl" required ng-maxlength="2048">
+
+                            <div ng-show="editForm.rssUrl.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.rssUrl.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.rssUrl.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                    This field cannot be longer than 2048 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.createdBy">CreatedBy</label>
+                            <input type="text" class="form-control" name="createdBy"
+                                   ng-model="externalFeed.createdBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.createdDate">CreatedDate</label>
+                            <input type="datetime-local" class="form-control" name="createdDate"
+                                   ng-model="externalFeed.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.lastModifiedBy">LastModifiedBy</label>
+                            <input type="text" class="form-control" name="lastModifiedBy"
+                                   ng-model="externalFeed.lastModifiedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.lastModifiedDate">LastModifiedDate</label>
+                            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                                   ng-model="externalFeed.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.publisher">publisher</label>
+                            <select class="form-control" name="publisher" ng-model="externalFeed.publisher.id" ng-options="publisher.id as publisher.id for publisher in publishers">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.externalFeed.parent">parent</label>
+                            <select class="form-control" name="parent" ng-model="externalFeed.parent.id" ng-options="category.id as category.name for category in categorys">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteExternalFeedConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(externalFeed.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.externalFeed.delete.question" translate-values="{id: '{{externalFeed.id}}'}">Are you sure you want to delete this ExternalFeed?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.externalFeed.rssAllowed">RssAllowed</th>
+                    <th translate="publisherApp.externalFeed.name">Name</th>
+                    <th translate="publisherApp.externalFeed.iconUrl">IconUrl</th>
+                    <th translate="publisherApp.externalFeed.lang">Lang</th>
+                    <th translate="publisherApp.externalFeed.ttl">Ttl</th>
+                    <th translate="publisherApp.externalFeed.displayOrder">DisplayOrder</th>
+                    <th translate="publisherApp.externalFeed.accessView">AccessView</th>
+                    <th translate="publisherApp.externalFeed.description">Description</th>
+                    <th translate="publisherApp.externalFeed.defaultDisplayOrder">DefaultDisplayOrder</th>
+                    <th translate="publisherApp.externalFeed.rssUrl">RssUrl</th>
+                    <th translate="publisherApp.externalFeed.createdBy">CreatedBy</th>
+                    <th translate="publisherApp.externalFeed.createdDate">CreatedDate</th>
+                    <th translate="publisherApp.externalFeed.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="publisherApp.externalFeed.lastModifiedDate">LastModifiedDate</th>
+                    <th translate="publisherApp.externalFeed.publisher">publisher</th>
+                    <th translate="publisherApp.externalFeed.parent">parent</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="externalFeed in externalFeeds">
+                    <td><a ui-sref="externalFeedDetail({id:externalFeed.id})">{{externalFeed.id}}</a></td>
+                    <td>{{externalFeed.rssAllowed}}</td>
+                    <td>{{externalFeed.name}}</td>
+                    <td>{{externalFeed.iconUrl}}</td>
+                    <td>{{externalFeed.lang}}</td>
+                    <td>{{externalFeed.ttl}}</td>
+                    <td>{{externalFeed.displayOrder}}</td>
+                    <td>{{externalFeed.accessView}}</td>
+                    <td>{{externalFeed.description}}</td>
+                    <td>{{externalFeed.defaultDisplayOrder}}</td>
+                    <td>{{externalFeed.rssUrl}}</td>
+                    <td>{{externalFeed.createdBy}}</td>
+                    <td>{{externalFeed.createdDate}}</td>
+                    <td>{{externalFeed.lastModifiedBy}}</td>
+                    <td>{{externalFeed.lastModifiedDate}}</td>
+                    <td>{{externalFeed.publisher.id}}</td>
+                    <td>{{externalFeed.parent.name}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="externalFeedDetail({id:externalFeed.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(externalFeed.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(externalFeed.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

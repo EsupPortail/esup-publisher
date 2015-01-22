@@ -1,0 +1,113 @@
+{
+    "enum": {
+        "itemStatus": {
+            "pending": {
+                "title": "En validation"
+            },
+            "scheduled": {
+                "title": "À venir"
+            },
+            "published": {
+                "title": "Publié"
+            },
+            "archived": {
+                "title": "Expiré"
+            },
+            "draft": {
+                "title": "Brouillon"
+            }
+        },
+        "itemType": {
+            "NEWS": "Actualité",
+            "MEDIA": "Média",
+            "RESOURCE": "Ressource",
+            "EVENT": "Évènement"
+        },
+        "displayOrder": {
+            "lastCreatedModifiedFirst": {
+                "title":"Dernier créé/modifié en premier"
+            },
+            "onlyLastCreatedFirst": {
+                "title":"Dernier créé en premier"
+            },
+            "byName": {
+                "title": "Sur le nom"
+            },
+            "byStartDate": {
+                "title": "Par date de début de publication"
+            },
+            "custom": {
+                "title": "Manuel"
+            }
+        },
+        "permission": {
+            "superAdm": {
+                "title": "Super administrateur"
+            },
+            "manager": {
+                "title": "Manageur"
+            },
+            "editor": {
+                "title": "Editeur"
+            },
+            "contributor": {
+                "title": "Contributeur"
+            },
+            "lookover": {
+                "title": "Parcours"
+            }
+        },
+        "permissionclass": {
+            "context": {
+                "title": "Permissions sur des contextes"
+            },
+            "contextwithsubjects": {
+                "title": "Permissions sur des contextes avec des populations cible filtrées"
+            },
+            "subject": {
+                "title": "Permissions sur des personnes"
+            },
+            "subjectwithclassif": {
+                "title": "Permissions sur des personnes avec des contextes filtrés"
+            }
+        },
+        "subscribe": {
+            "forced": {
+                "title": "Abonnement forcé"
+            },
+            "free": {
+                "title": "Abonnement libre"
+            },
+            "pre": {
+                "title": "Pré-abonnement"
+            }
+        },
+        "subject": {
+            "person": {
+                "title": "Personne"
+            },
+            "group": {
+                "title": "Groupe"
+            }
+        },
+        "access": {
+            "public": {
+                "title": "Public"
+            },
+            "authenticated": {
+                "title": "Utilisateurs authentifiés"
+            },
+            "authorized": {
+                "title": "Utilisateurs autorisés"
+            }
+        },
+        "writingMode": {
+            "static": {
+                "title": "Cibles pré-définis via les classifications"
+            },
+            "targetsOnItem": {
+                "title": "Cibles définis lors de la publication."
+            }
+        }
+    }
+}

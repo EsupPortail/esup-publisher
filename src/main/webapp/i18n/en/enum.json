@@ -1,0 +1,99 @@
+{
+    "enum": {
+        "itemStatus": {
+            "pending": {
+                "title": "Pending"
+            },
+            "scheduled": {
+                "title": "Scheduled"
+            },
+            "published": {
+                "title": "Published"
+            },
+            "archived": {
+                "title": "Archived"
+            },
+            "draft": {
+                "title": "Draft"
+            }
+        },
+        "itemType": {
+            "NEWS": "News",
+            "MEDIA": "Media",
+            "RESOURCE": "Resource",
+            "EVENT": "Event"
+        },
+        "displayOrder": {
+            "lastCreatedModifiedFirst": {
+                "title":"Last created/modified first"
+            },
+            "onlyLastCreatedFirst": {
+                "title":"Last created first"
+            },
+            "byName": {
+                "title": "By name"
+            },
+            "byStartDate": {
+                "title": "By start date"
+            },
+            "custom": {
+                "title": "Manual"
+            }
+        },
+        "permission": {
+            "superAdm": {
+                "title": "Super administrator"
+            },
+            "manager": {
+                "title": "Manager"
+            },
+            "editor": {
+                "title": "Editor"
+            },
+            "contributor": {
+                "title": "Contributor"
+            },
+            "lookover": {
+                "title": "Look over"
+            }
+        },
+        "subscribe": {
+            "forced": {
+                "title": "Forced subscription"
+            },
+            "free": {
+                "title": "Free subscription"
+            },
+            "pre": {
+                "title": "Pre-subscription"
+            }
+        },
+        "subject": {
+            "person": {
+                "title": "Person"
+            },
+            "group": {
+                "title": "Group"
+            }
+        },
+        "access": {
+            "public": {
+                "title": "Public access"
+            },
+            "authenticated": {
+                "title": "Authenticated users"
+            },
+            "authorized": {
+                "title": "Authorized users"
+            }
+        },
+        "writingMode": {
+            "static": {
+                "title": "Targets pre-defined on classifications"
+            },
+            "targetsOnItem": {
+                "title": "Targets defined when publishing."
+            }
+        }
+    }
+}

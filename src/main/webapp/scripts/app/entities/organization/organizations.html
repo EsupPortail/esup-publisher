@@ -1,0 +1,189 @@
+<div>
+
+    <h2 translate="publisherApp.organization.home.title">Organization</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveOrganizationModal" ng-click="clear()" has-any-role="ROLE_ADMIN">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.organization.home.createLabel">Create a new Organization</span>
+    </button>
+    <div class="modal fade" id="saveOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="myOrganizationLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myOrganizationLabel" translate="publisherApp.organization.home.createOrEditLabel">Create or edit a Organization</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="organization.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.organization.name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   ng-model="organization.name" required ng-minlength="5" ng-maxlength="255">
+
+                            <div ng-show="editForm.name.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="255">
+                                    This field cannot be longer than 255 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-hide="true">
+                            <label translate="publisherApp.organization.displayName">DisplayName</label>
+                            <input type="text" class="form-control" name="displayName"
+                                   ng-model="organization.displayName" ng-maxlength="100">
+
+                            <div ng-show="editForm.displayName.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="100">
+                                    This field cannot be longer than 100 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.organization.description">Description</label>
+                            <input type="text" class="form-control" name="description"
+                                   ng-model="organization.description" required ng-minlength="5" ng-maxlength="512">
+
+                            <div ng-show="editForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.organization.displayOrder">DisplayOrder</label>
+                            <input type="number" class="form-control" name="displayOrder"
+                                   ng-model="organization.displayOrder" required min="0" max="999">
+
+                            <div ng-show="editForm.displayOrder.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                                    This field should be more than 0.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="999">
+                                    This field cannot be more than 999.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
+                            <input type="checkbox" class="form-control" name="allowNotifications"
+                                   ng-model="organization.allowNotifications">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteOrganizationConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(organization.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.organization.delete.question" translate-values="{id: '{{organization.id}}'}">Are you sure you want to delete this Organization?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.organization.name">Name</th>
+                    <th ng-hide="true" translate="publisherApp.organization.displayName">DisplayName</th>
+                    <th translate="publisherApp.organization.description">Description</th>
+                    <th translate="publisherApp.organization.displayOrder">DisplayOrder</th>
+                    <th translate="publisherApp.organization.allowNotifications">AllowNotifications</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="organization in organizations">
+                    <td><a ui-sref="organizationDetail({id:organization.id})">{{organization.id}}</a></td>
+                    <td>{{organization.name}}</td>
+                    <td ng-hide="true">{{organization.displayName}}</td>
+                    <td>{{organization.description}}</td>
+                    <td>{{organization.displayOrder}}</td>
+                    <td><input type="checkbox" ng-model="organization.allowNotifications" disabled/></td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="organizationDetail({id:organization.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit" has-any-role="ROLE_ADMIN"
+                                ng-click="update(organization.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit" has-any-role="ROLE_ADMIN"
+                                ng-click="delete(organization.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,150 @@
+
+<div>
+    <h2><span translate="publisherApp.externalFeed.detail.title">ExternalFeed</span> {{externalFeed.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.rssAllowed">RssAllowed</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.rssAllowed}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.name">Name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.iconUrl">IconUrl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.iconUrl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.lang">Lang</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.lang}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.ttl">Ttl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.ttl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.displayOrder">DisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.displayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.accessView">AccessView</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.accessView}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.defaultDisplayOrder">DefaultDisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.defaultDisplayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.rssUrl">RssUrl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.rssUrl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.createdBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.createdDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.lastModifiedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.lastModifiedDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.publisher">publisher</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.publisher.id}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.externalFeed.parent">parent</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{externalFeed.parent.name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="externalFeed"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

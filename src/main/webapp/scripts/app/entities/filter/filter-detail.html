@@ -1,0 +1,54 @@
+
+<div>
+    <h2><span translate="publisherApp.filter.detail.title">Filter</span> {{filter.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.filter.pattern">Pattern</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{filter.pattern}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.filter.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{filter.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.filter.type">Type</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{filter.type}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.filter.organization">organization</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{filter.organization.name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="filter"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

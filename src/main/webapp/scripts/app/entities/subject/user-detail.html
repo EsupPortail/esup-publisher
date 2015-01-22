@@ -1,0 +1,56 @@
+
+<div class="modal-open" id="userDetailsDialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
+            <h2><span translate="publisherApp.subject.user.detail.title">User</span></h2>
+        </div>
+
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th translate="entity.detail.field">Field</th>
+                        <th translate="entity.detail.value">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span translate="publisherApp.subject.user.id">id</span>
+                        </td>
+                        <td>
+                            <input type="text" class="input-sm form-control" value="{{subject.modelId.keyId}}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span translate="publisherApp.subject.user.displayName" >displayName</span>
+                        </td>
+                        <td>
+                            <input type="text" class="input-sm form-control" value="{{subject.displayName}}" readonly>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="attribute in attributes">
+                        <td>
+                            <span translate="{{'publisherApp.subject.user.' + attribute}}">{{attribute}}</span>
+                        </td>
+                        <td>
+                            <input ng-repeat="value in subject.attributes[attribute]" type="text" class="input-sm form-control" value="{{value}}" readonly>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">
+                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.close">Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

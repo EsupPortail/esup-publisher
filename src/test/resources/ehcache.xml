@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         name="CM1"
+         updateCheck="false"
+         maxBytesLocalHeap="16M">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache
+            eternal="false"
+            overflowToDisk="false"
+            />
+
+   <cache name="org.esupportail.publisher.domain.User" timeToLiveSeconds="3600">
+    </cache>
+
+    <!-- <cache name="org.esupportail.publisher.domain.Authority" -->
+    <!-- timeToLiveSeconds="3600"> -->
+    <!-- </cache> -->
+
+    <!-- <cache name="org.esupportail.publisher.domain.User.authorities" -->
+    <!-- timeToLiveSeconds="3600"> -->
+    <!-- </cache> -->
+
+    <!-- <cache name="org.esupportail.publisher.domain.PersistentToken" timeToLiveSeconds="3600"> </cache> <cache name="org.esupportail.publisher.domain.User.persistentTokens"
+        timeToLiveSeconds="3600"> </cache> -->
+    <cache name="org.esupportail.publisher.domain.PersistentAuditEvent" timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.esupportail.publisher.domain.AbstractClassification" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.AbstractPermission" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.ItemClassificationOrder" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Publisher" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.AbstractItem" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Filter" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Redactor" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Reader" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Subscriber" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Organization" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Reader.organizationReaderRedactors" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.evaluators.OperatorEvaluator.evaluators" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Organization.availablePublisherContexts" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.Redactor.organizationReaderRedactors" timeToLiveSeconds="3600">
+    </cache>
+</ehcache>
+

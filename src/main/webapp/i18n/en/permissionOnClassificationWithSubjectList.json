@@ -1,0 +1,33 @@
+{
+    "publisherApp": {
+        "permissionOnClassificationWithSubjectList" : {
+            "home": {
+                "title": "Permission On Classification With Subject Lists",
+                "createLabel": "Create a new Permission On Classification With Subject List",
+                "createOrEditLabel": "Create or edit a Permission On Classification With Subject List"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Permission On Classification With Subject List {{ id }}?"
+            },
+            "detail": {
+                "title": "Permission On Classification With Subject List"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Role",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "evaluator": "Evaluator",
+            "authorizedSubjects": "Authorized Subjects",
+            "evaluatorsimple" : "Subject",
+            "evaluator.add" : {
+                "action": "Add :",
+                "user": "Person",
+                "group": "Group",
+                "userfromgroup": "Person from group"
+            }
+        }
+    }
+}

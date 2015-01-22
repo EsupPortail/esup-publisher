@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span translate="publisherApp.userMultivaluedAttributesEvaluator.detail.title">UserMultivaluedAttributesEvaluator</span> {{userMultivaluedAttributesEvaluator.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.userMultivaluedAttributesEvaluator.mode">Mode</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{userMultivaluedAttributesEvaluator.mode}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.userMultivaluedAttributesEvaluator.attribute">Attribute</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{userMultivaluedAttributesEvaluator.attribute}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.userMultivaluedAttributesEvaluator.value">Value</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{userMultivaluedAttributesEvaluator.value}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="userMultivaluedAttributesEvaluator"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

@@ -1,0 +1,29 @@
+{
+    "publisherApp": {
+        "organization" : {
+            "home": {
+                "title": "Structures",
+                "createLabel": "Créer une nouvelle structure",
+                "createOrEditLabel": "Créer ou éditer une structure",
+                "editLabel": "Éditer une structure"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la structure {{ id }} ?"
+            },
+            "detail": {
+                "title": "Structure"
+            },
+            "name": "Nom",
+            "displayName": "Nom affiché",
+            "description": "Description",
+            "displayOrder": "Ordre d'affichage",
+            "allowNotifications": "Notifications",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "availablePublisherContexts": "Liste des contextes de publications disponibles"
+        }
+    }
+}
+

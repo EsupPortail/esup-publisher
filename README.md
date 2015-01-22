@@ -1,2 +1,4 @@
-# esup-publisher-ui
-UI to publish content
+esup-publisher-ui
+==============
+
+Apps api to publish content into some portal's portlets

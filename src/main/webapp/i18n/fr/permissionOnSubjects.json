@@ -1,0 +1,27 @@
+{
+    "publisherApp": {
+        "permissionOnSubjects" : {
+            "home": {
+                "title": "PermissionOnSubjectss",
+                "createLabel": "Créer un nouveau PermissionOnSubjects",
+                "createOrEditLabel": "Créer ou éditer un PermissionOnSubjects"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le PermissionOnSubjects {{ id }} ?"
+            },
+            "detail": {
+                "title": "PermissionOnSubjects"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Role",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "evaluator": "evaluator",
+            "rolesOnSubjects": "rolesOnSubjects"
+        }
+    }
+}
+

@@ -1,0 +1,94 @@
+
+<div>
+    <h2><span translate="publisherApp.organization.detail.title">Organization</span> {{organization.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.name">Name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.name}}" readonly>
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td>
+                        <span translate="publisherApp.organization.displayName">DisplayName</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.displayName}}" readonly>
+                    </td>
+                </tr>-->
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.displayOrder">DisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.displayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.allowNotifications">AllowNotifications</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.allowNotifications}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.createdBy.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.lastModifiedBy.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.organization.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{organization.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="organization"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

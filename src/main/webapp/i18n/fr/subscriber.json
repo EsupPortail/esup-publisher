@@ -1,0 +1,26 @@
+{
+    "publisherApp": {
+        "subscriber" : {
+            "home": {
+                "title": "Abonnements",
+                "createLabel": "Ajouter un nouvel abonnement",
+                "createOrEditLabel": "Créer ou éditer un abonnement"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer l'abonnement de la population ciblée ?",
+                "questionbis": "Etes-vous certain de vouloir supprimer l'abonnement {{ id }} ?"
+            },
+            "detail": {
+                "title": "Abonnement"
+            },
+            "ctxId": "Identifiant du contexte",
+            "ctxType": "Type du contexte",
+            "keyId": "Identifiant de la cible",
+            "keyType": "Type de la cible",
+            "subscribeType": "Type de souscription",
+            "subject": "Population cible",
+            "context": "Contexte"
+        }
+    }
+}
+

@@ -1,0 +1,198 @@
+    <div class="modal fade" id="saveMediaModal" tabindex="-1" role="dialog" aria-labelledby="myMediaLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editMediaForm" role="form" novalidate>
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myMediaLabel" translate="publisherApp.media.home.createOrEditLabel">Create or edit a Media</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="item.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.media.title">Title</label>
+                            <input type="text" class="form-control" name="title"
+                                   ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
+
+                            <div ng-show="editMediaForm.title.$invalid">
+                                <p class="help-block"
+                                   ng-show="editMediaForm.title.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.title.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                                    This field cannot be longer than 200 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.enclosure">Enclosure</label>
+                            <input type="url" class="form-control" name="enclosure"
+                                   ng-model="item.enclosure" ng-maxlength="2048">
+
+                            <div ng-show="editMediaForm.enclosure.$invalid">
+                                <p class="help-block"
+                                   ng-show="editMediaForm.enclosure.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                    This field cannot be longer than 2048 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.enclosure.$error.url" translate="entity.validation.url">
+                                    This field must be a valid URL.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.startDate">StartDate</label>
+                            <input type="date" class="form-control" name="startDate" placeholder="jj/mm/aaaa" min={{today}} ng-model="item.startDate"
+                                   alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
+
+                            <div ng-show="editMediaForm.startDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editMediaForm.startDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.startDate.$error.date" translate="entity.validation.date">
+                                    This field is not a valid date.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{today | date: dtformat }}">
+                                    A date after now is required.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                                    A date before next year from now is required
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
+                                   translate-value-field="{{'publisherApp.media.endDate' | translate}}">
+                                    From date must be lower than To date
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.endDate">EndDate</label>
+                            <input type="date" class="form-control" name="endDate" placeholder="jj/mm/aaaa" max={{nextyear}} ng-model="item.endDate"
+                                   alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
+
+                            <div ng-show="editMediaForm.endDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editMediaForm.endDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.endDate.$error.date" translate="entity.validation.date">
+                                    This field is not a valid date.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{item.startDate | date: dtformat }}">
+                                    A date after now is required.
+                                </p>
+                                <p class="help-block" ng-show="editMediaForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                                    A date before next year from now is required
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
+                                   translate-value-field="{{'publisherApp.media.startDate' | translate}}">
+                                    From date must be greater than From date
+                                </p>
+                            </div>
+                        </div>
+                       <!--
+                       <div class="form-group">
+                            <label translate="publisherApp.media.validatedBy">ValidatedBy</label>
+                            <input type="text" class="form-control" name="validatedBy"
+                                   ng-model="item.validatedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.validatedDate">ValidatedDate</label>
+                            <input type="datetime-local" class="form-control" name="validatedDate"
+                                   ng-model="item.validatedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group hidden">
+                            <label translate="publisherApp.media.status">Status</label>
+                            <input type="text" class="form-control" name="status"
+                                   ng-model="item.status">
+
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <label translate="publisherApp.media.summary">Summary</label>
+                            <input type="text" class="form-control" name="summary"
+                                   ng-model="item.summary" required ng-minlength="5" ng-maxlength="512">
+
+                            <div ng-show="editMediaForm.summary.$invalid">
+                                <p class="help-block"
+                                   ng-show="editMediaForm.summary.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editMediaForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="form-group">
+                            <label translate="publisherApp.media.createdBy">CreatedBy</label>
+                            <input type="text" class="form-control" name="createdBy"
+                                   ng-model="item.createdBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.createdDate">CreatedDate</label>
+                            <input type="datetime-local" class="form-control" name="createdDate"
+                                   ng-model="item.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.lastModifiedBy">LastModifiedBy</label>
+                            <input type="text" class="form-control" name="lastModifiedBy"
+                                   ng-model="item.lastModifiedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.lastModifiedDate">LastModifiedDate</label>
+                            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                                   ng-model="item.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        -->
+                        <div class="form-group">
+                            <label translate="publisherApp.media.organization">organization</label>
+                            <select class="form-control" name="organization" ng-model="item.organization.id" ng-options="organization.id as organization.name for organization in organizations" required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.media.redactor">redactor</label>
+                            <select class="form-control" name="redactor" ng-model="item.redactor.id" ng-options="redactor.id as redactor.displayName for redactor in redactors" required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="button" ng-disabled="editMediaForm.$invalid" class="btn btn-primary" ng-click="publish('DRAFT')">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="publisherApp.item.action.save">Save</span>
+                        </button>
+                        <button type="button" ng-disabled="editMediaForm.$invalid" class="btn btn-primary" ng-click="publish('PUBLISH')">
+                            <span class="glyphicon glyphicon-send"></span>&nbsp;<span translate="publisherApp.item.action.publish">Publish</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

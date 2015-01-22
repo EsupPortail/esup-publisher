@@ -1,0 +1,188 @@
+<div>
+
+    <h2 translate="publisherApp.reader.home.title">Reader</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveReaderModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.reader.home.createLabel">Create a new Reader</span>
+    </button>
+    <div class="modal fade" id="saveReaderModal" tabindex="-1" role="dialog" aria-labelledby="myReaderLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myReaderLabel" translate="publisherApp.reader.home.createOrEditLabel">Create or edit a Reader</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="reader.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.reader.name">Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   ng-model="reader.name" required ng-minlength="3" ng-maxlength="20">
+
+                            <div ng-show="editForm.name.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="20">
+                                    This field cannot be longer than 20 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.reader.displayName">DisplayName</label>
+                            <input type="text" class="form-control" name="displayName"
+                                   ng-model="reader.displayName" required ng-minlength="3" ng-maxlength="50">
+
+                            <div ng-show="editForm.displayName.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.displayName.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayName.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
+                                    This field cannot be longer than 50 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.reader.description">Description</label>
+                            <input type="text" class="form-control" name="description"
+                                   ng-model="reader.description" required ng-minlength="3" ng-maxlength="512">
+
+                            <div ng-show="editForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" translate="publisherApp.reader.authorizedTypes">AuthorizedTypes</label>
+                            <!--<select class="form-control" id="authorizedTypes" name="authorizedTypes" ng-model="reader.authorizedTypes"
+                                    ng-options="authorizedType.name as authorizedType.label | translate for authorizedType in authorizedTypesList" required>
+                            </select>-->
+                            <div class="inline-form">
+                                <div ng-repeat="authorizedType in authorizedTypesList" class="checkbox-inline">
+                                    <input ng-attr-id="{{authorizedType}}" type="checkbox" value="{{authorizedType}}" ng-checked="containsSelectedType(authorizedType)"
+                                           ng-click="toggleSelection(authorizedType)">
+                                    <label ng-attr-for="{{authorizedType}}">
+                                        <!--<img ng-if="classif.icon" ng-src="{{ classif.icon }}"/>-->
+                                        <span>{{ 'enum.itemType.' + authorizedType | translate}}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div ng-show="reader.authorizedTypes.length < 1">
+                                <p class="help-block"
+                                   ng-show="reader.authorizedTypes.length < 1" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid || reader.authorizedTypes.length < 1" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteReaderConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(reader.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.reader.delete.question" translate-values="{id: '{{reader.id}}'}">Are you sure you want to delete this Reader?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.reader.name">Name</th>
+                    <th translate="publisherApp.reader.displayName">DisplayName</th>
+                    <th translate="publisherApp.reader.description">Description</th>
+                    <th translate="publisherApp.reader.authorizedTypes">AuthorizedTypes</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="reader in readers">
+                    <td><a ui-sref="readerDetail({id:reader.id})">{{reader.id}}</a></td>
+                    <td>{{reader.name}}</td>
+                    <td>{{reader.displayName}}</td>
+                    <td>{{reader.description}}</td>
+                    <td><span class="list-comma" ng-repeat="type in reader.authorizedTypes">{{'enum.itemType.' + type | translate}}</span></td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="readerDetail({id:reader.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(reader.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(reader.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

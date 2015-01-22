@@ -1,0 +1,38 @@
+{
+    "publisherApp": {
+        "category" : {
+            "home": {
+                "title": "Catégories",
+                "createLabel": "Créer une nouvelle catégorie",
+                "createOrEditLabel": "Créer ou éditer une categorie"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la categorie {{ id }} ?"
+            },
+            "detail": {
+                "title": "Catégorie"
+            },
+            "rssAllowed": "Autoriser RSS",
+            "name": "Nom",
+            "iconUrl": "Icône",
+            "lang": "Langue",
+            "langList": {
+                "fr": "Français",
+                "en": "Anglais",
+                "de": "Allemand",
+                "es": "Espagnol"
+            },
+            "ttl": "TTL",
+            "displayOrder": "Ordre d'affichage",
+            "accessView": "Type d'accès",
+            "description": "Description",
+            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "publisher": "Contexte de publication"
+        }
+    }
+}
+

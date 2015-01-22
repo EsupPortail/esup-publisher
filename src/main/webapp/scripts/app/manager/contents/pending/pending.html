@@ -1,0 +1,107 @@
+<div>
+
+    <h2 translate="manager.contents.pending.title">Item</h2>
+
+    <div class="modal fade" id="deleteItemConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(item.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.item.delete.question" translate-values="{id: '{{item.id}}'}">Are you sure you want to delete this Item?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="hidden">ID</th>
+                <th translate="publisherApp.item.type">Type</th>
+                <th translate="publisherApp.item.title">Title</th>
+                <th class="hidden" translate="publisherApp.item.enclosure">Enclosure</th>
+                <th class="hidden-sm" translate="publisherApp.item.startDate">StartDate</th>
+                <th class="hidden-sm" translate="publisherApp.item.endDate">EndDate</th>
+                <th class="hidden" translate="publisherApp.item.validatedBy">ValidatedBy</th>
+                <th class="hidden" translate="publisherApp.item.validatedDate">ValidatedDate</th>
+                <th class="hidden" translate="publisherApp.item.status">Status</th>
+                <th class="hidden-sm" translate="publisherApp.item.summary">Summary</th>
+                <th class="hidden" translate="publisherApp.item.body">Body</th>
+                <th class="hidden" translate="publisherApp.item.createdBy">CreatedBy</th>
+                <th class="hidden" translate="publisherApp.item.createdDate">CreatedDate</th>
+                <th class="hidden" translate="publisherApp.item.lastModifiedBy">LastModifiedBy</th>
+                <th class="hidden" translate="publisherApp.item.lastModifiedDate">LastModifiedDate</th>
+                <th translate="publisherApp.item.organization">organization</th>
+                <th class="hidden-sm" translate="publisherApp.item.redactor">redactor</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in items">
+                <td class="hidden"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
+                <td>{{item.type}}</td>
+                <td class="longtext">{{item.title}}</td>
+                <td class="hidden">{{item.enclosure}}</td>
+                <td class="hidden-sm">{{item.startDate}}</td>
+                <td class="hidden-sm">{{item.endDate}}</td>
+                <td class="hidden">{{item.validatedBy.displayName}}</td>
+                <td class="hidden">{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                <td class="hidden">{{item.status.label | translate}}</td>
+                <td class="hidden-sm verylongtext">{{item.summary}}</td>
+                <td class="hidden">{{item.body}}</td>
+                <td class="hidden">{{item.createdBy.displayName}}</td>
+                <td class="hidden">{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                <td class="hidden">{{item.lastModifiedBy.displayName}}</td>
+                <td class="hidden">{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                <td>{{item.organization.name}}</td>
+                <td class="hidden-sm">{{item.redactor.displayName}}</td>
+                <td>
+                    <button type="submit"
+                            ui-sref="details({id:item.id})"
+                            class="btn btn-info">
+                        <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                    </button>
+                    <button type="submit"
+                            ui-sref="publish.publisher({id:item.id})"
+                            class="btn btn-primary">
+                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                    </button>
+                    <button type="submit"
+                            ng-click="delete(item.id)"
+                            class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

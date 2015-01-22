@@ -1,0 +1,142 @@
+
+<div>
+    <h2><span translate="publisherApp.internalFeed.detail.title">InternalFeed</span> {{internalFeed.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.rssAllowed">RssAllowed</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.rssAllowed}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.name">Name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.iconUrl">IconUrl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.iconUrl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.lang">Lang</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.lang}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.ttl">Ttl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.ttl}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.displayOrder">DisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.displayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.accessView">AccessView</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.accessView}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.defaultDisplayOrder">DefaultDisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.defaultDisplayOrder}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.createdBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.createdDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.lastModifiedBy}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.lastModifiedDate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.publisher">publisher</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.publisher.id}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.internalFeed.parent">parent</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{internalFeed.parent.name}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="internalFeed"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

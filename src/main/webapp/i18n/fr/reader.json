@@ -1,0 +1,22 @@
+{
+    "publisherApp": {
+        "reader" : {
+            "home": {
+                "title": "Lecteurs",
+                "createLabel": "Créer un nouveau Lecteur",
+                "createOrEditLabel": "Créer ou éditer un Lecteur"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Lecteur {{ id }} ?"
+            },
+            "detail": {
+                "title": "Lecteur"
+            },
+            "name": "Nom",
+            "displayName": "Nom d'affichage",
+            "description": "Description",
+            "authorizedTypes": "Types de contenus"
+        }
+    }
+}
+

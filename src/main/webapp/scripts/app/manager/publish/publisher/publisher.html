@@ -1,0 +1,50 @@
+<div class="col-sm-8 col-sm-offset-2">
+    <h3 translate="manager.publish.publisher.title">Publisher Choice</h3>
+    <div class="form-group" ng-hide="publishers.length < 1">
+        <label class="control-label" for="reader" translate="manager.publish.publisher.reader">reader</label>
+        <select class="form-control" id="reader" name="reader" ng-model="selectedPublisher.context.reader" ng-change="selectReader(selectedPublisher.context.reader)"
+                ng-options="reader as reader.displayName for reader in readers track by reader.id" required>
+        </select>
+        <!--<select class="form-control" id="reader" name="reader" ng-model="reader" required>-->
+            <!--&lt;!&ndash;<option value="" ng-selected="!reader.id" ng-show="!reader.id"></option>&ndash;&gt;-->
+            <!--<option ng-repeat="publisher in filteredPublishers" value="{{publisher.context.reader}}" ng-selected="reader.id && reader.id === publisher.context.reader.id">-->
+                <!--{{publisher.context.reader.displayName}}-->
+            <!--</option>-->
+        <!--</select>-->
+    </div>
+
+    <div class="form-group" ng-show="selectedPublisher.context.reader && selectedPublisher.context.reader.id">
+        <label class="control-label" for="redactor" translate="manager.publish.publisher.redactor">redactor</label>
+        <select class="form-control" id="redactor" name="redactor" ng-model="selectedPublisher.context.redactor" ng-change="selectRedactor(selectedPublisher.context.redactor)"
+                ng-options="redactor as redactor.displayName for redactor in redactors track by redactor.id" required>
+        </select>
+    </div>
+
+    <div class="form-group" ng-show="selectedPublisher.context.redactor && selectedPublisher.context.redactor.id" >
+        <label class="control-label" for="organization" translate="manager.publish.publisher.organization">organization</label>
+        <select class="form-control" id="organization" name="organization" ng-model="selectedPublisher.context.organization" ng-change="selectOrganization(selectedPublisher.context.organization)"
+                ng-options="organization as organization.name for organization in organizations track by organization.id" required>
+        </select>
+    </div>
+
+
+    <div class="text-center" ng-hide="publishers.length < 1">
+        <div class="btn-group" role="group">
+            <button type="button" ui-sref="home" class="btn btn-info">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+            </button>
+
+            <button type="button" ui-sref="publish.content" ng-disabled="!isPublisherSelected()" class="btn btn-info" ng-click="validatePublisher()">
+                <span translate="manager.publish.nextStep"> Next Step</span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
+            </button>
+        </div>
+    </div>
+
+    <div ng-show="publishers.length < 1" class="alert alert-danger" translate="manager.publish.publisher.emptyList" ></div>
+
+    <!--<div ng-show="isPublisherSelected()">
+        <span translate="manager.publish.publisher.selected"
+              translate-values="{ channel: '{{publisher.context.reader.displayName}}', writer: '{{publisher.context.redactor.displayName}}', organization: '{{publisher.context.organization.name}}'}"></span>
+    </div>-->
+
+</div>

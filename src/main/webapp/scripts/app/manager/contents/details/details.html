@@ -1,0 +1,96 @@
+
+<div>
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="" ng-click="showNav('content')"><span translate="manager.contents.details.item"></span></a></li>
+        <li><a data-toggle="pill" href="" ng-click="showNav('publishers')"><span translate="manager.contents.details.publishers"></span></a></li>
+        <li ng-if="item.redactor.writingMode != 'STATIC'"><a data-toggle="pill" href="" ng-click="showNav('targets')"><span translate="manager.contents.details.targets"></span></a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="content" class="tab-pane fade in" ng-class="{active: activeNav =='content'}">
+            <div ng-include="contentTemplate"></div>
+        </div>
+        <div id="publishers" class="tab-pane fade in" ng-class="{active: activeNav =='publishers'}">
+            <h3 translate="manager.contents.details.publishers"></h3>
+            <!--<div>-->
+                <!--<div class="table-responsive">-->
+                    <!--<table class="table table-striped">-->
+                        <!--<thead>-->
+                        <!--<tr>-->
+                            <!--<th translate="publisherApp.classification.name">Name</th>-->
+                            <!--<th translate="publisherApp.classification.iconUrl">Icon</th>-->
+                            <!--<th translate="publisherApp.classification.description">Description</th>-->
+                            <!--<th translate="publisherApp.classification.type">Type</th>-->
+                            <!--&lt;!&ndash;<th translate="publisherApp.classification.parent">Parent</th>&ndash;&gt;-->
+                        <!--</tr>-->
+                        <!--</thead>-->
+                        <!--<tbody>-->
+                        <!--<tr ng-repeat="classification in classifications">-->
+                            <!--<td>{{classification.name}}</td>-->
+                            <!--<td>{{classification.iconUrl}}</td>-->
+                            <!--<td>{{classification.description}}</td>-->
+                            <!--<td>{{'publisherApp.classification.type.' + classification.type | translate}}</td>-->
+                            <!--&lt;!&ndash;<td>{{classification.parent}}</td>&ndash;&gt;-->
+                        <!--</tr>-->
+                        <!--</tbody>-->
+                    <!--</table>-->
+                <!--</div>-->
+                <div ng-repeat="context in pubContexts" class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading"><h3 class="panel-title">{{context.publisher.context.reader.displayName}} - {{context.publisher.context.redactor.displayName}}</h3></div>
+                    <div class="panel-body">
+                        <p><span translate="manager.contents.details.publisher.reader"></span> {{context.publisher.context.reader.description}}</p>
+                        <p><span translate="manager.contents.details.publisher.redactor"></span> {{context.publisher.context.redactor.description}}</p>
+                    </div>
+                    <!-- List group -->
+                    <div class="panel-footer">
+                        <h4 translate="manager.contents.details.classifications"></h4>
+                        <ul class="list-group">
+                            <li ng-repeat="classification in context.classifications" class="list-group-item">
+                                <figure class="{{classification.type}}">
+                                    <img ng-if="classification.iconUrl" ng-src="{{classification.iconUrl}}"/>
+                                    <figcaption>{{classification.name}}</figcaption>
+                                </figure>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            <!--</div>-->
+        </div>
+        <div id="targets" class="tab-pane fade in" ng-class="{active: activeNav =='targets'}">
+            <h3 translate="manager.contents.details.targets"></h3>
+            <div ng-switch="item.redactor.writingMode">
+                <div ng-switch-when="STATIC" class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th translate="publisherApp.subscriber.subscribeType">Subscribe Type</th>
+                            <th translate="publisherApp.subscriber.subject">Target</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="target in targets">
+                            <td>{{getSubscribeTypeLabel(target.subscribeType) | translate}}</td>
+                            <td><subject-infos subject="target.subject" ng-click="viewSubject(target)"></subject-infos></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-switch-default>
+                    <ul class="list-group">
+                        <li ng-repeat="target in targets" class="list-group-item">
+                            <subject-infos subject="target.subject" ng-click="viewSubject(target)"></subject-infos>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button type="button" class="btn btn-info" ng-click="back()">
+            <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+        </button>
+    </div>
+</div>

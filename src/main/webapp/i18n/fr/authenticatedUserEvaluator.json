@@ -1,0 +1,18 @@
+{
+    "publisherApp": {
+        "authenticatedUserEvaluator" : {
+            "home": {
+                "title": "AuthenticatedUserEvaluators",
+                "createLabel": "Créer un nouveau AuthenticatedUserEvaluator",
+                "createOrEditLabel": "Créer ou éditer un AuthenticatedUserEvaluator"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le AuthenticatedUserEvaluator {{ id }} ?"
+            },
+            "detail": {
+                "title": "AuthenticatedUserEvaluator"
+            }
+        }
+    }
+}
+

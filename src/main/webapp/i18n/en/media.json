@@ -1,0 +1,48 @@
+{
+    "publisherApp": {
+        "media" : {
+            "home": {
+                "title": "Medias",
+                "createLabel": "Create a new Media",
+                "createOrEditLabel": "Create or edit a Media"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Media {{ id }}?",
+                "enclosure": "Are you sure you want to delete this Media (no back action possible) ?"
+            },
+            "detail": {
+                "title": "Media"
+            },
+            "title": "Title",
+            "enclosure": "Enclosure",
+            "enclosure.button": "Selecting a file",
+            "endDate": "EndDate",
+            "startDate": "StartDate",
+            "validatedBy": "ValidatedBy",
+            "validatedDate": "ValidatedDate",
+            "status": "Status",
+            "summary": "Summary",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "organization": "organization",
+            "redactor": "redactor",
+            "action": {
+                "publish": "Save and Publish",
+                "save": "Save"
+            },
+            "inputfile": {
+                "title": "Select a Media",
+                "url.label": "Enter an external url",
+                "resizeauto" : "Picture automaticaly fitted",
+                "resizecrop" : "Picture fitted manually",
+                "upload.label": "Upload a file",
+                "upload.button": "Select a file",
+                "video": "Video",
+                "audio": "Audio",
+                "mediafile": "File"
+            }
+        }
+    }
+}

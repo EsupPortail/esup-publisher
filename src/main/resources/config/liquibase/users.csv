@@ -1,0 +1,5 @@
+user_id;display_name;email;enabled;lang_key;accept_notifications
+system;System;system@myapp.com;true;en;false
+anonymousUser;Anonymous;NULL;true;en;false
+admin;Administrator;NULL;true;en;false
+user;User;NULL;true;en;false

@@ -1,0 +1,114 @@
+
+<div>
+    <h3><!--<span translate="publisherApp.category.detail.title">Category</span>--><span translate="manager.treeview.details.context.properties">Properties</span></h3>
+    <button type="button" can-edit="context.contextKey" class="btn btn-primary" ng-click="updateContext()">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+    </button>
+    <button type="button" can-delete="context.contextKey" class="btn btn-danger" data-toggle="modal" data-target="#deleteContextConfirmation">
+        <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+    </button>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.category.name">Name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.category.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.description}}" readonly>
+                    </td>
+                </tr>
+                <tr ng-show="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' ">
+                    <td>
+                        <span translate="publisherApp.category.iconUrl">IconUrl</span>
+                    </td>
+                    <td>
+                        <img class="media-object" src="{{context.iconUrl}}" alt="" />
+                    </td>
+                </tr>
+                <tr has-role="ROLE_ADMIN">
+                    <td>
+                        <span translate="publisherApp.category.accessView">AccessView</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getAccessTypeLabel(context.accessView) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr has-role="ROLE_ADMIN">
+                    <td>
+                        <span translate="publisherApp.category.rssAllowed">RssAllowed</span>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="input-sm form-control" ng-model="context.rssAllowed" disabled>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.category.defaultDisplayOrder">DefaultDisplayOrder</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getDisplayOrderTypeLabel(context.defaultDisplayOrder) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr has-role="ROLE_ADMIN">
+                    <td>
+                        <span translate="publisherApp.category.lang">Lang</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getLangLabel(context.lang) | translate }}" readonly>
+                    </td>
+                </tr>
+                <tr has-role="ROLE_ADMIN">
+                    <td>
+                        <span translate="publisherApp.category.ttl">Ttl</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.ttl}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/category-form.html'"></div>
+
+    <div class="modal fade" id="deleteContextConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDeleteContext(context.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!--ng-click="clear()"-->
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.category.delete.question" translate-values="{id: '{{context.name}}'}">Are you sure you want to delete this Category?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ><!--ng-click="clear()"-->
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>

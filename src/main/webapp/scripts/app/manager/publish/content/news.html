@@ -1,0 +1,269 @@
+<div>
+    <div class="newsForm">
+        <div class="form-group hidden">
+            <label>ID</label>
+            <input type="text" class="form-control" name="id"
+                   ng-model="item.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label translate="publisherApp.news.title">Title</label>
+            <input type="text" class="form-control" name="title"
+                   ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
+
+            <div ng-show="publishContentForm.title.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                    This field is required to be at least 3 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                    This field cannot be longer than 200 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.enclosure">Enclosure</label>
+            <div class="form-inline">
+                <button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">
+                    <span>{{'publisherApp.news.enclosure.button' | translate}}</span>
+                </button>
+
+                <img ng-if="item.enclosure" name="enclosure" ng-src="{{item.enclosure}}" />
+                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
+                    <i class="glyphicon glyphicon-remove-circle text-danger"></i>
+                </a>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.summary">Summary</label>
+            <textarea class="form-control" name="summary" rows="3"
+                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
+
+            <div ng-show="publishContentForm.summary.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                    This field is required to be at least 5 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                    This field cannot be longer than 512 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-inline">
+            <div class="form-group">
+                <label translate="publisherApp.news.startDate">StartDate</label>
+                <input type="date" class="form-control" name="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
+                       alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
+
+                <div ng-show="publishContentForm.startDate.$invalid">
+                    <p class="help-block"
+                       ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                        This field is not a valid date.
+                    </p>
+                    <p class="help-block" ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                        A date after now is required.
+                    </p>
+                    <p class="help-block" ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                        A date before next year from now is required
+                    </p>
+                    <p class="help-block"
+                       ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
+                       translate-value-field="{{'publisherApp.news.startDate' | translate}}">>
+                        From date must be lower than To date
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label translate="publisherApp.news.endDate">EndDate</label>
+                <input type="date" class="form-control" name="endDate" placeholder="jj/mm/aaaa" min-date="{{today | date: dtformat}}" max={{nextyear}} ng-model="item.endDate"
+                       alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
+
+                <div ng-show="publishContentForm.endDate.$invalid">
+                    <p class="help-block"
+                       ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                    <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                        This field is not a valid date.
+                    </p>
+                    <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{today | date: dtformat }}">
+                        A date after now is required.
+                    </p>-->
+                    <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                        A date before next year from now is required
+                    </p>
+                    <p class="help-block"
+                       ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
+                       translate-value-field="{{'publisherApp.news.startDate' | translate}}">>
+                        From date must be greater than From date
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.body">Body</label>
+            <text-angular name="body"
+                          ng-model="item.body" required ng-minlength="15"></text-angular>
+            <!--<input type="text" class="form-control" name="body"-->
+            <!--ng-model="item.body" required ng-minlength="5">-->
+
+            <div ng-show="publishContentForm.body.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.body.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
+                    This field is required to be at least 15 characters.
+                </p>
+            </div>
+        </div>
+        <!--
+        <div class="form-group">
+            <label translate="publisherApp.news.createdBy">CreatedBy</label>
+            <input type="text" class="form-control" name="createdBy"
+                   ng-model="item.createdBy">
+
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.createdDate">CreatedDate</label>
+            <input type="datetime-local" class="form-control" name="createdDate"
+                   ng-model="item.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.lastModifiedBy">LastModifiedBy</label>
+            <input type="text" class="form-control" name="lastModifiedBy"
+                   ng-model="item.lastModifiedBy">
+
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.lastModifiedDate">LastModifiedDate</label>
+            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                   ng-model="item.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+        </div>
+
+        <div class="form-group">
+            <label translate="publisherApp.news.organization">organization</label>
+            <select class="form-control" name="organization" ng-model="item.organization.id" ng-options="organization.id as organization.name for organization in organizations" required>
+            </select>
+        </div>
+        <div class="form-group">
+            <label translate="publisherApp.news.redactor">redactor</label>
+            <select class="form-control" name="redactor" ng-model="item.redactor.id" ng-options="redactor.id as redactor.displayName for redactor in redactors" required>
+            </select>
+        </div>
+        -->
+    </div>
+    <div class="modal fade" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" translate="publisherApp.news.inputfile.title">Selection of a picture</h3>
+                </div>
+                <div class="modal-body">
+                    <form name="publishContentEnclosureForm" role="form" novalidate class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 translate="publisherApp.news.inputfile.url.label">Enter a picture URL</h3></div>
+                            <div class="panel-body form-inline">
+                                <div class="form-group">
+                                    <input type="url" class="form-control" name="enclosure" placeholder="https://..."
+                                           ng-model="content.picUrl" ng-maxlength="2048">
+                                    <div ng-show="publishContentForm.enclosure.$invalid">
+                                        <p class="help-block"
+                                           ng-show="publishContentForm.enclosure.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                            This field cannot be longer than 2048 characters.
+                                        </p>
+                                        <p class="help-block"
+                                           ng-show="publishContentForm.enclosure.$error.url" translate="entity.validation.url">
+                                            This field must be a valid URL.
+                                        </p>
+                                    </div>
+                                    <button type="button" ng-disabled="publishContentForm.enclosure.$invalid || !content.picUrl" class="btn btn-primary"
+                                            ng-click="validatePicUrl(content.picUrl)">
+                                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate>entity.action.validate</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 style="display:inline-block" translate="publisherApp.news.inputfile.upload.label">Selecting a file</h3>&nbsp;<button
+                                ngf-select class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="content.file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                                        ngf-resize="{width: 240, height: 240, centerCrop: true}" ngf-resize-if="resizeCondition($file, $width, $height, 240, 240)" >
+                                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.news.inputfile.upload.button">Browse</span>
+                                </button>
+                            </div>
+                            <div class="panel-body">
+
+                                <div class="">
+                                    <div ng-show="content.file" class="well">
+
+                                        <h4 class="page-title" translate="publisherApp.news.inputfile.resizeauto">Auto fit resize</h4>
+
+                                        <div ng-show="content.file">
+                                            <img ngf-src="!content.file.$error && content.file">
+                                            <button ng-click="uploadFile(content.file)" class="btn btn-primary" ng-disabled="!content.file">
+                                                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.validate">Validate</span></button>
+                                        </div>
+
+                                    </div>
+
+                                    <!--<div ng-show="content.picFile" class="well">-->
+
+                                    <!--<h4 translate="publisherApp.news.inputfile.resizecrop">Manual resizing</h4>-->
+
+                                    <!--<div class="cropArea">-->
+                                    <!--<img-crop image="content.picFile | ngfDataUrl" area-type="square" are-min-size="25"-->
+                                    <!--result-image="croppedDataUrl" result-image-quality="1" result-image-size="120" ng-init="croppedDataUrl=''">-->
+                                    <!--</img-crop>-->
+                                    <!--</div>-->
+                                    <!--<div>-->
+                                    <!--<img ng-src="{{croppedDataUrl}}"/>-->
+                                    <!--<button ng-click="uploadCroppedFile(croppedDataUrl, content.picFile)" class="btn btn-primary" ng-disabled="!content.picFile">-->
+                                    <!--<i class="glyphicon glyphicon-save"></i>&nbsp;<span translate="entity.action.validate">Validate</span></button>-->
+                                    <!--</div>-->
+
+                                    <!--</div>-->
+
+                                    <span class="progress" ng-show="progress > 0">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                                            <span>{{progress}}%</span>
+                                        </div>
+                                    </span>
+                                    <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-default" title="Clear selected files" ng-click="clearUpload()">
+                        <span class="glyphicon glyphicon-trash"></span>&nbsp;<span translate="entity.action.delete">Remove</span>
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

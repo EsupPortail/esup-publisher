@@ -1,0 +1,70 @@
+
+<div>
+    <h2><span translate="publisherApp.redactor.detail.title">Redactor</span> {{redactor.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.name">Name</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{redactor.name}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.displayName">DisplayName</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{redactor.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.description">Description</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{redactor.description}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.format">Format</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{redactor.format | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.writingMode">WritingMode</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getWritingModeLabel(redactor.writingMode) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.redactor.nbLevelsOfClassification">NbLevelsOfClassification</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{redactor.nbLevelsOfClassification}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="redactor"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

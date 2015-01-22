@@ -1,0 +1,34 @@
+{
+    "publisherApp": {
+        "permissionOnClassificationWithSubjectList" : {
+            "home": {
+                "title": "Permission de rubriques avec cibles restreintes",
+                "createLabel": "Créer une nouvelle permission de contexte avec cibles restreintes",
+                "createOrEditLabel": "Créer ou éditer une permission de contexte avec cibles restreintes"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la permission de rubrique avec cibles restreintes et le droit {{ id }} ?"
+            },
+            "detail": {
+                "title": "Permission de rubrique avec cibles restreintes"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Rôle",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "evaluator": "Évaluateur",
+            "authorizedSubjects": "Cibles autorisées",
+            "evaluatorsimple" : "Populations",
+            "evaluator.add" : {
+                "action": "Ajouter :",
+                "user": "Personne",
+                "group": "Groupe",
+                "userfromgroup": "Personne d'un groupe"
+            }
+        }
+    }
+}
+

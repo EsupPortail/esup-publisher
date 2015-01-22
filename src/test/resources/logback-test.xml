@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>utf-8</charset>
+            <Pattern>[%p] %c - %m%n</Pattern>
+        </encoder>
+    </appender>
+    <logger name="org.esupportail.publisher" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.aop.logging.LoggingAspect" level="WARN"/>
+    <logger name="org.esupportail.publisher.service.factories.impl" level="WARN"/>
+    <logger name="org.esupportail.publisher.service.factories.impl.ItemDTOSelectorFactoryImpl" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.service.factories.impl.SubjectDTOFactoryImpl" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapServiceTest" level="DEBUG"/>
+
+    <logger name="javax.validation" level="DEBUG"/>
+    <logger name="org.hibernate.validation" level="DEBUG"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+
+
+    <logger name="javax.activation" level="WARN"/>
+    <logger name="javax.xml.bind" level="DEBUG"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.fasterxml.jackson" level="DEBUG"/>
+    <logger name="com.sun.xml.internal.bind" level="INFO"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="net.sf.ehcache" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.hibernate.validator" level="ERROR"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="WARN"/>
+<!--     <logger name="org.hibernate.type" level="TRACE"/> -->
+    <logger name="org.atmosphere" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+<!--     <logger name="org.springframework.transaction" level="TRACE"/> -->
+<!--     <logger name="org.springframework.boot" level="WARN"/> -->
+<!--     <logger name="org.springframework.beans" level="WARN"/> -->
+<!--     <logger name="org.springframework.core" level="WARN"/> -->
+<!--     <logger name="org.springframework.web" level="WARN"/> -->
+<!--     <logger name="org.springframework.security" level="WARN"/> -->
+<!--     <logger name="org.springframework.cache" level="WARN"/> -->
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="DEBUG"/>
+<!--     <logger name="org.springframework.http" level="DEBUG"/> -->
+    <logger name="org.springframework.test.web.servlet" level="DEBUG"/>
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="com.mangofactory.swagger" level="warn"/>
+    <logger name="com.wordnik.swagger" level="warn"/>
+    <logger name="liquibase" level="WARN"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

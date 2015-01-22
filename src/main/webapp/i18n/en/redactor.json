@@ -1,0 +1,24 @@
+{
+    "publisherApp": {
+        "redactor" : {
+            "home": {
+                "title": "Redactors",
+                "createLabel": "Create a new Redactor",
+                "createOrEditLabel": "Create or edit a Redactor"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Redactor {{ id }}?"
+            },
+            "detail": {
+                "title": "Redactor"
+            },
+            "name": "Name",
+            "displayName": "DisplayName",
+            "description": "Description",
+            "format": "Format of redactor",
+            "writingMode": "Writing mode",
+            "nbLevelsOfClassification": "NbLevelsOfClassification",
+            "organizationReaderRedactors": "organizationReaderRedactors"
+        }
+    }
+}

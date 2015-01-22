@@ -1,0 +1,62 @@
+<div>
+
+    <div id="publish-form-container" class="panel panel-default">
+
+        <div class="panel-heading page-header text-center">
+            <h2 translate="manager.publish.title">Publishing a content</h2>
+
+            <!-- the links to our nested states using relative paths -->
+            <!-- add the active class if the state matches our ui-sref -->
+            <div id="status-buttons" class="text-center" ng-switch="publishingType()">
+                <div class="publish-form-views-steps" ng-switch-when="NONE">
+                    <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
+                </div>
+                <div class="publish-form-views-steps" ng-switch-when="STATIC">
+                    <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.content.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.classification.step' | translate}}</a>
+                </div>
+                <div class="publish-form-views-steps" ng-switch-default>
+                    <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.content.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.classification.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".targets" disable-click="isClassificationsSelected()"><span>4</span> {{'manager.publish.targets.step' | translate}}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- our nested state views will be injected here -->
+        <div class="panel-body" id="publish-form-views" ui-view></div>
+
+
+        <div class="panel-footer text-center" ng-show="canSave()">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" ng-click="publishItem('DRAFT')">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="publisherApp.item.action.save">Save</span>
+                </button>
+                <button type="button" class="btn btn-primary" ng-if="canSubmit()" ng-click="publishItem('PUBLISH')">
+                    <span class="glyphicon glyphicon-send"></span>&nbsp;<span translate>publisherApp.item.action.publish</span>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- show our formData as it is being typed -->
+    <!--<pre>-->
+        <!--{{ publisher.id }}-->
+        <!--{{ publishContentForm | json }}-->
+        <!--{{ content.type == ''  }}-->
+        <!--{{ publisher.context.redactor.writingMode }}-->
+        <!--&lt;!&ndash;{{ item | json }}&ndash;&gt;-->
+        <!--{{ publishContentForm.$error |json }}-->
+        <!--{{ publishContentForm.$invalid | json }}-->
+        <!--{{ publishContentForm.$valid | json }}-->
+        <!--{{ publishContentForm.$valid | json }}-->
+        <!--{{ classifications |json }}-->
+        <!--{{ targets |json }}-->
+    <!--</pre>-->
+
+
+</div>

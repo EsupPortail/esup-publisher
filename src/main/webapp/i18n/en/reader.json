@@ -1,0 +1,21 @@
+{
+    "publisherApp": {
+        "reader" : {
+            "home": {
+                "title": "Readers",
+                "createLabel": "Create a new Reader",
+                "createOrEditLabel": "Create or edit a Reader"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Reader {{ id }}?"
+            },
+            "detail": {
+                "title": "Reader"
+            },
+            "name": "Name",
+            "displayName": "DisplayName",
+            "description": "Description",
+            "authorizedTypes" : "Authorized content's types"
+        }
+    }
+}

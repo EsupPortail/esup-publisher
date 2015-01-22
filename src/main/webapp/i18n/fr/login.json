@@ -1,0 +1,24 @@
+{
+    "login": {
+        "title": "Authentification",
+        "form": {
+            "password": "Mot de passe",
+            "password.placeholder": "Votre mot de passe",
+            "rememberme": "Garder la session ouverte",
+            "button": "Connexion"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Erreur d'authentification!</strong> Veuillez vérifier vos identifiants de connexion.",
+                "401": "Vous devez être authentifié pour accéder à cette page."
+            }
+        },
+        "modal": {
+            "title.timeout": "Expiration de la session",
+            "relog": {
+                "body": "Afin de travailler sur cette application veuillez vous ré-authentifier",
+                "action": "Se ré-authentifier"
+            }
+        }
+    }
+}

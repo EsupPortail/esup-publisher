@@ -1,0 +1,31 @@
+# to add NOTICE
+'mvn notice:check' Checks that a NOTICE file exists and that its content match what would be generated.
+'mvn notice:generate' Generates a new NOTICE file, replacing any existing NOTICE file.
+
+
+# to add licence headers
+'mvn license:check' verify if some files miss license header
+'mvn license:format' add the license header when missing. If a header is existing, it is updated to the new one.
+'mvn license:remove' remove existing license header
+
+# In dev process when changing the entities
+'mvn clean generate-sources' will generates new or modified Q__ classes or to update evaluator's entites when updating evaluator lib
+
+# To apply and generate diff sql database schema, in dev mod, see in liquibase.properties.generation for database properties
+- delete the database
+- 'mvn spring-boot:run' should create the database at start (don't use fast profile or add hsql in profile list)
+- 'mvn compile liquibase:diff' to generate  each diff
+
+# Liquibase memento :
+- 'mvn compile liquibase:generateChangeLog' will generate first the creation of database changelog file
+- 'mvn compile liquibase:diff' to generate each diff
+
+# to run tests :
+- `mvn test -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod
+- `mvn test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
+
+# to run in dev :
+- `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
+
+# dep
+//@JsonFormat(shape = JsonFormat.Shape.STRING) should works with jackson 2.5, until use @JsonSerialize with custom serializer

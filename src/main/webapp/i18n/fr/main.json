@@ -1,0 +1,30 @@
+{
+    "main": {
+        "title": "Bienvenue",
+        "subtitle": "Ceci est votre page d'accueil",
+        "logged": {
+            "message": "Vous êtes connecté en tant que \"{{username}}\"."
+        },
+        "question": "Si vous avez des questions à propos de JHipster:",
+        "link": {
+            "homepage": "Page d'accueil",
+            "write": {
+                "name": "Publier",
+                "desc": "Publier un contenu"
+            },
+            "manage": {
+                "name": "Gérer",
+                "desc": "Gérer les contenus publiés et les contextes de publication"
+            },
+            "admin": {
+                "name": "Administration",
+                "desc": "Vue Super Administrateur"
+            },
+            "stackoverflow": "JHipster sur Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "contact": "Contactez-nous sur Twitter @java_hipster"
+        },
+        "like": "Si vous aimez JHipster, donnez nous une étoile sur",
+        "github": "Github"
+    }
+}

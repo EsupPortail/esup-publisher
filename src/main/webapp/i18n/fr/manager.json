@@ -1,0 +1,102 @@
+{
+    "manager": {
+        "contents": {
+            "title": "Gestion des Publications",
+            "details": {
+                "title": "Détails de la publication",
+                "item" : "Publication",
+                "classifications" : "Rubriques",
+                "targets" : "Cibles",
+                "publishers": "Contextes de publication",
+                "publisher" : {
+                    "reader" : "Canal de lecture :",
+                    "redactor" : "Format de publication :"
+                }
+            },
+            "owned": {
+                "title": "Mes Publications",
+                "order": "Organisées par état de publication :"
+            },
+            "pending": {
+                "title": "Publications en attente de validation"
+            }
+        },
+        "publish": {
+            "title": "Publier",
+            "publisher": {
+                "step": "Contexte",
+                "title": "Contexte de publication",
+                "reader": "Où publier :",
+                "redactor": "Mode de saisie :",
+                "organization": "Pour la structure :",
+                "selected": "Publication dans le canal {{channel}} avec le mode de saisie {{writer}} pour la structure {{organization}}",
+                "emptyList": "Vous n'avez aucun droit sur un quelconque contexte de publication ou il se peut qu'aucun contexte ne soit défini !"
+            },
+            "content": {
+                "step": "Contenu",
+                "title": "Contenu",
+                "type": "Type de contenu"
+            },
+            "classification": {
+                "step": "Organiser",
+                "title": "Organiser",
+                "choice": "Associer des rubriques à la publication :",
+                "emptyList": "Vous n'avez pas de droit sur les rubriques du context sélectionné ou il n'y a aucune rubrique de définie !"
+            },
+            "targets": {
+                "step": "Cibles",
+                "title": "Populations Ciblées",
+                "emptyList": "Vous n'avez pas les droits pour sélectionner des populations cibles ou aucune n'est définie !",
+                "remove": "Enlever la cible",
+                "selected": "Cibles :",
+                "search": "Ajouter une cible :",
+                "type": {
+                    "label": "Rechercher des",
+                    "user": "Personnes",
+                    "group": "Groupes",
+                    "userfromgroup": "Personnes d'un groupe"
+                },
+                "user.search": {
+                    "label": "Rechercher un utilisateur",
+                    "desc": "Recherche sous la forme : \n NOM Prénom, sans accent, saisissez un maximum de caractères, 3 caractères minimum",
+                    "placeholder": "Recherche..."
+                },
+                "results": {
+                    "users": "Liste des utilisateurs de la recherche"
+                },
+                "filter": {
+                    "label": "Filtre :",
+                    "placeholder":"filtre"
+                },
+                "pager":{
+                    "nbItems": "Nb items par page :"
+                },
+                "userFromGroup.label": "Cliquez sur un groupe pour en sélectionner les membres : "
+            },
+            "nextStep": "Suite"
+        },
+        "treeview": {
+            "title" : "Gestion des contextes",
+            "details": {
+                "context": {
+                    "properties": "Propriétés",
+                    "ORGANIZATION": "Type: Structure",
+                    "PUBLISHER": "Type: Contexte de publication",
+                    "CATEGORY": "Type: Catégorie",
+                    "FEED": "Type: Fil",
+                    "ITEM": "Type: Publication"
+                },
+                "permissions": "Permissions",
+                "targets": "Populations ciblées",
+                "actions": "Actions",
+                "search": {
+                    "targets" : {
+                        "user": "Recherche d'un utilisateur",
+                        "group": "Recherche d'un groupe",
+                        "userFromGroup": "Recherche d'un utilisateur à partir d'un groupe"
+                    }
+                }
+            }
+        }
+    }
+}

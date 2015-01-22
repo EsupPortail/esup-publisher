@@ -1,0 +1,46 @@
+{
+    "publisherApp": {
+        "subject" : {
+            "search": "Rechercher un sujet",
+            "search.unnamed": "Rechercher un ...",
+            "type": {
+                "label": "Type : ",
+                "user": "Personne",
+                "group": "Groupe",
+                "userfromgroup": "Personne d'un groupe"
+            },
+            "user.search": {
+                "label": "Rechercher un utilisateur",
+                "desc": "Recherche sous la forme : \n NOM Prénom, sans accent, saisissez un maximum de caractères, 3 caractères minimum",
+                "placeholder": "Recherche..."
+            },
+            "results": {
+                "users": "Liste des utilisateurs de la recherche"
+            },
+            "filter": {
+                "label": "Filtre :",
+                "placeholder":"filtre"
+            },
+            "pager":{
+                "nbItems": "Nb items par page :"
+            },
+            "userFromGroup.label": "Cliquez sur un groupe pour en sélectionner les membres : ",
+            "user" : {
+                "detail.title" : "Détails de l'utilisateur",
+                "id" : "Identifiant",
+                "displayName" : "Utilisateur",
+                "ESCOUAI": "Établissement(s)",
+                "mail":"Courriel"
+            },
+            "group" : {
+                "detail.title" : "Détails du groupe",
+                "id" : "Identifiant",
+                "displayName" : "Nom",
+                "hasChilds" : "Contient des groupes",
+                "member": "Membres",
+                "cn" : "Nom interne"
+            }
+        }
+    }
+}
+

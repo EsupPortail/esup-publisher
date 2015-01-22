@@ -1,0 +1,31 @@
+{
+    "publisherApp": {
+        "publisher" : {
+            "home": {
+                "title": "Publishers",
+                "createLabel": "Create a new Publisher",
+                "createOrEditLabel": "Create or edit a Publisher"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Publisher {{ id }}?"
+            },
+            "detail": {
+                "title": "Publisher"
+            },
+            "context": {
+                "key": "Publication context",
+                "organization": "Organization",
+                "reader": "Reader channel",
+                "redactor": "Writing tool"
+            },
+            "used": "Used",
+            "displayOrder": "Display Order",
+            "permissionType": "Permission Type",
+            "defaultDisplayOrder": "Default Display Order",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date"
+        }
+    }
+}

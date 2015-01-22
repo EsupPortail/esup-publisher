@@ -1,0 +1,27 @@
+{
+    "publisherApp": {
+        "permission" : {
+            "home": {
+                "title": "Permissions",
+                "createLabel": "Créer une nouvelle permission",
+                "createOrEditLabel": "Créer ou éditer une permission"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la permission avec le droit {{ id }} ?"
+            },
+            "detail": {
+                "title": "Permission"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Role",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "evaluator": "Évaluateur",
+            "advancedMode": "Afficher/définir les permissions en mode expert ou simple"
+        }
+    }
+}
+

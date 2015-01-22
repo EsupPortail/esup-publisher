@@ -1,0 +1,112 @@
+<div class="modal fade" id="saveOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="myOrganizationLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="editForm" role="form" novalidate ng-submit="confirmUpdateContext('ORGANIZATION')">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!-- ng-click="clear()"-->
+                    <h4 class="modal-title" id="myOrganizationLabel" translate="publisherApp.organization.home.editLabel">Create or edit a Organization</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" has-role="ROLE_ADMIN">
+                        <label class="control-label" for="id">ID</label>
+                        <input type="text" class="form-control" name="id" id="id"
+                               ng-model="editedContext.id" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label translate="publisherApp.organization.name">Name</label>
+                        <input type="text" class="form-control" name="name"
+                               ng-model="editedContext.name" required ng-minlength="5" ng-maxlength="255" ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.name.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                This field is required to be at least 5 characters.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="255">
+                                This field cannot be longer than 255 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <!--<div class="form-group" can-edit="context.contextKey" ng-hide="true">
+                        <label translate="publisherApp.organization.displayName">DisplayName</label>
+                        <input type="text" class="form-control" name="displayName"
+                               ng-model="editedContext.displayName" ng-maxlength="100" ng-readonly="!canManage">
+
+                        <div ng-show="editForm.displayName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="100">
+                                This field cannot be longer than 100 characters.
+                            </p>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label translate="publisherApp.organization.description">Description</label>
+                        <input type="text" class="form-control" name="description"
+                               ng-model="editedContext.description" required ng-minlength="5" ng-maxlength="512" ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.description.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                This field is required to be at least 5 characters.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                This field cannot be longer than 512 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label translate="publisherApp.organization.displayOrder">DisplayOrder</label>
+                        <input type="number" class="form-control" name="displayOrder"
+                               ng-model="editedContext.displayOrder" required min="0" max="999" ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.displayOrder.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                                This field should be more than 0.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="999">
+                                This field cannot be more than 999.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                                This field should be a number.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group" can-edit="context.contextKey">
+                        <label translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
+                        <input type="checkbox" class="form-control" name="allowNotifications"
+                               ng-model="editedContext.allowNotifications" ng-disabled="!canManage"/>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> <!--ng-click="close()"-->
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="submit" ng-disabled="editForm.$invalid || !canManage || editForm.$pristine" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

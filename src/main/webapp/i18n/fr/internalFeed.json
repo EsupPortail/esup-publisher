@@ -1,0 +1,33 @@
+{
+    "publisherApp": {
+        "internalFeed" : {
+            "home": {
+                "title": "Thèmes",
+                "createLabel": "Créer un nouveau Thème",
+                "createOrEditLabel": "Créer ou éditer un Thème"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Thème {{ id }} ?"
+            },
+            "detail": {
+                "title": "Thème"
+            },
+            "rssAllowed": "Autoriser RSS",
+            "name": "Nom",
+            "iconUrl": "Icône",
+            "lang": "Langue",
+            "ttl": "TTL",
+            "displayOrder": "Ordre d'affichage",
+            "accessView": "Type d'accès",
+            "description": "Description",
+            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "publisher": "Contexte de publication",
+            "parent": "Catégorie"
+        }
+    }
+}
+

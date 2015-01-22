@@ -1,0 +1,285 @@
+<div>
+
+    <h2 translate="publisherApp.news.home.title">News</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveNewsModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="publisherApp.news.home.createLabel">Create a new News</span>
+    </button>
+    <div class="modal fade" id="saveNewsModal" tabindex="-1" role="dialog" aria-labelledby="myNewsLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myNewsLabel" translate="publisherApp.news.home.createOrEditLabel">Create or edit a News</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="news.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.news.title">Title</label>
+                            <input type="text" class="form-control" name="title"
+                                   ng-model="news.title" required ng-minlength="3" ng-maxlength="200">
+
+                            <div ng-show="editForm.title.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                    This field is required to be at least 3 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                                    This field cannot be longer than 200 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.enclosure">Enclosure</label>
+                            <input type="text" class="form-control" name="enclosure"
+                                   ng-model="news.enclosure" ng-maxlength="2048">
+
+                            <div ng-show="editForm.enclosure.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.enclosure.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                                    This field cannot be longer than 2048 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.endDate">EndDate</label>
+                            <input type="date" class="form-control" name="endDate"
+                                   ng-model="news.endDate" required>
+
+                            <div ng-show="editForm.endDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.endDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.startDate">StartDate</label>
+                            <input type="date" class="form-control" name="startDate"
+                                   ng-model="news.startDate" required>
+
+                            <div ng-show="editForm.startDate.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.startDate.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.validatedBy">ValidatedBy</label>
+                            <input type="text" class="form-control" name="validatedBy"
+                                   ng-model="news.validatedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.validatedDate">ValidatedDate</label>
+                            <input type="datetime-local" class="form-control" name="validatedDate"
+                                   ng-model="news.validatedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.status">Status</label>
+                            <input type="text" class="form-control" name="status"
+                                   ng-model="news.status">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.summary">Summary</label>
+                            <input type="text" class="form-control" name="summary"
+                                   ng-model="news.summary" required ng-minlength="5" ng-maxlength="512">
+
+                            <div ng-show="editForm.summary.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                                    This field cannot be longer than 512 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.body">Body</label>
+                            <input type="text" class="form-control" name="body"
+                                   ng-model="news.body" required ng-minlength="5">
+
+                            <div ng-show="editForm.body.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.body.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                                    This field is required to be at least 5 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.createdBy">CreatedBy</label>
+                            <input type="text" class="form-control" name="createdBy"
+                                   ng-model="news.createdBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.createdDate">CreatedDate</label>
+                            <input type="datetime-local" class="form-control" name="createdDate"
+                                   ng-model="news.createdDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.lastModifiedBy">LastModifiedBy</label>
+                            <input type="text" class="form-control" name="lastModifiedBy"
+                                   ng-model="news.lastModifiedBy">
+
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.lastModifiedDate">LastModifiedDate</label>
+                            <input type="datetime-local" class="form-control" name="lastModifiedDate"
+                                   ng-model="news.lastModifiedDate" ng-model-options="{timezone: 'UTC'}">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="publisherApp.news.organization">organization</label>
+                            <select class="form-control" name="organization" ng-model="news.organization.id" ng-options="organization.id as organization.name for organization in organizations">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label translate="publisherApp.news.redactor">redactor</label>
+                            <select class="form-control" name="redactor" ng-model="news.redactor.id" ng-options="redactor.id as redactor.displayName for redactor in redactors">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteNewsConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(news.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.news.delete.question" translate-values="{id: '{{news.id}}'}">Are you sure you want to delete this News?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th translate="publisherApp.news.title">Title</th>
+                    <th translate="publisherApp.news.enclosure">Enclosure</th>
+                    <th translate="publisherApp.news.endDate">EndDate</th>
+                    <th translate="publisherApp.news.startDate">StartDate</th>
+                    <th translate="publisherApp.news.validatedBy">ValidatedBy</th>
+                    <th translate="publisherApp.news.validatedDate">ValidatedDate</th>
+                    <th translate="publisherApp.news.status">Status</th>
+                    <th translate="publisherApp.news.summary">Summary</th>
+                    <th translate="publisherApp.news.body">Body</th>
+                    <th translate="publisherApp.news.createdBy">CreatedBy</th>
+                    <th translate="publisherApp.news.createdDate">CreatedDate</th>
+                    <th translate="publisherApp.news.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="publisherApp.news.lastModifiedDate">LastModifiedDate</th>
+                    <th translate="publisherApp.news.organization">organization</th>
+                    <th translate="publisherApp.news.redactor">redactor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="news in newss">
+                    <td><a ui-sref="newsDetail({id:news.id})">{{news.id}}</a></td>
+                    <td>{{news.title}}</td>
+                    <td>{{news.enclosure}}</td>
+                    <td>{{news.endDate}}</td>
+                    <td>{{news.startDate}}</td>
+                    <td>{{news.validatedBy}}</td>
+                    <td>{{news.validatedDate}}</td>
+                    <td>{{news.status}}</td>
+                    <td>{{news.summary}}</td>
+                    <td>{{news.body}}</td>
+                    <td>{{news.createdBy}}</td>
+                    <td>{{news.createdDate}}</td>
+                    <td>{{news.lastModifiedBy}}</td>
+                    <td>{{news.lastModifiedDate}}</td>
+                    <td>{{news.organization.name}}</td>
+                    <td>{{news.redactor.displayName}}</td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="newsDetail({id:news.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(news.id)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(news.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+{
+    "publisherApp": {
+        "publisher" : {
+            "home": {
+                "title": "Contextes de publication",
+                "createLabel": "Créer un nouveau contexte",
+                "createOrEditLabel": "Créer ou éditer un contexte"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le contexte de publication {{ id }} ?"
+            },
+            "detail": {
+                "title": "Contexte de publication"
+            },
+            "context": {
+                "key": "Contexte de publication",
+                "organization": "Structure",
+                "reader": "Canal d'affichage",
+                "redactor": "Outil de rédaction"
+            },
+            "used": "Utiliser",
+            "displayOrder": "Ordre d'affichage",
+            "permissionType": "Type de permission",
+            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification"
+        }
+    }
+}
+

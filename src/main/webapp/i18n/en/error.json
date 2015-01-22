@@ -1,0 +1,11 @@
+{
+    "errors": {
+        "title": "Error page!",
+        "403": "You are not authorized to access the page.",
+        "wrong.subject": "Impossible to obtain more details",
+        "upload" : {
+            "config": "Error of server configuration",
+            "empty": "the file passed is empty"
+        }
+    }
+}
