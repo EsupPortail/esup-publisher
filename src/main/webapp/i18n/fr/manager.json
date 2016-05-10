@@ -26,7 +26,7 @@
             "publisher": {
                 "step": "Contexte",
                 "title": "Contexte de publication",
-                "reader": "Où publier :",
+                "reader": "Dans quel canal ENT souhaitez vous publier :",
                 "redactor": "Mode de saisie :",
                 "organization": "Pour la structure :",
                 "selected": "Publication dans le canal {{channel}} avec le mode de saisie {{writer}} pour la structure {{organization}}",
@@ -88,6 +88,7 @@
                 },
                 "permissions": "Permissions",
                 "targets": "Populations ciblées",
+                "defaultTargets": "Populations ciblées par défaut",
                 "actions": "Actions",
                 "search": {
                     "targets" : {

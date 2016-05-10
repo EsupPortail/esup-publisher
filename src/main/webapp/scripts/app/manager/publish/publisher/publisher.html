@@ -13,7 +13,7 @@
         <!--</select>-->
     </div>
 
-    <div class="form-group" ng-show="selectedPublisher.context.reader && selectedPublisher.context.reader.id">
+    <div class="form-group" ng-show="selectedPublisher.context.reader && selectedPublisher.context.reader.id && redactors.length > 1">
         <label class="control-label" for="redactor" translate="manager.publish.publisher.redactor">redactor</label>
         <select class="form-control" id="redactor" name="redactor" ng-model="selectedPublisher.context.redactor" ng-change="selectRedactor(selectedPublisher.context.redactor)"
                 ng-options="redactor as redactor.displayName for redactor in redactors track by redactor.id" required>

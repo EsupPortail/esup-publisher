@@ -23,18 +23,18 @@ angular.module('publisherApp')
         $scope.dtformat = $scope.dtformats[3];
 
         if (!$scope.$parent.publisher || !$scope.$parent.publisher.id){
-            console.log("go back previous state as publisher isn't setted");
+            //console.log("go back previous state as publisher isn't setted");
             $rootScope.back();
         }
 
         if (angular.equals({},$scope.$parent.item) && loadedItem) {
             $scope.$parent.item = angular.copy(loadedItem);
-            console.log('loaded Item :' + JSON.stringify(loadedItem));
-
+            //console.log('loaded Item :' + JSON.stringify(loadedItem));
         }
+
         if (loadedItem && loadedItem.startDate != '') {
             $scope.startdate = angular.copy(loadedItem.startDate);
-            console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
+            //console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
         }
 
         if ($scope.$parent.item.type) {
@@ -53,17 +53,16 @@ angular.module('publisherApp')
         $scope.itemStatusList = EnumDatas.getItemStatusList();
 
         if (angular.equals('', $scope.content.type)) {
-            console.log('set type ');
+            //console.log('set type ');
             $timeout(function() {
-                console.log('timeout run');
+                //console.log('timeout run');
                 $scope.content.type = 'NEWS';
-                //$scope.initItem();
             });
         }
 
         $scope.$watch('content.type', function(newType, oldType) {
-            console.log('New type setted : ' + JSON.stringify(newType));
-            if (oldType != newType) {
+            //console.log('New type setted : ' + JSON.stringify(newType));
+            if (oldType != newType || !angular.isDefined($scope.$parent.item) || angular.equals({}, $scope.$parent.item)) {
                 $scope.initItem();
             }
         }, true);
@@ -73,7 +72,7 @@ angular.module('publisherApp')
         };
 
         $scope.initItem = function () {
-            console.log("init Item with type " + JSON.stringify($scope.type));
+            //console.log("init Item with type " + JSON.stringify($scope.type));
             var entityID = $scope.$parent.publisher.context.organization.id;
             var redactorID = $scope.$parent.publisher.context.redactor.id;
 
@@ -142,7 +141,11 @@ angular.module('publisherApp')
                         redactor: {id: redactorID}
                     };
                     break;
+                default: console.log("Type not managed :", $scope.content.type); break;
             }
+            /*if (angular.isDefined($scope.$parent.item)) {
+                console.log("inited item :", $scope.$parent.item.type, $scope.$parent.item.startDate, $scope.$parent.item.endDate);
+            }*/
             if ($scope.$parent.publishContentForm) {
                 $scope.$parent.publishContentForm.$setPristine();
                 $scope.$parent.publishContentForm.$setUntouched();
@@ -161,8 +164,8 @@ angular.module('publisherApp')
             }).then(function (response) {
                 $timeout(function () {
                     $scope.result = response.headers("Location");
-                    console.log("Upload result ",$scope.result);
-                    console.log("item id ",$scope.$parent.item.id);
+                    //console.log("Upload result ",$scope.result);
+                    //console.log("item id ",$scope.$parent.item.id);
                     if ($scope.$parent.item.id) {
                         Item.patch({objectId:$scope.$parent.item.id, attribute : "enclosure", value: $scope.result}, function() {
                             $scope.$parent.item.enclosure = $scope.result;
@@ -175,18 +178,18 @@ angular.module('publisherApp')
                     }
                 });
             }, function (response) {
-                console.log('Request status: ' + response.status);
+                //console.log('Request status: ' + response.status);
                 if (response.status > 0)
                     $scope.errorMsg = response.status + ': ' + response.data;
             }, function (evt) {
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                 //$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% ' + evt.config.data.file.name);
+                //console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% ' + evt.config.data.file.name);
             });
         };
 
         $scope.uploadCroppedFile = function(dataUrl, file) {
-            console.log("uploadFiles", dataUrl, file, $scope.$parent.publisher.context.organization.id);
+            //console.log("uploadFiles", dataUrl, file, $scope.$parent.publisher.context.organization.id);
             Upload.upload({
                 url: 'app/upload/',
                 data: {
@@ -197,7 +200,7 @@ angular.module('publisherApp')
             }).then(function (response) {
                 $timeout(function () {
                     $scope.result = response.headers("Location");
-                    console.log("Upload result ",$scope.result);
+                    //console.log("Upload result ",$scope.result);
                     Item.patch({objectId:$scope.$parent.item.id, attribute : "enclosure", value: $scope.result}, function() {
                         $scope.$parent.item.enclosure = $scope.result;
                         $('#cropImageModale').modal('hide');
@@ -205,19 +208,19 @@ angular.module('publisherApp')
                     });
                 });
             }, function (response) {
-                console.log('Request status: ' + response.status);
+                //console.log('Request status: ' + response.status);
                 if (response.status > 0)
                     $scope.errorMsg = response.status + ': ' + response.data;
             }, function (evt) {
                 $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                 //$scope.progress = parseInt(100.0 * evt.loaded / evt.total);
-                console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% ' + evt.config.data.file.name);
+                //console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% ' + evt.config.data.file.name);
             });
 
         };
 
         $scope.removeEnclosure = function() {
-            console.log("Remove Enclosure", $scope.$parent.publisher.context.organization.id, $scope.$parent.item.enclosure, $scope.$parent.item.id);
+            //console.log("Remove Enclosure", $scope.$parent.publisher.context.organization.id, $scope.$parent.item.enclosure, $scope.$parent.item.id);
             FileManager.delete({entityId: $scope.$parent.publisher.context.organization.id, isPublic: true, fileUri: Base64.encode($scope.$parent.item.enclosure)},
                 function () {
                     if ($scope.$parent.item.id) {
@@ -239,7 +242,7 @@ angular.module('publisherApp')
         };
 
         $scope.validatePicUrl = function (picUrl) {
-            console.log("Set Enclosure :", picUrl);
+            //console.log("Set Enclosure :", picUrl);
             $scope.$parent.item.enclosure = picUrl;
             $('#cropImageModale').modal('hide');
         };
@@ -259,7 +262,7 @@ angular.module('publisherApp')
         $scope.resizeCondition = function(file, width, height, maxwidth, maxheight) {
             $scope.content.picFile = file;
             $scope.mediaType = file.type.substring(0, 5);
-            console.log("Media Type :", $scope.mediaType);
+            //console.log("Media Type :", $scope.mediaType);
             if ($scope.mediaType === 'image' && (width > maxwidth || height > maxheight)) {
                 return true;
             }
@@ -267,21 +270,14 @@ angular.module('publisherApp')
         };
 
         $scope.changeFile = function (file, newFiles, invalidFiles, event) {
-            console.log("file ", file, newFiles, invalidFiles, event);
+            //console.log("file ", file, newFiles, invalidFiles, event);
             if (file) {
                 $scope.mediaType = file.type.substring(0, 5);
-                console.log("Media Type :", $scope.mediaType);
+                //console.log("Media Type :", $scope.mediaType);
             } else {
                 $scope.mediaType = '';
             }
         };
-
-
-        //Watch for date changes
-        /*$scope.$watch('item.startDate', function(newDate) {
-         console.log('New date set: ', newDate);
-
-         }, false);*/
 
         $scope.getItemTypeLabel = function (name) {
             return $scope.itemStatusList.filter(function (val) {

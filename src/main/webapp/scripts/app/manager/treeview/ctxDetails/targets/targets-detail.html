@@ -1,5 +1,6 @@
 <div>
-    <h3 translate="manager.treeview.details.targets"></h3>
+    <h3 ng-if="context.contextKey.keyType != 'ORGANIZATION'" translate="manager.treeview.details.targets"></h3>
+    <h3 ng-if="context.contextKey.keyType == 'ORGANIZATION'" translate="manager.treeview.details.defaultTargets"></h3>
 
     <div ng-show="addSubs" aria-labelledby="addSubscriberOnContext" aria-hidden="true">
         <form name="editSubscriberForm" role="form" novalidate ng-submit="createSubscriber()">

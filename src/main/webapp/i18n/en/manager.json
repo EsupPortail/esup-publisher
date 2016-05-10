@@ -88,6 +88,7 @@
                 },
                 "permissions": "Permissions",
                 "targets": "People Targeted",
+                "defaultTargets": "Default targeted peoples",
                 "actions": "Actions",
                 "search": {
                     "targets" : {
