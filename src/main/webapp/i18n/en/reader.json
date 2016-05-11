@@ -15,7 +15,8 @@
             "name": "Name",
             "displayName": "DisplayName",
             "description": "Description",
-            "authorizedTypes" : "Authorized content's types"
+            "authorizedTypes" : "Authorized content's types",
+            "classificationDecorations": "Decoration on classifications"
         }
     }
 }

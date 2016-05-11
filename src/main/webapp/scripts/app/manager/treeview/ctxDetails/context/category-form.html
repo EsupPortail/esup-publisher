@@ -55,7 +55,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-show="inArray('ENCLOSURE',publisher.context.reader.classificationDecorations)">
                         <label translate="publisherApp.category.iconUrl">IconUrl</label>
                         <input type="url" class="form-control" name="iconUrl" placeholder="http://..."
                                ng-model="editedContext.iconUrl" ng-maxlength="2048">
@@ -68,6 +68,18 @@
                             <p class="help-block"
                                ng-show="editCategoryForm.iconUrl.$error.url" translate="entity.validation.url">
                                 This field must be a valid URL.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="inArray('COLOR',publisher.context.reader.classificationDecorations)">
+                        <label translate="publisherApp.category.color">Color</label>
+                        <input type="color" class="form-control" name="color"
+                               ng-model="editedContext.color" required>
+
+                        <div ng-show="editCategoryForm.color.$invalid">
+                            <p class="help-block"
+                               ng-show="editCategoryForm.color.$error.required" translate="entity.validation.required">
+                                This field is required.
                             </p>
                         </div>
                     </div>

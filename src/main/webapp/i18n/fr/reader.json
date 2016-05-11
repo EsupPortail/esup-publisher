@@ -15,7 +15,8 @@
             "name": "Nom",
             "displayName": "Nom d'affichage",
             "description": "Description",
-            "authorizedTypes": "Types de contenus"
+            "authorizedTypes": "Types de contenus",
+            "classificationDecorations": "Décoration des rubriques"
         }
     }
 }

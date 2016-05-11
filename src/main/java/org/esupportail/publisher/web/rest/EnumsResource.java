@@ -44,6 +44,16 @@ public class EnumsResource {
     }
 
     /**
+     * GET  /classifdecorationtype -> get all the DecorationType.
+     */
+    @RequestMapping(value = "/classifdecorationtype",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ClassificationDecorType>> getAllClassifDecorType() {
+        return new ResponseEntity<List<ClassificationDecorType>>(Arrays.asList(ClassificationDecorType.values()), HttpStatus.OK);
+    }
+
+    /**
      * GET  /displayorder -> get all the DisplayOrderType.
      */
     @RequestMapping(value = "/displayordertype",

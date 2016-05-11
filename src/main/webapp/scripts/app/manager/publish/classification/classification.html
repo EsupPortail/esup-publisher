@@ -24,10 +24,11 @@
                 <div class="inline-form">
                     <div ng-repeat="classif in classificationsList" class="checkbox-inline">
                         <input ng-attr-id="{{classif.name}}" type="checkbox" value="{{classif.name}}" ng-checked="containsSelectedClassification(classif.contextKey)"
-                               ng-click="toggleSelection(classif.contextKey)">
+                               ng-click="toggleSelection(classif.contextKey)" ng-class="{iconurl : inArray('ENCLOSURE',publisher.context.reader.classificationDecorations)}">
                         <label ng-attr-for="{{classif.name}}" uib-tooltip-placement="top" uib-tooltip="{{ classif.description }}"
-                               ng-style="{'background-image': 'url('+ classif.icon+')'}">
-                            <!--<img ng-if="classif.icon" ng-src="{{ classif.icon }}"/>-->
+                            ng-style='{"background-color": inArray("COLOR", publisher.context.reader.classificationDecorations)?classif.color:null, "background-image": inArray("ENCLOSURE",publisher.context.reader.classificationDecorations)?"url("+classif.icon+")":null}'>
+                            <!--ng-style="inArray('COLOR', publisher.context.reader.classificationDecorations) && {'background-color': classif.color}">
+                         <img ng-if="classif.icon" ng-src="{{ classif.icon }}"/>-->
                             <span>{{classif.name}}</span>
                         </label>
                     </div>

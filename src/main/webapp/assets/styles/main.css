@@ -317,7 +317,7 @@ form .progress {
     animation:slideOutLeft 0.5s both ease;
 }
 
-#publish-form-container .publish-classification input[type=checkbox] {
+#publish-form-container .publish-classification input[type=checkbox].iconurl {
     display: none;
 }
 
@@ -325,7 +325,7 @@ form .progress {
 - Style each label that is directly after the input
 - position: relative; will ensure that any position: absolute children will position themselves in relation to it
 */
-#publish-form-container .publish-classification input[type=checkbox] + label {
+#publish-form-container .publish-classification input[type=checkbox].iconurl + label {
     height: 8em;
     width: 8em;
     background-color: #cccccc;
@@ -342,8 +342,8 @@ form .progress {
 }
 
 /* Provide a border when hovered and when the checkbox before it is checked */
-#publish-form-container .publish-classification input[type=checkbox] + label:hover,
-#publish-form-container .publish-classification input[type=checkbox]:checked + label {
+#publish-form-container .publish-classification input[type=checkbox].iconurl + label:hover,
+#publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label {
     border: solid 5px #F00;
     box-shadow: 0 0 1px #F00; /* Soften the jagged edge */
 }
@@ -352,7 +352,7 @@ form .progress {
 - Create a pseudo element :after when checked and provide a tick
 - Center the content
 */
-#publish-form-container .publish-classification input[type=checkbox]:checked + label:after {
+#publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label:after {
     content: '\2714'; /*content is required, though it can be empty - content: '';*/
     display: block;
     height: 1em;

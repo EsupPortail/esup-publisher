@@ -2,6 +2,7 @@ package org.esupportail.publisher.web.rest;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.enums.ClassificationDecorType;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.hamcrest.Matchers;
@@ -50,6 +51,9 @@ public class ReaderResourceTest {
     private static final Set<ItemType> DEFAULT_ITEMTYPE = EnumSet.of(ItemType.NEWS, ItemType.MEDIA);
     //private static final Set<String> DEFAULT_ITEMTYPE_STRING = enumsToString(DEFAULT_ITEMTYPE);
     private static final Set<ItemType> UPDATED_ITEMTYPE = EnumSet.of(ItemType.NEWS);
+    private static final Set<ClassificationDecorType> DEFAULT_DECORTYPE = EnumSet.of(ClassificationDecorType.COLOR);
+    //private static final Set<String> DEFAULT_DECORTYPE_STRING = enumsToString(DEFAULT_DECORTYPE);
+    private static final Set<ClassificationDecorType> UPDATED_DECORTYPE = EnumSet.of(ClassificationDecorType.ENCLOSURE);
 
 
     @Inject
@@ -82,6 +86,7 @@ public class ReaderResourceTest {
         reader.setDisplayName(DEFAULT_DISPLAY_NAME);
         reader.setDescription(DEFAULT_DESCRIPTION);
         reader.setAuthorizedTypes(DEFAULT_ITEMTYPE);
+        reader.setClassificationDecorations(DEFAULT_DECORTYPE);
     }
 
     @Test
@@ -104,6 +109,7 @@ public class ReaderResourceTest {
         assertThat(testReader.getDisplayName()).isEqualTo(DEFAULT_DISPLAY_NAME);
         assertThat(testReader.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testReader.getAuthorizedTypes()).isEqualTo(DEFAULT_ITEMTYPE);
+        assertThat(testReader.getClassificationDecorations()).isEqualTo(DEFAULT_DECORTYPE);
     }
 
     @Test
@@ -121,7 +127,8 @@ public class ReaderResourceTest {
             .andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME.toString()))
             .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())));
+            .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
+            .andExpect(jsonPath("$.[0].classificationDecorations", Matchers.hasSize(DEFAULT_DECORTYPE.size())));
             // EnumSet can't be tested as Matcher will test enum objet against his String value error : Expected: is <[NEWS, MEDIA]> but: was <["NEWS","MEDIA"]>
             //.andExpect(jsonPath("$.[0].authorizedTypes", Matchers.is(DEFAULT_ITEMTYPE)));
     }
@@ -140,7 +147,8 @@ public class ReaderResourceTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())));
+            .andExpect(jsonPath("$.authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
+            .andExpect(jsonPath("$.classificationDecorations", Matchers.hasSize(DEFAULT_DECORTYPE.size())));
             // EnumSet can't be tested as Matcher will test enum objet against his String value error : Expected: is <[NEWS, MEDIA]> but: was <["NEWS","MEDIA"]>
             //.andExpect(jsonPath("$.authorizedTypes", Matchers.is(DEFAULT_ITEMTYPE)));
     }
@@ -178,6 +186,7 @@ public class ReaderResourceTest {
         assertThat(testReader.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
         assertThat(testReader.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testReader.getAuthorizedTypes()).isEqualTo(UPDATED_ITEMTYPE);
+        assertThat(testReader.getClassificationDecorations()).isEqualTo(UPDATED_DECORTYPE);
     }
 
     @Test

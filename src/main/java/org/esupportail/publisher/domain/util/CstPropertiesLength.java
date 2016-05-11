@@ -38,5 +38,6 @@ public final class CstPropertiesLength {
 	public static final int LANG = 5;
 	public static final int ORDER = 3;
 	public static final int USER_DISPLAYNAME = 100;
+	public static final int COLOR = 7;
 
 }

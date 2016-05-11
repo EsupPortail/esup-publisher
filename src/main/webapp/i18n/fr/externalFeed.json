@@ -15,6 +15,7 @@
             "rssAllowed": "Autoriser RSS",
             "name": "Nom",
             "iconUrl": "Icône",
+            "color" : "Couleur",
             "lang": "Langue",
             "ttl": "TTL",
             "displayOrder": "Ordre d'affichage",

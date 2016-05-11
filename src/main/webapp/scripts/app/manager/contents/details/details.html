@@ -48,8 +48,8 @@
                         <ul class="list-group">
                             <li ng-repeat="classification in context.classifications" class="list-group-item">
                                 <figure class="{{classification.type}}">
-                                    <img ng-if="classification.iconUrl" ng-src="{{classification.iconUrl}}"/>
-                                    <figcaption>{{classification.name}}</figcaption>
+                                    <img ng-if="inArray('CLOSURE', context.publisher.context.reader.classificationDecorations) && classification.iconUrl" ng-src="{{classification.iconUrl}}"/>
+                                    <figcaption><span ng-style='{"background-color": inArray("COLOR", context.publisher.context.reader.classificationDecorations)?classification.color:null}'>{{classification.name}}</span></figcaption>
                                 </figure>
                             </li>
                         </ul>

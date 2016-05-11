@@ -198,7 +198,8 @@ public final class ObjTest {
 
 	public static Reader newReader(final String indice) {
 		return new Reader("lecture_" + indice, "lecture des trucs " + indice,
-				"DESC des " + indice, Sets.newHashSet(ItemType.NEWS, ItemType.MEDIA, ItemType.RESOURCE));
+				"DESC des " + indice, Sets.newHashSet(ItemType.NEWS, ItemType.MEDIA, ItemType.RESOURCE)
+            , Sets.newHashSet(ClassificationDecorType.COLOR, ClassificationDecorType.ENCLOSURE));
 	}
 
 	public static Redactor newRedactor(final String indice) {

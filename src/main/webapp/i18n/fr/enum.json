@@ -1,5 +1,9 @@
 {
     "enum": {
+        "classificationDecorType": {
+            "ENCLOSURE": "Illustration",
+            "COLOR": "Coloration"
+        },
         "itemStatus": {
             "pending": {
                 "title": "En validation"

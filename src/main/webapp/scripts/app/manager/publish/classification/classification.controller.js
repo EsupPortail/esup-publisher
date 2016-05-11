@@ -29,7 +29,7 @@ angular.module('publisherApp')
                     if (containsSelectedClassification(obj.contextKey)) {
                         ticked = true;
                     }*/
-                    $scope.classificationsList.push({contextKey : obj.contextKey, icon : obj.iconUrl, name: obj.name, description : obj.description});
+                    $scope.classificationsList.push({contextKey : obj.contextKey, icon : obj.iconUrl, name: obj.name, description : obj.description, color : obj.color});
                     //$scope.classificationsList.push({contextKey : obj.contextKey, icon : obj.iconUrl, name: obj.name, description : obj.description, ticked: ticked});
                 });
                 //console.log("after load already selected : ",$scope.$parent.classifications );
@@ -95,13 +95,13 @@ angular.module('publisherApp')
             return false;
         };
 
-        $scope.getBackgroundStyle = function(classification){
+        /*$scope.getBackgroundStyle = function(classification){
             if (classification.icon) {
                 var style = "'background-image':'url(" + classification.icon + ")'";
                 console.log("with background ", style);
                 return style;
             }
             return "";
-        };
+        };*/
 
     });

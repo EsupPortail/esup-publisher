@@ -32,12 +32,20 @@
                         <input type="text" class="input-sm form-control" value="{{context.description}}" readonly>
                     </td>
                 </tr>
-                <tr ng-show="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' ">
+                <tr ng-show="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
                     <td>
                         <span translate="publisherApp.category.iconUrl">IconUrl</span>
                     </td>
                     <td>
                         <img class="media-object" src="{{context.iconUrl}}" alt="" />
+                    </td>
+                </tr>
+                <tr ng-show="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
+                    <td>
+                        <span translate="publisherApp.category.color">Color</span>
+                    </td>
+                    <td>
+                        <input type="color" value="{{context.color}}" disabled></span>
                     </td>
                 </tr>
                 <tr has-role="ROLE_ADMIN">

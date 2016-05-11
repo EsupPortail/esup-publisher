@@ -104,6 +104,10 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
     @JsonSerialize(using = CustomEnumSerializer.class)
     //@JsonDeserialize(using = DisplayOrderTypeDeserializer.class)
 	private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
+    /** This field corresponds to the database column color. */
+    @Size(max = CstPropertiesLength.COLOR)
+	@Column(length = CstPropertiesLength.COLOR)
+    private String color;
 
 	// @JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {})

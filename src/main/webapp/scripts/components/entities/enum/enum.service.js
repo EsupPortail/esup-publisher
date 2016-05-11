@@ -5,6 +5,10 @@ angular.module('publisherApp')
         return $resource('api/enums/accesstype/', {}, {
             'query': { method: 'GET', isArray: true}
         });
+    }).factory('ClassificationDecorType', function ($resource) {
+        return $resource('api/enums/classifdecorationtype/', {}, {
+            'query': { method: 'GET', isArray: true}
+        });
     }).factory('ContextType', function ($resource) {
         return $resource('api/enums/contexttype/', {}, {
             'query': { method: 'GET', isArray: true}
@@ -57,17 +61,18 @@ angular.module('publisherApp')
         return $resource('api/enums/writingformat/', {}, {
             'query': { method: 'GET', isArray: true}
         });
-    }).factory('EnumDatas', function($q, $state, AccessType, ContextType, DisplayOrderType, FilterType,
+    }).factory('EnumDatas', function($q, $state, AccessType, ClassificationDecorType, ContextType, DisplayOrderType, FilterType,
                                      ItemStatus, ItemType, OperatorType, PermissionClass, PermissionType, StringEvaluationMode, SubjectType,
                                      SubscribeType, WritingMode, WritingFormat) {
-        var AccessTypeList,ContextTypeList,DisplayOrderTypeList,FilterTypeList,ItemStatusList,ItemTypeList,OperatorTypeList,PermissionClassList,
+        var AccessTypeList,ClassificationDecorTypeList,ContextTypeList,DisplayOrderTypeList,FilterTypeList,ItemStatusList,ItemTypeList,OperatorTypeList,PermissionClassList,
             PermissionTypeList, StringEvaluationModeList, SubjectTypeList, SubscribeTypeList, WritingModeList, WritingFormatList;
         return {
             init : function () {
                 return $q.all([AccessType.query().$promise, ContextType.query().$promise, DisplayOrderType.query().$promise,
                     FilterType.query().$promise, ItemStatus.query().$promise, ItemType.query().$promise, OperatorType.query().$promise,
                     PermissionClass.query().$promise, PermissionType.query().$promise, StringEvaluationMode.query().$promise,
-                    SubjectType.query().$promise, SubscribeType.query().$promise, WritingMode.query().$promise, WritingFormat.query().$promise])
+                    SubjectType.query().$promise, SubscribeType.query().$promise, WritingMode.query().$promise, WritingFormat.query().$promise,
+                    ClassificationDecorType.query().$promise])
                     .then(function (results) {
                         AccessTypeList = results[0];
                         ContextTypeList = results[1];
@@ -76,13 +81,13 @@ angular.module('publisherApp')
                         ItemStatusList = results[4];
                         ItemTypeList = results[5];
                         OperatorTypeList = results[6];
-                        PermissionClassList = results[7];
-                        PermissionTypeList = results[8];
+                        PermissionClassList = results[7];                     PermissionTypeList = results[8];
                         StringEvaluationModeList = results[9];
                         SubjectTypeList = results[10];
                         SubscribeTypeList = results[11];
                         WritingModeList = results[12];
                         WritingFormatList = results[13];
+                        ClassificationDecorTypeList = results[14];
                     }).catch(function (error) {
                         console.log(JSON.stringify(error));
                         $state.go("error");
@@ -91,6 +96,10 @@ angular.module('publisherApp')
             getAccessTypeList : function () {
                 if (!AccessTypeList) {this.init();}
                 return AccessTypeList;
+            },
+            getClassificationDecorTypeList : function () {
+                if (!ClassificationDecorTypeList) {this.init();}
+                return ClassificationDecorTypeList;
             },
             getContextTypeList : function () {
                 if (!ContextTypeList) {this.init();}

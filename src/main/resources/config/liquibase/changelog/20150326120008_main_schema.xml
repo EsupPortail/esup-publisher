@@ -17,6 +17,7 @@
             <column name="access_view" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="color" type="VARCHAR(7)"/>
             <column name="default_display_order" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
@@ -307,6 +308,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="item_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="classif_decoration" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

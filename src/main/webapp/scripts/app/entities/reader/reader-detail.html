@@ -42,6 +42,14 @@
                         <input type="text" class="input-sm form-control" ng-repeat="type in reader.authorizedTypes" value="{{'enum.itemType.' + type | translate}}"readonly>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.reader.classificationDecorations">ClassificationDecorations</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" ng-repeat="type in reader.classificationDecorations" value="{{'enum.classificationDecorType.' + type | translate}}"readonly>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

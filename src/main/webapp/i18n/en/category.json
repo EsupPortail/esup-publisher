@@ -15,6 +15,7 @@
             "rssAllowed": "RssAllowed",
             "name": "Name",
             "iconUrl": "IconUrl",
+            "color" : "Color",
             "lang": "Lang",
             "langList": {
                 "fr": "French",

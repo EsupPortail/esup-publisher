@@ -214,9 +214,9 @@ angular.module('publisherApp')
                     break;
                 case 'CATEGORY' :
                     // in waiting all access are PUBLIC
-                    $scope.editedContext = {type:'CATEGORY', publisher: $scope.context, rssAllowed: false, name: null, iconUrl: null, lang: 'fr', ttl: 3600, displayOrder: 0,
-                        accessView: 'PUBLIC', description: null, defaultDisplayOrder: $scope.displayOrderTypeList[0].name, createdBy: null,
-                        createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null};
+                    $scope.editedContext = {type:'CATEGORY', publisher: $scope.context, rssAllowed: false, name: null, iconUrl: null, color: null,
+                        lang: 'fr', ttl: 3600, displayOrder: 0, accessView: 'PUBLIC', description: null, defaultDisplayOrder: $scope.displayOrderTypeList[0].name,
+                        createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null};
                     if ($scope.editCategoryForm) {
                         $scope.editCategoryForm.$setPristine();
                         $scope.editCategoryForm.$setUntouched();

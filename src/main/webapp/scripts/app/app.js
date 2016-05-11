@@ -73,6 +73,11 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+
+        $rootScope.inArray = function (item, array) {
+            if (!angular.isDefined(array) || !angular.isArray(array)) return false;
+            return (-1 !== array.indexOf(item));
+        };
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider,
                       httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider, $provide) {
