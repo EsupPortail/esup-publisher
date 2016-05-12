@@ -19,8 +19,16 @@ angular.module('publisherApp')
                     $scope.classificationsList.push({contextKey : obj.contextKey, icon : obj.iconUrl, name: obj.name, description : obj.description, color : obj.color});
                 });
                 // if only one Classification is enable automatic select it !
-                if ($scope.classificationsList.length == 1) {
-                    $scope.toggleSelection($scope.classificationsList[0].contextKey);
+                if ($scope.classificationsList.length == 1 && !inArray($scope.classificationsList[0].contextKey, $scope.$parent.classifications)) {
+                    $scope.$parent.classifications.push($scope.classificationsList[0].contextKey);
+                }
+                // we clean already saved classification where user loose rights
+                if (loadedClassifications) {
+                    angular.forEach(loadedClassifications, function(obj) {
+                       if (!inArray(obj, $scope.classificationsList)) {
+                           remove(obj);
+                       }
+                    });
                 }
             });
         };
@@ -50,6 +58,17 @@ angular.module('publisherApp')
                 $scope.$parent.classifications.push(contextKey);
             }
         };
+
+        function remove(contextkey) {
+            $scope.$parent.classifications = $scope.$parent.classifications.filter(function(element) {
+                return !angular.equals(element, contextkey);
+            });
+        }
+
+        function inArray (item, array) {
+            if (!angular.isDefined(array) || !angular.isArray(array)) return false;
+            return (-1 !== array.indexOf(item));
+        }
 
 
         $scope.containsSelectedClassification = function (contextKey) {
