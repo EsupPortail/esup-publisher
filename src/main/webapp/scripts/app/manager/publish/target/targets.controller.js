@@ -29,36 +29,9 @@ angular.module('publisherApp')
             }
         });
 
-
-        /*$scope.submitUsers = function() {
-            $scope.selectedtargets.push.apply($scope.selectedtargets,$scope.checkedUsers);
-            $scope.$parent.targets = [];
-            for(var i = 0; i < $scope.selectedtargets.length; ++i) {
-                var target = {modelId :$scope.selectedtargets[i].modelId, displayName: $scope.selectedtargets[i].displayName};
-                $scope.$parent.targets.push(target);
-            }
-            $scope.checkedUsers = [];
-            $scope.type="";
-            $("#userListModal").modal("hide");
-        };
-
-        $scope.submitGroups = function() {
-            $scope.selectedtargets.push.apply($scope.selectedtargets,$scope.checkedGroups);
-            $scope.$parent.targets = [];
-            for(var i = 0; i < $scope.selectedtargets.length; ++i) {
-                var target = {modelId :$scope.selectedtargets[i].modelId, displayName: $scope.selectedtargets[i].displayName};
-                $scope.$parent.targets.push(target);
-            }
-            $scope.checkedGroups = [];
-            $scope.type="";
-        };*/
-
         $scope.remove = function(subject) {
-            /*$scope.selectedtargets = $scope.selectedtargets.filter(function(element) {
-                return element.modelId.keyId != subject.modelId.keyId;
-            });*/
             $scope.$parent.targets = $scope.$parent.targets.filter(function(element) {
-                return element.modelId.keyId != subject.modelId.keyId;
+                return !angular.equals(element.modelId, subject.modelId);
             });
         };
 
