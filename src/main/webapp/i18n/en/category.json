@@ -16,6 +16,7 @@
             "name": "Name",
             "iconUrl": "IconUrl",
             "color" : "Color",
+            "color.none" : "Color undefined",
             "lang": "Lang",
             "langList": {
                 "fr": "French",

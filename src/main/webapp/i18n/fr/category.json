@@ -16,6 +16,7 @@
             "name": "Nom",
             "iconUrl": "Icône",
             "color" : "Couleur",
+            "color.none" : "Couleur non définie",
             "lang": "Langue",
             "langList": {
                 "fr": "Français",

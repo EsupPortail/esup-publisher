@@ -45,7 +45,8 @@
                         <span translate="publisherApp.category.color">Color</span>
                     </td>
                     <td>
-                        <input type="color" value="{{context.color}}" disabled></span>
+                        <input ng-if="context.color" type="color" value="{{context.color}}" disabled>
+                        <span ng-if="!context.color">{{ 'publisherApp.category.color.none' | translate : 'Undefined' }}</span>
                     </td>
                 </tr>
                 <tr has-role="ROLE_ADMIN">
