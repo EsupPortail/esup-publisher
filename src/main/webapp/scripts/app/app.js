@@ -258,6 +258,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
 
         $translateProvider.fallbackLanguage('en')
             .determinePreferredLanguage();
+        //$translateProvider.useSanitizeValueStrategy('escaped');
         $translateProvider.useCookieStorage();
 
         tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
