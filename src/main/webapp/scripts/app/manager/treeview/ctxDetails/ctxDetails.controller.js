@@ -336,14 +336,14 @@ angular.module('publisherApp')
         };
 
         $scope.createSubscriber = function () {
-            console.log("call create subscriber");
+            //console.log("call create subscriber");
             var subscriber = {subscribeType: $scope.subscriber.subscribeType, subjectCtxId: {subject: $scope.selectedSubject.modelId, context: $scope.context.contextKey}};
             Subscriber.save(subscriber, function() {
-                    console.log("createSubscriber POST is done");
+                    //console.log("createSubscriber POST is done");
                     $scope.clearSubscriber();
                     Subscriber.queryForCtx({ctx_type: $scope.ctxType, ctx_id: $scope.context.id}, function(result) {
-                        console.log("createSubscriber queryForCtx done");
-                        console.log(result);
+                        //console.log("createSubscriber queryForCtx done");
+                        //console.log(result);
                         $scope.targets = result;
                         $scope.load($scope.ctxType, $scope.context.id);
                     });
@@ -369,7 +369,7 @@ angular.module('publisherApp')
         };
 
         $scope.$watch("search.target", function(newVal, oldVal) {
-            console.log("watch search.target", newVal, oldVal);
+            //console.log("watch search.target", newVal, oldVal);
             if (angular.isDefined(newVal) && !angular.equals({}, newVal) && !angular.equals(newVal, oldVal)) {
                 $scope.selectedSubject = newVal;
             }
@@ -380,7 +380,7 @@ angular.module('publisherApp')
         };
 
         $scope.clearSubscriber = function() {
-            console.log("clear Subscriber");
+            //console.log("clear Subscriber");
             $scope.subscriber = {subscribeType: $scope.subscribeTypeList[0].name};
             $scope.selectedSubject = {};
             $scope.addSubs = false;
@@ -555,7 +555,7 @@ angular.module('publisherApp')
             if (!$scope.isAdvancedEvaluator(evaluator)) {
                 for (var i = 0; i < evaluator.evaluators.length; i++) {
                     var subjectEval = evaluator.evaluators[i];
-                    console.log("evaluator :",subjectEval);
+                    //console.log("evaluator :",subjectEval);
                     switch (subjectEval.class) {
                         case "USERATTRIBUTES":
                         case "USERMULTIVALUEDATTRIBUTES":
@@ -571,13 +571,13 @@ angular.module('publisherApp')
             }
         }
         $scope.$watch("permission.evaluator", function(newv) {
-            console.log("watch permission.evaluator", $scope.permission);
+            //console.log("watch permission.evaluator", $scope.permission);
             if ($scope.addPerm) {
                 setSelectedSubjectsFromEvaluator($scope.permission.evaluator);
             }
         }, true);
         $scope.$watch("edit.authorizedSubject", function(newVal, oldVal) {
-            console.log("watch edit.authorizedSubject ", newVal, oldVal);
+            //console.log("watch edit.authorizedSubject ", newVal, oldVal);
             if (angular.isDefined(newVal) && !angular.equals({}, newVal) && !angular.equals(newVal, oldVal)) {
                 var found = false;
                 angular.forEach($scope.permission.authorizedSubjects, function (value) {
@@ -585,14 +585,14 @@ angular.module('publisherApp')
                         found = true;
                     }
                 });
-                console.log("authorized subject was found ? ",found);
+                //console.log("authorized subject was found ? ",found);
                 if (!found){
                     $scope.permission.authorizedSubjects.push(newVal.modelId);
                 }
             }
         });
         $scope.$watch("search.subject", function(newVal, oldVal) {
-            console.log("watch search.subject", newVal, oldVal);
+            //console.log("watch search.subject", newVal, oldVal);
             if (angular.isDefined(newVal) && !angular.equals({}, newVal) && !angular.equals(newVal, oldVal)) {
                 var found = false;
                 angular.forEach($scope.selectedSubjects, function (value) {
@@ -600,14 +600,14 @@ angular.module('publisherApp')
                         found = true;
                     }
                 });
-                console.log("subject was found ? ",found);
+                //console.log("subject was found ? ",found);
                 if (!found){
                     $scope.selectedSubjects.push(newVal.modelId);
                 }
             }
         });
         $scope.removePermTarget = function(subject) {
-            console.log("removePermTarget", subject);
+            //console.log("removePermTarget", subject);
             $scope.permission.authorizedSubjects = $scope.permission.authorizedSubjects.filter(function(element) {
                 if (subject.hasOwnProperty("modelId")) return !angular.equals(element,subject.modelId);
                 return !angular.equals(element,subject);
@@ -669,12 +669,12 @@ angular.module('publisherApp')
                     return false;
                 case 'CATEGORY' :
                     if (!angular.equals({},$scope.publisher)) {
-                        console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
+                        //console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
                         return $scope.publisher.context.redactor.writingMode == 'STATIC';
                     }
                     return false;
                 case 'FEED' :
-                    console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
+                    //console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
                     if (!angular.equals({},$scope.publisher)) {
                         return $scope.publisher.context.redactor.writingMode == 'STATIC';
                     }
@@ -731,13 +731,13 @@ angular.module('publisherApp')
             console.log("subject", target);
             if (target) {
                 if (target.subjectDTO && target.subjectDTO.modelId) {
-                    console.log("go on state ", 'ctxDetails.subject', target.subjectDTO.modelId);
+                    //console.log("go on state ", 'ctxDetails.subject', target.subjectDTO.modelId);
                     $state.go('ctxDetails.subject', target.subjectDTO.modelId);
                 } else if (target.modelId) {
-                    console.log("go on state ", 'ctxDetails.subject', target.modelId);
+                    //console.log("go on state ", 'ctxDetails.subject', target.modelId);
                     $state.go('ctxDetails.subject', target.modelId);
                 } else if (target.keyId && target.keyType) {
-                    console.log("go on state ", 'ctxDetails.subject', target);
+                    //console.log("go on state ", 'ctxDetails.subject', target);
                     $state.go('ctxDetails.subject', target);
                 }
             }
