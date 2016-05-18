@@ -53,6 +53,7 @@ public class ItemRepositoryTest {
 	final static String INDICE_2 = "ind2";
 	final static String INDICE_3 = "ind3";
 	final static String INDICE_4 = "ind4";
+	final static String INDICE_A = "indA";
     final static ItemStatus DEFAULT_STATUS = ItemStatus.PUBLISHED;
     final static ItemStatus UPDATED_STATUS = ItemStatus.ARCHIVED;
 
@@ -92,6 +93,11 @@ public class ItemRepositoryTest {
 				ObjTest.d3.toLocalDate(), ObjTest.d2, user2,
 				DEFAULT_STATUS, "summary" + INDICE_3, org1, redactor2);
 		repository.saveAndFlush(m3);
+        Flash m4 = new Flash("Titre " + INDICE_4, "enclosure" + INDICE_4, "body"
+            + INDICE_4, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
+            ObjTest.d2, user2, DEFAULT_STATUS, "summary"
+            + INDICE_4, org2, redactor2);
+        repository.saveAndFlush(m4);
 	}
 
     @Test
@@ -161,10 +167,10 @@ public class ItemRepositoryTest {
 
 	@Test
 	public void testInsert() {
-		News n1 = new News("Titre " + INDICE_4, "enclosure" + INDICE_4, "body"
-				+ INDICE_4, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
+		News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
+				+ INDICE_A, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
 				ObjTest.d2, user1, ItemStatus.DRAFT, "summary"
-						+ INDICE_4, org2, redactor2);
+						+ INDICE_A, org2, redactor2);
 
 		log.info("Before insert : " + n1.toString());
 		repository.save(n1);
@@ -185,10 +191,10 @@ public class ItemRepositoryTest {
 		n2 = (News) repository.getOne(n2.getId());
 		assertNotNull(n2);
 		log.info("After select : " + n2.toString());
-		assertTrue(repository.count() == 4);
+		assertTrue(repository.count() == 5);
 
 		List<AbstractItem> result = repository.findAll();
-		assertThat(result.size(), is(4));
+		assertThat(result.size(), is(5));
 		assertThat(result, hasItem(n2));
 		result = Lists.newArrayList(repository.findAll(ItemPredicates
 				.NewsItems()));
@@ -197,7 +203,7 @@ public class ItemRepositoryTest {
 
 		repository.delete(n2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
-		assertThat(repository.findAll().size(), is(3));
+		assertThat(repository.findAll().size(), is(4));
 		assertFalse(repository.exists(n2.getId()));
 	}
 
@@ -207,7 +213,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testFindAll() {
-		assertThat(repository.findAll().size(), is(3));
+		assertThat(repository.findAll().size(), is(4));
 	}
 
 	/**
@@ -227,7 +233,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 3);
+		assertTrue(repository.count() == 4);
 	}
 
 	/**

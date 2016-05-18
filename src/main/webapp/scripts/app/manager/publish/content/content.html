@@ -27,7 +27,7 @@
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
             </button>
 
-            <button type="button" ui-sref="publish.classification" ng-disabled="publishContentForm.$invalid || content.type == '' " class="btn btn-info" ng-click="validateItem()">
+            <button type="button" ui-sref="publish.classification" ng-disabled="publishContentForm.$invalid || content.type == '' || (content.type == 'FLASH' && !$parent.item.enclosure)" class="btn btn-info" ng-click="validateItem()">
                 <span translate="manager.publish.nextStep"> Next Step</span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>

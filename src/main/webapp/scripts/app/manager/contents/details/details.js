@@ -51,6 +51,7 @@ angular.module('publisherApp')
                         $translatePartialLoader.addPart('externalFeed');
                         $translatePartialLoader.addPart('item');
                         $translatePartialLoader.addPart('news');
+                        $translatePartialLoader.addPart('flash');
                         $translatePartialLoader.addPart('media');
                         $translatePartialLoader.addPart('resource');
                         $translatePartialLoader.addPart('subscriber');

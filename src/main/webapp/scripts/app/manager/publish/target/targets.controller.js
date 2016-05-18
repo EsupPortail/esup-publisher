@@ -21,7 +21,7 @@ angular.module('publisherApp')
         }
 
         $scope.$watch('search.target', function(newData, oldData) {
-            console.log("search selected :", newData, oldData);
+            //console.log("search selected :", newData, oldData);
             if (angular.isDefined(newData) && !angular.equals({},newData) && newData.hasOwnProperty('modelId') && !containsSubcriber(newData.modelId)) {
                 var target = {modelId :newData.modelId, displayName: newData.displayName};
                 $scope.$parent.targets.push(target);

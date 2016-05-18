@@ -26,15 +26,15 @@ angular.module('publisherApp')
         };
 
         $scope.validatePublisher = function() {
-            console.log("validatePublisher");
+            //console.log("validatePublisher");
             if ($scope.isPublisherSelected) {
-                console.log("validatePublisher pub selected");
+                //console.log("validatePublisher pub selected");
                 for (var i = 0, size = $scope.publishers.length; i < size; i++) {
                     if ($scope.publishers[i].context.reader.id == $scope.selectedPublisher.context.reader.id
                         && $scope.publishers[i].context.redactor.id == $scope.selectedPublisher.context.redactor.id
                         && $scope.publishers[i].context.organization.id == $scope.selectedPublisher.context.organization.id) {
                         $scope.$parent.publisher = angular.copy($scope.publishers[i]);
-                        console.log("validatePublisher pub selected : ", JSON.stringify($scope.$parent.publisher));
+                        //console.log("validatePublisher pub selected : ", JSON.stringify($scope.$parent.publisher));
                         break;
                     }
                 }

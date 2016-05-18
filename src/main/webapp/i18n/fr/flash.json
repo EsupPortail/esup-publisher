@@ -1,0 +1,46 @@
+{
+    "publisherApp": {
+        "flash" : {
+            "home": {
+                "title": "Flash Info",
+                "createLabel": "Nouvelle Flash Info",
+                "createOrEditLabel": "Créer ou éditer une Flash Info"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la Flash Info {{ id }} ?",
+                "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
+            },
+            "detail": {
+                "title": "Flash Info"
+            },
+            "title": "Titre",
+            "enclosure": "Illustration",
+            "enclosure.button": "Sélectionner une illustration",
+            "endDate": "Date de disparition",
+            "startDate": "Date d'apparition",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Résumé",
+            "body": "Texte",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "action": {
+                "publish": "Enregistrer et Publier",
+                "save": "Enregistrer"
+            },
+            "inputfile": {
+                "title": "Sélection d'une image",
+                "crop" : {
+                    "step1" : "Charger une image",
+                    "step2" : "Sélectionner une zone de l'image",
+                    "step3" : "Valider la sélection"
+                }
+            }
+        }
+    }
+}

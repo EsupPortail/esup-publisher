@@ -128,7 +128,8 @@
             "save": "Enregistrer",
             "view": "Voir",
             "close" : "Fermer",
-            "validate": "Valider"
+            "validate": "Valider",
+            "reset": "Réinitialiser"
         },
         "detail": {
             "field": "Champs",

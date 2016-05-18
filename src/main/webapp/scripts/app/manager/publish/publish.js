@@ -27,6 +27,7 @@ angular.module('publisherApp')
                         $translatePartialLoader.addPart('global');
                         $translatePartialLoader.addPart('publisher');
                         $translatePartialLoader.addPart('item');
+                        $translatePartialLoader.addPart('flash');
                         $translatePartialLoader.addPart('news');
                         $translatePartialLoader.addPart('media');
                         $translatePartialLoader.addPart('resource');

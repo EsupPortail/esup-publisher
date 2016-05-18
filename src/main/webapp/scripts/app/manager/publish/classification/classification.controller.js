@@ -18,17 +18,23 @@ angular.module('publisherApp')
                 angular.forEach(result, function(obj) {
                     $scope.classificationsList.push({contextKey : obj.contextKey, icon : obj.iconUrl, name: obj.name, description : obj.description, color : obj.color});
                 });
-                // if only one Classification is enable automatic select it !
-                if ($scope.classificationsList.length == 1 && !inArray($scope.classificationsList[0].contextKey, $scope.$parent.classifications)) {
-                    $scope.$parent.classifications.push($scope.classificationsList[0].contextKey);
-                }
                 // we clean already saved classification where user loose rights
                 if (loadedClassifications) {
                     angular.forEach(loadedClassifications, function(obj) {
-                       if (!inArray(obj, $scope.classificationsList)) {
-                           remove(obj);
-                       }
+                        var found = false;
+                        angular.forEach($scope.classificationsList, function(objList) {
+                            if (angular.equals(objList.contextKey, obj)) {
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            remove(obj);
+                        }
                     });
+                }
+                // if only one Classification is enable automatic select it !
+                if ($scope.classificationsList.length == 1 && !inArray($scope.classificationsList[0].contextKey, $scope.$parent.classifications)) {
+                    $scope.$parent.classifications.push($scope.classificationsList[0].contextKey);
                 }
             });
         };
@@ -59,6 +65,10 @@ angular.module('publisherApp')
             }
         };
 
+        $scope.containsSelectedClassification = function (contextKey) {
+            return inArray(contextKey, $scope.$parent.classifications);
+        };
+
         function remove(contextkey) {
             $scope.$parent.classifications = $scope.$parent.classifications.filter(function(element) {
                 return !angular.equals(element, contextkey);
@@ -66,22 +76,16 @@ angular.module('publisherApp')
         }
 
         function inArray (item, array) {
-            if (!angular.isDefined(array) || !angular.isArray(array)) return false;
-            return (-1 !== array.indexOf(item));
-        }
-
-
-        $scope.containsSelectedClassification = function (contextKey) {
-            var list = $scope.$parent.classifications;
-            if (list.length > 0) {
-                for (var i = 0, size = list.length; i < size; i++) {
-                    //console.log("checking equals ", list[i], contextKey);
-                    if (angular.equals(list[i], contextKey)) {
-                        return true;
-                    }
+            //console.log("inArray", array, item);
+            if (!angular.isDefined(array) || !angular.isArray(array) || array.length < 1) return false;
+            for (var i = 0, size = array.length; i < size; i++) {
+                if (angular.equals(array[i], item)) {
+                    //console.log("inArray return true !");
+                    return true;
                 }
             }
+            //console.log("inArray returned false !");
             return false;
-        };
+        }
 
     });

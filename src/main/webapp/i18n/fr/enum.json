@@ -25,7 +25,8 @@
             "NEWS": "Actualité",
             "MEDIA": "Média",
             "RESOURCE": "Ressource",
-            "EVENT": "Évènement"
+            "EVENT": "Évènement",
+            "FLASH": "Flash d'Information"
         },
         "displayOrder": {
             "lastCreatedModifiedFirst": {

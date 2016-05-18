@@ -6,16 +6,13 @@ console.log("enter ContentDetailsController",contentData);
         $scope.item = contentData[1].item;
         $scope.classifications = contentData[0];
         $scope.targets = contentData[1].targets;
-        console.log("ContentDetailsController", $scope.item, $scope.classifications,$scope.targets);
+        //console.log("ContentDetailsController", $scope.item, $scope.classifications,$scope.targets);
         $scope.pubContexts = [];
 
         if ($scope.classifications && $scope.classifications.length > 0) {
-            console.log("construct0 with ", $scope.classifications);
             angular.forEach($scope.classifications, function(value, key) {
-                console.log("construct with ", key, value);
                 var found = false;
                 angular.forEach($scope.pubContexts, function(v, k) {
-                    console.log("construct2 with ", k, v);
                     if (v.id === value.publisher.id) {
                         $scope.pubContexts[k].classifications.push(value);
                         found = true;
@@ -25,7 +22,7 @@ console.log("enter ContentDetailsController",contentData);
                     $scope.pubContexts.push({id: value.publisher.id, publisher: value.publisher, classifications: [value]});
                 }
             });
-            console.log("Constructed map : ", $scope.pubContexts);
+            //console.log("Constructed map : ", $scope.pubContexts);
         }
 
         $scope.itemStatusList = EnumDatas.getItemStatusList();
@@ -47,6 +44,9 @@ console.log("enter ContentDetailsController",contentData);
                 break;
             case 'RESOURCE':
                 $scope.contentTemplate = 'scripts/app/manager/contents/details/templates/resource.html';
+                break;
+            case 'FLASH':
+                $scope.contentTemplate = 'scripts/app/manager/contents/details/templates/flash.html';
                 break;
         }
 

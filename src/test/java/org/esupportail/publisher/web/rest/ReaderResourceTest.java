@@ -49,9 +49,11 @@ public class ReaderResourceTest {
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
 
     private static final Set<ItemType> DEFAULT_ITEMTYPE = EnumSet.of(ItemType.NEWS, ItemType.MEDIA);
+    private static final String[] DEFAULT_ITEMTYPE_ARRAY = {ItemType.NEWS.name(), ItemType.MEDIA.name()};
     //private static final Set<String> DEFAULT_ITEMTYPE_STRING = enumsToString(DEFAULT_ITEMTYPE);
     private static final Set<ItemType> UPDATED_ITEMTYPE = EnumSet.of(ItemType.NEWS);
     private static final Set<ClassificationDecorType> DEFAULT_DECORTYPE = EnumSet.of(ClassificationDecorType.COLOR);
+    private static final String[] DEFAULT_DECORTYPE_ARRAY = {ClassificationDecorType.COLOR.name()};
     //private static final Set<String> DEFAULT_DECORTYPE_STRING = enumsToString(DEFAULT_DECORTYPE);
     private static final Set<ClassificationDecorType> UPDATED_DECORTYPE = EnumSet.of(ClassificationDecorType.ENCLOSURE);
 
@@ -128,9 +130,9 @@ public class ReaderResourceTest {
             .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME.toString()))
             .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
+            .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasItems(DEFAULT_ITEMTYPE_ARRAY)))
+            .andExpect(jsonPath("$.[0].classificationDecorations", Matchers.hasItems(DEFAULT_DECORTYPE_ARRAY)))
             .andExpect(jsonPath("$.[0].classificationDecorations", Matchers.hasSize(DEFAULT_DECORTYPE.size())));
-            // EnumSet can't be tested as Matcher will test enum objet against his String value error : Expected: is <[NEWS, MEDIA]> but: was <["NEWS","MEDIA"]>
-            //.andExpect(jsonPath("$.[0].authorizedTypes", Matchers.is(DEFAULT_ITEMTYPE)));
     }
 
     @Test
@@ -138,6 +140,7 @@ public class ReaderResourceTest {
     public void getReader() throws Exception {
         // Initialize the database
         readerRepository.saveAndFlush(reader);
+
 
         // Get the reader
         restReaderMockMvc.perform(get("/api/readers/{id}", reader.getId()))
@@ -148,9 +151,9 @@ public class ReaderResourceTest {
             .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
+            .andExpect(jsonPath("$.authorizedTypes", Matchers.hasItems(DEFAULT_ITEMTYPE_ARRAY)))
+            .andExpect(jsonPath("$.classificationDecorations", Matchers.hasItems(DEFAULT_DECORTYPE_ARRAY)))
             .andExpect(jsonPath("$.classificationDecorations", Matchers.hasSize(DEFAULT_DECORTYPE.size())));
-            // EnumSet can't be tested as Matcher will test enum objet against his String value error : Expected: is <[NEWS, MEDIA]> but: was <["NEWS","MEDIA"]>
-            //.andExpect(jsonPath("$.authorizedTypes", Matchers.is(DEFAULT_ITEMTYPE)));
     }
 
     @Test
@@ -172,6 +175,7 @@ public class ReaderResourceTest {
         reader.setDisplayName(UPDATED_DISPLAY_NAME);
         reader.setDescription(UPDATED_DESCRIPTION);
         reader.setAuthorizedTypes(UPDATED_ITEMTYPE);
+        reader.setClassificationDecorations(UPDATED_DECORTYPE);
         restReaderMockMvc.perform(
             put("/api/readers")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)

@@ -22,9 +22,9 @@ public final class ItemPredicates {
     private final static QAbstractItem qItem = QAbstractItem.abstractItem;
     private final static QItemClassificationOrder qItemClass = QItemClassificationOrder.itemClassificationOrder;
 
-	public static Predicate itemsClassOfClassification(final AbstractClassification classif) {
-		return itemsClassOfClassification(classif.getId());
-	}
+    public static Predicate itemsClassOfClassification(final AbstractClassification classif) {
+        return itemsClassOfClassification(classif.getId());
+    }
     public static Predicate itemsClassOfClassification(final long classifId) {
         return qItemClass.itemClassificationId.abstractClassification.id.eq(classifId);
     }
@@ -33,36 +33,36 @@ public final class ItemPredicates {
         return qItemClass.isNotNull();
     }
 
-	public static Predicate itemsClassOfItem(final Long itemId) {
-		return qItemClass.itemClassificationId.abstractItem.id.eq(itemId);
-	}
+    public static Predicate itemsClassOfItem(final Long itemId) {
+        return qItemClass.itemClassificationId.abstractItem.id.eq(itemId);
+    }
 
-	public static OrderSpecifier<?> orderByClassifDefinition(
-			final AbstractClassification classif) {
-		return orderByClassifDefinition(classif.getDefaultDisplayOrder());
-	}
+    public static OrderSpecifier<?> orderByClassifDefinition(
+        final AbstractClassification classif) {
+        return orderByClassifDefinition(classif.getDefaultDisplayOrder());
+    }
 
-	public static OrderSpecifier<?> orderByClassifDefinition(
-			final DisplayOrderType displayOrder) {
-		switch (displayOrder) {
-		case LAST_CREATED_MODIFIED_FIRST:
-			return qItemClass.itemClassificationId.abstractItem.lastModifiedDate
-					.coalesce(
+    public static OrderSpecifier<?> orderByClassifDefinition(
+        final DisplayOrderType displayOrder) {
+        switch (displayOrder) {
+            case LAST_CREATED_MODIFIED_FIRST:
+                return qItemClass.itemClassificationId.abstractItem.lastModifiedDate
+                    .coalesce(
                         qItemClass.itemClassificationId.abstractItem.createdDate)
-					.desc();
-		case ONLY_LAST_CREATED_FIRST:
-			return qItemClass.itemClassificationId.abstractItem.createdDate
-					.desc();
-		case NAME:
-			return qItemClass.itemClassificationId.abstractItem.title.asc();
-		case START_DATE:
-			return qItemClass.itemClassificationId.abstractItem.startDate.desc();
-		case CUSTOM:
-			return qItemClass.displayOrder.desc();
-		default:
-			return qItemClass.itemClassificationId.abstractItem.startDate.asc();
-		}
-	}
+                    .desc();
+            case ONLY_LAST_CREATED_FIRST:
+                return qItemClass.itemClassificationId.abstractItem.createdDate
+                    .desc();
+            case NAME:
+                return qItemClass.itemClassificationId.abstractItem.title.asc();
+            case START_DATE:
+                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
+            case CUSTOM:
+                return qItemClass.displayOrder.desc();
+            default:
+                return qItemClass.itemClassificationId.abstractItem.startDate.asc();
+        }
+    }
 
     public static OrderSpecifier<?> orderByItemDefinition(
         final DisplayOrderType displayOrder) {
@@ -98,34 +98,41 @@ public final class ItemPredicates {
         return onStatus;
     }
 
-	public static Predicate NewsItems() {
-		return qItem.instanceOf(News.class);
+    public static Predicate NewsItems() {
+        return qItem.instanceOf(News.class);
+    }
 
-	}
+    public static Predicate NewsItemsOfOrganization(final Organization org) {
+        return qItem.organization.id.eq(org.getId()).and(NewsItems());
+    }
 
-	public static Predicate NewsItemsOfOrganization(final Organization org) {
-		return qItem.organization.id.eq(org.getId()).and(NewsItems());
-	}
+    public static Predicate MediaItems() {
+        return qItem.instanceOf(Media.class);
+    }
 
-	public static Predicate MediaItems() {
-		return qItem.instanceOf(Media.class);
-	}
+    public static Predicate MediaItemsOfOrganization(final Organization org) {
+        return qItem.organization.id.eq(org.getId()).and(MediaItems());
+    }
 
-	public static Predicate MediaItemsOfOrganization(final Organization org) {
-		return qItem.organization.id.eq(org.getId()).and(MediaItems());
-	}
+    public static Predicate ResourceItems() {
+        return qItem.instanceOf(Resource.class);
+    }
 
-	public static Predicate ResourceItems() {
-		return qItem.instanceOf(Resource.class);
-	}
+    public static Predicate ResourceItemsOfOrganization(final Organization org) {
+        return qItem.organization.id.eq(org.getId()).and(ResourceItems());
+    }
 
-	public static Predicate ResourceItemsOfOrganization(final Organization org) {
-		return qItem.organization.id.eq(org.getId()).and(ResourceItems());
-	}
+    public static Predicate FlashItems() {
+        return qItem.instanceOf(Flash.class);
+    }
+
+    public static Predicate FlashItemsOfOrganization(final Organization org) {
+        return qItem.organization.id.eq(org.getId()).and(FlashItems());
+    }
 
     public static Predicate ItemsToRemove() {
         final Predicate archived = qItem.status.eq(ItemStatus.ARCHIVED).and(itemsEndDateOlderThanNMonth(4));
-        return qItem.status.eq(ItemStatus.DRAFT).and(itemsEndDateOlderThanNMonth(8)).or(archived);
+        return qItem.status.eq(ItemStatus.DRAFT).and(itemsEndDateOlderThanNMonth(15)).or(archived);
     }
 
     private static Predicate itemsEndDateOlderThanNMonth(final int nmonth) {

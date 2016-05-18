@@ -7,37 +7,27 @@ angular.module('publisherApp')
         //$scope.targets = [];
         $scope.itemValidated = false;
 
-        /*$scope.load = function(){*/
-            if (angular.isDefined(contentData)) {
-                console.log("editing : ", contentData);
-                /*$scope.item = contentData.item;
-                if (contentData.targets && contentData.targets.length > 0) {
-                    $scope.targets = contentData.targets;
-                }
-                $scope.itemValidated = true;
-                if (contentData.classifications && contentData.classifications.length > 0) {
-                    $scope.classifications = contentData.classifications;
-                    $scope.publisher = contentData.publisher;
-                    console.log("Publisher: ", $scope.publisher);
-                    console.log("classifications: ", $scope.classifications);
-                    console.log("Item: ", $scope.item);
-                    console.log("Targets: ", $scope.targets);
-
-                }*/
-            }
-        //};
-
-        //$scope.load();
-        /* if ($stateParams.id) {
-         console.log($stateParams.id);
-         $scope.load($stateParams.id);
-         } else {
-         console.log("no $stateParams.id");
-         }*/
+            //if (angular.isDefined(contentData)) {
+            //    console.log("editing : ", contentData);
+            //    /*$scope.item = contentData.item;
+            //    if (contentData.targets && contentData.targets.length > 0) {
+            //        $scope.targets = contentData.targets;
+            //    }
+            //    $scope.itemValidated = true;
+            //    if (contentData.classifications && contentData.classifications.length > 0) {
+            //        $scope.classifications = contentData.classifications;
+            //        $scope.publisher = contentData.publisher;
+            //        console.log("Publisher: ", $scope.publisher);
+            //        console.log("classifications: ", $scope.classifications);
+            //        console.log("Item: ", $scope.item);
+            //        console.log("Targets: ", $scope.targets);
+            //
+            //    }*/
+            //}
 
         $scope.publishingType = function() {
             if (!$scope.isPublisherSelected()) {
-                console.log("publishingType = 'NONE'");
+                //console.log("publishingType = 'NONE'");
                 return "NONE";
             }
             return $scope.publisher.context.redactor.writingMode;
@@ -57,8 +47,9 @@ angular.module('publisherApp')
 
 
         $scope.canSubmit = function() {
+            //console.log("canSubmit ?",$scope.classifications, $scope.publisher.context.redactor.writingMode, $scope.targets);
             return $scope.publisher && $scope.publisher.id && $scope.itemValidated && $scope.classifications && $scope.classifications.length > 0
-                && ($scope.publisher.context.reader.writingMode == "STATIC" || ($scope.targets && $scope.targets.length > 0));
+                && ($scope.publisher.context.redactor.writingMode == "STATIC" || ($scope.targets && $scope.targets.length > 0));
         };
 
         $scope.canSave = function() {
@@ -92,7 +83,7 @@ angular.module('publisherApp')
                 item : $scope.item,
                 targets: targets
             };
-            console.log("publishing : " + JSON.stringify(content));
+            //console.log("publishing : " + JSON.stringify(content));
             if (content.item.id != null) {
                 ContentDTO.update(content,
                     function () {
@@ -108,17 +99,4 @@ angular.module('publisherApp')
             }
         };
 
-    })/*.filter("greaterThanToday", function () {
-        return function (input) {
-            var today = new Date();
-            console.log("come into filter with input ", input);
-            if (angular.isDate(input)) {
-                console.log("input is a date, and today", today);
-                if (new Date(input) > new Date(today)) {
-                    console.log("input is upper of today");
-                    return input;
-                }
-            }
-            return today;
-        }
-    })*/;
+    });

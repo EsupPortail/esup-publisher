@@ -10,6 +10,7 @@ import org.esupportail.publisher.repository.ClassificationRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.IPermissionService;
@@ -46,6 +47,9 @@ public class ContentService {
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
 
+    @Inject
+    private IExternalGroupDao externalGroupDao;
+
     //@Inject
     //private PublisherRepository publisherRepository;
 
@@ -75,7 +79,7 @@ public class ContentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (content.getClassifications() == null || content.getClassifications().isEmpty()) {
             // we can save the item as DRAFT if there is at least a validated item
-            if (content.getItem().getStatus().equals(ItemStatus.DRAFT)) {
+            if (ItemStatus.DRAFT.equals(content.getItem().getStatus())) {
                 AbstractItem item = content.getItem();
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
@@ -124,13 +128,32 @@ public class ContentService {
         }
         log.debug("==> upperClassifPerm = [{}, {}]", upperClassifPerm.getFirst(), upperClassifPerm.getSecond());
 
+        // Case of DRAFT state and not complete publishment to save data, or in static mode when subscribers are on classifications
         if (content.getTargets() == null || content.getTargets().isEmpty()) {
-            log.debug("no targets are provided, will save as draft !");
-            // we can save the item as DRAFT if there is at least a validated item
-            if (content.getItem().getStatus().equals(ItemStatus.DRAFT)) {
+            log.debug("no targets are provided, will save as draft or is a Static redactor !");
+            // we can save the item as DRAFT if there is at least a validated item or we can save
+            if (ItemStatus.DRAFT.equals(content.getItem().getStatus()) || WritingMode.STATIC.equals(content.getItem().getRedactor().getWritingMode())) {
                 AbstractItem item = content.getItem();
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
+
+                // manage static mode without target, published or scheduled state is authorized
+                if (WritingMode.STATIC.equals(content.getItem().getRedactor().getWritingMode())
+                    && (ItemStatus.PUBLISHED.equals(item.getStatus()) || ItemStatus.SCHEDULED.equals(item.getStatus()))) {
+                    // lower rights in all classifications will applied for validation
+                    if (lowerClassifPerm.getFirst().getMask() > PermissionType.CONTRIBUTOR.getMask()) {
+                        if (item.getStartDate().isAfter(LocalDate.now())) {
+                            item.setStatus(ItemStatus.SCHEDULED);
+                        }
+                        item.setValidatedBy(SecurityUtils.getCurrentUser());
+                        item.setValidatedDate(DateTime.now());
+                    } else {
+                        item.setStatus(ItemStatus.PENDING);
+                    }
+                } else {
+                   item.setStatus(ItemStatus.DRAFT);
+                }
+
                 item = itemRepository.save(item);
 
                 // now we save all linked classification
@@ -160,7 +183,8 @@ public class ContentService {
             PermOnClassifWSubjDTO permObj = (PermOnClassifWSubjDTO) lowerClassifPerm.getSecond();
             // permObj could be null when user is ADMIN
             if (permObj != null && permObj.getAuthorizedSubjects() != null && !permObj.getAuthorizedSubjects().isEmpty()) {
-//TODO for filter
+                // we check on authorized subject, else we filter
+                //TODO filter authorized
                 authorizedSubscribers.addAll(content.getTargets());
             } else {
                 authorizedSubscribers.addAll(content.getTargets());
@@ -277,15 +301,34 @@ public class ContentService {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
+        // Case of DRAFT state and not complete publishment to save data, or in static mode when subscribers are on classifications
         Set<Subscriber> oldSubscribers = Sets.newHashSet(subscriberRepository.findAll(SubscriberPredicates.onCtx(content.getItem().getContextKey())));
         if (content.getTargets() == null || content.getTargets().isEmpty()) {
             subscriberRepository.delete(oldSubscribers);
             log.debug("no targets are provided, will save as draft !");
             // we can save the item as DRAFT if there is at least a validated item
-            if (content.getItem().getStatus().equals(ItemStatus.DRAFT)) {
+            if (ItemStatus.DRAFT.equals(content.getItem().getStatus()) || WritingMode.STATIC.equals(content.getItem().getRedactor().getWritingMode())) {
                 AbstractItem item = content.getItem();
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
+
+                // manage static mode without target, published or scheduled state is authorized
+                if (WritingMode.STATIC.equals(content.getItem().getRedactor().getWritingMode())
+                    && (ItemStatus.PUBLISHED.equals(item.getStatus()) || ItemStatus.SCHEDULED.equals(item.getStatus()))) {
+                    // lower rights in all classifications will applied for validation
+                    if (lowerClassifPerm.getFirst().getMask() > PermissionType.CONTRIBUTOR.getMask()) {
+                        if (item.getStartDate().isAfter(LocalDate.now())) {
+                            item.setStatus(ItemStatus.SCHEDULED);
+                        }
+                        item.setValidatedBy(SecurityUtils.getCurrentUser());
+                        item.setValidatedDate(DateTime.now());
+                    } else {
+                        item.setStatus(ItemStatus.PENDING);
+                    }
+                } else {
+                    item.setStatus(ItemStatus.DRAFT);
+                }
+
                 item = itemRepository.save(item);
 
                 // now we save all linked classification
@@ -321,9 +364,10 @@ public class ContentService {
         if (PermissionClass.CONTEXT_WITH_SUBJECTS.equals(contextPermClass)) {
             // case of defining targets on items (with on level of classification only)
             PermOnClassifWSubjDTO permObj = (PermOnClassifWSubjDTO) lowerClassifPerm.getSecond();
-            // permObj could be null is user is ADMIN
+            // permObj could be null when user is ADMIN
             if (permObj != null && permObj.getAuthorizedSubjects() != null && !permObj.getAuthorizedSubjects().isEmpty()) {
-                //TODO for filter
+                // we check on authorized subject, else we filter
+                //TODO filter authorized
                 authorizedSubscribers.addAll(content.getTargets());
             } else {
                 authorizedSubscribers.addAll(content.getTargets());
