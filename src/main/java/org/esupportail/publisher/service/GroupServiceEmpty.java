@@ -1,5 +1,6 @@
 package org.esupportail.publisher.service;
 
+import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.web.rest.dto.TreeJS;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
@@ -11,17 +12,17 @@ import java.util.List;
  */
 public class GroupServiceEmpty implements IGroupService {
     @Override
-    public List<TreeJS> getRootNodes(ContextKey contextKey) {
-        return null;
+    public List<TreeJS> getRootNodes(ContextKey contextKey, List<ContextKey> subContextKeys) {
+        return Lists.newArrayList();
     }
 
     @Override
     public List<TreeJS> getGroupMembers(String id) {
-        return null;
+        return Lists.newArrayList();
     }
 
     @Override
     public List<UserDTO> getUserMembers(String id) {
-        return null;
+        return Lists.newArrayList();
     }
 }

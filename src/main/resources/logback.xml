@@ -74,8 +74,9 @@
 
     <!-- for REST request debug -->
     <!--<logger name="org.springframework.security.web.util.matcher" level="DEBUG" />-->
+    <!--<logger name="org.springframework.security.web" level="DEBUG"/>-->
     <!--<logger name="org.springframework.security.web.FilterChainProxy" level="DEBUG" />-->
-    <logger name="org.springframework.http" level="DEBUG" />
+    <!--<logger name="org.springframework.http" level="DEBUG" />-->
     <!--<logger name="org.springframework.security.cas" level="DEBUG"/>-->
 
 
@@ -89,6 +90,7 @@
 
     <logger name="org.esupportail.publisher.security" level="DEBUG">
         <appender-ref ref="FILE" />
+
     </logger>
 
 </configuration>

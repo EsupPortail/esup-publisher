@@ -25,4 +25,14 @@ public interface IExternalGroupDao {
 
     List<IExternalUser> getDirectUserMembers(@NotNull final String id);
 
+    boolean isGroupMemberOfGroup(@NotNull final String member, @NotNull final String parent);
+
+    boolean isGroupMemberOfGroupFilter(@NotNull String stringFilter, @NotNull final String member);
+
+    boolean isGroupMemberOfAtLeastOneGroup(@NotNull final String member, @NotNull final Iterable<String> parents);
+
+    boolean isUserMemberOfGroup(@NotNull final String uid, @NotNull final String group);
+
+    boolean isUserMemberOfAtLeastOneGroup(@NotNull final String uid, @NotNull final Iterable<String> groups);
+
 }

@@ -12,6 +12,7 @@ import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.UserService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
+import org.esupportail.publisher.web.rest.dto.SearchSubjectFormDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
 import org.slf4j.Logger;
@@ -163,17 +164,33 @@ public class UserResource {
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
 
+//    /**
+//     * GET /users/search/:param -> get the "login" user.
+//     */
+//    @RequestMapping(value = "/users/search/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @Timed
+//    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
+//        + " && hasPermission(#ctxId,  #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
+//    public ResponseEntity<List<UserDTO>> searchUsers(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
+//                                                     @RequestParam(value = "subctxs", required = false) List<ContextKey> ctxs, @RequestParam("criteria") String search) {
+//        log.debug("REST request to search Users with value {} in contextKey[keyType ={},keyId={}] and subContexts {}", search, ctxType, ctxId, ctxs);
+//        List<UserDTO> users = userService.getUserFromSearchInCtx(new ContextKey(ctxId, ctxType), ctxs, search);
+//        if (users == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(users,HttpStatus.OK);
+//    }
+
     /**
-     * GET /users/search/:param -> get the "login" user.
+     * POST /users/search/:param -> get the "login" user.
      */
-    @RequestMapping(value = "/users/search/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/users/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
-        + " && hasPermission(#ctxId,  #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    public ResponseEntity<List<UserDTO>> searchUsers(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType, @RequestParam("criteria") String search) {
-        final ContextKey ctx = new ContextKey(ctxId, ctxType);
-        log.debug("REST request to search Users with value {} in context {}", search, ctx);
-        List<UserDTO> users = userService.getUserFromSearchInCtx(ctx, search);
+        + " && hasPermission(#form.context.keyId, #form.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
+    public ResponseEntity<List<UserDTO>> searchUsersBis(@RequestBody SearchSubjectFormDTO form) {
+        log.debug("REST request to search Users with params {}", form);
+        List<UserDTO> users = userService.getUserFromSearchInCtx(form.getContext(), form.getSubContexts(), form.getSearch());
         if (users == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -55,16 +55,27 @@ public class GroupService implements IGroupService {
     @Inject
     private ContextService contextService;
 
-    public List<TreeJS> getRootNodes(final ContextKey contextKey) {
+    public List<TreeJS> getRootNodes(final ContextKey contextKey, final List<ContextKey> subContextKeys) {
         if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
             return Lists.newArrayList();
         }
         Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), contextKey);
+        if ((perms == null || PermissionType.LOOKOVER.equals(perms.getFirst())) && subContextKeys != null) {
+            Pair<PermissionType, PermissionDTO> lowerPerm = null;
+            // we need to get the lower perm to apply rules on lower context to avoid problems of rights !
+            for (ContextKey ctxKey: subContextKeys) {
+                perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), ctxKey);
+                if (perms != null && (lowerPerm == null || perms.getFirst().getMask() < lowerPerm.getFirst().getMask())) {
+                    lowerPerm = perms;
+                    // if contributor if found we have the lower rights !
+                    if (lowerPerm.getFirst().getMask() == PermissionType.CONTRIBUTOR.getMask()) break;
+                }
+            }
+        }
+        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
         if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst()) && perms.getSecond() == null) {
             return Lists.newArrayList();
         }
-
-        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
 
         // if ADMIN perms.getSecond() is null as all is authorized
         if (PermissionType.ADMIN.getMask() <= perms.getFirst().getMask()) {
@@ -81,11 +92,11 @@ public class GroupService implements IGroupService {
                     }
                 }
             }
-            // can be very long and finish with timeout if no filters
+            // WARNING can be very long and finish with timeout if no filters
             return treeJSDTOFactory.asDTOList(externalGroupDao.getGroupsById(groupIds, true));
         }
 
-        if (PermissionType.MANAGER.getMask() <= perms.getFirst().getMask()) {
+        if (PermissionType.CONTRIBUTOR.getMask() <= perms.getFirst().getMask()) {
             PermissionDTO perm = perms.getSecond();
             if (perm != null) {
                 if (perm instanceof PermOnClassifWSubjDTO) {

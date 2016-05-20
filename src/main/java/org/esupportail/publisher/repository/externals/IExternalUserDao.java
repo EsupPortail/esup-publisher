@@ -24,4 +24,6 @@ public interface IExternalUserDao {
 
     List<IExternalUser> getUsersWithFilter(final String stringFilter, final String token);
 
+    boolean isUserFoundWithFilter(final String stringFilter, final String uid);
+
 }

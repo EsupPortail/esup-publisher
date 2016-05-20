@@ -6,11 +6,10 @@ import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.*;
-import org.esupportail.publisher.repository.ClassificationRepository;
-import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
-import org.esupportail.publisher.repository.ItemRepository;
-import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
+import org.esupportail.publisher.repository.externals.IExternalUserDao;
+import org.esupportail.publisher.repository.predicates.FilterPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.IPermissionService;
@@ -26,6 +25,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,6 +49,9 @@ public class ContentService {
 
     @Inject
     private IExternalGroupDao externalGroupDao;
+    @Inject
+    private IExternalUserDao externalUserDao;
+
 
     //@Inject
     //private PublisherRepository publisherRepository;
@@ -68,6 +71,9 @@ public class ContentService {
 
     @Inject
     public UserContextLoaderService userSessionTreeLoader;
+
+    @Inject
+    private FilterRepository filterRepository;
 
     @Inject
     private FileService fileService;
@@ -151,7 +157,7 @@ public class ContentService {
                         item.setStatus(ItemStatus.PENDING);
                     }
                 } else {
-                   item.setStatus(ItemStatus.DRAFT);
+                    item.setStatus(ItemStatus.DRAFT);
                 }
 
                 item = itemRepository.save(item);
@@ -177,17 +183,19 @@ public class ContentService {
         // TODO also check if passed argument was in contained last userSearch
         Set<SubscriberFormDTO> authorizedSubscribers = new HashSet<>();
         //log.debug("Contexts of publishment {}", publishers);
-        log.debug("Type of Contexts of publishment {}", contextPermClass);
+        log.debug("Type of Contexts of publishment {} and userPerms applied {}", contextPermClass, lowerClassifPerm.getSecond());
         if (PermissionClass.CONTEXT_WITH_SUBJECTS.equals(contextPermClass)) {
             // case of defining targets on items (with on level of classification only)
-            PermOnClassifWSubjDTO permObj = (PermOnClassifWSubjDTO) lowerClassifPerm.getSecond();
-            // permObj could be null when user is ADMIN
-            if (permObj != null && permObj.getAuthorizedSubjects() != null && !permObj.getAuthorizedSubjects().isEmpty()) {
-                // we check on authorized subject, else we filter
-                //TODO filter authorized
+            PermOnCtxDTO permObj = (PermOnCtxDTO) lowerClassifPerm.getSecond();
+            // permObj could be null only when user is ADMIN
+            if (permObj == null) {
                 authorizedSubscribers.addAll(content.getTargets());
-            } else {
-                authorizedSubscribers.addAll(content.getTargets());
+            } else if (lowerClassifPerm.getSecond() instanceof PermOnClassifWSubjDTO
+                && ((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects() != null && !((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects().isEmpty()) {
+                authorizedSubscribers.addAll(filterSubcribers(Sets.newHashSet(content.getTargets()), ((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects()));
+            } else if (ContextType.ORGANIZATION.equals(permObj.getContext().getKeyType())) {
+                // case of perms are herited from ORGANIZATIONS
+                 authorizedSubscribers.addAll(filterSubcribersOnDefault(Sets.newHashSet(content.getTargets()), permObj.getContext()));
             }
 
             log.debug("Authorized targets are {}", authorizedSubscribers);
@@ -363,14 +371,17 @@ public class ContentService {
         log.debug("Type of Contexts of publishment {}", contextPermClass);
         if (PermissionClass.CONTEXT_WITH_SUBJECTS.equals(contextPermClass)) {
             // case of defining targets on items (with on level of classification only)
-            PermOnClassifWSubjDTO permObj = (PermOnClassifWSubjDTO) lowerClassifPerm.getSecond();
-            // permObj could be null when user is ADMIN
-            if (permObj != null && permObj.getAuthorizedSubjects() != null && !permObj.getAuthorizedSubjects().isEmpty()) {
-                // we check on authorized subject, else we filter
-                //TODO filter authorized
+            // case of defining targets on items (with on level of classification only)
+            PermOnCtxDTO permObj = (PermOnCtxDTO) lowerClassifPerm.getSecond();
+            // permObj could be null only when user is ADMIN
+            if (permObj == null) {
                 authorizedSubscribers.addAll(content.getTargets());
-            } else {
-                authorizedSubscribers.addAll(content.getTargets());
+            } else if (lowerClassifPerm.getSecond() instanceof PermOnClassifWSubjDTO
+                && ((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects() != null && !((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects().isEmpty()) {
+                authorizedSubscribers.addAll(filterSubcribers(Sets.newHashSet(content.getTargets()), ((PermOnClassifWSubjDTO) permObj).getAuthorizedSubjects()));
+            } else if (ContextType.ORGANIZATION.equals(permObj.getContext().getKeyType())) {
+                // case of perms are herited from ORGANIZATIONS
+                authorizedSubscribers.addAll(filterSubcribersOnDefault(Sets.newHashSet(content.getTargets()), permObj.getContext()));
             }
 
             log.debug("Authorized targets are {}", authorizedSubscribers);
@@ -457,6 +468,70 @@ public class ContentService {
             models.add(new Subscriber(subjectConverter.convertToModelKey(dto.getSubject().getModelId()), ctx, dto.getSubscribeType()));
         }
         return models;
+    }
+
+    private Set<SubscriberFormDTO> filterSubcribers(final Set<SubscriberFormDTO> targets, final Set<SubjectKeyDTO> authorizedSubjects) {
+        Set<SubscriberFormDTO> filteredSubjects = Sets.newHashSet();
+        Set<String> authorizedGroups = Sets.newHashSet();
+        Set<String> authorizedUsers = Sets.newHashSet();
+        for (SubjectKeyDTO subjectKeyDTO : authorizedSubjects) {
+            switch (subjectKeyDTO.getKeyType()) {
+                case GROUP: authorizedGroups.add(subjectKeyDTO.getKeyId()); break;
+                case PERSON: authorizedUsers.add(subjectKeyDTO.getKeyId()); break;
+                default: throw new IllegalArgumentException("SubjectType '" + subjectKeyDTO.getKeyType() + "' not managed !");
+            }
+        }
+        for (SubscriberFormDTO toTest: targets) {
+            if (authorizedSubjects.contains(toTest.getSubject().getModelId())) {
+                // subjectkey are equals
+                filteredSubjects.add(toTest);
+            } else {
+                // subjectkey are equals so find with "sub queries"
+                switch (toTest.getSubject().getModelId().getKeyType()) {
+                    case GROUP:
+                        if (externalGroupDao.isGroupMemberOfAtLeastOneGroup(toTest.getSubject().getModelId().getKeyId(), authorizedGroups)) {
+                            filteredSubjects.add(toTest);
+                        }
+                        break;
+                    case PERSON:
+                        if (externalGroupDao.isUserMemberOfAtLeastOneGroup(toTest.getSubject().getModelId().getKeyId(), authorizedGroups)) {
+                            filteredSubjects.add(toTest);
+                        }
+                        break;
+                    default: throw new IllegalArgumentException("SubjectType '" + toTest.getSubject().getModelId().getKeyType() + "' not managed !");
+                }
+            }
+        }
+        log.debug("filterSubcribers returned {}, \n comparing to entry {}", filteredSubjects, targets);
+
+        return filteredSubjects;
+    }
+
+    private Set<SubscriberFormDTO> filterSubcribersOnDefault(final Set<SubscriberFormDTO> targets, final ContextKeyDTO ctx) {
+        Assert.isTrue(ContextType.ORGANIZATION.equals(ctx.getKeyType()));
+        Set<SubscriberFormDTO> filteredSubjects = Sets.newHashSet();
+        Filter filterGroup = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(), FilterType.GROUP));
+        Filter filterUser = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(), FilterType.LDAP));
+        for (SubscriberFormDTO subscriberFormDTO : targets) {
+            switch (subscriberFormDTO.getSubject().getModelId().getKeyType()) {
+                case GROUP:
+                    if (filterGroup != null && externalGroupDao.isGroupMemberOfGroupFilter(filterGroup.getPattern(),subscriberFormDTO.getSubject().getModelId().getKeyId())) {
+                        filteredSubjects.add(subscriberFormDTO);
+                    }
+                    break;
+                case PERSON:
+                    if (filterUser != null && externalUserDao.isUserFoundWithFilter(filterUser.getPattern(), subscriberFormDTO.getSubject().getModelId().getKeyId())) {
+                        filteredSubjects.add(subscriberFormDTO);
+                    }
+                    break;
+                default: throw new IllegalArgumentException("SubjectType '" + subscriberFormDTO.getSubject().getModelId().getKeyType() + "' not managed !");
+            }
+        }
+
+
+        log.debug("filterSubcribersOnDefault returned {}, \n comparing to entry {}", filteredSubjects, targets);
+
+        return filteredSubjects;
     }
 
     /*private boolean isCompatiblePublishersContext(final Set<Publisher> publishers) {

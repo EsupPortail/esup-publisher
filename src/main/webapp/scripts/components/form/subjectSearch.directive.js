@@ -11,13 +11,20 @@ angular.module('publisherApp')
                 subject: '=',
                 subjectId :'=?',
                 text: "@?",
-                searchId: "@"
+                searchId: "@",
+                subContextKeys: '=?'
             },
             controller: function ($scope, $filter, User, Subject, Group ) {
                 //console.log("init SubjectControler : ", $scope.searchType, $scope.subject, $scope.contextKey, $scope.subjectId, $scope.text, $scope.searchId);
                 // searchId id usefull for modal if the tag is used more than once
 
                 $scope.currentCtxKey = angular.copy($scope.contextKey);
+                $scope.subCtxs = [];
+                if ($scope.subContextKeys && $scope.subContextKeys.length > 0) {
+                    angular.forEach($scope.subContextKeys, function(obj) {
+                        $scope.subCtxs.push(angular.copy(obj));
+                    })
+                }
 
                 $scope.userAttrs = Subject.getUserDisplayedAttrs();
                 $scope.userResult = [];
@@ -35,11 +42,15 @@ angular.module('publisherApp')
 
                 $scope.treeCoreCtxGroups = {
                     multiple: false,  // disable multiple node selection
-                    check_callback:true
+                    check_callback:true,
+                    ajax_params: {context : $scope.currentCtxKey, subContexts : $scope.subCtxs},
+                    ajax_method: 'POST'
                 };
                 $scope.treeCoreCtxUsersFG = {
                     multiple: false,  // disable multiple node selection
-                    check_callback:true
+                    check_callback:true,
+                    ajax_params: {context : $scope.currentCtxKey, subContexts : $scope.subCtxs},
+                    ajax_method: 'POST'
                 };
                 $scope.treeCtxCheckboxConf= {
                     three_state: false
@@ -52,7 +63,17 @@ angular.module('publisherApp')
                     $scope.search.filter = '';
                     $scope.currentPage = 1;
                     $scope.nbtotalItems = 0;
-                    User.search({ctx_id: $scope.contextKey.keyId, ctx_type: $scope.contextKey.keyType, criteria: $scope.search.queryUserTerm}, function(result) {
+                    /*User.search({ctx_id: $scope.contextKey.keyId, ctx_type: $scope.contextKey.keyType, criteria: $scope.search.queryUserTerm}, function(result) {
+                        if (result.length > 0) {
+                            //console.log("Array has length : ", result.length);
+                            $scope.userResult = $filter('orderBy')(result, 'displayName');
+                            $scope.nbtotalItems = $scope.userResult.length;
+                            //console.log("result : ", $scope.userResult);
+                            $scope.resultsArr = $scope.userResult.slice(0, $scope.numPerPage);
+                            //console.log("results paginated : ", $scope.resultsArr);
+                        }
+                    });*/
+                    User.search({context: $scope.currentCtxKey, subContexts: $scope.subCtxs ,search: $scope.search.queryUserTerm}, function(result) {
                         if (result.length > 0) {
                             //console.log("Array has length : ", result.length);
                             $scope.userResult = $filter('orderBy')(result, 'displayName');
@@ -82,9 +103,9 @@ angular.module('publisherApp')
 
                 };
 
-                $scope.$watch('container.subject', function() {
-                    console.log("watch container.subject", $scope.container.subject);
-                });
+                //$scope.$watch('container.subject', function() {
+                //    console.log("watch container.subject", $scope.container.subject);
+                //});
 
                 $scope.$watch('currentPage', function(newVal, oldVal) {
                     if (angular.isDefined(newVal) && !angular.equals(newVal, oldVal)) {

@@ -129,42 +129,42 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         return groups;
     }
 
-     @Override
+    @Override
     //@Cacheable(value = "ExternalGroups", key = "#id")
     public List<IExternalGroup> getGroupsByIdStartWith(@NotNull final Collection<String> ids, final boolean withMembers) {
-         if (ids == null || ids.isEmpty())
+        if (ids == null || ids.isEmpty())
             return Lists.newArrayList();
-         AndFilter filter = new AndFilter();
-         OrFilter list = new OrFilter();
-         for (String id: ids) {
-             list.append(new EqualsFilter(externalGroupHelper.getGroupIdAttribute(), id));
-             list.append(new LikeFilter(externalGroupHelper.getGroupIdAttribute(), id.trim() + ":*"));
-         }
-         filter.append(list);
-         if (log.isDebugEnabled()) {
-             log.debug("LDAP filter applied : " + filter);
-         }
-         ContextMapper<IExternalGroup> mapper;
-         if (withMembers) {
-             mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
-         } else {
-             mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
-         }
-         // SearchControls constraints = new SearchControls();
-         // constraints.setReturningAttributes((String[])
-         // ldapUserHelper.getAttributes().toArray());
-         LdapQuery query = LdapQueryBuilder.query()
-             .base(externalGroupHelper.getGroupDNSubPath()).filter(filter);
-         List<IExternalGroup> groups = ldapTemplate.search(query, mapper);
-         if (withMembers) {
-             List<IExternalGroup> tmp = Lists.newArrayList();
-             for (IExternalGroup group : groups) {
-                 tmp.add(groupMemberDesigner.designe(group, this));
-             }
-             groups = tmp;
-         }
-         return groups;
-     }
+        AndFilter filter = new AndFilter();
+        OrFilter list = new OrFilter();
+        for (String id: ids) {
+            list.append(new EqualsFilter(externalGroupHelper.getGroupIdAttribute(), id));
+            list.append(new LikeFilter(externalGroupHelper.getGroupIdAttribute(), id.trim() + ":*"));
+        }
+        filter.append(list);
+        if (log.isDebugEnabled()) {
+            log.debug("LDAP filter applied : " + filter);
+        }
+        ContextMapper<IExternalGroup> mapper;
+        if (withMembers) {
+            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+        } else {
+            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+        }
+        // SearchControls constraints = new SearchControls();
+        // constraints.setReturningAttributes((String[])
+        // ldapUserHelper.getAttributes().toArray());
+        LdapQuery query = LdapQueryBuilder.query()
+            .base(externalGroupHelper.getGroupDNSubPath()).filter(filter);
+        List<IExternalGroup> groups = ldapTemplate.search(query, mapper);
+        if (withMembers) {
+            List<IExternalGroup> tmp = Lists.newArrayList();
+            for (IExternalGroup group : groups) {
+                tmp.add(groupMemberDesigner.designe(group, this));
+            }
+            groups = tmp;
+        }
+        return groups;
+    }
 
     @Override
     public List<IExternalGroup> getDirectGroupMembers(@NotNull final String id, final boolean withMembers) {
@@ -178,7 +178,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
     @Override
     // @Cacheable(value = "ExternalGroups")
     public List<IExternalGroup> getGroupsWithFilter(@NotNull String stringFilter, String token, final boolean withMembers) {
-        log.debug("Serch with filter {} and token {}", stringFilter, token);
+        log.debug("Search with filter {} and token {}", stringFilter, token);
         AndFilter filter = new AndFilter()
             .and(new HardcodedFilter(stringFilter));
         if (token != null && !token.isEmpty())
@@ -208,6 +208,78 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         return Lists.newArrayList();
     }
 
+    @Override
+    public boolean isGroupMemberOfGroup(@NotNull final String member, @NotNull final String parent) {
+        if (externalGroupHelper.getGroupKeyMemberRegex() == null) return false;
+        // direct resolution when using grouper subpath is in parent path, so do only char comparison.
+        if (member.startsWith(parent)) return true;
+        // else if not subpath checking in ldap
+        AndFilter filter = new AndFilter().and(new LikeFilter(externalGroupHelper.getGroupSearchAttribute(), parent + "*"));
+        filter.and(new EqualsFilter(externalGroupHelper.getGroupMembersAttribute(), externalGroupHelper.getGroupKeyMemberRegex().toString().replace("(.*)", member)));
+        if (log.isDebugEnabled()) {
+            log.debug("isGroupMemberOfGroup LDAP filter applied : " + filter);
+        }
+        return !searchWithFilter(filter, false).isEmpty();
+    }
+
+    @Override
+    public boolean isGroupMemberOfGroupFilter(@NotNull String stringFilter, @NotNull final String member) {
+        log.debug("Search with filter {} and group {}", stringFilter, member);
+        AndFilter filter = new AndFilter()
+            .and(new HardcodedFilter(stringFilter));
+        OrFilter or = new OrFilter();
+        or.append(new EqualsFilter(externalGroupHelper.getGroupMembersAttribute(), externalGroupHelper.getGroupKeyMemberRegex().toString().replace("(.*)", member)));
+        or.append(new EqualsFilter(externalGroupHelper.getGroupSearchAttribute(), member));
+        filter.and(or);
+
+        return !searchWithFilter(filter, false).isEmpty();
+
+    }
+
+    @Override
+    public boolean isUserMemberOfGroup(@NotNull final String uid, @NotNull final String group) {
+        if (externalGroupHelper.getUserKeyMemberRegex() == null) return false;
+        AndFilter filter = new AndFilter().and(new LikeFilter(externalGroupHelper.getGroupSearchAttribute(), group + "*"));
+        filter.and(new EqualsFilter(externalGroupHelper.getGroupMembersAttribute(), externalGroupHelper.getUserKeyMemberRegex().toString().replace("(.*)", uid)));
+        if (log.isDebugEnabled()) {
+            log.debug("isUserMemberOfGroup LDAP filter applied : " + filter);
+        }
+        return !searchWithFilter(filter, false).isEmpty();
+    }
+
+    @Override
+    public boolean isGroupMemberOfAtLeastOneGroup(@NotNull final String member, @NotNull final Iterable<String> parents) {
+        if (externalGroupHelper.getGroupKeyMemberRegex() == null) return false;
+        // direct resolution when using grouper subpath is in parent path, so do only char comparison.
+        if (OptimContainsGroup(member, parents)) return true;
+        // else if not subpath checking in ldap
+        OrFilter orFilter = new OrFilter();
+        for (final String group : parents) {
+            orFilter.append(new LikeFilter(externalGroupHelper.getGroupSearchAttribute(), group + "*"));
+        }
+        AndFilter filter = new AndFilter().and(orFilter);
+        filter.and(new EqualsFilter(externalGroupHelper.getGroupMembersAttribute(), externalGroupHelper.getGroupKeyMemberRegex().toString().replace("(.*)", member)));
+        if (log.isDebugEnabled()) {
+            log.debug("isGroupMemberOfGroup LDAP filter applied : " + filter);
+        }
+        return !searchWithFilter(filter, false).isEmpty();
+    }
+
+    @Override
+    public boolean isUserMemberOfAtLeastOneGroup(@NotNull final String uid, @NotNull final Iterable<String> groups) {
+        if (externalGroupHelper.getUserKeyMemberRegex() == null) return false;
+        OrFilter orFilter = new OrFilter();
+        for (final String group : groups) {
+            orFilter.append(new LikeFilter(externalGroupHelper.getGroupSearchAttribute(), group + "*"));
+        }
+        AndFilter filter = new AndFilter().and(orFilter);
+        filter.and(new EqualsFilter(externalGroupHelper.getGroupMembersAttribute(), externalGroupHelper.getUserKeyMemberRegex().toString().replace("(.*)", uid)));
+        if (log.isDebugEnabled()) {
+            log.debug("isUserMemberOfAtLeastOneGroup LDAP filter applied : " + filter);
+        }
+        return !searchWithFilter(filter, false).isEmpty();
+    }
+
     // @Cacheable(value = "ExternalGroups", key = "#filter")
     private List<IExternalGroup> searchWithFilter(@NotNull final Filter filter, final boolean withMembers) {
         final String filterAsStr = filter.encode();
@@ -226,6 +298,13 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         LdapQuery query = LdapQueryBuilder.query()
             .base(externalGroupHelper.getGroupDNSubPath()).filter(filter);
         return ldapTemplate.search(query, mapper);
+    }
+
+    private boolean OptimContainsGroup(@NotNull final String member, @NotNull final Iterable<String> parents) {
+        for (String group : parents) {
+            if (member.startsWith(group)) return true;
+        }
+        return false;
     }
 
     /*private OrFilter orFilterOnIds(@NotNull final Iterable<String> ids) {

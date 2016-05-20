@@ -18,6 +18,7 @@ import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -171,7 +172,7 @@ public class LdapUserDaoImpl implements IExternalUserDao {
             boolean emptyFilter = true;
             for (String groupId : groupIds) {
                 if (groupId != null && !groupId.trim().isEmpty()) {
-                    groupFilter.or(new EqualsFilter(externalUserHelper.getUserSearchAttribute(), groupId.trim() + "*"));
+                    groupFilter.or(new LikeFilter(externalUserHelper.getUserGroupAttribute(), groupId.trim() + "*"));
                     emptyFilter = false;
                 }
             }
@@ -184,6 +185,15 @@ public class LdapUserDaoImpl implements IExternalUserDao {
             return searchWithFilter(filter);
         }
         return new LinkedList<IExternalUser>();
+    }
+
+    @Override
+    public boolean isUserFoundWithFilter(@NotNull final String stringFilter, @NotNull final String uid) {
+        AndFilter filter = new AndFilter()
+            .and(new HardcodedFilter(stringFilter));
+        filter.and(new EqualsFilter(externalUserHelper.getUserIdAttribute(), uid));
+
+        return !searchWithFilter(filter).isEmpty();
     }
 
     // @Cacheable(value = "ExternalUsers", key = "#filter")

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by jgribonvald on 10/06/15.
  */
 public interface IGroupService {
-    List<TreeJS> getRootNodes(ContextKey contextKey);
+    List<TreeJS> getRootNodes(ContextKey contextKey, List<ContextKey> subContextKeys);
 
     List<TreeJS> getGroupMembers(String id);
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Subscriber;
@@ -30,6 +31,7 @@ import java.util.Set;
  * Created by jgribonvald on 04/06/15.
  */
 @AllArgsConstructor
+@Slf4j
 public class GroupServiceWS implements IGroupService {
 
     @Inject
@@ -54,11 +56,24 @@ public class GroupServiceWS implements IGroupService {
     private ContextService contextService;
 
 
-    public List<TreeJS> getRootNodes(final ContextKey contextKey) {
+    public List<TreeJS> getRootNodes(final ContextKey contextKey, final List<ContextKey> subContextKeys) {
         if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
             return Lists.newArrayList();
         }
         Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), contextKey);
+        if ((perms == null || PermissionType.LOOKOVER.equals(perms.getFirst())) && subContextKeys != null) {
+            Pair<PermissionType, PermissionDTO> lowerPerm = null;
+            // we need to get the lower perm to apply rules on lower context to avoid problems of rights !
+            for (ContextKey ctxKey: subContextKeys) {
+                perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), ctxKey);
+                if (perms != null && (lowerPerm == null || perms.getFirst().getMask() < lowerPerm.getFirst().getMask())) {
+                    lowerPerm = perms;
+                    // if contributor if found we have the lower rights !
+                    if (lowerPerm.getFirst().getMask() == PermissionType.CONTRIBUTOR.getMask()) break;
+                }
+            }
+        }
+        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
         if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst()) && perms.getSecond() == null) {
             return Lists.newArrayList();
         }

@@ -66,16 +66,27 @@ public class GroupServiceEsco implements IGroupService {
     private Pattern pattern = Pattern.compile("([a-zA-Z0-9_ ]+:[a-zA-Z0-9_ ]+:[a-zA-Z0-9_ ]+:).*");
 
     @Override
-    public List<TreeJS> getRootNodes(final ContextKey contextKey) {
+    public List<TreeJS> getRootNodes(final ContextKey contextKey, final List<ContextKey> subContextKeys) {
         if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
             return Lists.newArrayList();
         }
         Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), contextKey);
+        if ((perms == null || PermissionType.LOOKOVER.equals(perms.getFirst())) && subContextKeys != null) {
+            Pair<PermissionType, PermissionDTO> lowerPerm = null;
+            // we need to get the lower perm to apply rules on lower context to avoid problems of rights !
+            for (ContextKey ctxKey: subContextKeys) {
+                perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), ctxKey);
+                if (perms != null && (lowerPerm == null || perms.getFirst().getMask() < lowerPerm.getFirst().getMask())) {
+                    lowerPerm = perms;
+                    // if contributor if found we have the lower rights !
+                    if (lowerPerm.getFirst().getMask() == PermissionType.CONTRIBUTOR.getMask()) break;
+                }
+            }
+        }
+        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
         if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst()) && perms.getSecond() == null) {
             return Lists.newArrayList();
         }
-
-        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
 
         // if ADMIN perms.getSecond() is null as all is authorized
         if (PermissionType.ADMIN.equals(perms.getFirst())) {
@@ -100,44 +111,46 @@ public class GroupServiceEsco implements IGroupService {
 
         if (PermissionType.CONTRIBUTOR.getMask() <= perms.getFirst().getMask()) {
             PermissionDTO perm = perms.getSecond();
-            if (perm != null && perm instanceof PermOnClassifWSubjDTO) {
-                Set<SubjectKeyDTO> authorizedSubjects = ((PermOnClassifWSubjDTO) perm).getAuthorizedSubjects();
-                Set<String> authorizedGroups = Sets.newHashSet();
-                for (SubjectKeyDTO subjDto : authorizedSubjects){
-                    if (SubjectType.GROUP.equals(subjDto.getKeyType())) {
-                        authorizedGroups.add(subjDto.getKeyId() + "*");
+            if (perm != null) {
+                if (perm instanceof PermOnClassifWSubjDTO) {
+                    Set<SubjectKeyDTO> authorizedSubjects = ((PermOnClassifWSubjDTO) perm).getAuthorizedSubjects();
+                    Set<String> authorizedGroups = Sets.newHashSet();
+                    for (SubjectKeyDTO subjDto : authorizedSubjects) {
+                        if (SubjectType.GROUP.equals(subjDto.getKeyType())) {
+                            authorizedGroups.add(subjDto.getKeyId() + "*");
+                        }
                     }
-                }
-                log.debug("PermOnClassifWSubjDTO with groups {}", authorizedGroups);
-                return treeJSDTOFactory.asDTOList(externalGroupDao.getGroupsByIdStartWith(authorizedGroups, true));
-            } else if (perm instanceof PermOnCtxDTO) {
-                log.debug("PermOnCtxDTO");
-                List<Subscriber> subscribers = subscriberService.getDefaultsSubscribersOfContext(contextKey);
-                Set<String> groupIds = Sets.newHashSet();
-                for (Subscriber subscriber: subscribers) {
-                    if (SubjectType.GROUP.equals(subscriber.getSubjectCtxId().getSubject().getKeyType())) {
-                        groupIds.add(subscriber.getSubjectCtxId().getSubject().getKeyId()+ "*");
+                    log.debug("PermOnClassifWSubjDTO with groups {}", authorizedGroups);
+                    return treeJSDTOFactory.asDTOList(externalGroupDao.getGroupsByIdStartWith(authorizedGroups, true));
+                } else if (perm instanceof PermOnCtxDTO) {
+                    log.debug("PermOnCtxDTO");
+                    List<Subscriber> subscribers = subscriberService.getDefaultsSubscribersOfContext(contextKey);
+                    Set<String> groupIds = Sets.newHashSet();
+                    for (Subscriber subscriber : subscribers) {
+                        if (SubjectType.GROUP.equals(subscriber.getSubjectCtxId().getSubject().getKeyType())) {
+                            groupIds.add(subscriber.getSubjectCtxId().getSubject().getKeyId() + "*");
+                        }
                     }
-                }
-                final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
-                Set<TreeJS> tree = Sets.newHashSet();
-                if (rootCtx != null){
-                    Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(), FilterType.GROUP));
-                    if (filter != null) {
-                        List<IExternalGroup> groups = externalGroupDao.getGroupsWithFilter(filter.getPattern(), null, false);
-                        if (groups != null) {
+                    final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
+                    Set<TreeJS> tree = Sets.newHashSet();
+                    if (rootCtx != null) {
+                        Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(), FilterType.GROUP));
+                        if (filter != null) {
+                            List<IExternalGroup> groups = externalGroupDao.getGroupsWithFilter(filter.getPattern(), null, false);
+                            if (groups != null) {
                             /*for (IExternalGroup group : groups) {
                                 groupIds.add(group.getId());
                             }*/
-                            tree.addAll(getGroupMembers(groups));
+                                tree.addAll(getGroupMembers(groups));
+                            }
                         }
                     }
-                }
 
-                return Lists.newArrayList(tree);
-                //return treeJSDTOFactory.asDTOList(externalGroupDao.getGroupsById(groupIds, true));
-            } else
-                throw new IllegalStateException(String.format("Management of %s type is not yet implemented", perm.getClass()));
+                    return Lists.newArrayList(tree);
+                    //return treeJSDTOFactory.asDTOList(externalGroupDao.getGroupsById(groupIds, true));
+                } else
+                    throw new IllegalStateException(String.format("Management of %s type is not yet implemented", perm.getClass()));
+            }
 
         }
         return Lists.newArrayList();

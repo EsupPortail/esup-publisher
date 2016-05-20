@@ -1,6 +1,7 @@
 package org.esupportail.publisher.repository.externals.ws;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.portal.ws.client.PortalGroup;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jgribonvald on 10/06/15.
@@ -131,6 +133,47 @@ public class WSEsupGroupDaoImpl implements IExternalGroupDao {
     @Override
     public List<IExternalUser> getDirectUserMembers(@NotNull String id) {
        throw new NotYetImplementedException("Method not implemented");
+    }
+
+    @Override
+    public boolean isGroupMemberOfGroup(@NotNull String member, @NotNull String parent) {
+        final List<PortalGroup> tmp_grps = portalService.getSubGroupsById(parent);
+        for (PortalGroup pg : tmp_grps) {
+            if (pg.getId().equals(member)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isGroupMemberOfGroupFilter(@NotNull String stringFilter, @NotNull final String member) {
+        throw new NotYetImplementedException("Method not implemented");
+    }
+
+    @Override
+    public boolean isGroupMemberOfAtLeastOneGroup(@NotNull final String member, @NotNull final Iterable<String> parents) {
+        for (String parent : parents) {
+            final List<PortalGroup> tmp_grps = portalService.getSubGroupsById(parent);
+            for (PortalGroup pg : tmp_grps) {
+                if (pg.getId().equals(member)) return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isUserMemberOfGroup(@NotNull final String uid, @NotNull final String group) {
+        return portalService.isUserMemberOfGroup(portalService.getUser(uid), portalService.getGroupById(group));
+    }
+
+    @Override
+    public boolean isUserMemberOfAtLeastOneGroup(@NotNull final String uid, @NotNull final Iterable<String> groups) {
+        //could be done in an other way, optimization ?
+        final List<PortalGroup> userGroups = portalService.getUserGroups(uid);
+        final Set<String> itemGroups = Sets.newHashSet(groups);
+        for (PortalGroup pg : userGroups) {
+            if (itemGroups.contains(pg.getId())) return true;
+        }
+        return false;
     }
 
     private ExternalGroup toExternal(final PortalGroup portalGroup) {

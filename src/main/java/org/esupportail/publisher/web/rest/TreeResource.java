@@ -9,6 +9,7 @@ import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.ContextService;
 import org.esupportail.publisher.service.IGroupService;
 import org.esupportail.publisher.web.propertyeditors.ContextKeyEditor;
+import org.esupportail.publisher.web.rest.dto.SearchSubjectFormDTO;
 import org.esupportail.publisher.web.rest.dto.TreeJS;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class TreeResource {
      */
     @RequestMapping(value = "/contexts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<TreeJS>> getContexts(@RequestParam("id") String id/*, @RequestParam(value="filtered", required = false) Boolean filtered*/) {
+    public ResponseEntity<List<TreeJS>> getContexts(@RequestParam("search") String id/*, @RequestParam(value="filtered", required = false) Boolean filtered*/) {
         log.debug("REST request to get tree of Context from id {}", id);
         List<TreeJS> nodes = null;
         if ("1".equals(id)) {
@@ -71,19 +72,38 @@ public class TreeResource {
     /**
      * GET /groups/{ctx_id}/{ctx_type} -> get root nodes
      */
-    @RequestMapping(value = "/groups/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RequestMapping(value = "/groups/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
+//        + " && hasPermission(#ctxId,  #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
+//    @Timed
+//    public ResponseEntity<List<TreeJS>> getGroups(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
+//                                                  @RequestParam(value = "subctxs", required = false) List<ContextKey> ctxs, @RequestParam("id") String id) {
+//        log.debug("REST request to get tree of groups from id {}, ctx Key {}, other ctx Keys {}", id, new ContextKey(ctxId, ctxType), ctxs);
+//        List<TreeJS> nodes = null;
+//        if ("1".equals(id)) {
+//            nodes = groupService.getRootNodes(new ContextKey(ctxId, ctxType), ctxs);
+//        } else {
+//            nodes = groupService.getGroupMembers(id);
+//        }
+//        if (nodes != null) return new ResponseEntity<>(nodes, HttpStatus.OK);
+//
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+
+    /**
+     * POST /groups/{ctx_id}/{ctx_type} -> get root nodes
+     */
+    @RequestMapping(value = "/groups", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
-        + " && hasPermission(#ctxId,  #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    //TODO checking rights of gettings members of the passed group and in sub context, sometime rights are in sub context
+        + " && hasPermission(#form.context.keyId, #form.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
     @Timed
-    public ResponseEntity<List<TreeJS>> getGroups(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
-                                                  @RequestParam(value = "subctxs", required = false) List<ContextKey> ctxs, @RequestParam("id") String id) {
-        log.debug("REST request to get tree of groups from id {}, ctx Key {}, other ctx Keys {}", id, new ContextKey(ctxId, ctxType), ctxs);
+    public ResponseEntity<List<TreeJS>> getGroupsBis(@RequestBody SearchSubjectFormDTO form) {
+        log.debug("REST request to get tree of groups from {}", form);
         List<TreeJS> nodes = null;
-        if ("1".equals(id)) {
-            nodes = groupService.getRootNodes(new ContextKey(ctxId, ctxType));
+        if ("1".equals(form.getSearch())) {
+            nodes = groupService.getRootNodes(form.getContext(), form.getSubContexts());
         } else {
-            nodes = groupService.getGroupMembers(id);
+            nodes = groupService.getGroupMembers(form.getSearch());
         }
         if (nodes != null) return new ResponseEntity<>(nodes, HttpStatus.OK);
 

@@ -26,7 +26,7 @@ public class LoggingAspect {
     private Environment env;
 
     @Pointcut("within(org.esupportail.publisher.repository..* && !(org.esupportail.publisher.repository.externals..*)) " +
-        "|| within(org.esupportail.publisher.service..* && !(org.esupportail.publisher.service.factories.TreeJSDTOFactory..*)) " +
+        "|| within(org.esupportail.publisher.service..* && !(org.esupportail.publisher.service.factories..*)) " +
         "|| within(org.esupportail.publisher.web.rest..*)) ")
     public void loggingPointcut() {}
 

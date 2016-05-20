@@ -40,4 +40,29 @@ public class EmptyGroupDaoImpl implements IExternalGroupDao {
     public List<IExternalUser> getDirectUserMembers(@NotNull String id) {
         return null;
     }
+
+    @Override
+    public boolean isGroupMemberOfGroup(@NotNull String member, @NotNull String parent) {
+        return false;
+    }
+
+    @Override
+    public boolean isGroupMemberOfGroupFilter(@NotNull String stringFilter, @NotNull final String member) { return false;}
+
+    @Override
+    public boolean isGroupMemberOfAtLeastOneGroup(@NotNull String member, @NotNull Iterable<String> parents) {
+        return false;
+    }
+
+    @Override
+    public boolean isUserMemberOfGroup(@NotNull String uid, @NotNull String group) {
+        return false;
+    }
+
+    @Override
+    public boolean isUserMemberOfAtLeastOneGroup(@NotNull String uid, @NotNull Iterable<String> groups) {
+        return false;
+    }
+
+
 }

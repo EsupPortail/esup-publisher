@@ -49,9 +49,17 @@ angular.module('publisherApp')
                 url: 'api/users/perm/editTargets',
                 method: 'GET'
             },
+            //'search': {
+            //    url: 'api/users/search/:ctx_id/:ctx_type',
+            //    method: 'GET', isArray: true,
+            //    transformResponse: function (data) {
+            //        data = angular.fromJson(data);
+            //        return data;
+            //    }
+            //},
             'search': {
-                url: 'api/users/search/:ctx_id/:ctx_type',
-                method: 'GET', isArray: true,
+                url: 'api/users/search',
+                method: 'POST', isArray: true,
                 transformResponse: function (data) {
                     data = angular.fromJson(data);
                     return data;

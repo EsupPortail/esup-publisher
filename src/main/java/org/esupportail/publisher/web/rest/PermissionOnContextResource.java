@@ -56,13 +56,13 @@ public class PermissionOnContextResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
 	@Timed
-    public ResponseEntity<Void> create(@RequestBody PermissionOnContext permissionOnContext) throws URISyntaxException {
-        log.debug("REST request to save PermissionOnContext : {}", permissionOnContext);
-        if (permissionOnContext.getId() != null) {
+    public ResponseEntity<Void> create(@RequestBody PermissionOnContext permission) throws URISyntaxException {
+        log.debug("REST request to save PermissionOnContext : {}", permission);
+        if (permission.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new permissionOnContext cannot already have an ID").build();
         }
-        permissionOnContextRepository.save(permissionOnContext);
-        return ResponseEntity.created(new URI("/api/permissionOnContexts/" + permissionOnContext.getId())).build();
+        permissionOnContextRepository.save(permission);
+        return ResponseEntity.created(new URI("/api/permissionOnContexts/" + permission.getId())).build();
     }
 
     /**
@@ -74,12 +74,12 @@ public class PermissionOnContextResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
     @Timed
-    public ResponseEntity<Void> update(@RequestBody PermissionOnContext permissionOnContext) throws URISyntaxException {
-        log.debug("REST request to update PermissionOnContext : {}", permissionOnContext);
-        if (permissionOnContext.getId() == null) {
-            return create(permissionOnContext);
+    public ResponseEntity<Void> update(@RequestBody PermissionOnContext permission) throws URISyntaxException {
+        log.debug("REST request to update PermissionOnContext : {}", permission);
+        if (permission.getId() == null) {
+            return create(permission);
         }
-        permissionOnContextRepository.save(permissionOnContext);
+        permissionOnContextRepository.save(permission);
         return ResponseEntity.ok().build();
 	}
 
