@@ -508,7 +508,7 @@
 
     <changeSet id="1421860634824-58" author="jgribonvald (manual)">
         <loadData encoding="UTF-8"
-                  file="config/liquibase/users.csv"
+                  file="src/main/resources/config/liquibase/users.csv"
                   separator=";"
                   tableName="T_USER">
             <column name="enabled" type="boolean"/>

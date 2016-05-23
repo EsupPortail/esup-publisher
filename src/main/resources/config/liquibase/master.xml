@@ -4,9 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
 <!--     <include file="classpath:config/liquibase/changelog/20141118120129_main_schema.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="classpath:config/liquibase/changelog/20141124120129_main_schema.xml" relativeToChangelogFile="false"/> -->
     <!-- JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>
+    <include file="src/main/resources/config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

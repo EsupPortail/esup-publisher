@@ -680,7 +680,6 @@
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <outputChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</outputChangeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                    <defaultSchemaName>publisher</defaultSchemaName>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -692,6 +691,39 @@
                         <groupId>org.liquibase.ext</groupId>
                         <artifactId>liquibase-hibernate4</artifactId>
                         <version>${liquibase-hibernate4.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-core</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-entitymanager</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-envers</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.hibernate.javax.persistence</groupId>
+                                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-core</artifactId>
+                        <version>${hibernate.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-entitymanager</artifactId>
+                        <version>${hibernate.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.hibernate</groupId>
+                        <artifactId>hibernate-envers</artifactId>
+                        <version>${hibernate.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.springframework.boot</groupId>
