@@ -49,8 +49,8 @@ public class ContextService {
     private CategoryRepository categoryRepository;
     @Inject
     private FeedRepository<AbstractFeed> feedRepository;
-    @Inject
-    private ItemClassificationOrderRepository itemClassificationOrderRepository;
+//    @Inject
+//    private ItemClassificationOrderRepository itemClassificationOrderRepository;
     @Inject
     private ItemRepository<AbstractItem> itemRepository;
 
@@ -81,10 +81,29 @@ public class ContextService {
                      return feedRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
                  case ITEM :
                      return itemRepository.findOne(ctxKey.getKeyId()).getOrganization().getContextKey();
+                 default: throw new IllegalArgumentException("The context Type " + ctxKey.getKeyType() + " is not managed") ;
 
              }
         }
         return null;
+    }
+
+    public boolean isLinkedPublisherHasSubPermManagement(@NotNull final ContextKey fromCtx) {
+        switch (fromCtx.getKeyType()) {
+            case ORGANIZATION: return true;
+            case PUBLISHER:
+                final Publisher pub = publisherRepository.findOne(fromCtx.getKeyId());
+                return pub != null && pub.isHasSubPermsManagement();
+            case CATEGORY:
+                final Category cat = categoryRepository.findOne(fromCtx.getKeyId());
+                return cat != null && cat.getPublisher() != null && cat.getPublisher().isHasSubPermsManagement();
+            case FEED:
+                final AbstractFeed feed = feedRepository.findOne(fromCtx.getKeyId());
+                return feed != null && feed.getPublisher() != null && feed.getPublisher().isHasSubPermsManagement();
+            case ITEM : return false; // we can't know if permission management is done as several publisher can be set to an item
+            default:
+                throw new IllegalArgumentException("The context Type " + fromCtx.getKeyType() + " is not managed") ;
+        }
     }
 
     private List<? extends IContext> getRootContexts(PermissionType minPerm) {
@@ -149,7 +168,7 @@ public class ContextService {
                 return items;
                  **/
                 return Lists.newArrayList();
-            default : return null;
+            default : throw new IllegalArgumentException("The context Type " + ctx.getKeyType() + " is not managed") ;
         }
     }
 

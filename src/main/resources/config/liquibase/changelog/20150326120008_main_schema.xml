@@ -284,6 +284,9 @@
             <column name="used" type="VARCHAR(1)">
                 <constraints nullable="false"/>
             </column>
+            <column name="has_sub_perms_management" type="VARCHAR(1)">
+                <constraints nullable="false"/>
+            </column>
             <column name="created_by" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>

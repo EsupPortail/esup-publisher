@@ -131,7 +131,7 @@ public class ExternalFeedResourceTest {
 
 		publisher = publisherRepository.saveAndFlush(new Publisher(
 				organization, reader, redactor,PermissionClass.CONTEXT,
-				false));
+				false, true));
 
 		category = new Category();
 		category.setAccessView(DEFAULT_ACCESS_VIEW);

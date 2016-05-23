@@ -141,14 +141,14 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
         List<ContextKey> pubsCtx = Lists.newArrayList();
         for (Publisher pub : publishers) {
             if (!checkPerms) {
-                ctxRoles.put(pub.getContextKey(), null);
+                ctxRoles.put(pub.getContextKey(), parentPerm.getSecond());
             } else if (parentPerm.getFirst().getMask() > PermissionType.LOOKOVER.getMask()) {
                 pubsCtx.add(pub.getContextKey());
                 // we keep at least all childs with parent perm
                 ctxRoles.put(pub.getContextKey(), (PermOnCtxDTO) userSessionTree.getPermsFromContextTree(organizationCtx).getSecond());
-            } else {
+            } else if (pub.isHasSubPermsManagement()){
                 pubsCtx.add(pub.getContextKey());
-                // we keep these contexts to find possible perm > LOOKOVER
+                // we keep these contexts to find possible perm > LOOKOVER if there are subcontext permission management
                 ctxRoles.put(pub.getContextKey(), null);
             }
 
@@ -299,6 +299,9 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
                 if (!checkPerms) {
                     userSessionTree.addCtx(ctx.getKey(), !hasFeeds, publisherCtx, null, null);
                     loadAuthorizedCategoryChilds(user, ctx.getKey(), false, publisher.getPermissionType(), parentPerm);
+                } else if (!publisher.isHasSubPermsManagement()) {
+                    userSessionTree.addCtx(ctx.getKey(), !hasFeeds, publisherCtx, null,ctx.getValue());
+                    loadAuthorizedCategoryChilds(user, ctx.getKey(), false, publisher.getPermissionType(), new Pair<PermissionType, PermOnCtxDTO>(ctx.getValue().getRole(), ctx.getValue()));
                 } else if (ctx.getValue() != null && PermissionType.MANAGER.getMask() <= ctx.getValue().getRole().getMask()) {
                     userSessionTree.addCtx(ctx.getKey(), !hasFeeds, publisherCtx, null,ctx.getValue());
                     loadAuthorizedCategoryChilds(user, ctx.getKey(), false, publisher.getPermissionType(),new Pair<PermissionType, PermOnCtxDTO>(ctx.getValue().getRole(), ctx.getValue()));
@@ -407,6 +410,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
     private void findAuthorizedPublisherChilds(final UserDTO user, final ContextKey publisherCtx) {
         log.debug("Call findAuthorizedPublisherChilds {}", publisherCtx);
         final Publisher publisher = publisherDao.findOne(publisherCtx.getKeyId());
+        // if no subcontext permission management it's useless to find possible rights.
+        if (!publisher.isHasSubPermsManagement()) return;
 
         if (!contextPermsType.contains(publisher.getPermissionType())) {
             log.error(String.format(

@@ -69,8 +69,13 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
     @Size(max=50)
     private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
 
+    @Getter
+    @Setter
+    private boolean hasSubPermsManagement;
+
     public PublisherDTO(@NotNull final Long modelId, @NotNull final OrganizationDTO organization, @NotNull final ReaderDTO reader, @NotNull final RedactorDTO redactor,
-                        final boolean used, final int displayOrder, @NotNull final PermissionClass permissionType, @NotNull final DisplayOrderType defaultDisplayOrder) {
+                        final boolean used, final int displayOrder, @NotNull final PermissionClass permissionType, @NotNull final DisplayOrderType defaultDisplayOrder,
+                        final boolean hasSubPermsManagement) {
         super(modelId);
         this.organization = organization;
         this.reader = reader;
@@ -79,6 +84,7 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
         this.displayOrder = displayOrder;
         this.permissionType = permissionType;
         this.defaultDisplayOrder = defaultDisplayOrder;
+        this.hasSubPermsManagement = hasSubPermsManagement;
     }
 
     public String getDisplayName() {

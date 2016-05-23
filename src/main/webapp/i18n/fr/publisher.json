@@ -22,6 +22,7 @@
             "displayOrder": "Ordre d'affichage",
             "permissionType": "Type de permission",
             "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "hasSubPermsManagement": "Gestion des permissions possible dans les rubriques",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

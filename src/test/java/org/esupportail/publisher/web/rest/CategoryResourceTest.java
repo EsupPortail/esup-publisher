@@ -115,7 +115,7 @@ public class CategoryResourceTest {
 		redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor(name));
 
 		publisher = publisherRepository.saveAndFlush(new Publisher(organization, reader, redactor,
-            PermissionClass.CONTEXT, false));
+            PermissionClass.CONTEXT, false, true));
 
 		category = new Category();
 		category.setAccessView(DEFAULT_ACCESS_VIEW);

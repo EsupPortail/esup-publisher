@@ -79,13 +79,13 @@ public class SubscriberResource {
 
             case FEED:
                 AbstractClassification classif = classificationRepository.findOne(subscriber.getSubjectCtxId().getContext().getKeyId());
-                if (!WritingMode.TARGETS_ON_ITEM.equals(classif.getPublisher().getContext().getRedactor().getWritingMode())) {
+                if (classif != null && !WritingMode.TARGETS_ON_ITEM.equals(classif.getPublisher().getContext().getRedactor().getWritingMode()) && classif.getPublisher().isHasSubPermsManagement()) {
                    subscribersOnCtx = true;
                 }
                 break;
             case ITEM:
                 AbstractItem item = itemRepository.findOne(subscriber.getSubjectCtxId().getContext().getKeyId());
-                if (!WritingMode.TARGETS_ON_ITEM.equals(item.getRedactor().getWritingMode())) {
+                if (item != null && WritingMode.TARGETS_ON_ITEM.equals(item.getRedactor().getWritingMode())) {
                     subscribersOnCtx = true;
                 }
                 break;

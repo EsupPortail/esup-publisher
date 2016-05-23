@@ -22,6 +22,7 @@
             "displayOrder": "Display Order",
             "permissionType": "Permission Type",
             "defaultDisplayOrder": "Default Display Order",
+            "hasSubPermsManagement": "Permission management is possible in classifications",
             "createdBy": "Created By",
             "createdDate": "Created Date",
             "lastModifiedBy": "Last Modified By",

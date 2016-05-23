@@ -3,7 +3,7 @@
     <ul class="nav nav-pills">
         <li ng-class="{active: activeNav =='content' || !activeNav}"><a data-toggle="pill" href="" ng-click="showNav('content')"><span translate="manager.treeview.details.context.properties">Properties</span>
             <!--<span translate="{{ 'manager.treeview.details.context.' + ctxType}}"></span>--></a></li>
-        <li ng-class="{active: activeNav =='permissions'}" ng-if="canManage && ctxType !='ITEM'"><a data-toggle="pill" href="" ng-click="showNav('permissions')"><span translate="manager.treeview.details.permissions"></span></a></li>
+        <li ng-class="{active: activeNav =='permissions'}" ng-if="hasPermissionManagment && canManage"><a data-toggle="pill" href="" ng-click="showNav('permissions')"><span translate="manager.treeview.details.permissions"></span></a></li>
         <li ng-class="{active: activeNav =='targets'}" ng-if="hasTargetManagment && canManage"><a data-toggle="pill" href="" ng-click="showNav('targets')"><span translate="manager.treeview.details.targets"></span></a></li>
         <!--<li ng-if="canManage" role="presentation" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

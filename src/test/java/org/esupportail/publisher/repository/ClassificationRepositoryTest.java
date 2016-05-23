@@ -84,10 +84,10 @@ public class ClassificationRepositoryTest {
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 
 		pub1 = new Publisher(org1, reader2, redactor1,
-            PermissionClass.CONTEXT, false);
+            PermissionClass.CONTEXT, false, true);
 		pub1 = publisherRepo.saveAndFlush(pub1);
 		pub2 = new Publisher(org2, reader1, redactor2,
-            PermissionClass.CONTEXT, false);
+            PermissionClass.CONTEXT, false, true);
 		pub2 = publisherRepo.saveAndFlush(pub2);
 
 		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"

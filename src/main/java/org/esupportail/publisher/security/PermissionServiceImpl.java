@@ -8,6 +8,7 @@ import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
+import org.esupportail.publisher.service.ContextService;
 import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Service(value = "permissionService")
@@ -38,6 +40,11 @@ public class PermissionServiceImpl implements IPermissionService {
     public UserContextTree userSessionTree;
     @Inject
     public UserContextLoaderService userSessionTreeLoader;
+
+    @Inject
+    public ContextService contextService;
+
+    EnumSet<ContextType> specialPermsPublisher = EnumSet.of(ContextType.CATEGORY, ContextType.FEED);
 
     public PermissionServiceImpl() {
         super();
@@ -293,6 +300,12 @@ public class PermissionServiceImpl implements IPermissionService {
         final Collection<? extends GrantedAuthority> authorities = ((CustomUserDetails) authentication.getPrincipal()).getAuthorities();
 
         log.debug("Testing canEditCtxPerm in context {} for  user {}", contextKey, user);
+
+        // Permission must check if linked publisher permit to set permission on subcontext
+        if (specialPermsPublisher.contains(contextKey.getKeyType()) &&
+            !contextService.isLinkedPublisherHasSubPermManagement(contextKey)) {
+            return false;
+        }
 
         // Permissions are autorized only for ADMIN on ORGANIZATIONS
         if (authorities.contains(new SimpleGrantedAuthority(

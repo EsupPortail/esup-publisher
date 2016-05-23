@@ -81,8 +81,6 @@
                             <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="publisher.defaultDisplayOrder"
                                     ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required>
                             </select>
-                           <!-- <input type="text" class="form-control" name="defaultDisplayOrder"
-                                   ng-model="publisher.defaultDisplayOrder" required>-->
 
                             <div ng-show="editForm.defaultDisplayOrder.$invalid">
                                 <p class="help-block"
@@ -95,15 +93,6 @@
                             <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
                             <input type="checkbox" class="form-control" id="used" name="used"
                                    ng-model="publisher.used">
-                            <!--<input type="checkbox" class="form-control" name="used"
-                                   ng-model="publisher.used" required>
-
-                            <div ng-show="editForm.used.$invalid">
-                                <p class="help-block"
-                                   ng-show="editForm.used.$error.required" translate="entity.validation.required">
-                                    This field is required.
-                                </p>
-                            </div>-->
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="displayOrder" translate="publisherApp.publisher.displayOrder">DisplayOrder</label>
@@ -128,6 +117,11 @@
                                     This field should be a number.
                                 </p>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="hasSubPermsManagement" translate="publisherApp.publisher.hasSubPermsManagement">HasSubPermsManagement</label>
+                            <input type="checkbox" class="form-control" id="hasSubPermsManagement" name="hasSubPermsManagement"
+                                   ng-model="publisher.hasSubPermsManagement">
                         </div>
 
                     </div>
@@ -182,6 +176,7 @@
                     <th translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</th>
                     <th translate="publisherApp.publisher.used">Used</th>
                     <th translate="publisherApp.publisher.displayOrder">DisplayOrder</th>
+                    <th translate="publisherApp.publisher.hasSubPermsManagement">HasSubPermsManagement</th>
                     <!--<th translate="publisherApp.publisher.createdBy">CreatedBy</th>
                     <th translate="publisherApp.publisher.createdDate">CreatedDate</th>
                     <th translate="publisherApp.publisher.lastModifiedBy">LastModifiedBy</th>
@@ -197,6 +192,7 @@
                     <td>{{getDisplayOrderTypeLabel(publisher.defaultDisplayOrder) | translate}}</td>
                     <td><input type="checkbox" ng-model="publisher.used" disabled/></td>
                     <td>{{publisher.displayOrder}}</td>
+                    <td><input type="checkbox" ng-model="publisher.hasSubPermsManagement" disabled/></td>
                     <!--<td>{{publisher.createdBy}}</td>
                     <td>{{publisher.createdDate}}</td>
                     <td>{{publisher.lastModifiedBy}}</td>

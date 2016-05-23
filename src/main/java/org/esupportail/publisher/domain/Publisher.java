@@ -75,6 +75,10 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
     @JsonSerialize(using = CustomEnumSerializer.class)
 	private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
 
+    /** This field corresponds to the database column has_sub_perms_management. */
+    @Column(length = 1, nullable = false, name = "has_sub_perms_management")
+    private boolean hasSubPermsManagement = true;
+
 	public Publisher() {
 		super();
 	}
@@ -82,12 +86,13 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 	public Publisher(final Organization organization, final Reader reader,
 			final Redactor redactor,
 			final PermissionClass permissionType,
-			final boolean used) {
+			final boolean used, final boolean hasSubPermsManagement) {
 		super();
 		this.context = new OrganizationReaderRedactorKey(organization, reader,
 				redactor);
 		this.permissionType = permissionType;
 		this.used = used;
+        this.hasSubPermsManagement = hasSubPermsManagement;
 	}
 
 	@Override

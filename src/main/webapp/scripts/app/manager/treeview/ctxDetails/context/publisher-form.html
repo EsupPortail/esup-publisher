@@ -79,8 +79,7 @@
                         <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="editedContext.defaultDisplayOrder"
                                 ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required ng-readonly="!canManage">
                         </select>
-                        <!-- <input type="text" class="form-control" name="defaultDisplayOrder"
-                                ng-model="context.defaultDisplayOrder" required>-->
+
 
                         <div ng-show="editForm.defaultDisplayOrder.$invalid">
                             <p class="help-block"
@@ -93,15 +92,6 @@
                         <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
                         <input type="checkbox" class="form-control" id="used" name="used"
                                ng-model="editedContext.used" ng-readonly="!canManage">
-                        <!--<input type="checkbox" class="form-control" name="used"
-                               ng-model="context.used" required>
-
-                        <div ng-show="editForm.used.$invalid">
-                            <p class="help-block"
-                               ng-show="editForm.used.$error.required" translate="entity.validation.required">
-                                This field is required.
-                            </p>
-                        </div>-->
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="displayOrder" translate="publisherApp.publisher.displayOrder">DisplayOrder</label>
@@ -127,7 +117,11 @@
                             </p>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="control-label" for="hasSubPermsManagement" translate="publisherApp.publisher.hasSubPermsManagement">HasSubPermsManagement</label>
+                        <input type="checkbox" class="form-control" id="hasSubPermsManagement" name="hasSubPermsManagement"
+                               ng-model="editedContext.hasSubPermsManagement" readonly>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"> <!--ng-click="close()"-->

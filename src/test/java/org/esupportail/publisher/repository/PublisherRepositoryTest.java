@@ -70,17 +70,17 @@ public class PublisherRepositoryTest {
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 
 		Publisher e1 = new Publisher(org1, reader2, redactor1,
-            PermissionClass.CONTEXT, false);
+            PermissionClass.CONTEXT, false, true);
 		repository.saveAndFlush(e1);
 		Publisher e2 = new Publisher(org2, reader1, redactor2,
-            PermissionClass.CONTEXT, false);
+            PermissionClass.CONTEXT, false, true);
 		repository.saveAndFlush(e2);
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testUnique() {
 		Publisher e = new Publisher(org1, reader2, redactor1,
-            PermissionClass.SUBJECT, true);
+            PermissionClass.SUBJECT, true, true);
 		repository.saveAndFlush(e);
 		assertEquals(e,
 				repository.findOne(PublisherPredicates.AllOfOrganization(org1)));
@@ -89,7 +89,7 @@ public class PublisherRepositoryTest {
 	@Test
 	public void testInsert() {
 		Publisher e = new Publisher(org1, reader1, redactor1,
-            PermissionClass.CONTEXT, true);
+            PermissionClass.CONTEXT, true, true);
 
 		log.info("Before insert : " + e.toString());
 		repository.save(e);
@@ -102,7 +102,7 @@ public class PublisherRepositoryTest {
 		assertEquals(e, e2);
 
 		e = new Publisher(org2, reader2, redactor2,
-            PermissionClass.CONTEXT_WITH_SUBJECTS, true);
+            PermissionClass.CONTEXT_WITH_SUBJECTS, true, true);
 		repository.save(e);
 		log.info("After update : " + e.toString());
 		assertNotNull(e.getId());

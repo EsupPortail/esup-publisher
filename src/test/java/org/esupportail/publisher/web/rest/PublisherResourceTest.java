@@ -121,7 +121,7 @@ public class PublisherResourceTest {
 
         context = new OrganizationReaderRedactorKey(organization, reader, redactor);
         publisher = new Publisher(organization, reader, redactor,
-            DEFAULT_PERMISSION_CLASS, DEFAULT_USED);
+            DEFAULT_PERMISSION_CLASS, DEFAULT_USED, DEFAULT_USED);
         publisher.setDefaultDisplayOrder(DEFAULT_DEFAULT_DISPLAY_ORDER);
     }
 
@@ -145,6 +145,7 @@ public class PublisherResourceTest {
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             DEFAULT_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(DEFAULT_USED);
+        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(DEFAULT_USED);
         assertThat(testPublisher.getDisplayOrder()).isEqualTo(
             DEFAULT_DISPLAY_ORDER);
         assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(
@@ -174,6 +175,9 @@ public class PublisherResourceTest {
                 jsonPath("$.[0].used").value(
                     DEFAULT_USED.booleanValue()))
             .andExpect(
+                jsonPath("$.[0].hasSubPermsManagement").value(
+                    DEFAULT_USED.booleanValue()))
+            .andExpect(
                 jsonPath("$.[0].displayOrder").value(
                     DEFAULT_DISPLAY_ORDER))
             .andExpect(
@@ -199,6 +203,8 @@ public class PublisherResourceTest {
             .andExpect(
                 jsonPath("$.used").value(DEFAULT_USED.booleanValue()))
             .andExpect(
+                jsonPath("$.hasSubPermsManagement").value(DEFAULT_USED.booleanValue()))
+            .andExpect(
                 jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
             .andExpect(
                 jsonPath("$.defaultDisplayOrder").value(
@@ -222,6 +228,7 @@ public class PublisherResourceTest {
         // Update the publisher
         publisher.setPermissionType(UPDATED_PERMISSION_CLASS);
         publisher.setUsed(UPDATED_USED);
+        publisher.setHasSubPermsManagement(UPDATED_USED);
         publisher.setDisplayOrder(UPDATED_DISPLAY_ORDER);
         publisher.setDefaultDisplayOrder(UPDATED_DEFAULT_DISPLAY_ORDER);
         restPublisherMockMvc.perform(
@@ -237,6 +244,7 @@ public class PublisherResourceTest {
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             UPDATED_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_USED);
+        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(UPDATED_USED);
         assertThat(testPublisher.getDisplayOrder()).isEqualTo(
             UPDATED_DISPLAY_ORDER);
         assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(
@@ -269,6 +277,7 @@ public class PublisherResourceTest {
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             DEFAULT_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_USED);
+        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(DEFAULT_USED);
         assertThat(testPublisher.getDisplayOrder()).isEqualTo(
             DEFAULT_DISPLAY_ORDER);
         assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(

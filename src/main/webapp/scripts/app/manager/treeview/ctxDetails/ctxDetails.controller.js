@@ -30,7 +30,9 @@ angular.module('publisherApp')
         $scope.userAttributes = User.funtionalAttributes();
 
         $scope.canManage = false;
+        //$scope.canEditPerms = false;
         $scope.hasTargetManagment = false;
+        $scope.hasPermissionManagment = false;
 
         $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/empty-detail.html';
         $scope.permissionTemplate = 'scripts/app/manager/treeview/ctxDetails/permissions/permissionOnCtx-detail.html';
@@ -48,6 +50,7 @@ angular.module('publisherApp')
                         $scope.publisher = {};
                         $scope.canManage = getUserCanManage(result.contextKey);
                         $scope.hasTargetManagment = getHasTargetManagment(ctxType);
+                        $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                     });
                     PermissionOnContext.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                         $scope.permissions = result;
@@ -68,6 +71,7 @@ angular.module('publisherApp')
                         $scope.canManage = getUserCanManage(result.contextKey);
                         $scope.hasTargetManagment = getHasTargetManagment(ctxType);
                         $scope.ctxPermissionType = $scope.publisher.permissionType;
+                        $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
                     });
                     PermissionOnContext.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
@@ -86,6 +90,7 @@ angular.module('publisherApp')
                         $scope.canManage = getUserCanManage(result.contextKey);
                         $scope.hasTargetManagment = getHasTargetManagment(ctxType);
                         $scope.ctxPermissionType = $scope.publisher.permissionType;
+                        $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
                     });
                     Permission.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
@@ -103,6 +108,7 @@ angular.module('publisherApp')
                         $scope.publisher = result.publisher;
                         $scope.canManage = getUserCanManage(result.contextKey);
                         $scope.hasTargetManagment = getHasTargetManagment(ctxType);
+                        $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         switch ($scope.context.type) {
                             case 'EXTERNALFEED' :
                                 $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/external-detail.html';
@@ -127,6 +133,7 @@ angular.module('publisherApp')
                         $scope.context = result;
                         $scope.canManage = getUserCanManage(result.contextKey);
                         $scope.hasTargetManagment = getHasTargetManagment(ctxType);
+                        $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         switch ($scope.context.type) {
                             case 'NEWS':
                                 $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/news-detail.html';
@@ -404,6 +411,7 @@ angular.module('publisherApp')
             $scope.editedContext = {};
             $scope.canManage = false;
             $scope.hasTargetManagment = false;
+            $scope.hasPermissionManagment = false;
 
             $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/empty-detail.html';
             $scope.permissionTemplate = 'scripts/app/manager/treeview/ctxDetails/permissions/permissionOnCtx-detail.html';
@@ -669,20 +677,46 @@ angular.module('publisherApp')
                     return false;
                 case 'CATEGORY' :
                     if (!angular.equals({},$scope.publisher)) {
+                        console.log("getHasTargetManagment ",  !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
+                            $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
+                        return !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement;
+                    }
+                    return false;
+                case 'FEED' :
+                    console.log("getHasTargetManagment ", !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
+                        $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
+                    if (!angular.equals({},$scope.publisher)) {
+                        return !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement;
+                    }
+                    return false;
+                case 'ITEM' :
+                    if (!angular.equals({},$scope.context)) {
+                        return angular.equals($scope.context.redactor.writingMode, 'TARGETS_ON_ITEM');
+                    }
+                    return false;
+                default : return false;
+            }
+        }
+
+        function getHasPermissionManagment(ctxType) {
+            switch(ctxType) {
+                case 'ORGANIZATION' :
+                    return true;
+                case 'PUBLISHER' :
+                    return true;
+                case 'CATEGORY' :
+                    if (!angular.equals({},$scope.publisher)) {
                         //console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
-                        return $scope.publisher.context.redactor.writingMode == 'STATIC';
+                        return $scope.publisher.hasSubPermsManagement;
                     }
                     return false;
                 case 'FEED' :
                     //console.log("getHasTargetManagment ", $scope.publisher.context.redactor.writingMode == 'STATIC');
                     if (!angular.equals({},$scope.publisher)) {
-                        return $scope.publisher.context.redactor.writingMode == 'STATIC';
+                        return $scope.publisher.hasSubPermsManagement;
                     }
                     return false;
                 case 'ITEM' :
-                    if (!angular.equals({},$scope.context)) {
-                        return $scope.context.redactor.writingMode != 'STATIC';
-                    }
                     return false;
                 default : return false;
             }
@@ -695,6 +729,12 @@ angular.module('publisherApp')
 
             });
         }
+        /*function getUserCanEditPerms(contextKey) {
+            User.canEditCtxPerms(contextKey, function (data) {
+                var result = data.value;
+                $scope.canEditPerms = (result == true);
+            });
+        }*/
 
         function selectTemplatePermissionTemplate(permissionClass) {
             switch (permissionClass) {
