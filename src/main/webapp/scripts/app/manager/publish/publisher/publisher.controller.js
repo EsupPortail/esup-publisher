@@ -75,7 +75,7 @@ angular.module('publisherApp')
 
 
         $scope.selectReader = function(item) {
-            $scope.selectedPublisher.reader = item;
+            $scope.selectedPublisher.context.reader = item;
 
             initRedactors($scope.publishers, true);
             if ($scope.filteredFromReader.length == 1) {
@@ -83,6 +83,8 @@ angular.module('publisherApp')
                 $scope.selectedPublisher.context.organization = angular.copy($scope.filteredFromReader[0].context.organization);
                 $scope.redactors = [$scope.filteredFromReader[0].context.redactor];
                 $scope.organizations = [$scope.filteredFromReader[0].context.organization];
+            } else if ($scope.redactors.length == 1) {
+                $scope.selectRedactor($scope.redactors[0]);
             } else {
                 $scope.selectedPublisher.context.redactor = {};
                 $scope.selectedPublisher.context.organization = {};
@@ -90,7 +92,8 @@ angular.module('publisherApp')
         };
 
         $scope.selectRedactor = function(item) {
-            $scope.selectedPublisher.redactor = item;
+            $scope.selectedPublisher.context.redactor = item;
+
             initOrganizations($scope.filteredFromReader, true);
             if ($scope.filteredFromRedactor.length == 1) {
                 $scope.selectedPublisher.context.organization = angular.copy($scope.filteredFromRedactor[0].context.organization);
