@@ -18,6 +18,8 @@
             "description": "Description",
             "displayOrder": "Ordre d'affichage",
             "allowNotifications": "Notifications",
+            "identifiers": "Clé(s) identifiante(s)",
+            "identifiers.help": "Utilisez la virgule comme séparateur de plusieurs valeurs possibles",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

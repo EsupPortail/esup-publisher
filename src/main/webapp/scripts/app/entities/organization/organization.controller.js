@@ -58,7 +58,7 @@ angular.module('publisherApp')
         };
 
         $scope.clear = function () {
-            $scope.organization = {name: null, displayName: null, description: null, displayOrder: 0, allowNotifications: false, id: null};
+            $scope.organization = {name: null, displayName: null, description: null, displayOrder: 0, allowNotifications: false, identifiers: [], id: null};
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
         };

@@ -78,6 +78,10 @@ public class Organization extends AbstractAuditingEntity implements IContext, Se
 	@Column(length = 1, nullable = false, name = "allow_notifications")
 	private boolean allowNotifications;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "T_ENTITY_IDENTIFIERS")
+    private Set<String> identifiers = new HashSet<>();
+
 	public Organization() {
 		super();
 	}
@@ -89,7 +93,7 @@ public class Organization extends AbstractAuditingEntity implements IContext, Se
     private Set<Publisher> availablePublisherContexts = new HashSet<>();
 
 	public Organization(final String name, final String displayName,
-			final String description, final Integer displayOrder) {
+			final String description, final Integer displayOrder, final Set<String> identifiers) {
 		super();
 		this.name = name;
         this.displayName = displayName;
@@ -98,6 +102,7 @@ public class Organization extends AbstractAuditingEntity implements IContext, Se
         }
 		this.displayOrder = displayOrder;
 		this.description = description;
+        this.identifiers = identifiers;
 	}
 
 	@Override

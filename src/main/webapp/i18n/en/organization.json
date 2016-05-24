@@ -16,6 +16,8 @@
             "name": "Name",
             "displayName": "Display Name",
             "description": "Description",
+            "identifiers": "Identity key(s)",
+            "identifiers.help": "Use comma as separator of several values",
             "displayOrder": "Display Order",
             "allowNotifications": "Allow Notifications",
             "createdBy": "Created By",

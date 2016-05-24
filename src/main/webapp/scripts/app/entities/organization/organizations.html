@@ -76,6 +76,21 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="identifiers" translate="publisherApp.organization.identifiers">Identifiers</label>
+                            <input type="text" id="identifiers" name="identifiers" class="form-control" ng-model="organization.identifiers" ng-list="," required>
+
+                            <div ng-show="editForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <!--<p class="help-block"-->
+                                   <!--ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">-->
+                                    <!--This field is required to be at least 5 characters.-->
+                                <!--</p>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label translate="publisherApp.organization.displayOrder">DisplayOrder</label>
                             <input type="number" class="form-control" name="displayOrder"
                                    ng-model="organization.displayOrder" required min="0" max="999">
@@ -154,6 +169,7 @@
                     <th translate="publisherApp.organization.description">Description</th>
                     <th translate="publisherApp.organization.displayOrder">DisplayOrder</th>
                     <th translate="publisherApp.organization.allowNotifications">AllowNotifications</th>
+                    <th translate="publisherApp.organization.identifiers">Identifiers</th>
                     <th></th>
                 </tr>
             </thead>
@@ -165,6 +181,7 @@
                     <td>{{organization.description}}</td>
                     <td>{{organization.displayOrder}}</td>
                     <td><input type="checkbox" ng-model="organization.allowNotifications" disabled/></td>
+                    <td><span class="list-comma" ng-repeat="id in organization.identifiers">{{ id }}</span></td>
                     <td>
                         <button type="submit"
                                 ui-sref="organizationDetail({id:organization.id})"
