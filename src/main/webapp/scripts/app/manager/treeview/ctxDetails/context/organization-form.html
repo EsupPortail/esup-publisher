@@ -67,6 +67,22 @@
                             </p>
                         </div>
                     </div>
+                    <div class="form-group" has-role="ROLE_ADMIN">
+                        <label for="identifiers" class="control-label" translate="publisherApp.organization.identifiers">Identifiers</label>
+                        <input type="text" id="identifiers" name="identifiers" class="form-control" ng-model="editedContext.identifiers"
+                               placeholder="{{ 'publisherApp.organization.identifiers.help' | translate }}" ng-list="," required ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.identifiers.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.identifiers.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <!--<p class="help-block"-->
+                            <!--ng-show="editForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">-->
+                            <!--This field is required to be at least 5 characters.-->
+                            <!--</p>-->
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="control-label" for="displayOrder" translate="publisherApp.organization.displayOrder">DisplayOrder</label>
                         <input type="number" class="form-control" name="displayOrder" id="displayOrder"

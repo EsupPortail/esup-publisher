@@ -77,7 +77,8 @@
                         </div>
                         <div class="form-group">
                             <label for="identifiers" class="control-label" translate="publisherApp.organization.identifiers">Identifiers</label>
-                            <input type="text" id="identifiers" name="identifiers" class="form-control" ng-model="organization.identifiers" ng-list="," required>
+                            <input type="text" id="identifiers" name="identifiers" class="form-control" ng-model="organization.identifiers"
+                                   placeholder="{{ 'publisherApp.organization.identifiers.help' | translate }}" ng-list="," required>
 
                             <div ng-show="editForm.identifiers.$invalid">
                                 <p class="help-block"
