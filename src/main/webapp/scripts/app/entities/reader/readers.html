@@ -9,7 +9,7 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate ng-submit="create()">
+                <form name="editForm" role="form" novalidate ng-submit="create()" show-validation>
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -18,14 +18,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" class="form-control" name="id"
+                            <label class="control-label" for="ID">ID</label>
+                            <input type="text" class="form-control" name="id" id="ID"
                                    ng-model="reader.id" readonly>
                         </div>
 
                         <div class="form-group">
-                            <label translate="publisherApp.reader.name">Name</label>
-                            <input type="text" class="form-control" name="name"
+                            <label class="control-label" for="name" translate="publisherApp.reader.name">Name</label>
+                            <input type="text" class="form-control" name="name" id="name"
                                    ng-model="reader.name" required ng-minlength="3" ng-maxlength="20">
 
                             <div ng-show="editForm.name.$invalid">
@@ -44,8 +44,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="publisherApp.reader.displayName">DisplayName</label>
-                            <input type="text" class="form-control" name="displayName"
+                            <label class="control-label" for="displayName" translate="publisherApp.reader.displayName">DisplayName</label>
+                            <input type="text" class="form-control" name="displayName" id="displayName"
                                    ng-model="reader.displayName" required ng-minlength="3" ng-maxlength="50">
 
                             <div ng-show="editForm.displayName.$invalid">
@@ -64,8 +64,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="publisherApp.reader.description">Description</label>
-                            <input type="text" class="form-control" name="description"
+                            <label class="control-label" for="description" translate="publisherApp.reader.description">Description</label>
+                            <input type="text" class="form-control" name="description" id="description"
                                    ng-model="reader.description" required ng-minlength="3" ng-maxlength="512">
 
                             <div ng-show="editForm.description.$invalid">
@@ -83,11 +83,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" translate="publisherApp.reader.authorizedTypes">AuthorizedTypes</label>
+                        <div class="form-group" ng-class="{ 'has-error': reader.authorizedTypes.length < 1 && authorizedTypesDirty }">
+                            <label class="control-label" for="authorizedTypes" class="control-label" translate="publisherApp.reader.authorizedTypes">AuthorizedTypes</label>
                             <div class="inline-form">
                                 <div ng-repeat="authorizedType in authorizedTypesList" class="checkbox-inline">
-                                    <input ng-attr-id="{{authorizedType}}" type="checkbox" value="{{authorizedType}}" ng-checked="containsSelectedType(authorizedType)"
+                                    <input ng-attr-id="{{authorizedType}}" type="checkbox" id="authorizedTypes" name="authorizedTypes" value="{{authorizedType}}" ng-checked="containsSelectedType(authorizedType)"
                                            ng-click="toggleSelectionType(authorizedType)">
                                     <label ng-attr-for="{{authorizedType}}">
                                         <span>{{ 'enum.itemType.' + authorizedType | translate}}</span>
@@ -102,11 +102,11 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label" translate="publisherApp.reader.classificationDecorations">ClassificationDecorations</label>
+                        <div class="form-group" ng-class="{ 'has-error': reader.classificationDecorations.length < 1 && classificationDecorTypesDirty }">
+                            <label class="control-label" for="classificationDecorations" class="control-label" translate="publisherApp.reader.classificationDecorations">ClassificationDecorations</label>
                             <div class="inline-form">
                                 <div ng-repeat="classificationDecorType in classificationDecorTypesList" class="checkbox-inline">
-                                    <input ng-attr-id="{{classificationDecorType}}" type="checkbox" value="{{classificationDecorType}}" ng-checked="containsSelectedDecorType(classificationDecorType)"
+                                    <input ng-attr-id="{{classificationDecorType}}" type="checkbox" id="classificationDecorations" name="classificationDecorations" value="{{classificationDecorType}}" ng-checked="containsSelectedDecorType(classificationDecorType)"
                                            ng-click="toggleSelectionDecorType(classificationDecorType)">
                                     <label ng-attr-for="{{classificationDecorType}}">
                                         <span>{{ 'enum.classificationDecorType.' + classificationDecorType | translate}}</span>

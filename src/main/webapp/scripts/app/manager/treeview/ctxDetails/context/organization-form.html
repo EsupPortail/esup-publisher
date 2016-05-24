@@ -2,7 +2,7 @@
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="editForm" role="form" novalidate ng-submit="confirmUpdateContext('ORGANIZATION')">
+            <form name="editForm" role="form" novalidate ng-submit="confirmUpdateContext('ORGANIZATION')" show-validation>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!-- ng-click="clear()"-->
@@ -16,8 +16,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label translate="publisherApp.organization.name">Name</label>
-                        <input type="text" class="form-control" name="name"
+                        <label class="control-label" for="name" translate="publisherApp.organization.name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name"
                                ng-model="editedContext.name" required ng-minlength="5" ng-maxlength="255" ng-readonly="!isInRole('ROLE_ADMIN')">
 
                         <div ng-show="editForm.name.$invalid">
@@ -48,8 +48,8 @@
                         </div>
                     </div>-->
                     <div class="form-group">
-                        <label translate="publisherApp.organization.description">Description</label>
-                        <input type="text" class="form-control" name="description"
+                        <label class="control-label" for="description" translate="publisherApp.organization.description">Description</label>
+                        <input type="text" class="form-control" name="description" id="description"
                                ng-model="editedContext.description" required ng-minlength="5" ng-maxlength="512" ng-readonly="!isInRole('ROLE_ADMIN')">
 
                         <div ng-show="editForm.description.$invalid">
@@ -68,8 +68,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label translate="publisherApp.organization.displayOrder">DisplayOrder</label>
-                        <input type="number" class="form-control" name="displayOrder"
+                        <label class="control-label" for="displayOrder" translate="publisherApp.organization.displayOrder">DisplayOrder</label>
+                        <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                ng-model="editedContext.displayOrder" required min="0" max="999" ng-readonly="!isInRole('ROLE_ADMIN')">
 
                         <div ng-show="editForm.displayOrder.$invalid">
@@ -92,8 +92,8 @@
                         </div>
                     </div>
                     <div class="form-group" can-edit="context.contextKey">
-                        <label translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
-                        <input type="checkbox" class="form-control" name="allowNotifications"
+                        <label class="control-label" for="allowNotifications" translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
+                        <input type="checkbox" class="form-control" name="allowNotifications" id="allowNotifications"
                                ng-model="editedContext.allowNotifications" ng-disabled="!canManage"/>
 
                     </div>

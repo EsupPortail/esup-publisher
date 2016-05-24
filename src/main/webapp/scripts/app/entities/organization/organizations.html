@@ -9,7 +9,7 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate ng-submit="create()">
+                <form name="editForm" role="form" novalidate ng-submit="create()" show-validation>
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -18,14 +18,14 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>ID</label>
-                            <input type="text" class="form-control" name="id"
+                            <label class="control-label" for="ID" >ID</label>
+                            <input type="text" class="form-control" name="id" id="ID"
                                    ng-model="organization.id" readonly>
                         </div>
 
                         <div class="form-group">
-                            <label translate="publisherApp.organization.name">Name</label>
-                            <input type="text" class="form-control" name="name"
+                            <label for ="name" class="control-label" translate="publisherApp.organization.name">Name</label>
+                            <input type="text" class="form-control" name="name" id="name"
                                    ng-model="organization.name" required ng-minlength="5" ng-maxlength="255">
 
                             <div ng-show="editForm.name.$invalid">
@@ -44,8 +44,8 @@
                             </div>
                         </div>
                         <div class="form-group" ng-hide="true">
-                            <label translate="publisherApp.organization.displayName">DisplayName</label>
-                            <input type="text" class="form-control" name="displayName"
+                            <label for="displayName" class="control-label" translate="publisherApp.organization.displayName">DisplayName</label>
+                            <input type="text" class="form-control" name="displayName" id="displayName"
                                    ng-model="organization.displayName" ng-maxlength="100">
 
                             <div ng-show="editForm.displayName.$invalid">
@@ -56,8 +56,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="publisherApp.organization.description">Description</label>
-                            <input type="text" class="form-control" name="description"
+                            <label for="description" class="control-label" translate="publisherApp.organization.description">Description</label>
+                            <input type="text" class="form-control" name="description" id="description"
                                    ng-model="organization.description" required ng-minlength="5" ng-maxlength="512">
 
                             <div ng-show="editForm.description.$invalid">
@@ -76,12 +76,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="identifiers" translate="publisherApp.organization.identifiers">Identifiers</label>
+                            <label for="identifiers" class="control-label" translate="publisherApp.organization.identifiers">Identifiers</label>
                             <input type="text" id="identifiers" name="identifiers" class="form-control" ng-model="organization.identifiers" ng-list="," required>
 
-                            <div ng-show="editForm.description.$invalid">
+                            <div ng-show="editForm.identifiers.$invalid">
                                 <p class="help-block"
-                                   ng-show="editForm.description.$error.required" translate="entity.validation.required">
+                                   ng-show="editForm.identifiers.$error.required" translate="entity.validation.required">
                                     This field is required.
                                 </p>
                                 <!--<p class="help-block"-->
@@ -91,8 +91,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="publisherApp.organization.displayOrder">DisplayOrder</label>
-                            <input type="number" class="form-control" name="displayOrder"
+                            <label for="displayOrder" class="control-label" translate="publisherApp.organization.displayOrder">DisplayOrder</label>
+                            <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                    ng-model="organization.displayOrder" required min="0" max="999">
 
                             <div ng-show="editForm.displayOrder.$invalid">
@@ -115,8 +115,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
-                            <input type="checkbox" class="form-control" name="allowNotifications"
+                            <label for="allowNotifications" class="control-label" translate="publisherApp.organization.allowNotifications">AllowNotifications</label>
+                            <input type="checkbox" class="form-control" name="allowNotifications" id="allowNotifications"
                                    ng-model="organization.allowNotifications">
 
                         </div>

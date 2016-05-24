@@ -5,6 +5,9 @@ angular.module('publisherApp')
         $scope.readers = [];
         $scope.authorizedTypesList = EnumDatas.getItemTypeList();
         $scope.classificationDecorTypesList = EnumDatas.getClassificationDecorTypeList();
+        $scope.authorizedTypesDirty = false;
+        $scope.classificationDecorTypesDirty = false;
+
         $scope.loadAll = function() {
             Reader.query(function(result) {
                $scope.readers = result;
@@ -48,6 +51,8 @@ angular.module('publisherApp')
             $scope.reader = {name: null, displayName: null, description: null, id: null, authorizedTypes: [], classificationDecorations: []};
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
+            $scope.authorizedTypesDirty = false;
+            $scope.classificationDecorTypesDirty = false;
         };
 
         $scope.containsSelectedType = function (type) {
@@ -80,6 +85,7 @@ angular.module('publisherApp')
         };
 
         $scope.toggleSelectionType = function (type) {
+            $scope.authorizedTypesDirty = true;
             var i = 0, idx=-1;
             for (var size = $scope.reader.authorizedTypes.length; i < size; i++) {
                 //console.log("checking equals ", $scope.reader.authorizedTypes[i], type);
@@ -100,6 +106,7 @@ angular.module('publisherApp')
 
 
         $scope.toggleSelectionDecorType = function (type) {
+            $scope.classificationDecorTypesDirty = true;
             var i = 0, idx=-1;
             for (var size = $scope.reader.classificationDecorations.length; i < size; i++) {
                 //console.log("checking equals ", $scope.reader.authorizedTypes[i], type);

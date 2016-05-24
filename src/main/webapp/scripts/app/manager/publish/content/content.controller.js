@@ -6,6 +6,7 @@ angular.module('publisherApp')
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
         $scope.content = {type : '', picFile: null, picUrl: null, file:null};
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
+        $scope.enclosureDirty = false;
 
         var today = new Date();
         var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
@@ -317,6 +318,7 @@ angular.module('publisherApp')
             $scope.result = null;
             $scope.errorMsg = null;
             $scope.progress = null;
+            $scope.enclosureDirty = true;
         };
 
         $scope.mediaType = '';

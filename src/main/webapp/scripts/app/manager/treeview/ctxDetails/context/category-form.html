@@ -2,7 +2,7 @@
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="editCategoryForm" role="form" novalidate ng-submit="confirmUpdateContext('CATEGORY')">
+            <form name="editCategoryForm" role="form" novalidate ng-submit="confirmUpdateContext('CATEGORY')" show-validation>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!-- ng-click="clear()"-->
@@ -10,14 +10,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label>ID</label>
-                        <input type="text" class="form-control" name="id"
+                        <label class="control-label" for="ID">ID</label>
+                        <input type="text" class="form-control" name="id" id="ID"
                                ng-model="context.id" readonly>
                     </div>
 
                     <div class="form-group">
-                        <label translate="publisherApp.category.name">Name</label>
-                        <input type="text" class="form-control" name="name"
+                        <label class="control-label" for="name" translate="publisherApp.category.name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name"
                                ng-model="editedContext.name" required ng-minlength="3" ng-maxlength="200">
 
                         <div ng-show="editCategoryForm.name.$invalid">
@@ -36,8 +36,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label translate="publisherApp.category.description">Description</label>
-                        <input type="text" class="form-control" name="description"
+                        <label class="control-label" for="description" translate="publisherApp.category.description">Description</label>
+                        <input type="text" class="form-control" name="description" id="description"
                                ng-model="editedContext.description" required ng-minlength="5" ng-maxlength="512">
 
                         <div ng-show="editCategoryForm.description.$invalid">
@@ -56,8 +56,8 @@
                         </div>
                     </div>
                     <div class="form-group" ng-show="inArray('ENCLOSURE',publisher.context.reader.classificationDecorations)">
-                        <label translate="publisherApp.category.iconUrl">IconUrl</label>
-                        <input type="url" class="form-control" name="iconUrl" placeholder="http://..."
+                        <label class="control-label" for="iconUrl" translate="publisherApp.category.iconUrl">IconUrl</label>
+                        <input type="url" class="form-control" name="iconUrl" id="iconUrl" placeholder="http://..."
                                ng-model="editedContext.iconUrl" ng-maxlength="2048">
 
                         <div ng-show="editCategoryForm.iconUrl.$invalid">
@@ -72,8 +72,8 @@
                         </div>
                     </div>
                     <div class="form-group" ng-show="inArray('COLOR',publisher.context.reader.classificationDecorations)">
-                        <label translate="publisherApp.category.color">Color</label>
-                        <input type="color" class="form-control" name="color"
+                        <label class="control-label" for="color" translate="publisherApp.category.color">Color</label>
+                        <input type="color" class="form-control" name="color" id="color"
                                ng-model="editedContext.color" required>
 
                         <div ng-show="editCategoryForm.color.$invalid">
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label for="accessView" translate="publisherApp.category.accessView">AccessView</label>
+                        <label class="control-label" for="accessView" translate="publisherApp.category.accessView">AccessView</label>
                         <!--<input type="text" class="form-control" name="accessView"
                                ng-model="editedContext.accessView" required>-->
                         <select class="form-control" id="accessView" name="accessView" ng-model="editedContext.accessView"
@@ -99,12 +99,12 @@
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label translate="publisherApp.category.rssAllowed">RssAllowed</label>
-                        <input type="checkbox" class="form-control" name="rssAllowed"
+                        <label class="control-label" for="rssAllowed" translate="publisherApp.category.rssAllowed">RssAllowed</label>
+                        <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed"
                                ng-model="editedContext.rssAllowed">
                     </div>
                     <div class="form-group">
-                        <label for="defaultDisplayOrder" translate="publisherApp.category.defaultDisplayOrder">DefaultDisplayOrder</label>
+                        <label class="control-label" for="defaultDisplayOrder" translate="publisherApp.category.defaultDisplayOrder">DefaultDisplayOrder</label>
                         <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="editedContext.defaultDisplayOrder"
                                 ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required>
                         </select>
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label for="lang" translate="publisherApp.category.lang">Lang</label>
+                        <label class="control-label" for="lang" translate="publisherApp.category.lang">Lang</label>
                         <select class="form-control" id="lang" name="lang" ng-model="editedContext.lang" required
                                 ng-options="langVal.id as langVal.label | translate for langVal in langList" required>
                         </select>
@@ -144,8 +144,8 @@
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label translate="publisherApp.category.ttl">Ttl</label>
-                        <input type="number" class="form-control" name="ttl"
+                        <label class="control-label" for="ttl" translate="publisherApp.category.ttl">Ttl</label>
+                        <input type="number" class="form-control" name="ttl" id="ttl"
                                ng-model="editedContext.ttl" min="900" max="86400">
 
                         <div ng-show="editCategoryForm.ttl.$invalid">
@@ -164,8 +164,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label translate="publisherApp.category.displayOrder">DisplayOrder</label>
-                        <input type="number" class="form-control" name="displayOrder"
+                        <label class="control-label" for="displayOrder" translate="publisherApp.category.displayOrder">DisplayOrder</label>
+                        <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                ng-model="editedContext.displayOrder" required min="0" max="999">
 
                         <div ng-show="editCategoryForm.displayOrder.$invalid">
@@ -188,10 +188,10 @@
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">
-                        <label translate="publisherApp.category.publisher">publisher</label>
+                        <label class="control-label" for="publisher" translate="publisherApp.category.publisher">publisher</label>
                         <!--<select class="form-control" name="publisher" ng-model="editedContext.publisher.id" ng-options="publisher.id as publisher.id for publisher in publishers">
                         </select>-->
-                        <input type="text" class="input-sm form-control"
+                        <input type="text" class="input-sm form-control" id="publisher" name="publisher"
                                value="{{editedContext.publisher.context.reader.displayName}} - {{editedContext.publisher.context.redactor.displayName}}" readonly>
                     </div>
                 </div>

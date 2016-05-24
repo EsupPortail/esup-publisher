@@ -1,14 +1,14 @@
 <div>
     <div class="newsForm">
         <div class="form-group hidden">
-            <label>ID</label>
-            <input type="text" class="form-control" name="id"
+            <label class="control-label" for="ID">ID</label>
+            <input type="text" class="form-control" name="id" id="ID"
                    ng-model="item.id" readonly>
         </div>
 
-        <div class="form-group">
-            <label translate="publisherApp.news.title">Title</label>
-            <input type="text" class="form-control" name="title"
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.title.$invalid && publishContentForm.title.$dirty }">
+            <label class="control-label" for="title" translate="publisherApp.news.title">Title</label>
+            <input type="text" class="form-control" name="title" id="title"
                    ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
 
             <div ng-show="publishContentForm.title.$invalid">
@@ -27,21 +27,21 @@
             </div>
         </div>
         <div class="form-group">
-            <label translate="publisherApp.news.enclosure">Enclosure</label>
+            <label class="control-label" for="enclosure" translate="publisherApp.news.enclosure">Enclosure</label>
             <div class="form-inline">
                 <button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">
                     <span>{{'publisherApp.news.enclosure.button' | translate}}</span>
                 </button>
 
-                <img ng-if="item.enclosure" name="enclosure" ng-src="{{item.enclosure}}" />
+                <img ng-if="item.enclosure" name="enclosure" id="enclosure" ng-src="{{item.enclosure}}" />
                 <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>
         </div>
-        <div class="form-group">
-            <label translate="publisherApp.news.summary">Summary</label>
-            <textarea class="form-control" name="summary" rows="3"
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
+            <label class="control-label" for="summary" translate="publisherApp.news.summary">Summary</label>
+            <textarea class="form-control" name="summary" id="summary" rows="3"
                       ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
 
             <div ng-show="publishContentForm.summary.$invalid">
@@ -60,9 +60,9 @@
             </div>
         </div>
         <div class="form-inline">
-            <div class="form-group">
-                <label translate="publisherApp.news.startDate">StartDate</label>
-                <input type="date" class="form-control" name="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
+            <div class="form-group" ng-class="{ 'has-error': publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
+                <label class="control-label" for="startDate" translate="publisherApp.news.startDate">StartDate</label>
+                <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
                        alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
 
                 <div ng-show="publishContentForm.startDate.$invalid">
@@ -86,9 +86,9 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group">
-                <label translate="publisherApp.news.endDate">EndDate</label>
-                <input type="date" class="form-control" name="endDate" placeholder="jj/mm/aaaa" min-date="{{today | date: dtformat}}" max={{nextyear}} ng-model="item.endDate"
+            <div class="form-group" ng-class="{ 'has-error': publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
+                <label class="control-label" for="endDate" translate="publisherApp.news.endDate">EndDate</label>
+                <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{today | date: dtformat}}" max={{nextyear}} ng-model="item.endDate"
                        alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
                 <div ng-show="publishContentForm.endDate.$invalid">
@@ -113,9 +113,9 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label translate="publisherApp.news.body">Body</label>
-            <text-angular name="body"
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
+            <label class="control-label" for="body" translate="publisherApp.news.body">Body</label>
+            <text-angular name="body" id="body"
                           ng-model="item.body" required ng-minlength="15"></text-angular>
             <!--<input type="text" class="form-control" name="body"-->
             <!--ng-model="item.body" required ng-minlength="5">-->
