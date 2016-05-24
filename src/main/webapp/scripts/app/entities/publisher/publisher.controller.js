@@ -2,7 +2,7 @@
 
 angular.module('publisherApp')
     .controller('PublisherController', function ($scope, Publisher, EnumDatas, dataResolved) {
-        console.log("callPublisherController ");
+        //console.log("callPublisherController ");
         $scope.publishers = [];
         $scope.organizations = dataResolved[0];
         $scope.redactors = dataResolved[1];
@@ -68,7 +68,7 @@ angular.module('publisherApp')
                 used: false, displayOrder: 0, permissionType: $scope.permissionClassList[0].name, defaultDisplayOrder: $scope.displayOrderTypeList[0].name, id: null,
                 hasSubPermsManagement: true
             };
-            console.log(JSON.stringify($scope.publisher));
+            //console.log($scope.publisher);
             if ($scope.editForm) {
                 $scope.editForm.$setPristine();
                 $scope.editForm.$setUntouched();

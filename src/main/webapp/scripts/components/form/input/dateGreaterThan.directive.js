@@ -9,14 +9,14 @@ angular.module('publisherApp')
                 var validateDateRange = function (inputValue) {
                     var fromDate = DateService.normalize(attrs.dateGreaterThan);
                     var minDate = DateService.normalize(attrs.minDate);
-                    console.log("dateGreaterthan with dates : ", fromDate, minDate);
+                    //console.log("dateGreaterthan with dates : ", fromDate, minDate);
                     if (DateService.getDateDifference(fromDate, minDate) > 0) {
                         fromDate = minDate;
-                        console.log("Comparing with minDate ", minDate);
+                        //console.log("Comparing with minDate ", minDate);
                     }
                     var toDate = DateService.normalize(inputValue);
                     var isValid = DateService.isValidDateRange(fromDate, toDate);
-                    console.log("dateGreaterthan ", isValid);
+                    //console.log("dateGreaterthan ", isValid);
                     ctrl.$setValidity('dateGreaterThan', isValid);
                     return inputValue;
                 };

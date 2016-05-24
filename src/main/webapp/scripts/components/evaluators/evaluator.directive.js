@@ -11,7 +11,7 @@ angular.module('publisherApp')
             link: function (scope, element, attrs) {
                 var init = function () {
                     if (angular.isDefined(scope.evaluator) && angular.isDefined(scope.evaluator.class)) {
-                        console.log("evaluator traitée :", scope.evaluator);
+                        //console.log("evaluator traitée :", scope.evaluator);
                         switch (scope.evaluator.class) {
                             case "OPERATOR":
                                 //var html = '<operator-evaluator evaluator="evaluator" ></operator-evaluator>';
@@ -83,9 +83,9 @@ angular.module('publisherApp')
                 scope.$watch('evaluator', function() {
                     if (angular.isDefined(scope.evaluator)) {
                         init();
-                    } else {
-                        console.log("evaluator is undefined !");
-                    }
+                    } //else {
+                        //console.log("evaluator is undefined !");
+                    //}
                 });
             }
         }
@@ -259,7 +259,7 @@ angular.module('publisherApp')
                     data.evaluators = [];
                 };
                 $scope.deleteEvaluator = function(data, array) {
-                    console.log("deleteEvaluator ", data, array);
+                    //console.log("deleteEvaluator ", data, array);
                     var i = 0, idx=-1;
                     for (var size = array.length; i < size; i++) {
                         //console.log("checking equals ", $scope.$parent.classifications[i], contextKey);

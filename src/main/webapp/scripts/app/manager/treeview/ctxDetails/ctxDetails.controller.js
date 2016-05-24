@@ -57,7 +57,7 @@ angular.module('publisherApp')
                         $scope.loadAvailableRoles();
                     });
                     Subscriber.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
-                        console.log(result);
+                        //console.log(result);
                         $scope.targets = result;
                     });
                     $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/organization-detail.html';
@@ -238,7 +238,7 @@ angular.module('publisherApp')
                     div = "#saveContextModal";
                     break;
             }
-            console.log("createContext", type);
+            //console.log("createContext", type);
             $(div).modal('show');
         };
 
@@ -474,13 +474,13 @@ angular.module('publisherApp')
                 }
 
             }
-            console.log("loadAvailableRoles :",  $scope.availableRoles, $scope.permissionTypeList);
+            //console.log("loadAvailableRoles :",  $scope.availableRoles, $scope.permissionTypeList);
         };
         $scope.addPermission = function() {
             $scope.addPerm = true;
             $scope.loadAvailableRoles();
             $scope.selectedSubjects = [];
-            console.log("addPermission :",  $scope.availableRoles, $scope.ctxPermissionType);
+            //console.log("addPermission :",  $scope.availableRoles, $scope.ctxPermissionType);
             switch ($scope.ctxPermissionType) {
                 case 'CONTEXT':
                     $scope.permission = {type: 'PERMONCTX', context : {keyId: $scope.context.contextKey.keyId, keyType: $scope.context.contextKey.keyType},
@@ -497,12 +497,12 @@ angular.module('publisherApp')
                  case: 'SUBJECT',
                  case: 'SUBJECT_WITH_CONTEXT',*/
             }
-            console.log("addPermission :",  $scope.permission);
+            //console.log("addPermission :",  $scope.permission);
 
         };
 
         $scope.createPermission = function () {
-            console.log("SavePermission :",  $scope.permission);
+            //console.log("SavePermission :",  $scope.permission);
             if (!$scope.permissionAdvanced) {
                 $scope.permission.evaluator.evaluators = [];
                 for (var i = 0; i < $scope.selectedSubjects.length; i++) {
@@ -533,13 +533,13 @@ angular.module('publisherApp')
         };
 
         $scope.updatePermission = function (id) {
-            console.log("updatePermission");
+            //console.log("updatePermission");
             switch ($scope.ctxPermissionType) {
                 case 'CONTEXT':
                     PermissionOnContext.get({id: id}, function (result) {
                         $scope.permission = result;
                         $scope.loadAvailableRoles(result.role);
-                        console.log("available roles : ", $scope.availableRoles);
+                        //console.log("available roles : ", $scope.availableRoles);
                         setSelectedSubjectsFromEvaluator($scope.permission.evaluator);
                         $scope.addPerm = true;
                     });
@@ -548,7 +548,7 @@ angular.module('publisherApp')
                     Permission.get({id: id}, function (result) {
                         $scope.permission = result;
                         $scope.loadAvailableRoles(result.role);
-                        console.log("available roles : ", $scope.availableRoles);
+                        //console.log("available roles : ", $scope.availableRoles);
                         setSelectedSubjectsFromEvaluator($scope.permission.evaluator);
                         // TODO what about setting several perm on same role if we could define different authorized subject on different evaluators ?
                         $scope.addPerm = true;
@@ -677,14 +677,14 @@ angular.module('publisherApp')
                     return false;
                 case 'CATEGORY' :
                     if (!angular.equals({},$scope.publisher)) {
-                        console.log("getHasTargetManagment ",  !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
-                            $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
+                       // console.log("getHasTargetManagment ",  !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
+                           // $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
                         return !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement;
                     }
                     return false;
                 case 'FEED' :
-                    console.log("getHasTargetManagment ", !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
-                        $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
+                    //console.log("getHasTargetManagment ", !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
+                    //    $scope.publisher.context.redactor.writingMode, $scope.publisher.hasSubPermsManagement);
                     if (!angular.equals({},$scope.publisher)) {
                         return !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement;
                     }
@@ -768,7 +768,7 @@ angular.module('publisherApp')
             })[0].id;
         };
         $scope.viewSubject= function(target) {
-            console.log("subject", target);
+            //console.log("subject", target);
             if (target) {
                 if (target.subjectDTO && target.subjectDTO.modelId) {
                     //console.log("go on state ", 'ctxDetails.subject', target.subjectDTO.modelId);

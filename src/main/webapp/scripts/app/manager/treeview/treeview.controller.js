@@ -31,7 +31,7 @@ angular.module('publisherApp')
         };
 
         $scope.nodeSelected = function(e, data) {
-            console.log("Select node : " + JSON.stringify(data.node));
+            //console.log("Select node : " + JSON.stringify(data.node));
             var _l = data.node.id.split(":");
             $scope.currentNode = data.node;
 

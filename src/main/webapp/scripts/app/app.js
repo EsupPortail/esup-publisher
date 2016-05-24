@@ -230,7 +230,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                     }
                 ],
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    console.log("add partials");
+                    //console.log("add partials");
                     $translatePartialLoader.addPart('global');
                     $translatePartialLoader.addPart('language');
                     $translatePartialLoader.addPart('enum');
