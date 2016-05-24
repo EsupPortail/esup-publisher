@@ -45,7 +45,7 @@ public class FlashDTOFactoryImpl extends ItemDTOFactoryImpl<FlashDTO, Flash> imp
             }
             return new FlashDTO(model.getId(), model.getTitle(), model.getEnclosure(), model.getBody(), model.getStartDate(),
                     model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
-                    model.getStatus(), model.getSummary(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
+                    model.getStatus(), model.getSummary(), model.isRssAllowed(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
                     model.getCreatedDate(), model.getLastModifiedDate(),
                     getSubjectFactory().from(model.getCreatedBy()), updatedBy);
         }
@@ -64,6 +64,7 @@ public class FlashDTOFactoryImpl extends ItemDTOFactoryImpl<FlashDTO, Flash> imp
         model.setValidatedBy(getSubjectFactory().from(dtObject.getValidatedBy()));
         model.setStatus(dtObject.getStatus());
         model.setSummary(dtObject.getSummary());
+        model.setRssAllowed(dtObject.isRssAllowed());
         model.setOrganization(orgFactory.from(dtObject.getOrganization().getModelId()));
         model.setRedactor(redactorFactory.from(dtObject.getRedactor().getModelId()));
 

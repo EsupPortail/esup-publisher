@@ -10,4 +10,5 @@
     <!-- JHipster will add liquibase changelogs here -->
     <include file="src/main/resources/config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>
     <include file="src/main/resources/config/liquibase/changelog/20160523135456_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="src/main/resources/config/liquibase/changelog/20160524132648_changelog.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

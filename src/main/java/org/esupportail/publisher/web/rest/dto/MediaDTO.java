@@ -22,6 +22,7 @@ public class MediaDTO extends ItemDTO implements Serializable {
      * @param validatedBy
      * @param status
      * @param summary
+     * @param rssAllowed
      * @param organization
      * @param redactor
      * @param creationDate
@@ -32,11 +33,11 @@ public class MediaDTO extends ItemDTO implements Serializable {
     public MediaDTO(@NotNull final Long modelId, @NotNull final String title, @NotNull final String enclosure,
             @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
-            @NotNull final String summary, @NotNull final OrganizationDTO organization,
+            @NotNull final String summary, final boolean rssAllowed, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy) {
         super(modelId, title, enclosure, startDate, endDate, validatedDate,
-                validatedBy, status, summary, organization, redactor, creationDate,
+                validatedBy, status, summary, rssAllowed, organization, redactor, creationDate,
                 lastUpdateDate, createdBy, lastUpdateBy);
     }
 

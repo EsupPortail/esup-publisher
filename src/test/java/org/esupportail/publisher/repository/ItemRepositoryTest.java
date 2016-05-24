@@ -80,23 +80,23 @@ public class ItemRepositoryTest {
 
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(), ObjTest.d2,
-				user2, DEFAULT_STATUS, "summary" + INDICE_1,
+				user2, DEFAULT_STATUS, "summary" + INDICE_1, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		News m2 = new News("Titre " + INDICE_2, "enclosure" + INDICE_2, "body"
 				+ INDICE_2, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
-				ObjTest.d2, user2, DEFAULT_STATUS, "summary"
-						+ INDICE_2, org2, redactor2);
+				ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_2,  true,
+            org2, redactor2);
 		repository.saveAndFlush(m2);
 		Resource m3 = new Resource("Titre " + INDICE_3, "enclosure" + INDICE_3,
 				"ressourceUrl" + INDICE_3, ObjTest.d1.toLocalDate(),
 				ObjTest.d3.toLocalDate(), ObjTest.d2, user2,
-				DEFAULT_STATUS, "summary" + INDICE_3, org1, redactor2);
+				DEFAULT_STATUS, "summary" + INDICE_3,  true, org1, redactor2);
 		repository.saveAndFlush(m3);
         Flash m4 = new Flash("Titre " + INDICE_4, "enclosure" + INDICE_4, "body"
             + INDICE_4, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
-            ObjTest.d2, user2, DEFAULT_STATUS, "summary"
-            + INDICE_4, org2, redactor2);
+            ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_4, true,
+            org2, redactor2);
         repository.saveAndFlush(m4);
 	}
 
@@ -131,7 +131,7 @@ public class ItemRepositoryTest {
 	public void testDateOK() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -140,7 +140,7 @@ public class ItemRepositoryTest {
 	public void testDateOKUpdateKO() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		m1.setEndDate(ObjTest.d1.toLocalDate());
@@ -151,7 +151,7 @@ public class ItemRepositoryTest {
 	public void testDateKOLT() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d3.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -160,7 +160,7 @@ public class ItemRepositoryTest {
 	public void testDateKOEQ() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -170,7 +170,7 @@ public class ItemRepositoryTest {
 		News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
 				+ INDICE_A, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
 				ObjTest.d2, user1, ItemStatus.DRAFT, "summary"
-						+ INDICE_A, org2, redactor2);
+						+ INDICE_A,  true, org2, redactor2);
 
 		log.info("Before insert : " + n1.toString());
 		repository.save(n1);

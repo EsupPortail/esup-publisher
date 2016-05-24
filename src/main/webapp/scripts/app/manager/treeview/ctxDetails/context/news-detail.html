@@ -69,6 +69,14 @@
                         <input type="text" class="input-sm form-control" value="{{context.endDate | date:'dd MMMM yyyy'}}" readonly>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.news.rssAllowed">rssAllowed</span>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="input-sm form-control" ng-model="context.rssAllowed" disabled>
+                    </td>
+                </tr>
                 <tr ng-show="context.validatedBy">
                     <td>
                         <span translate="publisherApp.news.validatedBy">ValidatedBy</span>

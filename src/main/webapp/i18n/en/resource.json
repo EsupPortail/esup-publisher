@@ -21,6 +21,7 @@
             "status": "Status",
             "summary": "Summary",
             "ressourceUrl": "RessourceUrl",
+            "rssAllowed": "Access in public RSS feed",
             "createdBy": "CreatedBy",
             "createdDate": "CreatedDate",
             "lastModifiedBy": "LastModifiedBy",

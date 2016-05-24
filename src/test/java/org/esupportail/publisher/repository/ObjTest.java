@@ -273,7 +273,7 @@ public final class ObjTest {
 	public static News newNews(final String indice) {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice,
+				null, getRandomItemStatus(), "summary" + indice, true,
 				newOrganization(indice), newRedactor(indice));
 	}
 
@@ -281,7 +281,7 @@ public final class ObjTest {
 			final Organization organization) {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice,
+				null, getRandomItemStatus(), "summary" + indice, true,
 				organization, newRedactor(indice));
 	}
 
@@ -289,7 +289,7 @@ public final class ObjTest {
 			final Organization organization, final Redactor redactor) {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice,
+				null, getRandomItemStatus(), "summary" + indice, true,
 				organization, redactor);
 	}
 

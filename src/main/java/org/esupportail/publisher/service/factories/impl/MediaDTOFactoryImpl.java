@@ -45,7 +45,7 @@ public class MediaDTOFactoryImpl extends ItemDTOFactoryImpl<MediaDTO, Media> imp
              }
              return new MediaDTO(model.getId(), model.getTitle(), model.getEnclosure(), model.getStartDate(),
                      model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
-                     model.getStatus(), model.getSummary(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
+                     model.getStatus(), model.getSummary(), model.isRssAllowed(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
                      model.getCreatedDate(), model.getLastModifiedDate(),
                      getSubjectFactory().from(model.getCreatedBy()), updatedBy);
          }
@@ -63,6 +63,7 @@ public class MediaDTOFactoryImpl extends ItemDTOFactoryImpl<MediaDTO, Media> imp
         model.setValidatedBy(getSubjectFactory().from(dtObject.getValidatedBy()));
         model.setStatus(dtObject.getStatus());
         model.setSummary(dtObject.getSummary());
+        model.setRssAllowed(dtObject.isRssAllowed());
         model.setOrganization(orgFactory.from(dtObject.getOrganization().getModelId()));
         model.setRedactor(redactorFactory.from(dtObject.getRedactor().getModelId()));
 

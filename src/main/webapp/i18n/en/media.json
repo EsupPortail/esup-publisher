@@ -22,6 +22,7 @@
             "validatedDate": "ValidatedDate",
             "status": "Status",
             "summary": "Summary",
+            "rssAllowed": "Access in public RSS feed",
             "createdBy": "CreatedBy",
             "createdDate": "CreatedDate",
             "lastModifiedBy": "LastModifiedBy",

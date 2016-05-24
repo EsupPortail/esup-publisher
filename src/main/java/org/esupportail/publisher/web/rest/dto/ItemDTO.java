@@ -69,6 +69,10 @@ public abstract class ItemDTO extends PermissibleDTO {
     @Setter
     private String summary;
 
+    @Getter
+    @Setter
+    private boolean rssAllowed;
+
 
     @Getter
     private OrganizationDTO organization;
@@ -93,13 +97,14 @@ public abstract class ItemDTO extends PermissibleDTO {
      * @param validatedBy
      * @param status
      * @param summary
+     * @param rssAllowed
      * @param organization
      * @param redactor
      */
     public ItemDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
             @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
-            @NotNull final String summary, @NotNull final OrganizationDTO organization,
+            @NotNull final String summary, final boolean rssAllowed, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy) {
         super(modelId, creationDate, lastUpdateDate, createdBy, lastUpdateBy, ContextType.ITEM);
@@ -111,6 +116,7 @@ public abstract class ItemDTO extends PermissibleDTO {
         this.validatedBy = validatedBy;
         this.status = status;
         this.summary = summary;
+        this.rssAllowed = rssAllowed;
         this.organization = organization;
         this.redactor = redactor;
     }

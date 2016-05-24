@@ -69,6 +69,10 @@ angular.module('publisherApp')
             }
         }, true);
 
+        $scope.$watch('$parent.item.startDate', function(newType, oldType) {
+            console.log('New startdate setted : ', newType, oldType);
+        }, true);
+
         $scope.validateItem = function (){
             $scope.$parent.itemValidated = true;
         };
@@ -93,6 +97,7 @@ angular.module('publisherApp')
                         status: null,
                         summary: null,
                         body: null,
+                        rssAllowed: false,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -113,6 +118,7 @@ angular.module('publisherApp')
                         validatedDate: null,
                         status: null,
                         summary: null,
+                        rssAllowed: false,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -134,6 +140,7 @@ angular.module('publisherApp')
                         status: null,
                         summary: null,
                         ressourceUrl: null,
+                        rssAllowed: false,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -155,6 +162,7 @@ angular.module('publisherApp')
                         status: null,
                         summary: null,
                         body: null,
+                        rssAllowed: false,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -173,6 +181,7 @@ angular.module('publisherApp')
                 $scope.$parent.publishContentForm.$setPristine();
                 $scope.$parent.publishContentForm.$setUntouched();
             }
+            console.log("item init : ",$scope.$parent.item);
         };
 
         $scope.invalidFiles = [];
@@ -214,7 +223,7 @@ angular.module('publisherApp')
         $scope.uploadCroppedFile = function(dataUrl, file) {
             //console.log("uploadFiles", dataUrl, file, $scope.$parent.publisher.context.organization.id);
             //console.log("FileSize", Upload.dataUrltoBlob(dataUrl).size());
-            console.log("datas", $scope.content, $scope.crop);
+            //console.log("datas", $scope.content, $scope.crop);
             Upload.upload({
                 url: 'app/upload/',
                 data: {
@@ -334,7 +343,7 @@ angular.module('publisherApp')
         };
 
         $scope.changeFile = function (file, newFiles, invalidFiles, event) {
-            console.log("file ", file, newFiles, invalidFiles, event);
+            //console.log("file ", file, newFiles, invalidFiles, event);
             if (file) {
                 $scope.mediaType = file.type.substring(0, 5);
                 //console.log("Media Type :", $scope.mediaType);
@@ -343,7 +352,7 @@ angular.module('publisherApp')
             }
         };
         $scope.changeCropFile = function (file, newFiles, invalidFiles, event) {
-            console.log("file ", file, newFiles, invalidFiles, event);
+            //console.log("file ", file, newFiles, invalidFiles, event);
             var files = event.target.files;
 
             var fileReader = new FileReader();

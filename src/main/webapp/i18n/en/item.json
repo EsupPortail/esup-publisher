@@ -27,6 +27,7 @@
             "status": "Status",
             "summary": "Summary",
             "body": "Body",
+            "rssAllowed": "Access in public RSS feed",
             "createdBy": "CreatedBy",
             "createdDate": "CreatedDate",
             "lastModifiedBy": "LastModifiedBy",

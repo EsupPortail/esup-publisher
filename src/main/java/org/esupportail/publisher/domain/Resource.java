@@ -78,6 +78,7 @@ public class Resource extends AbstractItem implements Serializable {
 	 * @param validatedBy
 	 * @param status
 	 * @param summary
+     * @param rssAllowed
 	 * @param organization
 	 * @param redactor
 	 */
@@ -85,10 +86,10 @@ public class Resource extends AbstractItem implements Serializable {
 			final String ressourceUrl, final LocalDate startDate,
 			final LocalDate endDate, final DateTime validatedDate,
 			final User validatedBy, final ItemStatus status,
-			final String summary, final Organization organization,
-			final Redactor redactor) {
+			final String summary,  final boolean rssAllowed,
+            final Organization organization, final Redactor redactor) {
 		super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
-				status, summary, organization, redactor);
+				status, summary, rssAllowed, organization, redactor);
 		this.ressourceUrl = ressourceUrl;
 	}
 

@@ -27,6 +27,7 @@
             "status": "État",
             "summary": "Résumé",
             "body": "Texte",
+            "rssAllowed": "Accès public via les flux RSS",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

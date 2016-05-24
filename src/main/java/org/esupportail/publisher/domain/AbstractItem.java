@@ -113,6 +113,10 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
 	@Column(nullable = false, length = CstPropertiesLength.SUMMARY)
 	private String summary;
 
+    /** This field corresponds to the database column rss_allowed. */
+    @Column(length = 1, nullable = false, name = "rss_allowed")
+    private boolean rssAllowed = false;
+
 	/** This field corresponds to the database column entity_id. */
 	@NotNull
 	@ManyToOne
@@ -142,13 +146,14 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
 	 * @param validatedBy
 	 * @param status
 	 * @param summary
+     * @param rssAllowed
 	 * @param organization
 	 * @param redactor
 	 */
 	public AbstractItem(final String title, final String enclosure,
 			final LocalDate startDate, final LocalDate endDate,
 			final DateTime validatedDate, final User validatedBy,
-			final ItemStatus status, final String summary,
+			final ItemStatus status, final String summary, final boolean rssAllowed,
 			final Organization organization, final Redactor redactor) {
 		super();
 		this.title = title;
@@ -159,6 +164,7 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
 		this.validatedBy = validatedBy;
 		this.status = status;
 		this.summary = summary;
+        this.rssAllowed = rssAllowed;
 		this.organization = organization;
 		this.redactor = redactor;
 	}

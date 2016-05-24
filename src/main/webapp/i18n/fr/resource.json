@@ -21,6 +21,7 @@
             "status": "État",
             "summary": "Résumé",
             "ressourceUrl": "Lien de la ressource",
+            "rssAllowed": "Accès public via les flux RSS",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

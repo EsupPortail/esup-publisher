@@ -29,9 +29,11 @@
 # to run in dev :
 - `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
 
-# dep
-//@JsonFormat(shape = JsonFormat.Shape.STRING) should works with jackson 2.5, until use @JsonSerialize with custom serializer
 
+# TODO
+
+# TODO dependencies update
+//@JsonFormat(shape = JsonFormat.Shape.STRING) should works with jackson 2.5, until use @JsonSerialize with custom serializer
 
 # TODO with cache
 error appear :
