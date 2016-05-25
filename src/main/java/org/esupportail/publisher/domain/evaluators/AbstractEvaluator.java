@@ -38,8 +38,7 @@ import java.io.Serializable;
     @JsonSubTypes.Type(value = AuthenticatedUserEvaluator.class, name = "AUTHENTICATED"),
     @JsonSubTypes.Type(value = UserAttributesEvaluator.class, name = "USERATTRIBUTES"),
     @JsonSubTypes.Type(value = UserMultivaluedAttributesEvaluator.class, name = "USERMULTIVALUEDATTRIBUTES"),
-    @JsonSubTypes.Type(value = UserGroupEvaluator.class, name = "USERGROUP"),
-    @JsonSubTypes.Type(value = UserIdEvaluator.class, name = "USERID")
+    @JsonSubTypes.Type(value = UserGroupEvaluator.class, name = "USERGROUP")
 })
 @Entity
 @Table(name = "T_EVALUATOR")

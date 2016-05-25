@@ -9,8 +9,6 @@ public interface IEvaluationVisitor {
 
 	boolean isApplicable(final UserAttributesEvaluator evaluator);
 
-	boolean isApplicable(final UserIdEvaluator evaluator);
-
 	boolean isApplicable(final UserMultivaluedAttributesEvaluator evaluator);
 
 	boolean isApplicable(final UserGroupEvaluator evaluator);
