@@ -92,7 +92,7 @@
                     <h4 class="modal-title" translate="manager.treeview.details.search.targets.group">Result List</h4>
                 </div>
                 <div class="modal-body">
-                    <js-tree id="jsTreeGroup{{searchId}}" tree-ajax="/api/groups" tree-plugins="checkbox,sort"
+                    <js-tree id="jsTreeGroup{{searchId}}" tree-ajax="api/groups" tree-plugins="checkbox,sort"
                              tree-events="select_node:checkGroup;deselect_node:uncheckGroup" tree-core="treeCoreCtxGroups" tree-checkbox="treeCtxCheckboxConf"></js-tree>
                 </div>
                 <div class="modal-footer">
@@ -119,7 +119,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <label><span translate="manager.publish.targets.userFromGroup.label"></span></label>
-                            <js-tree id="jsTreeUserFromGroup{{searchId}}" tree-ajax="/api/groups" tree-plugins="sort"
+                            <js-tree id="jsTreeUserFromGroup{{searchId}}" tree-ajax="api/groups" tree-plugins="sort"
                                      tree-events="select_node:getUserOfGroup" tree-core="treeCoreCtxUsersFG"></js-tree>
                         </div>
                     </div>
