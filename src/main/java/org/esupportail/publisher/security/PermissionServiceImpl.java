@@ -110,7 +110,7 @@ public class PermissionServiceImpl implements IPermissionService {
                 case ORGANIZATION : return QOrganization.organization.id.in(ids).and(predicate);
                 case PUBLISHER : return QPublisher.publisher.id.in(ids).and(predicate);
                 case CATEGORY : return QAbstractClassification.abstractClassification.id.in(ids).and(predicate).and(ClassificationPredicates.CategoryClassification());
-                case FEED : return QAbstractFeed.abstractFeed.id.in(ids).and(predicate);
+                case FEED : return QAbstractClassification.abstractClassification.id.in(ids).and(predicate);
                 case ITEM : return QAbstractItem.abstractItem.id.in(ids).and(predicate);
                 default: break;
             }
