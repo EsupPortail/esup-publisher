@@ -46,8 +46,9 @@
                 <th class="hidden" translate="publisherApp.item.createdDate">CreatedDate</th>
                 <th class="hidden" translate="publisherApp.item.lastModifiedBy">LastModifiedBy</th>
                 <th class="hidden" translate="publisherApp.item.lastModifiedDate">LastModifiedDate</th>
+                <th class="hidden-sm" translate="publisherApp.item.rssAllowed">rssAllowed</th>
                 <th translate="publisherApp.item.organization">organization</th>
-                <th class="hidden-sm" translate="publisherApp.item.redactor">redactor</th>
+                <th class="hidden-md" translate="publisherApp.item.redactor">redactor</th>
                 <th></th>
             </tr>
             </thead>
@@ -68,8 +69,9 @@
                 <td class="hidden">{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
                 <td class="hidden">{{item.lastModifiedBy.displayName}}</td>
                 <td class="hidden">{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                <td class="hidden-sm"><input type="checkbox" ng-model="item.rssAllowed" disabled/></td>
                 <td>{{item.organization.name}}</td>
-                <td class="hidden-sm">{{item.redactor.displayName}}</td>
+                <td class="hidden-md">{{item.redactor.displayName}}</td>
                 <td>
                     <button type="submit"
                             ui-sref="details({id:item.id})"
