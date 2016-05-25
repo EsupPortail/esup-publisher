@@ -28,16 +28,13 @@
     "jquery-ui": "~1.11.4",
     "angular-filter": "~0.5.4",
     "isteven-angular-multiselect": "~4.0.0",
-    "jstree-directive": "~0.1.5",
     "jstree": "~3.2.1",
     "angular-spinner": "~0.8.1",
     "checklist-model": "~0.6.0",
     "textAngular": "~1.5.0",
     "ng-file-upload": "~11.2.0",
     "ng-img-crop": "~0.3.2",
-    "angular-bootstrap-colorpicker": "^3.0.23",
-    "components-font-awesome": "^4.5.0",
-    "angular-image-crop": "^2.0.0"
+    "components-font-awesome": "^4.5.0"
   },
   "devDependencies": {
     "angular-mocks": "1.3.15",
