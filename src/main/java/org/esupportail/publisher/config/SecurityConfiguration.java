@@ -50,8 +50,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Inject
 	private Environment env;
 
-	//    @Inject
-	//    private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
+    @Inject
+	private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
 
 	@Inject
 	private AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
@@ -151,7 +151,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource());
 		casAuthenticationFilter.setSessionAuthenticationStrategy(sessionStrategy());
 		casAuthenticationFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler);
-		casAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+		//casAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        casAuthenticationFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler);
 		// casAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new
 		// AntPathRequestMatcher("/login", "GET"));
 		return casAuthenticationFilter;
