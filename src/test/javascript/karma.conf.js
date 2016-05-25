@@ -33,11 +33,11 @@ module.exports = function (config) {
             'main/webapp/bower_components/jquery-ui/jquery-ui.js',
             'main/webapp/bower_components/angular-filter/dist/angular-filter.min.js',
             'main/webapp/bower_components/isteven-angular-multiselect/isteven-multi-select.js',
-            'main/webapp/bower_components/jstree-directive/jsTree.directive.js',
+            //'main/webapp/bower_components/jstree-directive/jsTree.directive.js',
             'main/webapp/bower_components/jstree/dist/jstree.js',
             'main/webapp/bower_components/spin.js/spin.js',
             'main/webapp/bower_components/angular-spinner/angular-spinner.js',
-            'main/webapp/bower_components/angular-loading-spinner/angular-loading-spinner.js',
+            //'main/webapp/bower_components/angular-loading-spinner/angular-loading-spinner.js',
             'main/webapp/bower_components/checklist-model/checklist-model.js',
             'main/webapp/bower_components/rangy/rangy-core.js',
             'main/webapp/bower_components/rangy/rangy-classapplier.js',
@@ -50,7 +50,7 @@ module.exports = function (config) {
             'main/webapp/bower_components/textAngular/dist/textAngularSetup.js',
             'main/webapp/bower_components/ng-file-upload/ng-file-upload.js',
             'main/webapp/bower_components/ng-img-crop/compile/minified/ng-img-crop.js',
-            'main/webapp/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
+            //'main/webapp/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js',
             'main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'main/webapp/scripts/app/app.js',
@@ -58,7 +58,6 @@ module.exports = function (config) {
             'main/webapp/scripts/components/**/*.js',
             'test/javascript/**/!(karma.conf).js'
         ],
-
 
         // list of files / patterns to exclude
         exclude: [],
