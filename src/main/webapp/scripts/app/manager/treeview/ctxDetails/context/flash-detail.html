@@ -1,0 +1,131 @@
+
+<div>
+    <h3><!--<span translate="publisherApp.news.detail.title">News</span>--><span translate="manager.treeview.details.context.properties">Properties</span></h3>
+    <button type="button" ui-sref="details({id:context.id})" class="btn btn-info">
+        <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+    </button>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.title">Title</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.title}}" readonly>
+                    </td>
+                </tr>
+                <tr ng-show="context.enclosure && context.enclosure != '' && context.enclosure != 'http://' ">
+                    <td>
+                        <span translate="publisherApp.flash.enclosure">Enclosure</span>
+                    </td>
+                    <td>
+                        <img class="media-object" src="{{context.enclosure}}" alt="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.status">Status</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{getItemStatusLabel(context.status) | translate}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.summary">Summary</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.summary}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.body">Body</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.body}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.startDate">StartDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.startDate | date:'dd MMMM yyyy'}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.endDate">EndDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.endDate | date:'dd MMMM yyyy'}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.rssAllowed">rssAllowed</span>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="input-sm form-control" ng-model="context.rssAllowed" disabled>
+                    </td>
+                </tr>
+                <tr ng-show="context.validatedBy">
+                    <td>
+                        <span translate="publisherApp.flash.validatedBy">ValidatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.validatedBy.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr ng-show="context.validatedDate">
+                    <td>
+                        <span translate="publisherApp.flash.validatedDate">ValidatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.createdBy">CreatedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.createdBy.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span translate="publisherApp.flash.createdDate">CreatedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
+                    </td>
+                </tr>
+                <tr ng-show="context.lastModifiedBy">
+                    <td>
+                        <span translate="publisherApp.flash.lastModifiedBy">LastModifiedBy</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.lastModifiedBy.displayName}}" readonly>
+                    </td>
+                </tr>
+                <tr ng-show="context.lastModifiedDate">
+                    <td>
+                        <span translate="publisherApp.flash.lastModifiedDate">LastModifiedDate</span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{context.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
