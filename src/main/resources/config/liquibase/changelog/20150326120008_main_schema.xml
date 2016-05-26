@@ -1,520 +1,524 @@
-<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <property name="now" value="now()" dbms="mysql,h2" />
     <property name="now" value="current_timestamp" dbms="postgresql" />
     <changeSet author="jgribonvald (generated)" id="1427879970790-1">
-        <createTable tableName="T_CLASSIFICATION">
-            <column name="type" type="VARCHAR(31)">
+        <createTable tableName="t_classification">
+            <column name="type" type="varchar(31)">
                 <constraints nullable="false"/>
             </column>
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_CLASSIFICATIONPK"/>
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_classificationpk"/>
             </column>
             <column name="created_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_date" type="datetime"/>
-            <column name="access_view" type="VARCHAR(50)">
+            <column name="access_view" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="color" type="VARCHAR(7)"/>
-            <column name="default_display_order" type="VARCHAR(50)">
+            <column name="color" type="varchar(7)"/>
+            <column name="default_display_order" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(512)">
+            <column name="description" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_order" type="INT">
+            <column name="display_order" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="icon_url" type="VARCHAR(2048)"/>
-            <column name="lang" type="VARCHAR(5)"/>
-            <column name="name" type="VARCHAR(200)">
+            <column name="icon_url" type="varchar(2048)"/>
+            <column name="lang" type="varchar(5)"/>
+            <column name="name" type="varchar(200)">
                 <constraints nullable="false"/>
             </column>
-            <column name="rss_allowed" type="VARCHAR(1)">
+            <column name="rss_allowed" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="ttl" type="INT">
+            <column name="ttl" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="rss_url" type="VARCHAR(255)"/>
-            <column name="created_by" type="VARCHAR(50)">
+            <column name="rss_url" type="varchar(255)"/>
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="VARCHAR(50)"/>
-            <column name="publisher_id" type="BIGINT">
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="publisher_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="parent_id" type="BIGINT"/>
+            <column name="parent_id" type="bigint"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-2">
-        <createTable tableName="T_CLASSIFICATION_ITEM">
-            <column name="display_order" type="INT">
+        <createTable tableName="t_classification_item">
+            <column name="display_order" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="classification_id" type="BIGINT"/>
-            <column name="item_id" type="BIGINT"/>
+            <column name="classification_id" type="bigint"/>
+            <column name="item_id" type="bigint"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-3">
-        <createTable tableName="T_ENTITY">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_ENTITYPK"/>
+        <createTable tableName="t_entity">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_entitypk"/>
             </column>
             <column name="created_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_date" type="datetime"/>
-            <column name="allow_notifications" type="VARCHAR(1)">
+            <column name="allow_notifications" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(512)">
+            <column name="description" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(100)"/>
-            <column name="display_order" type="INT">
+            <column name="display_name" type="varchar(100)"/>
+            <column name="display_order" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(255)">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_by" type="VARCHAR(50)">
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_by" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-4">
-        <createTable tableName="T_EVALUATOR">
-            <column name="evaluatortype" type="VARCHAR(50)">
+        <createTable tableName="t_evaluator">
+            <column name="evaluatortype" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_EVALUATORPK"/>
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_evaluatorpk"/>
             </column>
-            <column name="attribute" type="VARCHAR(125)"/>
-            <column name="value" type="VARCHAR(512)"/>
-            <column name="mode" type="VARCHAR(12)"/>
-            <column name="group_name" type="VARCHAR(512)"/>
-            <column name="type" type="VARCHAR(3)"/>
-            <column name="parent_id" type="BIGINT"/>
+            <column name="attribute" type="varchar(125)"/>
+            <column name="value" type="varchar(512)"/>
+            <column name="mode" type="varchar(12)"/>
+            <column name="group_name" type="varchar(512)"/>
+            <column name="type" type="varchar(3)"/>
+            <column name="parent_id" type="bigint"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-5">
-        <createTable tableName="T_FILTER">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_FILTERPK"/>
+        <createTable tableName="t_filter">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_filterpk"/>
             </column>
-            <column name="description" type="VARCHAR(255)"/>
-            <column name="pattern" type="VARCHAR(2048)">
+            <column name="description" type="varchar(255)"/>
+            <column name="pattern" type="varchar(2048)">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="VARCHAR(15)">
+            <column name="type" type="varchar(15)">
                 <constraints nullable="false"/>
             </column>
-            <column name="entity_id" type="BIGINT">
+            <column name="entity_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-6">
-        <createTable tableName="T_ITEM">
-            <column name="type" type="VARCHAR(31)">
+        <createTable tableName="t_item">
+            <column name="type" type="varchar(31)">
                 <constraints nullable="false"/>
             </column>
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_ITEMPK"/>
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_itempk"/>
             </column>
             <column name="created_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_date" type="datetime"/>
-            <column name="enclosure" type="VARCHAR(2048)"/>
+            <column name="enclosure" type="varchar(2048)"/>
             <column name="end_date" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="start_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="VARCHAR(50)">
+            <column name="status" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="summary" type="VARCHAR(512)">
+            <column name="summary" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="title" type="VARCHAR(200)">
+            <column name="title" type="varchar(200)">
                 <constraints nullable="false"/>
             </column>
-            <column name="validated_by" type="VARCHAR(50)"/>
+            <column name="validated_by" type="varchar(50)"/>
             <column name="validated_date" type="datetime"/>
-            <column name="body" type="CLOB"/>
-            <column name="ressource_url" type="VARCHAR(2048)"/>
-            <column name="created_by" type="VARCHAR(50)">
+            <column name="body" type="clob"/>
+            <column name="ressource_url" type="varchar(2048)"/>
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="VARCHAR(50)"/>
-            <column name="entity_id" type="BIGINT">
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="entity_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="redactor_id" type="BIGINT">
+            <column name="redactor_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-7">
-        <createTable tableName="T_PERMISSION">
-            <column name="permissiontype" type="VARCHAR(45)">
+        <createTable tableName="t_permission">
+            <column name="permissiontype" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_PERMISSIONPK"/>
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_permissionpk"/>
             </column>
             <column name="created_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_date" type="datetime"/>
-            <column name="ctx_id" type="BIGINT">
+            <column name="ctx_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="ctx_type" type="VARCHAR(255)">
+            <column name="ctx_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="perm" type="VARCHAR(50)"/>
-            <column name="created_by" type="VARCHAR(50)">
+            <column name="perm" type="varchar(50)"/>
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="VARCHAR(50)"/>
-            <column name="evaluator_id" type="BIGINT"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="evaluator_id" type="bigint"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-8">
-        <createTable tableName="T_PERM_AUTHORIZED_CONTEXTS">
-            <column name="PermissionOnSubjectsWithClassificationList_id" type="BIGINT">
+        <createTable tableName="t_perm_authorized_contexts">
+            <column name="permissiononsubjectswithclassificationlist_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="ctx_id" type="BIGINT">
+            <column name="ctx_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="ctx_type" type="VARCHAR(255)">
+            <column name="ctx_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <modifySql dbms="mysql">
-            <append value=" ENGINE=InnoDB ROW_FORMAT=COMPRESSED" />
+            <append value=" engine=innodb row_format=compressed" />
         </modifySql>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-9">
-        <createTable tableName="T_PERM_AUTHORIZED_SUBJECTS">
-            <column name="PermissionOnClassificationWithSubjectList_id" type="BIGINT">
+        <createTable tableName="t_perm_authorized_subjects">
+            <column name="permissiononclassificationwithsubjectlist_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_id" type="VARCHAR(512)">
+            <column name="subject_id" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_type" type="VARCHAR(25)">
+            <column name="subject_type" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <modifySql dbms="mysql">
-            <append value=" ENGINE=InnoDB ROW_FORMAT=COMPRESSED" />
+            <append value=" engine=innodb row_format=compressed" />
         </modifySql>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-10">
-        <createTable tableName="T_PERM_ROLES_ON_SUBJECTS">
-            <column name="PermissionOnSubjects_id" type="BIGINT">
+        <createTable tableName="t_perm_roles_on_subjects">
+            <column name="permissiononsubjects_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="validation" type="VARCHAR(1)">
+            <column name="validation" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_id" type="VARCHAR(512)">
+            <column name="subject_id" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_type" type="VARCHAR(25)">
+            <column name="subject_type" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <modifySql dbms="mysql">
-            <append value=" ENGINE=InnoDB ROW_FORMAT=COMPRESSED" />
+            <append value=" engine=innodb row_format=compressed" />
         </modifySql>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-11">
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
-            <column autoIncrement="true" name="event_id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_PERSISTENT_AUDIT_EVENTPK"/>
+        <createTable tableName="t_persistent_audit_event">
+            <column autoIncrement="true" name="event_id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_persistent_audit_eventpk"/>
             </column>
             <column name="event_date" type="datetime"/>
-            <column name="event_type" type="VARCHAR(255)"/>
-            <column name="principal" type="VARCHAR(255)">
+            <column name="event_type" type="varchar(255)"/>
+            <column name="principal" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-12">
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
-            <column name="event_id" type="BIGINT">
+        <createTable tableName="t_persistent_audit_event_data">
+            <column name="event_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="value" type="VARCHAR(255)"/>
-            <column name="name" type="VARCHAR(255)">
+            <column name="value" type="varchar(255)"/>
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-13">
-        <createTable tableName="T_PUBLISHER">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_PUBLISHERPK"/>
+        <createTable tableName="t_publisher">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_publisherpk"/>
             </column>
             <column name="created_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_date" type="datetime"/>
-            <column name="default_display_order" type="VARCHAR(50)">
+            <column name="default_display_order" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_order" type="INT">
+            <column name="display_order" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="permission_class" type="VARCHAR(50)">
+            <column name="permission_class" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="used" type="VARCHAR(1)">
+            <column name="used" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="has_sub_perms_management" type="VARCHAR(1)">
+            <column name="has_sub_perms_management" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_by" type="VARCHAR(50)">
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="VARCHAR(50)"/>
-            <column name="entity_id" type="BIGINT"/>
-            <column name="reader_id" type="BIGINT"/>
-            <column name="redactor_id" type="BIGINT"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="entity_id" type="bigint"/>
+            <column name="reader_id" type="bigint"/>
+            <column name="redactor_id" type="bigint"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-14">
-        <createTable tableName="T_READER">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_READERPK"/>
+        <createTable tableName="t_reader">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_readerpk"/>
             </column>
-            <column name="description" type="VARCHAR(512)">
+            <column name="description" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(50)">
+            <column name="display_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(15)">
+            <column name="name" type="varchar(15)">
                 <constraints nullable="false"/>
             </column>
-            <column name="item_type" type="VARCHAR(255)">
+            <column name="item_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="classif_decoration" type="VARCHAR(255)">
+            <column name="classif_decoration" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-15">
-        <createTable tableName="T_REDACTOR">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="T_REDACTORPK"/>
+        <createTable tableName="t_redactor">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="t_redactorpk"/>
             </column>
-            <column name="description" type="VARCHAR(512)">
+            <column name="description" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(50)">
+            <column name="display_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(15)">
+            <column name="name" type="varchar(15)">
                 <constraints nullable="false"/>
             </column>
-            <column name="format" type="VARCHAR(50)">
+            <column name="format" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="writing_mode" type="VARCHAR(50)">
+            <column name="writing_mode" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="nb_level_classification" type="INT">
+            <column name="nb_level_classification" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-16">
-        <createTable tableName="T_SUBSCRIBER">
-            <column name="ctx_id" type="BIGINT">
+        <createTable tableName="t_subscriber">
+            <column name="ctx_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="ctx_type" type="VARCHAR(255)">
+            <column name="ctx_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_id" type="VARCHAR(512)">
+            <column name="subject_id" type="varchar(512)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subject_type" type="VARCHAR(25)">
+            <column name="subject_type" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subscribe_type" type="VARCHAR(25)">
+            <column name="subscribe_type" type="varchar(25)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <modifySql dbms="mysql">
-            <append value=" ENGINE=InnoDB ROW_FORMAT=COMPRESSED" />
+            <append value=" engine=innodb row_format=compressed" />
         </modifySql>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-17">
-        <createTable tableName="T_USER">
-            <column name="user_id" type="VARCHAR(50)">
+        <createTable tableName="t_user">
+            <column name="user_id" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="accept_notifications" type="VARCHAR(1)">
+            <column name="accept_notifications" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp" >
                 <constraints nullable="false"/>
             </column>
-            <column name="display_name" type="VARCHAR(100)"/>
-            <column name="email" type="VARCHAR(100)"/>
-            <column name="enabled" type="VARCHAR(1)">
+            <column name="display_name" type="varchar(100)"/>
+            <column name="email" type="varchar(100)"/>
+            <column name="enabled" type="varchar(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="lang_key" type="VARCHAR(5)"/>
+            <column name="lang_key" type="varchar(5)"/>
             <column name="last_modified_date" type="datetime"/>
         </createTable>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-18">
-        <addPrimaryKey columnNames="PermissionOnSubjectsWithClassificationList_id, ctx_id, ctx_type" tableName="T_PERM_AUTHORIZED_CONTEXTS"/>
+        <addPrimaryKey columnNames="permissiononsubjectswithclassificationlist_id, ctx_id, ctx_type" tableName="t_perm_authorized_contexts"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-19">
-        <addPrimaryKey columnNames="PermissionOnClassificationWithSubjectList_id, subject_id, subject_type" tableName="T_PERM_AUTHORIZED_SUBJECTS"/>
+        <addPrimaryKey columnNames="permissiononclassificationwithsubjectlist_id, subject_id, subject_type" tableName="t_perm_authorized_subjects"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-20">
-        <addPrimaryKey columnNames="PermissionOnSubjects_id, validation, subject_id, subject_type" tableName="T_PERM_ROLES_ON_SUBJECTS"/>
+        <addPrimaryKey columnNames="permissiononsubjects_id, validation, subject_id, subject_type" tableName="t_perm_roles_on_subjects"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-21">
-        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
+        <addPrimaryKey columnNames="event_id, name" tableName="t_persistent_audit_event_data"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-22">
-        <addPrimaryKey columnNames="classification_id, item_id" constraintName="T_CLASSIFICATION_ITEMPK" tableName="T_CLASSIFICATION_ITEM"/>
+        <addPrimaryKey columnNames="classification_id, item_id" constraintName="t_classification_itempk" tableName="t_classification_item"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-23">
-        <addPrimaryKey columnNames="ctx_id, ctx_type, subject_id, subject_type" constraintName="T_SUBSCRIBERPK" tableName="T_SUBSCRIBER"/>
+        <addPrimaryKey columnNames="ctx_id, ctx_type, subject_id, subject_type" constraintName="t_subscriberpk" tableName="t_subscriber"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-24">
-        <addPrimaryKey columnNames="user_id" constraintName="T_USERPK" tableName="T_USER"/>
+        <addPrimaryKey columnNames="user_id" constraintName="t_userpk" tableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-25">
-        <addUniqueConstraint columnNames="name, publisher_id, type" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_CLASSIFICATION"/>
+        <addUniqueConstraint columnNames="name, publisher_id, type" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_classification"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-26">
-        <addUniqueConstraint columnNames="name" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_ENTITY"/>
+        <addUniqueConstraint columnNames="name" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_entity"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-27">
-        <addUniqueConstraint columnNames="type, entity_id" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_FILTER"/>
+        <addUniqueConstraint columnNames="type, entity_id" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_filter"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-28">
-        <addUniqueConstraint columnNames="entity_id, reader_id, redactor_id" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_PUBLISHER"/>
+        <addUniqueConstraint columnNames="entity_id, reader_id, redactor_id" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_publisher"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-29">
-        <addUniqueConstraint columnNames="name" constraintName="UC_T_READERNAME_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_READER"/>
+        <addUniqueConstraint columnNames="name" constraintName="uc_t_readername_col" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_reader"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-30">
-        <addUniqueConstraint columnNames="name" constraintName="UC_T_REDACTORNAME_COL" deferrable="false" disabled="false" initiallyDeferred="false" tableName="T_REDACTOR"/>
+        <addUniqueConstraint columnNames="name" constraintName="uc_t_redactorname_col" deferrable="false" disabled="false" initiallyDeferred="false" tableName="t_redactor"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-31">
-        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="T_ENTITY" constraintName="FK_1icppcsttu2bxbytrw3o2vvcw" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="t_entity" constraintName="fk_1icppcsttu2bxbytrw3o2vvcw" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-32">
-        <addForeignKeyConstraint baseColumnNames="reader_id" baseTableName="T_PUBLISHER" constraintName="FK_27u5g6cs47b08jrc1c03mqcac" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_READER"/>
+        <addForeignKeyConstraint baseColumnNames="reader_id" baseTableName="t_publisher" constraintName="fk_27u5g6cs47b08jrc1c03mqcac" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_reader"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-33">
-        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="T_CLASSIFICATION" constraintName="FK_2sx07p5g1edppsk1uh7k3rrx0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_CLASSIFICATION"/>
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="t_classification" constraintName="fk_2sx07p5g1edppsk1uh7k3rrx0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_classification"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-34">
-        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="T_CLASSIFICATION" constraintName="FK_3bmei7ycy82mmtd6xt8kuhr4f" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="t_classification" constraintName="fk_3bmei7ycy82mmtd6xt8kuhr4f" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-35">
-        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="T_ENTITY" constraintName="FK_6i1jwoe5r5lenuqq44doh194h" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="t_entity" constraintName="fk_6i1jwoe5r5lenuqq44doh194h" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-36">
-        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="T_PERMISSION" constraintName="FK_6kqte6i4l3hgfckby37hm89d4" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="t_permission" constraintName="fk_6kqte6i4l3hgfckby37hm89d4" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-37">
-        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="T_CLASSIFICATION" constraintName="FK_88d4l19ok01df615sp2tth5x3" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="t_classification" constraintName="fk_88d4l19ok01df615sp2tth5x3" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-38">
-        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="T_ITEM" constraintName="FK_9oic1am8od3w8srj60nu6liiw" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="t_item" constraintName="fk_9oic1am8od3w8srj60nu6liiw" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-39">
-        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="T_PUBLISHER" constraintName="FK_c0k3ydxiq8ici0xm2rh6uqusn" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="t_publisher" constraintName="fk_c0k3ydxiq8ici0xm2rh6uqusn" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-40">
-        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA" constraintName="FK_clwvdsoybicb9nxw6whom5m26" deferrable="false" initiallyDeferred="false" referencedColumnNames="event_id" referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
+        <addForeignKeyConstraint baseColumnNames="event_id" baseTableName="t_persistent_audit_event_data" constraintName="fk_clwvdsoybicb9nxw6whom5m26" deferrable="false" initiallyDeferred="false" referencedColumnNames="event_id" referencedTableName="t_persistent_audit_event"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-41">
-        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="T_ITEM" constraintName="FK_ejar4noswoxxnu199j5s19b26" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="t_item" constraintName="fk_ejar4noswoxxnu199j5s19b26" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-42">
-        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="T_CLASSIFICATION_ITEM" constraintName="FK_g5borax18ey8kckmhbng5ecye" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ITEM"/>
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="t_classification_item" constraintName="fk_g5borax18ey8kckmhbng5ecye" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_item"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-43">
-        <addForeignKeyConstraint baseColumnNames="PermissionOnSubjectsWithClassificationList_id" baseTableName="T_PERM_AUTHORIZED_CONTEXTS" constraintName="FK_gjyae4juig930qqebo8tjagx8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_PERMISSION"/>
+        <addForeignKeyConstraint baseColumnNames="permissiononsubjectswithclassificationlist_id" baseTableName="t_perm_authorized_contexts" constraintName="fk_gjyae4juig930qqebo8tjagx8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_permission"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-44">
-        <addForeignKeyConstraint baseColumnNames="PermissionOnSubjects_id" baseTableName="T_PERM_ROLES_ON_SUBJECTS" constraintName="FK_hhsensxlea4sw3scsqy5j2p7d" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_PERMISSION"/>
+        <addForeignKeyConstraint baseColumnNames="permissiononsubjects_id" baseTableName="t_perm_roles_on_subjects" constraintName="fk_hhsensxlea4sw3scsqy5j2p7d" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_permission"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-45">
-        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="T_PUBLISHER" constraintName="FK_iewbbdo7fu78lk2uh0hj9o98x" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="t_publisher" constraintName="fk_iewbbdo7fu78lk2uh0hj9o98x" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-46">
-        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="T_ITEM" constraintName="FK_jk42te9rchqh26qq0v7acbc8y" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ENTITY"/>
+        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="t_item" constraintName="fk_jk42te9rchqh26qq0v7acbc8y" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_entity"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-47">
-        <addForeignKeyConstraint baseColumnNames="validated_by" baseTableName="T_ITEM" constraintName="FK_jlxhb74e4xqwo4u4aadabpfn6" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="validated_by" baseTableName="t_item" constraintName="fk_jlxhb74e4xqwo4u4aadabpfn6" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-48">
-        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="T_PUBLISHER" constraintName="FK_k9y5ibgfjhg1fkgj1y0qlgks9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ENTITY"/>
+        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="t_publisher" constraintName="fk_k9y5ibgfjhg1fkgj1y0qlgks9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_entity"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-49">
-        <addForeignKeyConstraint baseColumnNames="evaluator_id" baseTableName="T_PERMISSION" constraintName="FK_kv9r93x02cyoh9vk0blfna9go" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_EVALUATOR"/>
+        <addForeignKeyConstraint baseColumnNames="evaluator_id" baseTableName="t_permission" constraintName="fk_kv9r93x02cyoh9vk0blfna9go" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_evaluator"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-50">
-        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="T_EVALUATOR" constraintName="FK_mbq6io7jnja9dmkr39r3sbs4h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_EVALUATOR"/>
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="t_evaluator" constraintName="fk_mbq6io7jnja9dmkr39r3sbs4h" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_evaluator"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-51">
-        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="T_PERMISSION" constraintName="FK_mwkhwq1jfnn33364jo4bw70gp" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER"/>
+        <addForeignKeyConstraint baseColumnNames="last_modified_by" baseTableName="t_permission" constraintName="fk_mwkhwq1jfnn33364jo4bw70gp" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="t_user"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-52">
-        <addForeignKeyConstraint baseColumnNames="redactor_id" baseTableName="T_ITEM" constraintName="FK_n4p65e327vgbxggiutx7ygg63" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_REDACTOR"/>
+        <addForeignKeyConstraint baseColumnNames="redactor_id" baseTableName="t_item" constraintName="fk_n4p65e327vgbxggiutx7ygg63" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_redactor"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-53">
-        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="T_FILTER" constraintName="FK_n70wyi9uellni8wftr0thafg3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ENTITY"/>
+        <addForeignKeyConstraint baseColumnNames="entity_id" baseTableName="t_filter" constraintName="fk_n70wyi9uellni8wftr0thafg3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_entity"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-54">
-        <addForeignKeyConstraint baseColumnNames="PermissionOnClassificationWithSubjectList_id" baseTableName="T_PERM_AUTHORIZED_SUBJECTS" constraintName="FK_p4bkbe6ocagf8wwaqtre0ppaf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_PERMISSION"/>
+        <addForeignKeyConstraint baseColumnNames="permissiononclassificationwithsubjectlist_id" baseTableName="t_perm_authorized_subjects" constraintName="fk_p4bkbe6ocagf8wwaqtre0ppaf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_permission"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-55">
-        <addForeignKeyConstraint baseColumnNames="redactor_id" baseTableName="T_PUBLISHER" constraintName="FK_qc58cvduw85pde6axrafnv087" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_REDACTOR"/>
+        <addForeignKeyConstraint baseColumnNames="redactor_id" baseTableName="t_publisher" constraintName="fk_qc58cvduw85pde6axrafnv087" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_redactor"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-56">
-        <addForeignKeyConstraint baseColumnNames="classification_id" baseTableName="T_CLASSIFICATION_ITEM" constraintName="FK_s54kvk52aehhl09i28ll51l6v" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_CLASSIFICATION"/>
+        <addForeignKeyConstraint baseColumnNames="classification_id" baseTableName="t_classification_item" constraintName="fk_s54kvk52aehhl09i28ll51l6v" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_classification"/>
     </changeSet>
     <changeSet author="jgribonvald (generated)" id="1427879970790-57">
-        <addForeignKeyConstraint baseColumnNames="publisher_id" baseTableName="T_CLASSIFICATION" constraintName="FK_si11rdpk95ucepfdqnh9jtjw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_PUBLISHER"/>
+        <addForeignKeyConstraint baseColumnNames="publisher_id" baseTableName="t_classification" constraintName="fk_si11rdpk95ucepfdqnh9jtjw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="t_publisher"/>
     </changeSet>
 
     <changeSet id="1421860634824-58" author="jgribonvald (manual)">
-        <loadData encoding="UTF-8"
-                  file="src/main/resources/config/liquibase/users.csv"
+        <loadData encoding="utf-8"
+                  file="config/liquibase/users.csv"
                   separator=";"
-                  tableName="T_USER">
+                  tableName="t_user">
             <column name="enabled" type="boolean"/>
             <column name="accept_notifications" type="boolean"/>
             <column name="created_date" type="timestamp" />
         </loadData>
-        <modifyDataType tableName="T_USER" columnName="created_date" newDataType="datetime"/>
+        <modifyDataType tableName="t_user" columnName="created_date" newDataType="datetime"/>
     </changeSet>
 </databaseChangeLog>

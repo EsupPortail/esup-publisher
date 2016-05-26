@@ -3,6 +3,7 @@ url: jdbc:mysql://192.168.56.10:3306/publisher-dev
 defaultSchema: publisher-dev
 username: jgribonvald
 password: root
+promptOnNonLocalDatabase: true
 referenceUrl: hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.esco.mysql.dialects.MySQL5InnoDBCompressedDialect
 verbose: true
 dropFirst: false

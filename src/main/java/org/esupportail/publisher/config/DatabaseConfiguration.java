@@ -1,11 +1,10 @@
 package org.esupportail.publisher.config;
 
-import java.util.Arrays;
-
-import javax.sql.DataSource;
-
+import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +20,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 @EnableJpaRepositories("org.esupportail.publisher.repository")
@@ -89,6 +86,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
 	public SpringLiquibase liquibase(DataSource dataSource) {
 		SpringLiquibase liquibase = new SpringLiquibase();
 		liquibase.setDataSource(dataSource);
+        liquibase.setIgnoreClasspathPrefix(true);
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");
 		liquibase.setContexts("development, production");
 		if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {

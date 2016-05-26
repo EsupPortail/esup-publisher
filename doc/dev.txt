@@ -18,9 +18,11 @@
 
 # Liquibase memento :
 - see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
+- on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
 - 'mvn compile liquibase:update' will apply changelog not loaded (from liquibase files) to the database
 - 'mvn compile liquibase:generateChangeLog' will generate the creation of database changelog file
 - 'mvn compile liquibase:diff' to generate each diff
+- check for mysql that table names are in lower case, do sames things for all table links...
 
 # to run tests :
 - `mvn test -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod

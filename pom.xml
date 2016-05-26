@@ -676,10 +676,12 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
                 <configuration>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>src/main/resources/config/liquibase/liquibase.properties.generation</propertyFile>
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <outputChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</outputChangeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                    <promptOnNonLocalDatabase>true</promptOnNonLocalDatabase>
                 </configuration>
                 <dependencies>
                     <dependency>
