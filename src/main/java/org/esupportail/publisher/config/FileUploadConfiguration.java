@@ -29,14 +29,14 @@ public class FileUploadConfiguration {
         if (getDefinedUploadPath() != null) {
             fuh.setUploadDirectoryPath(getDefinedUploadPath());
             fuh.setResourceLocation("file:///" + getDefinedUploadPath());
-            fuh.setUrlResourceMapping("/files/");
+            fuh.setUrlResourceMapping("files/");
             fuh.setUseDefaultPath(false);
             log.debug("FileUploadConfiguration : " + fuh.toString());
             return fuh;
         }
         fuh.setUploadDirectoryPath(new ClassPathResource("classpath:static/").getPath());
         fuh.setResourceLocation("classpath:static/");
-        fuh.setUrlResourceMapping("/files/");
+        fuh.setUrlResourceMapping("files/");
         fuh.setUseDefaultPath(true);
         log.debug("FileUploadConfiguration : " + fuh.toString());
         return fuh;
@@ -46,9 +46,9 @@ public class FileUploadConfiguration {
         if (env.containsProperty(ENV_UPLOAD_PATH)) {
             final String path = env.getProperty(ENV_UPLOAD_PATH);
             final File file = new File(path);
-            Assert.state(file.exists(), "You defined the property \'app.upload.path\' but the path doesn't exist or there isn't read permissions");
-            Assert.state(file.isDirectory(), "You defined the property \'app.upload.path\' but the path isn't a directory");
-            Assert.state(file.canWrite(), "You defined the property \'app.upload.path\' but the path isn't has write access");
+            Assert.state(file.exists(), "You defined the property \'app.upload.path\' = '" + path + "' but the path doesn't exist or there isn't read permissions");
+            Assert.state(file.isDirectory(), "You defined the property \'app.upload.path\' = '" + path + "' but the path isn't a directory");
+            Assert.state(file.canWrite(), "You defined the property \'app.upload.path\' = '" + path + "' but the path isn't has write access");
             return path;
         }
         return null;

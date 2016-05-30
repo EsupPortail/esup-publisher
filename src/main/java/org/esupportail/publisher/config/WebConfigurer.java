@@ -110,8 +110,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        if (!internalFileUploadHelper.isUseDefaultPath())
-            staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, internalFileUploadHelper.getUrlResourceMapping() + "*");
+//        if (!internalFileUploadHelper.isUseDefaultPath())
+//            staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/" + internalFileUploadHelper.getUrlResourceMapping() + "*");
 		staticResourcesProductionFilter.setAsyncSupported(true);
 	}
 
@@ -128,7 +128,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         if (!internalFileUploadHelper.isUseDefaultPath())
-            cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, internalFileUploadHelper.getUrlResourceMapping() + "*");
+            cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/" + internalFileUploadHelper.getUrlResourceMapping() + "*");
 		cachingHttpHeadersFilter.setAsyncSupported(true);
 	}
 

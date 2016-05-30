@@ -1,6 +1,7 @@
 package org.esupportail.publisher.web.filter;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.*;
@@ -15,6 +16,7 @@ import java.io.IOException;
  * destination directory.
  * </p>
  */
+@Slf4j
 public class StaticResourcesProductionFilter implements Filter {
 
     @Override
@@ -37,6 +39,7 @@ public class StaticResourcesProductionFilter implements Filter {
             requestURI = "/index.html";
         }
         String newURI = "/dist" + requestURI;
+        log.debug("RequestDispatcher - setting newURI to {}", newURI);
         request.getRequestDispatcher(newURI).forward(request, response);
     }
 }

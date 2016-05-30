@@ -28,14 +28,14 @@
     </appender>
 -->
 
-    <logger name="org.esupportail.publisher" level="DEBUG"/>
+    <logger name="org.esupportail.publisher" level="INFO"/>
     <logger name="org.esupportail.publisher.web.filter.CrossOriginFilter" level="WARN"/>
-    <logger name="org.esupportail.publisher.service.factories" level="WARN"/>
-    <logger name="org.esupportail.publisher.repository.externals.ldap" level="WARN"/>
-    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl" level="DEBUG"/>
-    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl" level="DEBUG"/>
+    <!--<logger name="org.esupportail.publisher.service.factories" level="WARN"/>-->
+    <!--<logger name="org.esupportail.publisher.repository.externals.ldap" level="WARN"/>-->
+    <!--<logger name="org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl" level="DEBUG"/>-->
+    <!--<logger name="org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl" level="DEBUG"/>-->
 
-    <logger name="com.mysema" level="debug"/>
+    <logger name="com.mysema" level="WARN"/>
 
 
     <logger name="javax.activation" level="WARN"/>
@@ -56,10 +56,10 @@
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <logger name="org.atmosphere" level="WARN"/>
     <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.web" level="DEBUG"/>
+    <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="INFO"/>
-    <logger name="org.springframework.security.web" level="INFO"/>
-    <logger name="org.springframework.security.web.util.matcher" level="INFO"/>
+    <!--<logger name="org.springframework.security.web" level="INFO"/>-->
+    <!--<logger name="org.springframework.security.web.util.matcher" level="INFO"/>-->
     <logger name="org.springframework.security.cas" level="INFO"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
@@ -69,8 +69,8 @@
     <logger name="liquibase" level="WARN"/>
     <logger name="sun.rmi.transport" level="WARN"/>
 
-    <logger name="javax.xml.bind" level="DEBUG"/>
-    <logger name="com.fasterxml.jackson" level="TRACE"/>
+    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="com.fasterxml.jackson" level="WARN"/>
 
     <!-- for REST request debug -->
     <!--<logger name="org.springframework.security.web.util.matcher" level="DEBUG" />-->
@@ -88,9 +88,8 @@
         <appender-ref ref="FILE"/>
     </root>
 
-    <logger name="org.esupportail.publisher.security" level="DEBUG">
-        <appender-ref ref="FILE" />
-
-    </logger>
+    <!--<logger name="org.esupportail.publisher.security" level="DEBUG">-->
+        <!--<appender-ref ref="FILE" />-->
+    <!--</logger>-->
 
 </configuration>

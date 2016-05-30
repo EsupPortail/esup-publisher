@@ -19,7 +19,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler(internalFileUploadHelper.getUrlResourceMapping() + "**").addResourceLocations(internalFileUploadHelper.getResourceLocation());
+        registry.addResourceHandler("/" + internalFileUploadHelper.getUrlResourceMapping() + "**").addResourceLocations(internalFileUploadHelper.getResourceLocation());
     }
 
     /*@Override

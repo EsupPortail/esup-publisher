@@ -24,7 +24,8 @@
 
     <properties>
 
-        <HikariCP.version>2.2.5</HikariCP.version>
+        <!--<HikariCP.version>2.2.5</HikariCP.version>-->
+        <HikariCP.version>2.4.5</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
@@ -55,7 +56,7 @@
         <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
         <spring-ldap.version>2.0.2.RELEASE</spring-ldap.version>
-        <usertype-core.version>3.2.0.GA</usertype-core.version>
+        <usertype-core.version>4.0.0.GA</usertype-core.version>
     </properties>
 
     <dependencies>
@@ -217,24 +218,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-java6</artifactId>
-            <version>${HikariCP.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>tools</artifactId>
-                    <groupId>com.sun</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
+        <!--<dependency>-->
+            <!--<groupId>com.zaxxer</groupId>-->
+            <!--<artifactId>HikariCP-java6</artifactId>-->
+            <!--<version>${HikariCP.version}</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>tools</artifactId>-->
+                    <!--<groupId>com.sun</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!-- The HikariCP Java Agent is disabled by default, as it is experimental-->
             <dependency>
                 <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP-agent</artifactId>
+                <artifactId>HikariCP</artifactId>
                 <version>${HikariCP.version}</version>
             </dependency>
-            -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -653,24 +653,6 @@
                     </licenseMapping>
                 </configuration>
             </plugin>
-            <!-- <plugin> <groupId>org.liquibase</groupId> <artifactId>liquibase-maven-plugin</artifactId>
-              <version>3.4.0-SNAPSHOT</version> <dependencies> <dependency> <groupId>org.esupportail.publisher</groupId>
-              <artifactId>esup-publisher-api</artifactId> <version>0.0.1-SNAPSHOT</version>
-              </dependency> <dependency> <groupId>org.liquibase</groupId> <artifactId>liquibase-core</artifactId>
-              <version>3.4.0-SNAPSHOT</version> <exclusions> <exclusion> <artifactId>jetty-servlet</artifactId>
-              <groupId>org.eclipse.jetty</groupId> </exclusion> </exclusions> </dependency>
-              <dependency> <groupId>org.liquibase.ext</groupId> <artifactId>liquibase-hibernate4</artifactId>
-              <version>3.5-SNAPSHOT</version> <exclusions> <exclusion> <artifactId>hibernate-jpa-2.0-api</artifactId>
-              <groupId>org.hibernate.javax.persistence</groupId> </exclusion> </exclusions>
-              </dependency> <dependency> <groupId>org.liquibase.ext</groupId> <artifactId>liquibase-hibernate4</artifactId>
-              <version>${liquibase-hibernate.version}</version> </dependency> <dependency>
-              <groupId>org.springframework</groupId> <artifactId>spring-context-support</artifactId>
-              <version>${spring.version}</version> </dependency> <dependency> <groupId>org.springframework</groupId>
-              <artifactId>spring-orm</artifactId> <version>${spring.version}</version>
-              </dependency> <dependency> <groupId>xml-apis</groupId> <artifactId>xml-apis</artifactId>
-              <version>1.4.01</version> </dependency> </dependencies> <configuration> <propertyFile>src/main/resources/config/liquibase/liquibase.properties.generation</propertyFile>
-              <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase> </configuration>
-              </plugin> -->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
@@ -744,17 +726,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug
-                        -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
-                    <arguments>
-                        <argument>--spring.profiles.active=dev</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -774,6 +745,21 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
+                            <arguments>
+                                <argument>--spring.profiles.active=dev</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>fast</id>
@@ -793,8 +779,10 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
+                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
                             <arguments>
-                                <argument>--spring.profiles.active=dev,fast,wsgrp</argument>
+                                <argument>--spring.profiles.active=dev,fast,ldapgrp</argument>
                             </arguments>
                         </configuration>
                     </plugin>
@@ -807,6 +795,7 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
             <build>
@@ -847,15 +836,6 @@
                                     <directory>node_modules</directory>
                                 </fileset>
                             </filesets>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <arguments>
-                                <argument>--spring.profiles.active=prod</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>

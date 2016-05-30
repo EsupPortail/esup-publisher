@@ -43,16 +43,16 @@ module.exports = function (grunt) {
             }
         },
         autoprefixer: {
-        // not used since Uglify task does autoprefixer,
-        //    options: ['last 1 version'],
-        //    dist: {
-        //        files: [{
-        //            expand: true,
-        //            cwd: '.tmp/styles/',
-        //            src: '**/*.css',
-        //            dest: '.tmp/styles/'
-        //        }]
-        //    }
+            // not used since Uglify task does autoprefixer,
+            //    options: ['last 1 version'],
+            //    dist: {
+            //        files: [{
+            //            expand: true,
+            //            cwd: '.tmp/styles/',
+            //            src: '**/*.css',
+            //            dest: '.tmp/styles/'
+            //        }]
+            //    }
         },
         wiredep: {
             app: {
@@ -152,9 +152,9 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-        // not used since Uglify task does concat,
-        // but still available if needed
-        //    dist: {}
+            // not used since Uglify task does concat,
+            // but still available if needed
+            //    dist: {}
         },
         rev: {
             dist: {
@@ -169,7 +169,7 @@ module.exports = function (grunt) {
             }
         },
         useminPrepare: {
-            html: 'src/main/webapp/**/*.html',
+            html: 'src/main/webapp/index.html',
             options: {
                 dest: '<%= yeoman.dist %>',
                 flow: {
@@ -178,9 +178,9 @@ module.exports = function (grunt) {
                             js: ['concat', 'uglifyjs'],
                             css: ['cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
                         },
-                            post: {}
-                        }
+                        post: {}
                     }
+                }
             }
         },
         usemin: {
@@ -202,7 +202,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/assets/images',
-                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
+                    src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
                     dest: '<%= yeoman.dist %>/assets/images'
                 }]
             }
@@ -229,29 +229,19 @@ module.exports = function (grunt) {
             //         ]
             //     }
             // }
-            options: {
-                root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
-            }
+            //options: {
+            //    root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
+            //}
         },
         ngtemplates:    {
             dist: {
                 cwd: 'src/main/webapp',
-                src: ['scripts/app/**/*.html', 'scripts/components/**/*.html',],
+                src: ['scripts/app/**/*.html', 'scripts/components/**/*.html'],
                 dest: '.tmp/templates/templates.js',
                 options: {
                     module: 'publisherApp',
                     usemin: 'scripts/app.js',
-                    htmlmin:  {
-                        removeCommentsFromCDATA: true,
-                        // https://github.com/yeoman/grunt-usemin/issues/44
-                        collapseWhitespace: true,
-                        collapseBooleanAttributes: true,
-                        conservativeCollapse: true,
-                        removeAttributeQuotes: true,
-                        removeRedundantAttributes: true,
-                        useShortDoctype: true,
-                        removeEmptyAttributes: true
-                    }
+                    htmlmin: '<%= htmlmin.dist.options %>'
                 }
             }
         },
@@ -279,6 +269,32 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
+            fonts: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: 'src/main/webapp',
+                    dest: '<%= yeoman.dist %>/assets/fonts',
+                    src: [
+                        'bower_components/bootstrap/fonts/*.*',
+                        'bower_components/font-awesome/fonts/*.*',
+                        'bower_components/components-font-awesome/fonts/*.*'
+                    ]
+                }]
+            },
+            jstree: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: 'src/main/webapp',
+                    dest: '<%= yeoman.dist %>/assets/styles',
+                    src: [
+                        'bower_components/jstree/dist/themes/default/*.{png,gif,webp,jpg,jpeg,svg}'
+                    ]
+                }]
+            },
             dist: {
                 files: [{
                     expand: true,
@@ -289,7 +305,8 @@ module.exports = function (grunt) {
                         '*.html',
                         'scripts/**/*.html',
                         'assets/images/**/*.{png,gif,webp,jpg,jpeg,svg}',
-                        'assets/fonts/*'
+                        'assets/fonts/*',
+                        'assets/static/*'
                     ]
                 }, {
                     expand: true,
@@ -301,19 +318,19 @@ module.exports = function (grunt) {
                 }]
             },
             generateHerokuDirectory: {
-                    expand: true,
-                    dest: 'deploy/heroku',
-                    src: [
-                        'pom.xml',
-                        'src/main/**'
+                expand: true,
+                dest: 'deploy/heroku',
+                src: [
+                    'pom.xml',
+                    'src/main/**'
                 ]
             },
             generateOpenshiftDirectory: {
-                    expand: true,
-                    dest: 'deploy/openshift',
-                    src: [
-                        'pom.xml',
-                        'src/main/**'
+                expand: true,
+                dest: 'deploy/openshift',
+                src: [
+                    'pom.xml',
+                    'src/main/**'
                 ]
             }
         },
@@ -398,7 +415,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('serve', [
-            'clean:server',
+        'clean:server',
         'wiredep',
         'ngconstant:dev',
         'concurrent:server',
@@ -426,7 +443,11 @@ module.exports = function (grunt) {
         'useminPrepare',
         'ngtemplates',
         'concurrent:dist',
+        'imagemin',
+        'svgmin',
         'concat',
+        'copy:jstree',
+        'copy:fonts',
         'copy:dist',
         'ngAnnotate',
         'cssmin',
@@ -440,7 +461,7 @@ module.exports = function (grunt) {
     grunt.registerTask('buildHeroku', [
         'test',
         'build',
-        'copy:generateHerokuDirectory',
+        'copy:generateHerokuDirectory'
     ]);
 
     grunt.registerTask('deployHeroku', [
@@ -453,7 +474,7 @@ module.exports = function (grunt) {
     grunt.registerTask('buildOpenshift', [
         'test',
         'build',
-        'copy:generateOpenshiftDirectory',
+        'copy:generateOpenshiftDirectory'
     ]);
 
     grunt.registerTask('deployOpenshift', [

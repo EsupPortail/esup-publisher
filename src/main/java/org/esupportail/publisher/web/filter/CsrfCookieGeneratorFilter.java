@@ -28,7 +28,11 @@ public class CsrfCookieGeneratorFilter extends OncePerRequestFilter {
             Cookie cookie = new Cookie(pCookieName, csrfToken.getToken());
             cookie.setMaxAge(-1);
             cookie.setHttpOnly(false);
-            cookie.setPath("/");
+            String applicationPath = request.getServletContext().getContextPath();
+            if (applicationPath.isEmpty()) {
+                applicationPath = "/";
+            }
+            cookie.setPath(applicationPath);
             response.addCookie(cookie);
         }
         filterChain.doFilter(request, response);
