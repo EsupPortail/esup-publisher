@@ -29,7 +29,6 @@
         <div class="form-group" ng-class="{ 'has-error': !item.enclosure && enclosureDirty }">
             <label class="control-label" for="enclosure" translate="publisherApp.flash.enclosure">Enclosure</label>
             <div class="form-inline">
-                <!--<input ng-if="!item.enclosure" type="image" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()" value="{{'publisherApp.flash.enclosure.button' | translate}}">-->
                 <button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">
                     <span>{{'publisherApp.flash.enclosure.button' | translate}}</span>
                 </button>
@@ -48,7 +47,7 @@
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
             <label class="control-label" for="summary" translate="publisherApp.flash.summary">Summary</label>
             <textarea class="form-control" name="summary" id="summary" rows="3"
-                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
+                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" ></textarea>
 
             <div ng-show="publishContentForm.summary.$invalid">
                 <p class="help-block"
@@ -88,7 +87,7 @@
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
-                           translate-value-field="{{'publisherApp.flash.startDate' | translate}}">>
+                           translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
                             From date must be lower than To date
                         </p>
                     </div>
@@ -106,15 +105,12 @@
                         <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{today | date: dtformat }}">
-                            A date after now is required.
-                        </p>-->
                         <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
                             A date before next year from now is required
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
-                           translate-value-field="{{'publisherApp.flash.startDate' | translate}}">>
+                           translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
                             From date must be greater than From date
                         </p>
                     </div>

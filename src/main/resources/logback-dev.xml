@@ -11,10 +11,10 @@
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.base}/logs/publisher.log</file>
+        <file>logFile.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/archives/publisher.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>366</maxHistory>
+            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
         </rollingPolicy>
         <encoder>
             <charset>utf-8</charset>
@@ -85,7 +85,7 @@
     </contextListener>
 
     <root level="${logback.loglevel}">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
     <logger name="org.esupportail.publisher.security" level="DEBUG">

@@ -70,7 +70,7 @@ angular.module('publisherApp')
         }, true);
 
         $scope.$watch('$parent.item.startDate', function(newType, oldType) {
-            console.log('New startdate setted : ', newType, oldType);
+            //console.log('New startdate setted : ', newType, oldType);
         }, true);
 
         $scope.validateItem = function (){
@@ -181,7 +181,7 @@ angular.module('publisherApp')
                 $scope.$parent.publishContentForm.$setPristine();
                 $scope.$parent.publishContentForm.$setUntouched();
             }
-            console.log("item init : ",$scope.$parent.item);
+            //console.log("item init : ",$scope.$parent.item);
         };
 
         $scope.invalidFiles = [];

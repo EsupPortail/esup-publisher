@@ -7,7 +7,10 @@ import org.esupportail.publisher.service.FileService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
@@ -39,6 +42,7 @@ public class UploadController {
         log.debug("Entering in upload : {}, {}, {}, file : {}, {}, {}", isPublic, entityId, name, file.getOriginalFilename(), file.getSize(), file.getContentType());
         if (!file.isEmpty()) {
             String result = null;
+
             if (isPublic) {
                 result = fileService.uploadInternalResource(entityId,name,file);
             } else {

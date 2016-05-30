@@ -54,15 +54,15 @@ angular.module('publisherApp')
             organization = $scope.organizations[0];
             redactor = $scope.redactors[0];
             reader = $scope.readers[0];
-            if (angular.isObject($scope.currentOrganization)) {
-                organization = $scope.currentOrganization.id;
-            }
-            if (angular.isObject($scope.currentReader)) {
-                redactor = $scope.currentReader.id;
-            }
-            if (angular.isObject($scope.currentRedactor)) {
-                redactor = $scope.currentRedactor.id;
-            }
+            //if (angular.isObject($scope.currentOrganization)) {
+            //    organization = $scope.currentOrganization.id;
+            //}
+            //if (angular.isObject($scope.currentReader)) {
+            //    redactor = $scope.currentReader.id;
+            //}
+            //if (angular.isObject($scope.currentRedactor)) {
+            //    redactor = $scope.currentRedactor.id;
+            //}
             $scope.publisher = {
                 context: {organization: organization, redactor: redactor, reader: reader},
                 used: false, displayOrder: 0, permissionType: $scope.permissionClassList[0].name, defaultDisplayOrder: $scope.displayOrderTypeList[0].name, id: null,
