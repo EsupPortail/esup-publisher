@@ -30,6 +30,7 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.util.Assert;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String CAS_SERVICE_URL = "app.service.security";
 	private static final String APP_URI_LOGIN = "/app/login";
 	private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
+	private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
 
 	@Inject
 	private Environment env;
@@ -87,14 +89,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public IAuthoritiesDefinition mainRolesDefs() {
 		AuthoritiesDefinition defs = new AuthoritiesDefinition();
 
-		UserAttributesEvaluation uae1 = new UserAttributesEvaluation("uid", "admin", StringEvaluationMode.EQUALS);
-		UserAttributesEvaluation uae2 = new UserAttributesEvaluation("uid", "admin", StringEvaluationMode.EQUALS);
-		UserAttributesEvaluation uae3 = new UserAttributesEvaluation("uid",
-				env.getRequiredProperty(APP_ADMIN_USER_NAME), StringEvaluationMode.EQUALS);
-		Set<IEvaluation> set = new HashSet<IEvaluation>();
-		set.add(uae1);
-		set.add(uae2);
-		set.add(uae3);
+        Set<IEvaluation> set = new HashSet<IEvaluation>();
+
+        final String userAdmin = env.getProperty(APP_ADMIN_USER_NAME);
+        if (userAdmin != null) {
+            final UserAttributesEvaluation uae2 = new UserAttributesEvaluation("uid", userAdmin, StringEvaluationMode.EQUALS);
+            set.add(uae2);
+        }
+
+        final String groupAdmin = env.getProperty(APP_ADMIN_GROUP_NAME);
+        if (groupAdmin != null) {
+            final UserAttributesEvaluation uae3 = new UserMultivaluedAttributesEvaluation("isMemberOf", groupAdmin, StringEvaluationMode.EQUALS);
+            set.add(uae3);
+        }
+
+        Assert.isTrue(userAdmin != null && groupAdmin != null, "Properties '" + APP_ADMIN_USER_NAME + "' or '" + APP_ADMIN_GROUP_NAME
+            + "' aren't defined in properties, there are needed to define an Admin user");
+
+
 		OperatorEvaluation admins = new OperatorEvaluation(OperatorType.OR, set);
 		defs.setAdmins(admins);
 

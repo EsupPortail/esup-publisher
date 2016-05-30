@@ -27,6 +27,9 @@ spring:
     messageSource:
         cacheSeconds: 1
 
+logging:
+    config: "classpath:logback.xml"
+
 swagger:
     title: publisher API
     description: publisher applications and beyond!
