@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,8 +47,7 @@ public class FileService {
 
     public String uploadInternalResource(final Long entityId,final String name, final MultipartFile file) {
         try {
-            byte[] bytes = file.getBytes();
-            //String fname = (name != null && name.length() > 0) ? name : file.getOriginalFilename();
+            //byte[] bytes = file.getBytes();
             final String fileExt = Files.getFileExtension(file.getOriginalFilename()).toLowerCase();
             String fname = (name != null && name.length() > 0) ? name : new SimpleDateFormat("yyyyMMddHHmmss'." + fileExt + "'").format(new Date());
             final String internPath = internalFileUploadHelper.getUploadDirectoryPath();
@@ -73,10 +70,11 @@ public class FileService {
             }
             log.debug("Uploading file as {}", inFile.getPath());
             // start upload
-            BufferedOutputStream stream =
-                new BufferedOutputStream(new FileOutputStream(inFile));
-            stream.write(bytes);
-            stream.close();
+            file.transferTo(inFile);
+//            BufferedOutputStream stream =
+//                new BufferedOutputStream(new FileOutputStream(inFile));
+//            stream.write(bytes);
+//            stream.close();
             return internalFileUploadHelper.getUrlResourceMapping() + relativPath + fname;
         } catch (Exception e) {
             log.error("File Upload error", e);
