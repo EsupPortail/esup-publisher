@@ -15,6 +15,37 @@ angular.module('publisherApp')
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': {
+                method:'PUT',
+                transformRequest: function(data) {
+                    var newDate = new Date();
+                    newDate.setUTCDate(data.item.startDate.getDate());
+                    newDate.setUTCMonth(data.item.startDate.getMonth());
+                    newDate.setUTCFullYear(data.item.startDate.getFullYear());
+                    data.item.startDate = newDate;
+                    newDate = new Date();
+                    newDate.setUTCDate(data.item.endDate.getDate());
+                    newDate.setUTCMonth(data.item.endDate.getMonth());
+                    newDate.setUTCFullYear(data.item.endDate.getFullYear());
+                    data.item.endDate = new Date(data.item.endDate);
+                    return angular.toJson(data);
+                }
+            },
+            'save': {
+                method:'POST',
+                transformRequest: function(data) {
+                    var newDate = new Date();
+                    newDate.setUTCDate(data.item.startDate.getDate());
+                    newDate.setUTCMonth(data.item.startDate.getMonth());
+                    newDate.setUTCFullYear(data.item.startDate.getFullYear());
+                    data.item.startDate = newDate;
+                    newDate = new Date();
+                    newDate.setUTCDate(data.item.endDate.getDate());
+                    newDate.setUTCMonth(data.item.endDate.getMonth());
+                    newDate.setUTCFullYear(data.item.endDate.getFullYear());
+                    data.item.endDate = new Date(data.item.endDate);
+                    return angular.toJson(data);
+                }
+            }
         });
     });
