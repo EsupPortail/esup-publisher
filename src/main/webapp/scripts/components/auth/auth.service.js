@@ -123,7 +123,7 @@ angular.module('publisherApp')
                 // don't launch auth when request only the account as it's requested at first access
                 if (rejection.status !== 401 || $rootScope.modalOpened || rejection.data.path === "/api/account" ) {
                     return $q.reject(rejection);
-                }
+                };
 
                 var deferred = $q.defer();
 
@@ -133,7 +133,7 @@ angular.module('publisherApp')
                         deferred.resolve( $http(rejection.config) );
                     })
                     .catch(function () {
-                        $state.go('site');
+                        $state.go('home');
                         deferred.reject(rejection);
                     });
 
