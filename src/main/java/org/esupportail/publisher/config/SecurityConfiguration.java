@@ -6,6 +6,7 @@ import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.*;
 import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
+import org.esupportail.publisher.service.bean.IpVariableHolder;
 import org.esupportail.publisher.service.evaluators.IEvaluation;
 import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
 import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
@@ -67,6 +68,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
     private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> userDetailsService;
+
+    @Inject
+    private IpVariableHolder ipVariableHolder;
 
     // @Inject
     // private RememberMeServices rememberMeServices;
@@ -228,6 +232,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .disable()
             .authorizeRequests()
             .antMatchers("/app/**").authenticated()
+            .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
+                + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
             .antMatchers("/api/register").denyAll()
             .antMatchers("/api/activate").denyAll()
             .antMatchers("/api/authenticate").denyAll()
