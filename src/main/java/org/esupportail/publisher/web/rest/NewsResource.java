@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.repository.NewsRepository;
+import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -42,6 +44,7 @@ public class NewsResource {
     @RequestMapping(value = "/newss",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     @Timed
     public ResponseEntity<Void> create(@RequestBody News news) throws URISyntaxException {
         log.debug("REST request to save News : {}", news);
@@ -58,6 +61,7 @@ public class NewsResource {
     @RequestMapping(value = "/newss",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     @Timed
     public ResponseEntity<Void> update(@RequestBody News news) throws URISyntaxException {
         log.debug("REST request to update News : {}", news);
@@ -74,6 +78,7 @@ public class NewsResource {
     @RequestMapping(value = "/newss",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     @Timed
     public ResponseEntity<List<News>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
@@ -89,6 +94,7 @@ public class NewsResource {
     @RequestMapping(value = "/newss/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     @Timed
     public ResponseEntity<News> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get News : {}", id);
@@ -105,6 +111,7 @@ public class NewsResource {
     @RequestMapping(value = "/newss/{id}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete News : {}", id);
