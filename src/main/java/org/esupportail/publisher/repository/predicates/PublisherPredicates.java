@@ -1,5 +1,6 @@
 package org.esupportail.publisher.repository.predicates;
 
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.OrderSpecifier;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.QPublisher;
@@ -14,7 +15,7 @@ public final class PublisherPredicates {
 	private static final QPublisher qobj = QPublisher.publisher;
 
 	public static Predicate AllOfOrganization(Organization org) {
-		return qobj.context.organization.eq(org);
+		return AllOfOrganization(org.getId());
 	}
     public static Predicate AllOfOrganization(long orgId) {
         return qobj.context.organization.id.eq(orgId);
@@ -24,19 +25,34 @@ public final class PublisherPredicates {
         return qobj.isNotNull();
     }
 
-	public static Predicate AllUsedInOrganization(Organization org) {
-		return qobj.context.organization.eq(org).and(qobj.used.isTrue());
-	}
-    public static Predicate AllUsedInOrganization(long orgId) {
-        return qobj.context.organization.id.eq(orgId).and(qobj.used.isTrue());
-    }
-    public static Predicate AllUsed() {
-        return qobj.used.isTrue();
+    public static Predicate AllOfUsedState(boolean used) {
+        if (used) {
+            return qobj.used.isTrue();
+        }
+        return qobj.used.isFalse();
     }
 
-	public static Predicate AllNotUsedInOrganization(Organization org) {
-		return qobj.context.organization.eq(org).and(qobj.used.isFalse());
-	}
+    public static Predicate AllOfReader(long readerId) {
+        return qobj.context.reader.id.eq(readerId);
+    }
+
+    public static Predicate AllOfRedactor(long redactorId) {
+        return qobj.context.redactor.id.eq(redactorId);
+    }
+
+    public static Predicate AllUsedInOrganizationWithReader(long orgId, long readerId) {
+        BooleanBuilder builder = new BooleanBuilder(AllOfOrganization(orgId));
+        builder.and(AllOfUsedState(true));
+        builder.and(AllOfReader(readerId));
+        return builder;
+    }
+
+    public static Predicate AllUsedInOrganizationWithReaderAndRedactor(long orgId, long readerId, long redactorId) {
+        BooleanBuilder builder = new BooleanBuilder(AllUsedInOrganizationWithReader(orgId, readerId));
+        builder.and(AllOfRedactor(redactorId));
+        return builder;
+    }
+
 
     public static OrderSpecifier<?> orderByOrganizations() {
         return qobj.context.organization.displayOrder.asc();

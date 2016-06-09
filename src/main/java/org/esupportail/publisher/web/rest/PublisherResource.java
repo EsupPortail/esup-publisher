@@ -2,6 +2,7 @@ package org.esupportail.publisher.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
+import com.mysema.query.BooleanBuilder;
 import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.PermissionType;
@@ -143,9 +144,9 @@ public class PublisherResource {
         if (organizationId != null && used == null) {
             where = PublisherPredicates.AllOfOrganization(organizationId);
         } else if (organizationId != null) {
-            where = PublisherPredicates.AllUsedInOrganization(organizationId);
+            where = new BooleanBuilder(PublisherPredicates.AllOfOrganization(organizationId)).and(PublisherPredicates.AllOfUsedState(true));
         } else if (used != null) {
-            where = PublisherPredicates.AllUsed();
+            where = PublisherPredicates.AllOfUsedState(true);
         }
        return Lists.newArrayList(publisherRepository.findAll(where, PublisherPredicates.orderByOrganizations(), PublisherPredicates.orderByDisplayOrder()));
     }
