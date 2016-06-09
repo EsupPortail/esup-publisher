@@ -19,7 +19,6 @@ import org.esupportail.publisher.repository.predicates.FilterPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.service.factories.TreeJSDTOFactory;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
-import org.esupportail.publisher.service.util.SubscriberService;
 import org.esupportail.publisher.web.rest.dto.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 

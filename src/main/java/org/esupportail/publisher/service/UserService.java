@@ -19,7 +19,6 @@ import org.esupportail.publisher.security.IAuthorityService;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
-import org.esupportail.publisher.service.util.SubscriberService;
 import org.esupportail.publisher.web.rest.dto.*;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;

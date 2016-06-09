@@ -1,4 +1,4 @@
-package org.esupportail.publisher.service.util;
+package org.esupportail.publisher.service;
 
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.*;
