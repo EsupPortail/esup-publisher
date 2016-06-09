@@ -110,9 +110,11 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
     private String color;
 
 	// @JsonIgnore
+    @NotNull
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {})
 	@JoinColumn(name = "publisher_id", nullable = false)
 	private Publisher publisher;
+
 
 	public AbstractClassification() {
 		super();
@@ -162,5 +164,10 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
     @Override
     public String getDisplayName() {
         return this.name;
+    }
+
+    //TODO attribut for supermanager obliged content
+    public boolean isHighlighted() {
+        return false;
     }
 }
