@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<changeSet author="jgribonvald (generated)" id="1465484049604-1">
+<addUniqueConstraint columnNames="identifiers" tableName="t_entity_identifiers"/>
+</changeSet>
+<changeSet author="jgribonvald (generated)" id="1465484049604-2">
+<dropNotNullConstraint columnDataType="bigint" columnName="classification_id" tableName="t_classification_item"/>
+<dropDefaultValue columnDataType="bigint" columnName="classification_id" tableName="t_classification_item"/>
+</changeSet>
+<changeSet author="jgribonvald (generated)" id="1465484049604-3">
+<addNotNullConstraint columnDataType="datetime" columnName="created_date" tableName="t_user"/>
+</changeSet>
+<changeSet author="jgribonvald (generated)" id="1465484049604-4">
+<dropDefaultValue columnDataType="varchar(1)" columnName="has_sub_perms_management" tableName="t_publisher"/>
+</changeSet>
+<changeSet author="jgribonvald (generated)" id="1465484049604-5">
+<dropNotNullConstraint columnDataType="bigint" columnName="item_id" tableName="t_classification_item"/>
+<dropDefaultValue columnDataType="bigint" columnName="item_id" tableName="t_classification_item"/>
+</changeSet>
+</databaseChangeLog>

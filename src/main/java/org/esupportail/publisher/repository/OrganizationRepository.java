@@ -29,6 +29,8 @@ public interface OrganizationRepository extends
 
 	Organization findByName(final String name);
 
+    Organization findByIdentifiers(final String identifier);
+
 	@Query("SELECT COALESCE(max(e.displayOrder) +1, 0) FROM #{#entityName} e")
 	int getNextDisplayOrder();
 

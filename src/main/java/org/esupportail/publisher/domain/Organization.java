@@ -79,7 +79,7 @@ public class Organization extends AbstractAuditingEntity implements IContext, Se
 	private boolean allowNotifications;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "T_ENTITY_IDENTIFIERS")
+    @CollectionTable(name = "T_ENTITY_IDENTIFIERS", uniqueConstraints = @UniqueConstraint(columnNames = "identifiers"))
     private Set<String> identifiers = new HashSet<>();
 
 	public Organization() {
