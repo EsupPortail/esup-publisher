@@ -29,6 +29,13 @@ public final class ItemPredicates {
         return qItemClass.itemClassificationId.abstractClassification.id.eq(classifId);
     }
 
+    public static Predicate itemsClassOfPublisher(final Publisher publisher) {
+        return itemsClassOfPublisher(publisher.getId());
+    }
+    public static Predicate itemsClassOfPublisher(final long publisherId) {
+        return qItemClass.itemClassificationId.abstractClassification.publisher.id.eq(publisherId);
+    }
+
     public static Predicate notNull() {
         return qItemClass.isNotNull();
     }
@@ -64,6 +71,27 @@ public final class ItemPredicates {
         }
     }
 
+    public static OrderSpecifier<?> orderByPublisherDefinition(
+        final DisplayOrderType displayOrder) {
+        switch (displayOrder) {
+            case LAST_CREATED_MODIFIED_FIRST:
+                return qItemClass.itemClassificationId.abstractClassification.lastModifiedDate
+                    .coalesce(
+                        qItemClass.itemClassificationId.abstractClassification.createdDate)
+                    .desc();
+            case ONLY_LAST_CREATED_FIRST:
+                return qItemClass.itemClassificationId.abstractClassification.createdDate
+                    .desc();
+            case NAME:
+                return qItemClass.itemClassificationId.abstractClassification.name.asc();
+            case CUSTOM:
+                return qItemClass.displayOrder.desc();
+            default:
+                return qItemClass.itemClassificationId.abstractClassification.createdDate
+                    .desc();
+        }
+    }
+
     public static OrderSpecifier<?> orderByItemDefinition(
         final DisplayOrderType displayOrder) {
         switch (displayOrder) {
@@ -84,16 +112,35 @@ public final class ItemPredicates {
     }
 
     public static Predicate OwnedItemsOfStatus(final Boolean owned, final Integer status) {
-        //Predicate onOwner = item.createdBy.isNotNull();
         Predicate onStatus = qItem.status.isNotNull();
         if (status != null) {
             ItemStatus itemStatus = ItemStatus.valueOf(status);
             if (itemStatus != null)
                 onStatus = qItem.status.eq(itemStatus);
         }
+        if (owned != null) {
+            final String userId = SecurityUtils.getCurrentLogin();
+            if (owned) {
+                return qItem.createdBy.login.eq(userId).and(onStatus);
+            } else {
+                return qItem.createdBy.login.ne(userId).and(onStatus);
+            }
+        }
+        return onStatus;
+    }
+
+    public static Predicate OwnedItemsClassOfStatus(final Boolean owned, final ItemStatus status) {
+        Predicate onStatus = qItemClass.itemClassificationId.abstractItem.status.isNotNull();
+        if (status != null) {
+            onStatus = qItemClass.itemClassificationId.abstractItem.status.eq(status);
+        }
         if (owned != null && owned) {
             String userId = SecurityUtils.getCurrentLogin();
-            return qItem.createdBy.login.eq(userId).and(onStatus);
+            if (owned) {
+                return qItemClass.itemClassificationId.abstractItem.createdBy.login.eq(userId).and(onStatus);
+            } else {
+                return qItemClass.itemClassificationId.abstractItem.createdBy.login.ne(userId).and(onStatus);
+            }
         }
         return onStatus;
     }
