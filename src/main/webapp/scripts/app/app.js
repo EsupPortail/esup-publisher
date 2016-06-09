@@ -79,7 +79,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             return (-1 !== array.indexOf(item));
         };
     })
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider,
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider, tmhDynamicLocaleProvider,
                       httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider, $provide) {
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
@@ -201,13 +201,10 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             return taOptions;
         }]);
 
-//cfpLoadingBarProvider.parentSelector = 'container';
-
 //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
         $httpProvider.interceptors.push('AuthInterceptor');
-//$httpProvider.interceptors.push('loadingDialogInterceptor');
 //$httpProvider.interceptors.push('loadingDialogInterceptor');
 
         $urlRouterProvider.otherwise('/');
@@ -260,6 +257,8 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             .determinePreferredLanguage();
         //$translateProvider.useSanitizeValueStrategy('escaped');
         $translateProvider.useCookieStorage();
+
+        $translatePartialLoaderProvider.addPart('login');
 
         tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
         tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
