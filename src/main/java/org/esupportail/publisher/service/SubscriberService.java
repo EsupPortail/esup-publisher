@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -31,27 +32,27 @@ public class SubscriberService {
 
 
 
-    public List<Subscriber> getDefaultsSubscribersOfContext(final ContextKey contextkey){
-        switch (contextkey.getKeyType()) {
+    public List<Subscriber> getDefaultsSubscribersOfContext(@NotNull final ContextKey contextKey){
+        switch (contextKey.getKeyType()) {
             case ORGANIZATION:
-                return Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextkey)));
+                return Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextKey)));
             case PUBLISHER:
-                List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextkey)));
+                List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextKey)));
                 if (subscribers.isEmpty()) {
-                    Publisher publisher = publisherRepository.findOne(contextkey.getKeyId());
+                    Publisher publisher = publisherRepository.findOne(contextKey.getKeyId());
                     if (publisher != null) {
                         return getDefaultsSubscribersOfContext(publisher.getContext().getOrganization().getContextKey());
                     }
                 }
                 return subscribers;
             case CATEGORY:
-                Category category = categoryRepository.findOne(contextkey.getKeyId());
+                Category category = categoryRepository.findOne(contextKey.getKeyId());
                 if (category != null) {
                     return getDefaultsSubscribersOfContext(category.getPublisher().getContextKey());
                 }
                 return Lists.newArrayList();
             case FEED:
-                AbstractFeed feed = feedRepository.findOne(contextkey.getKeyId());
+                AbstractFeed feed = feedRepository.findOne(contextKey.getKeyId());
                 if (feed != null) {
                     return getDefaultsSubscribersOfContext(feed.getPublisher().getContextKey());
                 }
@@ -61,5 +62,9 @@ public class SubscriberService {
                 return Lists.newArrayList();*/
             default:return Lists.newArrayList();
         }
+    }
+
+    public List<Subscriber> getDefinedSubcribersOfContext(@NotNull final ContextKey contextKey) {
+        return Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextKey)));
     }
 }

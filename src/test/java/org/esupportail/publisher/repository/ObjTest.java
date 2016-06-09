@@ -35,14 +35,19 @@ public final class ObjTest {
 	public final static String group2 = "esco:admin:central";
 	public final static String subject3 = "admin";
 
+    // Must be a Person
 	public final static SubjectKey subjectKey1 = new SubjectKey(subject1,
 			SubjectType.PERSON);
+    // Must be a Person
 	public final static SubjectKey subjectKey2 = new SubjectKey(subject2,
 			SubjectType.PERSON);
+    // Must be a Person
 	public final static SubjectKey subjectKey3 = new SubjectKey(subject3,
 			SubjectType.PERSON);
+    //Must be a Group
 	public final static SubjectKey subjectKey4 = new SubjectKey(group1,
 			SubjectType.GROUP);
+    //Must be a Group
 	public final static SubjectKey subjectKey5 = new SubjectKey(group2,
 			SubjectType.GROUP);
 
@@ -293,10 +298,23 @@ public final class ObjTest {
 				organization, redactor);
 	}
 
+    public static Flash newFlash(final String indice,
+                               final Organization organization, final Redactor redactor) {
+        return new Flash("Titre " + indice, "enclosure" + indice, "body"
+            + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
+            null, getRandomItemStatus(), "summary" + indice, true,
+            organization, redactor);
+    }
+
 	public static Subscriber newSubscriber(final ContextKey context) {
 		return new Subscriber(subjectKey3, context, getRandomSubscribeType());
-
 	}
+    public static Subscriber newSubscriberPerson(final ContextKey context) {
+        return new Subscriber(subjectKey1, context, getRandomSubscribeType());
+    }
+    public static Subscriber newSubscriberGroup(final ContextKey context) {
+        return new Subscriber(subjectKey5, context, getRandomSubscribeType());
+    }
 
 	public static AccessType getRandomAccessType() {
 		return AccessType

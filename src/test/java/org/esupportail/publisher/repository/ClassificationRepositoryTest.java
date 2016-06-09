@@ -192,6 +192,14 @@ public class ClassificationRepositoryTest {
 		assertThat(repository.findAll().size(), is(3));
 	}
 
+    /**
+     * Test method for eager path of Category with publisher
+     */
+    @Test
+    public void testFindAllOfPublisher() {
+        assertTrue(repository.count(ClassificationPredicates.CategoryClassificationOfPublisher(pub1.getId())) == 1);
+    }
+
 	/**
 	 * Test method for
 	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}

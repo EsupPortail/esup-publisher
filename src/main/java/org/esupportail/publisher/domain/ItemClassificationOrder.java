@@ -18,6 +18,7 @@
  */
 package org.esupportail.publisher.domain;
 
+import com.mysema.query.annotations.QueryInit;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
@@ -46,6 +47,7 @@ public class ItemClassificationOrder implements Serializable,
 	private static final long serialVersionUID = 1987929502768792376L;
 
 	@NotNull
+    @QueryInit({"abstractClassification.*", "abstractItem.*"})
 	@EmbeddedId
 	private ItemClassificationKey itemClassificationId;
 

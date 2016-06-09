@@ -21,21 +21,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @author GIP RECIA - Julien Gribonvald 1 juil. 2014
  */
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonPropertyOrder({ "id", "name", "label" })
+@XmlType
 public enum AccessType {
 
 	/** No checked access, free access. */
+    @XmlEnumValue("public")
 	PUBLIC(1, "PUBLIC", "enum.access.public.title"),
 	/** Check access : if the user is authenticated. */
+    @XmlEnumValue("cas")
 	AUTHENTICATED(2, "AUTHENTICATED", "enum.access.authenticated.title"),
 	/**
 	 * Check access : if the user is authenticated and if he is in the list of
 	 * authorized.
 	 */
+    @XmlEnumValue("cas")
 	AUTHORIZED(3, "AUTHORIZED", "enum.access.authorized.title");
 
     /** Identifier. */
