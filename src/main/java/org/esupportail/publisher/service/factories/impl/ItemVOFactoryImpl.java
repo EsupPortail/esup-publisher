@@ -7,6 +7,7 @@ import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
+import org.esupportail.publisher.web.rest.vo.Visibility;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
@@ -35,7 +36,8 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             ArticleVO article = new ArticleVO();
             article.setTitle(item.getTitle());
             article.setLink("/" + urlHelper.getContextPath().replaceFirst("/","") + urlHelper.getItemUri() + item.getId());
-            article.setEnclosure(urlHelper.getRootAppUrl() + item.getEnclosure());
+            if (item.getEnclosure() != null)
+                article.setEnclosure(urlHelper.getRootAppUrl() + item.getEnclosure());
             article.setDescription(item.getSummary());
             article.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
             article.setGuid(item.getId().hashCode());
@@ -50,9 +52,15 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             vo.setCreator(item.getCreatedBy().getId().getKeyId());
             vo.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()).toString());
             vo.setCreatedDate(item.getCreatedDate().toDateTime(DateTimeZone.getDefault()).toString());
-            vo.setModifiedDate(item.getLastModifiedDate().toDateTime(DateTimeZone.getDefault()).toString());
+            if (item.getLastModifiedDate() != null)
+                vo.setModifiedDate(item.getLastModifiedDate().toDateTime(DateTimeZone.getDefault()).toString());
             vo.setUuid(item.getId().toString());
-            vo.setVisibility(visibilityFactory.from(subscribers));
+            if (subscribers != null && !subscribers.isEmpty()) {
+                vo.setVisibility(visibilityFactory.from(subscribers));
+            } else {
+                vo.setVisibility(new Visibility());
+            }
+
             return vo;
         }
         return null;

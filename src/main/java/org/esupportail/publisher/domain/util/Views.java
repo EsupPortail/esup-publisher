@@ -6,4 +6,5 @@ package org.esupportail.publisher.domain.util;
 public class Views {
 
      public interface Lite {};
+     public interface Flash {};
 }

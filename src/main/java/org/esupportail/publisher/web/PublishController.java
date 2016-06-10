@@ -1,14 +1,18 @@
 package org.esupportail.publisher.web;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mysema.query.BooleanBuilder;
+import com.mysema.query.jpa.JPASubQuery;
+import com.mysema.query.types.expr.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.WritingMode;
+import org.esupportail.publisher.domain.util.Views;
 import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
@@ -32,9 +36,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jgribonvald on 22/01/16.
@@ -61,7 +63,7 @@ public class PublishController {
 //    private FeedRepository<AbstractFeed> feedRepository;
 
     @Inject
-    private FlashRepository flashRepository;
+    private ItemRepository itemRepository;
 
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
@@ -85,15 +87,34 @@ public class PublishController {
     @RequestMapping(value = "/flash/{organization_uai}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(Views.Flash.class)
     @Timed
     public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_uai") String uai) throws URISyntaxException {
         log.debug("Entering getFlashInfo with params : uai={}", uai);
         Organization org = organizationRepository.findByIdentifiers(uai);
         if (org != null) {
             DisplayOrderType displayOrder = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
-            BooleanBuilder builder = new BooleanBuilder(ItemPredicates.FlashItemsOfOrganization(org));
-            builder.and(ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId()));
-            return flashInfoVOFactory.asVOList(Lists.newArrayList(flashRepository.findAll(builder, ItemPredicates.orderByItemDefinition(displayOrder))));
+            final BooleanExpression builder = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id.in(new JPASubQuery()
+                .from(QAbstractItem.abstractItem)
+                .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId()))
+                .list(QAbstractItem.abstractItem.id));
+            List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
+
+            if (itemsClasss != null && !itemsClasss.isEmpty()) {
+                Map<Flash, List<AbstractClassification>> itemsMap= Maps.newHashMap();
+
+                for ( ItemClassificationOrder ico: itemsClasss) {
+                    final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+                    //categories.add(classif);
+                    final Flash flash = (Flash) ico.getItemClassificationId().getAbstractItem();
+                    if (!itemsMap.containsKey(flash)) {
+                        itemsMap.put(flash, Lists.newArrayList(classif));
+                    } else {
+                        itemsMap.get(flash).add(classif);
+                    }
+                }
+                return flashInfoVOFactory.asVOList(itemsMap);
+            }
         }
         return Lists.newArrayList();
     }
@@ -138,15 +159,17 @@ public class PublishController {
         CategoryProfilesUrl cpu = new CategoryProfilesUrl();
         if (!publishers.isEmpty()) {
             Redactor redactor = publishers.get(0).getContext().getRedactor();
-            String contextPath = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+            final String contextPath = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+            final String url = request.getRequestURL().toString();
+            final String uri = request.getRequestURI();
+            final String base = url.substring(0, url.length() - uri.length()) + contextPath;
             for (Publisher pub : publishers) {
                 String urlCategory = null;
                 String urlActualite = null;
-                final String port = request.getServerPort() > -1 ? ":" + Integer.toString(request.getServerPort()) : "";
                 if (redactor.getNbLevelsOfClassification() == 1 && WritingMode.TARGETS_ON_ITEM.equals(redactor.getWritingMode())) {
-                    urlActualite =  request.getScheme() + "://" + request.getServerName() + port + contextPath + "published/items/" + pub.getId();
+                    urlActualite =  base + "published/items/" + pub.getId();
                 } else {
-                    urlCategory = request.getScheme() + "://" + request.getServerName() + port + contextPath + "published/categories/" + pub.getId();
+                    urlCategory = base + "published/categories/" + pub.getId();
                 }
                 cpu.getCategoryProfilesUrl().add(categoryProfileFactory.from(pub, subscriberService.getDefaultsSubscribersOfContext(pub.getContextKey()), urlActualite, urlCategory));
             }

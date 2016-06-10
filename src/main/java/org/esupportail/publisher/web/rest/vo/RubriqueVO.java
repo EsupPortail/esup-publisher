@@ -1,10 +1,12 @@
 package org.esupportail.publisher.web.rest.vo;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.esupportail.publisher.domain.util.Views;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -26,8 +28,10 @@ public class RubriqueVO implements Serializable {
     private String uuid;
 
     @NonNull
+    @JsonView(Views.Flash.class)
     private String name;
 
+    @JsonView(Views.Flash.class)
     private String color;
 
     private String mediaUrl;
