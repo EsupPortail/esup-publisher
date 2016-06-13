@@ -347,4 +347,26 @@ public class PermissionServiceImpl implements IPermissionService {
 
         return false;
     }
+
+    @Override
+    public boolean canModerateSomething(@NotNull Authentication authentication) {
+        final UserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+        final Collection<? extends GrantedAuthority> authorities = ((CustomUserDetails) authentication.getPrincipal()).getAuthorities();
+
+        log.debug("Testing canModerateSomething");
+        if (authorities.contains(new SimpleGrantedAuthority(
+            AuthoritiesConstants.ADMIN))) {
+            return true;
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority(
+            AuthoritiesConstants.USER))) {
+            if (!userSessionTree.isTreeLoaded()) {
+                userSessionTreeLoader.loadUserTree(user, authorities);
+            }
+
+            return userSessionTree.getUpperPerm() != null && userSessionTree.getUpperPerm().getMask() > PermissionType.CONTRIBUTOR.getMask();
+        }
+        return false;
+    }
 }

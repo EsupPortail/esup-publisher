@@ -42,6 +42,7 @@ public interface IPermissionService {
 
     boolean canEditCtxTargets (Authentication authentication, @NotNull final ContextKey contextKey);
 
+    boolean canModerateSomething(Authentication authentication);
 
     boolean hasAuthorizedChilds(Authentication authentication, @NotNull final ContextKey contextKey);
 

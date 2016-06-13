@@ -8,9 +8,11 @@
             },
             "type": "Type",
             "delete": {
-                "question": "Are you sure you want to delete Item {{ id }}?",
+                "question": "Are you sure you want to delete Item {{ id }} ?",
                 "enclosure": "Are you sure you want to delete this picture (no back action possible) ?"
             },
+            "validate.question" : "Are you sure you want to validate this Item {{ id }} ?",
+            "unvalidate.question" : "Are you sure you want to invalidate this Item {{ id }} ?",
             "detail": {
                 "title": "Item"
             },

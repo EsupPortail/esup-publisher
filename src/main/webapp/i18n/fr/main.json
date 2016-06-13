@@ -16,6 +16,10 @@
                 "name": "Gérer",
                 "desc": "Gérer les contenus publiés et les contextes de publication"
             },
+            "moderate": {
+                "name": "Modérer",
+                "desc": "Modérer les contenus publiés"
+            },
             "admin": {
                 "name": "Administration",
                 "desc": "Vue Super Administrateur"

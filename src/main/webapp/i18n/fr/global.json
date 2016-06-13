@@ -58,7 +58,8 @@
                 "contents": {
                     "main": "Publications",
                     "owned": "Mes publications",
-                    "pending": "Publications à valider"
+                    "pending": "Publications à valider",
+                    "managed": "Gestion des publications"
                 },
                 "contexts": {
                     "main": "Contextes"
@@ -129,6 +130,7 @@
             "view": "Voir",
             "close" : "Fermer",
             "validate": "Valider",
+            "unvalidate": "Invalider",
             "reset": "Réinitialiser"
         },
         "detail": {
@@ -137,6 +139,12 @@
         },
         "delete": {
             "title": "Confirmation de suppression"
+        },
+        "validate": {
+            "title": "Confirmation de validation"
+        },
+        "unvalidate": {
+            "title": "Confirmation d'invalidation"
         },
         "validation": {
             "required": "Ce champs est obligatoire.",

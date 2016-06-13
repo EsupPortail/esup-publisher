@@ -82,6 +82,9 @@ public class ContentService {
         if (content.getItem().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
         }
+        if (content.getItem().getEndDate().isBefore(LocalDate.now())) {
+            content.getItem().setStatus(ItemStatus.DRAFT);
+        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (content.getClassifications() == null || content.getClassifications().isEmpty()) {
             // we can save the item as DRAFT if there is at least a validated item
@@ -255,6 +258,9 @@ public class ContentService {
     public ResponseEntity<Void> updateContent(final ContentDTO content)  throws URISyntaxException {
         if (content.getItem().getId() == null) {
             return ResponseEntity.badRequest().header("Failure", "Trying to update a new content isn't possible.").build();
+        }
+        if (content.getItem().getEndDate().isBefore(LocalDate.now())) {
+            content.getItem().setStatus(ItemStatus.DRAFT);
         }
         Set<ItemClassificationOrder> oldLinkedClassifications = Sets.newHashSet(itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(content.getItem().getId())));
         if (content.getClassifications() == null || content.getClassifications().isEmpty()) {
@@ -452,6 +458,36 @@ public class ContentService {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<Void> setValidationItem(final boolean validation, @NotNull final AbstractItem item) {
+        PermissionType permType = permissionService.getRoleOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), item.getContextKey());
+        if (permType == null)
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if (PermissionType.CONTRIBUTOR.getMask() < permType.getMask()) {
+            if (validation) {
+                item.setValidatedBy(SecurityUtils.getCurrentUser());
+                item.setValidatedDate(DateTime.now());
+                if (item.getStartDate().isAfter(LocalDate.now())) {
+                    item.setStatus(ItemStatus.SCHEDULED);
+                } else {
+                    item.setStatus(ItemStatus.PUBLISHED);
+                }
+                if (item.getEndDate().isBefore(LocalDate.now())) {
+                    item.setStatus(ItemStatus.DRAFT);
+                }
+            } else {
+                item.setValidatedBy(null);
+                item.setValidatedDate(null);
+                item.setStatus(ItemStatus.PENDING);
+                if (item.getEndDate().isBefore(LocalDate.now())) {
+                    item.setStatus(ItemStatus.DRAFT);
+                }
+            }
+            itemRepository.save(item);
+            return ResponseEntity.ok().build();
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     private boolean isValidatedLevelLink(final AbstractClassification classification) {

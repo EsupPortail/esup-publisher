@@ -19,6 +19,10 @@
             },
             "pending": {
                 "title": "Publications en attente de validation"
+            },
+            "managed": {
+                "title": "Toutes les publications",
+                "order": "Organisées par état de publication :"
             }
         },
         "publish": {

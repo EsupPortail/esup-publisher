@@ -49,6 +49,9 @@ public class UserContextTree {
     @Setter
     private Boolean superAdmin;
 
+    @Getter
+    private PermissionType upperPerm;
+
     @Setter
     private boolean userTreeLoaded;
 
@@ -105,17 +108,17 @@ public class UserContextTree {
         }
     }
 
-    /**
-     * Must be used when a user create a new context, and to be able to see it
-     * @param ctx
-     * @param isLastNode
-     * @param parent
-     */
-    public void addCreatedCtx(@NotNull final ContextKey ctx,final boolean isLastNode,
-                       final ContextKey parent) {
-        final Pair<PermissionType, PermissionDTO> perms = this.getPermsFromContextTree(parent);
-        this.addCtx(ctx, isLastNode, parent, null, null, null);
-    }
+//    /**
+//     * Must be used when a user create a new context, and to be able to see it
+//     * @param ctx
+//     * @param isLastNode
+//     * @param parent
+//     */
+//    public void addCreatedCtx(@NotNull final ContextKey ctx,final boolean isLastNode,
+//                       final ContextKey parent) {
+//        final Pair<PermissionType, PermissionDTO> perms = this.getPermsFromContextTree(parent);
+//        this.addCtx(ctx, isLastNode, parent, null, null, null);
+//    }
 
     /**
      * There mustn't have childs in the context to remove.
@@ -148,7 +151,7 @@ public class UserContextTree {
             currentInfos.getParents().remove(parent);
             parentInfos.getChilds().remove(ctx);
             // process parent role to update after removing parent
-            currentInfos.setParentsPerms(null);
+            currentInfos.initParentsPerms();
             for (ContextKey parentKey : currentInfos.getParents()) {
                 UserContextInfos uci = contexts.get(parentKey);
                 currentInfos.setParentsPerms(uci.getPermsObject(), uci.getPermsType());
@@ -198,6 +201,19 @@ public class UserContextTree {
         }
         return false;
     }
+
+    /*public boolean hasRoleAnyWhere (final PermissionType permissionType) {
+        if (userTreeLoaded && permissionType != null) {
+            for (Map.Entry<ContextKey, UserContextInfos> ctx : contexts.entrySet()) {
+                if (!ctx.getKey().getKeyType().equals(ContextType.ITEM) && ctx.getValue() != null && ctx.getValue().getPermsType().getMask() >= permissionType.getMask()) {
+                    return true;
+                }
+            }
+        } else {
+            log.warn("Call hasRole - User Tree is not loaded or parameter permissionType is null !");
+        }
+        return false;
+    }*/
 
     public Set<ContextKey> getChildsOfContext(@NotNull final ContextKey ctx) {
         if (userTreeLoaded && contexts.containsKey(ctx)) {
@@ -376,24 +392,32 @@ public class UserContextTree {
         public void setPerms(final PermissionDTO perms, final PermissionType permType) {
             this.perms = perms;
             this.permType = permType;
+            setUpperPerm(permType);
         }
 
-        /*public void setParentsPerms(final PermissionType parentsPerms) {
-                    if (parentsPerms != null && (this.parentsPerms == null || parentsPerms.getMask() > this.parentsPerms.getMask())) {
-                        this.parentsPerms = parentsPerms;
-                    }
-                }*/
-        public void setParentsPerms(final PermOnCtxDTO parentsPerms) {
-            if (parentsPerms != null && (this.parentsPerms == null || parentsPerms.getRole().getMask() > this.parentsPermType.getMask())) {
-                this.parentsPerms = parentsPerms;
-                this.permType = parentsPerms.getRole();
+        private void setUpperPerm(final PermissionType permType) {
+            if (permType != null && (upperPerm == null || upperPerm.getMask() < permType.getMask())) {
+                upperPerm = permType;
             }
         }
+
+        public void initParentsPerms() {
+            this.parentsPerms = null;
+            this.parentsPermType = null;
+        }
+
+//        public void setParentsPerms(final PermOnCtxDTO parentsPerms) {
+//            if (parentsPerms != null && (this.parentsPerms == null || parentsPerms.getRole().getMask() > this.parentsPermType.getMask())) {
+//                this.parentsPerms = parentsPerms;
+//                this.parentsPermType = parentsPerms.getRole();
+//            }
+//        }
 
         public void setParentsPerms(final PermissionDTO parentsPerms, final PermissionType permType) {
             if (parentsPerms != null && (this.parentsPerms == null || permType.getMask() > this.parentsPermType.getMask())) {
                 this.parentsPerms = parentsPerms;
                 this.parentsPermType = permType;
+                setUpperPerm(permType);
             }
         }
 

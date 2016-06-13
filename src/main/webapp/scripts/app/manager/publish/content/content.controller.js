@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, $timeout, FileManager, Base64) {
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, $timeout, FileManager, Base64, DateService) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
@@ -24,6 +24,7 @@ angular.module('publisherApp')
         $scope.dtformat = $scope.dtformats[3];
 
         $scope.changeContentType = function(oldValue) {
+            console.log("changeContentType ", oldValue, $scope.content.type);
             if (!angular.equals(oldValue, $scope.content.type) || !angular.isDefined($scope.$parent.item) || angular.equals({}, $scope.$parent.item)) {
                 $scope.initItem();
             }
@@ -49,8 +50,9 @@ angular.module('publisherApp')
         }
 
         if ($scope.itemTypeList.length == 1) {
+            var oldVal = $scope.content.type;
             $scope.content.type = $scope.itemTypeList[0];
-            $timeout(function() {$scope.changeContentType('');});
+            $timeout(function() {$scope.changeContentType(oldVal);});
         }
 
         $scope.templates = [{name: 'NEWS', url: 'scripts/app/manager/publish/content/news.html'},
@@ -63,7 +65,8 @@ angular.module('publisherApp')
 
         $scope.$watch('$parent.item', function(newType, oldType) {
             if (angular.isDefined($scope.publishContentForm) && $scope.publishContentForm.$valid
-                && angular.isDefined($scope.$parent.item) && $scope.$parent.item.body != null && $scope.$parent.item.body.length > 5) {
+                && angular.isDefined($scope.$parent.item) && $scope.$parent.item.body != null && $scope.$parent.item.body.length > 5
+                && DateService.getDateDifference($scope.today, $scope.$parent.item.endDate) > 0 && DateService.isValidDateRange($scope.$parent.item.startDate, $scope.$parent.item.endDate)) {
                 $scope.$parent.itemValidated = true;
             } else {
                 $scope.$parent.itemValidated = false;

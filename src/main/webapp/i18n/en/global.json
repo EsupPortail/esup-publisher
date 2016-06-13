@@ -58,7 +58,8 @@
                 "contents": {
                     "main": "Publications",
                     "owned": "My publications",
-                    "pending": "Publications to validate"
+                    "pending": "Publications to validate",
+                    "managed": "Managing publications"
                 },
                 "contexts": {
                     "main": "Contexts"
@@ -129,6 +130,7 @@
             "view": "View",
             "close": "Close",
             "validate": "Ok",
+            "unvalidate": "Invalidate",
             "reset": "Reset"
         },
         "detail": {
@@ -137,6 +139,12 @@
         },
         "delete": {
             "title": "Confirm delete operation"
+        },
+        "validate": {
+            "title": "Confirm validation operation"
+        },
+        "unvalidate": {
+            "title": "Confirm invalidation operation"
         },
         "validation": {
             "required": "This field is required.",

@@ -9,6 +9,7 @@ import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
+import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
@@ -95,6 +96,9 @@ public class ItemResourceTest {
     @Inject
     private RedactorRepository redactorRepository;
     private Redactor redactor;
+    @Inject
+    private ContentService contentService;
+
 
     @Inject
     private UserRepository userRepo;
@@ -116,6 +120,7 @@ public class ItemResourceTest {
         ReflectionTestUtils.setField(itemResource, "permissionService", permissionService);
         ReflectionTestUtils.setField(itemResource, "fileService", fileservice);
         ReflectionTestUtils.setField(organizationResource, "organizationRepository", organizationRepository);
+        ReflectionTestUtils.setField(itemResource, "contentService", contentService);
         ReflectionTestUtils.setField(redactorResource, "redactorRepository", redactorRepository);
         this.restNewsMockMvc = MockMvcBuilders.standaloneSetup(itemResource, organizationResource).build();
 

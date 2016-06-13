@@ -2,7 +2,7 @@
 
 angular.module('publisherApp')
     .controller('ContentDetailsController', function ($scope, $state, EnumDatas, contentData) {
-console.log("enter ContentDetailsController",contentData);
+//console.log("enter ContentDetailsController",contentData);
         $scope.item = contentData[1].item;
         $scope.classifications = contentData[0];
         $scope.targets = contentData[1].targets;

@@ -11,6 +11,8 @@
                 "question": "Etes-vous certain de vouloir supprimer la publication {{ id }} ?",
                 "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
             },
+            "validate.question" : "Etes-vous certain de vouloir valider cette publication {{ id }} ?",
+            "unvalidate.question" : "Etes-vous certain de vouloir invalider cette publication {{ id }} ?",
             "detail": {
                 "title": "Publication"
             },

@@ -28,12 +28,13 @@
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active" ><a ui-sref="owned"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.manager.contents.owned">owned</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="pending"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" can-moderate><a ui-sref="pending"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.manager.contents.pending">pending</span></a></li>
-
+                        <li ui-sref-active="active" can-moderate><a ui-sref="managed"><span class="glyphicon glyphicon-asterisk"></span>
+                            &#xA0;<span translate="global.menu.manager.contents.managed">managed</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active">
+                <li ui-sref-active="active" can-moderate>
                     <a ui-sref="treeview">
                         <span class="glyphicon glyphicon-th-list"></span>
                         <span translate="global.menu.manager.contexts.main">Contexts</span>

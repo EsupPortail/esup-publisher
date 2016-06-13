@@ -19,6 +19,10 @@
             },
             "pending": {
                 "title": "Pending Publications"
+            },
+            "managed": {
+                "title": "All publications",
+                "order": "Organized by status :"
             }
         },
         "publish": {

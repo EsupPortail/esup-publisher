@@ -124,7 +124,7 @@ public class UserResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanEditCtxPerms(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
-        log.debug("REST request to get if user has edit rights on permission on context !");
+        log.debug("REST request to get if user has edit rights permission on context !");
         boolean canDo = permissionService.canEditCtxPerms(SecurityContextHolder.getContext().getAuthentication(), new ContextKey(ctxId, ctxType));
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
@@ -136,7 +136,7 @@ public class UserResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanEditCtxTargets(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
-        log.debug("REST request to get if user has edit rights on permission on context !");
+        log.debug("REST request to get if user has edit rights permission on context !");
         boolean canDo = permissionService.canEditCtxTargets(SecurityContextHolder.getContext().getAuthentication(), new ContextKey(ctxId, ctxType));
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
@@ -148,7 +148,7 @@ public class UserResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanDeleteCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
-        log.debug("REST request to get List of user Attributes to show !");
+        log.debug("REST request to get if user has delete rights permission on context !");
         boolean canDo = permissionService.canDeleteCtx(SecurityContextHolder.getContext().getAuthentication(), new ContextKey(ctxId, ctxType));
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
@@ -159,8 +159,17 @@ public class UserResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanCreateInCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
-        log.debug("REST request to get List of user Attributes to show !");
+        log.debug("REST request to get if user has create rights permission on context !");
         boolean canDo = permissionService.canCreateInCtx(SecurityContextHolder.getContext().getAuthentication(), new ContextKey(ctxId, ctxType));
+        return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users/perm/moderate", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @RolesAllowed(AuthoritiesConstants.USER)
+    public ResponseEntity<ValueResource> userModerateSomething() {
+        log.debug("REST request to get if user can moderate something !");
+        boolean canDo = permissionService.canModerateSomething(SecurityContextHolder.getContext().getAuthentication());
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
 

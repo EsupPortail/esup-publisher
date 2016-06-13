@@ -49,6 +49,10 @@ angular.module('publisherApp')
                 url: 'api/users/perm/editTargets',
                 method: 'GET'
             },
+            'canModerateAnyThing': {
+                url: 'api/users/perm/moderate',
+                method: 'GET'
+            },
             //'search': {
             //    url: 'api/users/search/:ctx_id/:ctx_type',
             //    method: 'GET', isArray: true,

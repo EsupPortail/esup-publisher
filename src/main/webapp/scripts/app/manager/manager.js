@@ -21,7 +21,7 @@ angular.module('publisherApp')
                     }
                 },
                 resolve: {
-                    dataResolved: [ '$q', 'Organization', 'Redactor', 'ItemStatus', function ($q, Organization, Redactor) {
+                    dataResolved: [ '$q', 'Organization', 'Redactor', function ($q, Organization, Redactor) {
                         var organizationList = Organization.query();
                         var redactorList = Redactor.query();
                         return $q.all([organizationList.$promise, redactorList.$promise]);

@@ -12,6 +12,7 @@ import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
+import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.dto.ActionDTO;
 import org.esupportail.publisher.web.rest.util.PaginationUtil;
@@ -40,13 +41,16 @@ import java.net.URISyntaxException;
 @RequestMapping("/api")
 public class ItemResource {
 
-	private final Logger log = LoggerFactory.getLogger(ItemResource.class);
+    private final Logger log = LoggerFactory.getLogger(ItemResource.class);
 
-	@Inject
-	private ItemRepository<AbstractItem> itemRepository;
+    @Inject
+    private ItemRepository<AbstractItem> itemRepository;
 
     @Inject
     private IPermissionService permissionService;
+
+    @Inject
+    private ContentService contentService;
 
     @Inject
     private FileService fileService;
@@ -75,7 +79,7 @@ public class ItemResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
-       + " && @permissionService.canEditCtx(authentication, #item.contextKey)")
+        + " && @permissionService.canEditCtx(authentication, #item.contextKey)")
     @Timed
     public ResponseEntity<Void> update(@RequestBody AbstractItem item) throws URISyntaxException {
         log.debug("REST request to update Item : {}", item);
@@ -113,7 +117,9 @@ public class ItemResource {
             case "enclosure" :
                 item.setEnclosure(action.getValue());
                 break;
-            default : break;
+            case "validate" :
+                return contentService.setValidationItem(Boolean.parseBoolean(action.getValue()), item);
+            default : return ResponseEntity.badRequest().build();
         }
         itemRepository.save(item);
         return ResponseEntity.ok().build();
@@ -128,10 +134,10 @@ public class ItemResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @Timed
     public ResponseEntity<ItemList> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                             @RequestParam(value = "per_page", required = false) Integer limit,
-                                             @RequestParam(value = "displayOrder", required = false) DisplayOrderType displayOrder,
-                                             @RequestParam(value = "owned", required = false) Boolean owned,
-                                             @RequestParam(value = "item_status", required = false) Integer itemStatus)
+                                           @RequestParam(value = "per_page", required = false) Integer limit,
+                                           @RequestParam(value = "displayOrder", required = false) DisplayOrderType displayOrder,
+                                           @RequestParam(value = "owned", required = false) Boolean owned,
+                                           @RequestParam(value = "item_status", required = false) Integer itemStatus)
         throws URISyntaxException {
         Sort sort = new QSort(ItemPredicates.orderByItemDefinition(DisplayOrderType.START_DATE));
         if (displayOrder != null) {
@@ -171,8 +177,8 @@ public class ItemResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_ITEM + "')")
-        //+ " && (hasPermission(#item, '" + SecurityConstants.PERM_EDITOR + "') || #item.createdBy.login.equals(principal.username))")
-        //+ " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_EDITOR + "')")
+    //+ " && (hasPermission(#item, '" + SecurityConstants.PERM_EDITOR + "') || #item.createdBy.login.equals(principal.username))")
+    //+ " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_EDITOR + "')")
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Item : {}", id);

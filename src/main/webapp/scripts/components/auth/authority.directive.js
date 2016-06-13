@@ -252,4 +252,38 @@ angular.module('publisherApp')
             }
 
         };
+    }])
+    .directive('canModerate', ['User', function (User) {
+        return {
+            restrict: 'A',
+            scope: {},
+            link: function (scope, element, attrs) {
+                var setVisible = function () {
+                        element.removeClass('hidden');
+                    },
+                    setHidden = function () {
+                        element.addClass('hidden');
+                    },
+                    defineVisibility = function (reset) {
+                        var result;
+                        if (reset) {
+                            setVisible();
+                        }
+
+                        User.canModerateAnyThing(function (data) {
+                            var result = data.value;
+                            if (result == true) {
+                                setVisible();
+                            } else {
+                                setHidden();
+                            }
+                        }, function () {
+                            setHidden();
+                        });
+                    };
+                setHidden();
+                defineVisibility(false);
+            }
+
+        };
     }]);

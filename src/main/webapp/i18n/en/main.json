@@ -16,6 +16,10 @@
                 "name": "Manage",
                 "desc": "Manage contents and publishing contexts"
             },
+            "moderate": {
+                "name": "Moderate",
+                "desc": "Moderate all contents"
+            },
             "admin": {
                 "name": "Administration",
                 "desc": "Super Administrator view"

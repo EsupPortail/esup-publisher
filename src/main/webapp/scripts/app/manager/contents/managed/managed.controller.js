@@ -1,14 +1,19 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('PendingController', function ($scope, Item, ContentDTO,ParseLinks) {
+    .controller('ManagedController', function ($scope, Item, ContentDTO, ParseLinks) {
         $scope.items = [];
         $scope.page = 1;
         /** in manager state resolve
-         $scope.itemStateList = itemStatusList;
-         $scope.organizations = organizationList;
-         $scope.redactors = redactorList;*/
+        $scope.itemStateList = itemStatusList;
+        $scope.organizations = organizationList;
+        $scope.redactors = redactorList;*/
+        $scope.itemState = getEnumKey('PENDING');
+        //$scope.itemStateList = ItemStatusList;//Enums.ItemStatus;
+        $scope.itemStateForManager = $scope.itemStateList.filter(function(val) {
+            return val.name !=  'DRAFT';
+        });
         $scope.loadAll = function() {
-            Item.query({page: $scope.page, per_page: 20, owned: false, item_status: getEnumKey('PENDING')}, function(result, headers) {
+            Item.query({page: $scope.page, per_page: 20, item_status: $scope.itemState}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.items = result;
             });
@@ -18,7 +23,6 @@ angular.module('publisherApp')
             $scope.loadAll();
         };
         $scope.loadAll();
-
 
         $scope.validate = function (id) {
             Item.get({id: id}, function(result) {
@@ -36,6 +40,21 @@ angular.module('publisherApp')
                 });
         };
 
+        $scope.invalidate = function (id) {
+            Item.get({id: id}, function(result) {
+                $scope.item = result;
+                $('#inValidateItemConfirmation').modal('show');
+            });
+        };
+
+        $scope.confirmInValidate = function (id) {
+            Item.patch({objectId:id, attribute : "validate", value: "false"},
+                function () {
+                    $scope.loadAll();
+                    $('#inValidateItemConfirmation').modal('hide');
+                    //$scope.clear();
+                });
+        };
         $scope.delete = function (id) {
             Item.get({id: id}, function(result) {
                 $scope.item = result;
@@ -52,17 +71,19 @@ angular.module('publisherApp')
                 });
         };
 
-        /*$scope.clear = function () {
-            $scope.item = {title: null, enclosure: null, endDate: null, startDate: null, validatedBy: null, validatedDate: null, status: null, summary: null, body: null, createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null};
-            $scope.editForm.$setPristine();
-            $scope.editForm.$setUntouched();
-        };*/
+        $scope.onClickState = function (state) {
+            $scope.itemState = state.id;
+            $scope.loadAll();
+        };
+
+        $scope.isActiveState = function(stateId) {
+            return stateId == $scope.itemState;
+        };
 
         function getEnumKey (name) {
             return $scope.itemStateList.filter(function(val) {
                 return val.name === name;
             })[0].id;
         }
-
     });
 
