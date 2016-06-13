@@ -38,6 +38,11 @@
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>
+            <div ng-show="!item.enclosure">
+                <p class="help-block" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
             <label class="control-label" for="summary" translate="publisherApp.resource.summary">Summary</label>
