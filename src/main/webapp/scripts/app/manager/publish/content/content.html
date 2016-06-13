@@ -9,17 +9,17 @@
         </div>
         <div class="col-sm-8" ng-if="item.id == null && itemTypeList.length > 1">
             <label ng-repeat="itemType in itemTypeList" class="radio-inline">
-                <input type="radio" name="type" value="{{itemType}}" ng-model="content.type" />&nbsp;<span>{{'enum.itemType.' + itemType | translate}}</span></label>
+                <input type="radio" name="type" value="{{itemType}}" ng-model="content.type" ng-change="changeContentType('{{content.type}}')"/>&nbsp;<span>{{'enum.itemType.' + itemType | translate}}</span></label>
         </div>
     </div>
 
     <form name="publishContentForm" ng-submit="processForm()" show-validation>
-        <div ng-repeat="template in templates"><div ng-if="content.type == template.name" ng-include="template.url"></div></div>
+        <div ng-repeat="template in templates"><div ng-if="content.type == template.name" ng-include src="template.url"></div></div>
     </form>
 
     <div class="text-center">
         <div class="btn-group" role="group">
-            <button type="button" ui-sref="publish.publisher" class="btn btn-info">
+            <button type="button" ui-sref="publish.classification" class="btn btn-info">
                 <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
             </button>
 
@@ -27,8 +27,10 @@
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
             </button>
 
-            <button type="button" ui-sref="publish.classification" ng-disabled="publishContentForm.$invalid || content.type == '' || (content.type == 'FLASH' && !$parent.item.enclosure)" class="btn btn-info" ng-click="validateItem()">
-                <span translate="manager.publish.nextStep"> Next Step</span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
+            <button type="button" ng-if="goOnTargets()" ui-sref="publish.targets"
+                    ng-disabled="publishContentForm.$invalid || content.type == '' || (content.type == 'FLASH' && !$parent.item.enclosure)"
+                    class="btn btn-info" ng-click="validateItem()">
+                <span> {{ 'manager.publish.nextStep' | translate }} </span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>
     </div>

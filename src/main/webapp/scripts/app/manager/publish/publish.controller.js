@@ -6,24 +6,8 @@ angular.module('publisherApp')
         //$scope.classifications = [];
         //$scope.targets = [];
         $scope.itemValidated = false;
+        $scope.classificationsValidated = false;
 
-            //if (angular.isDefined(contentData)) {
-            //    console.log("editing : ", contentData);
-            //    /*$scope.item = contentData.item;
-            //    if (contentData.targets && contentData.targets.length > 0) {
-            //        $scope.targets = contentData.targets;
-            //    }
-            //    $scope.itemValidated = true;
-            //    if (contentData.classifications && contentData.classifications.length > 0) {
-            //        $scope.classifications = contentData.classifications;
-            //        $scope.publisher = contentData.publisher;
-            //        console.log("Publisher: ", $scope.publisher);
-            //        console.log("classifications: ", $scope.classifications);
-            //        console.log("Item: ", $scope.item);
-            //        console.log("Targets: ", $scope.targets);
-            //
-            //    }*/
-            //}
 
         $scope.publishingType = function() {
             if (!$scope.isPublisherSelected()) {
@@ -47,13 +31,16 @@ angular.module('publisherApp')
 
 
         $scope.canSubmit = function() {
-            //console.log("canSubmit ?",$scope.classifications, $scope.publisher.context.redactor.writingMode, $scope.targets);
-            return $scope.publisher && $scope.publisher.id && $scope.itemValidated && $scope.classifications && $scope.classifications.length > 0
+            //console.log("canSubmit ?",$scope.itemValidated, $scope.classifications, $scope.publisher.context.redactor.writingMode, $scope.targets);
+            return $scope.publisher && $scope.publisher.id
+                && $scope.itemValidated
+                && $scope.classifications && $scope.classifications.length > 0
                 && ($scope.publisher.context.redactor.writingMode == "STATIC" || ($scope.targets && $scope.targets.length > 0));
         };
 
         $scope.canSave = function() {
-            return $scope.publisher && $scope.publisher.id && $scope.itemValidated ; //&& $scope.classifications.length > 0 && $scope.targets.length > 0 ;
+            return $scope.publisher && $scope.publisher.id && $scope.classificationsValidated && $scope.classifications.length > 0
+                && angular.isDefined($scope.item) && angular.isDefined($scope.item.title);
         };
 
         $scope.publishItem = function (status) {

@@ -13,13 +13,13 @@
                 </div>
                 <div class="publish-form-views-steps" ng-switch-when="STATIC">
                     <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.content.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.classification.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.classification.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.content.step' | translate}}</a>
                 </div>
                 <div class="publish-form-views-steps" ng-switch-default>
                     <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.content.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.classification.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.classification.step' | translate}}</a>
+                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.content.step' | translate}}</a>
                     <a ui-sref-active="active" ui-sref=".targets" disable-click="isClassificationsSelected()"><span>4</span> {{'manager.publish.targets.step' | translate}}</a>
                 </div>
             </div>

@@ -23,6 +23,12 @@ angular.module('publisherApp')
         $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate'];
         $scope.dtformat = $scope.dtformats[3];
 
+        $scope.changeContentType = function(oldValue) {
+            if (!angular.equals(oldValue, $scope.content.type) || !angular.isDefined($scope.$parent.item) || angular.equals({}, $scope.$parent.item)) {
+                $scope.initItem();
+            }
+        };
+
         if (!$scope.$parent.publisher || !$scope.$parent.publisher.id){
             //console.log("go back previous state as publisher isn't setted");
             $rootScope.back();
@@ -44,6 +50,7 @@ angular.module('publisherApp')
 
         if ($scope.itemTypeList.length == 1) {
             $scope.content.type = $scope.itemTypeList[0];
+            $timeout(function() {$scope.changeContentType('');});
         }
 
         $scope.templates = [{name: 'NEWS', url: 'scripts/app/manager/publish/content/news.html'},
@@ -54,23 +61,16 @@ angular.module('publisherApp')
 
         $scope.itemStatusList = EnumDatas.getItemStatusList();
 
-        if (angular.equals('', $scope.content.type)) {
-            //console.log('set type ');
-            $timeout(function() {
-                //console.log('timeout run');
-                $scope.content.type = 'NEWS';
-            });
-        }
-
-        $scope.$watch('content.type', function(newType, oldType) {
-            //console.log('New type setted : ' + JSON.stringify(newType));
-            if (oldType != newType || !angular.isDefined($scope.$parent.item) || angular.equals({}, $scope.$parent.item)) {
-                $scope.initItem();
+        $scope.$watch('$parent.item', function(newType, oldType) {
+            if (angular.isDefined($scope.publishContentForm) && $scope.publishContentForm.$valid
+                && angular.isDefined($scope.$parent.item) && $scope.$parent.item.body != null && $scope.$parent.item.body.length > 5) {
+                $scope.$parent.itemValidated = true;
+            } else {
+                $scope.$parent.itemValidated = false;
             }
-        }, true);
 
-        $scope.$watch('$parent.item.startDate', function(newType, oldType) {
-            //console.log('New startdate setted : ', newType, oldType);
+            //console.log("Form : ", $scope.publishContentForm);
+            //console.log("item : ", $scope.$parent.item);
         }, true);
 
         $scope.validateItem = function (){
@@ -177,11 +177,16 @@ angular.module('publisherApp')
             /*if (angular.isDefined($scope.$parent.item)) {
                 console.log("inited item :", $scope.$parent.item.type, $scope.$parent.item.startDate, $scope.$parent.item.endDate);
             }*/
-            if ($scope.$parent.publishContentForm) {
-                $scope.$parent.publishContentForm.$setPristine();
-                $scope.$parent.publishContentForm.$setUntouched();
+            if ($scope.publishContentForm) {
+                $scope.publishContentForm.$setPristine();
+                $scope.publishContentForm.$setUntouched();
             }
             //console.log("item init : ",$scope.$parent.item);
+        };
+
+        $scope.goOnTargets = function() {
+            //console.log("goOnTargets : " + JSON.stringify($scope.$parent.publisher.context.redactor.writingMode == "TARGETS_ON_ITEM"));
+            return $scope.$parent.publisher.context.redactor.writingMode == "TARGETS_ON_ITEM";
         };
 
         $scope.invalidFiles = [];

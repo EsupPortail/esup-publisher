@@ -4,6 +4,7 @@ angular.module('publisherApp')
 
         $scope.$parent.classifications = $scope.$parent.classifications || [];
         $scope.$parent.targets = $scope.$parent.targets || [];
+        $scope.$parent.classificationsValidated = $scope.$parent.classificationsValidated || false;
 
         $scope.classificationsList = [];
 
@@ -39,11 +40,6 @@ angular.module('publisherApp')
             });
         };
 
-        $scope.goOnTargets = function() {
-            //console.log("goOnTargets : " + JSON.stringify($scope.$parent.publisher.context.redactor.writingMode == "TARGETS_ON_ITEM"));
-            return $scope.$parent.publisher.context.redactor.writingMode == "TARGETS_ON_ITEM";
-        };
-
         $scope.loadAll();
 
         $scope.toggleSelection = function (contextKey) {
@@ -67,6 +63,10 @@ angular.module('publisherApp')
 
         $scope.containsSelectedClassification = function (contextKey) {
             return inArray(contextKey, $scope.$parent.classifications);
+        };
+
+        $scope.validateClassifications = function (){
+            $scope.$parent.classificationsValidated = true;
         };
 
         function remove(contextkey) {
