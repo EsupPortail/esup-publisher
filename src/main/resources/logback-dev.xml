@@ -34,6 +34,8 @@
     <logger name="org.esupportail.publisher.repository.externals.ldap" level="WARN"/>
     <logger name="org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl" level="DEBUG"/>
     <logger name="org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.security.UserContextLoaderServiceImpl" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.security.PermissionServiceImpl" level="DEBUG"/>
 
     <logger name="com.mysema" level="debug"/>
 
