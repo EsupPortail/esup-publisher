@@ -3,8 +3,8 @@
         "publisher" : {
             "home": {
                 "title": "Contextes de publication",
-                "createLabel": "Créer un nouveau contexte",
-                "createOrEditLabel": "Créer ou éditer un contexte"
+                "createLabel": "Créer un nouveau contexte de publication",
+                "createOrEditLabel": "Créer ou éditer un contexte de publication"
             },
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le contexte de publication {{ id }} ?"
@@ -18,11 +18,11 @@
                 "reader": "Canal d'affichage",
                 "redactor": "Outil de rédaction"
             },
-            "used": "Utiliser",
-            "displayOrder": "Ordre d'affichage",
+            "used": "Autoriser l'utilisation du contexte",
+            "displayOrder": "Position du contexte dans l'arborescence",
             "permissionType": "Type de permission",
-            "defaultDisplayOrder": "Ordre d'affichage par défaut",
-            "hasSubPermsManagement": "Gestion des permissions possible dans les rubriques",
+            "defaultDisplayOrder": "Affichage par défaut des articles",
+            "hasSubPermsManagement": "Permettre la gestion des permissions dans les rubriques",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

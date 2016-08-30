@@ -59,7 +59,7 @@
                     "main": "Publications",
                     "owned": "Mes publications",
                     "pending": "Publications à valider",
-                    "managed": "Gestion des publications"
+                    "managed": "Toutes les publications"
                 },
                 "contexts": {
                     "main": "Contextes"
@@ -147,20 +147,20 @@
             "title": "Confirmation d'invalidation"
         },
         "validation": {
-            "required": "Ce champs est obligatoire.",
-            "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
-            "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
-            "min": "Ce champs doit être inférieur à {{min}}.",
-            "max": "Ce champs doit être supérieur à {{max}}.",
-            "mindate": "Ce champs doit être une date après {{min}}.",
-            "maxdate": "Ce champs doit être une date avant {{max}}.",
-            "pattern": "Ce champs doit suivre l'expression régluière {{pattern}}.",
-            "number": "Ce champs doit être un nombre.",
-            "datetimelocal": "Ce champs doit être une date et une heure.",
-            "date": "Ce champs doit être une date valide.",
-            "dateLowerThan":"Ce champ doit être une date antérieur au champ {{field}}",
-            "dateGreaterThan":"Ce champ doit être une date postérieur à aujourd'hui et au champ {{field}}",
-            "url": "Ce champs doit être un URL valide.",
+            "required": "Champ obligatoire.",
+            "minlength": "Ce champ doit comporter au minimum {{min}} caractères.",
+            "maxlength": "Ce champ doit comporter moins de {{max}} caractères.",
+            "min": "La valeur doit être inférieure à '{{min}}'.",
+            "max": "La valeur doit être supérieure à '{{max}}'.",
+            "mindate": "La date doit être au minimum le '{{min}}'.",
+            "maxdate": "La date doit se situer avant le {{max}}.",
+            "pattern": "Ce champ doit suivre l'expression régluière '{{pattern}}'.",
+            "number": "Ce champ doit contenir un nombre.",
+            "datetimelocal": "Ce champ doit être composé d'une date et d'une heure.",
+            "date": "Ce champ doit être une date valide.",
+            "dateLowerThan":"La date doit se situer après celle du champ '{{field}}'.",
+            "dateGreaterThan":"La date doit se situer après la date du jour et après celle du champ '{{field}}'.",
+            "url": "Ce champ doit contenir une URL valide.",
             "maxduration": "Le temps maximum autorisé pour une vidéo est de {{maxduration}}.",
             "maxsize": "La taille maximum autorisée d'un fichier est de {{maxsize}}.",
             "filepattern": "Ce type de média n'est pas autorisé."

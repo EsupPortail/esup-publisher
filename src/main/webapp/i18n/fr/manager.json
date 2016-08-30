@@ -15,14 +15,14 @@
             },
             "owned": {
                 "title": "Mes Publications",
-                "order": "Organisées par état de publication :"
+                "order": "Organisées par état de publication"
             },
             "pending": {
                 "title": "Publications en attente de validation"
             },
             "managed": {
                 "title": "Toutes les publications",
-                "order": "Organisées par état de publication :"
+                "order": "Organisées par état de publication"
             }
         },
         "publish": {
@@ -30,10 +30,10 @@
             "publisher": {
                 "step": "Contexte",
                 "title": "Contexte de publication",
-                "reader": "Dans quel canal ENT souhaitez vous publier :",
+                "reader": "Service ENT dans lequel vous souhaitez publier :",
                 "redactor": "Mode de saisie :",
                 "organization": "Pour la structure :",
-                "selected": "Publication dans le canal {{channel}} avec le mode de saisie {{writer}} pour la structure {{organization}}",
+                "selected": "Publication dans le contexte {{channel}} avec le mode de saisie {{writer}} pour la structure {{organization}}",
                 "emptyList": "Vous n'avez aucun droit sur un quelconque contexte de publication ou il se peut qu'aucun contexte ne soit défini !"
             },
             "content": {
@@ -42,9 +42,9 @@
                 "type": "Type de contenu"
             },
             "classification": {
-                "step": "Organiser",
-                "title": "Organiser",
-                "choice": "Associer des rubriques à la publication :",
+                "step": "Rubrique",
+                "title": "Choix de la rubrique",
+                "choice": "Classer la publication dans une ou plusieurs rubriques :",
                 "emptyList": "Vous n'avez pas de droit sur les rubriques du context sélectionné ou il n'y a aucune rubrique de définie !"
             },
             "targets": {

@@ -16,13 +16,13 @@
             "title": "Titre",
             "enclosure": "Illustration",
             "enclosure.button": "Sélectionner une illustration",
-            "endDate": "Date de disparition",
-            "startDate": "Date d'apparition",
+            "endDate": "Fin de publication",
+            "startDate": "Début de publication",
             "validatedBy": "Validé par",
             "validatedDate": "Date de validation",
             "status": "État",
             "summary": "Résumé",
-            "body": "Texte",
+            "body": "Détail de la flash-info",
             "rssAllowed": "Accès public via les flux RSS",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
@@ -35,10 +35,10 @@
                 "save": "Enregistrer"
             },
             "inputfile": {
-                "title": "Sélection d'une image",
+                "title": "Sélection d'une illustration",
                 "crop" : {
                     "step1" : "Charger une image",
-                    "step2" : "Sélectionner une zone de l'image",
+                    "step2" : "Définir la zone de l'image qui sera affichée avec la flash-info",
                     "step3" : "Valider la sélection"
                 }
             }

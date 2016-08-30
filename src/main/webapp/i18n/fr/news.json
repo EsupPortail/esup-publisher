@@ -7,7 +7,7 @@
                 "createOrEditLabel": "Créer ou éditer une news"
             },
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer la news {{ id }} ?",
+                "question": "Etes-vous certain de vouloir supprimer l'actualité {{ id }} ?",
                 "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
             },
             "detail": {
@@ -16,14 +16,14 @@
             "title": "Titre",
             "enclosure": "Illustration",
             "enclosure.button": "Sélectionner une illustration",
-            "endDate": "Date de disparition",
-            "startDate": "Date d'apparition",
+            "endDate": "Fin de publication",
+            "startDate": "Début de publication",
             "validatedBy": "Validé par",
             "validatedDate": "Date de validation",
             "status": "État",
             "summary": "Résumé",
             "rssAllowed": "Accès public via les flux RSS",
-            "body": "Texte",
+            "body": "Détail de l'actualité",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",
@@ -35,7 +35,7 @@
                 "save": "Enregistrer"
             },
             "inputfile": {
-                "title": "Sélection d'une image",
+                "title": "Sélection d'une illustration",
                 "url.label": "Depuis un lien web",
                 "resizeauto" : "Découpage automatique",
                 "resizecrop" : "Découpage manuel",

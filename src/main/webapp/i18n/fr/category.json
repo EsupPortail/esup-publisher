@@ -2,15 +2,15 @@
     "publisherApp": {
         "category" : {
             "home": {
-                "title": "Catégories",
-                "createLabel": "Créer une nouvelle catégorie",
-                "createOrEditLabel": "Créer ou éditer une categorie"
+                "title": "Rubriques",
+                "createLabel": "Créer une nouvelle rubrique",
+                "createOrEditLabel": "Créer ou éditer une rubrique"
             },
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer la categorie {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer la rubrique {{ id }} ?"
             },
             "detail": {
-                "title": "Catégorie"
+                "title": "Rubrique"
             },
             "rssAllowed": "Autoriser RSS",
             "name": "Nom",
@@ -25,10 +25,10 @@
                 "es": "Espagnol"
             },
             "ttl": "TTL",
-            "displayOrder": "Ordre d'affichage",
+            "displayOrder": "Position de la rubrique dans l'arborescence",
             "accessView": "Type d'accès",
             "description": "Description",
-            "defaultDisplayOrder": "Ordre d'affichage par défaut",
+            "defaultDisplayOrder": "Ordre d'affichage des articles",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

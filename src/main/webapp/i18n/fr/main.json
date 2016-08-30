@@ -14,11 +14,11 @@
             },
             "manage": {
                 "name": "Gérer",
-                "desc": "Gérer les contenus publiés et les contextes de publication"
+                "desc": "Gérer les publications et les contextes de publication"
             },
             "moderate": {
                 "name": "Modérer",
-                "desc": "Modérer les contenus publiés"
+                "desc": "Modérer les publications"
             },
             "admin": {
                 "name": "Administration",

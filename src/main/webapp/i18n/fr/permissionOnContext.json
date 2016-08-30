@@ -10,17 +10,17 @@
                 "question": "Etes-vous certain de vouloir supprimer la permission de contexte avec le droit {{ id }} ?"
             },
             "detail": {
-                "title": "Permissions sur le contexte"
+                "title": "Permissions sur le niveau sélectionné"
             },
             "ctxId": "CtxId",
             "ctxType": "CtxType",
-            "role": "Rôle",
+            "role": "Rôle à attribuer",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",
             "lastModifiedDate": "Date de dernière modification",
             "evaluator": "Évaluateur",
-            "evaluatorsimple" : "Populations",
+            "evaluatorsimple" : "Populations recevant le rôle",
             "evaluator.add" : {
                 "action": "Ajouter :",
                 "user": "Personne",

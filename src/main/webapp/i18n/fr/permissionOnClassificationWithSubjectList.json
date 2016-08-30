@@ -20,8 +20,8 @@
             "lastModifiedBy": "Dernière modification par",
             "lastModifiedDate": "Date de dernière modification",
             "evaluator": "Évaluateur",
-            "authorizedSubjects": "Cibles autorisées",
-            "evaluatorsimple" : "Populations",
+            "authorizedSubjects": "Publics cibles autorisés pour ce rôle",
+            "evaluatorsimple" : "Populations recevant le rôle",
             "evaluator.add" : {
                 "action": "Ajouter :",
                 "user": "Personne",

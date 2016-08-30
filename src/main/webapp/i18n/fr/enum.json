@@ -12,13 +12,13 @@
                 "title": "À venir"
             },
             "published": {
-                "title": "Publié"
+                "title": "Publiées"
             },
             "archived": {
-                "title": "Expiré"
+                "title": "Expirées"
             },
             "draft": {
-                "title": "Brouillon"
+                "title": "Brouillons"
             }
         },
         "itemType": {
@@ -30,19 +30,19 @@
         },
         "displayOrder": {
             "lastCreatedModifiedFirst": {
-                "title":"Dernier créé/modifié en premier"
+                "title":"Dernier créé ou modifié en premier"
             },
             "onlyLastCreatedFirst": {
                 "title":"Dernier créé en premier"
             },
             "byName": {
-                "title": "Sur le nom"
+                "title": "Alphabétique (sur le nom)"
             },
             "byStartDate": {
                 "title": "Par date de début de publication"
             },
             "custom": {
-                "title": "Manuel"
+                "title": "Classement manuel"
             }
         },
         "permission": {
@@ -59,15 +59,15 @@
                 "title": "Contributeur"
             },
             "lookover": {
-                "title": "Parcours"
+                "title": "Visiteur"
             }
         },
         "permissionclass": {
             "context": {
-                "title": "Permissions sur des contextes"
+                "title": "Simple attribution de rôles"
             },
             "contextwithsubjects": {
-                "title": "Permissions sur des contextes avec des populations cible filtrées"
+                "title": "Attribution de rôles sur populations cibles"
             },
             "subject": {
                 "title": "Permissions sur des personnes"
@@ -108,10 +108,10 @@
         },
         "writingMode": {
             "static": {
-                "title": "Cibles pré-définis via les classifications"
+                "title": "Cibles pré-définies via les classifications"
             },
             "targetsOnItem": {
-                "title": "Cibles définis lors de la publication."
+                "title": "Cibles définies lors de la publication."
             }
         }
     }
