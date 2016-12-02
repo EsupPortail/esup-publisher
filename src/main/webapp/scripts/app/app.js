@@ -7,6 +7,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
+        $rootScope.HOST = $location.host().split('.').join('_');
         //$rootScope.showSpinner = false;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             //console.log("$stateChangeStart");
