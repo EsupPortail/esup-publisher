@@ -123,25 +123,29 @@
                    ng-model="item.rssAllowed"/>
 
         </div>
-        <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
-            <label class="control-label" for="body" translate="publisherApp.flash.body">Body</label>
-            <text-angular name="body" id="body"
-                          ng-model="item.body" required ng-minlength="15"></text-angular>
-            <!--<input type="text" class="form-control" name="body" id="body"-->
-            <!--ng-model="item.body" required ng-minlength="5">-->
+		<div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
+			<label class="control-label" for="body"	translate="publisherApp.flash.body">Body</label>
+			<text-angular ta-file-drop="taDropHandler" name="body" id="body" ng-model="item.body" required ng-minlength="15"></text-angular>
+			<!--<input type="text" class="form-control" name="body" id="body"-->
+			<!--ng-model="item.body" required ng-minlength="5">-->
 
-            <div ng-show="publishContentForm.body.$invalid">
-                <p class="help-block"
-                   ng-show="publishContentForm.body.$error.required" translate="entity.validation.required">
+			<div ng-show="publishContentForm.body.$invalid">
+				<p class="help-block"
+					ng-show="publishContentForm.body.$error.required" translate="entity.validation.required">
                     This field is required.
+				</p>
+				<p class="help-block"
+					ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
+					This field is required to be at least 15 characters.
                 </p>
-                <p class="help-block"
-                   ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
-                    This field is required to be at least 15 characters.
-                </p>
-            </div>
-        </div>
-        <!--
+                <div class="alert alert-danger" ng-show="errorMsgTa && errorMsgTa != null" >
+                    <p class="error-message" translate="{{errorMsgTa}}" translate-value="{{errorMsgTaExplain}}">
+                        An error occured !
+                    </p>
+                </div>
+			</div>
+		</div>
+		<!--
         <div class="form-group">
             <label translate="publisherApp.flash.organization">organization</label>
             <select class="form-control" name="organization" ng-model="item.organization.id" ng-options="organization.id as organization.name for organization in organizations" required>

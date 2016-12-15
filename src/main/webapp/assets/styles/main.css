@@ -422,6 +422,22 @@ form .progress {
 .fa-users .tooltip-inner {
     word-break: break-all;
 }
+
+
+/* ========================================
+    For TextAngular et specific buttons
+===========================================*/
+.tadropdown {
+    padding: 0px;
+    border:none;
+}
+/* see custom taDropdown, and copy style of .btn-default.active*/
+.tadropdown.active > button, .btn-default.active {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
 /* ========================================
     For ng-animates with ui-router, some transition give problems
 ===========================================*/

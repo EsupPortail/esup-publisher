@@ -1,12 +1,34 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, $timeout, FileManager, Base64, DateService) {
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, $timeout, FileManager, Base64, DateService, $translate, taTranslations) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
         $scope.content = {type : '', picFile: null, picUrl: null, file:null};
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
         $scope.enclosureDirty = false;
+
+        // I18n TextAngular Adds that can't be applied during app.config
+        angular.forEach(taTranslations, function(key, value){
+            translateSubKeys(key, value, 'textangular.');
+        });
+        function translateSubKeys(key, value, parentPartKey) {
+            angular.forEach(Object.keys(key), function(subkey, subvalue) {
+                if (typeof key[subkey] === 'object' && key[subkey] !== null) {
+                    translateSubKeys(key[subkey], subvalue, parentPartKey + value + '.' + subkey + ".");
+                } else {
+                    var subpath = '';
+                    if (typeof value !== 'number') {
+                        subpath = value + ".";
+                    }
+                    console.log("translate :", parentPartKey + subpath + subkey, key[subkey]);
+                    $translate(parentPartKey + subpath + subkey).then(function (translatedValue) {
+                        key[subkey] = translatedValue;
+                        console.log("translated :", JSON.stringify(taTranslations) );
+                    });
+                }
+            });
+        }
 
         var today = new Date();
         var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
@@ -319,6 +341,59 @@ angular.module('publisherApp')
                         $('#deleteEnclosureConfirmation').modal('hide');
                     }
                 });
+        };
+
+        $scope.taDropHandler =  function(file, insertAction){
+            console.log("loading file into TextAngular !");
+
+            if (file.type.substring(0, 5) === 'image' ){
+                // TODO DEFINIR LA TAILLE MAX DE FICHIER A JOINDRE
+                if (file.size <= 1310720){
+                    Upload.upload({
+                        url: 'app/upload/',
+                        data: {
+                            file : file,
+                            isPublic: true,
+                            entityId: $scope.$parent.publisher.context.organization.id
+                        }
+                    }).then(function (response) {
+                        // SUCCESS
+                        $scope.errorMsgTa = null;
+                        var resultUrl = response.headers("Location");
+                        insertAction('insertImage', resultUrl, true);
+                    }, function (response) {
+                        // ERROR
+                        console.log("response fct 2", response);
+                        if (response.status > 0){
+                            $scope.errorMsgTa = "taDropHandler.error.server";
+                            $scope.errorMsgTaExplain = response.statusText;
+                            //$scope.errorMsgTa += response.status + ': ' + response.statusText;
+                            $timeout(function(){
+                                $scope.errorMsgTa = null;
+                                $scope.errorMsgTaExplain = null;
+                            }, 5000);
+                        }
+                    }, function (evt) {
+                        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                    });
+                    return true;
+                }else {
+                    // FILE SIZE ISSUE
+                    $scope.errorMsgTa = "taDropHandler.error.filesize";
+                    $timeout(function(){
+                        $scope.errorMsgTa = null;
+                    }, 5000);
+                    return true;
+                }
+
+            }
+            // FILE TYPE ISSUE
+            $scope.errorMsgTa = "taDropHandler.error.filetype";
+            $timeout(function(){
+                $scope.errorMsgTa = null;
+            }, 5000);
+            return true;
+
         };
 
         $scope.validatePicUrl = function (picUrl) {

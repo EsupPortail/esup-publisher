@@ -1,0 +1,123 @@
+{
+    "textangular":{
+        "html":{
+            "tooltip":"Basculer html / texte riche"
+        },
+        "heading":{
+            "tooltip":"Titre "
+        },
+        "h1":{
+            "tooltip":"Titre 1"
+        },
+        "h2":{
+            "tooltip":"Titre 2"
+        },
+        "h3":{
+            "tooltip":"Titre 3"
+        },
+        "h4":{
+            "tooltip":"Titre 4"
+        },
+        "h5":{
+            "tooltip":"Titre 5"
+        },
+        "p":{
+            "tooltip":"Paragraphe"
+        },
+        "pre":{
+            "tooltip":"Texte préformatté"
+        },
+        "ul":{
+            "tooltip":"Liste non-ordonnée"
+        },
+        "ol":{
+            "tooltip":"Liste ordonnée"
+        },
+        "quote":{
+            "tooltip":"Citation"
+        },
+        "undo":{
+            "tooltip":"Annuler"
+        },
+        "redo":{
+            "tooltip":"Rétablir"
+        },
+        "bold":{
+            "tooltip":"Gras"
+        },
+        "italic":{
+            "tooltip":"Italique"
+        },
+        "underline":{
+            "tooltip":"Souligné"
+        },
+        "strikeThrough":{
+            "tooltip":"Barré"
+        },
+        "justifyLeft":{
+            "tooltip":"Aligner le texte à gauche"
+        },
+        "justifyRight":{
+            "tooltip":"Aligner le texte à droite"
+        },
+        "justifyFull":{
+            "tooltip":"Justifier le texte"
+        },
+        "justifyCenter":{
+            "tooltip":"Centrer le texte"
+        },
+        "indent":{
+            "tooltip":"Augmenter l'indentation"
+        },
+        "outdent":{
+            "tooltip":"Diminuer l'indentation"
+        },
+        "clear":{
+            "tooltip":"Enlever le formattage"
+        },
+        "insertImage":{
+            "dialogPrompt":"Entrer l'url de l'image à insérer",
+            "tooltip":"Insérer une image",
+            "hotkey":"the - possibly language dependent hotkey ... for some future implementation"
+        },
+        "insertVideo":{
+            "tooltip":"Insérer une video",
+            "dialogPrompt":"Entrer l'url youtube de la vidéo à insérer"
+        },
+        "insertLink":{
+            "tooltip":"Insérer / éditer un lien ",
+            "dialogPrompt":"Insérer une url"
+        },
+        "editLink":{
+            "reLinkButton":{
+                "tooltip":"Éditer le lien"
+            },
+            "unLinkButton":{
+                "tooltip":"Supprimer le lien"
+            },
+            "targetToggle":{
+                "buttontext":"Ouvrir dans une nouvelle fenetre"
+            }
+        },
+        "wordcount":{
+            "tooltip":"Montrer le total de mots"
+        },
+        "charcount":{
+            "tooltip":"Montrer le total de caractéres"
+        },
+        "textTypeDropdown":{
+            "tooltip":"Format du texte"
+        },
+        "fontColor":{
+            "tooltip":"Couleur de texte"
+        },
+        "backgroundColor": {
+            "tooltip":"Couleur d'arrière-plan"
+        }
+    },
+    "taDropHandler.error": {
+        "server" : "Une erreur s'est produite lors du transfert de fichier : {{ error }}",
+        "filesize": "Le fichier sélectionné est trop volumineux !",
+        "filetype": "Ce type de fichier n'est pas autorisé, veuillez sélectionner une image !"
+    }
+}
