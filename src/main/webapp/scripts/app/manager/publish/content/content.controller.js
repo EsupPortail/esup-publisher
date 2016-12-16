@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, $timeout, FileManager, Base64, DateService, $translate, taTranslations) {
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, Configuration, $timeout, FileManager, Base64, DateService, $translate, taTranslations) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
@@ -21,10 +21,10 @@ angular.module('publisherApp')
                     if (typeof value !== 'number') {
                         subpath = value + ".";
                     }
-                    console.log("translate :", parentPartKey + subpath + subkey, key[subkey]);
+                    //console.log("translate :", parentPartKey + subpath + subkey, key[subkey]);
                     $translate(parentPartKey + subpath + subkey).then(function (translatedValue) {
                         key[subkey] = translatedValue;
-                        console.log("translated :", JSON.stringify(taTranslations) );
+                        //console.log("translated :", JSON.stringify(taTranslations) );
                     });
                 }
             });
@@ -344,11 +344,9 @@ angular.module('publisherApp')
         };
 
         $scope.taDropHandler =  function(file, insertAction){
-            console.log("loading file into TextAngular !");
-
             if (file.type.substring(0, 5) === 'image' ){
-                // TODO DEFINIR LA TAILLE MAX DE FICHIER A JOINDRE
-                if (file.size <= 1310720){
+                var sizeMax = Configuration.getConfUploadImageSize();
+                if (file.size <= sizeMax){
                     Upload.upload({
                         url: 'app/upload/',
                         data: {
@@ -363,37 +361,28 @@ angular.module('publisherApp')
                         insertAction('insertImage', resultUrl, true);
                     }, function (response) {
                         // ERROR
-                        console.log("response fct 2", response);
                         if (response.status > 0){
                             $scope.errorMsgTa = "taDropHandler.error.server";
                             $scope.errorMsgTaExplain = response.statusText;
-                            //$scope.errorMsgTa += response.status + ': ' + response.statusText;
-                            $timeout(function(){
-                                $scope.errorMsgTa = null;
-                                $scope.errorMsgTaExplain = null;
-                            }, 5000);
                         }
                     }, function (evt) {
                         $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                     });
                     return true;
-                }else {
+                } else {
                     // FILE SIZE ISSUE
                     $scope.errorMsgTa = "taDropHandler.error.filesize";
-                    $timeout(function(){
-                        $scope.errorMsgTa = null;
-                    }, 5000);
+                    $scope.errorMsgTaExplain = sizeMax;
                     return true;
                 }
-
             }
             // FILE TYPE ISSUE
             $scope.errorMsgTa = "taDropHandler.error.filetype";
-            $timeout(function(){
-                $scope.errorMsgTa = null;
-            }, 5000);
             return true;
-
+        };
+        $scope.cleanErrorMsgTa = function() {
+            $scope.errorMsgTa = null;
+            $scope.errorMsgTaExplain = null;
         };
 
         $scope.validatePicUrl = function (picUrl) {

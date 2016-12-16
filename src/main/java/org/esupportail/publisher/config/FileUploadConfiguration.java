@@ -1,5 +1,7 @@
 package org.esupportail.publisher.config;
 
+import java.io.File;
+
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
-
-import java.io.File;
 
 /**
  * Created by jgribonvald on 25/01/16.
@@ -22,6 +22,9 @@ public class FileUploadConfiguration {
     private Environment env;
 
     private static final String ENV_UPLOAD_PATH = "app.upload.path";
+    private static final String ENV_UPLOAD_IMAGESIZE = "app.upload.imageMaxSize";
+
+    private static final long DefaultImageMaxSize = 131072;
 
     @Bean
     public FileUploadHelper internalFileUploadHelper() {
@@ -31,6 +34,7 @@ public class FileUploadConfiguration {
             fuh.setResourceLocation("file:///" + getDefinedUploadPath());
             fuh.setUrlResourceMapping("files/");
             fuh.setUseDefaultPath(false);
+            fuh.setImageMaxSize(env.getProperty(ENV_UPLOAD_IMAGESIZE, long.class, DefaultImageMaxSize));
             log.debug("FileUploadConfiguration : " + fuh.toString());
             return fuh;
         }
@@ -38,6 +42,7 @@ public class FileUploadConfiguration {
         fuh.setResourceLocation("classpath:static/");
         fuh.setUrlResourceMapping("files/");
         fuh.setUseDefaultPath(true);
+        fuh.setImageMaxSize(env.getProperty(ENV_UPLOAD_IMAGESIZE, long.class, DefaultImageMaxSize));
         log.debug("FileUploadConfiguration : " + fuh.toString());
         return fuh;
     }

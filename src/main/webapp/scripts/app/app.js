@@ -331,8 +331,8 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
 
                     return $translate.refresh();
                 }],
-                initData: [ 'EnumDatas', '$q', function(EnumDatas, $q){
-                    return EnumDatas.init();
+                initData: [ 'Configuration', 'EnumDatas', function(Configuration, EnumDatas){
+                    return EnumDatas.init() && Configuration.init();
                 }]
             }
         });

@@ -17,4 +17,6 @@ public class FileUploadHelper {
     private String urlResourceMapping;
 
     private boolean useDefaultPath;
+
+    private long imageMaxSize;
 }

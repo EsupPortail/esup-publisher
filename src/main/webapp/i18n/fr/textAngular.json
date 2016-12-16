@@ -77,8 +77,7 @@
         },
         "insertImage":{
             "dialogPrompt":"Entrer l'url de l'image à insérer",
-            "tooltip":"Insérer une image",
-            "hotkey":"the - possibly language dependent hotkey ... for some future implementation"
+            "tooltip":"Insérer une image"
         },
         "insertVideo":{
             "tooltip":"Insérer une video",
@@ -116,8 +115,8 @@
         }
     },
     "taDropHandler.error": {
-        "server" : "Une erreur s'est produite lors du transfert de fichier : {{ error }}",
-        "filesize": "Le fichier sélectionné est trop volumineux !",
+        "server" : "Une erreur s'est produite lors du transfert de fichier ! {{ error }}",
+        "filesize": "Le fichier sélectionné est trop volumineux ! La taille limite est de {{ error }} octets.",
         "filetype": "Ce type de fichier n'est pas autorisé, veuillez sélectionner une image !"
     }
 }

@@ -438,6 +438,19 @@ form .progress {
     border-color: #adadad;
 }
 
+/* =======================================
+    For Fixed alert to be visible on top of screen everywhere
+==========================================*/
+.alert-fixed {
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index:9999;
+    border-radius:0px;
+    text-align: center;
+}
+
 /* ========================================
     For ng-animates with ui-router, some transition give problems
 ===========================================*/

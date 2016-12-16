@@ -138,12 +138,13 @@
 					ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
 					This field is required to be at least 15 characters.
                 </p>
-                <div class="alert alert-danger" ng-show="errorMsgTa && errorMsgTa != null" >
-                    <p class="error-message" translate="{{errorMsgTa}}" translate-value="{{errorMsgTaExplain}}">
-                        An error occured !
-                    </p>
-                </div>
 			</div>
+            <div class="alert alert-danger alert-fixed" ng-show="errorMsgTa && errorMsgTa != null" >
+                <button type="button" class="close" ng-click="cleanErrorMsgTa()">&times;</button>
+                <p class="error-message" translate="{{errorMsgTa}}" translate-values="{error: '{{errorMsgTaExplain}}'}">
+                    An error occured !
+                </p>
+            </div>
 		</div>
 		<!--
         <div class="form-group">

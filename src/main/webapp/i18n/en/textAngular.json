@@ -116,8 +116,8 @@
         }
     },
     "taDropHandler.error": {
-        "server" : "An error occured during dosnload : {{ error }}",
-        "filesize": "The file is too large !",
+        "server" : "An error occured during dosnload ! {{ error }}",
+        "filesize": "The file is too large ! The size limit is {{ error }}.",
         "filetype": "The file type isn't autorized, insert only an image !"
     }
 }
