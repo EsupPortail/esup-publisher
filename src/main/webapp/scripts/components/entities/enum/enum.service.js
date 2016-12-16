@@ -81,7 +81,8 @@ angular.module('publisherApp')
                         ItemStatusList = results[4];
                         ItemTypeList = results[5];
                         OperatorTypeList = results[6];
-                        PermissionClassList = results[7];                     PermissionTypeList = results[8];
+                        PermissionClassList = results[7];
+                        PermissionTypeList = results[8];
                         StringEvaluationModeList = results[9];
                         SubjectTypeList = results[10];
                         SubscribeTypeList = results[11];
@@ -89,7 +90,7 @@ angular.module('publisherApp')
                         WritingFormatList = results[13];
                         ClassificationDecorTypeList = results[14];
                     }).catch(function (error) {
-                        console.log(JSON.stringify(error));
+                        //console.log(JSON.stringify(error));
                         $state.go("error");
                     });
             },
