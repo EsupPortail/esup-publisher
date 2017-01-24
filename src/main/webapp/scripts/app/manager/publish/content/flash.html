@@ -2,14 +2,12 @@
     <div class="flashForm">
         <div class="form-group hidden">
             <label class="control-label" for="ID">ID</label>
-            <input type="text" class="form-control" name="id" id="ID"
-                   ng-model="item.id" readonly>
+            <input type="text" class="form-control" name="id" id="ID" ng-model="item.id" readonly>
         </div>
 
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.title.$invalid && publishContentForm.title.$dirty }">
             <label class="control-label" for="title" translate="publisherApp.flash.title">Title</label>
-            <input type="text" class="form-control" name="title" id="title"
-                   ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
+            <input type="text" class="form-control" name="title" id="title" ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
 
             <div ng-show="publishContentForm.title.$invalid">
                 <p class="help-block"
@@ -21,7 +19,7 @@
                     This field is required to be at least 3 characters.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                   ng-show="publishContentForm.title.$error.maxlength"	translate="entity.validation.maxlength" translate-value-max="200">
                     This field cannot be longer than 200 characters.
                 </p>
             </div>
@@ -33,8 +31,9 @@
                     <span>{{'publisherApp.flash.enclosure.button' | translate}}</span>
                 </button>
 
-                <img ng-if="item.enclosure" name="enclosure" id="enclosure" ng-src="{{item.enclosure}}" />
-                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
+                <img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" />
+                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation"
+                   uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>
@@ -46,8 +45,7 @@
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
             <label class="control-label" for="summary" translate="publisherApp.flash.summary">Summary</label>
-            <textarea class="form-control" name="summary" id="summary" rows="3"
-                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" ></textarea>
+            <textarea class="form-control" name="summary" id="summary" rows="3" ng-model="item.summary" required ng-minlength="5" ng-maxlength="512"></textarea>
 
             <div ng-show="publishContentForm.summary.$invalid">
                 <p class="help-block"
@@ -55,11 +53,13 @@
                     This field is required.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                   ng-show="publishContentForm.summary.$error.minlength"
+                   translate="entity.validation.minlength" translate-value-min="5">
                     This field is required to be at least 5 characters.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                   ng-show="publishContentForm.summary.$error.maxlength"
+                   translate="entity.validation.maxlength" translate-value-max="512">
                     This field cannot be longer than 512 characters.
                 </p>
             </div>
@@ -76,19 +76,24 @@
                            ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate"
+                           translate-value-min="{{startdate | date: dtformat }}">
                             A date after now is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate"
+                           translate-value-max="{{item.endDate | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
-                           ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
+                           ng-show="publishContentForm.startDate.$error.dateLowerThan"	translate="entity.validation.dateLowerThan"
                            translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
-                            From date must be lower than To date
+                            From date must be lower than To date.
                         </p>
                     </div>
                 </div>
@@ -102,16 +107,18 @@
                            ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
                            translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
-                            From date must be greater than From date
+                            From date must be greater than From date.
                         </p>
                     </div>
                 </div>
@@ -119,34 +126,32 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="rssAllowed" translate="publisherApp.flash.rssAllowed">Allow in RSS</label>
-            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed"
-                   ng-model="item.rssAllowed"/>
-
+            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed" />
         </div>
-		<div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
-			<label class="control-label" for="body"	translate="publisherApp.flash.body">Body</label>
-			<text-angular ta-file-drop="taDropHandler" name="body" id="body" ng-model="item.body" required ng-minlength="15"></text-angular>
-			<!--<input type="text" class="form-control" name="body" id="body"-->
-			<!--ng-model="item.body" required ng-minlength="5">-->
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
+            <label class="control-label" for="body"	translate="publisherApp.flash.body">Body</label>
+            <text-angular ta-file-drop="taDropHandler" name="body" id="body" ng-model="item.body" required ng-minlength="15"></text-angular>
+            <!--<input type="text" class="form-control" name="body" id="body"-->
+            <!--ng-model="item.body" required ng-minlength="5">-->
 
-			<div ng-show="publishContentForm.body.$invalid">
-				<p class="help-block"
-					ng-show="publishContentForm.body.$error.required" translate="entity.validation.required">
+            <div ng-show="publishContentForm.body.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.body.$error.required" translate="entity.validation.required">
                     This field is required.
-				</p>
-				<p class="help-block"
-					ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
-					This field is required to be at least 15 characters.
                 </p>
-			</div>
+                <p class="help-block"
+                   ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
+                    This field is required to be at least 15 characters.
+                </p>
+            </div>
             <div class="alert alert-danger alert-fixed" ng-show="errorMsgTa && errorMsgTa != null" >
                 <button type="button" class="close" ng-click="cleanErrorMsgTa()">&times;</button>
                 <p class="error-message" translate="{{errorMsgTa}}" translate-values="{error: '{{errorMsgTaExplain}}'}">
                     An error occured !
                 </p>
             </div>
-		</div>
-		<!--
+        </div>
+        <!--
         <div class="form-group">
             <label translate="publisherApp.flash.organization">organization</label>
             <select class="form-control" name="organization" ng-model="item.organization.id" ng-options="organization.id as organization.name for organization in organizations" required>
@@ -159,8 +164,7 @@
         </div>
         -->
     </div>
-    <div class="modal fade modal-full-screen" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale"
-         aria-hidden="true">
+    <div class="modal fade modal-full-screen" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -195,7 +199,7 @@
                         </div>-->
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3>{{'publisherApp.flash.inputfile.crop.step'+crop.imageCropStep | translate}}</h3>
+                                <h3>{{'publisherApp.flash.inputfile.crop.step' + crop.imageCropStep | translate}}</h3>
                             </div>
                             <div class="panel-body">
 
@@ -240,14 +244,14 @@
                                         </div>
 
                                     </div>
-
                                 </div>
-
-                                    <span class="progress" ng-show="progress > 0">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress+'%'}">
-                                            <span>{{progress}}%</span>
-                                        </div>
-                                    </span>
+								<span class="progress" ng-show="progress > 0">
+									<div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{progress}}" aria-valuemin="0"
+                                         aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                                        <span>{{progress}}%</span>
+                                    </div>
+								</span>
                                 <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
                             </div>
                         </div>

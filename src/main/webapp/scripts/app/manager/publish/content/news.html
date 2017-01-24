@@ -71,13 +71,16 @@
                            ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
                             A date after now is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
                             A date before next year from now is required
                         </p>
                         <p class="help-block"
@@ -97,13 +100,15 @@
                            ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
                         <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{today | date: dtformat }}">
                             A date after now is required.
                         </p>-->
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat}}">
                             A date before next year from now is required
                         </p>
                         <p class="help-block"
@@ -117,9 +122,7 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="rssAllowed" translate="publisherApp.news.rssAllowed">Allow in RSS</label>
-            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed"
-                   ng-model="item.rssAllowed"/>
-
+            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed" />
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
             <label class="control-label" for="body" translate="publisherApp.news.body">Body</label>
@@ -159,8 +162,7 @@
         </div>
         -->
     </div>
-    <div class="modal fade" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale"
-         aria-hidden="true">
+    <div class="modal fade" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -171,7 +173,8 @@
                     <form name="publishContentEnclosureForm" role="form" novalidate class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 translate="publisherApp.news.inputfile.url.label">Enter a picture URL</h3></div>
+                                <h3 translate="publisherApp.news.inputfile.url.label">Enter a picture URL</h3>
+                            </div>
                             <div class="panel-body form-inline">
                                 <div class="form-group">
                                     <input type="url" class="form-control" name="enclosure" placeholder="https://..."
@@ -186,8 +189,8 @@
                                             This field must be a valid URL.
                                         </p>
                                     </div>
-                                    <button type="button" ng-disabled="publishContentForm.enclosure.$invalid || !content.picUrl" class="btn btn-primary"
-                                            ng-click="validatePicUrl(content.picUrl)">
+                                    <button type="button" ng-disabled="publishContentForm.enclosure.$invalid || !content.picUrl"
+                                            class="btn btn-primary" ng-click="validatePicUrl(content.picUrl)">
                                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate>entity.action.validate</span>
                                     </button>
                                 </div>
@@ -213,7 +216,6 @@
                                             <button ng-click="uploadFile(content.file)" class="btn btn-primary" ng-disabled="!content.file">
                                                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.validate">Validate</span></button>
                                         </div>
-
                                     </div>
 
                                     <!--<div ng-show="content.picFile" class="well">-->
@@ -237,7 +239,7 @@
                                         <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress+'%'}">
                                             <span>{{progress}}%</span>
                                         </div>
-                                    </span>
+									</span>
                                     <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
                                 </div>
                             </div>
