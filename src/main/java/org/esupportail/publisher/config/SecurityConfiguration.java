@@ -1,9 +1,22 @@
 package org.esupportail.publisher.config;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
-import org.esupportail.publisher.security.*;
+import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
+import org.esupportail.publisher.security.AjaxAuthenticationSuccessHandler;
+import org.esupportail.publisher.security.AjaxLogoutSuccessHandler;
+import org.esupportail.publisher.security.AuthoritiesConstants;
+import org.esupportail.publisher.security.CustomSessionFixationProtectionStrategy;
+import org.esupportail.publisher.security.CustomSingleSignOutFilter;
+import org.esupportail.publisher.security.RememberCasAuthenticationEntryPoint;
+import org.esupportail.publisher.security.RememberCasAuthenticationProvider;
+import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource;
 import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IpVariableHolder;
@@ -32,10 +45,6 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.Assert;
-
-import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Set;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -239,6 +248,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/authenticate").denyAll()
             .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/enums/**").permitAll()
+            .antMatchers("/api/conf/**").permitAll()
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.USER)
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
