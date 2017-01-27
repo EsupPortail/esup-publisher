@@ -26,28 +26,22 @@
                 </p>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': !item.enclosure && enclosureDirty }">
+        <div class="form-group">
             <label class="control-label" for="enclosure" translate="publisherApp.resource.enclosure">Enclosure</label>
             <div class="form-inline">
                 <button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">
                     <span>{{'publisherApp.news.enclosure.button' | translate}}</span>
                 </button>
 
-                <img ng-if="item.enclosure" name="enclosure" id="enclosure" ng-src="{{item.enclosure}}" />
+                <img ng-if="item.enclosure" name="enclosure" id="enclosure" ng-src="{{item.enclosure}}"  class="img-responsive" />
                 <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>
-            <div ng-show="!item.enclosure">
-                <p class="help-block" translate="entity.validation.required">
-                    This field is required.
-                </p>
-            </div>
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
             <label class="control-label" for="summary" translate="publisherApp.resource.summary">Summary</label>
-            <textarea class="form-control" name="summary" id="summary" rows="3"
-                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
+            <textarea class="form-control" name="summary" id="summary" rows="3" ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
 
             <div ng-show="publishContentForm.summary.$invalid">
                 <p class="help-block"
@@ -65,7 +59,7 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="form-inline-">
+            <div class="form-inline">
                 <div class="form-group" ng-class="{ 'has-error': publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
                     <label class="control-label" for="startDate" translate="publisherApp.resource.startDate">StartDate</label>
                     <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
@@ -76,19 +70,22 @@
                            ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
                             A date after now is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
                            translate-value-field="{{publisherApp.resource.endDate | translate}}">
-                            From date must be lower than To date
+                            From date must be lower than to date.
                         </p>
                     </div>
                 </div>
@@ -102,19 +99,21 @@
                            ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
                         <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{item.startDate | date: dtformat }}">
                             A date after now is required.
                         </p>-->
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
                            translate-value-field="{{'publisherApp.resource.startDate' | translate}}">
-                            From date must be greater than From date
+                            From date must be greater than from date.
                         </p>
                     </div>
                 </div>
@@ -122,13 +121,11 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="rssAllowed" translate="publisherApp.resource.rssAllowed">Allow in RSS</label>
-            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed"
-                   ng-model="item.rssAllowed"/>
-
+            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed"/>
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.ressourceUrl.$invalid && publishContentForm.ressourceUrl.$dirty }">
             <label class="control-label" for="ressourceUrl" translate="publisherApp.resource.ressourceUrl">RessourceUrl</label>
-            <input type="url" class="form-control" name="ressourceUrl" id="ressourceUrl" placeholder="http://..."
+            <input type="url" class="form-control" name="ressourceUrl" id="ressourceUrl" placeholder="https://..."
                    ng-model="item.ressourceUrl" required ng-maxlength="2048">
 
             <div ng-show="publishContentForm.ressourceUrl.$invalid">
@@ -203,30 +200,18 @@
                                         </div>
 
                                     </div>
-
-                                    <!--<div ng-show="content.picFile" class="well">-->
-
-                                    <!--<h4 translate="publisherApp.news.inputfile.resizecrop">Manual resizing</h4>-->
-
-                                    <!--<div class="cropArea">-->
-                                    <!--<img-crop image="content.picFile | ngfDataUrl" area-type="square" are-min-size="25"-->
-                                    <!--result-image="croppedDataUrl" result-image-quality="1" result-image-size="120" ng-init="croppedDataUrl=''">-->
-                                    <!--</img-crop>-->
-                                    <!--</div>-->
-                                    <!--<div>-->
-                                    <!--<img ng-src="{{croppedDataUrl}}"/>-->
-                                    <!--<button ng-click="uploadCroppedFile(croppedDataUrl, content.picFile)" class="btn btn-primary" ng-disabled="!content.picFile">-->
-                                    <!--<i class="glyphicon glyphicon-save"></i>&nbsp;<span translate="entity.action.validate">Validate</span></button>-->
-                                    <!--</div>-->
-
-                                    <!--</div>-->
-
-                                    <span class="progress" ng-show="progress > 0">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress+'%'}">
-                                            <span>{{progress}}%</span>
+                                    <div class="progress" ng-show="progress > 0">
+                                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                                             aria-valuenow="{{progress}}" aria-valuemin="0"
+                                             aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                                            <span class="progress-text">{{progress}}%</span>
                                         </div>
-                                    </span>
-                                    <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
+                                    </div>
+                                    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMsg">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span >{{errorMsg | translate}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

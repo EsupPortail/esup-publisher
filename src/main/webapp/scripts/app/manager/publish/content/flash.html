@@ -31,9 +31,8 @@
                     <span>{{'publisherApp.flash.enclosure.button' | translate}}</span>
                 </button>
 
-                <img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" />
-                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation"
-                   uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
+                <img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" class="img-responsive" />
+                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>
@@ -45,7 +44,7 @@
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
             <label class="control-label" for="summary" translate="publisherApp.flash.summary">Summary</label>
-            <textarea class="form-control" name="summary" id="summary" rows="3" ng-model="item.summary" required ng-minlength="5" ng-maxlength="512"></textarea>
+            <textarea class="form-control" name="summary" id="summary" rows="3" ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
 
             <div ng-show="publishContentForm.summary.$invalid">
                 <p class="help-block"
@@ -53,13 +52,11 @@
                     This field is required.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.summary.$error.minlength"
-                   translate="entity.validation.minlength" translate-value-min="5">
+                   ng-show="publishContentForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
                     This field is required to be at least 5 characters.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.summary.$error.maxlength"
-                   translate="entity.validation.maxlength" translate-value-max="512">
+                   ng-show="publishContentForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
                     This field cannot be longer than 512 characters.
                 </p>
             </div>
@@ -81,19 +78,17 @@
                             This field is not a valid date.
                         </p>
                         <p class="help-block"
-                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate"
-                           translate-value-min="{{startdate | date: dtformat }}">
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
                             A date after now is required.
                         </p>
                         <p class="help-block"
-                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate"
-                           translate-value-max="{{item.endDate | date: dtformat }}">
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
                             A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan"	translate="entity.validation.dateLowerThan"
                            translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
-                            From date must be lower than To date.
+                            From date must be lower than to date.
                         </p>
                     </div>
                 </div>
@@ -118,7 +113,7 @@
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
                            translate-value-field="{{'publisherApp.flash.startDate' | translate}}">
-                            From date must be greater than From date.
+                            From date must be greater than from date.
                         </p>
                     </div>
                 </div>
@@ -130,9 +125,7 @@
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
             <label class="control-label" for="body"	translate="publisherApp.flash.body">Body</label>
-            <text-angular ta-file-drop="taDropHandler" name="body" id="body" ng-model="item.body" required ng-minlength="15"></text-angular>
-            <!--<input type="text" class="form-control" name="body" id="body"-->
-            <!--ng-model="item.body" required ng-minlength="5">-->
+            <text-angular ta-file-drop="taDropHandler" name="body" id="body" ng-model="item.body" required ta-min-text="15"></text-angular>
 
             <div ng-show="publishContentForm.body.$invalid">
                 <p class="help-block"
@@ -140,7 +133,7 @@
                     This field is required.
                 </p>
                 <p class="help-block"
-                   ng-show="publishContentForm.body.$error.minlength" translate="entity.validation.minlength" translate-value-min="15">
+                   ng-show="publishContentForm.body.$error.taMinText" translate="entity.validation.minlength" translate-value-min="15">
                     This field is required to be at least 15 characters.
                 </p>
             </div>
@@ -173,96 +166,59 @@
                 </div>
                 <div class="modal-body">
                     <form name="publishContentEnclosureForm" role="form" novalidate class="panel-group">
-                        <!--<div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 translate="publisherApp.flash.inputfile.url.label">Enter a picture URL</h3></div>
-                            <div class="panel-body form-inline">
-                                <div class="form-group">
-                                    <input type="url" class="form-control" name="enclosure" placeholder="https://..."
-                                           ng-model="content.picUrl" ng-maxlength="2048">
-                                    <div ng-show="publishContentForm.enclosure.$invalid">
-                                        <p class="help-block"
-                                           ng-show="publishContentForm.enclosure.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
-                                            This field cannot be longer than 2048 characters.
-                                        </p>
-                                        <p class="help-block"
-                                           ng-show="publishContentForm.enclosure.$error.url" translate="entity.validation.url">
-                                            This field must be a valid URL.
-                                        </p>
-                                    </div>
-                                    <button type="button" ng-disabled="publishContentForm.enclosure.$invalid || !content.picUrl" class="btn btn-primary"
-                                            ng-click="validatePicUrl(content.picUrl)">
-                                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate>entity.action.validate</span>
-                                    </button>
+                        <div class="well">
+                            <div class="inputArea form-group" ng-class="{ 'has-error': publishContentForm.fileEnclosure.$error }">
+                                <h3 translate="publisherApp.news.inputfile.upload.label">Selecting a file</h3>&nbsp;<button
+                                class="btn btn-primary btn-file" name="fileEnclosure" ngf-select ngf-capture="'camera'" ng-model="content.file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                                ngf-max-size="10MB" ><i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.news.inputfile.upload.button">Browse</span></button>
+                                <div ng-show="publishContentForm.fileEnclosure.$invalid">
+                                    <p class="help-block"
+                                       ng-show="publishContentForm.fileEnclosure.$error.pattern" translate="entity.validation.filepattern">
+                                        The file hasn't a media type autorized.
+                                    </p>
+                                    <p class="help-block"
+                                       ng-show="publishContentForm.fileEnclosure.$error.maxSize" translate="entity.validation.maxsize" translate-value-maxsize="10MB">
+                                        The file size exceeded the maximum allowed size of 10MB.
+                                    </p>
                                 </div>
                             </div>
-                        </div>-->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3>{{'publisherApp.flash.inputfile.crop.step' + crop.imageCropStep | translate}}</h3>
+
+                            <div data-ng-if="content.file" class="cropArea">
+                                <ui-cropper
+                                    image="content.file"
+                                    result-image="content.resultImage"
+                                    change-on-fly="false"
+                                    area-type="rectangle"
+                                    result-image-format="'image/jpeg'"
+                                    result-image-quality="1"
+                                    result-image-size='[{ w: 800, h: 240}]'
+                                    aspect-ratio="3.3"
+                                    allow-crop-resize-on-corners="false">
+                                </ui-cropper>
                             </div>
-                            <div class="panel-body">
-
-                                <div class="">
-                                    <div class="well">
-
-                                        <div ng-show="crop.imageCropStep == 1">
-                                            <br/>
-                                            <!--<input type="file" name="fileInput" id="fileInput" onchange="angular.element(this).scope().fileCropChanged(event)" />-->
-                                            <input type="file" ngf-select ng-model="content.file"
-                                                   ngf-change="changeCropFile($file, $newFiles, $invalidFiles, $event)"
-                                                   ngf-pattern="'image/*'"
-                                                   ngf-accept="'image/*'" ngf-max-size="10MB">
-                                        </div>
-
-                                        <div ng-show="crop.imageCropStep == 2">
-
-                                            <image-crop
-                                                data-height="240"
-                                                data-width="800"
-                                                data-shape="square"
-                                                data-step="crop.imageCropStep"
-                                                src="content.picFile"
-                                                data-result="crop.result"
-                                                data-result-blob="crop.resultBlob"
-                                                crop="crop.initCrop"
-                                                data-result-format="image/jpeg"
-                                                ></image-crop>
-                                        </div>
-
-                                        <div ng-show="crop.imageCropStep == 2">
-                                            <br/>
-                                            <button ng-click="clearCrop()" class="btn btn-default"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.reset">Reset</span></button>
-                                            <button ng-click="crop.initCrop = true" class="btn btn-default"><span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.validate">Validate</span></button></button>
-                                        </div>
-
-                                        <div ng-show="crop.imageCropStep == 3">
-                                            <img ng-src="{{crop.result}}" >
-                                            <br/>
-                                            <button ng-click="clearCrop()" class="btn btn-default"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.reset">Reset</span></button>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-								<span class="progress" ng-show="progress > 0">
-									<div class="progress-bar" role="progressbar"
-                                         aria-valuenow="{{progress}}" aria-valuemin="0"
-                                         aria-valuemax="100" ng-style="{'width': progress+'%'}">
-                                        <span>{{progress}}%</span>
-                                    </div>
-								</span>
-                                <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
+                            <div ng-if="content.file && content.resultImage" class="previewCropArea">
+                                <img ng-src="{{content.resultImage}}" ng-style="{'width':'100%', 'max-width': '800px'}"/>
                             </div>
+                        </div>
+                        <div class="progress" ng-show="progress > 0">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                                 aria-valuenow="{{progress}}" aria-valuemin="0"
+                                 aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                                <span class="progress-text">{{progress}}%</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMsg">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span >{{errorMsg | translate}}</span>
                         </div>
                     </form>
                 </div>
-
                 <div class="modal-footer">
-                    <button ng-click="uploadCroppedFile(crop.result, content.file)" class="btn btn-primary" ng-disabled="!crop.result">
+                    <button ng-click="uploadFile(content.file, content.resultImage)" class="btn btn-primary" ng-disabled="!content.file || !content.resultImage">
                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span></button>
-                    <button type="button"  class="btn btn-default" title="Clear selected files" ng-click="clearCrop()">
-                        <span class="glyphicon glyphicon-trash"></span>&nbsp;<span translate="entity.action.delete">Remove</span>
+                    <button type="button" class="btn btn-default" ng-click="clearUpload()" ng-disabled="!content.file || !content.resultImage">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.reset">Reset</span>
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>

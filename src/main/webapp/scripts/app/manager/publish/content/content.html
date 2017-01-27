@@ -4,7 +4,7 @@
 
     <div class="form-group row" ng-hide="itemTypeList.length == 1">
         <label class="col-sm-4 control-label" translate="manager.publish.content.type">type</label>
-        <div class="col-sm-8" ng-if="item.id != null|| itemTypeList.length == 1">
+        <div class="col-sm-8" ng-if="item.id != null || itemTypeList.length == 1">
             <label class="radio-inline"><span translate="{{ 'enum.itemType.' + content.type}}"></span></label>
         </div>
         <div class="col-sm-8" ng-if="item.id == null && itemTypeList.length > 1">
@@ -23,13 +23,11 @@
                 <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
             </button>
 
-            <button type="button" ui-sref="home" class="btn btn-info">
+            <button type="button" ui-sref="home" class="btn btn-info" ng-click="removeEnclosure()">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
             </button>
 
-            <button type="button" ng-if="goOnTargets()" ui-sref="publish.targets"
-                    ng-disabled="publishContentForm.$invalid || content.type == '' || ((content.type == 'FLASH' || content.type == 'MEDIA' || content.type == 'RESOURCE') && !$parent.item.enclosure)"
-                    class="btn btn-info" ng-click="validateItem()">
+            <button type="button" ng-if="goOnTargets()" ui-sref="publish.targets" ng-disabled="!isItemValidated()" class="btn btn-info">
                 <span> {{ 'manager.publish.nextStep' | translate }} </span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>
@@ -56,6 +54,5 @@
             </div>
         </div>
     </div>
-
 
 </div>

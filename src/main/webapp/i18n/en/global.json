@@ -173,6 +173,8 @@
         "dialog": "Loading ..."
     },
     "error": {
-        "dialog": "An error occured"
+        "dialog": "An error occured",
+        "fileupload" : "An error {{code}} occured, file upload unsuccessfull !",
+        "ERR_INTERNET_DISCONNECTED" : "An internet disconnection occured !"
     }
 }

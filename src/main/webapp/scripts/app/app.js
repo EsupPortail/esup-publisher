@@ -2,7 +2,7 @@
 
 angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngResource', 'ui.router', 'checklist-model', /*'ngAnimate',*/ 'angularSpinner',/*'infinite-scroll',*/
     'ngCookies', 'pascalprecht.translate', 'ngCacheBuster', 'ui.bootstrap','angular.filter', 'isteven-multi-select', 'jsTree.directive', 'ui.bootstrap.tooltip','ui.bootstrap.pagination',
-    'textAngular', 'ngFileUpload', 'ngImgCrop', 'ImageCropper', 'colorpicker.module'])
+    'textAngular', 'ngFileUpload', 'uiCropper', 'colorpicker.module'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
@@ -15,8 +15,8 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             $rootScope.toStateParams = toStateParams;
 
             /*if (toState.resolve) {
-                $rootScope.showSpinner = true;
-            }*/
+             $rootScope.showSpinner = true;
+             }*/
 
             var requireLogin = toState.data.requireLogin;
 
@@ -48,9 +48,9 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             $rootScope.previousStateParams = fromParams;
 
             /*if (toState.resolve) {
-                console.log("set showspinner");
-                $rootScope.showSpinner = false;
-            }*/
+             console.log("set showspinner");
+             $rootScope.showSpinner = false;
+             }*/
 
             // Set the page title key to the one configured in state or use default one
             if (toState.data.pageTitle) {
@@ -63,9 +63,9 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         });
 
         /*$rootScope.$on('$stateChangeError', function (event, toState, toStateParams) {
-            console.log("$stateChangeError");
-           // $rootScope.showSpinner = false;
-        });*/
+         console.log("$stateChangeError");
+         // $rootScope.showSpinner = false;
+         });*/
 
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'

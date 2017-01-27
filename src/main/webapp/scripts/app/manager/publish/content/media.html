@@ -176,8 +176,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 style="display:inline-block" translate="publisherApp.media.inputfile.upload.label">Selecting a file</h3>
-                                <button ngf-select class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="content.file" ngf-model-invalid="invalidFiles"
-                                        ngf-change="changeFile($file, $newFiles, $invalidFiles, $event)"
+                                <button name="fileEnclosure" ngf-select class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="content.file"
+                                        ngf-change="changeFileType($file, $newFiles, $invalidFiles, $event)"
                                         ngf-pattern="'image/*,video/*,audio/*,application/pdf,application/ogg,application/vnd.oasis.*,application/vnd.ms-*,application/vnd.openxmlformats-officedocument*,application/msword'"
                                         ngf-accept="'image/*,video/*,audio/*,application/*'" ngf-max-duration="'3m" ngf-max-size="10MB"
                                         ngf-resize="{width: 480, height: 480, centerCrop: true}" ngf-resize-if="resizeCondition($file, $width, $height, 480, 480)" >
@@ -203,53 +203,43 @@
                                                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.validate">Validate</span></button>
                                         </div>
 
-                                        <div class="has-error" ng-show="content.file.$error">
+                                        <div class="has-error" ng-show="publishContentForm.fileEnclosure.$error">
                                             <p class="help-block"
-                                               ng-show="content.file.$error.maxSize" translate="entity.validation.maxSize" translate-value-maxsize="10MB">
-                                                The file size exceeded the maximum allowed size is 10MB
+                                               ng-show="publishContentForm.fileEnclosure.$error.maxSize" translate="entity.validation.maxSize" translate-value-maxsize="10MB">
+                                                The file size exceeded the maximum allowed size is 10MB.
                                             </p>
                                             <p class="help-block"
-                                               ng-show="content.file.$error.pattern" translate="entity.validation.filepattern">
-                                                The file isn't a media type autorized
+                                               ng-show="publishContentForm.fileEnclosure.$error.pattern" translate="entity.validation.filepattern">
+                                                The file isn't a media type autorized.
                                             </p>
                                             <p class="help-block"
-                                               ng-show="content.file.$error.maxDuration" translate="entity.validation.maxduration" translate-value-maxduration="3 min">
-                                                The video exceeds the maximum allowed time of 3 min
+                                               ng-show="publishContentForm.fileEnclosure.$error.maxDuration" translate="entity.validation.maxduration" translate-value-maxduration="3 min">
+                                                The video exceeds the maximum allowed time of 3 min.
                                             </p>
                                         </div>
 
                                     </div>
 
-                                    <!--<div ng-show="mediaType === 'image' && content.picFile" class="well">-->
-
-                                    <!--<h4 translate="publisherApp.media.inputfile.resizecrop">Manual resizing</h4>-->
-
-                                    <!--<div class="cropArea">-->
-                                    <!--<img-crop image="content.picFile | ngfDataUrl" area-type="square" are-min-size="25"-->
-                                    <!--result-image="croppedDataUrl" result-image-quality="1" result-image-size="120" ng-init="croppedDataUrl=''">-->
-                                    <!--</img-crop>-->
-                                    <!--</div>-->
-                                    <!--<div>-->
-                                    <!--<img ng-src="{{croppedDataUrl}}"/>-->
-                                    <!--<button ng-click="uploadCroppedFile(croppedDataUrl, content.picFile)" class="btn btn-primary" ng-disabled="!content.picFile">-->
-                                    <!--<i class="glyphicon glyphicon-save"></i>&nbsp;<span translate="entity.action.validate">Validate</span></button>-->
-                                    <!--</div>-->
-
-                                    <!--</div>-->
-
-                                    <span class="progress" ng-show="progress > 0">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress+'%'}">
-                                            <span>{{progress}}%</span>
+                                    <div class="progress" ng-show="progress > 0">
+                                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                                             aria-valuenow="{{progress}}" aria-valuemin="0"
+                                             aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                                            <span class="progress-text">{{progress}}%</span>
                                         </div>
-                                    </span>
-                                    <span class="error-message top-toolbar" ng-show="errorMsg">{{errorMsg | translate}}</span>
-                                    <div class="error-message top-toolbar">
-                                        <li class="sel-file" ng-repeat="f in invalidFiles">
-                                            <div>Invalid File: {{f.$error}} {{f.$errorParam}}, {{f.name}} - size: {{f.size}}B - type:
-                                                {{f.type}}
-                                            </div>
-                                        </li>
                                     </div>
+                                    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMsg">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                        <span >{{errorMsg | translate}}</span>
+                                    </div>
+
+                                    <!--<div class="error-message top-toolbar">-->
+                                        <!--<li class="sel-file" ng-repeat="f in invalidFiles">-->
+                                            <!--<div>Invalid File: {{f.$error}} {{f.$errorParam}}, {{f.name}} - size: {{f.size}}B - type:-->
+                                                <!--{{f.type}}-->
+                                            <!--</div>-->
+                                        <!--</li>-->
+                                    <!--</div>-->
                                 </div>
                             </div>
                         </div>

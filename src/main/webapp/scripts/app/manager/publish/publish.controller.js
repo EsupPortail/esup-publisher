@@ -39,8 +39,9 @@ angular.module('publisherApp')
         };
 
         $scope.canSave = function() {
+            // to be able to save an item at least all mandatory attributes should be setted
             return $scope.publisher && $scope.publisher.id && $scope.classificationsValidated && $scope.classifications.length > 0
-                && angular.isDefined($scope.item) && angular.isDefined($scope.item.title);
+                && angular.isDefined($scope.item) && angular.isDefined($scope.item.title) && $scope.itemValidated;
         };
 
         $scope.publishItem = function (status) {
