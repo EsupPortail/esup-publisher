@@ -19,6 +19,7 @@ angular.module('publisherApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('redactor');
+                        $translatePartialLoader.addPart('enum');
                         return $translate.refresh();
                     }]
                 }
@@ -39,6 +40,7 @@ angular.module('publisherApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('redactor');
+                        $translatePartialLoader.addPart('enum');
                         return $translate.refresh();
                     }]
                 }
