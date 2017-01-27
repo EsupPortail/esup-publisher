@@ -4,7 +4,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
     'ngCookies', 'pascalprecht.translate', 'ngCacheBuster', 'ui.bootstrap','angular.filter', 'isteven-multi-select', 'jsTree.directive', 'ui.bootstrap.tooltip','ui.bootstrap.pagination',
     'textAngular', 'ngFileUpload', 'ngImgCrop', 'ImageCropper', 'colorpicker.module'])
 
-    .run(function ($rootScope, $location, $window, $http, $state, $translate, Auth, Principal, Language, ENV, VERSION) {
+    .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
         $rootScope.HOST = $location.host().split('.').join('_');
@@ -37,6 +37,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             // Update the language
             Language.getCurrent().then(function (language) {
                 $translate.use(language);
+                tmhDynamicLocale.set(language);
             });
         });
 
@@ -80,14 +81,80 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             return (-1 !== array.indexOf(item));
         };
     })
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider, tmhDynamicLocaleProvider,
-                      httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider, $provide) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider,
+                      httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider) {
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
         $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';
 
         usSpinnerConfigProvider.setDefaults({color: 'white'});
 
+//Cache everything except rest api requests
+        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
+
+        $httpProvider.interceptors.push('AuthInterceptor');
+//$httpProvider.interceptors.push('loadingDialogInterceptor');
+
+        $urlRouterProvider.otherwise('/');
+        $stateProvider.state('site', {
+            'abstract': true,
+            views: {
+                /*'navbar@': {
+                 templateUrl: 'scripts/components/navbar/navbar.html',
+                 controller: 'NavbarController'
+                 }*/
+            },
+            data: {
+                requireLogin: true, // this property will apply to all children of 'site'
+                roles: ['ROLE_USER']
+            },
+            resolve: {
+                authorize: ['Auth',
+                    function (Auth) {
+                        return Auth.authorize();
+                    }
+                ],
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    //console.log("add partials");
+                    $translatePartialLoader.addPart('global');
+                    $translatePartialLoader.addPart('language');
+                    $translatePartialLoader.addPart('enum');
+                    $translatePartialLoader.addPart('subject');
+                    $translatePartialLoader.addPart('textAngular');
+
+                    return $translate.refresh();
+                }],
+                initData: [ 'Configuration', 'EnumDatas', function(Configuration, EnumDatas){
+                    return EnumDatas.init() && Configuration.init();
+                }]
+            }
+        });
+
+
+// Initialize angular-translate
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: 'i18n/{lang}/{part}.json'
+        });
+
+        $translateProvider.registerAvailableLanguageKeys(['en', 'fr'], {
+            'en_US': 'en',
+            'en_UK': 'en',
+            'fr_FR': 'fr'
+        });
+
+        $translateProvider.fallbackLanguage('en')
+            .determinePreferredLanguage();
+        //$translateProvider.useSanitizeValueStrategy('escaped');
+        $translateProvider.useCookieStorage();
+
+        $translatePartialLoaderProvider.addPart('login');
+
+
+    }).config(["tmhDynamicLocaleProvider", function (tmhDynamicLocaleProvider) {
+
+        tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
+        tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
+    }]).config(["$provide", function ($provide) {
         // configure textAngular
         $provide.decorator('taOptions', ['taRegisterTool', '$delegate','taTranslations', function(taRegisterTool, taOptions, taTranslations){
 
@@ -107,14 +174,14 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                 ['html', 'insertImage', 'insertVideo', 'insertLink']
             ];
             /*taOptions.classes = {
-                focussed: "focussed",
-                toolbar: "btn-toolbar",
-                toolbarGroup: "btn-group",
-                toolbarButton: "btn btn-primary",
-                toolbarButtonActive: "active",
-                disabled: "disabled",
-                textEditor: 'form-control',
-                htmlEditor: 'form-control'
+             focussed: "focussed",
+             toolbar: "btn-toolbar",
+             toolbarGroup: "btn-group",
+             toolbarButton: "btn btn-primary",
+             toolbarButtonActive: "active",
+             disabled: "disabled",
+             textEditor: 'form-control',
+             htmlEditor: 'form-control'
              };*/
             // TODO i18n must find a way to provide translated values of StFormat
             // as we are in config phase we can't provide translated values
@@ -146,7 +213,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
 
             var templateDropdDown = '<span class="dropdown tadropdown">';
             templateDropdDown += '<button id=\"single-button\" class="textTypeDropdown btn btn-default btn-group dropdown-toggle" title="{{ \'textangular.textTypeDropdown.tooltip\' | translate }}" data-toggle="dropdown" >'
-             + "{{ 'textangular.p.tooltip' | translate }}&nbsp;";
+                + "{{ 'textangular.p.tooltip' | translate }}&nbsp;";
             templateDropdDown +=  "<span class=\"btCaret caret\"></span>";
             templateDropdDown += '</button>';
             templateDropdDown += '<ul class="dropdown-menu" aria-labelledby="single-button">';
@@ -204,8 +271,8 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                             subpath = value + ".";
                         }
                         //console.log("translate :", parentPartKey + subpath + subkey, key[subkey]);
-                            key[subkey] = "{{ '" + parentPartKey + subpath + subkey + "' | translate }}";
-                            //console.log("translated :", JSON.stringify(taTranslations) );
+                        key[subkey] = "{{ '" + parentPartKey + subpath + subkey + "' | translate }}";
+                        //console.log("translated :", JSON.stringify(taTranslations) );
                     }
                 });
             }
@@ -296,66 +363,4 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             return taOptions;
         }]);
 
-//Cache everything except rest api requests
-        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
-
-        $httpProvider.interceptors.push('AuthInterceptor');
-//$httpProvider.interceptors.push('loadingDialogInterceptor');
-
-        $urlRouterProvider.otherwise('/');
-        $stateProvider.state('site', {
-            'abstract': true,
-            views: {
-                /*'navbar@': {
-                 templateUrl: 'scripts/components/navbar/navbar.html',
-                 controller: 'NavbarController'
-                 }*/
-            },
-            data: {
-                requireLogin: true, // this property will apply to all children of 'site'
-                roles: ['ROLE_USER']
-            },
-            resolve: {
-                authorize: ['Auth',
-                    function (Auth) {
-                        return Auth.authorize();
-                    }
-                ],
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    //console.log("add partials");
-                    $translatePartialLoader.addPart('global');
-                    $translatePartialLoader.addPart('language');
-                    $translatePartialLoader.addPart('enum');
-                    $translatePartialLoader.addPart('subject');
-                    $translatePartialLoader.addPart('textAngular');
-
-                    return $translate.refresh();
-                }],
-                initData: [ 'Configuration', 'EnumDatas', function(Configuration, EnumDatas){
-                    return EnumDatas.init() && Configuration.init();
-                }]
-            }
-        });
-
-
-// Initialize angular-translate
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: 'i18n/{lang}/{part}.json'
-        });
-
-        $translateProvider.registerAvailableLanguageKeys(['en', 'fr'], {
-            'en_US': 'en',
-            'en_UK': 'en',
-            'fr_FR': 'fr'
-        });
-
-        $translateProvider.fallbackLanguage('en')
-            .determinePreferredLanguage();
-        //$translateProvider.useSanitizeValueStrategy('escaped');
-        $translateProvider.useCookieStorage();
-
-        $translatePartialLoaderProvider.addPart('login');
-
-        tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
-        tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
-    });
+    }]);
