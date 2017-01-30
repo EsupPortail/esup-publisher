@@ -1,5 +1,14 @@
 package org.esupportail.publisher.web;
 
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
@@ -8,16 +17,28 @@ import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.types.expr.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.QAbstractItem;
+import org.esupportail.publisher.domain.QItemClassificationOrder;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.WritingMode;
 import org.esupportail.publisher.domain.util.Views;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.service.SubscriberService;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
@@ -31,12 +52,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
-import java.net.URISyntaxException;
-import java.util.*;
 
 /**
  * Created by jgribonvald on 22/01/16.
@@ -53,8 +68,8 @@ public class PublishController {
     @Inject
     private PublisherRepository publisherRepository;
 
-    @Inject
-    private ClassificationRepository<AbstractClassification> classificationRepository;
+//    @Inject
+//    private ClassificationRepository<AbstractClassification> classificationRepository;
 
     @Inject
     private CategoryRepository categoryRepository;
@@ -62,8 +77,8 @@ public class PublishController {
 //    @Inject
 //    private FeedRepository<AbstractFeed> feedRepository;
 
-    @Inject
-    private ItemRepository itemRepository;
+//    @Inject
+//    private ItemRepository itemRepository;
 
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
@@ -83,13 +98,16 @@ public class PublishController {
     @Inject
     private SubscriberService subscriberService;
 
+    @Inject
+    private ServiceUrlHelper urlHelper;
+
 
     @RequestMapping(value = "/flash/{organization_uai}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(Views.Flash.class)
     @Timed
-    public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_uai") String uai) throws URISyntaxException {
+    public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_uai") String uai, final HttpServletRequest request ) throws URISyntaxException {
         log.debug("Entering getFlashInfo with params : uai={}", uai);
         Organization org = organizationRepository.findByIdentifiers(uai);
         if (org != null) {
@@ -100,7 +118,7 @@ public class PublishController {
                 .list(QAbstractItem.abstractItem.id));
             List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
 
-            if (itemsClasss != null && !itemsClasss.isEmpty()) {
+            if (!itemsClasss.isEmpty()) {
                 Map<Flash, List<AbstractClassification>> itemsMap= Maps.newHashMap();
 
                 for ( ItemClassificationOrder ico: itemsClasss) {
@@ -113,7 +131,7 @@ public class PublishController {
                         itemsMap.get(flash).add(classif);
                     }
                 }
-                return flashInfoVOFactory.asVOList(itemsMap);
+                return flashInfoVOFactory.asVOList(itemsMap, request);
             }
         }
         return Lists.newArrayList();
@@ -150,8 +168,8 @@ public class PublishController {
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Timed
-    public CategoryProfilesUrl getAllPlublisherContext(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId, HttpServletRequest request ) {
-        log.debug("Entering getAllPlublisherContext with params :  reader_id={}, redactor_id={}", readerId, redactorId);
+    public CategoryProfilesUrl getAllPublisherContext(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId, final HttpServletRequest request ) {
+        log.debug("Entering getAllPublisherContext with params :  reader_id={}, redactor_id={}", readerId, redactorId);
         BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
             .and(PublisherPredicates.AllOfReader(readerId))
             .and(PublisherPredicates.AllOfRedactor(redactorId));
@@ -159,10 +177,7 @@ public class PublishController {
         CategoryProfilesUrl cpu = new CategoryProfilesUrl();
         if (!publishers.isEmpty()) {
             Redactor redactor = publishers.get(0).getContext().getRedactor();
-            final String contextPath = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
-            final String url = request.getRequestURL().toString();
-            final String uri = request.getRequestURI();
-            final String base = url.substring(0, url.length() - uri.length()) + contextPath;
+            String base = urlHelper.getRootAppUrl(request);
             for (Publisher pub : publishers) {
                 String urlCategory = null;
                 String urlActualite = null;
@@ -181,12 +196,12 @@ public class PublishController {
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Timed
-    public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId) {
+    public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId, HttpServletRequest request ) {
         //getting items on new way
         log.debug("Entering getItems with param : publisher_id={}", publisherId);
         Publisher publisher = publisherRepository.findOne(publisherId);
 
-        return getItemsOnPulisherNewWay(publisher);
+        return getItemsOnPublisherNewWay(publisher, request);
     }
 
     /*@RequestMapping(value = "/categories/{publisher_id}",
@@ -207,22 +222,22 @@ public class PublishController {
 
 
 
-    private Object getItemsOfPublisher(@NotNull Publisher publisher) {
-        if (publisher.getContext().getRedactor().getNbLevelsOfClassification() == 1
-            && WritingMode.TARGETS_ON_ITEM.equals(publisher.getContext().getRedactor().getWritingMode())) {
-            return getItemsOnPulisherNewWay(publisher);
-        }
-        log.error("Warning this request isn't yet implemented for !");
-        return Lists.newArrayList();
-    }
+//    private Object getItemsOfPublisher(@NotNull Publisher publisher, final HttpServletRequest request ) {
+//        if (publisher.getContext().getRedactor().getNbLevelsOfClassification() == 1
+//            && WritingMode.TARGETS_ON_ITEM.equals(publisher.getContext().getRedactor().getWritingMode())) {
+//            return getItemsOnPublisherNewWay(publisher, request);
+//        }
+//        log.error("Warning this request isn't yet implemented for !");
+//        return Lists.newArrayList();
+//    }
 
 
     //@Transactional
-    private Actualite getItemsOnPulisherNewWay(@NotNull Publisher publisher) {
-        log.debug("getItemsOnPulisherNewWay with publisher {}", publisher);
+    private Actualite getItemsOnPublisherNewWay(@NotNull Publisher publisher, final HttpServletRequest request  ) {
+        log.debug("getItemsOnPublisherNewWay with publisher {}", publisher);
         Actualite returnedObj = new Actualite();
         BooleanBuilder builder = new BooleanBuilder();
-        final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
+        //final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
         builder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
         builder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
 
@@ -252,7 +267,7 @@ public class PublishController {
             for (ItemClassificationOrder itemClass : itemsClasss) {
                 final AbstractItem item = itemClass.getItemClassificationId().getAbstractItem();
                 returnedObj.getItems().add(itemVOFactory.from(item, itemsMap.get(item.getId()),
-                    subscriberService.getDefinedSubcribersOfContext(item.getContextKey())));
+                    subscriberService.getDefinedSubcribersOfContext(item.getContextKey()), request));
             }
 
         }

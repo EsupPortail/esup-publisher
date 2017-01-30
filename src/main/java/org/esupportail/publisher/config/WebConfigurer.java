@@ -1,8 +1,22 @@
 package org.esupportail.publisher.config;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
+import com.google.common.collect.Lists;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;
@@ -20,13 +34,6 @@ import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-
-import javax.inject.Inject;
-import javax.servlet.*;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -83,7 +90,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         String ctxPath = env.getProperty("server.contextPath");
         if (ctxPath.equals("/")) ctxPath = "";
         final String protocol = env.getRequiredProperty("app.service.protocol");
-        final String domainName = env.getRequiredProperty("app.service.domainName");
+        final List<String> domainName = Lists.newArrayList(env.getRequiredProperty("app.service.domainName").replaceAll(",//s", ",").split(","));
         ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, domainName, protocol, "/#/contents/details/");
 
         log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());

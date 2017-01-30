@@ -1,5 +1,11 @@
 package org.esupportail.publisher.service.factories.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Subscriber;
@@ -13,10 +19,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by jgribonvald on 03/06/16.
  */
@@ -29,15 +31,20 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
     @Inject
     private VisibilityFactory visibilityFactory;
 
-    public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers) {
+    public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers, final HttpServletRequest request) {
         if (item != null) {
             ItemVO vo = new ItemVO();
             vo.setRubriques(new ArrayList<Long>());
             ArticleVO article = new ArticleVO();
             article.setTitle(item.getTitle());
-            article.setLink("/" + urlHelper.getContextPath().replaceFirst("/","") + urlHelper.getItemUri() + item.getId());
-            if (item.getEnclosure() != null)
-                article.setEnclosure(urlHelper.getRootAppUrl() + item.getEnclosure());
+            article.setLink(urlHelper.getContextPath() + urlHelper.getItemUri() + item.getId());
+            if (item.getEnclosure() != null) {
+                if (item.getEnclosure().matches("^https?://.*$")) {
+                    article.setEnclosure(item.getEnclosure());
+                } else {
+                    article.setEnclosure(urlHelper.getRootAppUrl(request) + item.getEnclosure());
+                }
+            }
             article.setDescription(item.getSummary());
             article.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
             article.setGuid(item.getId().hashCode());
