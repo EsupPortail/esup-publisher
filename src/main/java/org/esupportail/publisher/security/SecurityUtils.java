@@ -1,7 +1,13 @@
 package org.esupportail.publisher.security;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.esupportail.publisher.domain.User;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -10,14 +16,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-
 /**
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
 
-	private SecurityUtils() {
+    private SecurityUtils() {
 	}
 
 	/**
@@ -107,5 +111,13 @@ public final class SecurityUtils {
             }
         }
         return false;
+    }
+
+    public static String makeDynamicCASServiceUrl(ServiceUrlHelper urlHelper, HttpServletRequest request) {
+        String urlBase = urlHelper.getRootAppUrl(request);
+        for (String url : urlHelper.getAuthorizedDomainNames()) {
+            if (urlBase.startsWith(url)) return urlBase;
+        }
+        throw new AccessDeniedException("The server is unable to authenticate from requested url " + urlBase);
     }
 }

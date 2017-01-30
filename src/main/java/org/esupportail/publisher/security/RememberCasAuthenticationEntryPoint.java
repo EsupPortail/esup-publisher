@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.jasig.cas.client.util.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,8 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 
 	private String targetUrlParameter = "spring-security-redirect";
 
+    private ServiceUrlHelper urlHelper;
+
 	/**
 	 * Determines whether the Service URL should include the session id for the specific user. As of
 	 * CAS 3.0.5, the session id will automatically be stripped. However, older versions of CAS
@@ -57,12 +60,13 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 		Assert.hasLength(this.targetUrlParameter, "targetUrlParameter must be specified");
 		Assert.notNull(this.serviceProperties, "serviceProperties must be specified");
 		Assert.notNull(this.serviceProperties.getService(), "serviceProperties.getService() cannot be null.");
+		Assert.notNull(this.urlHelper, "urlHelper cannot be null.");
 	}
 
 	public final void commence(final HttpServletRequest request, final HttpServletResponse response,
 			final AuthenticationException authenticationException) throws IOException, ServletException {
 
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		//HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 		/*SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
@@ -74,7 +78,7 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 			}
 		}
 */
-		String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
+		String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
 		log.debug("=====================================================================> RESOURCEPATH {}",
 				resourcePath);
         boolean isPostMessage = false;
@@ -115,7 +119,8 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 	 * @return the constructed service url. CANNOT be NULL.
 	 */
 	protected String createServiceUrl(final HttpServletRequest request, final HttpServletResponse response) {
-		String service = this.serviceProperties.getService();
+		String service = SecurityUtils.makeDynamicCASServiceUrl(urlHelper, request) + this.serviceProperties.getService();
+        log.debug("createServiceUrl, service = {}", service);
 
 		String uri = request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
 
@@ -179,4 +184,7 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 		this.pathLogin = pathLogin;
 	}
 
+    public void setUrlHelper(ServiceUrlHelper urlHelper) {
+        this.urlHelper = urlHelper;
+    }
 }

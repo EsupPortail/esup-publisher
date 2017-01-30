@@ -55,7 +55,6 @@ public class RememberCasAuthenticationProvider implements AuthenticationProvider
 	private TicketValidator ticketValidator;
 	private ServiceProperties serviceProperties;
 	private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-	private String targetUrlParameter = "spring-security-redirect";
 
 	// ~ Methods
 	// ========================================================================================================
@@ -64,7 +63,6 @@ public class RememberCasAuthenticationProvider implements AuthenticationProvider
 		Assert.notNull(this.authenticationUserDetailsService, "An authenticationUserDetailsService must be set");
 		Assert.notNull(this.ticketValidator, "A ticketValidator must be set");
 		Assert.notNull(this.statelessTicketCache, "A statelessTicketCache must be set");
-		Assert.hasLength(this.targetUrlParameter, "targetUrlParameter must be specified");
 		Assert.hasText(this.key,
 				"A Key is required so CasAuthenticationProvider can identify tokens it previously authenticated");
 		Assert.notNull(this.messages, "A message source must be set");
@@ -151,8 +149,6 @@ public class RememberCasAuthenticationProvider implements AuthenticationProvider
 	private String getServiceUrl(Authentication authentication) {
 		String serviceUrl;
 
-		String targetPath = this.getTargetPath(authentication.getDetails());
-
 		if (authentication.getDetails() instanceof ServiceAuthenticationDetails) {
 			serviceUrl = ((ServiceAuthenticationDetails) authentication.getDetails()).getServiceUrl();
 		} else if (serviceProperties == null) {
@@ -161,43 +157,12 @@ public class RememberCasAuthenticationProvider implements AuthenticationProvider
 		} else if (serviceProperties.getService() == null) {
 			throw new IllegalStateException(
 					"serviceProperties.getService() cannot be null unless Authentication.getDetails() implements ServiceAuthenticationDetails.");
-		} else {
-			serviceUrl = serviceProperties.getService();
-			if (targetPath != null && !targetPath.isEmpty()) {
-				serviceUrl = String.format("%s?%s", serviceUrl, targetPath);
-			}
-		}
+		} else throw new IllegalStateException( "Authentication failure the service entry point isn't well configured");
+
 		if (log.isDebugEnabled()) {
 			log.debug("serviceUrl = " + serviceUrl);
 		}
 		return serviceUrl;
-	}
-
-	/**
-	 * Extracts the original target url form the query string. Example query string:
-	 * spring-security-redirect=/widget.jsp&ticket=ST-112-RiRTVZmzghHO7az5gpJF-cas
-	 */
-	protected String getTargetPath(Object authenticationDetails) {
-		String targetPath = "";
-
-		if (authenticationDetails instanceof RememberWebAuthenticationDetails) {
-			RememberWebAuthenticationDetails details = (RememberWebAuthenticationDetails) authenticationDetails;
-			String queryString = details.getQueryString();
-
-			if (queryString != null) {
-				int start = queryString.indexOf(this.targetUrlParameter);
-				if (start >= 0) {
-					int end = queryString.indexOf("&", start);
-					if (end >= 0) {
-						targetPath = queryString.substring(start, end);
-					} else {
-						targetPath = queryString.substring(start);
-					}
-				}
-			}
-		}
-
-		return targetPath;
 	}
 
 	/**

@@ -3,7 +3,6 @@ package org.esupportail.publisher.config;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -16,9 +15,7 @@ import javax.servlet.ServletRegistration;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
-import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;
 import org.esupportail.publisher.web.filter.CrossOriginFilter;
 import org.esupportail.publisher.web.filter.StaticResourcesProductionFilter;
@@ -31,7 +28,6 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -84,19 +80,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 		mappings.add("json", "text/html;charset=utf-8");
 		container.setMimeMappings(mappings);
 	}
-
-    @Bean
-    public ServiceUrlHelper serviceUrlHelper() {
-        String ctxPath = env.getProperty("server.contextPath");
-        if (ctxPath.equals("/")) ctxPath = "";
-        final String protocol = env.getRequiredProperty("app.service.protocol");
-        final List<String> domainName = Lists.newArrayList(env.getRequiredProperty("app.service.domainName").replaceAll(",//s", ",").split(","));
-        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, domainName, protocol, "/#/contents/details/");
-
-        log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());
-
-        return serviceUrlHelper;
-    }
 
 	/**
 	 * Initializes the GZip filter.

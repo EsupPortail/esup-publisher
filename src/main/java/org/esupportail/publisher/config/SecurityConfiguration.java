@@ -1,11 +1,14 @@
 package org.esupportail.publisher.config;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
@@ -20,6 +23,7 @@ import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource
 import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IpVariableHolder;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.evaluators.IEvaluation;
 import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
 import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
@@ -55,10 +59,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String CAS_URL_LOGIN = "cas.url.login";
     private static final String CAS_URL_LOGOUT = "cas.url.logout";
     private static final String CAS_URL_PREFIX = "cas.url.prefix";
-    private static final String CAS_SERVICE_URL = "app.service.security";
+    private static final String CAS_SERVICE_URI = "app.service.security";
+    private static final String CAS_SERVICE_KEY = "app.service.idKeyProvider";
+    private static final String CAS_SERVICE_SERVERNAMES = "app.service.authorizedDomainNames";
+    private static final String APP_SERVICE_REDIRECTPARAM = "app.service.redirectParamName";
     private static final String APP_URI_LOGIN = "/app/login";
     private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
     private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
+    private static final String APP_CONTEXT_PATH = "server.contextPath";
+    private static final String APP_PROTOCOL = "app.service.protocol";
+
+    private static final String DefaultTargetUrlParameter = "spring-security-redirect";
+
 
     @Inject
     private Environment env;
@@ -136,16 +148,38 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public ServiceProperties serviceProperties() {
         ServiceProperties sp = new ServiceProperties();
-        sp.setService(env.getRequiredProperty(CAS_SERVICE_URL));
+        sp.setService(env.getRequiredProperty(CAS_SERVICE_URI));
         sp.setSendRenew(false);
+        sp.setAuthenticateAllArtifacts(true);
         return sp;
+    }
+
+    @Bean
+    public ServiceUrlHelper serviceUrlHelper() {
+        String ctxPath = env.getRequiredProperty(APP_CONTEXT_PATH);
+        if (!ctxPath.startsWith("/")) ctxPath = "/" + ctxPath;
+        final String protocol = env.getRequiredProperty(APP_PROTOCOL);
+        //final List<String> domainName = Lists.newArrayList(env.getRequiredProperty(CAS_SERVICE_SERVERNAMES).replaceAll(",//s", ",").split(","));
+        List<String> validCasServerHosts = new ArrayList<>();
+        for (String ending : StringUtils.split(env.getRequiredProperty(CAS_SERVICE_SERVERNAMES), ",")) {
+            if (StringUtils.isNotBlank(ending)){
+                validCasServerHosts.add(StringUtils.trim(ending));
+            }
+        }
+        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, validCasServerHosts, protocol, "/#/contents/details/");
+        log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());
+        return serviceUrlHelper;
+    }
+
+    @Bean String getCasTargetUrlParameter() {
+        return env.getProperty(APP_SERVICE_REDIRECTPARAM, DefaultTargetUrlParameter);
     }
 
     @Bean
     public SimpleUrlAuthenticationSuccessHandler authenticationSuccessHandler() {
         SimpleUrlAuthenticationSuccessHandler authenticationSuccessHandler = new SimpleUrlAuthenticationSuccessHandler();
         authenticationSuccessHandler.setDefaultTargetUrl("/");
-        authenticationSuccessHandler.setTargetUrlParameter("spring-security-redirect");
+        authenticationSuccessHandler.setTargetUrlParameter(getCasTargetUrlParameter());
         return authenticationSuccessHandler;
     }
 
@@ -155,13 +189,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         casAuthenticationProvider.setAuthenticationUserDetailsService(userDetailsService);
         casAuthenticationProvider.setServiceProperties(serviceProperties());
         casAuthenticationProvider.setTicketValidator(cas20ServiceTicketValidator());
-        casAuthenticationProvider.setKey("an_id_for_this_auth_provider_only");
+        casAuthenticationProvider.setKey(env.getRequiredProperty(CAS_SERVICE_KEY));
         return casAuthenticationProvider;
     }
 
     @Bean
     public SessionAuthenticationStrategy sessionStrategy() {
-        SessionFixationProtectionStrategy sessionStrategy = new CustomSessionFixationProtectionStrategy();
+        SessionFixationProtectionStrategy sessionStrategy = new CustomSessionFixationProtectionStrategy(
+            serviceUrlHelper(), serviceProperties(), getCasTargetUrlParameter());
         sessionStrategy.setMigrateSessionAttributes(false);
         return sessionStrategy;
     }
@@ -175,10 +210,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public CasAuthenticationFilter casAuthenticationFilter() throws Exception {
         CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
         casAuthenticationFilter.setAuthenticationManager(authenticationManager());
-        casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource());
+        casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource(
+            serviceUrlHelper(), serviceProperties(), getCasTargetUrlParameter()));
         casAuthenticationFilter.setSessionAuthenticationStrategy(sessionStrategy());
         casAuthenticationFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler);
-        //casAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
         casAuthenticationFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler);
         // casAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new
         // AntPathRequestMatcher("/login", "GET"));
@@ -190,6 +225,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         RememberCasAuthenticationEntryPoint casAuthenticationEntryPoint = new RememberCasAuthenticationEntryPoint();
         casAuthenticationEntryPoint.setLoginUrl(env.getRequiredProperty(CAS_URL_LOGIN));
         casAuthenticationEntryPoint.setServiceProperties(serviceProperties());
+        casAuthenticationEntryPoint.setUrlHelper(serviceUrlHelper());
         //move to /app/login due to cachebuster instead of api/authenticate
         casAuthenticationEntryPoint.setPathLogin(APP_URI_LOGIN);
         return casAuthenticationEntryPoint;
