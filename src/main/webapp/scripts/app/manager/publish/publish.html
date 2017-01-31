@@ -13,8 +13,9 @@
                 </div>
                 <div class="publish-form-views-steps" ng-switch-when="STATIC">
                     <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".classification" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.classification.step' | translate}}</a>
-                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isItemValidated()"><span>3</span> {{'manager.publish.content.step' | translate}}</a>
+                    <!-- Flash has an auto associated classification, but we may check if  FLASH is in $scope.$parent.publisher.context.reader.authorizedTypes -->
+                    <!--<a ui-sref-active="active" ui-sref=".classification" disable-click="!isPublisherSelected()"><span>2</span> {{'manager.publish.classification.step' | translate}}</a>-->
+                    <a ui-sref-active="active" ui-sref=".content" disable-click="!isItemValidated()"><span>2</span> {{'manager.publish.content.step' | translate}}</a>
                 </div>
                 <div class="publish-form-views-steps" ng-switch-default>
                     <a ui-sref-active="active" ui-sref=".publisher"><span>1</span> {{'manager.publish.publisher.step' | translate}}</a>

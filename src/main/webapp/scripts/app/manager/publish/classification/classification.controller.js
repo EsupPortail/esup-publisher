@@ -5,6 +5,7 @@ angular.module('publisherApp')
         $scope.$parent.classifications = $scope.$parent.classifications || [];
         $scope.$parent.targets = $scope.$parent.targets || [];
         $scope.$parent.classificationsValidated = $scope.$parent.classificationsValidated || false;
+        $scope.showCats = false;
 
         $scope.classificationsList = [];
 
@@ -37,10 +38,21 @@ angular.module('publisherApp')
                 if ($scope.classificationsList.length == 1 && !inArray($scope.classificationsList[0].contextKey, $scope.$parent.classifications)) {
                     $scope.$parent.classifications.push($scope.classificationsList[0].contextKey);
                 }
+                $scope.autoValidateClassif();
+                $scope.showCats = true;
             });
         };
 
         $scope.loadAll();
+
+        // For Flash info we decided to doesn't show a classification to users and to attibute a default one as a default is needed
+        $scope.autoValidateClassif = function() {
+            if ($scope.$parent.publisher.context.redactor.writingMode == "STATIC" &&
+                inArray('FLASH', $scope.$parent.publisher.context.reader.authorizedTypes) && $scope.$parent.classifications.length > 0) {
+                $scope.validateClassifications();
+                $state.go("publish.content");
+            }
+        };
 
         $scope.toggleSelection = function (contextKey) {
             var i = 0, idx=-1;
