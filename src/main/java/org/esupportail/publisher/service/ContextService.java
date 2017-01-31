@@ -78,20 +78,19 @@ public class ContextService {
 
     public ContextKey getOrganizationCtxOfCtx(@NotNull ContextKey ctxKey){
         if (ctxKey.getKeyType() != null && ctxKey.getKeyId() != null) {
-             switch (ctxKey.getKeyType()) {
-                 case ORGANIZATION :
-                     return ctxKey;
-                 case PUBLISHER :
-                     return publisherRepository.findOne(ctxKey.getKeyId()).getContext().getOrganization().getContextKey();
-                 case CATEGORY :
-                     return categoryRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
-                 case FEED :
-                     return feedRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
-                 case ITEM :
-                     return itemRepository.findOne(ctxKey.getKeyId()).getOrganization().getContextKey();
-                 default: throw new IllegalArgumentException("The context Type " + ctxKey.getKeyType() + " is not managed") ;
-
-             }
+            switch (ctxKey.getKeyType()) {
+                case ORGANIZATION :
+                    return ctxKey;
+                case PUBLISHER :
+                    return publisherRepository.findOne(ctxKey.getKeyId()).getContext().getOrganization().getContextKey();
+                case CATEGORY :
+                    return categoryRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                case FEED :
+                    return feedRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                case ITEM :
+                    return itemRepository.findOne(ctxKey.getKeyId()).getOrganization().getContextKey();
+                default: throw new IllegalArgumentException("The context Type " + ctxKey.getKeyType() + " is not managed") ;
+            }
         }
         return null;
     }

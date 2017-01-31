@@ -5,7 +5,14 @@ package org.esupportail.publisher.repository.predicates;
 
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractFeed;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.ExternalFeed;
+import org.esupportail.publisher.domain.InternalFeed;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.QAbstractClassification;
+import org.esupportail.publisher.domain.QAbstractFeed;
+import org.esupportail.publisher.domain.QCategory;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 
 /**
@@ -89,13 +96,11 @@ public final class ClassificationPredicates {
     public static Predicate classificationsOfPublisher(long pubId) {
         final QAbstractClassification classif = QAbstractClassification.abstractClassification;
         return classif.publisher.id.eq(pubId);
-
     }
 
 	public static Predicate CategoryOfPublisher(long pubId) {
 		final QCategory category = QCategory.category;
 		return category.publisher.id.eq(pubId);
-
 	}
 
 	public static Predicate AbstractFeedsOfCategory(Category cat) {
