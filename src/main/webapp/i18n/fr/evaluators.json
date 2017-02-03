@@ -16,7 +16,7 @@
             },
             "delete": {
                 "question": "Êtes vous sûr de vouloir supprimer cet Évaluateur {{ id }}?",
-                "button": "Supprimer cette élément"
+                "button": "Supprimer cet élément"
             },
             "detail": {
                 "title": "Évaluateur"
