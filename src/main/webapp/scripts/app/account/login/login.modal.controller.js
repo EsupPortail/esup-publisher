@@ -38,6 +38,8 @@ angular.module('publisherApp')
             relogState.listener = onmessage;
             $window.addEventListener("message", onmessage);
             relogState.window = $window.open('app/login?postMessage');
-        }
+        };
+
+        $scope.relog();
 
     });
