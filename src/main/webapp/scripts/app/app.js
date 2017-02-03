@@ -46,6 +46,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             var titleKey = 'global.title';
             $rootScope.previousStateName = fromState.name;
             $rootScope.previousStateParams = fromParams;
+            $rootScope.currentState = toState;
 
             /*if (toState.resolve) {
              console.log("set showspinner");

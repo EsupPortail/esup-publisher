@@ -118,28 +118,28 @@
             </div>
         </div>
 
-        <div class="table-responsive" ng-show="permissionAdvanced">
+        <div class="table-responsive table-responsive-to-cards" ng-show="permissionAdvanced">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th translate="publisherApp.permission.role">Role</th>
                     <th translate="publisherApp.permission.evaluator">Evaluator</th>
                     <th translate="publisherApp.permissionOnClassificationWithSubjectList.authorizedSubjects">Authorized Subjects</th>
-                    <th></th>
+                    <th class="action"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="permission in permissions">
-                    <td>{{getPermissionTypeLabel(permission.role) | translate}}</td>
-                    <td><evaluator evaluator="permission.evaluator"></evaluator></td>
-                    <td>
+                    <td data-label="{{'publisherApp.permission.role' | translate}}">{{getPermissionTypeLabel(permission.role) | translate}}</td>
+                    <td class="verylongtext" data-label="{{'publisherApp.permission.evaluator' | translate}}"><evaluator evaluator="permission.evaluator"></evaluator></td>
+                    <td class="verylongtext" data-label="{{'publisherApp.permissionOnClassificationWithSubjectList.authorizedSubjects' | translate}}">
                         <ul class="list-unstyled">
                             <li ng-repeat="subject in permission.authorizedSubjects" class="list-unstyled">
                                 <subject-infos subject="subject" resolve-key="true" ng-click="viewSubject(subject)" ></subject-infos>
                             </li>
                         </ul>
                     </td>
-                    <td><button type="submit"
+                    <td class="action"><button type="submit"
                                 ng-click="updatePermission(permission.id)" can-edit-perms="context.contextKey"
                                 class="btn btn-primary">
                         <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
@@ -153,28 +153,28 @@
                 </tbody>
             </table>
         </div>
-        <div class="table-responsive" ng-show="!permissionAdvanced">
+        <div class="table-responsive table-responsive-to-cards" ng-show="!permissionAdvanced">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th translate="publisherApp.permission.role">Role</th>
                     <th translate="publisherApp.permissionOnContext.evaluatorsimple">Subjects</th>
                     <th translate="publisherApp.permissionOnClassificationWithSubjectList.authorizedSubjects">Authorized Subjects</th>
-                    <th></th>
+                    <th class="action"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="permission in permissions">
-                    <td>{{getPermissionTypeLabel(permission.role) | translate}}</td>
-                    <td><evaluator evaluator="permission.evaluator" simple="true"></evaluator></td>
-                    <td>
+                    <td data-label="{{'publisherApp.permission.role' | translate}}">{{getPermissionTypeLabel(permission.role) | translate}}</td>
+                    <td class="verylongtext" data-label="{{'publisherApp.permissionOnContext.evaluatorsimple' | translate}}"><evaluator evaluator="permission.evaluator" simple="true"></evaluator></td>
+                    <td class="verylongtext" data-label="{{'publisherApp.permissionOnClassificationWithSubjectList.authorizedSubjects' | translate}}">
                         <ul class="list-unstyled">
                             <li ng-repeat="subject in permission.authorizedSubjects" class="list-unstyled">
                                 <subject-infos subject="subject" resolve-key="true" ng-click="viewSubject(subject)" ></subject-infos>
                             </li>
                         </ul>
                     </td>
-                    <td><button type="submit" ng-show="!isAdvancedEvaluator(permission.evaluator)"
+                    <td class="action"><button type="submit" ng-show="!isAdvancedEvaluator(permission.evaluator)"
                                 ng-click="updatePermission(permission.id)" can-edit-perms="context.contextKey"
                                 class="btn btn-primary">
                         <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>

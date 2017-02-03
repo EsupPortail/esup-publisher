@@ -35,7 +35,7 @@
                 ng-click="onClickState(state)"><a href="#">{{state.label | translate}}</a></li>
         </ul>
 
-        <div class="table-responsive">
+        <div class="table-responsive table-responsive-to-cards">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -57,30 +57,30 @@
                     <th class="hidden-sm" translate="publisherApp.item.rssAllowed">rssAllowed</th>
                     <th translate="publisherApp.item.organization">organization</th>
                     <th class="hidden-md" translate="publisherApp.item.redactor">redactor</th>
-                    <th></th>
+                    <th class="action"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="item in items">
-                    <td class="hidden"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
-                    <td>{{item.type}}</td>
-                    <td class="longtext">{{item.title}}</td>
-                    <td class="hidden">{{item.enclosure}}</td>
-                    <td class="hidden-sm">{{item.startDate}}</td>
-                    <td class="hidden-sm">{{item.endDate}}</td>
-                    <td class="hidden">{{item.validatedBy.displayName}}</td>
-                    <td class="hidden">{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                    <td class="hidden">{{item.status.label | translate}}</td>
-                    <td class="hidden-sm verylongtext">{{item.summary}}</td>
-                    <td class="hidden">{{item.body}}</td>
-                    <td class="hidden">{{item.createdBy.displayName}}</td>
-                    <td class="hidden">{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                    <td class="hidden">{{item.lastModifiedBy.displayName}}</td>
-                    <td class="hidden">{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                    <td class="hidden-sm"><input type="checkbox" ng-model="item.rssAllowed" disabled/></td>
-                    <td>{{item.organization.name}}</td>
-                    <td class="hidden-md">{{item.redactor.displayName}}</td>
-                    <td>
+                    <td class="hidden" data-label="ID"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
+                    <td data-label="{{'publisherApp.item.type' | translate}}">{{'enum.itemType.' + item.type | translate}}</td>
+                    <td class="longtext" data-label="{{'publisherApp.item.title' | translate}}">{{item.title}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.enclosure' | translate}}">{{item.enclosure}}</td>
+                    <td class="hidden-sm" data-label="{{'publisherApp.item.startDate' | translate}}">{{item.startDate}}</td>
+                    <td class="hidden-sm" data-label="{{'publisherApp.item.endDate' | translate}}">{{item.endDate}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.validatedBy' | translate}}">{{item.validatedBy.displayName}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.validatedDate' | translate}}">{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.status' | translate}}">{{item.status.label | translate}}</td>
+                    <td class="hidden-sm verylongtext" data-label="{{'publisherApp.item.summary' | translate}}">{{item.summary}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.body' | translate}}">{{item.body}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.displayName' | translate}}">{{item.createdBy.displayName}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.createdDate' | translate}}">{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.lastModifiedBy' | translate}}">{{item.lastModifiedBy.displayName}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.lastModifiedDate' | translate}}">{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
+                    <td class="hidden-sm" data-label="{{'publisherApp.item.rssAllowed' | translate}}"><input type="checkbox" ng-model="item.rssAllowed" disabled/></td>
+                    <td data-label="{{'publisherApp.item.organization' | translate}}">{{item.organization.name}}</td>
+                    <td class="hidden-md" data-label="{{'publisherApp.item.redactor' | translate}}">{{item.redactor.displayName}}</td>
+                    <td class="action">
                         <button type="submit" ui-sref="details({id:item.id})" class="btn btn-info">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
                         </button>

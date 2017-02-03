@@ -1,14 +1,91 @@
-body {
-    background: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #333;
+/* We need to see if it's needed, but with Angular and his modules maybe...
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 100%
 }
+*/
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 14px;
+    background-color: #f3f3f3;
+    color: #000;
+    margin:0;
+}
+
+footer, .footer {
+    padding: 0 15px;
+}
+
+small, .small {
+    font-size: 78%;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    font-family: 'Roboto Slab', sans-serif;
+}
+
+/*button,*/
+/*.card,*/
+/*a {*/
+/*font-family: 'Roboto', sans-serif;*/
+/*}*/
 
 pre { margin-bottom:15px; }
 
 /* for relog button */
 body > .modal.fade.in {
     background-color: grey;
+}
+
+a:hover,
+a:focus,
+a:link {
+    text-decoration: none;
+}
+
+.container-fluid {
+    padding-left :0;
+    padding-right: 0;
+}
+
+.container-fluid > .well {
+    border: none;
+    background-color: #f3f3f3;
+    padding: 0;
+}
+
+body a {
+    color: #000;
+}
+/* Default color */
+a:hover,
+a:focus,
+a:hover > div,
+a:focus > div {
+    color: #25B2F3;
+}
+/* Specific color */
+.www_touraine-eschool_fr a:hover,
+.www_touraine-eschool_fr a:focus,
+.www_touraine-eschool_fr a:hover > div,
+.www_touraine-eschool_fr a:focus > div {
+    color: #C60440;
 }
 
 /* ==========================================================================
@@ -133,6 +210,10 @@ only screen and (                min-resolution: 2dppx) {
 .voffset8 { margin-top: 100px; }
 .voffset9 { margin-top: 150px; }
 
+/* ====================================
+              globals
+======================================*/
+
 /* start Password strength bar style */
 ul#strength {
     display:inline;
@@ -154,23 +235,397 @@ ul#strength {
     margin-right:1px;
     width:20px;
 }
+
 /* end Password strength bar style */
 
-.table-responsive .table .longtext {
-    overflow: hidden;
-    max-width: 50ch;
-    word-wrap: break-word;
-    text-overflow: ellipsis;
-    max-lines: 2;
+.disabled {
+    box-shadow: none;
+    opacity: 0.65;
 }
 
-.table-responsive .table .verylongtext {
-    overflow: hidden;
-    max-width: 50ch;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+/* start For enumarated values in entities views */
+.list-comma::before {
+    content: ', ';
+}
+.list-comma:first-child::before {
+    content: '';
+}
+/* end For enumarated values in entities views */
+
+/* start link for pagination */
+.pagination > li > a,
+.pagination > li > span {
+    color: #25B2F3;
+}
+.www_touraine-eschool_fr .pagination > li > a,
+.www_touraine-eschool_fr .pagination > li > span {
+    color: #C60440;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #25B2F3;
+    border-color: #25B2F3;
 }
 
+.www_touraine-eschool_fr .pagination > .active > a,
+.www_touraine-eschool_fr .pagination > .active > span,
+.www_touraine-eschool_fr .pagination > .active > a:hover,
+.www_touraine-eschool_fr .pagination > .active > span:hover,
+.www_touraine-eschool_fr .pagination > .active > a:focus,
+.www_touraine-eschool_fr .pagination > .active > span:focus {
+    color: #fff;
+    background-color: #C60440;
+    border-color: #C60440;
+}
+/* end link for pagination */
+/* start nav-tabs for tables - for all table containing contents */
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #25b2f3;
+    border: 1px solid #d0d0d0;
+    border-bottom-color: transparent;
+}
+.www_touraine-eschool_fr .nav-tabs > li.active > a,
+.www_touraine-eschool_fr .nav-tabs > li.active > a:hover,
+.www_touraine-eschool_fr .nav-tabs > li.active > a:focus {
+    color: #fff;
+    background-color: #C60440;
+}
+/* end nav-tabs for tables - for all table containing contents */
+/* start nav-pills for all sub-nav in contents*/
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+    background-color: #25b2f3;
+}
+.www_touraine-eschool_fr .nav-pills > li.active > a,
+.www_touraine-eschool_fr .nav-pills > li.active > a:hover,
+.www_touraine-eschool_fr .nav-pills > li.active > a:focus {
+    background-color: #C60440;
+}
+
+/* ====================================
+              Navbar
+======================================*/
+
+/* start ombre NAV*/
+body > div > nav {
+    -moz-box-shadow: 4px 0px 5px -5px #888888;
+    -webkit-box-shadow: 4px 0px 5px -5px #888888;
+    -o-box-shadow: 4px 0px 5px -5px #888888;
+    box-shadow: 4px 0px 5px -5px #888888;
+    filter: progid: DXImageTransform.Microsoft.Shadow(color=#888888, Direction=134, Strength=5);
+}
+
+/* Suppression nav-header project name*/
+nav > div > div.navbar-header > a {
+    display: none;
+}
+
+nav, .navbar,
+.navbar-default {
+    border: none;
+    margin: 0 0 10px 0;
+    background-color: inherit;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    background-color: #25B2F3;
+    color: #fff;
+}
+.www_touraine-eschool_fr .dropdown-menu > .active > a,
+.www_touraine-eschool_fr .dropdown-menu > .active > a:hover,
+.www_touraine-eschool_fr .dropdown-menu > .active > a:focus {
+    background-color: #C60440;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color: transparent;
+}
+.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a,
+.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a:hover,
+.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a:focus {
+    background-color: transparent;
+}
+@media screen and (max-width: 767px) {
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+        background-color: #25B2F3;
+        color: #fff;
+    }
+    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+        background-color: #C60440;
+    }
+}
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+    opacity: 0.75;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+    color: #25B2F3;
+    background-color: #f3f3f3;
+}
+.www_touraine-eschool_fr .dropdown-menu > li > a:hover,
+.www_touraine-eschool_fr .dropdown-menu > li > a:focus {
+    color: #C60440;
+}
+
+/* SIZE ET CENTRAGE SOUS MENU */
+
+#navbar-collapse > ul,
+#navbar-collapse {
+    width: 100%;
+    /*padding-left: 10%;*/
+    /*padding-right: 10%;*/
+    padding: 0;
+    text-align: center;
+    margin: 0;
+}
+
+#navbar-collapse > ul > li:focus,
+#navbar-collapse > ul > li:hover,
+#navbar-collapse > ul > li.active {
+    border-bottom: solid 3px #25B2F3;
+}
+.www_touraine-eschool_fr #navbar-collapse > ul > li:focus,
+.www_touraine-eschool_fr #navbar-collapse > ul > li:hover,
+.www_touraine-eschool_fr #navbar-collapse > ul > li.active {
+    border-bottom: solid 3px #C60440;
+}
+
+#navbar-collapse > ul > li {
+    /*width: 30%;*/
+    border-bottom: solid 3px #D0D0D0;
+    margin-left: 10px;
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+}
+
+body > div > nav {
+    background-color: #ffffff;
+}
+
+body > div > nav .navbar-default .navbar-collapse,
+body > div > nav .navbar-default .navbar-form {
+    border: none;
+}
+
+/*#navbar-collapse > ul > li > a {*/
+    /*text-align: center;*/
+/*}*/
+
+body > div > nav {
+    border-bottom: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-bottom: 0px;
+}
+
+body > div > nav > div.container {
+    width: 100%;
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* ====================================
+    Main (common part of all pages)
+======================================*/
+
+a.list-group-item div.bouton-action {
+    width: 100%;
+    text-align: center;
+}
+
+a.list-group-item div.bouton-action .div-icon,
+a.list-group-item div.bouton-action .div-text {
+    display: inline-block;
+    min-width: 33%;
+    padding: 10px 15px;
+}
+
+@media screen and (min-width:428px) {
+    .container-fluid > .well > div {
+        padding: 0 15%;
+    }
+    /* for Table only */
+    .container-fluid > .well > div.manager.contents {
+        padding: 0 5%;
+    }
+}
+@media screen and (max-width:427px) {
+    a.list-group-item div.bouton-action .div-icon {
+        display: none;
+    }
+    a.list-group-item div.bouton-action .div-text {
+        text-align: center;
+    }
+}
+
+/* ====================================
+             manager
+======================================*/
+.container-fluid > .well > .manager > .content {
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid #d0d0d0;
+}
+
+.container-fluid > .well > .manager > .content #tabs > h4 {
+    font-style: italic;
+}
+
+.container-fluid > .well > .manager > .content > div > #tabs > ul.nav,
+.container-fluid > .well > .manager > .content > div > div.table-responsive {
+    padding-top: 15px;
+}
+
+/* ====================================
+    manager contents (table of published contents)
+======================================*/
+@media screen and (min-width: 768px) {
+    .container-fluid > .well > .manager.contents > .content .table-responsive .table .longtext {
+        overflow: hidden;
+        max-width: 50ch;
+        word-wrap: break-word;
+        text-overflow: ellipsis;
+        max-lines: 2;
+    }
+
+    .container-fluid > .well > .manager.contents > .content .table-responsive .table .verylongtext {
+        overflow: hidden;
+        max-width: 50ch;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+/* start Transform table into cards ! */
+@media screen and (max-width:767px) {
+    .table-responsive-to-cards thead {
+        display: none;
+    }
+
+    .table-responsive-to-cards table > thead > tr > th,
+    .table-responsive-to-cards table > tbody > tr > th,
+    .table-responsive-to-cards table > tfoot > tr > th,
+    .table-responsive-to-cards table > thead > tr > td,
+    .table-responsive-to-cards table > tbody > tr > td,
+    .table-responsive-to-cards table > tfoot > tr > td {
+        border: none;
+        white-space: initial !important;
+    }
+
+    .table-responsive-to-cards tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        padding: 1rem 0.5rem 0.5rem 1rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(136, 136, 136, 0.5);
+    }
+
+    .table-responsive-to-cards td {
+        /* display block to show all td per line, else display inline-block*/
+        display: block;
+        margin: 0 0.5rem 0.5rem 0;
+        padding: 0.5rem;
+        text-align: left;
+        background-color: #f3f3f3;
+        /*border: 1px solid rgba(208, 208, 208, 0.5);*/
+
+    }
+
+    .manager.contents .table-responsive-to-cards td {
+        display: inline-block;
+    }
+
+    .table-responsive-to-cards td:not(.action):before {
+        content: attr(data-label) ": ";
+        float: left;
+        margin: -0.5rem 0.5rem -0.5rem -0.5rem;
+        padding: 0.625rem 0.5rem 0.625rem;
+        font-size: 0.75em;
+        font-weight: bold;
+        background: rgba(208, 208, 208, 0.1)
+        color:#303030;
+    }
+
+    .manager.contents .table-responsive-to-cards td.verylongtext,
+    .table-responsive-to-cards td.verylongtext,
+    .table-responsive-to-cards td.action {
+        display: block;
+        float: none;
+    }
+
+    .table-responsive-to-cards td.verylongtext:before {
+        display: block;
+        margin-right: -0.5rem;
+        margin-bottom: 0.5rem;
+        float: none;
+    }
+
+    .table-responsive-to-cards td:empty {
+        display: none;
+    }
+
+    .table-responsive-to-cards td.action {
+        width: 100%;
+        text-align: center;
+        background: transparent;
+    }
+    /* end Transform table into cards ! */
+}
+/* ==========================================
+    manager Treeview
+============================================*/
+.manager.treeview {
+    width: 100%;
+}
+.manager.treeview > .content > .treeview {
+    overflow: auto;
+}
+.manager.treeview > .content > .treeview,
+.manager.treeview > .content > .treeview > div {
+    margin: 0;
+    padding: 0;
+}
+.manager.treeview > .content > .treeview > div {
+    display: block;
+    float:left;
+    min-width: 25%;
+    box-sizing:border-box;
+    padding: 20px 20px 0 0;
+}
+.manager.treeview > .content > .treeview > div:last-child {
+    /*float: none;*/
+    overflow:hidden;
+    min-width: 60%;
+    max-width: 1024px;
+    padding-right: 0;
+}
+
+/* ====================================
+   preview of contents
+======================================*/
 .article-preview .details {
     background: #DDDDDD none repeat scroll 0 0;
     border: 1px dashed #c0c0c0;
@@ -181,7 +636,7 @@ ul#strength {
 .article-preview .details .summary {
     display: block;
 }
-.article-preview .details .pubInfo  p {
+.article-preview .details .pubInfo p {
     margin: 0;
 }
 .article-preview .details .label {
@@ -199,9 +654,9 @@ ul#strength {
     font-size: 16px;
 }
 
-/*.btn-group {
-    padding-top: 20px;
-}*/
+/* ====================================
+ modals for cropper with input file
+======================================*/
 
 .btn-file {
     position: relative;
@@ -232,21 +687,6 @@ ul#strength {
 
 .progress {
     width : 80%;
-}
-.evaluator {
-    list-style:none;
-}
-
-.disabled {
-    box-shadow: none;
-    opacity: 0.65;
-}
-
-.list-comma::before {
-    content: ', ';
-}
-.list-comma:first-child::before {
-    content: '';
 }
 
 /* ====================================
@@ -369,24 +809,11 @@ ul#strength {
     display: inline-block;
 }
 
-/* ==========================================
-    Treeview
-============================================*/
-
-.treeview .tree-browser {
-    padding-bottom: 1em;
- }
-/*#treeview .context-viewer {
-    padding-left: 50px;
-    overflow: auto;
-}*/
-
-
 /* ========================================
     Overlay, for spinner, etc...
 ===========================================*/
 .overlay {
-    background-color: #333; /*or semitransparent image*/
+    background-color: rgba(0,0,0,0.8); /*or semitransparent image*/
     height: 100%;
     width: 100%;
     position: fixed;
@@ -425,7 +852,42 @@ ul#strength {
 .fa-users .tooltip-inner {
     word-break: break-all;
 }
+.evaluator {
+    list-style: none;
+}
+div > div > edit-evaluator > ul,
+td > evaluator > ul {
+    padding: 0;
+}
 
+/* ========================================
+    For jstree
+===========================================*/
+js-tree {
+   display: inline-block;
+}
+.jstree-default > .jstree-container-ul > .jstree-node {
+    margin-left: 0;
+    margin-right: 20px;
+}
+.jstree-default .jstree-wholerow-clicked {
+    background: #25B2F3;
+}
+.www_touraine-eschool_fr .jstree-default .jstree-wholerow-clicked {
+    background: #C60440;
+}
+.jstree-default .jstree-anchor.jstree-clicked {
+    color: #fff;
+}
+.jstree-default .jstree-wholerow-hovered{
+    background: #F3F3F3;
+}
+.jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #25B2F3;
+}
+.www_touraine-eschool_fr .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #C60440;
+}
 
 /* ========================================
     For TextAngular et specific buttons
@@ -436,9 +898,9 @@ ul#strength {
 }
 /* see custom taDropdown, and copy style of .btn-default.active*/
 .tadropdown.active > button, .btn-default.active {
-    color: #333;
-    background-color: #e6e6e6;
-    border-color: #adadad;
+    color: #000;
+    background-color: #D0D0D0;
+    border-color: #D0D0D0;
 }
 
 /* =======================================
