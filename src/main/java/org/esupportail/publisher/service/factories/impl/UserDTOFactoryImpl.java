@@ -3,6 +3,12 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
@@ -15,11 +21,6 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 25 juil. 2014
@@ -59,7 +60,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 	public UserDTO from(final IExternalUser extModel, boolean withInternal) {
 		log.debug("External to DTO of {}", extModel);
 		User model = null;
-		if (withInternal) {
+		if (extModel != null && withInternal) {
 			model = dao.findOne(extModel.getId());
 		}
 		return from(model, extModel);

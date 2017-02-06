@@ -67,4 +67,12 @@ public class UserResourceTest {
 						MediaType.APPLICATION_JSON)).andExpect(
 				status().isNotFound());
 	}
+
+    @Test
+    public void testGetExtendedUnknownUser() throws Exception {
+        restUserMockMvc.perform(
+            get("/api/users/extended/unknown").accept(
+                MediaType.APPLICATION_JSON)).andExpect(
+            status().isNotFound());
+    }
 }
