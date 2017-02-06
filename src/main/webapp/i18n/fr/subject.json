@@ -3,6 +3,7 @@
         "subject" : {
             "search": "Rechercher un sujet",
             "search.unnamed": "Rechercher un ...",
+            "disappear": " n'est plus présent",
             "type": {
                 "label": "Type : ",
                 "user": "Personne",

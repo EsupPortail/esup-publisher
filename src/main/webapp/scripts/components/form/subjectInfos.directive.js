@@ -1,7 +1,7 @@
 'use strict';
 // if not explicitly set resolveKey to false it will try to resolve the subject
 angular.module('publisherApp')
-    .directive('subjectInfos', ['$compile', 'Subject', '$q', function($compile, Subject, $q) {
+    .directive('subjectInfos', ['$compile', 'Subject', '$q', '$translate', function($compile, Subject, $q, $translate) {
         return {
             restrict: 'E',
             transclude: true,
@@ -12,6 +12,12 @@ angular.module('publisherApp')
             },
             controller: function($scope) {
                 $scope.userAttrs = Subject.getUserDisplayedAttrs();
+
+                if (!angular.isDefined($scope.notFoundSubjectMsg)) {
+                    $translate('publisherApp.subject.disappear').then(function (translatedValue) {
+                        $scope.notFoundSubjectMsg = translatedValue;
+                    });
+                }
 
                 // to resolve and complete subject
                 if (angular.isDefined($scope.subject) && angular.isDefined($scope.subject.modelId)
@@ -33,7 +39,11 @@ angular.module('publisherApp')
 
                 $scope.tooltipSubject = function(subject) {
                     //console.log("tooltipSubject :", subject, $scope.userAttrs);
-                    if (!angular.isDefined($scope.userAttrs) || !angular.isDefined(subject) || !angular.isDefined(subject.modelId)) return '';
+                    if (!angular.isDefined($scope.userAttrs) || !angular.isDefined(subject)) return '';
+                    if (angular.isDefined(subject.keyId)) {
+                        return "'" + subject.keyId + "'" + $scope.notFoundSubjectMsg;
+                    }
+                    if (!angular.isDefined(subject.modelId)) return '';
                     if (subject.modelId.keyType =='GROUP') {
                         return subject.modelId.keyId;
                     }
@@ -68,7 +78,7 @@ angular.module('publisherApp')
                     element.show();
                     var subject = scope.subject;
                     element.children('.subject-infos').remove();
-                    //console.log("subjectInfos :", subject);
+                    //console.log("subjectInfos :", subject, element);
                     var html;
                     if (subject && !angular.equals({}, subject)) {
                         if (subject.hasOwnProperty('modelId')) {
@@ -81,8 +91,12 @@ angular.module('publisherApp')
                     $compile(element.contents())(scope)
                 };
 
-                scope.$watch('subject', function () {
-                   init();
+                scope.$watch('subject', function (newSubj, oldSubj) {
+                    /* hack to avoid angular problem of scope object not updated in parent scope due to ng-repeat*/
+                    if (!angular.isDefined(newSubj.modelId) && angular.isDefined(oldSubj.modelId)) {
+                        scope.subject = oldSubj;
+                    }
+                    init();
                 });
 
                 function append (html){
@@ -109,10 +123,10 @@ angular.module('publisherApp')
                     if (subject.foundOnExternalSource === true || subject.displayName.length > 0) {
                         displayName = subject.displayName;
                     } else if (type && id) {
-                        displayName = "Not Found : [" + type + ", " + id + "]";
+                        displayName = "[" + type + ", " + id + "]" + scope.notFoundSubjectMsg;
                     }
                     if (css && displayName) {
-                        elem = '<a href class="' + css + '"><span uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"> ' + displayName + '</span></a>';
+                        elem = '<a href class="' + css + '" data-subject-id="' + id + '"><span uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"> ' + displayName + '</span></a>';
                     }
                     //console.log("htmlFromDTO returned : ", elem);
                     return elem;
@@ -123,6 +137,7 @@ angular.module('publisherApp')
                     var elem = '<span class="fa fa-question subject-infos"></span>';
                     //console.log("subjectInfos htmlFromKey", subject);
                     var type = subject.keyType;
+                    var id = subject.keyId;
                     switch (type) {
                         case "GROUP" :
                             css = "fa fa-users subject-infos";
@@ -132,7 +147,7 @@ angular.module('publisherApp')
                             break;
                     }
                     if (css) {
-                        elem = '<a href class="' + css + '"><span class="fa fa-question"></span></a>';
+                        elem = '<a href class="' + css + '" data-subject-id="' + id + '"><span class="fa fa-question" uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"></span></a>';
                     }
                     //console.log("htmlFromKey returned : ", elem);
                     return elem;

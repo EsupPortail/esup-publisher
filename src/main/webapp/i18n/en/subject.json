@@ -2,6 +2,8 @@
     "publisherApp": {
         "subject" : {
             "search": "Search a subject ",
+            "search.unnamed": "Search a ...",
+            "disappear": " isn't more present",
             "type": {
                 "label": "Search on",
                 "user": "Person",
