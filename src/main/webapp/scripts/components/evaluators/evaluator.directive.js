@@ -262,7 +262,7 @@ angular.module('publisherApp')
                     //console.log("deleteEvaluator ", data, array);
                     var i = 0, idx=-1;
                     for (var size = array.length; i < size; i++) {
-                        //console.log("checking equals ", $scope.$parent.classifications[i], contextKey);
+                        //console.log("checking equals ", array[i], data);
                         if (angular.equals(array[i], data)) {
                             idx = i;
                             break;
