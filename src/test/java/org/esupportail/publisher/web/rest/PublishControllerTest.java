@@ -1,13 +1,40 @@
 package org.esupportail.publisher.web.rest;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.SubscribeType;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.ObjTest;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.ReaderRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.service.SubscriberService;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
@@ -27,13 +54,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 /**
  * Created by jgribonvald on 08/06/16.
  */
@@ -52,8 +72,8 @@ public class PublishControllerTest {
     @Inject
     private PublisherRepository publisherRepository;
 
-    @Inject
-    private ClassificationRepository<AbstractClassification> classificationRepository;
+//    @Inject
+//    private ClassificationRepository<AbstractClassification> classificationRepository;
 
     @Inject
     private CategoryRepository categoryRepository;
@@ -70,8 +90,8 @@ public class PublishControllerTest {
     @Inject
     private ItemRepository<AbstractItem> itemRepository;
 
-    @Inject
-    private FlashRepository flashRepository;
+//    @Inject
+//    private FlashRepository flashRepository;
 
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
@@ -94,6 +114,9 @@ public class PublishControllerTest {
     @Inject
     private SubscriberRepository subscriberRepository;
 
+    @Inject
+    private ServiceUrlHelper urlHelper;
+
 
     @PostConstruct
     public void setup() {
@@ -102,15 +125,16 @@ public class PublishControllerTest {
 
         ReflectionTestUtils.setField(publishController, "organizationRepository", organizationRepository);
         ReflectionTestUtils.setField(publishController, "publisherRepository", publisherRepository);
-        ReflectionTestUtils.setField(publishController, "flashRepository", flashRepository);
+        //ReflectionTestUtils.setField(publishController, "flashRepository", flashRepository);
         ReflectionTestUtils.setField(publishController, "categoryRepository", categoryRepository);
-        ReflectionTestUtils.setField(publishController, "classificationRepository", classificationRepository);
+        //ReflectionTestUtils.setField(publishController, "classificationRepository", classificationRepository);
         ReflectionTestUtils.setField(publishController, "itemClassificationOrderRepository", itemClassificationOrderRepository);
         ReflectionTestUtils.setField(publishController, "rubriqueVOFactory", rubriqueVOFactory);
         ReflectionTestUtils.setField(publishController, "itemVOFactory", itemVOFactory);
         ReflectionTestUtils.setField(publishController, "categoryProfileFactory", categoryProfileFactory);
         ReflectionTestUtils.setField(publishController, "flashInfoVOFactory", flashInfoVOFactory);
         ReflectionTestUtils.setField(publishController, "subscriberService", subscriberService);
+        ReflectionTestUtils.setField(publishController, "urlHelper", urlHelper);
 
 
         this.restPublishControllerMockMvc = MockMvcBuilders.standaloneSetup(publishController).build();
