@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-responsive" ng-class="{'table-responsive-to-flexbox': !showSubscribeType(),'table-responsive-to-cards': showSubscribeType() }">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -94,9 +94,9 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="target in targets">
-                    <td ng-if="showSubscribeType()">{{getSubscribeTypeLabel(target.subscribeType) | translate}}</td>
-                    <td><subject-infos subject="target.subjectDTO" ng-click="viewSubject(target)"></subject-infos></td>
-                    <td><button type="submit" can-edit-targets="context.contextKey"
+                    <td data-label="{{'publisherApp.subscriber.subscribeType' | translate}}" ng-if="showSubscribeType()">{{getSubscribeTypeLabel(target.subscribeType) | translate}}</td>
+                    <td data-label="{{'publisherApp.subscriber.subject' | translate}}"><subject-infos subject="target.subjectDTO" ng-click="viewSubject(target)"></subject-infos></td>
+                    <td class="action"><button type="submit" can-edit-targets="context.contextKey"
                                 ng-click="deleteSubscriber(target)"
                                 class="btn btn-danger">
                         <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>

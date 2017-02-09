@@ -670,8 +670,27 @@ a.list-group-item div.bouton-action .div-text {
         text-align: center;
         background: transparent;
     }
-    /* end Transform table into cards ! */
 }
+/* end Transform table into cards ! */
+/* start Transform table into flexbox ! */
+.table-responsive-to-flexbox tr {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #D0D0D0;
+}
+.table-responsive-to-flexbox td {
+    white-space: normal;
+}
+.table-responsive-to-flexbox,
+.table-responsive-to-flexbox > .table,
+.table-responsive-to-flexbox > .table > thead,
+.table-responsive-to-flexbox > .table > thead > tr,
+.table-responsive-to-flexbox > .table > thead > tr > th,
+.table-responsive-to-flexbox > .table > tbody > tr > td {
+    border: none;
+}
+/* end Transform table into flexbox ! */
 /* ==========================================
     manager Treeview
 ============================================*/
