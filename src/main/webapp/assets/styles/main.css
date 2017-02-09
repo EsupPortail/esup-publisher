@@ -343,6 +343,10 @@ ul#strength {
     background-color: #C60440;
 }
 
+.btn {
+    white-space: normal;
+}
+
 /*.btn-link,*/
 /*.btn-group .btn-nav {*/
     /*color: #25B2F3;*/
@@ -1021,8 +1025,8 @@ js-tree {
 .jstree-default .jstree-anchor.jstree-clicked {
     color: #fff;
 }
-.jstree-default .jstree-wholerow-hovered,
-.jstree-default .jstree-hovered{
+.jstree-default .jstree-wholerow-hovered:not(.jstree-wholerow-clicked),
+.jstree-default .jstree-hovered:not(.jstree-clicked){
     background: #f3f3f3;
 }
 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
