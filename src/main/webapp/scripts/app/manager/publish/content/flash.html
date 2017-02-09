@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="form-inline">
+            <div class="form-inline text-justify">
                 <div class="form-group" ng-class="{ 'has-error': publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
                     <label class="control-label" for="startDate" translate="publisherApp.flash.startDate">StartDate</label>
                     <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
@@ -117,11 +117,11 @@
                         </p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label" for="rssAllowed" translate="publisherApp.flash.rssAllowed">Allow in RSS</label>
+                    <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="rssAllowed" translate="publisherApp.flash.rssAllowed">Allow in RSS</label>
-            <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed" />
         </div>
         <div class="form-group" ng-class="{ 'has-error': publishContentForm.body.$invalid && publishContentForm.body.$dirty }">
             <label class="control-label" for="body"	translate="publisherApp.flash.body">Body</label>

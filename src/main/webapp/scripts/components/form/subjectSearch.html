@@ -122,8 +122,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span translate="manager.publish.targets.userFromGroup.label"></span>
+                        </div>
                         <div class="panel-body">
-                            <label><span translate="manager.publish.targets.userFromGroup.label"></span></label>
                             <js-tree id="jsTreeUserFromGroup{{searchId}}" tree-ajax="api/groups" tree-plugins="sort"
                                      tree-events="select_node:getUserOfGroup" tree-core="treeCoreCtxUsersFG"></js-tree>
                         </div>

@@ -6,7 +6,6 @@
     font-size: 100%
 }
 */
-
 body {
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 300;
@@ -15,6 +14,29 @@ body {
     background-color: #f3f3f3;
     color: #000;
     margin:0;
+}
+
+@media screen and (min-width: 768px) {
+    body.simulate-iframe {
+        padding: 0 15%;
+    }
+
+    body.simulate-iframe > div.container-fluid > div.well > div.manager,
+    body.simulate-iframe > div.container-fluid > div.well > div.admin,
+    body.simulate-iframe > div.container-navbar {
+        border-left: 1px solid #d0d0d0;
+        border-right: 1px solid #d0d0d0;
+    }
+
+    body.simulate-iframe > div.container-fluid > div.well > div.manager,
+    body.simulate-iframe > div.container-fluid > div.well > div.admin {
+        border-bottom: 1px solid #d0d0d0;
+        -moz-box-shadow: 4px 5px 5px -5px #888888;
+        -webkit-box-shadow: 4px 5px 5px -5px #888888;
+        -o-box-shadow: 4px 5px 5px -5px #888888;
+        box-shadow: 4px 5px 5px -5px #888888;
+        filter: progid:DXImageTransform.Microsoft.Shadow(color=#888888, Direction=134, Strength=5);
+    }
 }
 
 footer, .footer {
@@ -81,10 +103,10 @@ a:focus > div {
     color: #25B2F3;
 }
 /* Specific color */
-.www_touraine-eschool_fr a:hover,
-.www_touraine-eschool_fr a:focus,
-.www_touraine-eschool_fr a:hover > div,
-.www_touraine-eschool_fr a:focus > div {
+.clg37 a:hover,
+.clg37 a:focus,
+.clg37 a:hover > div,
+.clg37 a:focus > div {
     color: #C60440;
 }
 
@@ -120,7 +142,7 @@ Version number in navbar
 ========================================================================== */
 .navbar-version {
     font-size: 10px;
-    color: #ccc
+    color: #888;
 }
 
 /* ==========================================================================
@@ -133,23 +155,6 @@ Browser Upgrade Prompt
     padding: 0.2em 0;
 }
 
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 30px;
-    background-color: #eee;
-    border-radius: 6px;
-    padding: 60px;
-}
-
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
-}
-
 .error {
     color: white;
     background-color: red;
@@ -159,8 +164,8 @@ Browser Upgrade Prompt
     display: inline-block;
     width: 347px;
     height: 497px;
-    background: url("../images/hipster.png") no-repeat center top;
-    background-size: contain;
+    /*background: url("../images/hipster.png") no-repeat center top;*/
+    /*background-size: contain;*/
 }
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
@@ -172,8 +177,8 @@ only screen and (        min-device-pixel-ratio: 2),
 only screen and (                min-resolution: 192dpi),
 only screen and (                min-resolution: 2dppx) {
     .hipster {
-        background: url("../images/hipster2x.png") no-repeat center top;
-        background-size: contain;
+        /*background: url("../images/hipster2x.png") no-repeat center top;*/
+        /*background-size: contain;*/
     }
 }
 
@@ -257,8 +262,8 @@ ul#strength {
 .pagination > li > span {
     color: #25B2F3;
 }
-.www_touraine-eschool_fr .pagination > li > a,
-.www_touraine-eschool_fr .pagination > li > span {
+.clg37 .pagination > li > a,
+.clg37 .pagination > li > span {
     color: #C60440;
 }
 .pagination > .active > a,
@@ -270,18 +275,17 @@ ul#strength {
     color: #fff;
     cursor: default;
     background-color: #25B2F3;
-    border-color: #25B2F3;
+    border-color: #D0D0D0;
 }
-
-.www_touraine-eschool_fr .pagination > .active > a,
-.www_touraine-eschool_fr .pagination > .active > span,
-.www_touraine-eschool_fr .pagination > .active > a:hover,
-.www_touraine-eschool_fr .pagination > .active > span:hover,
-.www_touraine-eschool_fr .pagination > .active > a:focus,
-.www_touraine-eschool_fr .pagination > .active > span:focus {
+.clg37 .pagination > .active > a,
+.clg37 .pagination > .active > span,
+.clg37 .pagination > .active > a:hover,
+.clg37 .pagination > .active > span:hover,
+.clg37 .pagination > .active > a:focus,
+.clg37 .pagination > .active > span:focus {
     color: #fff;
     background-color: #C60440;
-    border-color: #C60440;
+    border-color: #D0D0D0;
 }
 /* end link for pagination */
 /* start nav-tabs for tables - for all table containing contents */
@@ -291,14 +295,13 @@ ul#strength {
     color: #fff;
     cursor: default;
     background-color: #25b2f3;
-    border: 1px solid #d0d0d0;
     border-bottom-color: transparent;
 }
-.www_touraine-eschool_fr .nav-tabs > li.active > a,
-.www_touraine-eschool_fr .nav-tabs > li.active > a:hover,
-.www_touraine-eschool_fr .nav-tabs > li.active > a:focus {
-    color: #fff;
+.clg37 .nav-tabs > li.active > a,
+.clg37 .nav-tabs > li.active > a:hover,
+.clg37 .nav-tabs > li.active > a:focus {
     background-color: #C60440;
+    color: #fff;
 }
 /* end nav-tabs for tables - for all table containing contents */
 /* start nav-pills for all sub-nav in contents*/
@@ -307,23 +310,82 @@ ul#strength {
 .nav-pills > li.active > a:focus {
     background-color: #25b2f3;
 }
-.www_touraine-eschool_fr .nav-pills > li.active > a,
-.www_touraine-eschool_fr .nav-pills > li.active > a:hover,
-.www_touraine-eschool_fr .nav-pills > li.active > a:focus {
+.clg37 .nav-pills > li.active > a,
+.clg37 .nav-pills > li.active > a:hover,
+.clg37 .nav-pills > li.active > a:focus {
     background-color: #C60440;
 }
 
+.pastille {
+    background: transparent;
+    display: inline-block;
+    border-radius:50%;
+    width:20px;
+    height:20px;
+    border:1px solid #f3f3f3;
+    vertical-align: text-bottom;
+}
+
+.publish-form-container .btn-primary:hover {
+    opacity: 0.75;
+}
+.publish-form-container .btn-primary,
+.btn-nav:not([disabled]):hover,
+.btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #25B2F3;
+    border-color: #D0D0D0;
+}
+.clg37 .publish-form-container .btn-primary,
+.clg37 .btn-nav:not([disabled]):hover,
+.clg37 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #C60440;
+}
+
+/*.btn-link,*/
+/*.btn-group .btn-nav {*/
+    /*color: #25B2F3;*/
+/*}*/
+/*.clg37 .btn-link,*/
+/*.clg37 .btn-group .btn-nav {*/
+    /*color: #C60440;*/
+/*}*/
+
+
+/* ====================================
+     All pages title on where user is
+====================================== */
+body > div.container-fluid > div.well > div.admin > div h1,
+body > div.container-fluid > div.well > div > div > div > h2,
+body > div.container-fluid > div.well > div > div > div > div.publish-header {
+    background-color: #f3f3f3;
+    padding: 20px 40px 10px 40px;
+    margin: 0;
+    /*line-height: 80px;*/
+    min-height: 80px;
+    border-bottom: 1px solid #d0d0d0;
+    /*border-top: 1px solid #d0d0d0;*/
+}
+
+body > div.container-fluid > div.well > div > div > div > div:not(.modal) {
+    background-color: #fff;
+    padding: 10px 5%;
+}
+/* start case on admin view when managing entities */
+body > div.container-fluid > div.well.entity > div > div > div:not(.modal) {
+    background-color: #fff;
+}
+body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > button {
+    margin: 10px 5%;
+}
+/* end case on admin view when managing entities */
 /* ====================================
               Navbar
-======================================*/
+====================================== */
 
-/* start ombre NAV*/
-body > div > nav {
-    -moz-box-shadow: 4px 0px 5px -5px #888888;
-    -webkit-box-shadow: 4px 0px 5px -5px #888888;
-    -o-box-shadow: 4px 0px 5px -5px #888888;
-    box-shadow: 4px 0px 5px -5px #888888;
-    filter: progid: DXImageTransform.Microsoft.Shadow(color=#888888, Direction=134, Strength=5);
+body > div.container-navbar {
+    background-color: #fff;
 }
 
 /* Suppression nav-header project name*/
@@ -334,7 +396,8 @@ nav > div > div.navbar-header > a {
 nav, .navbar,
 .navbar-default {
     border: none;
-    margin: 0 0 10px 0;
+    margin: 0;
+    padding: 0;
     background-color: inherit;
 }
 
@@ -344,19 +407,25 @@ nav, .navbar,
     background-color: #25B2F3;
     color: #fff;
 }
-.www_touraine-eschool_fr .dropdown-menu > .active > a,
-.www_touraine-eschool_fr .dropdown-menu > .active > a:hover,
-.www_touraine-eschool_fr .dropdown-menu > .active > a:focus {
+.clg37 .dropdown-menu > .active > a,
+.clg37 .dropdown-menu > .active > a:hover,
+.clg37 .dropdown-menu > .active > a:focus {
     background-color: #C60440;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus {
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
     background-color: transparent;
 }
-.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a,
-.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a:hover,
-.www_touraine-eschool_fr .navbar-default .navbar-nav > .active > a:focus {
+.clg37 .navbar-default .navbar-nav > .active > a,
+.clg37 .navbar-default .navbar-nav > .active > a:hover,
+.clg37 .navbar-default .navbar-nav > .active > a:focus,
+.clg37 .navbar-default .navbar-nav > .open > a,
+.clg37 .navbar-default .navbar-nav > .open > a:hover,
+.clg37 .navbar-default .navbar-nav > .open > a:focus{
     background-color: transparent;
 }
 @media screen and (max-width: 767px) {
@@ -366,9 +435,9 @@ nav, .navbar,
         background-color: #25B2F3;
         color: #fff;
     }
-    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-    .www_touraine-eschool_fr .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
         background-color: #C60440;
     }
 }
@@ -381,8 +450,8 @@ nav, .navbar,
     color: #25B2F3;
     background-color: #f3f3f3;
 }
-.www_touraine-eschool_fr .dropdown-menu > li > a:hover,
-.www_touraine-eschool_fr .dropdown-menu > li > a:focus {
+.clg37 .dropdown-menu > li > a:hover,
+.clg37 .dropdown-menu > li > a:focus {
     color: #C60440;
 }
 
@@ -391,8 +460,6 @@ nav, .navbar,
 #navbar-collapse > ul,
 #navbar-collapse {
     width: 100%;
-    /*padding-left: 10%;*/
-    /*padding-right: 10%;*/
     padding: 0;
     text-align: center;
     margin: 0;
@@ -403,9 +470,9 @@ nav, .navbar,
 #navbar-collapse > ul > li.active {
     border-bottom: solid 3px #25B2F3;
 }
-.www_touraine-eschool_fr #navbar-collapse > ul > li:focus,
-.www_touraine-eschool_fr #navbar-collapse > ul > li:hover,
-.www_touraine-eschool_fr #navbar-collapse > ul > li.active {
+.clg37 #navbar-collapse > ul > li:focus,
+.clg37 #navbar-collapse > ul > li:hover,
+.clg37 #navbar-collapse > ul > li.active {
     border-bottom: solid 3px #C60440;
 }
 
@@ -418,31 +485,24 @@ nav, .navbar,
     vertical-align: top;
 }
 
-body > div > nav {
+body > div.container-navbar > nav {
     background-color: #ffffff;
 }
 
-body > div > nav .navbar-default .navbar-collapse,
-body > div > nav .navbar-default .navbar-form {
+body > div.container-navbar > nav .navbar-default .navbar-collapse,
+body > div.container-navbar > nav .navbar-default .navbar-form {
     border: none;
 }
 
-/*#navbar-collapse > ul > li > a {*/
-    /*text-align: center;*/
-/*}*/
-
-body > div > nav {
-    border-bottom: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    margin-bottom: 0px;
-}
-
-body > div > nav > div.container {
+body > div.container-navbar > nav > div.container {
     width: 100%;
     padding: 0px;
     margin-left: 0px;
     margin-right: 0px;
+}
+
+body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.glyphicon {
+    display: none;
 }
 
 /* ====================================
@@ -461,15 +521,6 @@ a.list-group-item div.bouton-action .div-text {
     padding: 10px 15px;
 }
 
-@media screen and (min-width:428px) {
-    .container-fluid > .well > div {
-        padding: 0 15%;
-    }
-    /* for Table only */
-    .container-fluid > .well > div.manager.contents {
-        padding: 0 5%;
-    }
-}
 @media screen and (max-width:427px) {
     a.list-group-item div.bouton-action .div-icon {
         display: none;
@@ -480,13 +531,20 @@ a.list-group-item div.bouton-action .div-text {
 }
 
 /* ====================================
+             site.home
+======================================*/
+
+@media screen and (min-width: 768px) {
+    body:not(.simulate-iframe) > div.container-fluid > div.well.site {
+        padding: 0 15%;
+    }
+}
+
+/* ====================================
              manager
 ======================================*/
 .container-fluid > .well > .manager > .content {
     background-color: #fff;
-    padding: 10px 15px;
-    border-radius: 4px;
-    border: 1px solid #d0d0d0;
 }
 
 .container-fluid > .well > .manager > .content #tabs > h4 {
@@ -565,8 +623,7 @@ a.list-group-item div.bouton-action .div-text {
         padding: 0.625rem 0.5rem 0.625rem;
         font-size: 0.75em;
         font-weight: bold;
-        background: rgba(208, 208, 208, 0.1)
-        color:#303030;
+        background: rgba(208, 208, 208, 0.1);
     }
 
     .manager.contents .table-responsive-to-cards td.verylongtext,
@@ -603,32 +660,27 @@ a.list-group-item div.bouton-action .div-text {
 .manager.treeview > .content > .treeview {
     overflow: auto;
 }
-.manager.treeview > .content > .treeview,
 .manager.treeview > .content > .treeview > div {
     margin: 0;
-    padding: 0;
-}
-.manager.treeview > .content > .treeview > div {
     display: block;
     float:left;
     min-width: 25%;
     box-sizing:border-box;
-    padding: 20px 20px 0 0;
+    padding: 15px;
 }
 .manager.treeview > .content > .treeview > div:last-child {
     /*float: none;*/
     overflow:hidden;
     min-width: 60%;
     max-width: 1024px;
-    padding-right: 0;
 }
 
 /* ====================================
    preview of contents
 ======================================*/
 .article-preview .details {
-    background: #DDDDDD none repeat scroll 0 0;
-    border: 1px dashed #c0c0c0;
+    background: #f3f3f3 none repeat scroll 0 0;
+    border: 1px dashed #D0D0D0;
     font-size: 1em;
     margin: 0 0 20px;
 }
@@ -658,11 +710,12 @@ a.list-group-item div.bouton-action .div-text {
  modals for cropper with input file
 ======================================*/
 
-.btn-file {
+.publish-content .btn-file {
     position: relative;
     overflow: hidden;
+    white-space: initial;
 }
-.btn-file input[type=file] {
+.publish-content .btn-file input[type=file] {
     position: absolute;
     top: 0;
     right: 0;
@@ -678,136 +731,217 @@ a.list-group-item div.bouton-action .div-text {
     display: block;
 }
 
-.cropArea {
+#cropImageModale .cropArea {
     background: #E4E4E4;
     overflow: hidden;
     width:100%;
     height:350px;
 }
+#cropImageModale .previewCropArea img {
+    display: block;
+    margin: 10px 0;
+}
+#cropImageModale div.inputArea h3 {
+    display: inline-block;
+}
 
-.progress {
+#cropImageModale .progress {
     width : 80%;
 }
 
 /* ====================================
-    publish-form-container
+    publish.publisher form
 ======================================*/
-/* form styling */
-#publish-form-container { border-radius:5px;}
-#publish-form-container .page-header   { margin:0; border-top-left-radius:5px; border-top-right-radius:5px; }
 
-/* numbered buttons */
-#publish-form-container #status-buttons                 {  }
-#publish-form-container #status-buttons a               {
-    color:#003147;
-    display:inline-block;
-    font-size:12px;
-    margin-right:10px;
-    text-align:center;
-    text-transform:uppercase;
-    text-decoration: none;
-}
-#publish-form-container #status-buttons a:hover         { text-decoration:none; }
-#publish-form-container #status-buttons span            { background:#808080; display:block; height:30px; margin:0 auto 10px; padding-top:5px; width:30px; border-radius:50%; color: #ffffff}
-
-/* active buttons */
-#publish-form-container #status-buttons a.active span   { background:#00BC8C; }
-
-/* ANIMATION STYLINGS */
-#publish-form-container form            { position:relative;  overflow:visible; padding:20px; }
-
-/* basic styling for entering and leaving */
-/* left and right added to ensure full width */
-#publish-form-container #publish-form-views.ng-enter,
-#publish-form-container #publish-form-views.ng-leave      {
-    position:absolute;
-    left:30px;
-    right:30px;
-    transition:0.5s all ease;
-    -moz-transition:0.5s all ease;
-    -webkit-transition:0.5s all ease;
+.manager .publish-form-container {
+    padding: 0 0 15px 0;
 }
 
-#publish-form-container .btn-toolbar {
+/* Start The header */
+body > div.container-fluid > div.well > div > div > div > div.publish-header {
+    padding: 0 40px;
+    /*vertical-align: middle;*/
+}
+.manager .publish-form-container > .publish-header > h2 {
+    padding-top: 20px;
+}
+.manager .publish-form-container > .publish-header > div.status-buttons {
+    padding-top: 15px;
+}
+.manager .publish-form-container > .publish-header {
+    display: block;
+    overflow: auto;
+    clear: both;
+}
+.manager .publish-form-container > .publish-header > h2,
+.manager .publish-form-container > .publish-header > div.status-buttons {
+    display: inline-block;
+    margin: 0;
+}
+.manager .publish-form-container > .publish-header > div.status-buttons {
+    float: right;
+    /*line-height: 100%;*/
     text-align: center;
-    margin: 0 auto;
+    /*height: 100%;*/
+    overflow: hidden;
+}
+.manager .publish-form-container > .publish-header > div.status-buttons > div.publish-form-views-steps {
+    height: 100%;
+    vertical-align: middle;
+}
+.manager .publish-form-container > .publish-header > div.status-buttons > div.publish-form-views-steps > a {
+    display: inline-block;
+    margin: 0 10px;
+    height: 100%;
+}
+/*numbered buttons */
+.manager .publish-form-container > .publish-header > .status-buttons a:hover {
+    text-decoration:none;
+}
+.manager .publish-form-container > .publish-header > .status-buttons span.step-number {
+    display:inline-block;
+    font-size: 120%;
+    font-weight: bold;
+    line-height: 180%;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    white-space: nowrap;
+    color: #ffffff;
+    background: #888;
+    text-align:center;
+}
+.manager .publish-form-container > .publish-header > .status-buttons span.step-label {
+    color:#888;
+    display:block;
+    font-size:12px;
+    font-weight: bold;
+    margin-top: 5px;
+    /*text-align:center;*/
+    text-transform:uppercase;
+    /*vertical-align: middle;*/
+}
+/* active buttons */
+.manager .publish-form-container > .publish-header > .status-buttons a.active span.step-number {
+    background: #25B2F3;
+}
+.clg37 .manager .publish-form-container > .publish-header > .status-buttons a.active span.step-number {
+    background: #C60440;
+}
+.manager .publish-form-container > .publish-header > .status-buttons a.active span.step-label {
+    color: #000;
+}
+/* end The header */
+
+/* start The body */
+.manager .publish-form-container > .publish-body {
+    padding: 0 10%;
 }
 
-/* enter animation */
-#publish-form-container #publish-form-views.ng-enter            {
-    -webkit-animation:slideInRight 0.5s both ease;
-    -moz-animation:slideInRight 0.5s both ease;
-    animation:slideInRight 0.5s both ease;
+.manager .publish-form-container > .publish-body > div > h3 {
+    text-align: center;
+    padding-bottom: 15px;
+    color: #25B2F3;
+}
+.clg37 .manager .publish-form-container > .publish-body > div > h3 {
+    color: #C60440;
 }
 
-/* leave animation */
-#publish-form-container #publish-form-views.ng-leave            {
-    -webkit-animation:slideOutLeft 0.5s both ease;
-    -moz-animation:slideOutLeft 0.5s both ease;
-    animation:slideOutLeft 0.5s both ease;
+/** start specific publish.classification */
+.manager.publish .publish-form-container .publish-classification .inline-form .checkbox-inline:first-child {
+    margin-left: 10px;
 }
-
-#publish-form-container .publish-classification input[type=checkbox].iconurl {
+.manager.publish .publish-form-container .publish-classification input[type=checkbox] + label {
+    cursor: pointer;
+    font-weight: normal;
+    text-align: center;
+}
+/* Hide checkbox when iconurl is shown */
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl {
     display: none;
 }
-
 /*
 - Style each label that is directly after the input
 - position: relative; will ensure that any position: absolute children will position themselves in relation to it
 */
-#publish-form-container .publish-classification input[type=checkbox].iconurl + label {
-    height: 8em;
-    width: 8em;
-    background-color: #cccccc;
+.manager.publish .publish-form-container .publish-classification .checkbox-inline span.iconurl {
+    height: 10vh;
+    width: 10vh;
+    background-color: #f3f3f3;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 8em 8em;
+    background-size: 10vh 10vh;
     display: block;
     border-radius: 50%;
-    position: relative;
-    transition: all 0.4s;
-    border: solid 5px #FFF;
-    box-shadow: 0 0 1px #FFF; /* Soften the jagged edge */
+    border: solid 3px #FFF;
     text-align: center;
 }
-
 /* Provide a border when hovered and when the checkbox before it is checked */
-#publish-form-container .publish-classification input[type=checkbox].iconurl + label:hover,
-#publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label {
-    border: solid 5px #F00;
-    box-shadow: 0 0 1px #F00; /* Soften the jagged edge */
+.manager.publish .publish-form-container .publish-classification .checkbox-inline span.iconurl:hover,
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label> span.iconurl {
+    border: solid 3px #25B2F3;
 }
-
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl + label > span.iconurl:hover,
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label> span.iconurl {
+    border: solid 3px #C60440;
+}
 /*
 - Create a pseudo element :after when checked and provide a tick
 - Center the content
 */
-#publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label:after {
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label > span.iconurl:after {
     content: '\2714'; /*content is required, though it can be empty - content: '';*/
     display: block;
-    height: 1em;
-    width: 1em;
-    position: absolute;
+    /*height: 1em;*/
+    /*width: 1em;*/
+    font-size: 300%;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     margin: auto;
-    color: #FF0000;
+    color: #25B2F3;
 }
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label > span.iconurl:after {
+    color: #C60440;
+}
+/** end specific publish.classification */
 
-#publish-form-container #publish-form-views .form-inline img#enclosure.img-responsive {
+/** start specific publish.content */
+.manager.publish .publish-form-container .publish-content .form-inline img#enclosure.img-responsive {
     display: inline;
 }
-
-#publish-form-container #publish-form-views #cropImageModale .previewCropArea img {
-    display: block;
-    margin: 10px 0;
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify > .form-group {
+    vertical-align: top;
 }
-
-#publish-form-container #publish-form-views #cropImageModale div.inputArea h3 {
+/* tip to justify all .form-group divs into .form-inline*/
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify::after {
+    content: ' ';
+    width: 100%;
     display: inline-block;
 }
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify {
+    margin-bottom: -15px; /* previous tip add a new line and with the margin-bottom of 15px it's getting a useless line */
+}
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify > .form-group > label {
+    display: block;
+}
+.manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-control {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    width: 100%;
+}
+/** end specific publish.content */
+/** start specific publish.targets */
+.manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item {
+    border: none;
+}
+/** end specific publish.targets */
+/* end The body */
+/* The footer */
+
+
 
 /* ========================================
     Overlay, for spinner, etc...
@@ -839,7 +973,6 @@ a.list-group-item div.bouton-action .div-text {
     border-radius: 0;
 }
 
-
 /* ========================================
     For directives
 ===========================================*/
@@ -864,28 +997,38 @@ td > evaluator > ul {
     For jstree
 ===========================================*/
 js-tree {
-   display: inline-block;
+    display: inline-block;
+}
+.jstree-default .jstree-anchor{
+    color: #000;
 }
 .jstree-default > .jstree-container-ul > .jstree-node {
     margin-left: 0;
     margin-right: 20px;
 }
-.jstree-default .jstree-wholerow-clicked {
+.jstree-default .jstree-wholerow-clicked,
+.jstree-default .jstree-anchor.jstree-clicked,
+.jstree-default .jstree-clicked.jstree-hovered,
+.jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     background: #25B2F3;
 }
-.www_touraine-eschool_fr .jstree-default .jstree-wholerow-clicked {
+.clg37 .jstree-default .jstree-wholerow-clicked,
+.clg37 .jstree-default .jstree-anchor.jstree-clicked,
+.clg37 .jstree-default .jstree-clicked.jstree-hovered,
+.clg37 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     background: #C60440;
 }
 .jstree-default .jstree-anchor.jstree-clicked {
     color: #fff;
 }
-.jstree-default .jstree-wholerow-hovered{
-    background: #F3F3F3;
+.jstree-default .jstree-wholerow-hovered,
+.jstree-default .jstree-hovered{
+    background: #f3f3f3;
 }
 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #25B2F3;
 }
-.www_touraine-eschool_fr .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+.clg37 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #C60440;
 }
 

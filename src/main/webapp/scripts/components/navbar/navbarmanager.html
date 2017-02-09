@@ -17,7 +17,7 @@
                         <span translate="global.menu.home">Home</span>
                     </a>
                 </li>
-                <li ng-class="{active: $state.includes('owned')}" class="dropdown pointer">
+                <li ng-class="{active: $state.includes('owned') || $state.includes('pending') ||  $state.includes('managed')}" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>

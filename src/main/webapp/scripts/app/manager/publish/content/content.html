@@ -1,4 +1,4 @@
-<div>
+<div class="publish-content">
 
     <h3 translate="manager.publish.content.title">Item</h3>
 
@@ -19,18 +19,18 @@
 
     <div class="text-center">
         <div class="btn-group" role="group">
-            <button ng-if=" item.type != 'FLASH' " type="button" ui-sref="publish.classification" class="btn btn-info">
-                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+            <button ng-if=" item.type != 'FLASH' " type="button" ui-sref="publish.classification" class="btn btn-default btn-nav">
+                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> {{'entity.action.back' | translate}}</span>
             </button>
-            <button ng-if="item.type == 'FLASH' " type="button" ui-sref="publish.publisher" class="btn btn-info">
-                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+            <button ng-if="item.type == 'FLASH' " type="button" ui-sref="publish.publisher" class="btn btn-default btn-nav">
+                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> {{'entity.action.back' | translate}}</span>
             </button>
 
-            <button type="button" ui-sref="home" class="btn btn-info" ng-click="removeEnclosure()">
+            <button type="button" ui-sref="home" class="btn btn-default btn-nav" ng-click="removeEnclosure()">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
             </button>
 
-            <button type="button" ng-if="goOnTargets()" ui-sref="publish.targets" ng-disabled="!isItemValidated()" class="btn btn-info">
+            <button type="button" ng-if="goOnTargets()" ui-sref="publish.targets" ng-disabled="!isItemValidated()" class="btn btn-default btn-nav">
                 <span> {{ 'manager.publish.nextStep' | translate }} </span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>

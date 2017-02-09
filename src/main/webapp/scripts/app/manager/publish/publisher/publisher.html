@@ -1,4 +1,4 @@
-<div class="col-sm-8 col-sm-offset-2">
+<div class="publish-publisher">
     <h3 translate="manager.publish.publisher.title">Publisher Choice</h3>
     <div class="form-group" ng-hide="publishers.length < 1">
         <label class="control-label" for="reader" translate="manager.publish.publisher.reader">reader</label>
@@ -30,10 +30,10 @@
 
     <div class="text-center" ng-hide="publishers.length < 1">
         <div class="btn-group" role="group">
-            <button type="button" ui-sref="home" class="btn btn-info">
+            <button type="button" ui-sref="home" class="btn btn-default btn-nav">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
             </button>
-            <button type="button" ui-sref="publish.classification" ng-disabled="!isPublisherSelected()" class="btn btn-info" ng-click="validatePublisher()">
+            <button type="button" ui-sref="publish.classification" ng-disabled="!isPublisherSelected()" class="btn btn-default btn-nav" ng-click="validatePublisher()">
                 <span translate="manager.publish.nextStep"> Next Step</span>&nbsp;<span class="glyphicon glyphicon-arrow-right"></span>
             </button>
         </div>
