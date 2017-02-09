@@ -8,58 +8,18 @@
         <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
     </button>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.organization.name">Name</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.name}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-if="false">
-                    <td>
-                        <span translate="publisherApp.organization.displayName">DisplayName</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.displayName}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.organization.description">Description</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.description}}" readonly>
-                    </td>
-                </tr>
-                <tr has-role="ROLE_ADMIN">
-                    <td>
-                        <span translate="publisherApp.organization.displayOrder">DisplayOrder</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.displayOrder}}" readonly>
-                    </td>
-                </tr>
-                <tr can-edit="context.contextKey">
-                    <td>
-                        <span translate="publisherApp.organization.allowNotifications">AllowNotifications</span>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="input-sm form-control" ng-model="context.allowNotifications" disabled/>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <dl class="dl-horizontal entity-details">
+        <dt><span translate="publisherApp.organization.name">Name</span></dt>
+        <dd><span>{{context.name}}</span></dd>
+        <dt ng-if="false"><span translate="publisherApp.organization.displayName">DisplayName</span></dt>
+        <dd ng-if="false"><span>{{context.displayName}}</span></dd>
+        <dt><span translate="publisherApp.organization.description">Description</span></dt>
+        <dd><span>{{context.description}}</span></dd>
+        <dt has-role="ROLE_ADMIN"><span translate="publisherApp.organization.displayOrder">DisplayOrder</span></dt>
+        <dd has-role="ROLE_ADMIN"><span>{{context.displayOrder}}</span></dd>
+        <dt can-edit="context.contextKey"><span translate="publisherApp.organization.allowNotifications">AllowNotifications</span></dt>
+        <dd can-edit="context.contextKey"><input type="checkbox" class="input-sm" ng-model="context.allowNotifications" disabled/></dd>
+    </dl>
 
     <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/organization-form.html'"></div>
 

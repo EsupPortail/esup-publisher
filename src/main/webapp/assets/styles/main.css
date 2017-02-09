@@ -356,6 +356,23 @@ ul#strength {
     /*color: #C60440;*/
 /*}*/
 
+dl {
+    margin: 20px auto;
+}
+.dl-horizontal.entity-details > dd {
+    margin-bottom: 15px;
+}
+@media screen and (min-width: 768px) {
+    .dl-horizontal.entity-details > dt {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    .dl-horizontal.entity-details > dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 180px;
+        margin-left: 0;
+    }
+}
 
 /* ====================================
      All pages title on where user is
