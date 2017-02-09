@@ -7,7 +7,20 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
     .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
-        $rootScope.HOST = $location.host().split('.').join('_');
+
+        function getCssEnv() {
+            var sn = $location.host();
+            switch (sn) {
+                case 'www.touraine-eschool.fr' : return 'clg37';
+                case 'test.reciaclg.fr' : return 'clg37';
+                case 'lycees.netocentre.fr' : return 'lycees';
+                case 'test-lycee.reciaent.fr' : return 'lycees';
+                case 'cfa.netocentre.fr' : return 'cfa';
+                case 'test-cfa.reciaent.fr' : return 'cfa';
+                default : return 'default'
+            }
+        }
+        $rootScope.MAINCSS = getCssEnv();
         //$rootScope.showSpinner = false;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             //console.log("$stateChangeStart");
