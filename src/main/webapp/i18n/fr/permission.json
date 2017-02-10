@@ -20,7 +20,8 @@
             "lastModifiedBy": "LastModifiedBy",
             "lastModifiedDate": "LastModifiedDate",
             "evaluator": "Évaluateur",
-            "advancedMode": "Afficher/définir les permissions en mode expert ou simple"
+            "advancedMode": "Afficher/définir les permissions en mode expert ou simple",
+            "subjectAlreadySelected": "Population déjà sélectionnée !"
         }
     }
 }

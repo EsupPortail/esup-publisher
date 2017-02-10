@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="bower_components/ui-cropper/compile/minified/ui-cropper.css" />
     <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css assets/styles/main.css -->
@@ -40,15 +41,15 @@
 <div class="container-fluid">
     <span us-spinner loading-spinner class="overlay"></span>
     <!--<span us-spinner loading-spinner class="overlay" spinner-on="showSpinner"></span>-->
+    <toaster-container toaster-options="{'time-out': 10000, 'close-button': true }"></toaster-container>
     <!--<div id="errorInfos" class="alert alert-danger" role="alert" aria-hidden="true" hidden>-->
         <!--<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>-->
         <!--<span translate="error.dialog">An error occured !</span>-->
     <!--</div>-->
     <div ui-view="modalRoot"></div>
     <div class="well {{currentState.parent}}" ui-view="container"></div>
-
     <div class="footer" ng-cloak="">
-        <p><a href="#"><span translate="footer.project"></span> <span>v{{VERSION}}</span></a></p>
+        <p><a href="#"><span ng-cloak="" translate="footer.project"></span> <span>v{{VERSION}}</span></a></p>
     </div>
 
     <!--<div class="modal fade" id="errorDialog" tabindex="-1" role="dialog" data-keyboard="false" aria-hidden="true">-->
@@ -116,6 +117,7 @@
 <script src="bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
 <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 <script src="bower_components/ui-cropper/compile/minified/ui-cropper.js"></script>
+<script src="bower_components/AngularJS-Toaster/toaster.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 <script src="bower_components/jquery-ui/ui/i18n/datepicker-fr.js"></script>

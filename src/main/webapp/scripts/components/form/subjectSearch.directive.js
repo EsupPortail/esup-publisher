@@ -205,6 +205,8 @@ angular.module('publisherApp')
                     $scope.currentPage = 1;
                     $scope.numPerPage = 10;
                     $scope.container.subject = {};
+                    $scope.subject = {};
+                    $scope.subjectId = {};
                     $('#jsTreeGroup' + $scope.searchId).jstree(true).deselect_all();
                     $('#jsTreeUserFromGroup' + $scope.searchId).jstree(true).deselect_all();
                     $scope.search = {queryUserTerm: '', filter:''};

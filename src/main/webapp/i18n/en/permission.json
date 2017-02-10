@@ -20,7 +20,8 @@
             "lastModifiedBy": "LastModifiedBy",
             "lastModifiedDate": "LastModifiedDate",
             "evaluator": "Evaluator",
-            "advancedMode": "Show or add mpermission in simple or advanced mode"
+            "advancedMode": "Show or add permission in simple or advanced mode",
+            "subjectAlreadySelected": "Subject already selected !"
         }
     }
 }

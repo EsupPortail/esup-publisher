@@ -2,7 +2,7 @@
 
 angular.module('publisherApp')
     .controller('DetailsTreeViewController', function ($scope, $state, $stateParams, $filter, EnumDatas, Organization, Publisher, Classification,
-                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, Subscriber, User, Principal) {
+                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, Subscriber, User, Principal, toaster, $translate) {
 
         $scope.context = {};
         $scope.ctxType = $stateParams.ctxType;
@@ -378,7 +378,21 @@ angular.module('publisherApp')
         $scope.$watch("search.target", function(newVal, oldVal) {
             //console.log("watch search.target", newVal, oldVal);
             if (angular.isDefined(newVal) && !angular.equals({}, newVal) && !angular.equals(newVal, oldVal)) {
-                $scope.selectedSubject = newVal;
+                var found = false;
+                for (var i = 0; i < $scope.targets.length; i++) {
+                    if(angular.equals(newVal.modelId, $scope.targets[i].subjectDTO.modelId)) {
+                        found = true;
+                        break;
+                    }
+                }
+                //console.log("subject was found ? ",found);
+                if (!found){
+                    $scope.selectedSubject = newVal;
+                } else {
+                    $translate('publisherApp.subscriber.alreadySelected').then(function(translatedValue){
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
+                }
             }
         });
 
@@ -596,6 +610,10 @@ angular.module('publisherApp')
                 //console.log("authorized subject was found ? ",found);
                 if (!found){
                     $scope.permission.authorizedSubjects.push(newVal.modelId);
+                } else {
+                    $translate('publisherApp.permission.subjectAlreadySelected').then(function(translatedValue){
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
                 }
             }
         });
@@ -611,6 +629,10 @@ angular.module('publisherApp')
                 //console.log("subject was found ? ",found);
                 if (!found){
                     $scope.selectedSubjects.push(newVal.modelId);
+                } else {
+                    $translate('publisherApp.permission.subjectAlreadySelected').then(function(translatedValue){
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
                 }
             }
         });

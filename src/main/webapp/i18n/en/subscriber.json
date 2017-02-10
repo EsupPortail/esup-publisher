@@ -18,7 +18,8 @@
             "keyType": "KeyType",
             "subscribeType": "SubscribeType",
             "subject": "People targeted",
-            "context": "Context"
+            "context": "Context",
+            "alreadySelected": "The target is already selected !"
         }
     }
 }

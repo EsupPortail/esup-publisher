@@ -2,7 +2,7 @@
 
 angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngResource', 'ui.router', 'checklist-model', /*'ngAnimate',*/ 'angularSpinner',/*'infinite-scroll',*/
     'ngCookies', 'pascalprecht.translate', 'ngCacheBuster', 'ui.bootstrap','angular.filter', 'isteven-multi-select', 'jsTree.directive', 'ui.bootstrap.tooltip','ui.bootstrap.pagination',
-    'textAngular', 'ngFileUpload', 'uiCropper', 'colorpicker.module'])
+    'textAngular', 'ngFileUpload', 'uiCropper', 'colorpicker.module', 'toaster'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;

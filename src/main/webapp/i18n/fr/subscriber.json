@@ -19,7 +19,8 @@
             "keyType": "Type de la cible",
             "subscribeType": "Type de souscription",
             "subject": "Population cible",
-            "context": "Contexte"
+            "context": "Contexte",
+            "alreadySelected": "La cible a déjà été sélectionnée !"
         }
     }
 }
