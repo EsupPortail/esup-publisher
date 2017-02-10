@@ -976,8 +976,10 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
 }
 /** end specific publish.content */
 /** start specific publish.targets */
-.manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item {
+.manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item,
+.manager.treeview .list-group.list-unstyled .list-group-item {
     border: none;
+    position: inherit;
 }
 /** end specific publish.targets */
 /* end The body */
