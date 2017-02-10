@@ -1,3 +1,8 @@
+/**
+ * Angular Dynamic Locale - 0.1.32
+ * https://github.com/lgalfaso/angular-dynamic-locale
+ * License: MIT
+ */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
