@@ -9,16 +9,36 @@
     </button>
 
     <dl class="dl-horizontal entity-details">
-        <dt><span translate="publisherApp.organization.name">Name</span></dt>
-        <dd><span>{{context.name}}</span></dd>
-        <dt ng-if="false"><span translate="publisherApp.organization.displayName">DisplayName</span></dt>
-        <dd ng-if="false"><span>{{context.displayName}}</span></dd>
-        <dt><span translate="publisherApp.organization.description">Description</span></dt>
-        <dd><span>{{context.description}}</span></dd>
-        <dt has-role="ROLE_ADMIN"><span translate="publisherApp.organization.displayOrder">DisplayOrder</span></dt>
-        <dd has-role="ROLE_ADMIN"><span>{{context.displayOrder}}</span></dd>
-        <dt can-edit="context.contextKey"><span translate="publisherApp.organization.allowNotifications">AllowNotifications</span></dt>
-        <dd can-edit="context.contextKey"><input type="checkbox" class="input-sm" ng-model="context.allowNotifications" disabled/></dd>
+        <dt>
+            <span translate="publisherApp.organization.name">Name</span>
+        </dt>
+        <dd>
+            <span>{{context.name}}</span>
+        </dd>
+        <dt ng-if="false">
+            <span translate="publisherApp.organization.displayName">DisplayName</span>
+        </dt>
+        <dd ng-if="false">
+            <span>{{context.displayName}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.organization.description">Description</span>
+        </dt>
+        <dd>
+            <span>{{context.description}}</span>
+        </dd>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.organization.displayOrder">DisplayOrder</span>
+        </dt>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{context.displayOrder}}</span>
+        </dd>
+        <dt can-edit="context.contextKey">
+            <span translate="publisherApp.organization.allowNotifications">AllowNotifications</span>
+        </dt>
+        <dd can-edit="context.contextKey">
+            <input type="checkbox" class="input-sm" ng-model="context.allowNotifications" disabled/>
+        </dd>
     </dl>
 
     <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/organization-form.html'"></div>

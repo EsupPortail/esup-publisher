@@ -7,91 +7,65 @@
     <button type="button" can-delete="context.contextKey" class="btn btn-danger" data-toggle="modal" data-target="#deleteContextConfirmation">
         <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
     </button>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.category.name">Name</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.name}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.category.description">Description</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.description}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-if="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
-                    <td>
-                        <span translate="publisherApp.category.iconUrl">IconUrl</span>
-                    </td>
-                    <td>
-                        <img class="media-object" src="{{context.iconUrl}}" alt="" />
-                    </td>
-                </tr>
-                <tr ng-if="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
-                    <td>
-                        <span translate="publisherApp.category.color">Color</span>
-                    </td>
-                    <td>
-                        <input ng-if="context.color" type="color" value="{{context.color}}" disabled>
-                        <span ng-if="!context.color">{{ 'publisherApp.category.color.none' | translate : 'Undefined' }}</span>
-                    </td>
-                </tr>
-                <tr has-role="ROLE_ADMIN">
-                    <td>
-                        <span translate="publisherApp.category.accessView">AccessView</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{getAccessTypeLabel(context.accessView) | translate}}" readonly>
-                    </td>
-                </tr>
-                <tr has-role="ROLE_ADMIN">
-                    <td>
-                        <span translate="publisherApp.category.rssAllowed">RssAllowed</span>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="input-sm form-control" ng-model="context.rssAllowed" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.category.defaultDisplayOrder">DefaultDisplayOrder</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{getDisplayOrderTypeLabel(context.defaultDisplayOrder) | translate}}" readonly>
-                    </td>
-                </tr>
-                <tr has-role="ROLE_ADMIN">
-                    <td>
-                        <span translate="publisherApp.category.lang">Lang</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{getLangLabel(context.lang) | translate }}" readonly>
-                    </td>
-                </tr>
-                <tr has-role="ROLE_ADMIN">
-                    <td>
-                        <span translate="publisherApp.category.ttl">Ttl</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.ttl}}" readonly>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+    <dl class="dl-horizontal entity-details">
+        <dt>
+            <span translate="publisherApp.category.name">Name</span>
+        </dt>
+        <dd>
+            <span>{{context.name}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.category.description">Description</span>
+        </dt>
+        <dd>
+            <span>{{context.description}}</span>
+        </dd>
+        <dt ng-if="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
+            <span translate="publisherApp.category.iconUrl">IconUrl</span>
+        </dt>
+        <dd ng-if="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
+            <img class="media-object" src="{{context.iconUrl}}" alt="image" />
+        </dd>
+        <dt ng-if="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
+            <span translate="publisherApp.category.color">Color</span>
+        </dt>
+        <dd ng-if="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
+            <input ng-if="context.color" type="color" value="{{context.color}}" disabled>
+            <span ng-if="!context.color">{{ 'publisherApp.category.color.none' | translate : 'Undefined' }}</span>
+        </dd>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.category.accessView">AccessView</span>
+        </dt>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{getAccessTypeLabel(context.accessView) | translate}}</span>
+        </dd>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.category.rssAllowed">RssAllowed</span>
+        </dt>
+        <dd has-role="ROLE_ADMIN">
+            <input type="checkbox" class="input-sm" ng-model="context.rssAllowed" disabled>
+        </dd>
+        <dt>
+            <span translate="publisherApp.category.defaultDisplayOrder">DefaultDisplayOrder</span>
+        </dt>
+        <dd>
+            <span>{{getDisplayOrderTypeLabel(context.defaultDisplayOrder) | translate}}</span>
+        </dd>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.category.lang">Lang</span>
+        </dt>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{getLangLabel(context.lang) | translate }}</span>
+        </dd>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.category.ttl">Ttl</span>
+        </dt>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{context.ttl}}</span>
+        </dd>
+    </dl>
+
 
     <div ng-include="'scripts/app/manager/treeview/ctxDetails/context/category-form.html'"></div>
 

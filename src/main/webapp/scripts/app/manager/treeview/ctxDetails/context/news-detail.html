@@ -4,128 +4,90 @@
     <button type="button" ui-sref="details({id:context.id})" class="btn btn-info">
         <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
     </button>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.title">Title</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.title}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-show="context.enclosure && context.enclosure != '' && context.enclosure != 'http://' ">
-                    <td>
-                        <span translate="publisherApp.news.enclosure">Enclosure</span>
-                    </td>
-                    <td>
-                        <img class="media-object" src="{{context.enclosure}}" alt="" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.status">Status</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{getItemStatusLabel(context.status) | translate}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.summary">Summary</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.summary}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.body">Body</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.body}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.startDate">StartDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.startDate | date:'dd MMMM yyyy'}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.endDate">EndDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.endDate | date:'dd MMMM yyyy'}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.rssAllowed">rssAllowed</span>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="input-sm form-control" ng-model="context.rssAllowed" disabled>
-                    </td>
-                </tr>
-                <tr ng-show="context.validatedBy">
-                    <td>
-                        <span translate="publisherApp.news.validatedBy">ValidatedBy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.validatedBy.displayName}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-show="context.validatedDate">
-                    <td>
-                        <span translate="publisherApp.news.validatedDate">ValidatedDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.createdBy">CreatedBy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.createdBy.displayName}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="publisherApp.news.createdDate">CreatedDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-show="context.lastModifiedBy">
-                    <td>
-                        <span translate="publisherApp.news.lastModifiedBy">LastModifiedBy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.lastModifiedBy.displayName}}" readonly>
-                    </td>
-                </tr>
-                <tr ng-show="context.lastModifiedDate">
-                    <td>
-                        <span translate="publisherApp.news.lastModifiedDate">LastModifiedDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{context.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}" readonly>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <dl class="dl-horizontal entity-details">
+        <dt>
+            <span translate="publisherApp.news.title">Title</span>
+        </dt>
+        <dd>
+            <span>{{context.title}}</span>
+        </dd>
+        <dt ng-show="context.enclosure && context.enclosure != '' && context.enclosure != 'http://' ">
+            <span translate="publisherApp.news.enclosure">Enclosure</span>
+        </dt>
+        <dd ng-show="context.enclosure && context.enclosure != '' && context.enclosure != 'http://' ">
+            <img class="news-object" src="{{context.enclosure}}" alt="image" />
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.status">Status</span>
+        </dt>
+        <dd>
+            <span>{{getItemStatusLabel(context.status) | translate}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.summary">Summary</span>
+        </dt>
+        <dd>
+            <span>{{context.summary}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.body">Body</span>
+        </dt>
+        <dd>
+            <span>{{context.body}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.startDate">StartDate</span>
+        </dt>
+        <dd>
+            <span>{{context.startDate | date:'dd MMMM yyyy'}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.endDate">EndDate</span>
+        </dt>
+        <dd>
+            <span>{{context.endDate | date:'dd MMMM yyyy'}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.rssAllowed">rssAllowed</span>
+        </dt>
+        <dd>
+            <input type="checkbox" class="input-sm" ng-model="context.rssAllowed" disabled>
+        </dd>
+        <dt ng-show="context.validatedBy">
+            <span translate="publisherApp.news.validatedBy">ValidatedBy</span>
+        </dt>
+        <dd ng-show="context.validatedBy">
+            <span>{{context.validatedBy.displayName}}</span>
+        </dd>
+        <dt ng-show="context.validatedDate">
+            <span translate="publisherApp.news.validatedDate">ValidatedDate</span>
+        </dt>
+        <dd ng-show="context.validatedDate">
+            <span>{{context.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.createdBy">CreatedBy</span>
+        </dt>
+        <dd>
+            <span>{{context.createdBy.displayName}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.news.createdDate">CreatedDate</span>
+        </dt>
+        <dd>
+            <span>{{context.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</span>
+        </dd>
+        <dt ng-show="context.lastModifiedBy">
+            <span translate="publisherApp.news.lastModifiedBy">LastModifiedBy</span>
+        </dt>
+        <dd ng-show="context.lastModifiedBy">
+            <span>{{context.lastModifiedBy.displayName}}</span>
+        </dd>
+        <dt ng-show="context.lastModifiedDate">
+            <span translate="publisherApp.news.lastModifiedDate">LastModifiedDate</span>
+        </dt>
+        <dd ng-show="context.lastModifiedDate">
+            <span>{{context.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</span>
+        </dd>
+    </dl>
 </div>

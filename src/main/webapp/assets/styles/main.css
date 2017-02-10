@@ -366,10 +366,12 @@ dl {
     .dl-horizontal.entity-details > dt {
         margin-bottom: 15px;
         text-align: left;
+        white-space: normal;
+        width: 200px
     }
     .dl-horizontal.entity-details > dd {
         border-bottom: 1px solid #eee;
-        padding-left: 180px;
+        padding-left: 220px;
         margin-left: 0;
     }
 }
