@@ -15,6 +15,7 @@ angular.module('publisherApp')
 
                 if (!angular.isDefined($scope.notFoundSubjectMsg)) {
                     $translate('publisherApp.subject.disappear').then(function (translatedValue) {
+                        console.log("translated value : ", translatedValue);
                         $scope.notFoundSubjectMsg = translatedValue;
                     });
                 }
@@ -44,6 +45,9 @@ angular.module('publisherApp')
                         return "'" + subject.keyId + "'" + $scope.notFoundSubjectMsg;
                     }
                     if (!angular.isDefined(subject.modelId)) return '';
+                    if (angular.isDefined(subject.modelId) && subject.foundOnExternalSource !== true) {
+                        return "'" + subject.modelId.keyId + "'" + $scope.notFoundSubjectMsg;
+                    }
                     if (subject.modelId.keyType =='GROUP') {
                         return subject.modelId.keyId;
                     }
@@ -108,10 +112,12 @@ angular.module('publisherApp')
                 }
 
                 function htmlFromDTO (subject) {
-                    var displayName, css;
+                    var displayName = '';
+                    var css;
                     var elem = '<span class="fa fa-question subject-infos"></span>';
                     var type = subject.modelId.keyType;
                     var id = subject.modelId.keyId;
+                    var cssnotfound = '';
                     switch (type) {
                         case "GROUP" :
                             css = "fa fa-users subject-infos";
@@ -120,13 +126,14 @@ angular.module('publisherApp')
                             css = "fa fa-user subject-infos";
                             break;
                     }
-                    if (subject.foundOnExternalSource === true || subject.displayName.length > 0) {
+                    if (subject.foundOnExternalSource === true || (subject.displayName && subject.displayName.length > 0)) {
                         displayName = subject.displayName;
-                    } else if (type && id) {
-                        displayName = "[" + type + ", " + id + "]" + scope.notFoundSubjectMsg;
+                    } else {//if (type && id) {
+                        //displayName = "[" + type + ", " + id + "]" + scope.notFoundSubjectMsg;
+                        cssnotfound = "fa fa-question";
                     }
-                    if (css && displayName) {
-                        elem = '<a href class="' + css + '" data-subject-id="' + id + '"><span uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"> ' + displayName + '</span></a>';
+                    if (css) {
+                        elem = '<a href class="' + css + '" data-subject-id="' + id + '"><span class="' + cssnotfound + '" uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"> ' + displayName + '</span></a>';
                     }
                     //console.log("htmlFromDTO returned : ", elem);
                     return elem;

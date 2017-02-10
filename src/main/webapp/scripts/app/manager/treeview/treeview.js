@@ -19,6 +19,7 @@ angular.module('publisherApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('manager');
+                        $translatePartialLoader.addPart('subject');
                         return $translate.refresh();
                     }]
                 }
