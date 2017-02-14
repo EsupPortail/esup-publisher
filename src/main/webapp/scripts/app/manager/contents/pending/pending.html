@@ -53,73 +53,75 @@
     </div>
 
     <div class="table-responsive table-responsive-to-cards">
-        <table class="table table-striped">
+        <table class="table table-striped table-condensed">
             <thead>
-            <tr>
-                <th class="hidden">ID</th>
-                <th translate="publisherApp.item.type">Type</th>
-                <th translate="publisherApp.item.title">Title</th>
-                <th class="hidden" translate="publisherApp.item.enclosure">Enclosure</th>
-                <th class="hidden-sm" translate="publisherApp.item.startDate">StartDate</th>
-                <th class="hidden-sm" translate="publisherApp.item.endDate">EndDate</th>
-                <th class="hidden" translate="publisherApp.item.validatedBy">ValidatedBy</th>
-                <th class="hidden" translate="publisherApp.item.validatedDate">ValidatedDate</th>
-                <th class="hidden" translate="publisherApp.item.status">Status</th>
-                <th class="hidden-sm" translate="publisherApp.item.summary">Summary</th>
-                <th class="hidden" translate="publisherApp.item.body">Body</th>
-                <th class="hidden" translate="publisherApp.item.createdBy">CreatedBy</th>
-                <th class="hidden" translate="publisherApp.item.createdDate">CreatedDate</th>
-                <th class="hidden" translate="publisherApp.item.lastModifiedBy">LastModifiedBy</th>
-                <th class="hidden" translate="publisherApp.item.lastModifiedDate">LastModifiedDate</th>
-                <th class="hidden-sm" translate="publisherApp.item.rssAllowed">rssAllowed</th>
-                <th translate="publisherApp.item.organization">organization</th>
-                <th class="hidden-md" translate="publisherApp.item.redactor">redactor</th>
-                <th class="action"></th>
-            </tr>
+                <tr>
+                    <th class="hidden">ID</th>
+                    <th translate="publisherApp.item.type">Type</th>
+                    <th translate="publisherApp.item.title">Title</th>
+                    <th class="hidden" translate="publisherApp.item.createdBy">CreatedBy</th>
+                    <th class="hidden" translate="publisherApp.item.createdDate">CreatedDate</th>
+                    <th class="hidden" translate="publisherApp.item.enclosure">Enclosure</th>
+                    <th class="" translate="publisherApp.item.startDate">StartDate</th>
+                    <th class="" translate="publisherApp.item.endDate">EndDate</th>
+                    <th class="hidden-sm hidden-md" translate="publisherApp.item.lastModifiedBy">LastModifiedBy</th>
+                    <th class="hidden-sm hidden-md" translate="publisherApp.item.lastModifiedDate">LastModifiedDate</th>
+                    <th class="hidden" translate="publisherApp.item.validatedBy">ValidatedBy</th>
+                    <th class="visible-xs-inline-block" translate="publisherApp.item.validatedDate">ValidatedDate</th>
+                    <th class="hidden" translate="publisherApp.item.status">Status</th>
+                    <th class="visible-xs" translate="publisherApp.item.summary">Summary</th>
+                    <th class="hidden" translate="publisherApp.item.body">Body</th>
+                    <th class="hidden-sm hidden-md" translate="publisherApp.item.rssAllowed">rssAllowed</th>
+                    <th translate="publisherApp.item.organization">organization</th>
+                    <th class="hidden" translate="publisherApp.item.redactor">redactor</th>
+                    <th class="action"></th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in items">
-                <td class="hidden" data-label="ID"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
-                <td data-label="{{'publisherApp.item.type' | translate}}">{{'enum.itemType.' + item.type | translate}}</td>
-                <td class="longtext" data-label="{{'publisherApp.item.title' | translate}}">{{item.title}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.enclosure' | translate}}">{{item.enclosure}}</td>
-                <td class="hidden-sm" data-label="{{'publisherApp.item.startDate' | translate}}">{{item.startDate}}</td>
-                <td class="hidden-sm" data-label="{{'publisherApp.item.endDate' | translate}}">{{item.endDate}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.validatedBy' | translate}}">{{item.validatedBy.displayName}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.validatedDate' | translate}}">{{item.validatedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.status' | translate}}">{{item.status.label | translate}}</td>
-                <td class="hidden-sm verylongtext" data-label="{{'publisherApp.item.summary' | translate}}">{{item.summary}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.body' | translate}}">{{item.body}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.displayName' | translate}}">{{item.createdBy.displayName}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.createdDate' | translate}}">{{item.createdDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.lastModifiedBy' | translate}}">{{item.lastModifiedBy.displayName}}</td>
-                <td class="hidden" data-label="{{'publisherApp.item.lastModifiedDate' | translate}}">{{item.lastModifiedDate | date:'dd MMMM yyyy HH:mm:ss'}}</td>
-                <td class="hidden-sm" data-label="{{'publisherApp.item.rssAllowed' | translate}}"><input type="checkbox" ng-model="item.rssAllowed" disabled/></td>
-                <td data-label="{{'publisherApp.item.organization' | translate}}">{{item.organization.name}}</td>
-                <td class="hidden-md" data-label="{{'publisherApp.item.redactor' | translate}}">{{item.redactor.displayName}}</td>
-                <td class="action">
-                    <button type="submit"
-                            ui-sref="details({id:item.id})"
-                            class="btn btn-info">
-                        <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
-                    </button>
-                    <button type="submit"
-                            ui-sref="publish.publisher({id:item.id})"
-                            class="btn btn-primary">
-                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
-                    </button>
-                    <button type="submit"
-                            ng-click="validate(item.id)"
-                            class="btn btn-warning">
-                        <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span>{{"entity.action.validate" | translate : "Validate"}}</span>
-                    </button>
-                    <button type="submit"
-                            ng-click="delete(item.id)"
-                            class="btn btn-danger">
-                        <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
-                    </button>
-                </td>
-            </tr>
+                <tr ng-repeat="item in items">
+                    <td class="hidden" data-label="ID"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
+                    <td data-label="{{'publisherApp.item.type' | translate}}">{{'enum.itemType.' + item.type | translate}}</td>
+                    <td class="longtext" data-label="{{'publisherApp.item.title' | translate}}">{{item.title}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.displayName' | translate}}">{{item.createdBy.displayName}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.createdDate' | translate}}">{{item.createdDate | date:'medium'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.enclosure' | translate}}">
+                        <img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" class="img-responsive" />
+                    </td>
+                    <td class="" data-label="{{'publisherApp.item.startDate' | translate}}">{{item.startDate | date:'mediumDate'}}</td>
+                    <td class="" data-label="{{'publisherApp.item.endDate' | translate}}">{{item.endDate | date:'mediumDate'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.lastModifiedBy' | translate}}">{{item.lastModifiedBy.displayName}}</td>
+                    <td class="hidden-sm hidden-md" data-label="{{'publisherApp.item.lastModifiedDate' | translate}}">{{item.lastModifiedDate | date:'medium'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.validatedBy' | translate}}">{{item.validatedBy.displayName}}</td>
+                    <td class="visible-xs-inline-block" data-label="{{'publisherApp.item.validatedDate' | translate}}">{{item.validatedDate | date:'medium'}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.status' | translate}}">{{item.status.label | translate}}</td>
+                    <td class="visible-xs verylongtext" data-label="{{'publisherApp.item.summary' | translate}}">{{item.summary}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.body' | translate}}">{{item.body}}</td>
+                    <td class="hidden-sm hidden-md" data-label="{{'publisherApp.item.rssAllowed' | translate}}"><input type="checkbox" ng-model="item.rssAllowed" disabled/></td>
+                    <td data-label="{{'publisherApp.item.organization' | translate}}">{{item.organization.name}}</td>
+                    <td class="hidden" data-label="{{'publisherApp.item.redactor' | translate}}">{{item.redactor.displayName}}</td>
+                    <td class="action">
+                        <button type="submit" title="{{'entity.action.view' | translate : 'View'}}"
+                                ui-sref="details({id:item.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span>{{"entity.action.view" | translate : "View"}}</span>
+                        </button>
+                        <button type="submit" can-edit="item.contextKey" title="{{'entity.action.edit' | translate : 'Edit'}}"
+                                ui-sref="publish.publisher({id:item.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"entity.action.edit" | translate : "Edit"}}</span>
+                        </button>
+                        <button type="submit" can-edit="item.contextKey" title="{{'entity.action.validate' | translate : 'Validate'}}"
+                                ng-click="validate(item.id)"
+                                class="btn btn-warning btn-sm">
+                            <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span>{{"entity.action.validate" | translate : "Validate"}}</span>
+                        </button>
+                        <button type="submit" can-delete="item.contextKey" title="{{'entity.action.delete' | translate : 'Delete'}}"
+                                ng-click="delete(item.id)"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <nav>
