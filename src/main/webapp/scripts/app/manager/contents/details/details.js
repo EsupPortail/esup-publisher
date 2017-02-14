@@ -22,11 +22,9 @@ angular.module('publisherApp')
                     contentData: function(contentResource, classifRessource, $stateParams, $q) {
                         if ($stateParams.id) {
                             return contentResource.get({id: $stateParams.id}).$promise.then(function(result){
-                                console.log(result);
                                 var classifs = [];
                                 if (result) {
                                     angular.forEach(result.classifications, function(value, key) {
-                                        console.log("loop",value);
                                         classifs.push(classifRessource.get({id: value.keyId}).$promise);
                                     })
                                 }

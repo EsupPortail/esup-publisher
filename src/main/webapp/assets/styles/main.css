@@ -693,6 +693,17 @@ a.list-group-item div.bouton-action .div-text {
     border: none;
 }
 /* end Transform table into flexbox ! */
+/* start manager details */
+.manager.contents.details .content .tab-content > #publishers ul > li > figure {
+    margin: 0;
+}
+.manager.contents.details .content .tab-content > #publishers ul > li > figure > img {
+    max-width: 48px;
+}
+.manager.contents.details .content .tab-content > #targets ul > li {
+    border: none;
+}
+/* end manager details */
 /* ==========================================
     manager Treeview
 ============================================*/

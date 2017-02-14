@@ -1,68 +1,48 @@
 
 <div>
-    <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" href="" ng-click="showNav('content')"><span translate="manager.contents.details.item"></span></a></li>
-        <li><a data-toggle="pill" href="" ng-click="showNav('publishers')"><span translate="manager.contents.details.publishers"></span></a></li>
-        <li ng-if="item.redactor.writingMode != 'STATIC'"><a data-toggle="pill" href="" ng-click="showNav('targets')"><span translate="manager.contents.details.targets"></span></a></li>
-    </ul>
-
+    <div>
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="" ng-click="showNav('content')"><span translate="manager.contents.details.item"></span></a></li>
+            <li><a data-toggle="pill" href="" ng-click="showNav('publishers')"><span translate="manager.contents.details.publishers"></span></a></li>
+            <li ng-if="item.redactor.writingMode != 'STATIC'"><a data-toggle="pill" href="" ng-click="showNav('targets')"><span translate="manager.contents.details.targets"></span></a></li>
+        </ul>
+    </div>
     <div class="tab-content">
         <div id="content" class="tab-pane fade in" ng-class="{active: activeNav =='content'}">
             <div ng-include="contentTemplate"></div>
         </div>
         <div id="publishers" class="tab-pane fade in" ng-class="{active: activeNav =='publishers'}">
             <h3 translate="manager.contents.details.publishers"></h3>
-            <!--<div>-->
-                <!--<div class="table-responsive">-->
-                    <!--<table class="table table-striped">-->
-                        <!--<thead>-->
-                        <!--<tr>-->
-                            <!--<th translate="publisherApp.classification.name">Name</th>-->
-                            <!--<th translate="publisherApp.classification.iconUrl">Icon</th>-->
-                            <!--<th translate="publisherApp.classification.description">Description</th>-->
-                            <!--<th translate="publisherApp.classification.type">Type</th>-->
-                            <!--&lt;!&ndash;<th translate="publisherApp.classification.parent">Parent</th>&ndash;&gt;-->
-                        <!--</tr>-->
-                        <!--</thead>-->
-                        <!--<tbody>-->
-                        <!--<tr ng-repeat="classification in classifications">-->
-                            <!--<td>{{classification.name}}</td>-->
-                            <!--<td>{{classification.iconUrl}}</td>-->
-                            <!--<td>{{classification.description}}</td>-->
-                            <!--<td>{{'publisherApp.classification.type.' + classification.type | translate}}</td>-->
-                            <!--&lt;!&ndash;<td>{{classification.parent}}</td>&ndash;&gt;-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--</div>-->
-                <div ng-repeat="context in pubContexts" class="panel panel-default">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading"><h3 class="panel-title">{{context.publisher.context.reader.displayName}} - {{context.publisher.context.redactor.displayName}}</h3></div>
-                    <div class="panel-body">
-                        <p><span translate="manager.contents.details.publisher.reader"></span> {{context.publisher.context.reader.description}}</p>
-                        <p><span translate="manager.contents.details.publisher.redactor"></span> {{context.publisher.context.redactor.description}}</p>
-                    </div>
-                    <!-- List group -->
-                    <div class="panel-footer">
-                        <h4 translate="manager.contents.details.classifications"></h4>
-                        <ul class="list-group">
-                            <li ng-repeat="classification in context.classifications" class="list-group-item">
-                                <figure class="{{classification.type}}">
-                                    <img ng-if="inArray('CLOSURE', context.publisher.context.reader.classificationDecorations) && classification.iconUrl" ng-src="{{classification.iconUrl}}"/>
-                                    <figcaption><span ng-style='{"background-color": inArray("COLOR", context.publisher.context.reader.classificationDecorations)?classification.color:null}'>{{classification.name}}</span></figcaption>
-                                </figure>
-                            </li>
-                        </ul>
-
-                    </div>
+            <div ng-repeat="context in pubContexts" class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading"><h3 class="panel-title">{{context.publisher.context.reader.displayName}} - {{context.publisher.context.redactor.displayName}}</h3></div>
+                <div class="panel-body">
+                    <p><span translate="manager.contents.details.publisher.reader"></span> {{context.publisher.context.reader.description}}</p>
+                    <p><span translate="manager.contents.details.publisher.redactor"></span> {{context.publisher.context.redactor.description}}</p>
                 </div>
+                <!-- List group -->
+                <div class="panel-footer">
+                    <h4 translate="manager.contents.details.classifications"></h4>
+                    <ul class="list-group">
+                        <li ng-repeat="classification in context.classifications" class="list-group-item">
+                            <figure class="{{classification.type}}">
+                                <img ng-if="inArray('ENCLOSURE', context.publisher.context.reader.classificationDecorations) && classification.iconUrl" ng-src="{{classification.iconUrl}}"/>
+                                <figcaption>
+                                        <span class="pastille" ng-style='{"background-color": inArray("COLOR", context.publisher.context.reader.classificationDecorations)?classification.color:null}'
+                                              ng-show='inArray("COLOR", context.publisher.context.reader.classificationDecorations)'></span>
+                                    <span clas="text">{{classification.name}}</span>
+                                </figcaption>
+                            </figure>
+                        </li>
+                    </ul>
 
-            <!--</div>-->
+                </div>
+            </div>
         </div>
         <div id="targets" class="tab-pane fade in" ng-class="{active: activeNav =='targets'}">
             <h3 translate="manager.contents.details.targets"></h3>
             <div ng-switch="item.redactor.writingMode">
-                <div ng-switch-when="STATIC" class="table-responsive">
+                <div ng-switch-when="STATIC" class="table-responsive table-responsive-to-flexbox">
                     <table class="table table-striped">
                         <thead>
                         <tr>
