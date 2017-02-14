@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('PendingController', function ($scope, Item, ContentDTO,ParseLinks) {
+    .controller('PendingController', function ($scope, $state, Item, ContentDTO,ParseLinks, Subject) {
         $scope.items = [];
         $scope.page = 1;
         /** in manager state resolve
@@ -57,6 +57,13 @@ angular.module('publisherApp')
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
         };*/
+        $scope.viewSubject= function(subject) {
+            if (subject.subject.modelId) {
+                $state.go('pending.subject',  subject.subject.modelId);
+            }
+            return false;
+        };
+        $scope.userAttrs = Subject.getUserDisplayedAttrs();
 
         function getEnumKey (name) {
             return $scope.itemStateList.filter(function(val) {

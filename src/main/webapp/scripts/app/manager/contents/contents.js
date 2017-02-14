@@ -7,6 +7,7 @@ angular.module('publisherApp')
                 abstract: true,
                 parent: 'manager',
                 data: {
+                    requireLogin: true,
                     pageTitle: 'manager.contents.title'
                 }
             });

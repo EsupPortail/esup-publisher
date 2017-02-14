@@ -121,7 +121,9 @@
                         </td>
                         <td class="" data-label="{{'publisherApp.item.startDate' | translate}}">{{item.startDate | date:'mediumDate'}}</td>
                         <td class="" data-label="{{'publisherApp.item.endDate' | translate}}">{{item.endDate | date:'mediumDate'}}</td>
-                        <td class="hidden" data-label="{{'publisherApp.item.lastModifiedBy' | translate}}">{{item.lastModifiedBy.displayName}}</td>
+                        <td class="hidden-sm hidden-md" data-label="{{'publisherApp.item.lastModifiedBy' | translate}}">
+                            <subject-infos subject="item.lastModifiedBy.subject" ng-click="viewSubject(item.lastModifiedBy)" user-displayed-attrs="userAttrs"></subject-infos>
+                        </td>
                         <td class="hidden-sm hidden-md" data-label="{{'publisherApp.item.lastModifiedDate' | translate}}">{{item.lastModifiedDate | date:'medium'}}</td>
                         <td class="hidden" data-label="{{'publisherApp.item.validatedBy' | translate}}">{{item.validatedBy.displayName}}</td>
                         <td class="visible-xs-inline-block" data-label="{{'publisherApp.item.validatedDate' | translate}}">{{item.validatedDate | date:'medium'}}</td>

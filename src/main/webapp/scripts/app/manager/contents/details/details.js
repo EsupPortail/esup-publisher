@@ -77,7 +77,7 @@ angular.module('publisherApp')
                         resolve: {
                             dataResolved: ['$q', 'Subject', function($q, Subject) {
                                 Subject.init();
-                                var attributes = ($stateParams.type == "PERSON") ? Subject.getUserDisplayedAttrs() : Subject.getGroupDisplayedAttrs();
+                                var attributes = ($stateParams.keyType == "PERSON") ? Subject.getUserDisplayedAttrs() : Subject.getGroupDisplayedAttrs();
                                 var subject =  Subject.getSubjectInfos($stateParams.keyType, $stateParams.keyId);
                                 return $q.all([subject.$promise, attributes]);
                             }],
