@@ -71,18 +71,18 @@ angular.module('publisherApp')
                 item : $scope.item,
                 targets: targets
             };
-            //console.log("publishing : " + JSON.stringify(content));
+            //console.log("publishing : ", content);
             if (content.item.id != null) {
                 ContentDTO.update(content,
                     function () {
                         // TODO modale Success ?
-                        $state.go("owned");
+                        $state.go("owned", {itemState: $scope.item.status});
                     });
             } else {
                 ContentDTO.save(content,
                     function () {
                         // TODO modale Success ?
-                        $state.go("owned");
+                        $state.go("owned", {itemState: $scope.item.status});
                     });
             }
         };
