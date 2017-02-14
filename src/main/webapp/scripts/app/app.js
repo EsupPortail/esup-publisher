@@ -23,7 +23,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         $rootScope.MAINCSS = getCssEnv();
         //$rootScope.showSpinner = false;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
-            //console.log("$stateChangeStart");
+            //console.log("$stateChangeStart ", toState, toStateParams, event);
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
 
@@ -53,14 +53,16 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                 tmhDynamicLocale.set(language);
             });
         });
-
+        $rootScope.disabledRouteSave = ["details.subject","owned.subject","managed.subject", "pending.subject", "publish.targets.subject", "ctxDetails.subject"];
         $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
-            //console.log("$stateChangeSuccess");
             var titleKey = 'global.title';
-            $rootScope.previousStateName = fromState.name;
-            $rootScope.previousStateParams = fromParams;
+            //console.log("$stateChangeStart ", toState, toParams, fromState, fromParams, event);
+            // we remove from PreviousState all middle state when going on subject details, to be able to use the good back button
+            if ($rootScope.disabledRouteSave.indexOf(fromState.name) < 0 && $rootScope.disabledRouteSave.indexOf(toState.name) < 0 ) {
+                $rootScope.previousStateName = fromState.name;
+                $rootScope.previousStateParams = fromParams;
+            }
             $rootScope.currentState = toState;
-
             /*if (toState.resolve) {
              console.log("set showspinner");
              $rootScope.showSpinner = false;
