@@ -113,7 +113,8 @@ a {
  */
 
 a:active,
-a:hover {
+a:hover,
+:focus {
     outline-width: 0;
 }
 
