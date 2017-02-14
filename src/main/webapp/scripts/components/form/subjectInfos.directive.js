@@ -8,14 +8,14 @@ angular.module('publisherApp')
             replace: true,
             scope: {
                 subject: '=',
-                resolveKey: '@?'
+                resolveKey: '@?',
+                userDisplayedAttrs: '=?'
             },
             controller: function($scope) {
-                $scope.userAttrs = Subject.getUserDisplayedAttrs();
+                $scope.userAttrs = $scope.userDisplayedAttrs || Subject.getUserDisplayedAttrs();
 
                 if (!angular.isDefined($scope.notFoundSubjectMsg)) {
                     $translate('publisherApp.subject.disappear').then(function (translatedValue) {
-                        console.log("translated value : ", translatedValue);
                         $scope.notFoundSubjectMsg = translatedValue;
                     });
                 }
