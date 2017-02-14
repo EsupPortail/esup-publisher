@@ -583,6 +583,15 @@ a.list-group-item div.bouton-action .div-text {
 /* ====================================
     manager contents (table of published contents)
 ======================================*/
+.container-fluid > .well > .manager.contents > .content .table-responsive .table td {
+    font-size: 13px;
+}
+.container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos::before {
+    display: none;
+}
+.container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos {
+    font: inherit;
+}
 @media screen and (min-width: 768px) {
     .container-fluid > .well > .manager.contents > .content .table-responsive .table .longtext {
         overflow: hidden;
@@ -653,7 +662,7 @@ a.list-group-item div.bouton-action .div-text {
     .manager.contents .table-responsive-to-cards td.verylongtext,
     .table-responsive-to-cards td.verylongtext,
     .table-responsive-to-cards td.action {
-        display: block;
+        display: block !important;
         float: none;
     }
 
