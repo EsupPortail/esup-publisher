@@ -63,7 +63,7 @@ public class GroupDTOFactoryImpl implements GroupDTOFactory {
 		if (extModel != null) {
             boolean hasChilds;
             if (extModel instanceof ExternalGroup) {
-                hasChilds = ((ExternalGroup) extModel).hasMembers();
+                hasChilds = !((ExternalGroup) extModel).getGroupMembers().isEmpty();
             } else {
                 hasChilds = (extModel.getGroupMembers() != null && !extModel.getGroupMembers().isEmpty())
                     || (extModel.getUserMembers() != null && !extModel.getUserMembers().isEmpty());
