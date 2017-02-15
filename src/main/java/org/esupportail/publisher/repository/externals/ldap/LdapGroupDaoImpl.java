@@ -1,5 +1,10 @@
 package org.esupportail.publisher.repository.externals.ldap;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,13 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.*;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.ldap.filter.Filter;
+import org.springframework.ldap.filter.HardcodedFilter;
+import org.springframework.ldap.filter.LikeFilter;
+import org.springframework.ldap.filter.OrFilter;
+import org.springframework.ldap.filter.WhitespaceWildcardsFilter;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
-
-import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -76,6 +83,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         // constraints.setReturningAttributes((String[])
         // ldapUserHelper.getAttributes().toArray());
         LdapQuery query = LdapQueryBuilder.query()
+            .attributes((String[]) externalGroupHelper.getAttributes().toArray(new String[externalGroupHelper.getAttributes().size()]))
             .base(externalGroupHelper.getGroupDNSubPath()).filter(filter);
         IExternalGroup group;
         try {

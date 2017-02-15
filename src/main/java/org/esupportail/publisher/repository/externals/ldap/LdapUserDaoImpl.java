@@ -1,5 +1,11 @@
 package org.esupportail.publisher.repository.externals.ldap;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
@@ -13,15 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.*;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
+import org.springframework.ldap.filter.Filter;
+import org.springframework.ldap.filter.HardcodedFilter;
+import org.springframework.ldap.filter.LikeFilter;
+import org.springframework.ldap.filter.OrFilter;
+import org.springframework.ldap.filter.WhitespaceWildcardsFilter;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -68,7 +75,8 @@ public class LdapUserDaoImpl implements IExternalUserDao {
 		// constraints.setReturningAttributes((String[])
 		// ldapUserHelper.getAttributes().toArray());
 		LdapQuery query = LdapQueryBuilder.query()
-				.base(externalUserHelper.getUserDNSubPath()).filter(filter);
+            .attributes((String[]) externalUserHelper.getAttributes().toArray(new String[externalUserHelper.getAttributes().size()]))
+            .base(externalUserHelper.getUserDNSubPath()).filter(filter);
 		IExternalUser user;
 		try {
 			user = ldapTemplate.searchForObject(query, mapper);
