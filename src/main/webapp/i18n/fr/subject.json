@@ -4,6 +4,7 @@
             "search": "Rechercher un sujet",
             "search.unnamed": "Rechercher un ...",
             "disappear": " n'est plus présent",
+            "detail.title": "Détails du sujet",
             "type": {
                 "label": "Type : ",
                 "user": "Personne",

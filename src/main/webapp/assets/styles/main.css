@@ -505,8 +505,12 @@ nav, .navbar,
     border-bottom: solid 3px #D0D0D0;
     margin-left: 10px;
     float: none;
-    display: inline-block;
     vertical-align: top;
+}
+@media screen and (min-width:768px) {
+    #navbar-collapse > ul > li {
+        display: inline-block;
+    }
 }
 
 body > div.container-navbar > nav {
@@ -552,6 +556,16 @@ a.list-group-item div.bouton-action .div-text {
     a.list-group-item div.bouton-action .div-text {
         text-align: center;
     }
+}
+
+.longtext {
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    max-lines: 2;
+}
+.subject-key {
+    word-wrap: break-word;
 }
 
 /* ====================================

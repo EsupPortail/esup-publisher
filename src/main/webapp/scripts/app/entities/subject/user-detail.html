@@ -7,43 +7,26 @@
         </div>
 
         <div class="modal-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th translate="entity.detail.field">Field</th>
-                        <th translate="entity.detail.value">Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <span translate="publisherApp.subject.user.id">id</span>
-                        </td>
-                        <td>
-                            <input type="text" class="input-sm form-control" value="{{subject.modelId.keyId}}" readonly>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span translate="publisherApp.subject.user.displayName" >displayName</span>
-                        </td>
-                        <td>
-                            <input type="text" class="input-sm form-control" value="{{subject.displayName}}" readonly>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="attribute in attributes">
-                        <td>
-                            <span translate="{{'publisherApp.subject.user.' + attribute}}">{{attribute}}</span>
-                        </td>
-                        <td>
-                            <input ng-repeat="value in subject.attributes[attribute]" type="text" class="input-sm form-control" value="{{value}}" readonly>
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <dl class="dl-horizontal entity-details">
+                <dt>
+                    <span translate="publisherApp.subject.user.id">id</span>
+                </dt>
+                <dd>
+                    <span class="subject-key">{{subject.modelId.keyId}}</span>
+                </dd>
+                <dt>
+                    <span translate="publisherApp.subject.user.displayName" >displayName</span>
+                </dt>
+                <dd>
+                    <span>{{subject.displayName}}</span>
+                </dd>
+                <dt ng-repeat-start="attribute in attributes">
+                    <span>{{'publisherApp.subject.user.' + attribute | translate : attribute}}</span>
+                </dt>
+                <dd ng-repeat-end>
+                    <span class="list-comma" ng-repeat="value in subject.attributes[attribute]">{{value}}</span>
+                </dd>
+            </dl>
         </div>
         <div class="modal-footer">
             <div class="modal-footer">

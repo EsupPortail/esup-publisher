@@ -4,6 +4,7 @@
             "search": "Search a subject ",
             "search.unnamed": "Search a ...",
             "disappear": " isn't more present",
+            "detail.title": "Details of the subject",
             "type": {
                 "label": "Search on",
                 "user": "Person",

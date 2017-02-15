@@ -7,50 +7,32 @@
         </div>
 
         <div class="modal-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th translate="entity.detail.field">Field</th>
-                        <th translate="entity.detail.value">Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <span translate="publisherApp.subject.group.id">id</span>
-                        </td>
-                        <td>
-                            <input type="text" class="input-sm form-control" value="{{subject.modelId.keyId}}" readonly>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span translate="publisherApp.subject.group.displayName" >displayName</span>
-                        </td>
-                        <td>
-                            <input type="text" class="input-sm form-control" value="{{subject.displayName}}" readonly>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span translate="publisherApp.subject.group.hasChilds" >has members</span>
-                        </td>
-                        <td>
-                            <input type="checkbox" class="input-sm form-control" ng-model="subject.hasChilds" disabled readonly>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="attribute in attributes">
-                        <td>
-                            <span translate="publisherApp.subject.group.{{attribute}}" translate-compile>{{attribute}}</span>
-                        </td>
-                        <td>
-                            <input type="text" class="input-sm form-control" value="{{subject.attributes[attribute]}}" readonly>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <dl class="dl-horizontal entity-details">
+                <dt>
+                    <span translate="publisherApp.subject.group.id">id</span>
+                </dt>
+                <dd>
+                    <span class="subject-key">{{subject.modelId.keyId}}</span>
+                </dd>
+                <dt>
+                    <span translate="publisherApp.subject.group.displayName" >displayName</span>
+                </dt>
+                <dd>
+                    <span>{{subject.displayName}}</span>
+                </dd>
+                <!--<dt>-->
+                    <!--<span translate="publisherApp.subject.group.hasChilds" >has members</span>-->
+                <!--</dt>-->
+                <!--<dd>-->
+                    <!--<input type="checkbox" class="input-sm" ng-model="subject.hasChilds" disabled>-->
+                <!--</dd>-->
+                <dt ng-repeat-start="attribute in attributes">
+                    <span>{{'publisherApp.subject.group.' + attribute | translate : attribute}}</span>
+                </dt>
+                <dd ng-repeat-end>
+                    <span class="list-comma" ng-repeat="value in subject.attributes[attribute]">{{value}}</span>
+                </dd>
+            </dl>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="close()">

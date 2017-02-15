@@ -14,7 +14,7 @@ angular.module('publisherApp')
                     'modalRoot' : {
                         controller : 'SubjectDetailController',
                         templateProvider : function ($stateParams) {
-                            console.log("calculate template url with param : " + JSON.stringify($stateParams.type));
+                            //console.log("calculate template url with param : ", JSON.stringify($stateParams.type));
                             switch ($stateParams.type) {
                                 case "PERSON":
                                     return 'scripts/app/entities/subject/user-detail.html';
