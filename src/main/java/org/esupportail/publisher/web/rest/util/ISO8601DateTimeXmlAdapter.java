@@ -1,18 +1,18 @@
 package org.esupportail.publisher.web.rest.util;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 /**
  * Created by jgribonvald on 09/06/16.
  */
-public class CustomDateTimeXmlAdapter extends XmlAdapter<String, DateTime> {
+@Slf4j
+public class ISO8601DateTimeXmlAdapter extends XmlAdapter<String, DateTime> {
 
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    //private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 
     @Override
     public DateTime unmarshal(String v) throws Exception {
@@ -21,6 +21,6 @@ public class CustomDateTimeXmlAdapter extends XmlAdapter<String, DateTime> {
 
     @Override
     public String marshal(DateTime v) throws Exception {
-        return formatter.print(v);
+        return ISODateTimeFormat.dateTime().print(v);
     }
 }

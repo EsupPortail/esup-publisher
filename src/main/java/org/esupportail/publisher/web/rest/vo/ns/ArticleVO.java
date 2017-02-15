@@ -1,21 +1,25 @@
 package org.esupportail.publisher.web.rest.vo.ns;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
-import org.esupportail.publisher.web.rest.util.CustomDateTimeXmlAdapter;
-import org.esupportail.publisher.web.rest.util.ReadableDateTimeSerializer;
-import org.esupportail.publisher.web.rest.util.ReadableDateTimeXmlAdapter;
+import org.esupportail.publisher.web.rest.util.ISO8601DateTimeXmlAdapter;
+import org.esupportail.publisher.web.rest.util.RFC822DateTimeSerializer;
+import org.esupportail.publisher.web.rest.util.RFC822DateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.util.SeparatorListXMLAdapter;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by jgribonvald on 03/06/16.
@@ -36,8 +40,8 @@ public class ArticleVO implements Serializable {
 
     //Must be RFC2822 format
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonSerialize(using = ReadableDateTimeSerializer.class)
-    @XmlJavaTypeAdapter(ReadableDateTimeXmlAdapter.class)
+    @JsonSerialize(using = RFC822DateTimeSerializer.class)
+    @XmlJavaTypeAdapter(RFC822DateTimeXmlAdapter.class)
     private DateTime pubDate;
 
     private int guid;
@@ -55,7 +59,7 @@ public class ArticleVO implements Serializable {
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonProperty(value = "dc:date")
     @XmlElement(name="date", namespace = "http://purl.org/dc/elements/1.1/")
-    @XmlJavaTypeAdapter(CustomDateTimeXmlAdapter.class)
+    @XmlJavaTypeAdapter(ISO8601DateTimeXmlAdapter.class)
     private DateTime date;
 
 }

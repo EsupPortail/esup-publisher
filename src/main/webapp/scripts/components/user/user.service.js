@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('publisherApp')
-    .factory('User', function ($resource) {
+    .factory('User', function ($resource, DateUtils) {
         return $resource('api/users/:login', {}, {
             'query': {method: 'GET', isArray: true},
             'get': {
@@ -15,9 +15,11 @@ angular.module('publisherApp')
                 url: 'api/users/extended/:login',
                 method: 'GET',
                 transformResponse: function (data) {
-                    data = angular.fromJson(data);
-                    data.createdDate = new Date(data.createdDate);
-                    data.lastModifiedDate = new Date(data.lastModifiedDate);
+                    if (data) {
+                        data = angular.fromJson(data);
+                        data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                        data.lastModifiedDate = DateUtils.convertDateTimeFromServer(data.lastModifiedDate);
+                    }
                     return data;
                 }
             },

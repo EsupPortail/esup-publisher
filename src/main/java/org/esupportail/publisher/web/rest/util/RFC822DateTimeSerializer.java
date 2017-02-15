@@ -1,25 +1,24 @@
 package org.esupportail.publisher.web.rest.util;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.io.IOException;
 
 /**
  * Custom Jackson serializer for displaying Joda DateTime objects.
  */
-public class ReadableDateTimeSerializer extends JsonSerializer<DateTime> {
+public class RFC822DateTimeSerializer extends JsonSerializer<DateTime> {
 
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE dd MMMM yyyy HH:mm:ss 'GMT'ZZ");
+    //see in RFC822DateTimeXmlAdapter.java for the reference
+    //private static DateTimeFormatter formatter = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss Z").withLocale(Locale.US);
 
     @Override
     public void serialize(DateTime value, JsonGenerator generator,
                           SerializerProvider serializerProvider)
             throws IOException {
-        generator.writeString(formatter.print(value));
+        generator.writeString(RFC822DateTimeXmlAdapter.formatter.print(value));
     }
 }
