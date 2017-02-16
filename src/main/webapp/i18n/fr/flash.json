@@ -36,11 +36,11 @@
             },
             "inputfile": {
                 "title": "Sélection d'une illustration",
-                "crop" : {
-                    "step1" : "Charger une image",
-                    "step2" : "Définir la zone de l'image qui sera affichée avec la flash-info",
-                    "step3" : "Valider la sélection"
-                }
+                "url.label": "Depuis un lien web",
+                "resizeauto" : "Découpage automatique",
+                "resizecrop" : "Découpage manuel",
+                "upload.label": "Depuis un fichier",
+                "upload.button": "Parcourir..."
             }
         }
     }

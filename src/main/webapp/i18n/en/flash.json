@@ -36,11 +36,11 @@
             },
             "inputfile": {
                 "title": "Select a picture",
-                "crop" : {
-                    "step1" : "Load a picture",
-                    "step2" : "Select an area of the picture",
-                    "step3" : "Validate"
-                }
+                "url.label": "Enter an external url",
+                "resizeauto" : "Automatic fit",
+                "resizecrop" : "Manual fit",
+                "upload.label": "Upload a picture",
+                "upload.button": "Select a picture"
             }
         }
     }
