@@ -1124,6 +1124,13 @@ js-tree {
     background-color: #D0D0D0;
     border-color: #D0D0D0;
 }
+/* ========================================
+    For ui-datepicker
+===========================================*/
+/* z-index problem with TextAngular active buttons due to bootstrap .btn.active class */
+.ui-datepicker {
+    z-index: 3;
+}
 
 /* =======================================
     For Fixed alert to be visible on top of screen everywhere
