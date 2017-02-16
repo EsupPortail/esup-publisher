@@ -6,7 +6,15 @@ package org.esupportail.publisher.repository.predicates;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.Media;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.QAbstractItem;
+import org.esupportail.publisher.domain.QItemClassificationOrder;
+import org.esupportail.publisher.domain.Resource;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.security.SecurityUtils;
@@ -178,8 +186,8 @@ public final class ItemPredicates {
     }
 
     public static Predicate ItemsToRemove() {
-        final Predicate archived = qItem.status.eq(ItemStatus.ARCHIVED).and(itemsEndDateOlderThanNMonth(4));
-        return qItem.status.eq(ItemStatus.DRAFT).and(itemsEndDateOlderThanNMonth(15)).or(archived);
+        //return qItem.status.in(EnumSet.of(ItemStatus.ARCHIVED,ItemStatus.DRAFT,ItemStatus.PENDING)).and(itemsEndDateOlderThanNMonth(15));
+        return itemsEndDateOlderThanNMonth(15);
     }
 
     private static Predicate itemsEndDateOlderThanNMonth(final int nmonth) {
