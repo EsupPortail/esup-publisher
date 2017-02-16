@@ -1,6 +1,7 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, Configuration, $timeout, FileManager, Base64, DateService, $translate, taTranslations) {
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, Configuration, $timeout, FileManager, Base64,
+                                                    DateService, $translate, taTranslations, DateUtils, $filter) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
@@ -30,23 +31,18 @@ angular.module('publisherApp')
             });
         }
 
-        var today = new Date();
-        var tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
-        var nextweek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-        var nextyear = new Date(today.getTime() + 366 * 24 * 60 * 60 * 1000);
-
-        $scope.today = new Date(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-        $scope.startdate = angular.copy($scope.today);
-        $scope.tomorrow = new Date(new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate()));
-        $scope.nextweek = new Date(new Date(nextweek.getFullYear(), nextweek.getMonth(), nextweek.getDate()));
-        $scope.nextyear = new Date(new Date(nextyear.getFullYear(), nextyear.getMonth(), nextyear.getDate()));
+        $scope.today = DateUtils.addDaysToLocalDate(new Date(), 0);
+        //$scope.startdate = angular.copy($scope.today);
+        // init default max and min date;
+        $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 1);
+        $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, 366);
 
 
         $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate'];
         $scope.dtformat = $scope.dtformats[3];
 
         $scope.changeContentType = function(oldValue) {
-            console.log("changeContentType ", oldValue, $scope.content.type);
+            //console.log("changeContentType ", oldValue, $scope.content.type);
             if (!angular.equals(oldValue, $scope.content.type) || !angular.isDefined($scope.$parent.item) || angular.equals({}, $scope.$parent.item)) {
                 $scope.initItem();
             }
@@ -62,10 +58,10 @@ angular.module('publisherApp')
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
         }
 
-        if (loadedItem && loadedItem.startDate != '') {
-            $scope.startdate = angular.copy(loadedItem.startDate);
-            //console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
-        }
+        //if (loadedItem && loadedItem.startDate != '') {
+        //    $scope.startdate = angular.copy(loadedItem.startDate);
+        //    //console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
+        //}
 
         if ($scope.$parent.item.type) {
             $scope.content.type = $scope.$parent.item.type;
@@ -86,6 +82,7 @@ angular.module('publisherApp')
         $scope.itemStatusList = EnumDatas.getItemStatusList();
 
         $scope.$watch('$parent.item', function(newType, oldType) {
+            // to validate Item and be able to save it
             if (angular.isDefined($scope.publishContentForm) && $scope.publishContentForm.$valid
                 && angular.isDefined($scope.$parent.item) && DateService.getDateDifference($scope.today, $scope.$parent.item.endDate) > 0
                 && DateService.isValidDateRange($scope.$parent.item.startDate, $scope.$parent.item.endDate)) {
@@ -105,8 +102,22 @@ angular.module('publisherApp')
                 $scope.$parent.itemValidated = false;
             }
 
-            //console.log("Form : ", $scope.publishContentForm);
-            //console.log("item : ", $scope.$parent.item);
+            // Change min and max Date depending on publishing context/type
+            if (angular.isDefined(newType) && angular.isDefined(newType.type) && (!angular.isDefined(oldType) || oldType == null)
+                || newType.type != oldType.type || newType.startDate != oldType.startDate) {
+                switch (newType.type) {
+                    case 'NEWS':
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 168);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    case 'FLASH':
+                        $scope.minDate = angular.copy($scope.today);
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    default:console.log("Type not managed :", newType.type); break;
+                }
+            }
         }, true);
 
         $scope.isItemValidated = function() {
@@ -124,6 +135,9 @@ angular.module('publisherApp')
             var entityID = $scope.$parent.publisher.context.organization.id;
             var redactorID = $scope.$parent.publisher.context.redactor.id;
 
+            var tomorrow = DateUtils.addDaysToLocalDate($scope.today, 1);
+            var next4weeks = DateUtils.addDaysToLocalDate($scope.today, 28);
+
             $scope.$parent.item = {};
 
             switch ($scope.content.type) {
@@ -132,8 +146,8 @@ angular.module('publisherApp')
                         type: "NEWS",
                         title: null,
                         enclosure: null,
-                        endDate: $scope.nextweek,
-                        startDate: $scope.today,
+                        endDate: next4weeks,
+                        startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
                         status: null,
@@ -158,8 +172,8 @@ angular.module('publisherApp')
                         type: "MEDIA",
                         title: null,
                         enclosure: null,
-                        endDate: $scope.nextweek,
-                        startDate: $scope.today,
+                        endDate: next4weeks,
+                        startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
                         status: null,
@@ -179,8 +193,8 @@ angular.module('publisherApp')
                         type: "RESOURCE",
                         title: null,
                         enclosure: null,
-                        endDate: $scope.nextweek,
-                        startDate: $scope.today,
+                        endDate: next4weeks,
+                        startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
                         status: null,
@@ -201,8 +215,8 @@ angular.module('publisherApp')
                         type: "FLASH",
                         title: null,
                         enclosure: null,
-                        endDate: $scope.nextweek,
-                        startDate: $scope.today,
+                        endDate: DateUtils.addDaysToLocalDate($scope.today, 14),
+                        startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
                         status: null,
@@ -266,7 +280,7 @@ angular.module('publisherApp')
                     }
                 });
             }, function (response) {
-                console.log("error upload");
+                //console.log("error upload");
                 if (response.status > 0) {
                     $translate('error.fileupload', {code: response.status}).then(function (translatedValue) {
                         $scope.errorMsg = translatedValue;
@@ -311,7 +325,7 @@ angular.module('publisherApp')
         //};
 
         $scope.clearUpload = function() {
-            console.log("clear crop");
+            //console.log("clear crop");
             delete $scope.content.file;
             delete $scope.content.resultImage;
             delete $scope.content.picFile;

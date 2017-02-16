@@ -66,55 +66,59 @@
         </div>
         <div class="form-group">
             <div class="form-inline text-justify">
-                <div class="form-group" ng-class="{ 'has-error': publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan)
+                                && publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
                     <label class="control-label" for="startDate" translate="publisherApp.media.startDate">StartDate</label>
-                    <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min="{{startdate}}" ng-model="item.startDate"
+                    <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{minDate}} ng-model="item.startDate"
                            alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
 
-                    <div ng-show="publishContentForm.startDate.$invalid">
+                    <div ng-show="(publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan ) && publishContentForm.startDate.$invalid">
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{minDate | date: dtformat }}">
                             A date after now is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
                            translate-value-field="{{'publisherApp.media.endDate' | translate}}">
-                            From date must be lower than To date
+                            From date must be lower than to date.
                         </p>
                     </div>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
+                                && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
                     <label class="control-label" for="endDate" translate="publisherApp.media.endDate">EndDate</label>
-                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{today | date: dtformat}}" max="{{nextyear}}" ng-model="item.endDate"
+                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{minDate | date: dtformat}}" max={{maxDate}} ng-model="item.endDate"
                            alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
-                    <div ng-show="publishContentForm.endDate.$invalid">
+                    <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{today | date: dtformat }}">
-                            A date after now is required.
-                        </p>-->
-                        <p class="help-block" ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
-                            A date before next year from now is required
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{maxDate | date: dtformat }}">
+                            A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
                            translate-value-field="{{'publisherApp.media.startDate' | translate}}">
-                            From date must be greater than From date
+                            From date must be greater than from date.
                         </p>
                     </div>
                 </div>

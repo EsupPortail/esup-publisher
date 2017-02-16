@@ -28,6 +28,14 @@ angular.module('publisherApp')
             }
         },
 
+        addDaysToLocalDate : function(date, nbDays) {
+            if (date && angular.isDate(date) && !isNaN(nbDays) && angular.isNumber(nbDays)) {
+                var tmp = new Date(date.getTime() + nbDays * 24 * 60 * 60 * 1000);
+                return new Date(new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate()));
+            }
+            return null;
+        },
+
         dateformat : function dateformat() {
             return 'yyyy-MM-dd';
         }

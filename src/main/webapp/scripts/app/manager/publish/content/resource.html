@@ -60,12 +60,13 @@
         </div>
         <div class="form-group">
             <div class="form-inline text-justify">
-                <div class="form-group" ng-class="{ 'has-error': publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
-                    <label class="control-label" for="startDate" translate="publisherApp.resource.startDate">StartDate</label>
-                    <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{startdate}} ng-model="item.startDate"
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan)
+                                && publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
+                    <label class="control-label" for="startDate" translate="publisherApp.news.startDate">StartDate</label>
+                    <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{minDate}} ng-model="item.startDate"
                            alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
 
-                    <div ng-show="publishContentForm.startDate.$invalid">
+                    <div ng-show="(publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan ) && publishContentForm.startDate.$invalid">
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
                             This field is required.
@@ -75,7 +76,7 @@
                             This field is not a valid date.
                         </p>
                         <p class="help-block"
-                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{startdate | date: dtformat }}">
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{minDate | date: dtformat }}">
                             A date after now is required.
                         </p>
                         <p class="help-block"
@@ -84,17 +85,18 @@
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
-                           translate-value-field="{{publisherApp.resource.endDate | translate}}">
+                           translate-value-field="{{'publisherApp.news.endDate' | translate}}">
                             From date must be lower than to date.
                         </p>
                     </div>
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
-                    <label class="control-label" for="endDate" translate="publisherApp.resource.endDate">EndDate</label>
-                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{today | date: dtformat}}" max={{nextyear}} ng-model="item.endDate"
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
+                                && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
+                    <label class="control-label" for="endDate" translate="publisherApp.news.endDate">EndDate</label>
+                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{minDate | date: dtformat}}" max={{maxDate}} ng-model="item.endDate"
                            alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
-                    <div ng-show="publishContentForm.endDate.$invalid">
+                    <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
                             This field is required.
@@ -103,16 +105,13 @@
                            ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
                         </p>
-                        <!--<p class="help-block" ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{item.startDate | date: dtformat }}">
-                            A date after now is required.
-                        </p>-->
                         <p class="help-block"
-                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{nextyear | date: dtformat }}">
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{maxDate | date: dtformat }}">
                             A date before next year from now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
-                           translate-value-field="{{'publisherApp.resource.startDate' | translate}}">
+                           translate-value-field="{{'publisherApp.news.startDate' | translate}}">
                             From date must be greater than from date.
                         </p>
                     </div>
@@ -150,13 +149,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" translate="publisherApp.news.inputfile.title">Selection of a picture</h3>
+                    <h3 class="modal-title" translate="publisherApp.resource.inputfile.title">Selection of a picture</h3>
                 </div>
                 <div class="modal-body">
                     <form name="publishContentEnclosureForm" role="form" novalidate class="panel-group">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 translate="publisherApp.news.inputfile.url.label">Enter a picture URL</h3></div>
+                                <h3 translate="publisherApp.resource.inputfile.url.label">Enter a picture URL</h3></div>
                             <div class="panel-body form-inline">
                                 <div class="form-group">
                                     <input type="url" class="form-control" name="enclosure" placeholder="https://..."
@@ -180,10 +179,10 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 style="display:inline-block" translate="publisherApp.news.inputfile.upload.label">Selecting a file</h3>
+                                <h3 style="display:inline-block" translate="publisherApp.resource.inputfile.upload.label">Selecting a file</h3>
                                 <button ngf-select class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="content.file" ngf-pattern="'image/*'" ngf-accept="'image/*'"
                                         ngf-resize="{width: 240, height: 240, centerCrop: true}" ngf-resize-if="resizeCondition($file, $width, $height, 240, 240)" >
-                                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.news.inputfile.upload.button">Browse</span>
+                                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.resource.inputfile.upload.button">Browse</span>
                                 </button>
                             </div>
                             <div class="panel-body">
@@ -191,7 +190,7 @@
                                 <div class="">
                                     <div ng-show="content.file" class="well">
 
-                                        <h4 class="page-title" translate="publisherApp.news.inputfile.resizeauto">Auto fit resize</h4>
+                                        <h4 class="page-title" translate="publisherApp.resource.inputfile.resizeauto">Auto fit resize</h4>
 
                                         <div ng-show="content.file">
                                             <img ngf-src="!content.file.$error && content.file">
