@@ -13,6 +13,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mysema.commons.lang.Pair;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.types.expr.BooleanExpression;
@@ -250,23 +251,24 @@ public class PublishController {
         log.debug("list of itemsClasss associated to publisher : {}", itemsClasss);
         if (!itemsClasss.isEmpty()) {
             //Set<AbstractClassification> categories = Sets.newHashSet();
-            Map<Long, List<AbstractClassification>> itemsMap= Maps.newHashMap();
+            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap= Maps.newHashMap();
 
+            // get unique items associated to all his classifs
             for ( ItemClassificationOrder ico: itemsClasss) {
                 final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
                 //categories.add(classif);
                 final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
                 if (!itemsMap.containsKey(itemId)) {
-                    itemsMap.put(itemId, Lists.newArrayList(classif));
+                    itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(),Lists.newArrayList(classif)));
                 } else {
-                    itemsMap.get(itemId).add(classif);
+                    itemsMap.get(itemId).getSecond().add(classif);
                 }
             }
             returnedObj.setRubriques(rubriqueVOFactory.asVOList(cts));
             returnedObj.setItems(new ArrayList<ItemVO>());
-            for (ItemClassificationOrder itemClass : itemsClasss) {
-                final AbstractItem item = itemClass.getItemClassificationId().getAbstractItem();
-                returnedObj.getItems().add(itemVOFactory.from(item, itemsMap.get(item.getId()),
+            for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
+                final AbstractItem item = entry.getValue().getFirst();
+                returnedObj.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
                     subscriberService.getDefinedSubcribersOfContext(item.getContextKey()), request));
             }
 
