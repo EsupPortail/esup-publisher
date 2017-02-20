@@ -377,12 +377,19 @@ dl {
     }
 }
 
+.panel-heading, .panel-footer {
+    color: #000;
+    background-color: #f3f3f3;
+    border-color: #d0d0d0;
+}
+
 /* ====================================
      All pages title on where user is
 ====================================== */
 body > div.container-fluid > div.well > div.admin > div h1,
 body > div.container-fluid > div.well > div > div > div > h2,
-body > div.container-fluid > div.well > div > div > div > div.publish-header {
+body > div.container-fluid > div.well > div > div > div > div.publish-header,
+body > div.container-fluid > div.well > div > div > div > div.header {
     background-color: #f3f3f3;
     padding: 20px 40px 10px 40px;
     margin: 0;
@@ -392,7 +399,7 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     /*border-top: 1px solid #d0d0d0;*/
 }
 
-body > div.container-fluid > div.well > div > div > div > div:not(.modal) {
+body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header) {
     background-color: #fff;
     padding: 10px 5%;
 }
@@ -772,7 +779,7 @@ a.list-group-item div.bouton-action .div-text {
     color: #808080;
 }
 .article-preview {
-    border: 1px solid grey;
+    border: 1px solid #D0D0D0;
     padding: 10px;
     border-radius: 4px;
 }
