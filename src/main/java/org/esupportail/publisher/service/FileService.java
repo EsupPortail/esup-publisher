@@ -1,16 +1,18 @@
 package org.esupportail.publisher.service;
 
-import com.google.common.io.Files;
-import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.service.bean.FileUploadHelper;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.inject.Inject;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import javax.inject.Inject;
+
+import com.google.common.io.Files;
+import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.service.bean.FileUploadHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by jgribonvald on 25/01/16.
@@ -46,6 +48,9 @@ public class FileService {
 
 
     public String uploadInternalResource(final Long entityId,final String name, final MultipartFile file) {
+        if (file.getSize() > internalFileUploadHelper.getImageMaxSize()) {
+            throw new MaxUploadSizeExceededException(internalFileUploadHelper.getImageMaxSize());
+        }
         try {
             //byte[] bytes = file.getBytes();
             final String fileExt = Files.getFileExtension(file.getOriginalFilename()).toLowerCase();

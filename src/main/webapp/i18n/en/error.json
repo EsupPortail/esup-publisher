@@ -5,7 +5,10 @@
         "wrong.subject": "Impossible to obtain more details",
         "upload" : {
             "config": "Error of server configuration",
-            "empty": "the file passed is empty"
+            "empty": "The file passed is empty",
+            "filesize": "File size exceeds the allowed limit of {{size}} !",
+            "generic": "An error {{code}} occured, file upload unsuccessfull !",
+            "ERR_INTERNET_DISCONNECTED" : "An internet disconnection occured !"
         }
     }
 }

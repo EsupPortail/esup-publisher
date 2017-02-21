@@ -1,4 +1,4 @@
-package org.esupportail.publisher.web.rest;
+package org.esupportail.publisher.web.rest.exception;
 
 import java.util.ArrayList;
 import java.util.List;

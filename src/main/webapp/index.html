@@ -38,10 +38,10 @@
 <![endif]-->
 <div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
 <div ui-view="navbar" ng-cloak="" class="container-navbar"></div>
+<toaster-container toaster-options="{'time-out': 10000, 'close-button': true , 'position-class': 'toast-top-center'}"></toaster-container>
 <div class="container-fluid">
     <span us-spinner loading-spinner class="overlay"></span>
     <!--<span us-spinner loading-spinner class="overlay" spinner-on="showSpinner"></span>-->
-    <toaster-container toaster-options="{'time-out': 10000, 'close-button': true }"></toaster-container>
     <!--<div id="errorInfos" class="alert alert-danger" role="alert" aria-hidden="true" hidden>-->
         <!--<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>-->
         <!--<span translate="error.dialog">An error occured !</span>-->

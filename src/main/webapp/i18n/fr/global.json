@@ -173,8 +173,6 @@
         "dialog": "Chargement en cours ..."
     },
     "error": {
-        "dialog": "Une erreur est survenue!",
-        "fileupload" : "Une erreur {{code}} est survenue, le transfert du fichier n'a pas réussi !",
-        "ERR_INTERNET_DISCONNECTED" : "Vous rencontrez un problème d'accès internet !"
+        "dialog": "Une erreur est survenue!"
     }
 }

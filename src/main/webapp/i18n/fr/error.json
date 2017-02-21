@@ -5,7 +5,10 @@
         "wrong.subject": "Il est impossible d'obtenir des détails !",
         "upload" : {
             "config": "Erreur de configuration sur le serveur",
-            "empty": "Le fichier passé est vide"
+            "empty": "Le fichier passé est vide",
+            "filesize": "La taille du fichier dépasse la limite autorisée de {{size}} !",
+            "generic" : "Une erreur {{code}} est survenue, le transfert du fichier n'a pas réussi !",
+            "ERR_INTERNET_DISCONNECTED" : "Vous rencontrez un problème d'accès internet !"
         }
     }
 }

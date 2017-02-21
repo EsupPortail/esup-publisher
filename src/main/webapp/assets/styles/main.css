@@ -829,9 +829,9 @@ a.list-group-item div.bouton-action .div-text {
     display: inline-block;
 }
 
-#cropImageModale .progress {
-    width : 80%;
-}
+/*#cropImageModale .progress {*/
+    /*width : 80%;*/
+/*}*/
 
 /* ====================================
     publish.publisher form
@@ -1151,7 +1151,17 @@ js-tree {
     border-radius:0px;
     text-align: center;
 }
+/* ========================================
+    For toaster - used for request messages
+===========================================*/
 
+#toast-container > div {
+    min-width: 40%;
+    text-align: center;
+}
+.toast-top-center {
+    left: 0;
+}
 /* ========================================
     For ng-animates with ui-router, some transition give problems
 ===========================================*/

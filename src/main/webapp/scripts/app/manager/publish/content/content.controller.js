@@ -1,11 +1,11 @@
 'use strict';
 angular.module('publisherApp')
     .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, Configuration, $timeout, FileManager, Base64,
-                                                    DateService, $translate, taTranslations, DateUtils, $filter) {
+                                                    DateService, $translate, taTranslations, DateUtils, $filter, toaster) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
         //$scope.content = {type : '', picFile: null, picUrl: null, file:null};
-        $scope.content = {type : '', file: null, resultImage: null};
+        $scope.content = {type : '', file: '', resultImage: '', picUrl: ''};
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
         $scope.enclosureDirty = false;
 
@@ -129,6 +129,7 @@ angular.module('publisherApp')
             width: 240,
             height: 240
         };
+        $scope.sizeMax = Configuration.getConfUploadImageSize();
 
         $scope.initItem = function () {
             //console.log("init Item with type " + JSON.stringify($scope.type));
@@ -256,51 +257,51 @@ angular.module('publisherApp')
         $scope.invalidFiles = [];
         $scope.uploadFile = function (file, dataUrl) {
             if (!file) return;
+            $scope.progressStatus = 'success';
+            var dataFile = (typeof dataUrl !== 'undefined') ? Upload.dataUrltoBlob(dataUrl, file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg") : file;
             // we upload cropped file with extension jpg, it's lighter than png
-            var upload = Upload.upload({
-                url: 'app/upload/',
-                data: {
-                    file: (typeof dataUrl !== 'undefined') ? Upload.dataUrltoBlob(dataUrl, file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg") : file,
-                    isPublic: true,
-                    entityId: $scope.$parent.publisher.context.organization.id
-                }
-            });
-            upload.then(function (response) {
-                $timeout(function () {
-                    $scope.result = response.headers("Location");
-                    if ($scope.$parent.item.id) {
-                        Item.patch({objectId:$scope.$parent.item.id, attribute : "enclosure", value: $scope.result}, function() {
-                            $scope.$parent.item.enclosure = $scope.result;
-                            $('#cropImageModale').modal('hide');
-                            //$scope.publishContentForm.enclosure.$setValidity('url', true);
-                        });
-                    } else {
-                        $scope.$parent.item.enclosure = $scope.result;
-                        $('#cropImageModale').modal('hide');
+            if (dataFile.size <= $scope.sizeMax){
+                var upload = Upload.upload({
+                    url: 'app/upload/',
+                    data: {
+                        file: dataFile,
+                        isPublic: true,
+                        entityId: $scope.$parent.publisher.context.organization.id
                     }
                 });
-            }, function (response) {
-                //console.log("error upload");
-                if (response.status > 0) {
-                    $translate('error.fileupload', {code: response.status}).then(function (translatedValue) {
-                        $scope.errorMsg = translatedValue;
-                        // in case that the error is managed in backend we could want to show the message, else hide tomcat error
-                        // TODO review this part
-                        if (!response.data.indexOf("<html>")) {
-                            $scope.errorMsg = $scope.errorMsg + " " + $filter('translate')(response.data);
+                upload.then(function (response) {
+                    //SUCCESS
+                    $timeout(function () {
+                        $scope.result = response.headers("Location");
+                        if ($scope.$parent.item.id) {
+                            Item.patch({objectId:$scope.$parent.item.id, attribute : "enclosure", value: $scope.result}, function() {
+                                $scope.$parent.item.enclosure = $scope.result;
+                                $('#cropImageModale').modal('hide');
+                                $scope.progress = null;
+                                //$scope.publishContentForm.enclosure.$setValidity('url', true);
+                            });
+                        } else {
+                            $scope.$parent.item.enclosure = $scope.result;
+                            $('#cropImageModale').modal('hide');
+                            $scope.progress = null;
                         }
-                        $scope.progress=null;
                     });
-                } else if (response.status == 0){
-                    $translate('error.ERR_INTERNET_DISCONNECTED').then(function (translatedValue) {
-                        $scope.errorMsg = translatedValue;
-                        $scope.progress=null;
-                    });
-                }
-            }, function (evt) {
-                $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
+                }, function (response) {
+                    //ERROR
+                    //console.log("error upload");
+                   manageUploadError(response);
+                }, function (evt) {
+                    $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+            } else {
+                // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
+                $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.sizeMax,2)}).then(function (translatedValue) {
+                    toaster.pop({type: "warning", title: translatedValue});
+                });
+                return true;
+            }
         };
+
 
         //$scope.clearUpload = function() {
         //    $scope.content.file = null;
@@ -326,10 +327,10 @@ angular.module('publisherApp')
 
         $scope.clearUpload = function() {
             //console.log("clear crop");
-            delete $scope.content.file;
-            delete $scope.content.resultImage;
-            delete $scope.content.picFile;
-            delete $scope.content.picUrl;
+            $scope.content.file = '';
+            $scope.content.resultImage = '';
+            //$scope.content.picFile= '';
+            $scope.content.picUrl = '';
             $scope.errorMsg = null;
             $scope.progress = null;
             $scope.enclosureDirty = true;
@@ -371,10 +372,7 @@ angular.module('publisherApp')
             //$scope.content.picFile = file;
             $scope.mediaType = file.type.substring(0, 5);
             //console.log("Media Type :", $scope.mediaType);
-            if ($scope.mediaType === 'image' && (width > maxwidth || height > maxheight)) {
-                return true;
-            }
-            return false;
+            return $scope.mediaType === 'image' && (width > maxwidth || height > maxheight);
         };
 
         $scope.changeFileType = function (file, newFiles, invalidFiles, event) {
@@ -389,8 +387,8 @@ angular.module('publisherApp')
 
         $scope.taDropHandler =  function(file, insertAction){
             if (file.type.substring(0, 5) === 'image' ){
-                var sizeMax = Configuration.getConfUploadImageSize();
-                if (file.size <= sizeMax){
+                if (file.size <= $scope.sizeMax){
+                    $scope.progressStatus = 'success';
                     Upload.upload({
                         url: 'app/upload/',
                         data: {
@@ -400,34 +398,64 @@ angular.module('publisherApp')
                         }
                     }).then(function (response) {
                         // SUCCESS
-                        $scope.errorMsgTa = null;
                         var resultUrl = response.headers("Location");
                         insertAction('insertImage', resultUrl, true);
+                        $timeout(function() {
+                            $scope.progress = null;
+                        }, 5000);
                     }, function (response) {
                         // ERROR
-                        if (response.status > 0){
-                            $scope.errorMsgTa = "taDropHandler.error.server";
-                            $scope.errorMsgTaExplain = response.statusText;
-                        }
+                        manageUploadError(response);
                     }, function (evt) {
                         $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                     });
                     return true;
                 } else {
-                    // FILE SIZE ISSUE
-                    $scope.errorMsgTa = "taDropHandler.error.filesize";
-                    $scope.errorMsgTaExplain = sizeMax;
+                    // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
+                    $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.sizeMax,2)}).then(function (translatedValue) {
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
                     return true;
                 }
             }
             // FILE TYPE ISSUE
-            $scope.errorMsgTa = "taDropHandler.error.filetype";
+            $translate('taDropHandler.error.filetype').then(function (translatedValue) {
+                toaster.pop({type: "warning", title: translatedValue});
+            });
             return true;
         };
-        $scope.cleanErrorMsgTa = function() {
-            $scope.errorMsgTa = null;
-            $scope.errorMsgTaExplain = null;
-        };
+
+        function manageUploadError(response) {
+            if (response.status > 0) {
+                $scope.progressStatus = 'warning';
+                //console.log("Response : ", response.data);
+                if (response.data && response.data.message) {
+                    var params = {};
+                    if (response.data.params)  {
+                        params = angular.copy(response.data.params);
+                        if (response.data.params.size) {
+                            params.size = $filter('byteFmt')(response.data.params.size, 2);
+                        }
+                    }
+                    params.code = response.status;
+                    $translate(response.data.message, params).then(function (translatedValue) {
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
+                } else {
+                    $translate('errors.upload.generic', {code: response.status}).then(function (translatedValue) {
+                        toaster.pop({type: "warning", title: translatedValue});
+                    });
+                }
+            } else if (response.status == 0){
+                $scope.progressStatus = 'warning';
+                $translate('errors.upload.ERR_INTERNET_DISCONNECTED').then(function (translatedValue) {
+                    toaster.pop({type: "warning", title: translatedValue});
+                });
+            }
+            $timeout(function() {
+                $scope.progress = null;
+            }, 3000);
+        }
 
         $scope.getItemTypeLabel = function (name) {
             return $scope.itemStatusList.filter(function (val) {

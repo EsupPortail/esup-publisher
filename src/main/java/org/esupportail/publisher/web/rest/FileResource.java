@@ -39,7 +39,6 @@ public class FileResource {
     public ResponseEntity<Void> delete(@PathVariable Long entityId, @PathVariable boolean isPublic, @PathVariable("fileUri") String fileUri) throws URIException {
         log.debug("REST request to delete File : {}", fileUri);
         boolean result;
-        ;
         if (isPublic) {
             result = fileService.deleteInternalResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
         } else {

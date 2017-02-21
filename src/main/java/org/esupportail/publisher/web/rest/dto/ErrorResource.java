@@ -1,5 +1,6 @@
 package org.esupportail.publisher.web.rest.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ErrorResource {
+public class ErrorResource implements Serializable {
 	@NonNull
 	private String code;
 	@NonNull
