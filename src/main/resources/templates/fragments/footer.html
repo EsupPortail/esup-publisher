@@ -1,0 +1,4 @@
+<footer>
+    <script th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" src="https://code.jquery.com/jquery-1.11.3.js"/>
+    <script th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" src="/commun/jquery/1.11.3/jquery.min.js"/>
+</footer>

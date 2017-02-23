@@ -166,7 +166,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 validCasServerHosts.add(StringUtils.trim(ending));
             }
         }
-        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, validCasServerHosts, protocol, "/#/contents/details/");
+        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, validCasServerHosts, protocol, "/view/item/");
         log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());
         return serviceUrlHelper;
     }
@@ -298,7 +298,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated();
+            .antMatchers("/protected/**").authenticated()
+            .antMatchers("/view/**").permitAll();
         http
             .logout()
             .logoutUrl("/api/logout")

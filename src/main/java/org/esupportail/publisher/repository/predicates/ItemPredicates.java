@@ -48,7 +48,7 @@ public final class ItemPredicates {
         return qItemClass.isNotNull();
     }
 
-    public static Predicate itemsClassOfItem(final Long itemId) {
+    public static Predicate itemsClassOfItem(final long itemId) {
         return qItemClass.itemClassificationId.abstractItem.id.eq(itemId);
     }
 
@@ -117,6 +117,14 @@ public final class ItemPredicates {
             default:
                 return qItem.startDate.desc();
         }
+    }
+
+    public static Predicate ItemWithStatus(final long itemId, final ItemStatus status) {
+        Predicate onStatus = qItem.status.isNotNull();
+        if (status != null) {
+            onStatus = qItem.status.eq(status);
+        }
+        return qItem.id.eq(itemId).and(onStatus);
     }
 
     public static Predicate OwnedItemsOfStatus(final Boolean owned, final Integer status) {
