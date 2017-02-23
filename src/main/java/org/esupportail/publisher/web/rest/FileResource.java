@@ -1,5 +1,7 @@
 package org.esupportail.publisher.web.rest;
 
+import javax.inject.Inject;
+
 import com.codahale.metrics.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.inject.Inject;
 
 /**
  * Created by jgribonvald on 22/01/16.
@@ -42,7 +42,7 @@ public class FileResource {
         if (isPublic) {
             result = fileService.deleteInternalResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
         } else {
-            result = fileService.deleteInternalResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
+            result = fileService.deletePrivateResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
         }
         if (result)
             return ResponseEntity.ok().build();
