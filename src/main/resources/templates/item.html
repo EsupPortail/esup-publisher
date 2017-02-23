@@ -59,7 +59,9 @@
         </th:block>
         <section th:utext="${item.body}"></section>
     </article>
-    
+    <footer>
+        <p><a href="#"><small><span translate="footer.project">Publisher</span> <span th:text="${version}"></span> <span>&copy; 2017 Esup Portail - by GIP RECIA</span></small></a></p>
+    </footer>
 </div>
 <div th:replace="fragments/footer :: footer">
 </div>
