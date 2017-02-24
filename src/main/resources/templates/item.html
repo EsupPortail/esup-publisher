@@ -4,7 +4,7 @@
 <head lang="fr" th:replace="fragments/head :: head">
 </head>
 <body class="publisher-view" th:classappend="${item.getClass().getSimpleName()}">
-<div class="content">
+<div>
     <article>
         <header>
             <div th:if="${item.enclosure} != null" class="image">
@@ -41,17 +41,34 @@
 <script th:inline="text">
     /*<![CDATA[*/
     var LANG = '[[${#locale.language}]]';
+    function hasClassName(elm, name) {
+        return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(elm.className);
+    }
+
+    function addClassName(elm, name) {
+        if (!hasClassName(elm,name)) {
+            elm.className = elm.className ? [this.className, name].join(' ') : name;
+        }
+    }
+
+    function removeClassName(elm, name) {
+        if (hasClassName(elm,name)) {
+            var c = elm.className;
+            elm.className = c.replace(new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)", "g"), "");
+        }
+    }
     function showInfo() {
-        var elm = $(".details > .summary > span:first-child");
-        var subElm = $(".details > .pubInfo");
+        var elm = document.querySelector(".publisher-view > div > article > header > .details > .summary > span:first-child");
         var classOpened = "caret-bottom";
         var classClosed = "caret-right";
-        if (elm.hasClass(classOpened)) {
-            elm.removeClass(classOpened).addClass(classClosed);
-            subElm.hide();
+        if (hasClassName(elm, classOpened)) {
+            removeClassName(elm, classOpened);
+            addClassName(elm, classClosed);
+            document.querySelector(".publisher-view > div >  article > header > .details > .pubInfo").style.display='none';
         } else {
-            elm.removeClass(classClosed).addClass(classOpened);
-            subElm.show();
+            removeClassName(elm,classClosed);
+            addClassName(elm,classOpened);
+            document.querySelector(".publisher-view > div >  article > header > .details > .pubInfo").style.display='block';
         }
     }
     /*]]>*/
