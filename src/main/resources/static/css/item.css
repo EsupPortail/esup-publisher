@@ -1,4 +1,4 @@
-body {
+body.publisher-view {
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 300;
     font-style: normal;
@@ -6,85 +6,171 @@ body {
     background-color: #f3f3f3;
     color: #000;
     margin:0;
+    line-height: 1.42857143;
 }
 
-footer, .footer {
-    padding: 0 15px;
+.publisher-view * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.publisher-view footer,
+.publisher-view .footer {
+    padding: 0 1rem;
 }
 
-small, .small {
+.publisher-view small,
+.publisher-view .small {
     font-size: 78%;
 }
 
-h1,
-.h1,
-h2,
-.h2,
-h3,
-.h3,
-h4,
-.h4,
-h5,
-.h5,
-h6,
-.h6 {
+.publisher-view h1,
+.publisher-view .h1,
+.publisher-view h2,
+.publisher-view .h2,
+.publisher-view h3,
+.publisher-view .h3,
+.publisher-view h4,
+.publisher-view .h4,
+.publisher-view h5,
+.publisher-view .h5,
+.publisher-view h6,
+.publisher-view .h6 {
     font-family: 'Roboto Slab', sans-serif;
 }
 
-pre { margin-bottom:15px; }
+.publisher-view h1 {
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.1;
+}
 
-a:hover,
-a:focus,
-a:link {
+.publisher-view pre { margin-bottom:15px; }
+
+.publisher-view a:hover,
+.publisher-view .a:focus,
+.publisher-view a:link {
     text-decoration: none;
     outline: none;
 }
 
-body a {
+body.publisher-view  a {
     color: #000;
 }
 /* Default color */
-a:hover,
-a:hover > div{
+.publisher-view a:hover,
+.publisher-view a:hover > div{
     color: #25B2F3;
 }
 /* Specific color */
-.clg37 a:hover,
-.clg37 a:hover > div{
+.publisher-view .clg37 a:hover,
+.publisher-view .clg37 a:hover > div{
     color: #C60440;
 }
 
+.publisher-view p {
+    margin: 0 0 0.8rem;
+}
+
+/** BOOTSTRAP interesting parts **/
+.publisher-view .content {
+    /*padding-right: 15px;*/
+    /*padding-left: 15px;*/
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (min-width: 768px) {
+    .publisher-view .content {
+        width: 750px;
+    }
+}
+@media (min-width: 992px) {
+    .publisher-view .content {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px) {
+    .publisher-view .content {
+        width: 1170px;
+    }
+}
+.publisher-view .content:after,
+.publisher-view .content:before{
+    display: table;
+    content: " ";
+}
+.publisher-view img {
+    vertical-align: middle;
+    border: 0;
+}
+
+.publisher-view .label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.publisher-view .caret-bottom {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 5px dashed;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+}
+.publisher-view .caret-right {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px dashed;
+}
+
 /** ITEM VIEW **/
-article {
+.publisher-view article {
     background-color: #fff;
     border: 1px solid #D0D0D0;
     border-radius: 4px;
     min-height: 260px;
 }
-body {
+body.publisher-view  {
     min-width: 280px;
 }
-article > header > div > h1,
-article > header > div > img,
-article > header > div > p,
-article > header > div > div {
-    padding: 0 2rem;
+.publisher-view article > header > div > h1,
+.publisher-view article > header > div > img,
+.publisher-view article > header > div > p,
+.publisher-view article > header > div > div,
+.publisher-view article > section {
+    padding: 0 1rem;
 }
-article > section {
-    padding: 0 2rem;
+.publisher-view .img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
-article header {
+.publisher-view article header {
     /*overflow: hidden;*/
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
-article header .title h1 {
+.publisher-view article header .title h1 {
     background-color: #f3f3f3 ;
     margin: 0;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
-.hyphenate {
+.publisher-view .hyphenate {
     overflow-wrap: break-word;
     word-wrap: break-word;
     -webkit-hyphens: auto;
@@ -93,89 +179,89 @@ article header .title h1 {
     -o-hyphens: auto;
     hyphens: auto;
 }
-article header .image {
+.publisher-view article header .image {
     max-width: 240px;
     float: left;
 }
-article header .image img {
+.publisher-view article header .image img {
     display: block;
     width: 100%;
     margin-bottom: 2px;
 }
-article header .title,
-article header .details {
+.publisher-view article header .title,
+.publisher-view article header .details {
     display: flex;
     flex-direction: column;
     min-width: 200px;
 }
 
 @media screen and (max-width: 540px)  {
-    article header {
+    .publisher-view article header {
         display: flex;
         flex-direction: column;
     }
 
-    article header .title {
+    .publisher-view article header .title {
         text-align: center;
         order: 1;
     }
-    article header .image {
-        order:2;
+    .publisher-view article header .image {
+        order: 2;
     }
-    article header .details {
-        order : 3;
+    .publisher-view article header .details {
+        order: 3;
     }
 }
-.Flash article header {
+.publisher-view.Flash article header {
     display: flex;
     flex-direction: column;
 }
-.Flash article header .title {
+.publisher-view.Flash article header .title {
     text-align: center;
     order: 1;
 }
-.Flash article header .image {
+.publisher-view.Flash article header .image {
     display: block;
     float: none;
     max-width: none;
     order: 2;
 }
-.Flash article header .image img   {
+.publisher-view.Flash article header .image img   {
     display: block;
     margin-right: auto;
     margin-left: auto;
     width : initial;
 }
-.Flash article header .details {
-    order : 3;
+.publisher-view.Flash article header .details {
+    order: 3;
 }
 
-article .details {
+.publisher-view article .details {
     background: #f3f3f3;
     border: 1px dashed #D0D0D0;
     font-size: 1em;
     margin: 0;
 }
 
-article .details .summary {
+.publisher-view article .details .summary {
     display: block;
 }
-article .details .summary span {
+.publisher-view article .details .summary span {
     cursor: pointer;
 }
-article .details .pubInfo {
+.publisher-view article .details .pubInfo {
     display: none;
 }
-article .details .pubInfo > p {
+.publisher-view article .details .pubInfo > p {
     margin: 0;
 }
-article .details .pubInfo > p > .label {
+.publisher-view article .details .pubInfo > p > .label {
     color: #808080;
 }
-article .details .pubInfo > p > span:not(.label)::after {
+.publisher-view article .details .pubInfo > p > span:not(.label)::after {
     content: ", "
 }
-footer {
+.publisher-view footer {
     text-align: right;
     padding: 0 1rem;
 }
