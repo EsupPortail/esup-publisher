@@ -5,66 +5,44 @@
 </head>
 <body th:class="${item.getClass().getSimpleName()}">
 <div class="container">
-    <article th:with="timeZone=${T(java.util.TimeZone).getTimeZone('CET')}">
-        <th:block th:switch="${item.getClass().getSimpleName()}">
-            <header th:case="'Flash'">
-                <div class="title">
-                    <h1 th:text="${item.title}"></h1>
-                    <p><span>Auteur</span>: <span th:text="${item.createdBy.displayName}"></span>, <span>publié le</span>
-                        <time pubdate="pubdate" th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}" /></p>
-                </div>
-                <img class="img-responsive center-block" th:src="${item.enclosure}" th:alt-title="${item.title}" />
-                <div class="details" onclick="showInfo()">
-                    <div class="summary" >
-                        <span class="glyphicon glyphicon-triangle-right" th:text="${item.summary}"></span>
-                    </div>
-                    <div class="pubInfo">
-                        <p><span class="label" translate="publisherApp.item.createdBy">Créé par</span> <span th:text="${item.createdBy.displayName}"></span>,
-                            <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.createdDate)}"></time>
-                        </p><p th:if="${item.lastModifiedDate} != null">
-                        <span class="label" translate="publisherApp.item.lastModifiedBy">Dernière Modification par </span> <span th:text="${item.lastModifiedBy.displayName}"></span>,
-                        <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.lastModifiedDate)}"></time>
-                    </p><p th:if="${item.validatedBy} != null">
-                        <span class="label" translate="publisherApp.item.validatedBy">Validé par</span> <span th:text="${item.validatedBy.displayName}"></span>,
-                        <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.validatedDate)}"></time>
-                    </p>
-                    </div>
-                </div>
-            </header>
-            <header class="media" th:case="*">
-                <div th:if="${item.enclosure} != null" class="media-left">
-                    <img class="media-object" th:src="${item.enclosure}" th:alt-title="${item.title}" />
-                </div><div class="media-body">
-                <h1 class="media-heading" th:text="${item.title}"></h1>
+    <article>
+        <!--<th:block th:switch="${item.getClass().getSimpleName()}">-->
+        <!--<header th:case="'Flash'">-->
+        <header>
+            <div th:if="${item.enclosure} != null" class="image">
+                <img class="img-responsive" th:src="${item.enclosure}" th:alt-title="${item.title}" />
+            </div>
+            <div class="title">
+                <h1 class="hyphenate" th:text="${item.title}"></h1>
                 <p><span>Auteur</span>: <span th:text="${item.createdBy.displayName}"></span>, <span>publié le</span>
-                    <time pubdate="pubdate" th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}" /></p>
-                <div class="details" onclick="showInfo()">
-                    <div class="summary" >
-                        <span class="glyphicon glyphicon-triangle-right" th:text="${item.summary}"></span>
-                    </div>
-                    <div class="pubInfo">
-                        <p><span class="label" translate="publisherApp.item.createdBy">Créé par</span> <span th:text="${item.createdBy.displayName}"></span>,
-                            <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.createdDate)}"></time>
-                        </p><p th:if="${item.lastModifiedDate} != null">
-                        <span class="label" translate="publisherApp.item.lastModifiedBy">Dernière Modification par </span> <span th:text="${item.lastModifiedBy.displayName}"></span>,
-                        <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.lastModifiedDate)}"></time>
-                    </p><p th:if="${item.validatedBy} != null">
-                        <span class="label" translate="publisherApp.item.validatedBy">Validé par</span> <span th:text="${item.validatedBy.displayName}"></span>,
-                        <span class="label" translate="publisherApp.item.when">le</span> <time th:text="${#dates.format(item.validatedDate)}"></time>
-                    </p>
-                    </div>
+                    <time pubdate="pubdate" th:datetime="${item.startDate}" th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}"/></p>
+            </div>
+            <div class="details" onclick="showInfo()">
+                <div class="summary" >
+                    <span class="glyphicon glyphicon-triangle-right" th:text="${item.summary}"></span>
+                </div>
+                <div class="pubInfo">
+                    <p><span class="label" translate="publisherApp.item.createdBy">Créé par</span><span th:text="${item.createdBy.displayName}"></span><span
+                        class="label" translate="publisherApp.item.when">le</span><time th:datetime="${item.createdDate}" th:text="${#dates.format(item.createdDate)}"></time>
+                    </p><p th:if="${item.lastModifiedDate} != null">
+                    <span class="label" translate="publisherApp.item.lastModifiedBy">Dernière Modification par</span><span th:text="${item.lastModifiedBy.displayName}"></span><span
+                    class="label" translate="publisherApp.item.when">le</span><time th:datetime="${item.lastModifiedDate}" th:text="${#dates.format(item.lastModifiedDate)}"></time>
+                </p><p th:if="${item.validatedBy} != null">
+                    <span class="label" translate="publisherApp.item.validatedBy">Validé par</span><span th:text="${item.validatedBy.displayName}"></span><span
+                    class="label" translate="publisherApp.item.when">le</span><time th:datetime="${item.validatedDate}" th:text="${#dates.format(item.validatedDate)}"></time>
+                </p>
                 </div>
             </div>
-            </header>
-        </th:block>
+        </header>
+        <!--<header th:case="*">-->
+        <!-- -->
+        <!--</header>-->
+        <!--</th:block>-->
         <section th:utext="${item.body}"></section>
     </article>
-    <footer>
-        <p><a href="#"><small><span translate="footer.project">Publisher</span> <span th:text="${version}"></span> <span>&copy; 2017 Esup Portail - by GIP RECIA</span></small></a></p>
-    </footer>
 </div>
-<div th:replace="fragments/footer :: footer">
-</div>
+<footer th:replace="fragments/footer">
+</footer>
 <script th:inline="text">
     /*<![CDATA[*/
     var LANG = '[[${#locale.language}]]';

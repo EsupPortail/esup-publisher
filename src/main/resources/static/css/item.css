@@ -58,37 +58,103 @@ a:hover > div{
 article {
     background-color: #fff;
     border: 1px solid #D0D0D0;
-    padding: 0 15px;
     border-radius: 4px;
+    min-height: 260px;
+}
+body {
+    min-width: 280px;
+}
+article > header > div > h1,
+article > header > div > img,
+article > header > div > p,
+article > header > div > div {
+    padding: 0 2rem;
+}
+article > section {
+    padding: 0 2rem;
 }
 article header {
-    margin-top: 15px !important;
-    margin-bottom: 2rem;
+    /*overflow: hidden;*/
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
-article header h1 {
+article header .title h1 {
+    background-color: #f3f3f3 ;
+    margin: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.hyphenate {
     overflow-wrap: break-word;
     word-wrap: break-word;
     -webkit-hyphens: auto;
-    -moz-hyphens: auto;
     -ms-hyphens: auto;
+    -moz-hyphens: auto;
     -o-hyphens: auto;
     hyphens: auto;
-    background-color: #f3f3f3 ;
-    padding: 0 10px;
 }
-.Flash article header .title h1 {
-    margin-left: -15px;
-    margin-right: -15px;
+article header .image {
+    max-width: 240px;
+    float: left;
+}
+article header .image img {
+    display: block;
+    width: 100%;
+    margin-bottom: 2px;
+}
+article header .title,
+article header .details {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+@media screen and (max-width: 540px)  {
+    article header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    article header .title {
+        text-align: center;
+        order: 1;
+    }
+    article header .image {
+        order:2;
+    }
+    article header .details {
+        order : 3;
+    }
+}
+.Flash article header {
+    display: flex;
+    flex-direction: column;
 }
 .Flash article header .title {
     text-align: center;
+    order: 1;
+}
+.Flash article header .image {
+    display: block;
+    float: none;
+    max-width: none;
+    order: 2;
+}
+.Flash article header .image img   {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    width : initial;
+}
+.Flash article header .details {
+    order : 3;
 }
 
 article .details {
-    background: #f3f3f3 none repeat scroll 0 0;
+    background: #f3f3f3;
     border: 1px dashed #D0D0D0;
     font-size: 1em;
-    margin: 2px 0 20px;
+    margin: 0;
 }
 
 article .details .summary {
@@ -100,15 +166,16 @@ article .details .summary span {
 article .details .pubInfo {
     display: none;
 }
-article .details .pubInfo p {
+article .details .pubInfo > p {
     margin: 0;
 }
-article .details .label {
+article .details .pubInfo > p > .label {
     color: #808080;
 }
-article legend {
-    width: auto;
-    margin: 0 20px;
-    color: #666;
-    font-size: 16px;
+article .details .pubInfo > p > span:not(.label)::after {
+    content: ", "
+}
+footer {
+    text-align: right;
+    padding: 0 1rem;
 }
