@@ -1,4 +1,8 @@
-body.publisher-view {
+body {
+    margin: 0;
+}
+
+.publisher-view {
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 300;
     font-style: normal;
@@ -54,7 +58,7 @@ body.publisher-view {
     outline: none;
 }
 
-body.publisher-view  a {
+.publisher-view  a {
     color: #000;
 }
 /* Default color */
@@ -73,35 +77,35 @@ body.publisher-view  a {
 }
 
 /** BOOTSTRAP interesting parts **/
-body.publisher-view > div,
-body.publisher-view > footer {
+.publisher-view > article,
+.publisher-view > footer {
     /*padding-right: 15px;*/
     /*padding-left: 15px;*/
     margin-right: auto;
     margin-left: auto;
 }
 @media (min-width: 768px) {
-    body.publisher-view > div,
-    body.publisher-view > footer {
+    .publisher-view > article,
+    .publisher-view > footer {
         width: 750px;
     }
 }
 @media (min-width: 992px) {
-    body.publisher-view > div,
-    body.publisher-view > footer {
+    .publisher-view > article,
+    .publisher-view > footer {
         width: 970px;
     }
 }
 @media (min-width: 1200px) {
-    body.publisher-view > div,
-    body.publisher-view > footer {
+    .publisher-view > article,
+    .publisher-view > footer {
         width: 1170px;
     }
 }
-body.publisher-view > div:after,
-body.publisher-view > footer:after,
-body.publisher-view > div:before,
-body.publisher-view > footer:before{
+.publisher-view > article:after,
+.publisher-view > footer:after,
+.publisher-view > article:before,
+.publisher-view > footer:before{
     display: table;
     content: " ";
 }
@@ -144,26 +148,23 @@ body.publisher-view > footer:before{
 }
 
 /** ITEM VIEW **/
+.publisher-view  {
+    min-width: 280px;
+    padding-top: 1rem;
+}
 .publisher-view article {
     background-color: #fff;
     border: 1px solid #D0D0D0;
-    border-radius: 4px;
+    border-radius: 2px;
     min-height: 260px;
-}
-body.publisher-view  {
-    min-width: 280px;
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
 }
 .publisher-view article > header > div > h1,
-.publisher-view article > header > div > img,
+.publisher-view article > header > div.image,
 .publisher-view article > header > div > p,
 .publisher-view article > header > div > div,
 .publisher-view article > section {
     padding: 0 1rem;
-}
-.publisher-view .img-responsive {
-    display: block;
-    max-width: 100%;
-    height: auto;
 }
 .publisher-view article header {
     /*overflow: hidden;*/
@@ -191,8 +192,10 @@ body.publisher-view  {
 }
 .publisher-view article header .image img {
     display: block;
-    width: 100%;
+    max-width: 100%;
+    height: auto;
     margin-bottom: 2px;
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
 }
 .publisher-view article header .title,
 .publisher-view article header .details {
@@ -233,10 +236,8 @@ body.publisher-view  {
     order: 2;
 }
 .publisher-view.Flash article header .image img   {
-    display: block;
     margin-right: auto;
     margin-left: auto;
-    width : initial;
 }
 .publisher-view.Flash article header .details {
     order: 3;

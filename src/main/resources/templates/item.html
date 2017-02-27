@@ -3,8 +3,8 @@
       xsi:schemaLocation="http://www.thymeleaf.org ">
 <head lang="fr" th:replace="fragments/head :: head">
 </head>
-<body class="publisher-view" th:classappend="${item.getClass().getSimpleName()}">
-<div>
+<body>
+<div class="publisher-view" th:classappend="${item.getClass().getSimpleName()}">
     <article>
         <header>
             <div th:if="${item.enclosure} != null" class="image">
@@ -35,22 +35,20 @@
         </header>
         <section th:utext="${item.body}"></section>
     </article>
+    <footer th:replace="fragments/footer">
+    </footer>
 </div>
-<footer th:replace="fragments/footer">
-</footer>
 <script th:inline="text">
     /*<![CDATA[*/
     var LANG = '[[${#locale.language}]]';
     function hasClassName(elm, name) {
         return new RegExp("(?:^|\\s+)" + name + "(?:\\s+|$)").test(elm.className);
     }
-
     function addClassName(elm, name) {
         if (!hasClassName(elm,name)) {
-            elm.className = elm.className ? [this.className, name].join(' ') : name;
+            elm.className = elm.className ? [elm.className, name].join(' ') : name;
         }
     }
-
     function removeClassName(elm, name) {
         if (hasClassName(elm,name)) {
             var c = elm.className;
@@ -58,17 +56,17 @@
         }
     }
     function showInfo() {
-        var elm = document.querySelector(".publisher-view > div > article > header > .details > .summary > span:first-child");
+        var elm = document.querySelector(".publisher-view > article > header > .details > .summary > span:first-child");
         var classOpened = "caret-bottom";
         var classClosed = "caret-right";
         if (hasClassName(elm, classOpened)) {
             removeClassName(elm, classOpened);
             addClassName(elm, classClosed);
-            document.querySelector(".publisher-view > div >  article > header > .details > .pubInfo").style.display='none';
+            document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display='none';
         } else {
             removeClassName(elm,classClosed);
             addClassName(elm,classOpened);
-            document.querySelector(".publisher-view > div >  article > header > .details > .pubInfo").style.display='block';
+            document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display='block';
         }
     }
     /*]]>*/
