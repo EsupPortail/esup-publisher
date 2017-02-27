@@ -34,7 +34,7 @@ angular.module('publisherApp')
         $scope.today = DateUtils.addDaysToLocalDate(new Date(), 0);
         //$scope.startdate = angular.copy($scope.today);
         // init default max and min date;
-        $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 1);
+        $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 0);
         $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, 366);
 
 
@@ -111,7 +111,7 @@ angular.module('publisherApp')
                         //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
                         break;
                     case 'FLASH':
-                        $scope.minDate = angular.copy($scope.today);
+                        //$scope.minDate = angular.copy($scope.today);
                         $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
                         //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
                         break;
@@ -136,7 +136,8 @@ angular.module('publisherApp')
             var entityID = $scope.$parent.publisher.context.organization.id;
             var redactorID = $scope.$parent.publisher.context.redactor.id;
 
-            var tomorrow = DateUtils.addDaysToLocalDate($scope.today, 1);
+            // tomorrow isn't more tomorrow as param should be 1 instead of 0
+            var tomorrow = DateUtils.addDaysToLocalDate($scope.today, 0);
             var next4weeks = DateUtils.addDaysToLocalDate($scope.today, 28);
 
             $scope.$parent.item = {};
