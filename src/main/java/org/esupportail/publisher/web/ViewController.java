@@ -42,10 +42,10 @@ public class ViewController {
     @RequestMapping(value = "/item/{item_id}", produces = MediaType.TEXT_HTML_VALUE )
     public String itemView(Map<String, Object> model, @PathVariable("item_id") Long itemId, HttpServletRequest request) {
         log.debug("Request to render in viewer, item with id {}", itemId);
-        if (itemId == null) return "itemError";
+        if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
         final AbstractItem item = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED));
         log.debug("Item found {}", item);
-        if (item == null) return "itemNotFound";
+        if (item == null) return "objectNotFound";
 
         final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
 
