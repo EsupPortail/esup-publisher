@@ -187,13 +187,13 @@
                                 <ui-cropper
                                     image="content.file"
                                     result-image="content.resultImage"
-                                    change-on-fly="false"
-                                    area-type="square"
-                                    result-image-format="'image/jpeg'"
-                                    result-image-quality="1"
-                                    result-image-size='[{ w: 240, h: 240}]'
-                                    aspect-ratio="1"
-                                    allow-crop-resize-on-corners="false">
+                                    change-on-fly="cropperConf.changeOnFly"
+                                    area-type="{{cropperConf.type}}"
+                                    result-image-format="{{cropperConf.format}}"
+                                    result-image-quality="cropperConf.quality"
+                                    result-image-size="cropperConf.size"
+                                    aspect-ratio="cropperConf.ratio"
+                                    allow-crop-resize-on-corners="cropperConf.allowCropResizeOnCorners">
                                 </ui-cropper>
                             </div>
                             <div ng-if="content.file && content.resultImage" class="previewCropArea">

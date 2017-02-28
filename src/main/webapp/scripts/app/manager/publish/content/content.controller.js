@@ -134,8 +134,12 @@ angular.module('publisherApp')
 
         // default conf for cropper
         $scope.cropperConf = {
-            width: 240,
-            height: 240
+            size:[{w:240, h:240}],
+            quality: 0.9,
+            format: 'image/jpeg',
+            type: 'rectangle',
+            changeOnFly: false,
+            allowCropResizeOnCorners: false
         };
         $scope.sizeMax = Configuration.getConfUploadImageSize();
 
@@ -172,10 +176,8 @@ angular.module('publisherApp')
                         organization: {id: entityID},
                         redactor: {id: redactorID}
                     };
-                    $scope.cropperConf = {
-                        width: 240,
-                        height: 240
-                    };
+                    $scope.cropperConf.size = [{w:240, h:240}];
+                    $scope.cropperConf.type = "square";
                     break;
                 case 'MEDIA':
                     $scope.$parent.item = {
@@ -241,10 +243,10 @@ angular.module('publisherApp')
                         organization: {id: entityID},
                         redactor: {id: redactorID}
                     };
-                    $scope.cropperConf = {
-                        width: 800,
-                        height: 240
-                    };
+                    $scope.cropperConf.size = [{w:800, h:240}];
+                    $scope.cropperConf.quality = 0.8;
+                    $scope.cropperConf.type = "rectangle";
+                    $scope.cropperConf.ratio = 3.3;
                     break;
                 default: console.log("Type not managed :", $scope.content.type); break;
             }
@@ -268,6 +270,7 @@ angular.module('publisherApp')
             if (!file) return;
             $scope.progressStatus = 'success';
             var dataFile = (typeof dataUrl !== 'undefined') ? Upload.dataUrltoBlob(dataUrl, file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg") : file;
+            //console.log("try to download ",dataFile);
             // we upload cropped file with extension jpg, it's lighter than png
             if (dataFile.size <= $scope.sizeMax){
                 var upload = Upload.upload({
@@ -298,7 +301,7 @@ angular.module('publisherApp')
                 }, function (response) {
                     //ERROR
                     //console.log("error upload");
-                   manageUploadError(response);
+                    manageUploadError(response);
                 }, function (evt) {
                     $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
                 });
@@ -310,7 +313,6 @@ angular.module('publisherApp')
                 return true;
             }
         };
-
 
         //$scope.clearUpload = function() {
         //    $scope.content.file = null;
