@@ -7,8 +7,15 @@ angular.module('publisherApp')
             require: '?ngModel',
             link: function (scope, elm, attrs, ctrl) {
                 var validateDateRange = function (inputValue) {
-                    var fromDate = DateService.normalize(attrs.dateGreaterThan);
-                    var minDate = DateService.normalize(attrs.minDate);
+                    var comparison = attrs.dateGreaterThan;
+                    var comparisonMin = attrs.minDate;
+                    if(!inputValue || !(comparison || comparisonMin)){
+                        // It's valid because we have nothing to compare against
+                        ctrl.$setValidity('dateLowerThan', true);
+                        return inputValue;
+                    }
+                    var fromDate = DateService.normalize(comparison);
+                    var minDate = DateService.normalize(comparisonMin);
                     //console.log("dateGreaterthan with dates : ", fromDate, minDate);
                     if (DateService.getDateDifference(fromDate, minDate) > 0) {
                         fromDate = minDate;
@@ -24,7 +31,7 @@ angular.module('publisherApp')
                 ctrl.$parsers.unshift(validateDateRange);
                 ctrl.$formatters.push(validateDateRange);
                 attrs.$observe('dateGreaterThan', function () {
-                    validateDateRange(ctrl.$viewValue);
+                    return validateDateRange(ctrl.$viewValue);
 
                 });
             }

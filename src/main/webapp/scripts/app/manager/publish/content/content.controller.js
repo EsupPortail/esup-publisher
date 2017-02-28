@@ -82,7 +82,32 @@ angular.module('publisherApp')
         $scope.itemStatusList = EnumDatas.getItemStatusList();
 
         $scope.$watch('$parent.item', function(newType, oldType) {
-            // to validate Item and be able to save it
+            // checking validity independently of validators
+            testItemValidity();
+            // Change min and max Date depending on publishing context/type
+            if (angular.isDefined(newType) && angular.isDefined(newType.type) && (!angular.isDefined(oldType) || oldType == null)
+                || newType.type != oldType.type || newType.startDate != oldType.startDate) {
+                switch (newType.type) {
+                    case 'NEWS':
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 168);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    case 'FLASH':
+                        //$scope.minDate = angular.copy($scope.today);
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    default:console.log("Type not managed :", newType.type); break;
+                }
+            }
+        }, true);
+
+        $scope.$watch('publishContentForm.$valid', function(newType, oldType){
+            // checking validity after validators checks
+            testItemValidity();
+        }, true);
+
+        function testItemValidity(){
             if (angular.isDefined($scope.publishContentForm) && $scope.publishContentForm.$valid
                 && angular.isDefined($scope.$parent.item) && DateService.getDateDifference($scope.today, $scope.$parent.item.endDate) > 0
                 && DateService.isValidDateRange($scope.$parent.item.startDate, $scope.$parent.item.endDate)) {
@@ -101,24 +126,7 @@ angular.module('publisherApp')
             } else {
                 $scope.$parent.itemValidated = false;
             }
-
-            // Change min and max Date depending on publishing context/type
-            if (angular.isDefined(newType) && angular.isDefined(newType.type) && (!angular.isDefined(oldType) || oldType == null)
-                || newType.type != oldType.type || newType.startDate != oldType.startDate) {
-                switch (newType.type) {
-                    case 'NEWS':
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 168);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    case 'FLASH':
-                        //$scope.minDate = angular.copy($scope.today);
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    default:console.log("Type not managed :", newType.type); break;
-                }
-            }
-        }, true);
+        }
 
         $scope.isItemValidated = function() {
             return $scope.$parent.itemValidated;
