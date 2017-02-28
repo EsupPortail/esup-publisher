@@ -25,6 +25,12 @@ angular.module('publisherApp')
                     copy.item.startDate = DateUtils.convertLocalDateToServer(copy.item.startDate);
                     copy.item.endDate = DateUtils.convertLocalDateToServer(copy.item.endDate);
                     return angular.toJson(copy);
+                },
+                transformResponse: function(data, headersGetter) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                    }
+                    return data;
                 }
             },
             'save': {
@@ -34,6 +40,12 @@ angular.module('publisherApp')
                     copy.item.startDate = DateUtils.convertLocalDateToServer(copy.item.startDate);
                     copy.item.endDate = DateUtils.convertLocalDateToServer(copy.item.endDate);
                     return angular.toJson(copy);
+                },
+                transformResponse: function(data, headersGetter) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                    }
+                    return data;
                 }
             }
         });

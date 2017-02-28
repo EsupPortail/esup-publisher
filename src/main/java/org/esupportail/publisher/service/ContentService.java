@@ -78,7 +78,7 @@ public class ContentService {
     @Inject
     private FileService fileService;
 
-    public ResponseEntity<Void> createContent(final ContentDTO content)  throws URISyntaxException {
+    public ResponseEntity<?> createContent(final ContentDTO content)  throws URISyntaxException {
         if (content.getItem().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
         }
@@ -94,7 +94,7 @@ public class ContentService {
                 item.setValidatedDate(null);
                 item = itemRepository.save(item);
                 userSessionTreeLoader.loadUserTree(authentication);
-                return ResponseEntity.created(new URI("/api/contents/" + item.getId())).build();
+                return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(new ValueResource(item.getStatus()));
             }
             return ResponseEntity.badRequest().header("Failure", "When a new content isn't complete it must be saved as a Draft").build();
         }
@@ -175,7 +175,7 @@ public class ContentService {
                 itemClassificationOrderRepository.save(classifs);
 
                 userSessionTreeLoader.loadUserTree(authentication);
-                return ResponseEntity.created(new URI("/api/contents/" + item.getId())).build();
+                return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(new ValueResource(item.getStatus()));
             }
             return ResponseEntity.badRequest().header("Failure", "When a new content isn't complete it must be saved as a Draft").build();
         }
@@ -252,10 +252,10 @@ public class ContentService {
         }
 
         userSessionTreeLoader.loadUserTree(authentication);
-        return ResponseEntity.created(new URI("/api/contents/" + item.getId())).build();
+        return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(new ValueResource(item.getStatus()));
     }
 
-    public ResponseEntity<Void> updateContent(final ContentDTO content)  throws URISyntaxException {
+    public ResponseEntity<?> updateContent(final ContentDTO content)  throws URISyntaxException {
         if (content.getItem().getId() == null) {
             return ResponseEntity.badRequest().header("Failure", "Trying to update a new content isn't possible.").build();
         }
@@ -271,7 +271,7 @@ public class ContentService {
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
                 item = itemRepository.save(item);
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok(new ValueResource(item.getStatus()));
             }
             return ResponseEntity.badRequest().header("Failure", "When a content isn't complete it must be saved as a Draft").build();
         }
@@ -363,7 +363,7 @@ public class ContentService {
                 }
                 itemClassificationOrderRepository.save(classifs);
 
-                return ResponseEntity.ok().build();
+                return ResponseEntity.ok(new ValueResource(item.getStatus()));
             }
             return ResponseEntity.badRequest().header("Failure", "When a new content isn't complete it must be saved as a Draft").build();
         }
@@ -457,10 +457,10 @@ public class ContentService {
             subscriberRepository.save(persistSubscribers);
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new ValueResource(item.getStatus()));
     }
 
-    public ResponseEntity<Void> setValidationItem(final boolean validation, @NotNull final AbstractItem item) {
+    public ResponseEntity<?> setValidationItem(final boolean validation, @NotNull final AbstractItem item) {
         PermissionType permType = permissionService.getRoleOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), item.getContextKey());
         if (permType == null)
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -485,7 +485,7 @@ public class ContentService {
                 }
             }
             itemRepository.save(item);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new ValueResource(item.getStatus()));
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }

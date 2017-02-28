@@ -1,5 +1,11 @@
 package org.esupportail.publisher.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import com.codahale.metrics.annotation.Timed;
 import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -27,12 +33,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing Evaluator.
@@ -110,7 +116,7 @@ public class ItemResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtx(authentication, #action.objectId, '" +  SecurityConstants.CTX_ITEM + "')")
     @Timed
-    public ResponseEntity<Void> update(@RequestBody ActionDTO action) throws URISyntaxException {
+    public ResponseEntity<?> update(@RequestBody ActionDTO action) throws URISyntaxException {
         log.debug("REST request to update Item with action : {}", action);
         AbstractItem item = itemRepository.findOne(action.getObjectId());
         switch(action.getAttribute()) {

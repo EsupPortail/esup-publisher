@@ -74,15 +74,15 @@ angular.module('publisherApp')
             //console.log("publishing : ", content);
             if (content.item.id != null) {
                 ContentDTO.update(content,
-                    function () {
-                        // TODO modale Success ?
-                        $state.go("owned", {itemState: $scope.item.status});
+                    function (response) {
+                        // TODO toaster Success ?
+                        $state.go("owned", {itemState: response.value.name});
                     });
             } else {
                 ContentDTO.save(content,
-                    function () {
-                        // TODO modale Success ?
-                        $state.go("owned", {itemState: $scope.item.status});
+                    function (response) {
+                        // TODO toaster Success ?
+                        $state.go("owned", {itemState: response.value.name});
                     });
             }
         };
