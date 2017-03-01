@@ -1,15 +1,37 @@
 package org.esupportail.publisher.security;
 
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractFeed;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.PermissionOnContext;
+import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.PermissionType;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.FeedRepository;
+import org.esupportail.publisher.repository.IPermissionRepositorySelector;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
@@ -27,9 +49,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import javax.inject.Inject;
-import java.util.*;
 
 /**
  * Complex bean to obtains objects Organization, Publisher, Category, Internal/ExternalFeed, Item where the authenticated user has a permission.
@@ -146,9 +165,9 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
                 pubsCtx.add(pub.getContextKey());
                 // we keep at least all childs with parent perm
                 ctxRoles.put(pub.getContextKey(), (PermOnCtxDTO) userSessionTree.getPermsFromContextTree(organizationCtx).getSecond());
-            } else if (pub.isHasSubPermsManagement()){
+            } else {
                 pubsCtx.add(pub.getContextKey());
-                // we keep these contexts to find possible perm > LOOKOVER if there are subcontext permission management
+                // we keep these contexts to find possible perm > LOOKOVER
                 ctxRoles.put(pub.getContextKey(), null);
             }
 
