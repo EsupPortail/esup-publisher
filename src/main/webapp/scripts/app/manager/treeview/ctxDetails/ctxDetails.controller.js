@@ -39,6 +39,7 @@ angular.module('publisherApp')
         $scope.targetsTemplate = 'scripts/app/manager/treeview/ctxDetails/targets/targets-detail.html';
 
         $scope.activeNav = 'content';
+        $scope.canCreateCategory = false;
 
         var jstree = $('.tree-browser > .jstree').jstree(true);
 
@@ -73,6 +74,7 @@ angular.module('publisherApp')
                         $scope.ctxPermissionType = $scope.publisher.permissionType;
                         $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
+                        setCanCreateCategory($scope.publisher);
                     });
                     PermissionOnContext.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                         $scope.permissions = result;
@@ -220,15 +222,35 @@ angular.module('publisherApp')
                     div = "#savePublisherModal";
                     break;
                 case 'CATEGORY' :
-                    // in waiting all access are PUBLIC
-                    $scope.editedContext = {type:'CATEGORY', publisher: $scope.context, rssAllowed: false, name: null, iconUrl: null, color: null,
-                        lang: 'fr', ttl: 3600, displayOrder: 0, accessView: 'PUBLIC', description: null, defaultDisplayOrder: $scope.displayOrderTypeList[0].name,
-                        createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null};
-                    if ($scope.editCategoryForm) {
-                        $scope.editCategoryForm.$setPristine();
-                        $scope.editCategoryForm.$setUntouched();
+                    // filter on creation of category on publihser flash context
+                    if (!($scope.context.context.redactor.writingMode == "STATIC" &&
+                    inArray('FLASH', $scope.context.context.reader.authorizedTypes))) {
+                        // in waiting all access are PUBLIC
+                        $scope.editedContext = {
+                            type: 'CATEGORY',
+                            publisher: $scope.context,
+                            rssAllowed: false,
+                            name: null,
+                            iconUrl: null,
+                            color: null,
+                            lang: 'fr',
+                            ttl: 3600,
+                            displayOrder: 0,
+                            accessView: 'PUBLIC',
+                            description: null,
+                            defaultDisplayOrder: $scope.displayOrderTypeList[0].name,
+                            createdBy: null,
+                            createdDate: null,
+                            lastModifiedBy: null,
+                            lastModifiedDate: null,
+                            id: null
+                        };
+                        if ($scope.editCategoryForm) {
+                            $scope.editCategoryForm.$setPristine();
+                            $scope.editCategoryForm.$setUntouched();
+                        }
+                        div = "#saveCategoryModal";
                     }
-                    div = "#saveCategoryModal";
                     break;
                 case 'FEED' :
                     $scope.editedContext = {};
@@ -239,8 +261,23 @@ angular.module('publisherApp')
                     break;
             }
             //console.log("createContext", type);
-            $(div).modal('show');
+            if (div) {
+                $(div).modal('show');
+            }
         };
+
+        function setCanCreateCategory(publisher) {
+            if (publisher.context.redactor.writingMode == "STATIC" &&
+                inArray('FLASH', publisher.context.reader.authorizedTypes)) {
+                $scope.canCreateCategory = false;
+            } else {
+                User.canCreateInCtx($scope.context.contextKey, function (data) {
+                    $scope.canCreateCategory = (data.value == true);
+                    return;
+                });
+                $scope.canCreateCategory = false;
+            }
+        }
 
         $scope.updateContext = function() {
             var manager, div;
@@ -694,7 +731,8 @@ angular.module('publisherApp')
         function getHasTargetManagment(ctxType) {
             switch(ctxType) {
                 case 'ORGANIZATION' :
-                    return true;
+                    //return true;
+                    return Principal.isInRole('ROLE_ADMIN');
                 case 'PUBLISHER' :
                     return false;
                 case 'CATEGORY' :
@@ -723,7 +761,8 @@ angular.module('publisherApp')
         function getHasPermissionManagment(ctxType) {
             switch(ctxType) {
                 case 'ORGANIZATION' :
-                    return true;
+                    //return true;
+                    return Principal.isInRole('ROLE_ADMIN');
                 case 'PUBLISHER' :
                     return true;
                 case 'CATEGORY' :
@@ -868,6 +907,20 @@ angular.module('publisherApp')
                         })[0].label;
                 }
             }
+        }
+
+        function inArray (item, array) {
+            //console.log("inArray", array, item);
+            if (!angular.isDefined(array) || !angular.isArray(array) || array.length < 1) return false;
+            for (var i = 0, size = array.length; i < size; i++) {
+                //console.log("inArray test ", array[i], item);
+                if (angular.equals(array[i], item)) {
+                    //console.log("inArray return true !");
+                    return true;
+                }
+            }
+            //console.log("inArray returned false !");
+            return false;
         }
 
     });

@@ -7,8 +7,8 @@
     <button type="button"  has-role="ROLE_ADMIN" class="btn btn-danger" data-toggle="modal" data-target="#deleteContextConfirmation">
         <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span>{{"entity.action.delete" | translate : "Delete"}}</span>
     </button>
-    <button type="button" can-create-in="context.contextKey" class="btn btn-primary" ng-click="createContext('CATEGORY')">
-        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="publisherApp.category.home.createLabel">Create a Category</span>
+    <button type="button" ng-if="canCreateCategory" can-create-in="context.contextKey" class="btn btn-primary" ng-click="createContext('CATEGORY')">
+        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>{{"publisherApp.category.home.createLabel" | translate }}</span>
     </button>
 
     <dl class="dl-horizontal entity-details">
@@ -36,10 +36,10 @@
         <dd>
             <input type="checkbox" class="input-sm" ng-model="context.used" disabled>
         </dd>
-        <dt>
-            <span translate="publisherApp.publisher.hasSubPermsManagement">hasSubPermsManagement</span>
+        <dt ng-if="canCreateCategory">
+            <span>{{"publisherApp.publisher.hasSubPermsManagement" | translate }}</span>
         </dt>
-        <dd>
+        <dd ng-if="canCreateCategory">
             <input type="checkbox" class="input-sm" ng-model="context.hasSubPermsManagement" disabled>
         </dd>
     </dl>
