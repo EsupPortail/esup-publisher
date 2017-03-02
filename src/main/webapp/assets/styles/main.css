@@ -406,17 +406,16 @@ body > div.container-fluid > div.well > div > div > div > div.header {
     /*border-top: 1px solid #d0d0d0;*/
 }
 
-body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header) {
-    background-color: #fff;
-    padding: 10px 5%;
-}
 /* start case on admin view when managing entities */
+body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header),
 body > div.container-fluid > div.well.entity > div > div > div:not(.modal) {
     background-color: #fff;
 }
+body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header),
 body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > button {
-    margin: 10px 5%;
+    margin: 10px 2%;
 }
+
 /* end case on admin view when managing entities */
 /* ====================================
               Navbar
