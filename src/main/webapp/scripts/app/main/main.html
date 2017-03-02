@@ -17,17 +17,17 @@
             <a ui-sref="owned" class="list-group-item">
                 <div class="bouton-action">
                     <div class="div-icon text-right">
-                        <i class="fa fa-wrench fa-5x hidden-xs"></i>
-                        <i class="fa fa-wrench fa-2x visible-xs"></i>
+                        <i class="fa fa-file-text fa-5x hidden-xs"></i>
+                        <i class="fa fa-file-text fa-2x visible-xs"></i>
                     </div>
                     <div class="div-text text-left">
-                        <h4 class="item-heading" translate="main.link.manage.name">Manage</h4>
-                        <span class="item-text hidden-xs" translate="main.link.manage.desc">Manage the publication context</span>
+                        <h4 class="item-heading" translate="main.link.published.name">Publications</h4>
+                        <span class="item-text hidden-xs" translate="main.link.published.desc">Owned publications</span>
                     </div>
                 </div>
             </a>
 
-            <a ui-sref="managed" class="list-group-item" can-moderate>
+            <a ui-sref="pending" class="list-group-item" can-moderate>
                 <div class="bouton-action">
                     <div class="div-icon text-right">
                         <i class="fa fa-gavel fa-5x hidden-xs"></i>
@@ -35,7 +35,20 @@
                     </div>
                     <div class="div-text text-left">
                         <h4 class="item-heading" translate="main.link.moderate.name">Moderate</h4>
-                        <span class="item-text hidden-xs" translate="main.link.moderate.desc">Moderate all published context</span>
+                        <span class="item-text hidden-xs" translate="main.link.moderate.desc">Moderate published context</span>
+                    </div>
+                </div>
+            </a>
+
+            <a ui-sref="treeview" class="list-group-item" can-moderate>
+                <div class="bouton-action">
+                    <div class="div-icon text-right">
+                        <i class="fa fa-wrench fa-5x hidden-xs"></i>
+                        <i class="fa fa-wrench fa-2x visible-xs"></i>
+                    </div>
+                    <div class="div-text text-left">
+                        <h4 class="item-heading" translate="main.link.manage.name">Manage</h4>
+                        <span class="item-text hidden-xs" translate="main.link.manage.desc">Manage the publication's context</span>
                     </div>
                 </div>
             </a>

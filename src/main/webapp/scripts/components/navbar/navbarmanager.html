@@ -13,30 +13,40 @@
             <ul class="nav navbar-nav nav-pills">
                 <li ui-sref-active="active">
                     <a ui-sref="home">
-                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="fa fa-home fa-2x"></span>
                         <span translate="global.menu.home">Home</span>
                     </a>
                 </li>
-                <li ng-class="{active: $state.includes('owned') || $state.includes('pending') ||  $state.includes('managed')}" class="dropdown pointer">
+                <li ui-sref-active="active">
+                    <a ui-sref="publish.publisher">
+                        <span class="fa fa-pencil fa-2x"></span>
+                        <span translate="global.menu.write">Publish</span>
+                    </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="owned">
+                        <span class="fa fa-file-text fa-2x"></span>
+                        <span translate="global.menu.manager.contents.main">Owned Publications</span>
+                    </a>
+                </li>
+                <li ng-class="{active: $state.includes('pending') ||  $state.includes('managed')}" class="dropdown pointer" can-moderate>
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
-                            <span class="glyphicon glyphicon-th-list"></span>
-                            <span translate="global.menu.manager.contents.main">Publishing</span>
+                            <span class="fa fa-gavel fa-2x"></span>
+                            <span translate="global.menu.manager.contents.moderate">Moderate</span>
                             <b class="caret"></b>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" ><a ui-sref="owned"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.manager.contents.owned">owned</span></a></li>
-                        <li ui-sref-active="active" can-moderate><a ui-sref="pending"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" can-moderate><a ui-sref="pending"><span class="fa fa-asterisk"></span>
                         &#xA0;<span translate="global.menu.manager.contents.pending">pending</span></a></li>
-                        <li ui-sref-active="active" can-moderate><a ui-sref="managed"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" can-moderate><a ui-sref="managed"><span class="fa fa-asterisk"></span>
                             &#xA0;<span translate="global.menu.manager.contents.managed">managed</span></a></li>
                     </ul>
                 </li>
                 <li ui-sref-active="active" can-moderate>
                     <a ui-sref="treeview">
-                        <span class="glyphicon glyphicon-th-list"></span>
+                        <span class="fa fa-wrench fa-2x"></span>
                         <span translate="global.menu.manager.contexts.main">Contexts</span>
                     </a>
                 </li>

@@ -383,6 +383,13 @@ dl {
     border-color: #d0d0d0;
 }
 
+.form-control, output{
+    color: #000;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: "Roboto Slab", sans-serif;
+}
 /* ====================================
      All pages title on where user is
 ====================================== */
@@ -536,7 +543,8 @@ body > div.container-navbar > nav > div.container {
     margin-right: 0px;
 }
 
-body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.glyphicon {
+body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.glyphicon,
+body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.fa {
     display: none;
 }
 

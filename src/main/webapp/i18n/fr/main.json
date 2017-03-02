@@ -12,9 +12,13 @@
                 "name": "Publier",
                 "desc": "Publier un contenu"
             },
+            "published": {
+                "name": "Publications",
+                "desc": "Liste de mes publications"
+            },
             "manage": {
                 "name": "Gérer",
-                "desc": "Gérer les publications et les contextes de publication"
+                "desc": "Gérer les contextes de publication"
             },
             "moderate": {
                 "name": "Modérer",

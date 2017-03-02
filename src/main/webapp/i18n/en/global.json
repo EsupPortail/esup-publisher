@@ -59,12 +59,14 @@
                     "main": "Publications",
                     "owned": "My publications",
                     "pending": "Publications to validate",
-                    "managed": "Managing publications"
+                    "managed": "Managing publications",
+                    "moderate": "Moderate"
                 },
                 "contexts": {
                     "main": "Contexts"
                 }
-            }
+            },
+            "write": "Publish"
         },
         "form": {
             "username": "Login",

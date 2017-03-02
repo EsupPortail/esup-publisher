@@ -12,13 +12,17 @@
                 "name": "Publish",
                 "desc": "Publish a content"
             },
+            "published": {
+                "name": "Publications",
+                "desc": "List of my contents"
+            },
             "manage": {
                 "name": "Manage",
-                "desc": "Manage contents and publishing contexts"
+                "desc": "Manage publishing contexts"
             },
             "moderate": {
                 "name": "Moderate",
-                "desc": "Moderate all contents"
+                "desc": "Moderate contents"
             },
             "admin": {
                 "name": "Administration",
