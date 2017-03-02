@@ -7,6 +7,10 @@ angular.module('publisherApp')
                 parent: 'manager',
                 url: '/publish/:id',
                 views: {
+                    'navbar@': {
+                        templateUrl: 'scripts/components/navbar/navbarpublish.html',
+                        controller: 'NavbarController'
+                    },
                     'content@manager': {
                         templateUrl: 'scripts/app/manager/publish/publish.html',
                         controller: 'PublishController'
