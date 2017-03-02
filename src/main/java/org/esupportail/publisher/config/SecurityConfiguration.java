@@ -66,6 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String APP_URI_LOGIN = "/app/login";
     private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
     private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
+    private static final String APP_USERS_GROUP_NAME = "app.users.groupName";
     private static final String APP_CONTEXT_PATH = "server.contextPath";
     private static final String APP_PROTOCOL = "app.service.protocol";
 
@@ -137,9 +138,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         OperatorEvaluation admins = new OperatorEvaluation(OperatorType.OR, set);
         defs.setAdmins(admins);
 
-        UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf",
-            "((esco)|(cfa)|(clg37)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*",
-            StringEvaluationMode.MATCH);
+        final String groupUsers = env.getProperty(APP_USERS_GROUP_NAME);
+        UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf", groupUsers, StringEvaluationMode.MATCH);
         defs.setUsers(umae);
 
         return defs;
