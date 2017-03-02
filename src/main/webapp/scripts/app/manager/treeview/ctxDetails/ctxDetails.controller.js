@@ -501,7 +501,7 @@ angular.module('publisherApp')
 
         $scope.loadAvailableRoles = function(withRole) {
             $scope.availableRoles = [];
-            // construct available role remaining to limit permissions of one role
+            // construct available role remaining to limit permissions of one role with several users associated
             for (var i = 0; i < $scope.permissionTypeList.length; i++) {
                 switch ($scope.ctxPermissionType) {
                     case 'CONTEXT_WITH_SUBJECTS' : // TODO what about setting several perm on same role if we could define different authorized subject on different evaluators ?
@@ -524,6 +524,11 @@ angular.module('publisherApp')
                         break;
                 }
 
+            }
+            if ($scope.ctxType != 'ORGANIZATION') {
+                $scope.availableRoles = $scope.availableRoles.filter(function(element) {
+                    return !angular.equals(element.name, "LOOKOVER");
+                });
             }
             //console.log("loadAvailableRoles :",  $scope.availableRoles, $scope.permissionTypeList);
         };
