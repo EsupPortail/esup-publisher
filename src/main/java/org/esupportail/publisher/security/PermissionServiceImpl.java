@@ -1,10 +1,24 @@
 package org.esupportail.publisher.security;
 
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
 import com.mysema.query.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.QAbstractClassification;
+import org.esupportail.publisher.domain.QAbstractFeed;
+import org.esupportail.publisher.domain.QAbstractItem;
+import org.esupportail.publisher.domain.QCategory;
+import org.esupportail.publisher.domain.QItemClassificationOrder;
+import org.esupportail.publisher.domain.QOrganization;
+import org.esupportail.publisher.domain.QPublisher;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
@@ -21,12 +35,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Set;
 
 @Service(value = "permissionService")
 @Lazy
@@ -365,7 +373,7 @@ public class PermissionServiceImpl implements IPermissionService {
                 userSessionTreeLoader.loadUserTree(user, authorities);
             }
 
-            return userSessionTree.getUpperPerm() != null && userSessionTree.getUpperPerm().getMask() > PermissionType.CONTRIBUTOR.getMask();
+            return userSessionTree.getUpperPerm() != null && userSessionTree.getUpperPerm().getMask() > PermissionType.EDITOR.getMask();
         }
         return false;
     }
