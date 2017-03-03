@@ -3,6 +3,8 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
+import java.util.EnumSet;
+
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
@@ -194,12 +196,12 @@ public final class ItemPredicates {
     }
 
     public static Predicate ItemsToRemove() {
-        //return qItem.status.in(EnumSet.of(ItemStatus.ARCHIVED,ItemStatus.DRAFT,ItemStatus.PENDING)).and(itemsEndDateOlderThanNMonth(15));
-        return itemsEndDateOlderThanNMonth(15);
+        return qItem.status.in(EnumSet.of(ItemStatus.ARCHIVED, ItemStatus.DRAFT, ItemStatus.PENDING)).and(itemsEndDateOlderThanNMonth(15));
+        //return itemsEndDateOlderThanNMonth(15);
     }
 
     private static Predicate itemsEndDateOlderThanNMonth(final int nmonth) {
-        return qItem.endDate.isNotNull().and(qItem.endDate.after(new LocalDate().minusMonths(nmonth)));
+        return qItem.endDate.isNotNull().and(qItem.endDate.before(new LocalDate().minusMonths(nmonth)));
     }
 
     public static Predicate itemsOwnedOfOrganizationWithoutClassif(final UserDTO user, final long orgId) {
