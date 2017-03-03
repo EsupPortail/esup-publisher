@@ -87,19 +87,19 @@ body {
 @media (min-width: 768px) {
     .publisher-view > article,
     .publisher-view > footer {
-        width: 750px;
+        max-width: 750px;
     }
 }
 @media (min-width: 992px) {
     .publisher-view > article,
     .publisher-view > footer {
-        width: 970px;
+        max-width: 970px;
     }
 }
 @media (min-width: 1200px) {
     .publisher-view > article,
     .publisher-view > footer {
-        width: 1170px;
+        max-width: 1170px;
     }
 }
 .publisher-view > article:after,
@@ -150,7 +150,7 @@ body {
 /** ITEM VIEW **/
 .publisher-view  {
     min-width: 280px;
-    padding-top: 1rem;
+    /*margin-top: 1rem; removed for modal*/
 }
 .publisher-view article {
     background-color: #fff;
@@ -224,23 +224,38 @@ body {
 .publisher-view.Flash article header {
     display: flex;
     flex-direction: column;
+    position: relative;
+    padding-top: 0;
 }
 .publisher-view.Flash article header .title {
-    text-align: center;
+    /*text-align: center;*/
     order: 1;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.publisher-view.Flash article header .title > h1 {
+    background: rgba(255,255,255,0.6);
 }
 .publisher-view.Flash article header .image {
     display: block;
     float: none;
     max-width: none;
     order: 2;
+    padding: 0;
 }
 .publisher-view.Flash article header .image img   {
-    margin-right: auto;
-    margin-left: auto;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+    width: 100%;
+    opacity: 0.6;
 }
 .publisher-view.Flash article header .details {
     order: 3;
+    position: absolute;
+    bottom: 16px;
+    width: 100%;
+    background: rgba(255,255,255,0.8);
 }
 
 .publisher-view article .details {

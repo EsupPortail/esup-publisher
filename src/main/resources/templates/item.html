@@ -12,15 +12,15 @@
             </div>
             <div class="title">
                 <h1 class="hyphenate" th:text="${item.title}"></h1>
-                <p><span>Auteur</span>: <span th:text="${item.createdBy.displayName}"></span>, <span>publié le</span>
+                <p th:if="${item.getClass().getSimpleName()} != 'Flash'"><span>Auteur</span>: <span th:text="${item.createdBy.displayName}"></span>, <span>publié le</span>
                     <time pubdate="pubdate" th:datetime="${item.startDate}" th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}"/></p>
             </div>
             <div class="details" onclick="showInfo()">
                 <div class="summary">
-                    <span class="caret-right"></span>
+                    <span th:if="${item.getClass().getSimpleName()} != 'Flash'" class="caret-right"></span>
                     <span th:text="${item.summary}"></span>
                 </div>
-                <div class="pubInfo">
+                <div th:if="${item.getClass().getSimpleName()} != 'Flash'" class="pubInfo">
                     <p><span class="label" translate="publisherApp.item.createdBy">Créé par</span><span th:text="${item.createdBy.displayName}"></span><span
                         class="label" translate="publisherApp.item.when">le</span><time th:datetime="${item.createdDate}" th:text="${#dates.format(item.createdDate)}"></time>
                     </p><p th:if="${item.lastModifiedDate} != null">
@@ -56,17 +56,19 @@
         }
     }
     function showInfo() {
-        var elm = document.querySelector(".publisher-view > article > header > .details > .summary > span:first-child");
+        var elm = document.querySelector(".publisher-view:not(.Flash) > article > header > .details > .summary > span:first-child");
         var classOpened = "caret-bottom";
         var classClosed = "caret-right";
-        if (hasClassName(elm, classOpened)) {
-            removeClassName(elm, classOpened);
-            addClassName(elm, classClosed);
-            document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display='none';
-        } else {
-            removeClassName(elm,classClosed);
-            addClassName(elm,classOpened);
-            document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display='block';
+        if (elm) {
+            if (hasClassName(elm, classOpened)) {
+                removeClassName(elm, classOpened);
+                addClassName(elm, classClosed);
+                document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display = 'none';
+            } else {
+                removeClassName(elm, classClosed);
+                addClassName(elm, classOpened);
+                document.querySelector(".publisher-view > article > header > .details > .pubInfo").style.display = 'block';
+            }
         }
     }
     /*]]>*/
