@@ -97,9 +97,10 @@ angular.module('publisherApp')
                         $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
                         //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
                         break;
-                    default:console.log("Type not managed :", newType.type); break;
+                    default: throw "Type not managed :"+ newType.type; break;
                 }
             }
+            $scope.initCropper();
         }, true);
 
         $scope.$watch('publishContentForm.$valid', function(newType, oldType){
@@ -132,8 +133,7 @@ angular.module('publisherApp')
             return $scope.$parent.itemValidated;
         };
 
-        // default conf for cropper
-        $scope.cropperConf = {
+        $scope.defaultCropperConf = {
             size:[{w:240, h:240}],
             quality: 0.9,
             format: 'image/jpeg',
@@ -141,6 +141,30 @@ angular.module('publisherApp')
             changeOnFly: false,
             allowCropResizeOnCorners: false
         };
+
+        $scope.cropperConf = angular.copy($scope.defaultCropperConf);
+
+        $scope.initCropper = function(){
+
+            switch ($scope.content.type) {
+                case 'NEWS':
+                    $scope.cropperConf.size = [{w:240, h:240}];
+                    $scope.cropperConf.type = "square";
+                    break;
+                case 'FLASH':
+                    $scope.cropperConf.size = [{w:800, h:240}];
+                    $scope.cropperConf.quality = 0.8;
+                    $scope.cropperConf.type = "rectangle";
+                    $scope.cropperConf.ratio = 3.3;
+                    break;
+                default :
+                    $scope.cropperConf = angular.copy($scope.defaultCropperConf);break;
+            }
+            //console.log("call init cropper ", $scope.content.type, $scope.cropperConf);
+        };
+
+        // default conf for cropper
+
         $scope.sizeMax = Configuration.getConfUploadImageSize();
 
         $scope.initItem = function () {
@@ -153,6 +177,8 @@ angular.module('publisherApp')
             var next4weeks = DateUtils.addDaysToLocalDate($scope.today, 28);
 
             $scope.$parent.item = {};
+
+            $scope.initCropper();
 
             switch ($scope.content.type) {
                 case 'NEWS':
@@ -176,8 +202,6 @@ angular.module('publisherApp')
                         organization: {id: entityID},
                         redactor: {id: redactorID}
                     };
-                    $scope.cropperConf.size = [{w:240, h:240}];
-                    $scope.cropperConf.type = "square";
                     break;
                 case 'MEDIA':
                     $scope.$parent.item = {
@@ -243,12 +267,8 @@ angular.module('publisherApp')
                         organization: {id: entityID},
                         redactor: {id: redactorID}
                     };
-                    $scope.cropperConf.size = [{w:800, h:240}];
-                    $scope.cropperConf.quality = 0.8;
-                    $scope.cropperConf.type = "rectangle";
-                    $scope.cropperConf.ratio = 3.3;
                     break;
-                default: console.log("Type not managed :", $scope.content.type); break;
+                default: throw "Type not managed :" + $scope.content.type; break;
             }
             /*if (angular.isDefined($scope.$parent.item)) {
              console.log("inited item :", $scope.$parent.item.type, $scope.$parent.item.startDate, $scope.$parent.item.endDate);
@@ -350,7 +370,15 @@ angular.module('publisherApp')
 
         $scope.removeEnclosure = function() {
             if (!angular.isDefined($scope.$parent.item.enclosure) || $scope.$parent.item.enclosure == null) return;
-            //console.log("Remove Enclosure", $scope.$parent.publisher.context.organization.id, $scope.$parent.item.enclosure, $scope.$parent.item.id);
+            deleteEnclosure();
+        };
+        $scope.cancel = function() {
+            // on cancel we try to remove enclosure only on new item (without id)
+            if (!angular.isDefined($scope.$parent.item.enclosure) || $scope.$parent.item.enclosure == null || !angular.isDefined($scope.$parent.item.id)) return;
+            deleteEnclosure();
+        };
+
+        function deleteEnclosure() {
             FileManager.delete({entityId: $scope.$parent.publisher.context.organization.id, isPublic: true, fileUri: Base64.encode($scope.$parent.item.enclosure)},
                 function () {
                     if ($scope.$parent.item.id) {
@@ -369,7 +397,7 @@ angular.module('publisherApp')
                         $('#deleteEnclosureConfirmation').modal('hide');
                     }
                 });
-        };
+        }
 
         $scope.validatePicUrl = function (picUrl) {
             //console.log("Set Enclosure :", picUrl);

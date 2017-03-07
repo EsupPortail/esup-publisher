@@ -495,7 +495,18 @@ public class ContentService {
         boolean validCategory = nbLevel == 1 && classification instanceof Category;
         boolean validFeed = nbLevel == 2 && classification instanceof AbstractFeed;
         return validCategory || validFeed;
+    }
 
+    public ResponseEntity<?> setEnclosureItem(final String enclosure, @NotNull final AbstractItem item) {
+        if (permissionService.canEditCtx(SecurityContextHolder.getContext().getAuthentication(), item.getContextKey())) {
+            item.setEnclosure(enclosure);
+            if (item instanceof Flash && item.getEnclosure() == null) {
+                item.setStatus(ItemStatus.DRAFT);
+            }
+            itemRepository.save(item);
+            return ResponseEntity.ok(new ValueResource(item.getStatus()));
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     private Set<Subscriber> convert(@NotNull final Set<SubscriberFormDTO> dtos, @NotNull final ContextKey ctx) {

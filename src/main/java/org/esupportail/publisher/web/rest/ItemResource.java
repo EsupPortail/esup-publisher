@@ -121,14 +121,13 @@ public class ItemResource {
         AbstractItem item = itemRepository.findOne(action.getObjectId());
         switch(action.getAttribute()) {
             case "enclosure" :
-                item.setEnclosure(action.getValue());
-                break;
+                return contentService.setEnclosureItem(action.getValue(), item);
             case "validate" :
                 return contentService.setValidationItem(Boolean.parseBoolean(action.getValue()), item);
             default : return ResponseEntity.badRequest().build();
         }
-        itemRepository.save(item);
-        return ResponseEntity.ok().build();
+        //itemRepository.save(item);
+        //return ResponseEntity.ok().build();
     }
 
     /**
