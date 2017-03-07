@@ -123,7 +123,7 @@ angular.module('publisherApp')
                 // don't launch auth when request only the account as it's requested at first access
                 if (rejection.status !== 401 || $rootScope.modalOpened || rejection.data.path === "/api/account" ) {
                     return $q.reject(rejection);
-                };
+                }
 
                 var deferred = $q.defer();
 
@@ -140,4 +140,33 @@ angular.module('publisherApp')
                 return deferred.promise;
             }
         };
-    }]);
+    }])
+    .factory('CsrfInterceptor', ['$timeout', '$q', '$injector', function AuthInterceptor($timeout, $q, $injector) {
+        var Auth, $http, $state, $rootScope, Principal;
+
+        // this trick must be done so that we don't receive
+        // `Uncaught Error: [$injector:cdep] Circular dependency found`
+        $timeout(function () {
+            Auth = Auth || $injector.get('Auth');
+            Principal = Principal || $injector.get('Principal');
+            $http = $http || $injector.get('$http');
+            $state = $state || $injector.get('$state');
+            $rootScope = $rootScope || $injector.get('$rootScope');
+        });
+
+        return {
+            response: function(response) {
+                //console.log(response.config.headers);
+                return response;
+            },
+            responseError: function (rejection) {
+                // don't launch csrf renew when request only the account as it's requested at first access
+                if (rejection.status == 403 && rejection.message && rejection.message.lastIndexOf("Invalid CSRF Token",0) === 0){
+                    //console.log("CSRF token invalid detected ! Try to renew it");
+                    return $http.get('api/account').$promise;
+                }
+                return $q.reject(rejection);
+            }
+        };
+    }])
+;

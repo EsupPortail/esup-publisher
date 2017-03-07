@@ -125,6 +125,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
         $httpProvider.interceptors.push('AuthInterceptor');
+        $httpProvider.interceptors.push('CsrfInterceptor');
 //$httpProvider.interceptors.push('loadingDialogInterceptor');
 
         $urlRouterProvider.otherwise('/');
