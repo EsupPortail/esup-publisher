@@ -15,21 +15,31 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Data
 @ToString(callSuper = true)
@@ -46,6 +56,13 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 
 	@Embedded
 	private OrganizationReaderRedactorKey context;
+
+    /** This field corresponds to the database column displayName. */
+    @NotNull
+    @NonNull
+    @Size(min = 3, max = CstPropertiesLength.DISPLAYNAME)
+    @Column(name = "display_name", nullable = false, length = CstPropertiesLength.DISPLAYNAME)
+    private String displayName;
 
 	/**
 	 * A boolean parameter to tell if the organization use this publication
@@ -84,12 +101,13 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 	}
 
 	public Publisher(final Organization organization, final Reader reader,
-			final Redactor redactor,
+			final Redactor redactor, final String displayName,
 			final PermissionClass permissionType,
 			final boolean used, final boolean hasSubPermsManagement) {
 		super();
 		this.context = new OrganizationReaderRedactorKey(organization, reader,
 				redactor);
+        this.displayName = displayName;
 		this.permissionType = permissionType;
 		this.used = used;
         this.hasSubPermsManagement = hasSubPermsManagement;
@@ -100,9 +118,4 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
         if (getId() == null) return null;
         return new ContextKey(this.getId(), ContextType.PUBLISHER);
 	}
-
-    @Override
-    public String getDisplayName() {
-        return context.getReader().getDisplayName() + " - " + context.getRedactor().getDisplayName();
-    }
 }

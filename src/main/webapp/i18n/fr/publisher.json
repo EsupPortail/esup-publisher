@@ -13,11 +13,12 @@
                 "title": "Contexte de publication"
             },
             "context": {
-                "key": "Contexte de publication",
+                "key": "Éléments du contexte",
                 "organization": "Structure",
                 "reader": "Canal d'affichage",
                 "redactor": "Outil de rédaction"
             },
+            "displayName": "Contexte de publication",
             "used": "Autoriser l'utilisation du contexte",
             "displayOrder": "Position du contexte dans l'arborescence",
             "permissionType": "Type de permission",

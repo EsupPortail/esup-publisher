@@ -1,9 +1,28 @@
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.ExternalFeed;
+import org.esupportail.publisher.domain.InternalFeed;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -17,13 +36,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
@@ -83,10 +95,10 @@ public class ClassificationRepositoryTest {
 		redactor1 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_1));
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 
-		pub1 = new Publisher(org1, reader2, redactor1,
+		pub1 = new Publisher(org1, reader2, redactor1, "PUB " + INDICE_1,
             PermissionClass.CONTEXT, false, true);
 		pub1 = publisherRepo.saveAndFlush(pub1);
-		pub2 = new Publisher(org2, reader1, redactor2,
+		pub2 = new Publisher(org2, reader1, redactor2,"PUB " + INDICE_2,
             PermissionClass.CONTEXT, false, true);
 		pub2 = publisherRepo.saveAndFlush(pub2);
 

@@ -12,11 +12,17 @@
     </button>
 
     <dl class="dl-horizontal entity-details">
-        <dt>
+        <dt has-role="ROLE_ADMIN">
             <span translate="publisherApp.publisher.context.key">Context</span>
         </dt>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{context.context.reader.displayName}} - {{context.context.redactor.displayName}} - {{context.context.organization.name}}</span>
+        </dd>
+        <dt>
+            <span translate="publisherApp.publisher.displayName">DisplayName</span>
+        </dt>
         <dd>
-            <span>{{context.context.reader.displayName}} - {{context.context.redactor.displayName}}</span>
+            <span>{{context.displayName}}</span>
         </dd>
         <dt>
             <span translate="publisherApp.publisher.permissionType">PermissionType</span>

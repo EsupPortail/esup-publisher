@@ -15,10 +15,10 @@
                                ng-model="editedContext.id" readonly>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" has-role="ROLE_ADMIN">
                         <label class="control-label" for="context" translate="publisherApp.publisher.context.key">Context</label>
                         <input type="text" class="form-control" name="context" id="context"
-                               value="{{editedContext.context.reader.displayName}} - {{editedContext.context.redactor.displayName}}" readonly>
+                               value="{{editedContext.context.reader.displayName}} - {{editedContext.context.redactor.displayName}} - {{editedContext.context.organization.name}}" readonly>
                     </div>
 
                     <!--<div class="form-group">
@@ -60,6 +60,27 @@
                             </p>
                         </div>
                     </div>-->
+
+                    <div class="form-group">
+                        <label class="control-label" for="displayName" translate="publisherApp.publisher.displayName">DisplayName</label>
+                        <input type="text" class="form-control" name="displayName" id="displayName"
+                               ng-model="editedContext.displayName" required ng-minlength="3" ng-maxlength="50" ng-readonly="!isInRole('ROLE_ADMIN')">
+
+                        <div ng-show="editForm.displayName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.displayName.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayName.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                                This field is required to be at least 3 characters.
+                            </p>
+                            <p class="help-block"
+                               ng-show="editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="control-label" for="permissionType" translate="publisherApp.publisher.permissionType">PermissionType</label>

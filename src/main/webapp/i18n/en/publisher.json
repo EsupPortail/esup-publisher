@@ -13,11 +13,12 @@
                 "title": "Publisher"
             },
             "context": {
-                "key": "Publication context",
+                "key": "context elements",
                 "organization": "Organization",
                 "reader": "Reader channel",
                 "redactor": "Writing tool"
             },
+            "displayName": "Publication context",
             "used": "Used",
             "displayOrder": "Display Order",
             "permissionType": "Permission Type",

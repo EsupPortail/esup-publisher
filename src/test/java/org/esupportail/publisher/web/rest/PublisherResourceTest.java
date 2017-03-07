@@ -1,11 +1,36 @@
 package org.esupportail.publisher.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.OrganizationReaderRedactorKey;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.QUser;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.ObjTest;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.ReaderRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
@@ -30,14 +55,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 /**
  * Test class for the PublisherResource REST controller.
  *
@@ -58,6 +75,9 @@ public class PublisherResourceTest {
 
     private static final DisplayOrderType DEFAULT_DEFAULT_DISPLAY_ORDER = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
     private static final DisplayOrderType UPDATED_DEFAULT_DISPLAY_ORDER = DisplayOrderType.ONLY_LAST_CREATED_FIRST;
+
+    private static final String DEFAULT_PUBLISHER_NAME = "My Publisher";
+    private static final String UPDATED_PUBLISHER_NAME = "Your Publisher";
 
     @Inject
     private OrganizationRepository organizationRepository;
@@ -120,7 +140,7 @@ public class PublisherResourceTest {
         redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor(name));
 
         context = new OrganizationReaderRedactorKey(organization, reader, redactor);
-        publisher = new Publisher(organization, reader, redactor,
+        publisher = new Publisher(organization, reader, redactor, DEFAULT_PUBLISHER_NAME,
             DEFAULT_PERMISSION_CLASS, DEFAULT_USED, DEFAULT_USED);
         publisher.setDefaultDisplayOrder(DEFAULT_DEFAULT_DISPLAY_ORDER);
     }
@@ -142,6 +162,7 @@ public class PublisherResourceTest {
         List<Publisher> publishers = publisherRepository.findAll();
         assertThat(publishers).hasSize(1);
         Publisher testPublisher = publishers.iterator().next();
+        assertThat(testPublisher.getDisplayName()).isEqualTo(DEFAULT_PUBLISHER_NAME);
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             DEFAULT_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(DEFAULT_USED);
@@ -168,6 +189,9 @@ public class PublisherResourceTest {
             .andExpect(
                 jsonPath("$.[0].id")
                     .value(publisher.getId().intValue()))
+            .andExpect(
+                jsonPath("$.[0].displayName").value(
+                    DEFAULT_PUBLISHER_NAME))
             .andExpect(
                 jsonPath("$.[0].permissionType").value(
                     DEFAULT_PERMISSION_CLASS.name()))
@@ -197,6 +221,7 @@ public class PublisherResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(publisher.getId().intValue()))
+            .andExpect(jsonPath("$.displayName").value(DEFAULT_PUBLISHER_NAME))
             .andExpect(
                 jsonPath("$.permissionType").value(
                     DEFAULT_PERMISSION_CLASS.name()))
@@ -226,6 +251,7 @@ public class PublisherResourceTest {
         publisherRepository.saveAndFlush(publisher);
 
         // Update the publisher
+        publisher.setDisplayName(UPDATED_PUBLISHER_NAME);
         publisher.setPermissionType(UPDATED_PERMISSION_CLASS);
         publisher.setUsed(UPDATED_USED);
         publisher.setHasSubPermsManagement(UPDATED_USED);
@@ -241,6 +267,8 @@ public class PublisherResourceTest {
         List<Publisher> publishers = publisherRepository.findAll();
         assertThat(publishers).hasSize(1);
         Publisher testPublisher = publishers.iterator().next();
+        assertThat(testPublisher.getDisplayName()).isEqualTo(
+            UPDATED_PUBLISHER_NAME);
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             UPDATED_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_USED);
@@ -274,6 +302,8 @@ public class PublisherResourceTest {
         List<Publisher> publishers = publisherRepository.findAll();
         assertThat(publishers).hasSize(1);
         Publisher testPublisher = publishers.iterator().next();
+        assertThat(testPublisher.getDisplayName()).isEqualTo(
+            DEFAULT_PUBLISHER_NAME);
         assertThat(testPublisher.getPermissionType()).isEqualTo(
             DEFAULT_PERMISSION_CLASS);
         assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_USED);

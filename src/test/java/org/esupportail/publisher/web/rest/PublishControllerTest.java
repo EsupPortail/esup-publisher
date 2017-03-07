@@ -161,9 +161,9 @@ public class PublishControllerTest {
         redactor1 = redactorRepository.saveAndFlush(redactor1);
         Redactor redactor2 = ObjTest.newRedactor("2");
         redactor2 = redactorRepository.saveAndFlush(redactor2);
-        newWay = new Publisher(organization, reader1, redactor1, PermissionClass.CONTEXT, true,true);
+        newWay = new Publisher(organization, reader1, redactor1, "PUB 1", PermissionClass.CONTEXT, true,true);
         newWay = publisherRepository.saveAndFlush(newWay);
-        flashInfo = new Publisher(organization, reader2, redactor2, PermissionClass.CONTEXT, true,false);
+        flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false);
         flashInfo = publisherRepository.saveAndFlush(flashInfo);
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
         Category cat1 = ObjTest.newCategory("Cat1", newWay);

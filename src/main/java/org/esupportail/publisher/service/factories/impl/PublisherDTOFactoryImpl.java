@@ -1,5 +1,7 @@
 package org.esupportail.publisher.service.factories.impl;
 
+import javax.inject.Inject;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.Publisher;
@@ -11,8 +13,6 @@ import org.esupportail.publisher.service.factories.RedactorDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PublisherDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
 
 /**
 *
@@ -44,8 +44,8 @@ public class PublisherDTOFactoryImpl extends AbstractDTOFactoryImpl<PublisherDTO
         log.debug("Model to DTO of {}", model);
         if (model != null) {
             return new PublisherDTO(model.getId(), organizationDTOFactory.from(model.getContext().getOrganization()),readerFactory.from(model.getContext().getReader()),
-                redactorFactory.from(model.getContext().getRedactor()), model.isUsed(), model.getDisplayOrder(), model.getPermissionType(), model.getDefaultDisplayOrder()
-                , model.isHasSubPermsManagement());
+                redactorFactory.from(model.getContext().getRedactor()), model.getDisplayName(), model.isUsed(), model.getDisplayOrder(), model.getPermissionType(),
+                model.getDefaultDisplayOrder(), model.isHasSubPermsManagement());
         }
         return null;
     }

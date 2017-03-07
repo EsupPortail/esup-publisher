@@ -1,12 +1,35 @@
 package org.esupportail.publisher.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.ObjTest;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.ReaderRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.service.bean.UserContextTree;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +43,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the CategoryResource REST controller.
@@ -115,7 +130,7 @@ public class CategoryResourceTest {
 		redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor(name));
 
 		publisher = publisherRepository.saveAndFlush(new Publisher(organization, reader, redactor,
-            PermissionClass.CONTEXT, false, true));
+            "PUBLISHER", PermissionClass.CONTEXT, false, true));
 
 		category = new Category();
 		category.setAccessView(DEFAULT_ACCESS_VIEW);

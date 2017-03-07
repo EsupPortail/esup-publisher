@@ -15,17 +15,19 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
+import java.io.Serializable;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
 
 @NoArgsConstructor
 @ToString(callSuper=true)
@@ -43,6 +45,12 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
     @Setter
     @NotNull
     private RedactorDTO redactor;
+
+    @Getter
+    @Setter
+    @NotNull
+    @Size(min=3, max = CstPropertiesLength.DISPLAYNAME)
+    private String displayName;
 
     /**
      * A boolean parameter to tell if the organization use this publication
@@ -74,20 +82,17 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
     private boolean hasSubPermsManagement;
 
     public PublisherDTO(@NotNull final Long modelId, @NotNull final OrganizationDTO organization, @NotNull final ReaderDTO reader, @NotNull final RedactorDTO redactor,
-                        final boolean used, final int displayOrder, @NotNull final PermissionClass permissionType, @NotNull final DisplayOrderType defaultDisplayOrder,
-                        final boolean hasSubPermsManagement) {
+                        @NotNull final String displayName, final boolean used, final int displayOrder, @NotNull final PermissionClass permissionType,
+                        @NotNull final DisplayOrderType defaultDisplayOrder, final boolean hasSubPermsManagement) {
         super(modelId);
         this.organization = organization;
         this.reader = reader;
         this.redactor = redactor;
+        this.displayName = displayName;
         this.used = used;
         this.displayOrder = displayOrder;
         this.permissionType = permissionType;
         this.defaultDisplayOrder = defaultDisplayOrder;
         this.hasSubPermsManagement = hasSubPermsManagement;
-    }
-
-    public String getDisplayName() {
-        return getReader().getDisplayName() + " - " + getRedactor().getDisplayName();
     }
 }

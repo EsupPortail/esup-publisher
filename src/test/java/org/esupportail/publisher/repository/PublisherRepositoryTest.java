@@ -1,5 +1,17 @@
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
@@ -18,13 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -69,17 +74,17 @@ public class PublisherRepositoryTest {
 		redactor1 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_1));
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 
-		Publisher e1 = new Publisher(org1, reader2, redactor1,
+		Publisher e1 = new Publisher(org1, reader2, redactor1,"PUB " + INDICE_1,
             PermissionClass.CONTEXT, false, true);
 		repository.saveAndFlush(e1);
-		Publisher e2 = new Publisher(org2, reader1, redactor2,
+		Publisher e2 = new Publisher(org2, reader1, redactor2,"PUB " + INDICE_2,
             PermissionClass.CONTEXT, false, true);
 		repository.saveAndFlush(e2);
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
 	public void testUnique() {
-		Publisher e = new Publisher(org1, reader2, redactor1,
+		Publisher e = new Publisher(org1, reader2, redactor1, "PUB " + INDICE_3,
             PermissionClass.SUBJECT, true, true);
 		repository.saveAndFlush(e);
 		assertEquals(e,
@@ -88,7 +93,7 @@ public class PublisherRepositoryTest {
 
 	@Test
 	public void testInsert() {
-		Publisher e = new Publisher(org1, reader1, redactor1,
+		Publisher e = new Publisher(org1, reader1, redactor1, "PUB " + INDICE_3,
             PermissionClass.CONTEXT, true, true);
 
 		log.info("Before insert : " + e.toString());
@@ -101,7 +106,7 @@ public class PublisherRepositoryTest {
 		assertNotNull(e2);
 		assertEquals(e, e2);
 
-		e = new Publisher(org2, reader2, redactor2,
+		e = new Publisher(org2, reader2, redactor2, "PUB " + INDICE_4,
             PermissionClass.CONTEXT_WITH_SUBJECTS, true, true);
 		repository.save(e);
 		log.info("After update : " + e.toString());
