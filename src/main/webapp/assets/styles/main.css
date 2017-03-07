@@ -17,19 +17,19 @@ body {
 }
 
 @media screen and (min-width: 768px) {
-    body.simulate-iframe {
+    body.not-in-iframe {
         padding: 0 15%;
     }
 
-    body.simulate-iframe > div.container-fluid > div.well > div.manager,
-    body.simulate-iframe > div.container-fluid > div.well > div.admin,
-    body.simulate-iframe > div.container-navbar {
+    body.not-in-iframe > div.container-fluid > div.well > div.manager,
+    body.not-in-iframe > div.container-fluid > div.well > div.admin,
+    body.not-in-iframe > div.container-navbar {
         border-left: 1px solid #d0d0d0;
         border-right: 1px solid #d0d0d0;
     }
 
-    body.simulate-iframe > div.container-fluid > div.well > div.manager,
-    body.simulate-iframe > div.container-fluid > div.well > div.admin {
+    body.not-in-iframe > div.container-fluid > div.well > div.manager,
+    body.not-in-iframe > div.container-fluid > div.well > div.admin {
         border-bottom: 1px solid #d0d0d0;
         -moz-box-shadow: 4px 5px 5px -5px #888888;
         -webkit-box-shadow: 4px 5px 5px -5px #888888;
@@ -587,7 +587,7 @@ a.list-group-item div.bouton-action .div-text {
 ======================================*/
 
 @media screen and (min-width: 768px) {
-    body:not(.simulate-iframe) > div.container-fluid > div.well.site {
+    body:not(.not-in-iframe) > div.container-fluid > div.well.site {
         padding: 0 15%;
     }
 }

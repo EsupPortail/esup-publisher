@@ -32,7 +32,7 @@
     <!--<link href='//fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>-->
     <!-- endbuild -->
 </head>
-<body ng-app="publisherApp" class="esup-publisher {{MAINCSS}}" ng-class="{'simulate-iframe': ENV === 'dev'}">
+<body ng-app="publisherApp" class="esup-publisher {{MAINCSS}}" ng-class="{'not-in-iframe': !ISINIFRAME}">
 <!--[if lt IE 10]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -48,7 +48,7 @@
     <!--</div>-->
     <div ui-view="modalRoot"></div>
     <div class="well {{currentState.parent}}" ui-view="container"></div>
-    <div class="footer" ng-cloak="">
+    <div class="footer text-right" ng-cloak="">
         <p><a href="#"><span ng-cloak="" translate="footer.project"></span> <span>v{{VERSION}}</span></a></p>
     </div>
 

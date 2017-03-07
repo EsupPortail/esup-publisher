@@ -21,6 +21,22 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             }
         }
         $rootScope.MAINCSS = getCssEnv();
+
+        function isIframe() {
+            try {
+                // 2 ways to test if iframe depending on browser compatibility
+                //console.log("Testing iframe context :", window.self == window.top || window.location == window.parent.location);
+                return window.self !== window.top || window.location !== window.parent.location;
+            } catch (e) {
+                //default use: the app is in iframe
+                //console.log("Testing iframe context returned exception :", e);
+                return true;
+            }
+        }
+
+        $rootScope.ISINIFRAME = isIframe();
+
+
         //$rootScope.showSpinner = false;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             //console.log("$stateChangeStart ", toState, toStateParams, event);
