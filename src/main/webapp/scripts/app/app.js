@@ -114,7 +114,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         };
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider,
-                      httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider) {
+                      httpRequestInterceptorCacheBusterProvider, usSpinnerConfigProvider, VERSION) {
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
         $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';
@@ -166,7 +166,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
 
 // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: 'i18n/{lang}/{part}.json'
+            urlTemplate: 'i18n/{lang}/{part}.json?v='+VERSION
         });
 
         $translateProvider.registerAvailableLanguageKeys(['en', 'fr'], {
