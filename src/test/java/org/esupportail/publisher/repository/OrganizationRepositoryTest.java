@@ -18,6 +18,21 @@
  */
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -33,15 +48,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
@@ -59,16 +65,19 @@ public class OrganizationRepositoryTest {
 
 	private QOrganization organization = QOrganization.organization;
 
-    final static Set<String> DEFAULT_IDS = Sets.newHashSet("0450822x");
+    final static Set<String> DEFAULT_IDS1 = Sets.newHashSet("ID1");
+    final static Set<String> DEFAULT_IDS2 = Sets.newHashSet("ID2", "IDX");
+    final static Set<String> DEFAULT_IDS3 = Sets.newHashSet("ID3");
+    final static Set<String> DEFAULT_IDS4 = Sets.newHashSet("ID4");
 
 	@Before
 	public void setUp() {
 		log.info("starting up " + this.getClass().getName());
 		Organization e = ObjTest.newOrganization("init1");
-        e.setIdentifiers(DEFAULT_IDS);
+        e.setIdentifiers(DEFAULT_IDS1);
 		repository.save(e);
 		Organization e2 = ObjTest.newOrganization("init2");
-        e2.setIdentifiers(DEFAULT_IDS);
+        e2.setIdentifiers(DEFAULT_IDS2);
 		repository.save(e2);
 	}
 
@@ -79,21 +88,21 @@ public class OrganizationRepositoryTest {
 	@Test
 	public void testInsert() {
 		Organization e = ObjTest.newOrganization("");
-        e.setIdentifiers(DEFAULT_IDS);
+        e.setIdentifiers(DEFAULT_IDS3);
 		log.info("Before insert : " + e.toString());
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-        assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS.size()));
+        assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS3.size()));
 
 		Organization e2 = repository.findOne(e.getId());
-        e2.setIdentifiers(DEFAULT_IDS);
+        //e2.setIdentifiers(DEFAULT_IDS3);
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertEquals(e, e2);
 
 		e = ObjTest.newOrganization("1");
-        e.setIdentifiers(DEFAULT_IDS);
+        e.setIdentifiers(DEFAULT_IDS4);
 		repository.save(e);
 		log.info("After insert : " + e.toString());
 		assertNotNull(e.getId());

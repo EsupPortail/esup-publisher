@@ -1,17 +1,35 @@
 package org.esupportail.publisher.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.NewsRepository;
+import org.esupportail.publisher.repository.ObjTest;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.service.FileService;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,14 +42,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the NewsResource REST controller.
@@ -70,8 +80,7 @@ public class NewsResourceTest {
 
 	private static final String DEFAULT_BODY = "SAMPLE_TEXT";
 	private static final String UPDATED_BODY = "UPDATED_TEXT";
-	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat
-			.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+	private static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTime();
 
 	@Inject
 	private NewsRepository newsRepository;
