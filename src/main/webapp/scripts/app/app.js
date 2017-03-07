@@ -158,7 +158,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             'fr_FR': 'fr'
         });
 
-        $translateProvider.fallbackLanguage('en')
+        $translateProvider.fallbackLanguage('fr')
             .determinePreferredLanguage();
         //$translateProvider.useSanitizeValueStrategy('escaped');
         $translateProvider.useCookieStorage();
