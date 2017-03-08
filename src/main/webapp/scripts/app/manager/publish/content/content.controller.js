@@ -31,15 +31,36 @@ angular.module('publisherApp')
             });
         }
 
+        $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate'];
+        $scope.dtformat = $scope.dtformats[3];
+
         $scope.today = DateUtils.addDaysToLocalDate(new Date(), 0);
-        //$scope.startdate = angular.copy($scope.today);
+        //$scope.startdate = angular.copy($scope.today)
         // init default max and min date;
         $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 0);
         $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, 366);
-
-
-        $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate'];
-        $scope.dtformat = $scope.dtformats[3];
+        $scope.updateMaxDate = function(item) {
+            if (angular.isDefined(item) && angular.isDefined(item.type) && angular.isDefined(item.startDate)) {
+                switch (item.type) {
+                    case 'NEWS':
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 168);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    case 'FLASH':
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 90);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    default: throw "Type not managed :"+ newItem.type; break;
+                }
+            }
+        };
+        // used when we edit an item to avoid to change startDate
+        $scope.updateMinDate = function(item) {
+            if (angular.isDefined(item) && angular.isDefined(item.type) && angular.isDefined(item.startDate)) {
+                    $scope.minDate = item.startDate;
+                    //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+            }
+        };
 
         $scope.changeContentType = function(oldValue) {
             //console.log("changeContentType ", oldValue, $scope.content.type);
@@ -55,6 +76,7 @@ angular.module('publisherApp')
 
         if (angular.equals({},$scope.$parent.item) && loadedItem) {
             $scope.$parent.item = angular.copy(loadedItem);
+            $scope.updateMinDate(loadedItem);
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
         }
 
@@ -81,29 +103,18 @@ angular.module('publisherApp')
 
         $scope.itemStatusList = EnumDatas.getItemStatusList();
 
-        $scope.$watch('$parent.item', function(newType, oldType) {
+        $scope.$watch('$parent.item', function(newItem, oldItem) {
             // checking validity independently of validators
             testItemValidity();
             // Change min and max Date depending on publishing context/type
-            if (angular.isDefined(newType) && angular.isDefined(newType.type) && (!angular.isDefined(oldType) || oldType == null)
-                || newType.type != oldType.type || newType.startDate != oldType.startDate) {
-                switch (newType.type) {
-                    case 'NEWS':
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 168);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    case 'FLASH':
-                        //$scope.minDate = angular.copy($scope.today);
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(newType.startDate, 90);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    default: throw "Type not managed :"+ newType.type; break;
-                }
+            if (angular.isDefined(newItem) && angular.isDefined(newItem.type) && (!angular.isDefined(oldItem) || oldItem == null)
+                || newItem.type != oldItem.type || newItem.startDate != oldItem.startDate) {
+                $scope.updateMaxDate(newItem);
             }
             $scope.initCropper();
         }, true);
 
-        $scope.$watch('publishContentForm.$valid', function(newType, oldType){
+        $scope.$watch('publishContentForm.$valid', function(newObj, oldObj){
             // checking validity after validators checks
             testItemValidity();
         }, true);
@@ -162,8 +173,6 @@ angular.module('publisherApp')
             }
             //console.log("call init cropper ", $scope.content.type, $scope.cropperConf);
         };
-
-        // default conf for cropper
 
         $scope.sizeMax = Configuration.getConfUploadImageSize();
 
