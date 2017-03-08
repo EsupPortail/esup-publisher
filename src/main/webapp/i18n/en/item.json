@@ -24,22 +24,27 @@
             "enclosure": "Enclosure",
             "endDate": "EndDate",
             "startDate": "StartDate",
-            "validatedBy": "ValidatedBy",
-            "validatedDate": "ValidatedDate",
+            "validated": "Validated",
+            "validatedBy": "Validated By",
+            "validatedDate": "Validated Date",
             "status": "Status",
             "summary": "Summary",
             "body": "Body",
             "rssAllowed": "Access in public RSS feed",
-            "createdBy": "CreatedBy",
-            "createdDate": "CreatedDate",
-            "lastModifiedBy": "LastModifiedBy",
-            "lastModifiedDate": "LastModifiedDate",
+            "created": "Created",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModified": "Last Modified",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
             "organization": "organization",
             "redactor": "redactor",
             "action": {
                 "publish": "Save and Publish",
                 "save": "Save"
-            }
+            },
+            "beforeDate": "",
+            "beforeName": " by "
         }
     }
 }

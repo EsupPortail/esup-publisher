@@ -626,6 +626,12 @@ a.list-group-item div.bouton-action .div-text {
 .container-fluid > .well > .manager.contents > .content .table-responsive .table td {
     font-size: 13px;
 }
+.container-fluid > .well > .manager.contents > .content .table-responsive .table td > span {
+    display: block;
+}
+.container-fluid > .well > .manager.contents > .content .table-responsive .table td > span:before {
+    content: attr(data-label) "";
+}
 .container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos::before {
     display: none;
 }
@@ -648,9 +654,20 @@ a.list-group-item div.bouton-action .div-text {
         text-overflow: ellipsis;
     }
 }
+@media screen and (min-width:992px) {
+    .table-responsive .table td.fixed-date-width,
+    .table-responsive .table th.fixed-date-width {
+        max-width: 90px;
+    }
+}
+
+.table td > input[type="radio"],
+.table td > input[type="checkbox"] {
+    margin: 0;
+}
 
 /* start Transform table into cards ! */
-@media screen and (max-width:767px) {
+@media screen and (max-width:991px) {
     .table-responsive-to-cards thead {
         display: none;
     }
@@ -685,6 +702,10 @@ a.list-group-item div.bouton-action .div-text {
 
     }
 
+    .container-fluid > .well > .manager.contents > .content .table-responsive.table-responsive-to-cards .table td > span {
+        display: inline-block;
+    }
+
     .manager.contents .table-responsive-to-cards td {
         display: inline-block;
     }
@@ -692,9 +713,11 @@ a.list-group-item div.bouton-action .div-text {
     .table-responsive-to-cards td:not(.action):before {
         content: attr(data-label) ": ";
         float: left;
-        margin: -0.5rem 0.5rem -0.5rem -0.5rem;
-        padding: 0.625rem 0.5rem 0.625rem;
-        font-size: 0.75em;
+        margin: 0 0.5rem 0 0;
+        /* effet ne plaisant pas */
+        /*margin: -0.5rem 0.5rem -0.5rem -0.5rem;*/
+        /*padding: 0.625rem 0.5rem 0.625rem;*/
+        /*font-size: 0.75em;*/
         font-weight: bold;
         background: rgba(208, 208, 208, 0.1);
     }
