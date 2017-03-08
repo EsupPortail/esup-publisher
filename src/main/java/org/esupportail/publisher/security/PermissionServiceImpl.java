@@ -242,7 +242,8 @@ public class PermissionServiceImpl implements IPermissionService {
                 case ITEM :
                     perm = userSessionTree.getRoleFromContextTree(contextKey);
                     final boolean isOwner = userSessionTree.isItemOwner(contextKey.getKeyId(), user.getModelId());
-                    return perm != null && (perm.getMask() >=  PermissionType.MANAGER.getMask() || perm.getMask() >=  PermissionType.CONTRIBUTOR.getMask() && isOwner) || isOwner;
+                    //return perm != null && (perm.getMask() >=  PermissionType.MANAGER.getMask() || perm.getMask() >=  PermissionType.CONTRIBUTOR.getMask() && isOwner) || isOwner;
+                    return perm != null && (perm.getMask() >=  PermissionType.MANAGER.getMask() || isOwner);
                 default: return false;
             }
 
