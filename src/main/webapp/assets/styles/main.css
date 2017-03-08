@@ -14,6 +14,7 @@ body {
     background-color: #f3f3f3;
     color: #000;
     margin:0;
+    min-width: 280px;
 }
 
 @media screen and (min-width: 768px) {
@@ -427,6 +428,17 @@ body > div.container-navbar {
 
 /* Suppression nav-header project name*/
 nav > div > div.navbar-header > a {
+    display: none;
+}
+/* New style of navbar */
+nav.navbar-default .navbar-header .navbar-toggle.other-style {
+    width: 100%;
+    border: none;
+    text-align: center;
+    background-color: inherit;
+    float:none;
+}
+nav.navbar-default .navbar-header .navbar-toggle.other-style  span.fa {
     display: none;
 }
 
