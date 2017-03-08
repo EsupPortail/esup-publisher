@@ -23,27 +23,34 @@
                         <span translate="global.menu.write">Publish</span>
                     </a>
                 </li>
-                <li ui-sref-active="active">
+                <li ng-if="!canModerate" ui-sref-active="active">
                     <a ui-sref="owned">
                         <span class="fa fa-file-text fa-2x"></span>
-                        <span translate="global.menu.manager.contents.main">Owned Publications</span>
+                        <span>{{ "global.menu.manager.contents.main" | translate }}</span>
                     </a>
                 </li>
-                <li ng-class="{active: $state.includes('pending') ||  $state.includes('managed')}" class="dropdown pointer" can-moderate>
+                <li ng-if="canModerate"  ng-class="{active: $state.includes('owned') ||  $state.includes('managed')}" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
-                            <span class="fa fa-gavel fa-2x"></span>
-                            <span translate="global.menu.manager.contents.moderate">Moderate</span>
+                            <span class="fa fa-file-text fa-2x"></span>
+                            <span>{{ "global.menu.manager.contents.main" | translate }}</span>
                             <b class="caret"></b>
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" can-moderate><a ui-sref="pending"><span class="fa fa-asterisk"></span>
-                        &#xA0;<span translate="global.menu.manager.contents.pending">pending</span></a></li>
-                        <li ui-sref-active="active" can-moderate><a ui-sref="managed"><span class="fa fa-asterisk"></span>
-                            &#xA0;<span translate="global.menu.manager.contents.managed">managed</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="owned"><span class="fa fa-asterisk"></span>
+                            &#xA0;<span>{{ "global.menu.manager.contents.owned" | translate }}</span></a></li>
+                        <li ui-sref-active="active"><a ui-sref="managed"><span class="fa fa-asterisk"></span>
+                            &#xA0;<span>{{ "global.menu.manager.contents.managed" | translate }}</span></a></li>
                     </ul>
                 </li>
+                <li ng-if="canModerate" ui-sref-active="active">
+                    <a ui-sref="pending">
+                        <span class="fa fa-gavel fa-2x"></span>
+                        <span>{{ "global.menu.manager.contents.moderate" | translate }}</span>
+                    </a>
+                </li>
+
                 <li ui-sref-active="active" can-moderate>
                     <a ui-sref="treeview">
                         <span class="fa fa-wrench fa-2x"></span>

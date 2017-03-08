@@ -1,10 +1,19 @@
 'use strict';
 
 angular.module('publisherApp')
-    .controller('NavbarController', function ($scope, $location, $state, Auth, Principal) {
+    .controller('NavbarController', function ($scope, $location, $state, Auth, Principal, User) {
         $scope.isAuthenticated = Principal.isAuthenticated;
         $scope.isInRole = Principal.isInRole;
         $scope.$state = $state;
+
+        $scope.canModerate = false;
+
+        $scope.load = function() {
+            User.canModerateAnyThing(function (data) {
+                $scope.canModerate = (data.value == true);
+            });
+        };
+        $scope.load();
 
         $scope.logout = function () {
             Auth.logout();
