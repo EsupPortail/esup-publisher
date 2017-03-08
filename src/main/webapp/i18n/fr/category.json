@@ -25,10 +25,10 @@
                 "es": "Espagnol"
             },
             "ttl": "TTL",
-            "displayOrder": "Position de la rubrique dans l'arborescence",
+            "displayOrder": "Position",
             "accessView": "Type d'accès",
             "description": "Description",
-            "defaultDisplayOrder": "Ordre d'affichage des articles",
+            "defaultDisplayOrder": "Ordre d'affichage",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

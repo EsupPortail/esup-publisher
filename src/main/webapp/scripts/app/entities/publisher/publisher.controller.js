@@ -8,7 +8,10 @@ angular.module('publisherApp')
         $scope.redactors = dataResolved[1];
         $scope.readers = dataResolved[2];
         $scope.permissionClassList = EnumDatas.getPermissionClassList();
-        $scope.displayOrderTypeList = EnumDatas.getDisplayOrderTypeList();
+        // removing CUSTOM type until it is implemented
+        $scope.displayOrderTypeList = EnumDatas.getDisplayOrderTypeList().filter(function(element) {
+            return !angular.equals(element.name, "START_DATE");
+        });
 
         $scope.loadAll = function() {
             Publisher.query(function(result) {

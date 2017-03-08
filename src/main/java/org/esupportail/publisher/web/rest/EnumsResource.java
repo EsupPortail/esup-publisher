@@ -74,11 +74,7 @@ public class EnumsResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DisplayOrderType>> getAllDisplayOrder() {
-        //to limit to implemented way
-        //return new ResponseEntity<List<DisplayOrderType>>(Arrays.asList(DisplayOrderType.values()), HttpStatus.OK);
-        List<DisplayOrderType> list = Lists.newArrayList(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST, DisplayOrderType.ONLY_LAST_CREATED_FIRST,
-            DisplayOrderType.NAME, DisplayOrderType.START_DATE);
-        return new ResponseEntity<List<DisplayOrderType>>(list, HttpStatus.OK);
+        return new ResponseEntity<List<DisplayOrderType>>(Arrays.asList(DisplayOrderType.values()), HttpStatus.OK);
     }
 
 

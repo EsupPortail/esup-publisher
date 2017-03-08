@@ -16,7 +16,7 @@
             "name": "Nom",
             "displayName": "Nom affiché",
             "description": "Description",
-            "displayOrder": "Ordre d'affichage",
+            "displayOrder": "Position",
             "allowNotifications": "Notifications",
             "identifiers": "Clé(s) identifiante(s)",
             "identifiers.help": "Afin de saisir plusieurs valeurs utilisez la virgule comme séparateur",

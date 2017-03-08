@@ -96,11 +96,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
+                        <input type="checkbox" class="form-control" id="used" name="used"
+                               ng-model="editedContext.used" ng-readonly="!canManage">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label" for="defaultDisplayOrder" translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</label>
                         <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="editedContext.defaultDisplayOrder"
-                                ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in displayOrderTypeList" required ng-readonly="!canManage">
+                                ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in autorizedDisplayOrderTypeList" required ng-readonly="!canManage">
                         </select>
-
 
                         <div ng-show="editForm.defaultDisplayOrder.$invalid">
                             <p class="help-block"
@@ -109,12 +113,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
-                        <input type="checkbox" class="form-control" id="used" name="used"
-                               ng-model="editedContext.used" ng-readonly="!canManage">
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group"  has-role="ROLE_ADMIN">
                         <label class="control-label" for="displayOrder" translate="publisherApp.publisher.displayOrder">DisplayOrder</label>
                         <input type="number" class="form-control" id="displayOrder" name="displayOrder"
                                ng-model="editedContext.displayOrder" required min="0" max="99" ng-readonly="!isInRole('ROLE_ADMIN')">

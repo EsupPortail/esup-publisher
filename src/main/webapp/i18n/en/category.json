@@ -2,7 +2,7 @@
     "publisherApp": {
         "category" : {
             "home": {
-                "title": "Categorys",
+                "title": "Categories",
                 "createLabel": "Create a new Category",
                 "createOrEditLabel": "Create or edit a Category"
             },
@@ -12,9 +12,9 @@
             "detail": {
                 "title": "Category"
             },
-            "rssAllowed": "RssAllowed",
+            "rssAllowed": "Rss allowed",
             "name": "Name",
-            "iconUrl": "IconUrl",
+            "iconUrl": "Icon Url",
             "color" : "Color",
             "color.none" : "Color undefined",
             "lang": "Lang",
@@ -25,14 +25,14 @@
                 "es": "Spanish"
             },
             "ttl": "Ttl",
-            "displayOrder": "DisplayOrder",
-            "accessView": "AccessView",
+            "displayOrder": "Position",
+            "accessView": "Access View",
             "description": "Description",
-            "defaultDisplayOrder": "DefaultDisplayOrder",
-            "createdBy": "CreatedBy",
-            "createdDate": "CreatedDate",
-            "lastModifiedBy": "LastModifiedBy",
-            "lastModifiedDate": "LastModifiedDate",
+            "defaultDisplayOrder": "Display order",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
             "publisher": "publisher"
         }
     }

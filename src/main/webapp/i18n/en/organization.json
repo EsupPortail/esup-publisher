@@ -18,7 +18,7 @@
             "description": "Description",
             "identifiers": "Identity key(s)",
             "identifiers.help": "Use comma as separator of several values",
-            "displayOrder": "Display Order",
+            "displayOrder": "Position",
             "allowNotifications": "Allow Notifications",
             "createdBy": "Created By",
             "createdDate": "Created Date",

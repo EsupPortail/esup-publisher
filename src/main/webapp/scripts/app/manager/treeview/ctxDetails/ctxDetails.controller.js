@@ -21,7 +21,11 @@ angular.module('publisherApp')
         $scope.permissionClassList = EnumDatas.getPermissionClassList();
         $scope.subscribeTypeList = [{"name":"FORCED","id":0,"label":"enum.subscribe.forced.title"}] || EnumDatas.getSubscribeTypeList();
         $scope.subjectTypeList = EnumDatas.getSubjectTypeList();
-        $scope.displayOrderTypeList = EnumDatas.getDisplayOrderTypeList();
+        // removing CUSTOM type until it is implemented
+        $scope.displayOrderTypeList = EnumDatas.getDisplayOrderTypeList().filter(function(element) {
+            return !angular.equals(element.name, "CUSTOM");
+        });
+        $scope.autorizedDisplayOrderTypeList = angular.copy($scope.displayOrderTypeList);
         $scope.stringEvaluationModeList = EnumDatas.getStringEvaluationModeList();
         $scope.operatorTypeList = EnumDatas.getOperatorTypeList();
         $scope.accessTypeList = EnumDatas.getAccessTypeList();
@@ -212,6 +216,7 @@ angular.module('publisherApp')
 
         $scope.createContext = function(type) {
             var div;
+            $scope.loadAvailableDisplayOrder(false);
             switch(type) {
                 case 'ORGANIZATION' :
                     $scope.editedContext = {};
@@ -222,7 +227,7 @@ angular.module('publisherApp')
                     div = "#savePublisherModal";
                     break;
                 case 'CATEGORY' :
-                    // filter on creation of category on publihser flash context
+                    // filter on creation of category on publisher flash context
                     if (!($scope.context.context.redactor.writingMode == "STATIC" &&
                     inArray('FLASH', $scope.context.context.reader.authorizedTypes))) {
                         // in waiting all access are PUBLIC
@@ -238,7 +243,7 @@ angular.module('publisherApp')
                             displayOrder: 0,
                             accessView: 'PUBLIC',
                             description: null,
-                            defaultDisplayOrder: $scope.displayOrderTypeList[0].name,
+                            defaultDisplayOrder: $scope.autorizedDisplayOrderTypeList[0].name,
                             createdBy: null,
                             createdDate: null,
                             lastModifiedBy: null,
@@ -308,11 +313,14 @@ angular.module('publisherApp')
                 manager.get({id: $scope.context.id},
                     function (result) {
                         $scope.editedContext = result;
+                        $scope.loadAvailableDisplayOrder(true);
                         $(div).modal('show');
                     });
             }
 
         };
+
+
 
         $scope.confirmUpdateContext = function(type) {
             var manager, div;
@@ -531,6 +539,59 @@ angular.module('publisherApp')
                 });
             }
             //console.log("loadAvailableRoles :",  $scope.availableRoles, $scope.permissionTypeList);
+        };
+
+        $scope.loadAvailableDisplayOrder = function(isEditCurrentCtx) {
+            var ctx = isEditCurrentCtx ? $scope.editedContext : $scope.context;
+            console.log("ctx ", ctx, ctx.contextKey.keyType, isEditCurrentCtx);
+            switch(ctx.contextKey.keyType) {
+                case 'ORGANIZATION' :
+                    // in edit we are on ORGANIZATION else we create a sub context
+                    if (isEditCurrentCtx) {
+                        $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
+                            return !angular.equals(element.name, "START_DATE");
+                        });
+                    } else {
+                        throw "not yet implemented"
+                    }
+                    break;
+                case 'PUBLISHER' :
+                    // in edit we are on PUBLISHER else we create a sub context
+                    if (isEditCurrentCtx) {
+                        console.log("Autorized types ", ctx.context.reader.authorizedTypes);
+                        // If not Flash context, ie no Classification management we remove START_DATE order
+                        if (!(ctx.context.redactor.writingMode == "STATIC" &&
+                            inArray('FLASH', ctx.context.reader.authorizedTypes))) {
+                            $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
+                                return !angular.equals(element.name, "START_DATE");
+                            });
+                        }
+                    } else if (ctx.context.redactor.nbLevelsOfClassification > 1) {
+                            $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
+                                return !angular.equals(element.name, "START_DATE");
+                            });
+                    }
+                    break;
+                case 'CATEGORY' :
+                    // in edit we are on CATEGORY else we create a sub context
+                    if (isEditCurrentCtx) {
+                        console.log("Autorized types ", ctx.publisher.context.reader.authorizedTypes);
+                        if (ctx.publisher.context.redactor.nbLevelsOfClassification > 1) {
+                            $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
+                                return !angular.equals(element.name, "START_DATE");
+                            });
+                        }
+                    } else {
+                        throw "not yet implemented"
+                    }
+                    break;
+                //case 'FEED' :
+                //case 'ITEM' :
+                default :
+                    break;
+
+            }
+            console.log("loaded displayorder list ", $scope.autorizedDisplayOrderTypeList);
         };
         $scope.addPermission = function() {
             $scope.addPerm = true;

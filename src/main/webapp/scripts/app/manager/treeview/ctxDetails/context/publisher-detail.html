@@ -31,16 +31,22 @@
             <span>{{getPermissionClassLabel(context.permissionType) | translate}}</span>
         </dd>
         <dt>
+            <span translate="publisherApp.publisher.used">Used</span>
+        </dt>
+        <dd>
+            <input type="checkbox" class="input-sm" ng-model="context.used" disabled>
+        </dd>
+        <dt>
             <span translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</span>
         </dt>
         <dd>
             <span>{{getDisplayOrderTypeLabel(context.defaultDisplayOrder) | translate}}</span>
         </dd>
-        <dt>
-            <span translate="publisherApp.publisher.used">Used</span>
+        <dt has-role="ROLE_ADMIN">
+            <span translate="publisherApp.publisher.displayOrder">DisplayOrder</span>
         </dt>
-        <dd>
-            <input type="checkbox" class="input-sm" ng-model="context.used" disabled>
+        <dd has-role="ROLE_ADMIN">
+            <span>{{context.displayOrder}}</span>
         </dd>
         <dt ng-if="canCreateCategory">
             <span>{{"publisherApp.publisher.hasSubPermsManagement" | translate }}</span>
