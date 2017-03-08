@@ -1,7 +1,24 @@
 package org.esupportail.publisher.web.rest;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.common.collect.Lists;
-import org.esupportail.publisher.domain.enums.*;
+import org.esupportail.publisher.domain.enums.AccessType;
+import org.esupportail.publisher.domain.enums.ClassificationDecorType;
+import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.enums.DisplayOrderType;
+import org.esupportail.publisher.domain.enums.FilterType;
+import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.enums.ItemType;
+import org.esupportail.publisher.domain.enums.OperatorType;
+import org.esupportail.publisher.domain.enums.PermissionClass;
+import org.esupportail.publisher.domain.enums.PermissionType;
+import org.esupportail.publisher.domain.enums.StringEvaluationMode;
+import org.esupportail.publisher.domain.enums.SubjectType;
+import org.esupportail.publisher.domain.enums.SubscribeType;
+import org.esupportail.publisher.domain.enums.WritingFormat;
+import org.esupportail.publisher.domain.enums.WritingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -10,9 +27,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * REST controller for managing Evaluator.
@@ -60,7 +74,11 @@ public class EnumsResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DisplayOrderType>> getAllDisplayOrder() {
-        return new ResponseEntity<List<DisplayOrderType>>(Arrays.asList(DisplayOrderType.values()), HttpStatus.OK);
+        //to limit to implemented way
+        //return new ResponseEntity<List<DisplayOrderType>>(Arrays.asList(DisplayOrderType.values()), HttpStatus.OK);
+        List<DisplayOrderType> list = Lists.newArrayList(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST, DisplayOrderType.ONLY_LAST_CREATED_FIRST,
+            DisplayOrderType.NAME, DisplayOrderType.START_DATE);
+        return new ResponseEntity<List<DisplayOrderType>>(list, HttpStatus.OK);
     }
 
 
