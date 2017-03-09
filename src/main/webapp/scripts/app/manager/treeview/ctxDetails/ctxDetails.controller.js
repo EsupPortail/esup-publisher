@@ -349,7 +349,19 @@ angular.module('publisherApp')
             }
             if (manager) {
                 manager.update($scope.editedContext,
-                    function () {
+                    function (data) {
+                        // verrue Flash
+                        // pour mettre à jour l'ordre de trie dans la rubrique cachée du Flash-info, en attendant une meilleure gestion sans rubrique cachée
+                        if (type == 'PUBLISHER' && data.context.redactor.writingMode == "STATIC" &&
+                        inArray('FLASH', data.context.reader.authorizedTypes)) {
+                            Classification.query({publisherId: data.id, isPublishing: false}, function(result) {
+                                angular.forEach(result, function(obj) {
+                                    //console.log("edited :", obj,data.defaultDisplayOrder, data);
+                                    obj.defaultDisplayOrder = data.defaultDisplayOrder;
+                                    Category.update(obj);
+                                });
+                            })
+                        }
                         $(div).modal('hide');
                         /*$('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();*/

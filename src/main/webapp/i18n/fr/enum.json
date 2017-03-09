@@ -36,7 +36,7 @@
                 "title":"Dernier créé en premier"
             },
             "byName": {
-                "title": "Alphabétique (sur le nom)"
+                "title": "Alphabétique (sur le nom/titre)"
             },
             "byStartDate": {
                 "title": "Par date de début de publication"
