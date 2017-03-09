@@ -24,10 +24,10 @@
         <dd>
             <span>{{context.displayName}}</span>
         </dd>
-        <dt>
+        <dt ng-show="canCreateCategory">
             <span translate="publisherApp.publisher.permissionType">PermissionType</span>
         </dt>
-        <dd>
+        <dd ng-show="canCreateCategory">
             <span>{{getPermissionClassLabel(context.permissionType) | translate}}</span>
         </dd>
         <dt>

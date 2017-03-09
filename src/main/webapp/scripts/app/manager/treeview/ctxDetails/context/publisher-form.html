@@ -82,10 +82,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div ng-show="canCreateCategory" class="form-group">
                         <label class="control-label" for="permissionType" translate="publisherApp.publisher.permissionType">PermissionType</label>
                         <select class="form-control" id="permissionType" name="permissionType" ng-model="editedContext.permissionType"
-                                ng-options="permission.name as permission.label | translate for permission in permissionClassList" required ng-readonly="!canManage">
+                                ng-options="permission.name as permission.label | translate for permission in autorizedPermissionClassList" required ng-readonly="!canManage">
                         </select>
 
                         <div ng-show="editForm.permissionType.$invalid">

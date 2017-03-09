@@ -19,6 +19,7 @@ angular.module('publisherApp')
 
         $scope.permissionTypeList = EnumDatas.getPermissionTypeList();
         $scope.permissionClassList = EnumDatas.getPermissionClassList();
+        $scope.autorizedPermissionClassList = angular.copy(EnumDatas.getPermissionClassList());
         $scope.subscribeTypeList = [{"name":"FORCED","id":0,"label":"enum.subscribe.forced.title"}] || EnumDatas.getSubscribeTypeList();
         $scope.subjectTypeList = EnumDatas.getSubjectTypeList();
         // removing CUSTOM type until it is implemented
@@ -216,7 +217,7 @@ angular.module('publisherApp')
 
         $scope.createContext = function(type) {
             var div;
-            $scope.loadAvailableDisplayOrder(false);
+            $scope.loadAvailableTypes(false);
             switch(type) {
                 case 'ORGANIZATION' :
                     $scope.editedContext = {};
@@ -313,14 +314,12 @@ angular.module('publisherApp')
                 manager.get({id: $scope.context.id},
                     function (result) {
                         $scope.editedContext = result;
-                        $scope.loadAvailableDisplayOrder(true);
+                        $scope.loadAvailableTypes(true);
                         $(div).modal('show');
                     });
             }
 
         };
-
-
 
         $scope.confirmUpdateContext = function(type) {
             var manager, div;
@@ -377,8 +376,6 @@ angular.module('publisherApp')
             }
 
         };
-
-
 
         /* Subscribers */
         $scope.addSubscriber = function () {
@@ -541,9 +538,10 @@ angular.module('publisherApp')
             //console.log("loadAvailableRoles :",  $scope.availableRoles, $scope.permissionTypeList);
         };
 
-        $scope.loadAvailableDisplayOrder = function(isEditCurrentCtx) {
+        // Load DisplayOrderType & PermissionClassList
+        $scope.loadAvailableTypes = function(isEditCurrentCtx) {
             var ctx = isEditCurrentCtx ? $scope.editedContext : $scope.context;
-            console.log("ctx ", ctx, ctx.contextKey.keyType, isEditCurrentCtx);
+            //console.log("ctx ", ctx, ctx.contextKey.keyType, isEditCurrentCtx);
             switch(ctx.contextKey.keyType) {
                 case 'ORGANIZATION' :
                     // in edit we are on ORGANIZATION else we create a sub context
@@ -558,24 +556,27 @@ angular.module('publisherApp')
                 case 'PUBLISHER' :
                     // in edit we are on PUBLISHER else we create a sub context
                     if (isEditCurrentCtx) {
-                        console.log("Autorized types ", ctx.context.reader.authorizedTypes);
                         // If not Flash context, ie no Classification management we remove START_DATE order
                         if (!(ctx.context.redactor.writingMode == "STATIC" &&
                             inArray('FLASH', ctx.context.reader.authorizedTypes))) {
                             $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
                                 return !angular.equals(element.name, "START_DATE");
                             });
+                        } else {
+                            // we keep only "CONTEXT" in Flash context
+                            $scope.autorizedPermissionClassList = $scope.permissionClassList.filter(function (element) {
+                                return angular.equals(element.name, "CONTEXT");
+                            });
                         }
                     } else if (ctx.context.redactor.nbLevelsOfClassification > 1) {
-                            $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
-                                return !angular.equals(element.name, "START_DATE");
-                            });
+                        $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
+                            return !angular.equals(element.name, "START_DATE");
+                        });
                     }
                     break;
                 case 'CATEGORY' :
                     // in edit we are on CATEGORY else we create a sub context
                     if (isEditCurrentCtx) {
-                        console.log("Autorized types ", ctx.publisher.context.reader.authorizedTypes);
                         if (ctx.publisher.context.redactor.nbLevelsOfClassification > 1) {
                             $scope.autorizedDisplayOrderTypeList = $scope.displayOrderTypeList.filter(function (element) {
                                 return !angular.equals(element.name, "START_DATE");
@@ -591,7 +592,8 @@ angular.module('publisherApp')
                     break;
 
             }
-            console.log("loaded displayorder list ", $scope.autorizedDisplayOrderTypeList);
+            //console.log("loaded displayorder list ", $scope.autorizedDisplayOrderTypeList);
+            //console.log("loaded permissionClass list ", $scope.autorizedPermissionClassList);
         };
         $scope.addPermission = function() {
             $scope.addPerm = true;
