@@ -662,8 +662,11 @@ a.list-group-item div.bouton-action .div-text {
 }
 
 .table td > input[type="radio"],
-.table td > input[type="checkbox"] {
+.table td > input[type="checkbox"],
+dl > dd > input[type="radio"],
+dl > dd > input[type="checkbox"] {
     margin: 0;
+    height: auto;
 }
 
 /* start Transform table into cards ! */
