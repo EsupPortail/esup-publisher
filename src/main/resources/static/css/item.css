@@ -173,6 +173,7 @@ body {
 }
 .publisher-view article header .title h1 {
     background-color: #f3f3f3 ;
+    font-size: 36px;
     margin: 0;
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -211,7 +212,7 @@ body {
     }
 
     .publisher-view article header .title {
-        text-align: center;
+        /*text-align: center;*/
         order: 1;
     }
     .publisher-view article header .image {
@@ -224,18 +225,9 @@ body {
 .publisher-view.Flash article header {
     display: flex;
     flex-direction: column;
-    position: relative;
-    padding-top: 0;
 }
 .publisher-view.Flash article header .title {
-    /*text-align: center;*/
     order: 1;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-.publisher-view.Flash article header .title > h1 {
-    background: rgba(255,255,255,0.6);
 }
 .publisher-view.Flash article header .image {
     display: block;
@@ -244,18 +236,37 @@ body {
     order: 2;
     padding: 0;
 }
-.publisher-view.Flash article header .image img   {
-    /*margin-right: auto;*/
-    /*margin-left: auto;*/
-    width: 100%;
-    opacity: 0.6;
-}
 .publisher-view.Flash article header .details {
     order: 3;
-    position: absolute;
-    bottom: 16px;
-    width: 100%;
-    background: rgba(255,255,255,0.8);
+}
+/** Styling title and summary over the image */
+@media screen and (min-width: 768px) {
+    .publisher-view.Flash article header {
+        position: relative;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    .publisher-view.Flash article header .title {
+        position: absolute;
+        top: 0;
+        width: auto;
+    }
+    .publisher-view.Flash article header .title > h1 {
+        background: rgba(255,255,255,0.6);
+    }
+    .publisher-view.Flash article header .image {
+        padding: 0;
+    }
+    .publisher-view.Flash article header .image img   {
+        width: 100%;
+        opacity: 0.6;
+    }
+    .publisher-view.Flash article header .details {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(255,255,255,0.8);
+    }
 }
 
 .publisher-view article .details {
@@ -267,6 +278,7 @@ body {
 
 .publisher-view article header .details .summary {
     display: block;
+    font-weight: bold;
 }
 .publisher-view article header .details .summary span {
     cursor: pointer;
