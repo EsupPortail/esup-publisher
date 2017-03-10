@@ -558,6 +558,13 @@ body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > l
 body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.fa {
     display: none;
 }
+/* ====================================
+    Footer
+======================================*/
+body > div.container-fluid > div.footer {
+    display: flex;
+    justify-content: space-between;
+}
 
 /* ====================================
     Main (common part of all pages)

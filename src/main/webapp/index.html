@@ -36,7 +36,7 @@
 <!--[if lt IE 10]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
-<div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
+<div ng-show="{{ ENV === 'dev' }}" class="development" ng-cloak=""></div>
 <div ui-view="navbar" ng-cloak="" class="container-navbar"></div>
 <toaster-container toaster-options="{'time-out': 10000, 'close-button': true , 'position-class': 'toast-top-center'}"></toaster-container>
 <div class="container-fluid">
@@ -48,8 +48,9 @@
     <!--</div>-->
     <div ui-view="modalRoot"></div>
     <div class="well {{currentState.parent}}" ui-view="container"></div>
-    <div class="footer text-right" ng-cloak="">
-        <p><a href="#"><span ng-cloak="" translate="footer.project"></span> <span>v{{VERSION}}</span></a></p>
+    <div class="footer" ng-cloak="">
+        <p calss="help text-left"><a href="/aide/Publisher/ModererPublications.html" target="_blank"><span ng-cloak="">{{"footer.help" | translate }}</span></a> </p>
+        <p class="project text-right"><a href="#"><span ng-cloak="">{{"footer.project" | translate }}</span> <span>v{{VERSION}}</span></a></p>
     </div>
 
     <!--<div class="modal fade" id="errorDialog" tabindex="-1" role="dialog" data-keyboard="false" aria-hidden="true">-->

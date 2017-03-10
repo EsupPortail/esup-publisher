@@ -169,7 +169,8 @@
         }
     },
     "footer": {
-        "project" : "Publisher"
+        "project" : "Publisher",
+        "help": "Aide"
     },
     "wait": {
         "dialog": "Chargement en cours ..."

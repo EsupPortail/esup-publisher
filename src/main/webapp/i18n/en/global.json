@@ -169,7 +169,8 @@
         }
     },
     "footer": {
-        "project" : "publisher"
+        "project" : "publisher",
+        "help": "Help"
     },
     "wait": {
         "dialog": "Loading ..."
