@@ -10,7 +10,7 @@
 
     <groupId>org.esupportail.publisher</groupId>
     <artifactId>esup-publisher-ui</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <name>esup-publisher-ui</name>
@@ -19,6 +19,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</developerConnection>
+        <tag>1.0.0</tag>
         <url>https://github.com/EsupPortail/esup-publisher.git</url>
     </scm>
 
@@ -512,28 +513,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <compilerArgs>
-                        <arg>-verbose</arg>
-                        <arg>-Xlint:all</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <localCheckout>true</localCheckout>
-                    <tagNameFormat>${project.artifactId}-@{project.version}</tagNameFormat>
-                    <pushChanges>true</pushChanges>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>com.google.code.sortpom</groupId>
                 <artifactId>maven-sortpom-plugin</artifactId>
@@ -647,6 +626,28 @@
                             <version>[${java.version}.0,)</version>
                         </requireJavaVersion>
                     </rules>
+                </configuration>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-verbose</arg>
+                        <arg>-Xlint:all</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <localCheckout>true</localCheckout>
+                    <tagNameFormat>${project.artifactId}-@{project.version}</tagNameFormat>
+                    <pushChanges>true</pushChanges>
                 </configuration>
             </plugin>
             <plugin>
