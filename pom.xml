@@ -10,7 +10,7 @@
 
     <groupId>org.esupportail.publisher</groupId>
     <artifactId>esup-publisher-ui</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>esup-publisher-ui</name>
@@ -19,7 +19,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>HEAD</tag>
         <url>https://github.com/EsupPortail/esup-publisher.git</url>
     </scm>
 
