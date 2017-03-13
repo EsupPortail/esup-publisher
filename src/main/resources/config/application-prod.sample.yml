@@ -1,0 +1,121 @@
+server:
+    port: 8443
+    contextPath: /publisher
+
+multipart:
+    maxFileSize: 10MB
+    maxRequestSize: 1MB
+
+spring:
+    profiles:
+        active: prod
+        include: ldapgrp
+
+    datasource:
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        url: jdbc:mysql://mysql.internal.fr:3306/publisher?autoreconnect=true
+        databaseName:
+        serverName:
+        username: publisher
+        password: mypwd
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+    jpa:
+        database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+        database: MYSQL
+        openInView: false
+        show_sql: false
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+
+    mail:
+        baseUrl: http://localhost:8080
+
+    thymeleaf:
+        mode: XHTML
+        cache: true
+
+logging:
+    config: "classpath:logback.xml"
+
+metrics:
+    jmx.enabled: true
+    spark:
+        enabled: false
+        host: localhost
+        port: 9999
+    graphite:
+        enabled: false
+        host: localhost
+        port: 2003
+        prefix: publisher
+
+cache:
+    timeToLiveSeconds: 3600
+    ehcache:
+        maxBytesLocalHeap: 256M
+
+ldap:
+    base: dc=esco-centre,dc=fr
+    urls: ldap://ldap.internal.fr:389/
+    userDn: cn=admin,ou=administrateurs,dc=univ,dc=fr
+    password: mymdp
+    timeLimit: 20000
+    countLimit: 2000
+    otherUserDisplayedAttributes: mail,ESCOUAI
+    userGroupAttribute: isMemberOf
+    otherUserOtherAttributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure
+    groupDNContainsDisplayName: true
+    groupKeyMemberRegex: "cn=(.*),ou=groups,dc=esco-centre,dc=fr"
+    groupKeyMemberIndex: 1
+    userKeyMemberRegex: "uid=(.*),ou=people,dc=esco-centre,dc=fr"
+    userKeyMemberIndex: 1
+    groupDisplayNameRegex: ".*:([^:]*)"
+    groupResolveUserMember: true
+    groupResolveUserMemberByUserAttributes: true
+    escoGroupApplicationMatcher: "((esco)|(cfa)|(clg37)|(agri)):Applications:Publication_annonces:[^:]*"
+    escoGroupApplicationNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
+    escoGroupApplicationNameIndex: "1,2"
+
+cas:
+    url:
+        prefix: https://www.univ.fr/cas/
+        login: https://www.univ.fr/cas/login
+        logout: https://www.univ.fr/cas/logout
+
+app:
+    service:
+        security: j_spring_cas_security_check
+        redirectParamName: spring-security-redirect
+        authorizedDomainNames: https://www.univ.fr,https://www.univ2.fr,https://www.univ3.fr
+        protocol: https://
+        idKeyProvider: esco_cas_publisher
+
+    admin:
+        userName: admin
+        groupName: "esco:admin:central"
+
+    users:
+        groupName: "((esco)|(cfa)|(clg37)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*"
+
+    cors:
+        allowed:
+            origins: "*"
+
+    upload:
+        path: "/home/esco/uploads/"
+        # 256Kb max
+        imageMaxSize: 262144
+
+    authorizedServices:
+        ipRange: "192.168.0.0/16"
