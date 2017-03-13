@@ -23,7 +23,7 @@
     <div class="form-group" ng-show="selectedPublisher.context.redactor && selectedPublisher.context.redactor.id" >
         <label class="control-label" for="organization" translate="manager.publish.publisher.organization">organization</label>
         <select class="form-control" id="organization" name="organization" ng-model="selectedPublisher.context.organization" ng-change="selectOrganization(selectedPublisher.context.organization)"
-                ng-options="organization as organization.name for organization in organizations track by organization.id" required>
+                ng-options="organization as organization.name for organization in organizations | orderBy: 'name'  track by organization.id" required>
         </select>
     </div>
 
