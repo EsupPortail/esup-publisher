@@ -18,7 +18,7 @@
             <div class="details" onclick="showInfo()">
                 <div class="summary">
                     <span th:if="${item.getClass().getSimpleName()} != 'Flash'" class="caret-right"></span>
-                    <span th:text="${item.summary}"></span>
+                    <span th:utext="${item.summary}"></span>
                 </div>
                 <div th:if="${item.getClass().getSimpleName()} != 'Flash'" class="pubInfo">
                     <p><span class="label" translate="publisherApp.item.createdBy">Créé par</span><span th:text="${item.createdBy.displayName}"></span><span

@@ -26,8 +26,8 @@
             </details>-->
             <div class="details">
                 <div class="summary" ng-click="showInfo()">
-                    <span ng-if="open" class="glyphicon glyphicon-triangle-bottom">{{item.summary}}</span>
-                    <span ng-if="!open" class="glyphicon glyphicon-triangle-right">{{item.summary}}</span>
+                    <span ng-if="open" class="glyphicon glyphicon-triangle-bottom" ng-bind-html="item.summary">{{item.summary}}</span>
+                    <span ng-if="!open" class="glyphicon glyphicon-triangle-right" ng-bind-html="item.summary">{{item.summary}}</span>
                 </div>
                 <div ng-show="open" class="pubInfo">
                     <p><span class="label" translate="publisherApp.item.createdBy">CreatedBy</span> <span>{{item.createdBy.displayName}}</span>,
