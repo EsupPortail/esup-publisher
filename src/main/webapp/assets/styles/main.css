@@ -414,7 +414,7 @@ body > div.container-fluid > div.well.entity > div > div > div:not(.modal) {
 }
 body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header),
 body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > button {
-    margin: 10px 2%;
+    padding: 10px 2%;
 }
 
 /* end case on admin view when managing entities */
@@ -645,7 +645,7 @@ a.list-group-item div.bouton-action .div-text {
 .container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos {
     font: inherit;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width:992px) {
     .container-fluid > .well > .manager.contents > .content .table-responsive .table .longtext {
         overflow: hidden;
         max-width: 50ch;
@@ -660,8 +660,7 @@ a.list-group-item div.bouton-action .div-text {
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-}
-@media screen and (min-width:992px) {
+
     .table-responsive .table td.fixed-date-width,
     .table-responsive .table th.fixed-date-width {
         max-width: 90px;
