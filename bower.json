@@ -22,7 +22,6 @@
     "angular-local-storage": "0.1.5",
     "swagger-ui": "2.0.24",
     "angular-cache-buster": "0.4.3",
-    "ngInfiniteScroll": "1.2.1",
     "angular-bootstrap": "0.14.3",
     "moment": "2.9.0",
     "jquery-ui": "~1.11.4",
