@@ -123,6 +123,7 @@
 <!-- endbower -->
 <!-- endbuild -->
 <script src="bower_components/jquery-ui/ui/i18n/datepicker-fr.js"></script>
+<script ng-if="ISINIFRAME" src="bower_components/iframe-resizer/postMessage-resize-iframe-in-parent.js"></script>
 
 <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
 <script src="scripts/app/app.js"></script>
@@ -320,5 +321,6 @@
 <!--<script src="scripts/components/entities/authenticatedUserEvaluator/authenticatedUserEvaluator.service.js"></script>-->
 <script src="scripts/components/entities/file/fileManager.service.js"></script>
 <!-- endbuild -->
+
 </body>
 </html>
