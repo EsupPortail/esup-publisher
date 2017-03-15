@@ -1,7 +1,8 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle other-style h1" data-toggle="collapse" data-target="#navbar-collapse">
+            <!--<button type="button" class="navbar-toggle other-style h1" data-toggle="collapse" data-target="#navbar-collapse">-->
+            <button type="button" class="navbar-toggle other-style h1" ng-click="collapse()">
                 <div ng-if="$state.includes('owned') ||  $state.includes('managed')">
                     <span class="fa fa-file-text fa-2x"></span>
                     <span>{{ "global.menu.manager.contents.main" | translate }}</span>
@@ -19,22 +20,22 @@
                 </div>
             </button>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse">
+        <div class="collapse navbar-collapse" ng-class="{'in': !isCollapsed}" id="navbar-collapse">
             <ul class="nav navbar-nav nav-pills">
                 <li ui-sref-active="active">
-                    <a ui-sref="home">
+                    <a ng-click="isCollapsed=true" ui-sref="home">
                         <span class="fa fa-home fa-2x"></span>
                         <span translate="global.menu.home">Home</span>
                     </a>
                 </li>
                 <li ui-sref-active="active">
-                    <a ui-sref="publish.publisher">
+                    <a ng-click="isCollapsed=true" ui-sref="publish.publisher">
                         <span class="fa fa-pencil fa-2x"></span>
                         <span translate="global.menu.write">Publish</span>
                     </a>
                 </li>
                 <li ng-if="!canModerate" ui-sref-active="active">
-                    <a ui-sref="owned">
+                    <a ng-click="isCollapsed=true" ui-sref="owned">
                         <span class="fa fa-file-text fa-2x"></span>
                         <span>{{ "global.menu.manager.contents.main" | translate }}</span>
                     </a>
@@ -48,21 +49,21 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active"><a ui-sref="owned"><span class="fa fa-asterisk"></span>
+                        <li ui-sref-active="active"><a ng-click="isCollapsed=true" ui-sref="owned"><span class="fa fa-asterisk"></span>
                             &#xA0;<span>{{ "global.menu.manager.contents.owned" | translate }}</span></a></li>
-                        <li ui-sref-active="active"><a ui-sref="managed"><span class="fa fa-asterisk"></span>
+                        <li ui-sref-active="active"><a ng-click="isCollapsed=true" ui-sref="managed"><span class="fa fa-asterisk"></span>
                             &#xA0;<span>{{ "global.menu.manager.contents.managed" | translate }}</span></a></li>
                     </ul>
                 </li>
                 <li ng-if="canModerate" ui-sref-active="active">
-                    <a ui-sref="pending">
+                    <a ng-click="isCollapsed=true" ui-sref="pending">
                         <span class="fa fa-gavel fa-2x"></span>
                         <span>{{ "global.menu.manager.contents.moderate" | translate }}</span>
                     </a>
                 </li>
 
                 <li ui-sref-active="active" can-moderate>
-                    <a ui-sref="treeview">
+                    <a ng-click="isCollapsed=true" ui-sref="treeview">
                         <span class="fa fa-wrench fa-2x"></span>
                         <span translate="global.menu.manager.contexts.main">Contexts</span>
                     </a>

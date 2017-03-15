@@ -15,6 +15,16 @@ angular.module('publisherApp')
         };
         $scope.load();
 
+        $scope.isCollapsed = false;
+
+        $scope.collapse = function() {
+            $scope.isCollapsed = false;
+        };
+
+        $scope.$on('$stateChangeSuccess', function (event, next) {
+            $scope.isCollapsed = true;
+        });
+
         $scope.logout = function () {
             Auth.logout();
             $state.go('home');
