@@ -437,9 +437,14 @@ nav.navbar-default .navbar-header .navbar-toggle.other-style {
     text-align: center;
     background-color: inherit;
     float:none;
+    margin-left: 0;
+    margin-right: 0;
 }
 nav.navbar-default .navbar-header .navbar-toggle.other-style  span.fa {
     display: none;
+}
+.container > .navbar-header {
+    margin:0;
 }
 
 nav, .navbar,
