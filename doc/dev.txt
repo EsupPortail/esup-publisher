@@ -26,6 +26,9 @@
 # to run in dev :
 - `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
 
+# mvn remember :
+- `mvn release:perform -Darguments="-Dmaven.deploy.skip=true"` to avoid to deploy a release (run 'grunt ngconstant' to update version in angular app constant, we should try to watch on a grunt task to make release)
+
 
 # TODO
 
