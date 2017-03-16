@@ -610,7 +610,8 @@ a.list-group-item div.bouton-action .div-text {
 ======================================*/
 
 @media screen and (min-width: 768px) {
-    body:not(.not-in-iframe) > div.container-fluid > div.well.site {
+    body:not(.not-in-iframe) > div.container-fluid > div.well.site,
+    body:not(.not-in-iframe) > div.container-fluid > div.well.site + div.footer {
         padding: 0 15%;
     }
 }
