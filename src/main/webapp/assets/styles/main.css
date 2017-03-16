@@ -32,11 +32,6 @@ body {
     body.not-in-iframe > div.container-fluid > div.well > div.manager,
     body.not-in-iframe > div.container-fluid > div.well > div.admin {
         border-bottom: 1px solid #d0d0d0;
-        -moz-box-shadow: 4px 5px 5px -5px #888888;
-        -webkit-box-shadow: 4px 5px 5px -5px #888888;
-        -o-box-shadow: 4px 5px 5px -5px #888888;
-        box-shadow: 4px 5px 5px -5px #888888;
-        filter: progid:DXImageTransform.Microsoft.Shadow(color=#888888, Direction=134, Strength=5);
     }
 }
 
@@ -92,6 +87,8 @@ a:link {
     border: none;
     background-color: #f3f3f3;
     padding: 0;
+    -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 body a {
@@ -424,6 +421,8 @@ body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > but
 
 body > div.container-navbar {
     background-color: #fff;
+    -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /* Suppression nav-header project name*/
