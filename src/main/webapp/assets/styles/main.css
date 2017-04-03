@@ -1192,7 +1192,7 @@ js-tree {
 ===========================================*/
 /* z-index problem with TextAngular active buttons due to bootstrap .btn.active class */
 .ui-datepicker {
-    z-index: 3;
+    z-index: 3 !important;
 }
 
 /* =======================================
