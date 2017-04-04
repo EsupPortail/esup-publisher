@@ -815,6 +815,12 @@ dl > dd > input[type="checkbox"] {
     max-width: 1024px;
 }
 
+.manager.treeview > .content > .treeview .context-viewer .form-group input[type=checkbox].form-control {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 /* ====================================
    preview of contents
 ======================================*/
