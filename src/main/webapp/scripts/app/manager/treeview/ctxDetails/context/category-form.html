@@ -73,14 +73,18 @@
                     </div>
                     <div class="form-group" ng-show="inArray('COLOR',publisher.context.reader.classificationDecorations)">
                         <label class="control-label" for="color" translate="publisherApp.category.color">Color</label>
-                        <input type="color" class="form-control" name="color" id="color"
-                               ng-model="editedContext.color" required>
+                        <!--<input type="color" class="form-control" name="color" id="color"-->
+                               <!--ng-model="editedContext.color" required>-->
 
-                        <div ng-show="editCategoryForm.color.$invalid">
-                            <p class="help-block"
-                               ng-show="editCategoryForm.color.$error.required" translate="entity.validation.required">
-                                This field is required.
-                            </p>
+                        <!--<div ng-show="editCategoryForm.color.$invalid">-->
+                            <!--<p class="help-block"-->
+                               <!--ng-show="editCategoryForm.color.$error.required" translate="entity.validation.required">-->
+                                <!--This field is required.-->
+                            <!--</p>-->
+                        <!--</div>-->
+                        <div class="form-control custom-color-picker" name="color" id="color">
+                            <color-palette-picker color="editedContext.color" options="paletteColorPicker"
+                                                  on-color-changed="colorChanged(newColor, oldColor)"></color-palette-picker>
                         </div>
                     </div>
                     <div class="form-group" has-role="ROLE_ADMIN">

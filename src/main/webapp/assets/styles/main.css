@@ -374,6 +374,12 @@ dl {
         margin-left: 0;
     }
 }
+.dl-horizontal.entity-details > dd > .classification-color {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.4);
+}
 
 .panel-heading, .panel-footer {
     color: #000;
@@ -1139,6 +1145,14 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
 div > div > edit-evaluator > ul,
 td > evaluator > ul {
     padding: 0;
+}
+
+.form-control.custom-color-picker {
+    border: none;
+    box-shadow: none;
+    height: auto;
+    padding: 0;
+    margin: 0;
 }
 
 /* ========================================

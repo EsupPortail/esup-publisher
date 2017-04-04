@@ -2,7 +2,7 @@
 
 angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngResource', 'ui.router', 'checklist-model', /*'ngAnimate',*/ 'angularSpinner',/*'infinite-scroll',*/
     'ngCookies', 'pascalprecht.translate', 'ngCacheBuster', 'ui.bootstrap','angular.filter', 'isteven-multi-select', 'jsTree.directive', 'ui.bootstrap.tooltip','ui.bootstrap.pagination',
-    'textAngular', 'ngFileUpload', 'uiCropper', 'colorpicker.module', 'toaster'])
+    'textAngular', 'ngFileUpload', 'uiCropper', 'colorpicker.module', 'toaster', 'color-palette-picker'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
@@ -35,6 +35,13 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         }
 
         $rootScope.ISINIFRAME = isIframe();
+
+        // init de la palette de couleur
+        $rootScope.paletteColorPicker = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3',
+            '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39',
+            '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E',
+            '#607D8B', '#000000', 'transparent'
+        ];
 
 
         //$rootScope.showSpinner = false;

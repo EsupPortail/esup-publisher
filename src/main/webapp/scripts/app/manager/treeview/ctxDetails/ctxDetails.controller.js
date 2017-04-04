@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('publisherApp')
-    .controller('DetailsTreeViewController', function ($scope, $state, $stateParams, $filter, EnumDatas, Organization, Publisher, Classification,
+    .controller('DetailsTreeViewController', function ($scope, $state, $stateParams, $filter, EnumDatas, Organization, Publisher, Classification, $rootScope,
                                                        Category, Item, ContentDTO, Permission, PermissionOnContext, Subscriber, User, Principal, toaster, $translate) {
 
         $scope.context = {};
@@ -232,13 +232,15 @@ angular.module('publisherApp')
                     if (!($scope.context.context.redactor.writingMode == "STATIC" &&
                     inArray('FLASH', $scope.context.context.reader.authorizedTypes))) {
                         // in waiting all access are PUBLIC
+                        var defaultColor = inArray('COLOR',$scope.context.context.reader.classificationDecorations) ? $rootScope.paletteColorPicker[0] : null;
+                        console.log("Default color ", defaultColor);
                         $scope.editedContext = {
                             type: 'CATEGORY',
                             publisher: $scope.context,
                             rssAllowed: false,
                             name: null,
                             iconUrl: null,
-                            color: null,
+                            color: defaultColor,
                             lang: 'fr',
                             ttl: 3600,
                             displayOrder: 0,
@@ -388,6 +390,11 @@ angular.module('publisherApp')
             }
 
         };
+
+        // for color picker in category
+        //$scope.colorChanged = function(newColor, oldColor) {
+        //    console.log('from ', oldColor, ' to ', newColor);
+        //};
 
         /* Subscribers */
         $scope.addSubscriber = function () {
