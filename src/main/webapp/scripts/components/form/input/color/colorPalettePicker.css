@@ -1,36 +1,18 @@
 .color-palette-picker {
     text-align: center;
 }
-.color-palette-picker .color-palette {
+.color-palette-picker .modal-dialog {
     background-color: #fff;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    opacity: 0;
     padding: 7px 10px 3px;
-    position: absolute;
-    -webkit-transition: visibility 0s ease .218s,opacity .218s linear;
-    transition: visibility 0s ease .218s,opacity .218s linear;
-    visibility: hidden;
     max-width: 350px;
     width: 75%;
-    z-index: 1;
-    /* calculate center - 136px / 2*/
-    left: calc(50% - (350px / 2) );
 }
 
 @media screen and (max-width: 476px) {
-    .color-palette-picker .color-palette {
+    .color-palette-picker .modal-dialog {
         max-width: none;
         width: 100%;
-        left :0;
     }
-}
-
-.color-palette-picker:hover .color-palette {
-    visibility: visible;
-    opacity: 1;
 }
 
 .color-palette-picker .color-palette div.transparent-color {
@@ -39,9 +21,7 @@
 
 .color-palette-picker .selected-color,
 .color-palette-picker .color-palette div {
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-border-radius: 50%;
     border-radius: 50%;
     height: 52px;
     width: 52px;
@@ -65,5 +45,5 @@
     background-position: center;
     background-repeat: no-repeat;
     -webkit-background-size: 26px 26px;
-    background-size: 26px 26px
+    background-size: 26px 26px;
 }

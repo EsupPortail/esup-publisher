@@ -90,7 +90,8 @@
                 "url.label": "Saisie d'un lien web",
                 "upload.label": "Importer un fichier",
                 "upload.button": "Parcourir"
-            }
+            },
+            "colorPicker": "Choisir une couleur"
         },
         "messages": {
             "info": {

@@ -34,7 +34,16 @@ angular.module('color-palette-picker', [])
                     vm.color = option;
                     vm.onColorChanged({newColor: option, oldColor: old});
                 }
-            }
-
+            };
+            vm.init = function() {
+                vm.colorOrigin = vm.color;
+            };
+            vm.cancel = function() {
+                vm.color = vm.colorOrigin;
+                $('#colorPaletteModal').modal('hide');
+            };
+            vm.validate = function() {
+                $('#colorPaletteModal').modal('hide');
+            };
         }
     });

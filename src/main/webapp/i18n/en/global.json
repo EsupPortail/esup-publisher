@@ -90,7 +90,8 @@
                 "url.label": "Enter an external url",
                 "upload.label": "Upload a file",
                 "upload.button": "Select a file"
-            }
+            },
+            "colorPicker": "Select a color"
         },
         "messages": {
             "info": {

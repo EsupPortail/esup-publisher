@@ -1,9 +1,30 @@
 <div class="color-palette-picker">
-    <div class="selected-color" ng-style="{'background-color': vm.color}"></div>
-    <div class="color-palette">
-        <div ng-repeat="option in vm.options"
-             ng-style="{'background-color': option}"
-             ng-class="{'palette-selected-color': option == vm.color, 'transparent-color': option == 'transparent'}"
-             ng-click="vm.changeColor(option)"></div>
+    <div class="selected-color" ng-style="{'background-color': vm.color}" data-toggle="modal" data-target="#colorPaletteModal" ng-click="vm.init()"></div>
+    <div id="colorPaletteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="vm.cancel()" >&times;</button>
+                    <h4 class="modal-title" translate="global.form.colorPicker">Select a color</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="color-palette">
+                        <div ng-repeat="option in vm.options"
+                             ng-style="{'background-color': option}"
+                             ng-class="{'palette-selected-color': option == vm.color, 'transparent-color': option == 'transparent'}"
+                             ng-click="vm.changeColor(option)"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="vm.cancel()" >
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="vm.validate()">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
