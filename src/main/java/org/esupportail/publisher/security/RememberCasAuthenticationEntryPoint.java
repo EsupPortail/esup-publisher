@@ -24,50 +24,50 @@ import org.springframework.web.util.UrlPathHelper;
  */
 public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryPoint, InitializingBean {
 
-	private final Logger log = LoggerFactory.getLogger(RememberCasAuthenticationEntryPoint.class);
+    private final Logger log = LoggerFactory.getLogger(RememberCasAuthenticationEntryPoint.class);
 
-	// ~ Instance fields
-	// ================================================================================================
-	private ServiceProperties serviceProperties;
+    // ~ Instance fields
+    // ================================================================================================
+    private ServiceProperties serviceProperties;
 
-	private String casLoginUrl;
+    private String casLoginUrl;
 
-	private String pathLogin;
+    private String pathLogin;
 
-	private String targetUrlParameter = "spring-security-redirect";
+    private String targetUrlParameter = "spring-security-redirect";
 
     private ServiceUrlHelper urlHelper;
 
-	/**
-	 * Determines whether the Service URL should include the session id for the specific user. As of
-	 * CAS 3.0.5, the session id will automatically be stripped. However, older versions of CAS
-	 * (i.e. CAS 2), do not automatically strip the session identifier (this is a bug on the part of
-	 * the older server implementations), so an option to disable the session encoding is provided
-	 * for backwards compatibility.
-	 *
-	 * By default, encoding is enabled.
-	 *
-	 * @deprecated since 3.0.0 because CAS is currently on 3.3.5.
-	 */
-	@Deprecated
-	private boolean encodeServiceUrlWithSessionId = true;
+    /**
+     * Determines whether the Service URL should include the session id for the specific user. As of
+     * CAS 3.0.5, the session id will automatically be stripped. However, older versions of CAS
+     * (i.e. CAS 2), do not automatically strip the session identifier (this is a bug on the part of
+     * the older server implementations), so an option to disable the session encoding is provided
+     * for backwards compatibility.
+     *
+     * By default, encoding is enabled.
+     *
+     * @deprecated since 3.0.0 because CAS is currently on 3.3.5.
+     */
+    @Deprecated
+    private boolean encodeServiceUrlWithSessionId = true;
 
-	// ~ Methods
-	// ========================================================================================================
+    // ~ Methods
+    // ========================================================================================================
 
-	public void afterPropertiesSet() throws Exception {
-		Assert.hasLength(this.casLoginUrl, "loginUrl must be specified");
-		Assert.hasLength(this.pathLogin, "pathLogin must be specified");
-		Assert.hasLength(this.targetUrlParameter, "targetUrlParameter must be specified");
-		Assert.notNull(this.serviceProperties, "serviceProperties must be specified");
-		Assert.notNull(this.serviceProperties.getService(), "serviceProperties.getService() cannot be null.");
-		Assert.notNull(this.urlHelper, "urlHelper cannot be null.");
-	}
+    public void afterPropertiesSet() throws Exception {
+        Assert.hasLength(this.casLoginUrl, "loginUrl must be specified");
+        Assert.hasLength(this.pathLogin, "pathLogin must be specified");
+        Assert.hasLength(this.targetUrlParameter, "targetUrlParameter must be specified");
+        Assert.notNull(this.serviceProperties, "serviceProperties must be specified");
+        Assert.notNull(this.serviceProperties.getService(), "serviceProperties.getService() cannot be null.");
+        Assert.notNull(this.urlHelper, "urlHelper cannot be null.");
+    }
 
-	public final void commence(final HttpServletRequest request, final HttpServletResponse response,
-			final AuthenticationException authenticationException) throws IOException, ServletException {
+    public final void commence(final HttpServletRequest request, final HttpServletResponse response,
+                               final AuthenticationException authenticationException) throws IOException, ServletException {
 
-		//HttpServletRequest httpRequest = (HttpServletRequest) request;
+        //HttpServletRequest httpRequest = (HttpServletRequest) request;
 
 		/*SecurityContext securityContext = SecurityContextHolder.getContext();
 		Authentication authentication = securityContext.getAuthentication();
@@ -79,114 +79,114 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 			}
 		}
 */
-		String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
-		log.debug("=====================================================================> RESOURCEPATH {}",
-				resourcePath);
+        String resourcePath = new UrlPathHelper().getPathWithinApplication(request);
+        log.debug("=====================================================================> RESOURCEPATH {}",
+            resourcePath);
         boolean isPostMessage = false;
         if (request.getQueryString() != null) {
             isPostMessage = request.getQueryString().contains("postMessage");
         };
         log.debug("=====================================================================> postMessage {}", isPostMessage);
-		// String doCASAuth = servletRequest.getHeader("X-request-AuthCAS");
+        // String doCASAuth = servletRequest.getHeader("X-request-AuthCAS");
 
         boolean isViewServingPage = (resourcePath != null && resourcePath.startsWith(SecurityConfiguration.PROTECTED_PATH)) ? true : false;
         log.debug("=====================================================================> isViewServingPage {}", isViewServingPage);
 
-		if (this.pathLogin.equals(resourcePath) || isViewServingPage /*&& isPostMessage && springSecurityUser == null*/) {
+        if (this.pathLogin.equals(resourcePath) || isViewServingPage /*&& isPostMessage && springSecurityUser == null*/) {
 
-			// if (doCASAuth != null) {
-			//if (pathLogin.equals(resourcePath)) {
+            // if (doCASAuth != null) {
+            //if (pathLogin.equals(resourcePath)) {
 
-			final String urlEncodedService = createServiceUrl(request, response);
-			final String redirectUrl = createRedirectUrl(urlEncodedService);
+            final String urlEncodedService = createServiceUrl(request, response);
+            final String redirectUrl = createRedirectUrl(urlEncodedService);
 
-			log.debug("Pre-authenticated entry point called. Calling CAS Authentication with redirectURL {}",
-					redirectUrl);
-			preCommence(request, response);
+            log.debug("Pre-authenticated entry point called. Calling CAS Authentication with redirectURL {}",
+                redirectUrl);
+            preCommence(request, response);
 
-			response.sendRedirect(redirectUrl);
+            response.sendRedirect(redirectUrl);
         } else {
             log.debug("Pre-authenticated entry point called. Rejecting access");
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access Denied");
-		}
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access Denied");
+        }
 
-	}
+    }
 
-	/**
-	 * Constructs a new Service Url. The default implementation relies on the CAS client to do the
-	 * bulk of the work.
-	 *
-	 * @param request
-	 *            the HttpServletRequest
-	 * @param response
-	 *            the HttpServlet Response
-	 * @return the constructed service url. CANNOT be NULL.
-	 */
-	protected String createServiceUrl(final HttpServletRequest request, final HttpServletResponse response) {
-		String service = SecurityUtils.makeDynamicCASServiceUrl(urlHelper, request) + this.serviceProperties.getService();
+    /**
+     * Constructs a new Service Url. The default implementation relies on the CAS client to do the
+     * bulk of the work.
+     *
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServlet Response
+     * @return the constructed service url. CANNOT be NULL.
+     */
+    protected String createServiceUrl(final HttpServletRequest request, final HttpServletResponse response) {
+        String service = SecurityUtils.makeDynamicCASServiceUrl(urlHelper, request) + this.serviceProperties.getService();
         log.debug("createServiceUrl, service = {}", service);
 
-		String uri = request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        String uri = request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
 
-		String servletPath = request.getServletPath();
-		if (uri != null && !uri.isEmpty()) {
-			service += String.format("?%s=%s", this.targetUrlParameter, uri);
-		}
-		log.debug("serviceURL = {}", service);
-		return CommonUtils.constructServiceUrl(null, response, service, null,
-				this.serviceProperties.getArtifactParameter(), this.encodeServiceUrlWithSessionId);
-	}
+        String servletPath = request.getServletPath();
+        if (uri != null && !uri.isEmpty()) {
+            service += String.format("?%s=%s", this.targetUrlParameter, uri);
+        }
+        log.debug("serviceURL = {}", service);
+        return CommonUtils.constructServiceUrl(null, response, service, null,
+            this.serviceProperties.getArtifactParameter(), this.encodeServiceUrlWithSessionId);
+    }
 
-	/**
-	 * Constructs the Url for Redirection to the CAS server. Default implementation relies on the
-	 * CAS client to do the bulk of the work.
-	 *
-	 * @param serviceUrl
-	 *            the service url that should be included.
-	 * @return the redirect url. CANNOT be NULL.
-	 */
-	protected String createRedirectUrl(final String serviceUrl) {
-		return CommonUtils.constructRedirectUrl(this.casLoginUrl, this.serviceProperties.getServiceParameter(),
-				serviceUrl, this.serviceProperties.isSendRenew(), false);
-	}
+    /**
+     * Constructs the Url for Redirection to the CAS server. Default implementation relies on the
+     * CAS client to do the bulk of the work.
+     *
+     * @param serviceUrl
+     *            the service url that should be included.
+     * @return the redirect url. CANNOT be NULL.
+     */
+    protected String createRedirectUrl(final String serviceUrl) {
+        return CommonUtils.constructRedirectUrl(this.casLoginUrl, this.serviceProperties.getServiceParameter(),
+            serviceUrl, this.serviceProperties.isSendRenew(), false);
+    }
 
-	/**
-	 * Template method for you to do your own pre-processing before the redirect occurs.
-	 *
-	 * @param request
-	 *            the HttpServletRequest
-	 * @param response
-	 *            the HttpServletResponse
-	 */
-	protected void preCommence(final HttpServletRequest request, final HttpServletResponse response) {
+    /**
+     * Template method for you to do your own pre-processing before the redirect occurs.
+     *
+     * @param request
+     *            the HttpServletRequest
+     * @param response
+     *            the HttpServletResponse
+     */
+    protected void preCommence(final HttpServletRequest request, final HttpServletResponse response) {
 
-	}
+    }
 
-	/**
-	 * The enterprise-wide CAS login URL. Usually something like
-	 * <code>https://www.mycompany.com/cas/login</code>.
-	 *
-	 * @return the enterprise-wide CAS login URL
-	 */
-	public final String getLoginUrl() {
-		return this.casLoginUrl;
-	}
+    /**
+     * The enterprise-wide CAS login URL. Usually something like
+     * <code>https://www.mycompany.com/cas/login</code>.
+     *
+     * @return the enterprise-wide CAS login URL
+     */
+    public final String getLoginUrl() {
+        return this.casLoginUrl;
+    }
 
-	public final ServiceProperties getServiceProperties() {
-		return this.serviceProperties;
-	}
+    public final ServiceProperties getServiceProperties() {
+        return this.serviceProperties;
+    }
 
-	public final void setLoginUrl(final String loginUrl) {
-		this.casLoginUrl = loginUrl;
-	}
+    public final void setLoginUrl(final String loginUrl) {
+        this.casLoginUrl = loginUrl;
+    }
 
-	public final void setServiceProperties(final ServiceProperties serviceProperties) {
-		this.serviceProperties = serviceProperties;
-	}
+    public final void setServiceProperties(final ServiceProperties serviceProperties) {
+        this.serviceProperties = serviceProperties;
+    }
 
-	public void setPathLogin(String pathLogin) {
-		this.pathLogin = pathLogin;
-	}
+    public void setPathLogin(String pathLogin) {
+        this.pathLogin = pathLogin;
+    }
 
     public void setUrlHelper(ServiceUrlHelper urlHelper) {
         this.urlHelper = urlHelper;

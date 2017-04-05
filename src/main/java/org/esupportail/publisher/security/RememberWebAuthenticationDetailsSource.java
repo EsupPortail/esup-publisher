@@ -9,7 +9,7 @@ import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.web.authentication.ServiceAuthenticationDetails;
 
 public class RememberWebAuthenticationDetailsSource implements
-		AuthenticationDetailsSource<HttpServletRequest, ServiceAuthenticationDetails> {
+    AuthenticationDetailsSource<HttpServletRequest, ServiceAuthenticationDetails> {
 
     private ServiceUrlHelper urlHelper;
     private ServiceProperties serviceProperties;
@@ -22,6 +22,6 @@ public class RememberWebAuthenticationDetailsSource implements
     }
 
     public RememberWebAuthenticationDetails buildDetails(HttpServletRequest request) {
-		return new RememberWebAuthenticationDetails(request, urlHelper, serviceProperties, casTargetUrlParam);
-	}
+        return new RememberWebAuthenticationDetails(request, urlHelper, serviceProperties, casTargetUrlParam);
+    }
 }
