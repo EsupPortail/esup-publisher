@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.esupportail.publisher.config.SecurityConfiguration;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.jasig.cas.client.util.CommonUtils;
 import org.slf4j.Logger;
@@ -88,7 +89,10 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
         log.debug("=====================================================================> postMessage {}", isPostMessage);
 		// String doCASAuth = servletRequest.getHeader("X-request-AuthCAS");
 
-		if (this.pathLogin.equals(resourcePath) /*&& isPostMessage && springSecurityUser == null*/) {
+        boolean isViewServingPage = (resourcePath != null && resourcePath.startsWith(SecurityConfiguration.PROTECTED_PATH)) ? true : false;
+        log.debug("=====================================================================> isViewServingPage {}", isViewServingPage);
+
+		if (this.pathLogin.equals(resourcePath) || isViewServingPage /*&& isPostMessage && springSecurityUser == null*/) {
 
 			// if (doCASAuth != null) {
 			//if (pathLogin.equals(resourcePath)) {
@@ -102,8 +106,8 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
 
 			response.sendRedirect(redirectUrl);
         } else {
-						log.debug("Pre-authenticated entry point called. Rejecting access");
-						response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access Denied");
+            log.debug("Pre-authenticated entry point called. Rejecting access");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access Denied");
 		}
 
 	}

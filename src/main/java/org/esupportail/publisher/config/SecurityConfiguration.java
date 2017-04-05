@@ -277,8 +277,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .disable()
             .authorizeRequests()
             .antMatchers("/app/**").authenticated()
-            .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
-                + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
             .antMatchers("/api/register").denyAll()
             .antMatchers("/api/activate").denyAll()
             .antMatchers("/api/authenticate").denyAll()
@@ -298,7 +296,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated()
+            .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
+            + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers(PROTECTED_PATH + "**").authenticated()
             .antMatchers("/view/**").permitAll();
         http
             .logout()
@@ -309,6 +309,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .permitAll();
 
     }
+
+    // Specific path where pages are served (outter of REST API with ANGULAR)
+    public static final String PROTECTED_PATH = "/protected/";
 
     /**
      * This allows SpEL support in Spring Data JPA @Query definitions.

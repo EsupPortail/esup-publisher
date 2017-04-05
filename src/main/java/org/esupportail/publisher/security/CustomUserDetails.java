@@ -109,6 +109,7 @@ public class CustomUserDetails implements
 	@Override
 	public String toString() {
 		return "UserDetails [user=" + user + ", authorities=" + authorities
+                + ", role= " + roles
 				+ ", isAccountNonExpired()=" + isAccountNonExpired()
 				+ ", isAccountNonLocked()=" + isAccountNonLocked()
 				+ ", isCredentialsNonExpired()=" + isCredentialsNonExpired()
