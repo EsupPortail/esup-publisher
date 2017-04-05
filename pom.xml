@@ -52,6 +52,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.0.3</metrics-spring.version>
+        <powermock-on-mockito.version>1.6.6</powermock-on-mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <querydsl.version>3.6.9</querydsl.version>
         <run.addResources>false</run.addResources>
@@ -111,6 +112,18 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>${json-path.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock-on-mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock-on-mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -655,7 +668,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <argLine>-XX:MaxPermSize=128m -Xmx256m</argLine>
+                    <argLine>-XX:MaxPermSize=256m -Xmx512m</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>

@@ -102,6 +102,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
             userSessionTree.setSuperAdmin(false);
             log.debug("Call loadUserTree for USER access !");
             // Load list of organizations
+
+            @SuppressWarnings("unchecked")
             final List<PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(PermissionClass.CONTEXT).findAll(PermissionPredicates
                 .OnCtxType(ContextType.ORGANIZATION, PermissionClass.CONTEXT, false)));
             Map<ContextKey, PermissionOnContext> ctxRoles = Maps.newHashMap();

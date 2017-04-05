@@ -82,6 +82,23 @@ public final class SecurityUtils {
         return user;
     }
 
+    /**
+     * Get the User object of the current user.
+     */
+    public static CustomUserDetails getCurrentUserDetails() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        CustomUserDetails springSecurityUser = null;
+
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof CustomUserDetails) {
+                springSecurityUser = (CustomUserDetails) authentication.getPrincipal();
+            }
+        }
+
+        return springSecurityUser;
+    }
+
 
 	/**
 	 * Check if a user is authenticated.

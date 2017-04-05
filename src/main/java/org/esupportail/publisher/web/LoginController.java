@@ -1,44 +1,25 @@
 package org.esupportail.publisher.web;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.security.CustomUserDetails;
-import org.esupportail.publisher.service.UserService;
+import org.esupportail.publisher.security.SecurityUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.inject.Inject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/app")
 @Slf4j
 public class LoginController {
-
-
-    @Inject
-    private UserService userService;
 
     @RequestMapping("/login")
     public Object login(Model model, HttpServletRequest request) throws IOException {
@@ -54,7 +35,7 @@ public class LoginController {
             return "redirect:" + URI.create(url);
         }*/
         // retrieve the user
-        CustomUserDetails user = userService.getUserWithAuthorities();
+        CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

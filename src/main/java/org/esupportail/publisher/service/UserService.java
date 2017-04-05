@@ -1,5 +1,10 @@
 package org.esupportail.publisher.service;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
@@ -14,22 +19,21 @@ import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.predicates.FilterPredicates;
-import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IAuthorityService;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
-import org.esupportail.publisher.web.rest.dto.*;
+import org.esupportail.publisher.web.rest.dto.PermOnClassifWSubjDTO;
+import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
+import org.esupportail.publisher.web.rest.dto.PermissionDTO;
+import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Service class for managing users.
@@ -103,14 +107,6 @@ public class UserService {
         } else {
             log.warn("Tried to update lastAccess of unknown user !");
         }
-	}
-
-	@Transactional(readOnly = true)
-	public CustomUserDetails getUserWithAuthorities() {
-        User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
-		UserDTO currentUserDTO = userDTOFactory.from(currentUser);
-		return new CustomUserDetails(currentUserDTO, currentUser,
-				autorityService.getUserAuthorities(currentUserDTO));
 	}
 
 	// /**
