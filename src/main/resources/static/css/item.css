@@ -299,3 +299,9 @@ body {
     text-align: right;
     padding: 0 1rem;
 }
+/** Add to center image on line */
+.publisher-view .mdi .mdi-lg {
+    font-size: 1.33333333em;
+    line-height: 0.75em;
+    vertical-align: -15%;
+}

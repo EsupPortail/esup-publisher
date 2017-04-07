@@ -7,6 +7,7 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
     .run(function ($rootScope, $location, $window, $http, $state, $translate, tmhDynamicLocale, Auth, Principal, Language, ENV, VERSION) {
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
+        $rootScope.MDIHREF = ENV === 'dev' ? 'bower_components/mdi/css/materialdesignicons.css' : '/commun/material-design-icons/1.9.32/css/materialdesignicons.min.css';
 
         function getCssEnv() {
             var sn = $location.host();

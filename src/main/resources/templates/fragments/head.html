@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!--<link th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>-->
     <!--<link th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" href="/commun/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>-->
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" href="//cdn.materialdesignicons.com/1.9.32/css/materialdesignicons.min.css" rel="stylesheet"/>
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" href="/commun/material-design-icons/1.9.32/css/materialdesignicons.min.css" rel="stylesheet"/>
     <link href="../static/css/item.css" th:href="@{/css/item.css}" rel="stylesheet" />
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css' />
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />

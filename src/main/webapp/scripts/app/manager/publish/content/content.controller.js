@@ -454,16 +454,22 @@ angular.module('publisherApp')
             var isImage = filetype === 'image';
             var maxSize = isImage ? $scope.imageSizeMax : $scope.fileSizeMax;
             // to show an icon depending on filetype
-            var cssClassType = "fa fa-file-o fa-2x fa-lg";
+            var cssClassType = "mdi mdi-file mdi-dark mdi-lg";
             var fext = file.name.substr(file.name.lastIndexOf('.')+1);
-            if (filetype === 'image' || filetype === 'audio' || filetype === "video") {
-                cssClassType = "fa fa-file-" + filetype + "-o fa-2x fa-lg";
+            if (filetype === 'image' || filetype === "video") {
+                cssClassType = "mdi mdi-file-" + filetype + " mdi-dark mdi-lg";
+            } else if (filetype === 'audio') {
+                cssClassType = "mdi mdi-file-music mdi-dark mdi-lg";
             } else if (file.type === 'application/pdf') {
-                cssClassType = "fa fa-file-pdf-o fa-2x fa-lg";
+                cssClassType = "mdi mdi-file-pdf mdi-dark mdi-lg";
             } else if (fext && fext.length > 2 && (fext === 'odt' || fext === 'doc' || fext === 'docx')) {
-                cssClassType = "fa fa-file-word-o fa-2x fa-lg";
+                cssClassType = "mdi mdi-file-word mdi-dark mdi-lg";
+            } else if (fext && fext.length > 2 && (fext === 'ods' || fext === 'xls' || fext === 'xlsx')) {
+                cssClassType = "mdi mdi-file-excel mdi-dark mdi-lg";
+            } else if (fext && fext.length > 2 && (fext === 'odp' || fext === 'ppt' || fext === 'pptx')) {
+                cssClassType = "mdi mdi-file-powerpoint mdi-dark mdi-lg";
             } else if (fext && fext.length > 2 && fext === 'txt') {
-                cssClassType = "fa fa-file-text-o fa-2x fa-lg";
+                cssClassType = "mdi mdi-file-document mdi-dark mdi-lg";
             }
             if (file.size <= maxSize){
                 $scope.progressStatus = 'success';
