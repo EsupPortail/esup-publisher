@@ -270,6 +270,10 @@ angular.module('textAngularSetup', [])
         reLinkButton: {
             tooltip: "Relink"
         },
+        nameLinkButton: {
+            tooltip: "Text of the link",
+            dialogPromp: "Please enter a text from the URL"
+        },
         unLinkButton: {
             tooltip: "Unlink"
         },
@@ -396,22 +400,29 @@ angular.module('textAngularSetup', [])
             // setup the editor toolbar
             // Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic
             event.preventDefault();
-            editorScope.displayElements.popover.css('width', '436px');
+            editorScope.displayElements.popover.css({'max-width': '436px', 'width': '350px'});
             var container = editorScope.displayElements.popoverContainer;
             container.empty();
             container.css('line-height', '28px');
             var link = angular.element('<a href="' + $element.attr('href') + '" target="_blank">' + $element.attr('href') + '</a>');
             link.css({
                 'display': 'inline-block',
-                'max-width': '200px',
+                'max-width': '100%',
                 'overflow': 'hidden',
                 'text-overflow': 'ellipsis',
                 'white-space': 'nowrap',
                 'vertical-align': 'middle'
             });
             container.append(link);
-            var buttonGroup = angular.element('<div class="btn-group pull-right">');
+            var buttonGroup = angular.element('<div class="btn-group">');
+            buttonGroup.css({
+                'width': '100%',
+                'text-align': 'center'
+            });
             var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="fa fa-edit icon-edit"></i></button>');
+            reLinkButton.css({
+                'float': 'none'
+            });
             reLinkButton.on('click', function(event){
                 event.preventDefault();
                 var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
@@ -422,7 +433,24 @@ angular.module('textAngularSetup', [])
                 editorScope.hidePopover();
             });
             buttonGroup.append(reLinkButton);
+            var nameLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.nameLinkButton.tooltip + '"><i class="fa fa-comment-o icon-comment-alt"></i></button>');
+            nameLinkButton.css({
+                'float': 'none'
+            });
+            nameLinkButton.on('click', function(event){
+                event.preventDefault();
+                var textLink = $window.prompt(taTranslations.editLink.nameLinkButton.dialogPromp, $element.html());
+                if(textLink && textLink !== ''){
+                    $element.html(textLink);
+                    editorScope.updateTaBindtaTextElement();
+                }
+                editorScope.hidePopover();
+            });
+            buttonGroup.append(nameLinkButton);
             var unLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.unLinkButton.tooltip + '"><i class="fa fa-unlink icon-unlink"></i></button>');
+            unLinkButton.css({
+                'float': 'none'
+            });
             // directly before this click event is fired a digest is fired off whereby the reference to $element is orphaned off
             unLinkButton.on('click', function(event){
                 event.preventDefault();
@@ -432,6 +460,9 @@ angular.module('textAngularSetup', [])
             });
             buttonGroup.append(unLinkButton);
             var targetToggle = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on">' + taTranslations.editLink.targetToggle.buttontext + '</button>');
+            targetToggle.css({
+                'float': 'none'
+            });
             if($element.attr('target') === '_blank'){
                 targetToggle.addClass('active');
             }
