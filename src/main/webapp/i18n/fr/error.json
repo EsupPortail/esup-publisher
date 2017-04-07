@@ -7,6 +7,7 @@
             "config": "Erreur de configuration sur le serveur",
             "empty": "Le fichier passé est vide",
             "filesize": "La taille du fichier dépasse la limite autorisée de {{size}} !",
+            "filetype": "Ce type de fichier avec le type de contenu '{{type}}' n'est pas authorisé !",
             "generic" : "Une erreur {{code}} est survenue, le transfert du fichier n'a pas réussi !",
             "ERR_INTERNET_DISCONNECTED" : "Vous rencontrez un problème d'accès internet !"
         }

@@ -1,8 +1,8 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html ng-app="publisherApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html ng-app="publisherApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html ng-app="publisherApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="publisherApp" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,7 +33,7 @@
     <!--<link href='//fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>-->
     <!-- endbuild -->
 </head>
-<body ng-app="publisherApp" class="esup-publisher {{MAINCSS}}" ng-class="{'not-in-iframe': !ISINIFRAME}">
+<body class="esup-publisher {{MAINCSS}}" ng-class="{'not-in-iframe': !ISINIFRAME}">
 <!--[if lt IE 10]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->

@@ -174,7 +174,8 @@ angular.module('publisherApp')
             //console.log("call init cropper ", $scope.content.type, $scope.cropperConf);
         };
 
-        $scope.sizeMax = Configuration.getConfUploadImageSize();
+        $scope.imageSizeMax = Configuration.getConfUploadImageSize();
+        $scope.fileSizeMax = Configuration.getConfUploadFileSize();
 
         $scope.initItem = function () {
             //console.log("init Item with type " + JSON.stringify($scope.type));
@@ -301,7 +302,7 @@ angular.module('publisherApp')
             var dataFile = (typeof dataUrl !== 'undefined') ? Upload.dataUrltoBlob(dataUrl, file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg") : file;
             //console.log("try to download ",dataFile);
             // we upload cropped file with extension jpg, it's lighter than png
-            if (dataFile.size <= $scope.sizeMax){
+            if (dataFile.size <= $scope.imageSizeMax){
                 var upload = Upload.upload({
                     url: 'app/upload/',
                     data: {
@@ -336,7 +337,7 @@ angular.module('publisherApp')
                 });
             } else {
                 // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
-                $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.sizeMax,2)}).then(function (translatedValue) {
+                $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.imageSizeMax,2)}).then(function (translatedValue) {
                     toaster.pop({type: "warning", title: translatedValue});
                 });
                 return true;
@@ -433,45 +434,71 @@ angular.module('publisherApp')
             }
         };
 
-        $scope.taDropHandler =  function(file, insertAction){
-            if (file.type.substring(0, 5) === 'image' ){
-                if (file.size <= $scope.sizeMax){
-                    $scope.progressStatus = 'success';
-                    Upload.upload({
-                        url: 'app/upload/',
-                        data: {
-                            file : file,
-                            isPublic: true,
-                            entityId: $scope.$parent.publisher.context.organization.id
-                        }
-                    }).then(function (response) {
-                        // SUCCESS
-                        var resultUrl = response.headers("Location");
-                        insertAction('insertImage', resultUrl, true);
-                        $timeout(function() {
-                            $scope.progress = null;
-                        }, 5000);
-                    }, function (response) {
-                        // ERROR
-                        manageUploadError(response);
-                    }, function (evt) {
-                        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                    });
-                    return true;
-                } else {
-                    // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
-                    $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.sizeMax,2)}).then(function (translatedValue) {
-                        toaster.pop({type: "warning", title: translatedValue});
-                    });
-                    return true;
-                }
+        $scope.taDropHandler =  function(inputfile, insertAction){
+            var file = inputfile;
+            var filetype = file.type.substring(0, 5);
+            //var isImage = filetype === 'image';
+            //if (isImage) {
+            //    console.log("IsImage");
+            //    //upload.resize = function (file, width, height, quality, type, ratio, centerCrop, resizeIf, restoreExif)
+            //    Upload.resize(inputfile, 1000).then(function (result) {
+            //        file = result;
+            //        console.log("Image :", file.size);
+            //        return taUploadHandler(file, insertAction, filetype);
+            //    });
+            //
+            //}
+            return taUploadHandler(file, insertAction, filetype);
+        };
+        function taUploadHandler(file, insertAction, filetype) {
+            var isImage = filetype === 'image';
+            var maxSize = isImage ? $scope.imageSizeMax : $scope.fileSizeMax;
+            // to show an icon depending on filetype
+            var cssClassType = "fa fa-file-o fa-2x fa-lg";
+            var fext = file.name.substr(file.name.lastIndexOf('.')+1);
+            if (filetype === 'image' || filetype === 'audio' || filetype === "video") {
+                cssClassType = "fa fa-file-" + filetype + "-o fa-2x fa-lg";
+            } else if (file.type === 'application/pdf') {
+                cssClassType = "fa fa-file-pdf-o fa-2x fa-lg";
+            } else if (fext && fext.length > 2 && (fext === 'odt' || fext === 'doc' || fext === 'docx')) {
+                cssClassType = "fa fa-file-word-o fa-2x fa-lg";
+            } else if (fext && fext.length > 2 && fext === 'txt') {
+                cssClassType = "fa fa-file-text-o fa-2x fa-lg";
             }
-            // FILE TYPE ISSUE
-            $translate('taDropHandler.error.filetype').then(function (translatedValue) {
+            if (file.size <= maxSize){
+                $scope.progressStatus = 'success';
+                Upload.upload({
+                    url: 'app/upload/',
+                    data: {
+                        file : file,
+                        isPublic: filetype === 'image' || filetype === 'audio' || filetype === "video",
+                        entityId: $scope.$parent.publisher.context.organization.id
+                    }
+                }).then(function (response) {
+                    // SUCCESS
+                    var resultUrl = response.headers("Location");
+                    if (isImage) {
+                        insertAction('insertImage', resultUrl, true);
+                    } else {
+                        insertAction('createLink', [resultUrl, file.name, cssClassType], true);
+                    }
+                    $timeout(function() {
+                        $scope.progress = null;
+                    }, 5000);
+                }, function (response) {
+                    // ERROR
+                    manageUploadError(response);
+                }, function (evt) {
+                    $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+                return true;
+            }
+            // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
+            $translate('errors.upload.filesize', {size: $filter('byteFmt')(maxSize,2)}).then(function (translatedValue) {
                 toaster.pop({type: "warning", title: translatedValue});
             });
             return true;
-        };
+        }
 
         function manageUploadError(response) {
             if (response.status > 0) {

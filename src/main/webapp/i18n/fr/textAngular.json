@@ -91,6 +91,10 @@
             "reLinkButton":{
                 "tooltip":"Éditer le lien"
             },
+            "nameLinkButton": {
+                "tooltip": "Texte affiché du lien",
+                "dialogPromp": "Insérez le texte du l'URL à afficher"
+            },
             "unLinkButton":{
                 "tooltip":"Supprimer le lien"
             },

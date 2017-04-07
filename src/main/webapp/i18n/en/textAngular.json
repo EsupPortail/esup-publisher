@@ -92,6 +92,10 @@
             "reLinkButton":{
                 "tooltip":"Relink"
             },
+            "nameLinkButton": {
+                "tooltip": "Text of the link",
+                "dialogPromp": "Please enter a text from the URL"
+            },
             "unLinkButton":{
                 "tooltip":"Unlink"
             },

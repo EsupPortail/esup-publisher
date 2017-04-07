@@ -213,6 +213,10 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                 ['backgroundColor', 'fontColor', 'clear'], /* 'fontSize', 'fontName',*/
                 ['html', 'insertImage', 'insertVideo', 'insertLink']
             ];
+
+            taOptions.defaultTagAttributes = {
+                a: {target:"_blank"}
+            };
             /*taOptions.classes = {
              focussed: "focussed",
              toolbar: "btn-toolbar",
