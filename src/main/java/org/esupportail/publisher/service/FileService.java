@@ -1,6 +1,7 @@
 package org.esupportail.publisher.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,10 +9,17 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import com.google.common.io.Files;
+import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.EmptyFileException;
+import org.apache.tika.Tika;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
+import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -24,13 +32,18 @@ public class FileService {
     private static final DateFormat df = new SimpleDateFormat("yyyyMM");
 
     @Inject
-    private FileUploadHelper internalFileUploadHelper;
+    @Qualifier("publicFileUploadHelper")
+    private FileUploadHelper publicFileUploadHelper;
+
+    @Inject
+    @Qualifier("protectedFileUploadHelper")
+    private FileUploadHelper protectedFileUploadHelper;
 
 
     public boolean deleteInternalResource(final String urlPath) {
         if (urlPath != null && !urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
-            String path = urlPath.replace(internalFileUploadHelper.getUrlResourceMapping(), "");
-            path = internalFileUploadHelper.getUploadDirectoryPath() + path;
+            String path = urlPath.replace(publicFileUploadHelper.getUrlResourceMapping(), "");
+            path = publicFileUploadHelper.getUploadDirectoryPath() + path;
             final File file = new File(path);
             if (file.exists()) {
                 final boolean deleted = file.delete();
@@ -47,17 +60,53 @@ public class FileService {
     }
 
 
-    public String uploadInternalResource(final Long entityId,final String name, final MultipartFile file) {
-        if (file.getSize() > internalFileUploadHelper.getImageMaxSize()) {
-            throw new MaxUploadSizeExceededException(internalFileUploadHelper.getImageMaxSize());
+    public String uploadInternalResource(final Long entityId,final String name, final MultipartFile file) throws MultipartException {
+        return this.uploadResource(entityId, name, file, publicFileUploadHelper);
+    }
+
+    public boolean deletePrivateResource(final String urlPath) {
+        if (urlPath != null && !urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
+            String path = urlPath.replace(protectedFileUploadHelper.getUrlResourceMapping(), "");
+            path = protectedFileUploadHelper.getUploadDirectoryPath() + path;
+            final File file = new File(path);
+            if (file.exists()) {
+                final boolean deleted = file.delete();
+                if (!deleted) {
+                    log.error("Tried to delete the file {} failed, track errors!", urlPath);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            log.error("Tried to delete the file {} but it doesn't exist, track errors!", urlPath);
         }
+        return false;
+    }
+
+    public String uploadPrivateResource(final Long entityId,final String name, final MultipartFile file) throws MultipartException {
+        return this.uploadResource(entityId, name, file, protectedFileUploadHelper);
+    }
+
+    private String uploadResource(final Long entityId,final String name, final MultipartFile file, final FileUploadHelper fileUploadHelper) throws MultipartException {
+        // Checking size
+        if (file.getSize() > fileUploadHelper.getFileMaxSize()) {
+            throw new MaxUploadSizeExceededException(fileUploadHelper.getFileMaxSize());
+        }
+        // Checking ContentType
+        Pair<Boolean, MultipartException> isAuthorized = isAuthorizedMimeType(file,fileUploadHelper);
+        Assert.notNull(isAuthorized.getFirst());
+        if (!isAuthorized.getFirst()) {
+            if (isAuthorized.getSecond() != null)
+                throw isAuthorized.getSecond();
+            return null;
+        }
+
         try {
-            //byte[] bytes = file.getBytes();
             final String fileExt = Files.getFileExtension(file.getOriginalFilename()).toLowerCase();
-            String fname = (name != null && name.length() > 0) ? name : new SimpleDateFormat("yyyyMMddHHmmss'." + fileExt + "'").format(new Date());
-            final String internPath = internalFileUploadHelper.getUploadDirectoryPath();
-            String relativPath = String.valueOf(entityId).hashCode() + File.separator + df.format(new Date()) + File.separator;
-            String path = internPath + relativPath;
+            final String fname = (name != null && name.length() > 0) ? name : new SimpleDateFormat("yyyyMMddHHmmss'." + fileExt + "'").format(new Date());
+            final String internPath = fileUploadHelper.getUploadDirectoryPath();
+            final String relativPath = String.valueOf(entityId).hashCode() + File.separator + df.format(new Date()) + File.separator;
+            final String path = internPath + relativPath;
             File inFile = new File(path + fname);
             // checking if path is existing
             if (!inFile.getParentFile().exists()) {
@@ -76,37 +125,29 @@ public class FileService {
             log.debug("Uploading file as {}", inFile.getPath());
             // start upload
             file.transferTo(inFile);
-//            BufferedOutputStream stream =
-//                new BufferedOutputStream(new FileOutputStream(inFile));
-//            stream.write(bytes);
-//            stream.close();
-            return internalFileUploadHelper.getUrlResourceMapping() + relativPath + fname;
+            return fileUploadHelper.getUrlResourceMapping() + relativPath + fname;
         } catch (Exception e) {
             log.error("File Upload error", e);
             return null;
         }
     }
 
-    public boolean deletePrivateResource(final String urlPath) {
-        if (urlPath != null && !urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
-            String path = urlPath.replace(internalFileUploadHelper.getUrlResourceMapping(), "");
-            path = internalFileUploadHelper.getUploadDirectoryPath() + path;
-            final File file = new File(path);
-            if (file.exists()) {
-                final boolean deleted = file.delete();
-                if (!deleted) {
-                    log.error("Tried to delete the file {} failed, track errors!", urlPath);
-                    return false;
-                } else {
-                    return true;
+    private Pair<Boolean, MultipartException> isAuthorizedMimeType(final MultipartFile file, final FileUploadHelper fileUploadHelper) {
+        if (file != null && !file.isEmpty()) {
+            Tika tika = new Tika();
+            try {
+                final String detectedType = tika.detect(file.getBytes());
+                if (fileUploadHelper.getAuthorizedMimeType() != null && fileUploadHelper.getAuthorizedMimeType().contains(detectedType)) {
+                    return new Pair<Boolean, MultipartException>(true, null);
                 }
+                log.warn("File {} with ContentType {} isn't authorized", file.getName(), detectedType);
+                return new Pair<Boolean, MultipartException>(false, new UnsupportedMimeTypeException(detectedType));
+            } catch (IOException e) {
+                log.warn("Error when looking for the ContentType of the file in the MultipartFile !", e);
+                return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type : Unexpected IOException", e));
             }
-            log.error("Tried to delete the file {} but it doesn't exist, track errors!", urlPath);
         }
-        return false;
+        return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type of an empty file", new EmptyFileException()));
     }
 
-    public String uploadPrivateResource(final Long entityId,final String name, final MultipartFile file) {
-        return this.uploadInternalResource(entityId, name, file);
-    }
 }

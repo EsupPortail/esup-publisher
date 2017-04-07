@@ -23,6 +23,7 @@ import org.esupportail.publisher.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -47,7 +48,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 	private MetricRegistry metricRegistry;
 
     @Autowired
-    private FileUploadHelper internalFileUploadHelper;
+    @Qualifier("publicFileUploadHelper")
+    private FileUploadHelper publicFileUploadHelper;
 
 	@Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -115,8 +117,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-//        if (!internalFileUploadHelper.isUseDefaultPath())
-//            staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/" + internalFileUploadHelper.getUrlResourceMapping() + "*");
 		staticResourcesProductionFilter.setAsyncSupported(true);
 	}
 
@@ -132,8 +132,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        if (!internalFileUploadHelper.isUseDefaultPath())
-            cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/" + internalFileUploadHelper.getUrlResourceMapping() + "*");
+        if (!publicFileUploadHelper.isUseDefaultPath())
+            cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/" + publicFileUploadHelper.getUrlResourceMapping() + "*");
 		cachingHttpHeadersFilter.setAsyncSupported(true);
 	}
 

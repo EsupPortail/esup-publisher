@@ -1,12 +1,11 @@
 package org.esupportail.publisher.web.rest.exception;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadBase;
-import org.esupportail.publisher.service.bean.FileUploadHelper;
+import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
 import org.esupportail.publisher.web.rest.dto.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Inject
-    private FileUploadHelper fileUploadHelper;
-
     //StandardServletMultipartResolver
     @ExceptionHandler(MultipartException.class)
     @ResponseBody
@@ -37,7 +33,7 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (ex.getCause() != null && ex.getCause().getCause() != null
             && ex.getCause().getCause() instanceof FileUploadBase.SizeException) {
             return new ResponseEntity<Object>(new ErrorMessage("errors.upload.filesize",
-                ImmutableMap.of("size", fileUploadHelper.getImageMaxSize())),status);
+                ImmutableMap.of("size", ((FileUploadBase.SizeException) ex.getCause().getCause()).getPermittedSize())),status);
         }
         return new ResponseEntity<Object>(new ErrorMessage("errors.upload.generic"),status);
     }
@@ -47,8 +43,15 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ResponseEntity<?> handleException2(HttpServletRequest request, Throwable ex) {
         HttpStatus status = getStatus(request);
         return new ResponseEntity<Object>(new ErrorMessage("errors.upload.filesize",
-            ImmutableMap.of("size",fileUploadHelper.getImageMaxSize())),status);
-        //return new ResponseEntity<>(new CustomErrorType(status.value(), ex.getMessage()), status);
+            ImmutableMap.of("size",((MaxUploadSizeExceededException) ex).getMaxUploadSize())),status);
+    }
+
+    @ExceptionHandler(UnsupportedMimeTypeException.class)
+    @ResponseBody
+    ResponseEntity<?> handleException3(HttpServletRequest request, Throwable ex) {
+        HttpStatus status = getStatus(request);
+        return new ResponseEntity<Object>(new ErrorMessage("errors.upload.filetype",
+            ImmutableMap.of("type",((UnsupportedMimeTypeException) ex).getUnsupportedMimeType())),status);
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

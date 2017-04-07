@@ -1,5 +1,7 @@
 package org.esupportail.publisher.service.bean;
 
+import java.util.List;
+
 import lombok.*;
 
 /**
@@ -18,5 +20,7 @@ public class FileUploadHelper {
 
     private boolean useDefaultPath;
 
-    private long imageMaxSize;
+    private long fileMaxSize;
+
+    private List<String> authorizedMimeType;
 }

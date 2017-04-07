@@ -55,7 +55,8 @@ public class ViewController {
 
     private static final String REDIRECT_PARAM = "local-back-to";
 
-    private static final String ITEM_VIEW = "/view/item/";
+    public static final String ITEM_VIEW = "/view/item/";
+    public static final String FILE_VIEW = "/view/file/";
 
     @RequestMapping(value = SecurityConfiguration.PROTECTED_PATH, produces = MediaType.TEXT_HTML_VALUE )
     public String itemView(HttpServletRequest request) {

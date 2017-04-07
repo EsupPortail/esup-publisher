@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,24 @@ public class ConfigurationResource {
     //private final Logger log = LoggerFactory.getLogger(ConfigurationResource.class);
 
     @Inject
-    private FileUploadHelper internalFileUploadHelper;
+    @Qualifier("publicFileUploadHelper")
+    private FileUploadHelper publicFileUploadHelper;
+
+    @Inject
+    @Qualifier("protectedFileUploadHelper")
+    private FileUploadHelper protectedFileUploadHelper;
 
     @RequestMapping(value = "/conf/uploadimagesize",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ValueResource> getAllAccessType() {
-        return new ResponseEntity<ValueResource>(new ValueResource(internalFileUploadHelper.getImageMaxSize()), HttpStatus.OK);
+    public ResponseEntity<ValueResource> getConfImageSize() {
+        return new ResponseEntity<ValueResource>(new ValueResource(publicFileUploadHelper.getFileMaxSize()), HttpStatus.OK);
     }
 
-
+    @RequestMapping(value = "/conf/uploadfilesize",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ValueResource> getConfFileSize() {
+        return new ResponseEntity<ValueResource>(new ValueResource(protectedFileUploadHelper.getFileMaxSize()), HttpStatus.OK);
+    }
 }
