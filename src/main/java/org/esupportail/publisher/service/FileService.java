@@ -1,6 +1,7 @@
 package org.esupportail.publisher.service;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import com.google.common.io.Files;
 import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.Charsets;
 import org.apache.commons.lang.NullArgumentException;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
@@ -101,7 +103,10 @@ public class FileService {
 
         try {
             final String fileExt = Files.getFileExtension(file.getOriginalFilename()).toLowerCase();
-            final String fname = (name != null && name.length() > 0) ? name : new SimpleDateFormat("yyyyMMddHHmmss'." + fileExt + "'").format(new Date());
+            String fname = new SimpleDateFormat("yyyyMMddHHmmss'." + fileExt + "'").format(new Date());
+            if (name != null && name.length() > 0 ) {
+                fname = URLEncoder.encode(Files.getNameWithoutExtension(name), Charsets.UTF_8.name()) + "-" + fname;
+            }
             final String internPath = fileUploadHelper.getUploadDirectoryPath();
             final String relativPath = String.valueOf(entityId).hashCode() + File.separator + df.format(new Date()) + File.separator;
             final String path = internPath + relativPath;

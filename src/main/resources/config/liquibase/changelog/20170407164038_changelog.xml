@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="jgribonvald (generated)" id="1491583300487-1">
+        <createTable tableName="T_LINKEDFILEITEM">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="T_LINKEDFILEITEMPK"/>
+            </column>
+            <column name="item_id" type="BIGINT"/>
+            <column name="uri" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="jgribonvald (generated)" id="1491583300487-2">
+        <addUniqueConstraint columnNames="item_id, uri" tableName="T_LINKEDFILEITEM"/>
+    </changeSet>
+    <changeSet author="jgribonvald (generated)" id="1491583300487-3">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="T_LINKEDFILEITEM" constraintName="FK_al2o2xs665koick4gawcf67kw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ITEM"/>
+    </changeSet>
+</databaseChangeLog>

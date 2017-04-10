@@ -52,6 +52,8 @@ public class ContentService {
     @Inject
     private IExternalUserDao externalUserDao;
 
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
 
     //@Inject
     //private PublisherRepository publisherRepository;
@@ -93,6 +95,7 @@ public class ContentService {
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
                 item = itemRepository.save(item);
+                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
                 userSessionTreeLoader.loadUserTree(authentication);
                 return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(new ValueResource(item.getStatus()));
             }
@@ -164,6 +167,7 @@ public class ContentService {
                 }
 
                 item = itemRepository.save(item);
+                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
 
                 // now we save all linked classification
                 Set<ItemClassificationOrder> classifs = new HashSet<>();
@@ -234,6 +238,7 @@ public class ContentService {
         }
         log.debug("Will save item {}", item);
         item = itemRepository.save(item);
+        updateLinkedFilesToItem(item, content.getLinkedFilesInText());
 
         // now we save all linked classification
         Set<ItemClassificationOrder> classifs = new HashSet<>();
@@ -271,6 +276,7 @@ public class ContentService {
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
                 item = itemRepository.save(item);
+                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
                 return ResponseEntity.ok(new ValueResource(item.getStatus()));
             }
             return ResponseEntity.badRequest().header("Failure", "When a content isn't complete it must be saved as a Draft").build();
@@ -344,6 +350,7 @@ public class ContentService {
                 }
 
                 item = itemRepository.save(item);
+                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
 
                 // now we save all linked classification
                 Set<ItemClassificationOrder> oldToRemoves = new HashSet<>();
@@ -421,6 +428,7 @@ public class ContentService {
         }
         log.debug("Will save item {}", item);
         item = itemRepository.save(item);
+        updateLinkedFilesToItem(item, content.getLinkedFilesInText());
 
         // now we save all linked classification
         Set<ItemClassificationOrder> oldToRemoves = new HashSet<>();
@@ -581,6 +589,34 @@ public class ContentService {
         return filteredSubjects;
     }
 
+    private void updateLinkedFilesToItem(final AbstractItem item, final Set<String> filesLinked){
+        Assert.notNull(item.getId());
+        Set<LinkedFileItem> old = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(item.getId()));
+        Set<LinkedFileItem> oldToRemove = Sets.newHashSet();
+        Set<String> filesPath = Sets.newHashSet();
+        for (LinkedFileItem file: old) {
+            final String fileUri = file.getUri();
+            filesPath.add(fileUri);
+            if (!filesLinked.contains(fileUri)) {
+                oldToRemove.add(file);
+            }
+        }
+        if (filesLinked != null && !filesLinked.isEmpty()) {
+            Set<LinkedFileItem> linkedFileItems = Sets.newLinkedHashSet();
+            for (String fileLinked: filesLinked){
+                if (!filesPath.contains(fileLinked)) {
+                    linkedFileItems.add(new LinkedFileItem(fileLinked, item));
+                }
+            }
+            linkedFileItemRepository.save(linkedFileItems);
+        }
+
+        if(!oldToRemove.isEmpty()) {
+            linkedFileItemRepository.delete(oldToRemove);
+        }
+
+    }
+
     /*private boolean isCompatiblePublishersContext(final Set<Publisher> publishers) {
         if (publishers == null || publishers.isEmpty()) return false;
         if (publishers.size() == 1) return true;
@@ -600,10 +636,15 @@ public class ContentService {
     public void deleteContent(Long id) {
         final AbstractItem item = itemRepository.findOne(id);
         fileService.deleteInternalResource(item.getEnclosure());
-        Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates.onCtx(new ContextKey(id, ContextType.ITEM)));
+        final Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates.onCtx(new ContextKey(id, ContextType.ITEM)));
         subscriberRepository.delete(subscribersToDel);
-        Iterable<ItemClassificationOrder> classificationsLinksToDel = itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(id));
+        final Iterable<ItemClassificationOrder> classificationsLinksToDel = itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(id));
         itemClassificationOrderRepository.delete(classificationsLinksToDel);
+        final Iterable<LinkedFileItem> filesToDelete = linkedFileItemRepository.findByAbstractItemId(id);
+        linkedFileItemRepository.delete(filesToDelete);
+        for (LinkedFileItem lFile: filesToDelete) {
+            fileService.deletePrivateResource(lFile.getUri());
+        }
         itemRepository.delete(id);
     }
 

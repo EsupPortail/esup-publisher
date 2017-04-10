@@ -67,6 +67,10 @@ angular.module('publisherApp')
                     loadedItem : function(contentData){
                         if (contentData)
                             return contentData.item;
+                    },
+                    loadedFilesInText : function(contentData){
+                        if (contentData)
+                            return contentData.linkedFilesInText;
                     }
                 }
             })

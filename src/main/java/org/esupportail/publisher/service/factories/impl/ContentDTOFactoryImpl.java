@@ -1,11 +1,25 @@
 package org.esupportail.publisher.service.factories.impl;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
@@ -16,13 +30,6 @@ import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by jgribonvald on 22/04/15.
@@ -40,6 +47,9 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
 
     //@Inject
     //private PublisherRepository publisherRepository;
+
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
 
     @Inject
     private SubscriberRepository subscriberRepository;
@@ -80,6 +90,14 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
             }
         }
         dto.setTargets(targets);
+        Set<LinkedFileItem> files = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(model.getId()));
+        Set<String> pathFiles = Sets.newLinkedHashSet();
+        if (!files.isEmpty()) {
+            for (LinkedFileItem file: files) {
+                pathFiles.add(file.getUri());
+            }
+        }
+        dto.setLinkedFilesInText(pathFiles);
         return dto;
     }
 

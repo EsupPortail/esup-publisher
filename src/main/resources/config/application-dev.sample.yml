@@ -120,6 +120,10 @@ app:
         path: "/home/jgribonvald/tmp/"
         # 128Kb max
         imageMaxSize: 131072
+        protectedPath: "/home/jgribonvald/tmp/"
+        filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
+        # 10MB max should be equals or lower than multipart.maxFileSize
+        maxFileSize: 10485760
 
     authorizedServices:
         ipRange: "192.168.57.0/24"

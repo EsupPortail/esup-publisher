@@ -49,7 +49,8 @@ public class ContentResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @Timed
     public ResponseEntity<?> create(@RequestBody ContentDTO content) throws URISyntaxException {
-        log.debug("REST request to save ContentDTO : classifications : {} \n item : {} \n targets {}", content.getClassifications(), content.getItem(), content.getTargets());
+        log.debug("REST request to save ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
+            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
         return contentService.createContent(content);
     }
 
@@ -63,7 +64,8 @@ public class ContentResource {
         + " && @permissionService.canEditCtx(authentication, #content.item.contextKey)")
     @Timed
     public ResponseEntity<?> update(@RequestBody ContentDTO content) throws URISyntaxException {
-        log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets {}", content.getClassifications(), content.getItem(), content.getTargets());
+        log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
+            content.getClassifications(), content.getItem(), content.getTargets());
         return contentService.updateContent(content);
     }
 

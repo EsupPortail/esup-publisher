@@ -116,6 +116,10 @@ app:
         path: "/home/esco/uploads/"
         # 256Kb max
         imageMaxSize: 262144
+        protectedPath: "/home/esco/privates/"
+        filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
+        # 10MB max should be equals or lower than multipart.maxFileSize
+        maxFileSize: 10485760
 
     authorizedServices:
         ipRange: "192.168.0.0/16"

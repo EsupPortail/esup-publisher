@@ -1,6 +1,7 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, Item, Upload, Configuration, $timeout, FileManager, Base64,
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, loadedFilesInText,
+                                                    Item, Upload, Configuration, $timeout, FileManager, Base64,
                                                     DateService, $translate, taTranslations, DateUtils, $filter, toaster) {
         $scope.$parent.item = $scope.$parent.item || {};
         $scope.$parent.itemValidated = $scope.$parent.itemValidated || false;
@@ -8,6 +9,7 @@ angular.module('publisherApp')
         $scope.content = {type : '', file: '', resultImage: '', picUrl: ''};
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
         $scope.enclosureDirty = false;
+        $scope.$parent.linkedFilesInText = $scope.$parent.linkedFilesInText || [];
 
         // I18n TextAngular Adds that can't be applied during app.config
         angular.forEach(taTranslations, function(key, value){
@@ -79,11 +81,16 @@ angular.module('publisherApp')
             $scope.updateMinDate(loadedItem);
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
         }
-
         //if (loadedItem && loadedItem.startDate != '') {
         //    $scope.startdate = angular.copy(loadedItem.startDate);
         //    //console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
         //}
+        if (angular.equals([],$scope.$parent.linkedFilesInText) && loadedFilesInText) {
+            $scope.$parent.linkedFilesInText = angular.copy(loadedFilesInText);
+
+        }
+        //console.log('after loaded parent loadedFilesInText :' , $scope.$parent.linkedFilesInText);
+
 
         if ($scope.$parent.item.type) {
             $scope.content.type = $scope.$parent.item.type;
@@ -478,7 +485,8 @@ angular.module('publisherApp')
                     data: {
                         file : file,
                         isPublic: filetype === 'image' || filetype === 'audio' || filetype === "video",
-                        entityId: $scope.$parent.publisher.context.organization.id
+                        entityId: $scope.$parent.publisher.context.organization.id,
+                        name: file.name
                     }
                 }).then(function (response) {
                     // SUCCESS
@@ -488,6 +496,7 @@ angular.module('publisherApp')
                     } else {
                         insertAction('createLink', [resultUrl, file.name, cssClassType], true);
                     }
+                    $scope.$parent.linkedFilesInText.push(resultUrl);
                     $timeout(function() {
                         $scope.progress = null;
                     }, 5000);
