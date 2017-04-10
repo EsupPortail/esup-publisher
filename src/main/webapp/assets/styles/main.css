@@ -1207,6 +1207,9 @@ js-tree {
     background-color: #D0D0D0;
     border-color: #D0D0D0;
 }
+.ta-scroll-window.form-control {
+    overflow: visible;
+}
 /* ========================================
     For ui-datepicker
 ===========================================*/
