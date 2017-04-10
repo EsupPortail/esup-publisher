@@ -1,7 +1,6 @@
 package org.esupportail.publisher.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,8 +10,7 @@ import javax.inject.Inject;
 import com.google.common.io.Files;
 import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.EmptyFileException;
-import org.apache.tika.Tika;
+import org.apache.commons.lang.NullArgumentException;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -134,20 +132,16 @@ public class FileService {
 
     private Pair<Boolean, MultipartException> isAuthorizedMimeType(final MultipartFile file, final FileUploadHelper fileUploadHelper) {
         if (file != null && !file.isEmpty()) {
-            Tika tika = new Tika();
-            try {
-                final String detectedType = tika.detect(file.getBytes());
-                if (fileUploadHelper.getAuthorizedMimeType() != null && fileUploadHelper.getAuthorizedMimeType().contains(detectedType)) {
-                    return new Pair<Boolean, MultipartException>(true, null);
-                }
-                log.warn("File {} with ContentType {} isn't authorized", file.getName(), detectedType);
-                return new Pair<Boolean, MultipartException>(false, new UnsupportedMimeTypeException(detectedType));
-            } catch (IOException e) {
-                log.warn("Error when looking for the ContentType of the file in the MultipartFile !", e);
-                return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type : Unexpected IOException", e));
+            final String detectedType = file.getContentType();
+            log.debug("Detected file Content informations {} ", detectedType);
+
+            if (detectedType != null && fileUploadHelper.getAuthorizedMimeType() != null && fileUploadHelper.getAuthorizedMimeType().contains(detectedType)) {
+                return new Pair<Boolean, MultipartException>(true, null);
             }
+            log.warn("File {} with ContentType {} isn't authorized", file.getName(), detectedType);
+            return new Pair<Boolean, MultipartException>(false, new UnsupportedMimeTypeException(detectedType));
         }
-        return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type of an empty file", new EmptyFileException()));
+        return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type of an empty file", new NullArgumentException("file")));
     }
 
 }
