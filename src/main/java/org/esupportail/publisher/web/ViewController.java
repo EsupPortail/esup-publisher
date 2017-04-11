@@ -1,12 +1,18 @@
 package org.esupportail.publisher.web;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +21,7 @@ import org.esupportail.publisher.config.SecurityConfiguration;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Resource;
@@ -23,18 +30,25 @@ import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
 import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
+import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.SecurityUtils;
+import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by jgribonvald on 22/02/17.
@@ -52,6 +66,12 @@ public class ViewController {
 
     @Inject
     private ExternalUserHelper externalUserHelper;
+
+    @Inject
+    private FileService fileService;
+
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
 
     private static final String REDIRECT_PARAM = "local-back-to";
 
@@ -107,6 +127,67 @@ public class ViewController {
         return "item";
     }
 
+    @RequestMapping(value = FILE_VIEW + "**", method = RequestMethod.GET)
+    public void downloadFile(final HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException {
+        final String query = (String)
+            request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        log.debug("Entering getting file with query {}", query);
+        String filePath = query;
+        if (filePath == null || filePath.isEmpty())
+            throw new FileNotFoundException(filePath);
+        if (filePath.startsWith("/")) filePath = filePath.substring(1);
+        log.debug("Looking for file in database {}", filePath);
+        List<LinkedFileItem> itemsFiles = Lists.newArrayList(linkedFileItemRepository.findByUri(filePath));
+        if (itemsFiles.isEmpty()) {
+            log.warn("Try to download a file that doesn't exist into the fileSystem", filePath);
+            throw new FileNotFoundException(filePath);
+        }
+        boolean canView = false;
+        String filename = null;
+        for (LinkedFileItem lfiles: itemsFiles){
+            final AbstractItem item = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(), ItemStatus.PUBLISHED));
+            try {
+                if (item != null && canView(item.getContextKey())) {
+                    canView = true;
+                    filename = lfiles.getFilename();
+                    break;
+                }
+            } catch (AccessDeniedException ade) {
+                log.trace("Redirect to establish authentication !");
+                response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?" + REDIRECT_PARAM + "=" + query);
+                return;
+            }
+        }
+
+        if (!canView) throw new AccessDeniedException("Impossible to get file '"+ filePath + "'");
+
+        if (query.startsWith(FILE_VIEW)) {
+            filePath = query.substring(FILE_VIEW.length());
+        }
+
+        Path file = Paths.get(fileService.getProtectedFileUploadHelper().getUploadDirectoryPath(), filePath);
+        if (filename == null || filename.isEmpty()) filename = file.getFileName().toString();
+        log.debug("Retrieving file {} in path {}, contentType {}", filename, file, Files.probeContentType(file));
+        if (Files.exists(file) && !Files.isDirectory(file)) {
+            response.setContentType(Files.probeContentType(file));
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+            response.addHeader("Content-Disposition", "attachement; filename=\"" + filename + "\"");
+            response.setContentLengthLong(Files.size(file));
+
+            // copy it to response's OutputStream
+            try {
+                Files.copy(file, response.getOutputStream());
+                response.flushBuffer();
+            } catch (FileNotFoundException fnfe) {
+                log.warn("Try to download a file that doesn't exist into the fileSystem", fnfe);
+                throw new FileNotFoundException(filePath);
+            } catch (IOException ex) {
+                log.info("Error writing file to output stream. Filename was '{}'", filePath, ex);
+                throw ex;
+            }
+        } else throw new FileNotFoundException(filePath);
+    }
+
     private boolean canView(final ContextKey ctx) throws AccessDeniedException {
         List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(ctx)));
         // TODO we consider that all items have targets directly on
@@ -119,6 +200,8 @@ public class ViewController {
         if (user == null) {
             log.trace("user is not authenticated -> throw an error to redirect on authentication");
             throw new AccessDeniedException("Access is denied to anonymous !");
+        } else if (user.getRoles().contains(AuthoritiesConstants.ADMIN)) {
+            return true;
         } else {
             final UserDTO userDTO = user.getUser();
             List<String> groups = null;
@@ -184,11 +267,20 @@ public class ViewController {
         final String param = REDIRECT_PARAM + "=";
         if ( path.startsWith(param) ) {
             path = request.getQueryString().substring(param.length());
-            if (path.startsWith(ITEM_VIEW)) {
+            if (path.startsWith(ITEM_VIEW) || path.startsWith(FILE_VIEW)) {
                 return path;
             }
         }
         log.warn("The security was tested with a wrong request query '{}'", request.getQueryString());
         throw new AccessDeniedException("The security was tested with a wrong request query '" + request.getQueryString());
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ModelAndView handleAllExceptionFNFE(Exception ex) {
+        return new ModelAndView("fileNotFound");
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAllExceptionADE(Exception ex) {
+        return new ModelAndView("403");
     }
 }
