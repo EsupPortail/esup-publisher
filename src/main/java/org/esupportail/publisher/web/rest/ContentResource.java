@@ -65,7 +65,7 @@ public class ContentResource {
     @Timed
     public ResponseEntity<?> update(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
-            content.getClassifications(), content.getItem(), content.getTargets());
+            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
         return contentService.updateContent(content);
     }
 
@@ -106,6 +106,4 @@ public class ContentResource {
         log.debug("REST request to delete Content : {}", id);
         contentService.deleteContent(id);
     }
-
-
 }

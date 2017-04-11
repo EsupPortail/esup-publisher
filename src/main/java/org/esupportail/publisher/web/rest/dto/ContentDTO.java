@@ -27,6 +27,6 @@ public class ContentDTO {
 
     private List<SubscriberFormDTO> targets = new ArrayList<>();
 
-    private Set<String> linkedFilesInText = new HashSet<>();
+    private Set<LinkedFileItemDTO> linkedFilesInText = new HashSet<>();
 
 }

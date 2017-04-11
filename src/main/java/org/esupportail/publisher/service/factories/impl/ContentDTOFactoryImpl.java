@@ -27,6 +27,7 @@ import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.ContentDTOFactory;
 import org.esupportail.publisher.service.factories.SubjectDTOSimpleFactory;
 import org.esupportail.publisher.web.rest.dto.ContentDTO;
+import org.esupportail.publisher.web.rest.dto.LinkedFileItemDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,10 +92,10 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
         }
         dto.setTargets(targets);
         Set<LinkedFileItem> files = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(model.getId()));
-        Set<String> pathFiles = Sets.newLinkedHashSet();
+        Set<LinkedFileItemDTO> pathFiles = Sets.newLinkedHashSet();
         if (!files.isEmpty()) {
             for (LinkedFileItem file: files) {
-                pathFiles.add(file.getUri());
+                pathFiles.add(new LinkedFileItemDTO(file.getUri(), file.getFilename()));
             }
         }
         dto.setLinkedFilesInText(pathFiles);

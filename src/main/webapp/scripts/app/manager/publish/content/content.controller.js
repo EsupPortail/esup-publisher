@@ -496,7 +496,7 @@ angular.module('publisherApp')
                     } else {
                         insertAction('createLink', [resultUrl, file.name, cssClassType], true);
                     }
-                    $scope.$parent.linkedFilesInText.push(resultUrl);
+                    $scope.$parent.linkedFilesInText.push({ uri: decodeURIComponent(resultUrl), filename: file.name });
                     $timeout(function() {
                         $scope.progress = null;
                     }, 5000);

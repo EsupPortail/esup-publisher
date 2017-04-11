@@ -50,6 +50,7 @@ import org.esupportail.publisher.security.UserContextLoaderService;
 import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
+import org.esupportail.publisher.web.rest.dto.LinkedFileItemDTO;
 import org.esupportail.publisher.web.rest.dto.PermOnClassifWSubjDTO;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
@@ -620,23 +621,28 @@ public class ContentService {
         return filteredSubjects;
     }
 
-    private void updateLinkedFilesToItem(final AbstractItem item, final Set<String> filesLinked){
+    private void updateLinkedFilesToItem(final AbstractItem item, final Set<LinkedFileItemDTO> filesLinked){
         Assert.notNull(item.getId());
         Set<LinkedFileItem> old = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(item.getId()));
         Set<LinkedFileItem> oldToRemove = Sets.newHashSet();
         Set<String> filesPath = Sets.newHashSet();
-        for (LinkedFileItem file: old) {
-            final String fileUri = file.getUri();
+        for (LinkedFileItem oldFile: old) {
+            final String fileUri = oldFile.getUri();
             filesPath.add(fileUri);
-            if (!filesLinked.contains(fileUri)) {
-                oldToRemove.add(file);
+            boolean found = false;
+            for (LinkedFileItemDTO fileLinked: filesLinked) {
+                if (fileLinked.getUri().equals(fileUri)) {
+                    found = true;
+                    break;
+                }
             }
+            if (!found) oldToRemove.add(oldFile);
         }
         if (filesLinked != null && !filesLinked.isEmpty()) {
             Set<LinkedFileItem> linkedFileItems = Sets.newLinkedHashSet();
-            for (String fileLinked: filesLinked){
-                if (!filesPath.contains(fileLinked)) {
-                    linkedFileItems.add(new LinkedFileItem(fileLinked, item));
+            for (LinkedFileItemDTO fileLinked: filesLinked){
+                if (!filesPath.contains(fileLinked.getUri())) {
+                    linkedFileItems.add(new LinkedFileItem(fileLinked.getUri(), fileLinked.getFilename(), item));
                 }
             }
             linkedFileItemRepository.save(linkedFileItems);

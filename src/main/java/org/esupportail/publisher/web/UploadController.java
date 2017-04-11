@@ -46,12 +46,12 @@ public class UploadController {
         if (!file.isEmpty()) {
             String result = null;
             if (isPublic) {
-                result = fileService.uploadInternalResource(entityId,name,file);
+                result = fileService.uploadInternalResource(entityId, name, file);
             } else {
                 result = fileService.uploadPrivateResource(entityId, name, file);
             }
             if (result != null && !result.isEmpty()) {
-                return ResponseEntity.created(new URI(result)).build();
+                return ResponseEntity.created(new URI(null, null, result, null)).build();
             }
             return new ResponseEntity<Object>(new ErrorMessage("errors.upload.config"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
