@@ -1,12 +1,44 @@
 package org.esupportail.publisher.service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
-import org.esupportail.publisher.domain.enums.*;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractFeed;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.Filter;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.SubjectKey;
+import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.enums.FilterType;
+import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.enums.PermissionClass;
+import org.esupportail.publisher.domain.enums.PermissionType;
+import org.esupportail.publisher.domain.enums.SubjectType;
+import org.esupportail.publisher.domain.enums.WritingMode;
+import org.esupportail.publisher.repository.ClassificationRepository;
+import org.esupportail.publisher.repository.FilterRepository;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
+import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.predicates.FilterPredicates;
@@ -16,7 +48,14 @@ import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.security.UserContextLoaderService;
 import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
-import org.esupportail.publisher.web.rest.dto.*;
+import org.esupportail.publisher.web.rest.dto.ContentDTO;
+import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
+import org.esupportail.publisher.web.rest.dto.PermOnClassifWSubjDTO;
+import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
+import org.esupportail.publisher.web.rest.dto.PermissionDTO;
+import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
+import org.esupportail.publisher.web.rest.dto.ValueResource;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.http.HttpStatus;
@@ -26,16 +65,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -402,7 +431,9 @@ public class ContentService {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
-        } else if (!PermissionClass.CONTEXT.equals(contextPermClass)) {
+        } else if (PermissionClass.CONTEXT.equals(contextPermClass)) {
+            authorizedSubscribers.addAll(content.getTargets());
+        } else {
             throw new IllegalStateException(String.format("Permission Type %s is not managed", lowerClassifPerm.getSecond()));
         }
 
