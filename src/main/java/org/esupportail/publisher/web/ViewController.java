@@ -250,7 +250,10 @@ public class ViewController {
 
     private String replaceBodyUrl(final String body, final String baseUrl){
         if (body != null && !body.trim().isEmpty()){
-            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/");
+            String fileview = FILE_VIEW;
+            if (fileview.startsWith("/")) fileview = fileview.substring(1);
+            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/")
+                .replaceAll("href=\"" + fileview, "href=\"" + baseUrl + fileview);
         }
         return body;
     }
