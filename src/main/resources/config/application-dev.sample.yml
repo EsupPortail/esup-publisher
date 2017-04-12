@@ -105,6 +105,11 @@ app:
         protocol: http://
         idKeyProvider: esco_cas_publisher
 
+        highlightClassification :
+            name: "À la une"
+            color: "#F44336"
+            description: "Rubrique contenant les publications à mettre en avant"
+
     admin:
         userName: F08001ut
         groupName: "esco:admin:central"

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('OwnedController', function ($scope, $state, $stateParams, Item, ContentDTO, ParseLinks, Subject) {
+    .controller('OwnedController', function ($scope, $state, $stateParams, Item, ContentDTO, ParseLinks, Subject, loadHighlightedClassification) {
         $scope.items = [];
         $scope.page = 1;
         /** in manager state resolve
@@ -20,6 +20,8 @@ angular.module('publisherApp')
             $scope.loadAll();
         };
         $scope.loadAll();
+
+        $scope.classificationHighlighted = loadHighlightedClassification;
 
         $scope.delete = function (id) {
             Item.get({id: id}, function(result) {

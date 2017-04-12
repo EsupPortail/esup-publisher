@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ManagedController', function ($scope, $state, $stateParams, Item, ContentDTO, ParseLinks, Subject) {
+    .controller('ManagedController', function ($scope, $state, $stateParams, Item, ContentDTO, ParseLinks, Subject, loadHighlightedClassification) {
         $scope.items = [];
         $scope.page = 1;
         /** in manager state resolve
@@ -23,6 +23,8 @@ angular.module('publisherApp')
             $scope.loadAll();
         };
         $scope.loadAll();
+
+        $scope.classificationHighlighted = loadHighlightedClassification;
 
         $scope.validate = function (id) {
             Item.get({id: id}, function(result) {

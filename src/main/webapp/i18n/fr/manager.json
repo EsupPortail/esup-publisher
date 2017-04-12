@@ -23,6 +23,10 @@
             "managed": {
                 "title": "Toutes les publications",
                 "order": "Organisées par état de publication"
+            },
+            "legend": {
+                "title": "Légende :",
+                "highlight": "Ces publications sont \"{{ name }}\""
             }
         },
         "publish": {
@@ -45,7 +49,8 @@
                 "step": "Rubrique",
                 "title": "Choix de la rubrique",
                 "choice": "Classer la publication dans une ou plusieurs rubriques :",
-                "emptyList": "Vous n'avez pas de droit sur les rubriques du context sélectionné ou il n'y a aucune rubrique de définie !"
+                "emptyList": "Vous n'avez pas de droit sur les rubriques du context sélectionné ou il n'y a aucune rubrique de définie !",
+                "highlight": "Placer la publication \"{{ name }}\" :"
             },
             "targets": {
                 "step": "Cibles",

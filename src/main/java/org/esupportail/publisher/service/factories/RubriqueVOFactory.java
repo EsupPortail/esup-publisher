@@ -1,10 +1,11 @@
 package org.esupportail.publisher.service.factories;
 
-import org.esupportail.publisher.domain.AbstractClassification;
-import org.esupportail.publisher.web.rest.vo.RubriqueVO;
-
 import java.util.Collection;
 import java.util.List;
+
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.service.bean.HighlightedClassification;
+import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 
 /**
  * Created by jgribonvald on 03/06/16.
@@ -12,6 +13,8 @@ import java.util.List;
 public interface RubriqueVOFactory {
 
     RubriqueVO from(final AbstractClassification model);
+
+    RubriqueVO from(final HighlightedClassification model);
 
     List<RubriqueVO> asVOList(final Collection<? extends AbstractClassification> models);
 }

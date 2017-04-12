@@ -15,6 +15,14 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
@@ -26,13 +34,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -46,49 +47,49 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class News extends AbstractItem implements Serializable {
 
-	/** */
-	private static final long serialVersionUID = 8024488811030037006L;
+    /** */
+    private static final long serialVersionUID = 8024488811030037006L;
 
-	/** This field corresponds to the database column body. */
-	@NotNull
-	@NonNull
-	@Size(min = 5)
-	@Lob
-	@Basic
-	// @Column(nullable=false) can't apply as single table strategy
-	private String body;
+    /** This field corresponds to the database column body. */
+    @NotNull
+    @NonNull
+    @Size(min = 5)
+    @Lob
+    @Basic
+    // @Column(nullable=false) can't apply as single table strategy
+    private String body;
 
-	/**
-	 * Empty constructor of News.
-	 */
-	public News() {
-		super();
-	}
+    /**
+     * Empty constructor of News.
+     */
+    public News() {
+        super();
+    }
 
-	/**
-	 * Constructor of News.
-	 *
-	 * @param title
-	 * @param enclosure
-	 * @param body
-	 * @param startDate
-	 * @param endDate
-	 * @param validatedDate
-	 * @param validatedBy
-	 * @param status
-	 * @param summary
+    /**
+     * Constructor of News.
+     *
+     * @param title
+     * @param enclosure
+     * @param body
+     * @param startDate
+     * @param endDate
+     * @param validatedDate
+     * @param validatedBy
+     * @param status
+     * @param summary
      * @param rssAllowed
-	 * @param organization
-	 * @param redactor
-	 */
-	public News(final String title, final String enclosure, final String body,
-			final LocalDate startDate, final LocalDate endDate,
-			final DateTime validatedDate, final User validatedBy,
-			final ItemStatus status, final String summary, final boolean rssAllowed,
-			final Organization organization, final Redactor redactor) {
-		super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
-				status, summary, rssAllowed, organization, redactor);
-		this.body = body;
-	}
+     * @param organization
+     * @param redactor
+     */
+    public News(final String title, final String enclosure, final String body,
+                final LocalDate startDate, final LocalDate endDate,
+                final DateTime validatedDate, final User validatedBy,
+                final ItemStatus status, final String summary, final boolean rssAllowed,
+                final boolean highlight, final Organization organization, final Redactor redactor) {
+        super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
+            status, summary, rssAllowed, highlight, organization, redactor);
+        this.body = body;
+    }
 
 }

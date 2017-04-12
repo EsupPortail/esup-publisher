@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
@@ -31,6 +32,9 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
     @Inject
     private VisibilityFactory visibilityFactory;
 
+    @Inject
+    private HighlightedClassificationService highlightedClassificationService;
+
     public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers, final HttpServletRequest request) {
         if (item != null) {
             ItemVO vo = new ItemVO();
@@ -52,6 +56,10 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             for (AbstractClassification classif: classifications) {
                 article.getCategories().add(classif.getDisplayName());
                 vo.getRubriques().add(classif.getId());
+            }
+            if (item.isHighlight()) {
+                article.getCategories().add(highlightedClassificationService.getClassification().getName());
+                vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
             }
             article.setCreator(item.getCreatedBy().getDisplayName());
             article.setDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));

@@ -1,5 +1,11 @@
 package org.esupportail.publisher.web.rest;
 
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.ContextKey;
@@ -22,12 +28,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing users.
@@ -170,6 +176,18 @@ public class UserResource {
     public ResponseEntity<ValueResource> userModerateSomething() {
         log.debug("REST request to get if user can moderate something !");
         boolean canDo = permissionService.canModerateSomething(SecurityContextHolder.getContext().getAuthentication());
+        return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
+    }
+
+    /**
+     * GET /users/perm/highlight -> get the permission of can highlight an item in a context.
+     */
+    @RequestMapping(value = "/users/perm/highlight", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @RolesAllowed(AuthoritiesConstants.USER)
+    public ResponseEntity<ValueResource> userCanHighlightInCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
+        log.debug("REST request to get if user can highlight in context !");
+        boolean canDo = permissionService.canHighlightInCtx(SecurityContextHolder.getContext().getAuthentication(), new ContextKey(ctxId, ctxType));
         return new ResponseEntity<>(new ValueResource(canDo), HttpStatus.OK);
     }
 

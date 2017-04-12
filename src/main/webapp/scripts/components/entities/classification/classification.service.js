@@ -15,6 +15,10 @@ angular.module('publisherApp')
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT' },
+            'hightlihted': {
+                method: 'GET',
+                url: 'api/classifications/highlighted'
+            }
         });
     });

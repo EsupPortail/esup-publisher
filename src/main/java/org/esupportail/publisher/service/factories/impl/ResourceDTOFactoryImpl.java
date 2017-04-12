@@ -1,5 +1,7 @@
 package org.esupportail.publisher.service.factories.impl;
 
+import javax.inject.Inject;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -14,8 +16,6 @@ import org.esupportail.publisher.web.rest.dto.ResourceDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,10 +44,11 @@ public class ResourceDTOFactoryImpl extends ItemDTOFactoryImpl<ResourceDTO, Reso
                 updatedBy = getSubjectFactory().from(model.getLastModifiedBy());
             }
             return new ResourceDTO(model.getId(), model.getTitle(), model.getEnclosure(), model.getRessourceUrl(), model.getStartDate(),
-                    model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
-                    model.getStatus(), model.getSummary(), model.isRssAllowed(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
-                    model.getCreatedDate(), model.getLastModifiedDate(),
-                    getSubjectFactory().from(model.getCreatedBy()), updatedBy);
+                model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
+                model.getStatus(), model.getSummary(), model.isRssAllowed(), model.isHighlight(),
+                orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
+                model.getCreatedDate(), model.getLastModifiedDate(),
+                getSubjectFactory().from(model.getCreatedBy()), updatedBy);
         }
         return null;
     }
@@ -65,6 +66,7 @@ public class ResourceDTOFactoryImpl extends ItemDTOFactoryImpl<ResourceDTO, Reso
         model.setStatus(dtObject.getStatus());
         model.setSummary(dtObject.getSummary());
         model.setRssAllowed(dtObject.isRssAllowed());
+        model.setHighlight(dtObject.isHighlight());
         model.setOrganization(orgFactory.from(dtObject.getOrganization().getModelId()));
         model.setRedactor(redactorFactory.from(dtObject.getRedactor().getModelId()));
 

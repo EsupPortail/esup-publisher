@@ -1,5 +1,12 @@
 package org.esupportail.publisher.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import com.mysema.query.types.Predicate;
@@ -13,6 +20,8 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
+import org.esupportail.publisher.service.HighlightedClassificationService;
+import org.esupportail.publisher.service.bean.HighlightedClassification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,13 +31,12 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing AbstractClassification.
@@ -47,6 +55,9 @@ public class ClassificationResource {
 
     @Inject
     private IPermissionService permissionService;
+
+    @Inject
+    private HighlightedClassificationService highlightedClassificationService;
 
     /**
      * POST  /classifications -> Create a new classification.
@@ -157,5 +168,18 @@ public class ClassificationResource {
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractClassification : {}", id);
         classificationRepository.delete(id);
+    }
+
+    /**
+     * DELETE  /classifications/highlighted -> get the "highlighted" classification.
+     */
+    @RequestMapping(value = "/classifications/highlighted",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER)
+    @Timed
+    public ResponseEntity<HighlightedClassification> getHighlight() {
+        log.debug("REST request to get Highlight Classification.");
+        return new ResponseEntity<>(highlightedClassificationService.getClassification(), HttpStatus.OK);
     }
 }

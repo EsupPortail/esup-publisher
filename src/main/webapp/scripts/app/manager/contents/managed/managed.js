@@ -20,7 +20,11 @@ angular.module('publisherApp')
                         $translatePartialLoader.addPart('item');
                         $translatePartialLoader.addPart('classification');
                         return $translate.refresh();
-                    }]
+                    }],
+                    classificationResource : 'Classification',
+                    loadHighlightedClassification : function(classificationResource) {
+                        return classificationResource.hightlihted().$promise;
+                    }
                 }
             }).state('managed.subject', {
                 parent: 'managed',

@@ -1,5 +1,7 @@
 package org.esupportail.publisher.service.factories.impl;
 
+import javax.inject.Inject;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -14,8 +16,6 @@ import org.esupportail.publisher.web.rest.dto.MediaDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,18 +38,19 @@ public class MediaDTOFactoryImpl extends ItemDTOFactoryImpl<MediaDTO, Media> imp
     @Override
     public MediaDTO from(final Media model) {
         log.debug("Model to DTO of {}", model);
-         if (model != null) {
-             SubjectDTO updatedBy = null;
-             if (model.getLastModifiedBy() != null ) {
-                 updatedBy = getSubjectFactory().from(model.getLastModifiedBy());
-             }
-             return new MediaDTO(model.getId(), model.getTitle(), model.getEnclosure(), model.getStartDate(),
-                     model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
-                     model.getStatus(), model.getSummary(), model.isRssAllowed(), orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
-                     model.getCreatedDate(), model.getLastModifiedDate(),
-                     getSubjectFactory().from(model.getCreatedBy()), updatedBy);
-         }
-         return null;
+        if (model != null) {
+            SubjectDTO updatedBy = null;
+            if (model.getLastModifiedBy() != null ) {
+                updatedBy = getSubjectFactory().from(model.getLastModifiedBy());
+            }
+            return new MediaDTO(model.getId(), model.getTitle(), model.getEnclosure(), model.getStartDate(),
+                model.getEndDate(), model.getValidatedDate(), getSubjectFactory().from(model.getValidatedBy()),
+                model.getStatus(), model.getSummary(), model.isRssAllowed(), model.isHighlight(),
+                orgFactory.from(model.getOrganization()), redactorFactory.from(model.getRedactor()),
+                model.getCreatedDate(), model.getLastModifiedDate(),
+                getSubjectFactory().from(model.getCreatedBy()), updatedBy);
+        }
+        return null;
     }
 
     @Override
@@ -64,6 +65,7 @@ public class MediaDTOFactoryImpl extends ItemDTOFactoryImpl<MediaDTO, Media> imp
         model.setStatus(dtObject.getStatus());
         model.setSummary(dtObject.getSummary());
         model.setRssAllowed(dtObject.isRssAllowed());
+        model.setHighlight(dtObject.isHighlight());
         model.setOrganization(orgFactory.from(dtObject.getOrganization().getModelId()));
         model.setRedactor(redactorFactory.from(dtObject.getRedactor().getModelId()));
 

@@ -16,7 +16,11 @@ angular.module('publisherApp')
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('item');
                         return $translate.refresh();
-                    }]
+                    }],
+                    classificationResource : 'Classification',
+                    loadHighlightedClassification : function(classificationResource) {
+                        return classificationResource.hightlihted().$promise;
+                    }
                 }
             }).state('pending.subject', {
                 parent: 'pending',

@@ -286,4 +286,40 @@ angular.module('publisherApp')
             }
 
         };
+    }]).directive('canHighlight', ['User', function (User) {
+        return {
+            restrict: 'A',
+            scope: {
+                context: '=canHighlight'
+            },
+            link: function (scope, element, attrs) {
+                scope.$watch('context', function(ctx) {
+                    var setVisible = function () {
+                            element.removeClass('hidden');
+                        },
+                        setHidden = function () {
+                            element.addClass('hidden');
+                        },
+                        defineVisibility = function (reset) {
+                            if (reset) {
+                                setVisible();
+                            }
+                            User.canHighlight(scope.context, function (data) {
+                                var result = data.value;
+                                if (result == true) {
+                                    setVisible();
+                                } else {
+                                    setHidden();
+                                }
+                            }, function () {
+                                setHidden();
+                            });
+                        };
+                    setHidden();
+                    if (scope.context && scope.context.keyId && scope.context.keyType) {
+                        defineVisibility(false);
+                    }
+                });
+            }
+        };
     }]);

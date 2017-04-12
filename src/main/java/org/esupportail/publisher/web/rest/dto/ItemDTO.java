@@ -1,5 +1,9 @@
 package org.esupportail.publisher.web.rest.dto;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
@@ -7,14 +11,14 @@ import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.esupportail.publisher.domain.util.*;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
+import org.esupportail.publisher.domain.util.CustomDateTimeDeserializer;
+import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
+import org.esupportail.publisher.domain.util.CustomLocalDateSerializer;
+import org.esupportail.publisher.domain.util.ISO8601LocalDateDeserializer;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @ToString
 @ScriptAssert(lang = "javascript", script = "_this.startDate.before(_this.endDate)")
@@ -73,6 +77,9 @@ public abstract class ItemDTO extends PermissibleDTO {
     @Setter
     private boolean rssAllowed;
 
+    @Getter
+    @Setter
+    private boolean highlight;
 
     @Getter
     private OrganizationDTO organization;
@@ -98,13 +105,14 @@ public abstract class ItemDTO extends PermissibleDTO {
      * @param status
      * @param summary
      * @param rssAllowed
+     * @param highlight
      * @param organization
      * @param redactor
      */
     public ItemDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
             @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
-            @NotNull final String summary, final boolean rssAllowed, @NotNull final OrganizationDTO organization,
+            @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy) {
         super(modelId, creationDate, lastUpdateDate, createdBy, lastUpdateBy, ContextType.ITEM);
@@ -117,6 +125,7 @@ public abstract class ItemDTO extends PermissibleDTO {
         this.status = status;
         this.summary = summary;
         this.rssAllowed = rssAllowed;
+        this.highlight = highlight;
         this.organization = organization;
         this.redactor = redactor;
     }

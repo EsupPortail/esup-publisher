@@ -378,4 +378,26 @@ public class PermissionServiceImpl implements IPermissionService {
         }
         return false;
     }
+
+    @Override
+    public boolean canHighlightInCtx(Authentication authentication, @NotNull ContextKey contextKey) {
+        final UserDTO user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+        final Collection<? extends GrantedAuthority> authorities = ((CustomUserDetails) authentication.getPrincipal()).getAuthorities();
+
+        log.debug("Testing canHighlightInCtx");
+        if (authorities.contains(new SimpleGrantedAuthority(
+            AuthoritiesConstants.ADMIN))) {
+            return true;
+        }
+
+        if (authorities.contains(new SimpleGrantedAuthority(
+            AuthoritiesConstants.USER))) {
+            if (!userSessionTree.isTreeLoaded()) {
+                userSessionTreeLoader.loadUserTree(user, authorities);
+            }
+            final PermissionType perm = userSessionTree.getRoleFromContextTree(contextKey);
+            return perm != null && perm.getMask() > PermissionType.CONTRIBUTOR.getMask();
+        }
+        return false;
+    }
 }

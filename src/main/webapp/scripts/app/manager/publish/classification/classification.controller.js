@@ -1,16 +1,22 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ClassificationChoiceController', function ($scope, $state, $filter, Classification, loadedClassifications) {
+    .controller('ClassificationChoiceController', function ($scope, $state, $filter, Classification, loadedClassifications, User, loadHighlightedClassification, loadedItem) {
 
         $scope.$parent.classifications = $scope.$parent.classifications || [];
         $scope.$parent.targets = $scope.$parent.targets || [];
         $scope.$parent.classificationsValidated = $scope.$parent.classificationsValidated || false;
+        $scope.$parent.highlight = $scope.$parent.highlight || false;
         $scope.showCats = false;
 
         $scope.classificationsList = [];
+        $scope.classificationHighlighted = loadHighlightedClassification;
 
         if (angular.equals([],$scope.$parent.classifications) && loadedClassifications) {
             $scope.$parent.classifications = angular.copy(loadedClassifications);
+        }
+
+        if (angular.equals({},$scope.$parent.item) && loadedItem) {
+            $scope.$parent.highlight = angular.copy(loadedItem.highlight);
         }
 
         //TODO managing level of publication = 2 in "grouping" Feeds in categories name

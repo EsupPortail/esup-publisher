@@ -37,6 +37,11 @@
             </div>
         </div>
         <div ng-show="classificationsList.length < 1" class="alert alert-danger"><span>{{ 'manager.publish.classification.emptyList' | translate }}</span></div>
+        <div ng-show="classificationsList.length > 0" class="form-group" can-highlight="publisher.contextKey">
+            <label class="control-label"><span translate="manager.publish.classification.highlight" translate-value-name="{{classificationHighlighted.name}}"></span>
+                <input type="checkbox" name="highlight" id="highlight" ng-model="$parent.highlight" />
+            </label>
+        </div>
     </div>
 
     <div class="text-center">

@@ -18,6 +18,13 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
@@ -31,12 +38,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
  */
@@ -49,48 +50,48 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Resource extends AbstractItem implements Serializable {
 
-	/** */
-	private static final long serialVersionUID = -3486139050908384163L;
-	/** This field corresponds to the database column link. */
-	@NotNull
-	@NonNull
-	@Size(min = 5, max = CstPropertiesLength.URL)
-	@Column(name = "ressource_url", length = CstPropertiesLength.URL)
-	// @Column(nullable=false) can't apply as single table strategy
-	private String ressourceUrl;
+    /** */
+    private static final long serialVersionUID = -3486139050908384163L;
+    /** This field corresponds to the database column link. */
+    @NotNull
+    @NonNull
+    @Size(min = 5, max = CstPropertiesLength.URL)
+    @Column(name = "ressource_url", length = CstPropertiesLength.URL)
+    // @Column(nullable=false) can't apply as single table strategy
+    private String ressourceUrl;
 
-	/**
-	 * Empty constructor of Resource.
-	 */
-	public Resource() {
-		super();
-	}
+    /**
+     * Empty constructor of Resource.
+     */
+    public Resource() {
+        super();
+    }
 
-	/**
-	 * Constructor of Resource.
-	 *
-	 * @param title
-	 * @param enclosure
-	 * @param ressourceUrl
-	 * @param startDate
-	 * @param endDate
-	 * @param validatedDate
-	 * @param validatedBy
-	 * @param status
-	 * @param summary
+    /**
+     * Constructor of Resource.
+     *
+     * @param title
+     * @param enclosure
+     * @param ressourceUrl
+     * @param startDate
+     * @param endDate
+     * @param validatedDate
+     * @param validatedBy
+     * @param status
+     * @param summary
      * @param rssAllowed
-	 * @param organization
-	 * @param redactor
-	 */
-	public Resource(final String title, final String enclosure,
-			final String ressourceUrl, final LocalDate startDate,
-			final LocalDate endDate, final DateTime validatedDate,
-			final User validatedBy, final ItemStatus status,
-			final String summary,  final boolean rssAllowed,
-            final Organization organization, final Redactor redactor) {
-		super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
-				status, summary, rssAllowed, organization, redactor);
-		this.ressourceUrl = ressourceUrl;
-	}
+     * @param organization
+     * @param redactor
+     */
+    public Resource(final String title, final String enclosure,
+                    final String ressourceUrl, final LocalDate startDate,
+                    final LocalDate endDate, final DateTime validatedDate,
+                    final User validatedBy, final ItemStatus status,
+                    final String summary,  final boolean rssAllowed,
+                    final boolean highlight, final Organization organization, final Redactor redactor) {
+        super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
+            status, summary, rssAllowed, highlight, organization, redactor);
+        this.ressourceUrl = ressourceUrl;
+    }
 
 }

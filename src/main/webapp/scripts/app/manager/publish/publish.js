@@ -80,9 +80,17 @@ angular.module('publisherApp')
                 templateUrl: 'scripts/app/manager/publish/classification/classification.html',
                 controller: 'ClassificationChoiceController',
                 resolve: {
+                    classificationResource : 'Classification',
+                    loadedItem : function(contentData){
+                        if (contentData)
+                            return contentData.item;
+                    },
                     loadedClassifications: function(contentData){
                         if (contentData)
                             return contentData.classifications;
+                    },
+                    loadHighlightedClassification : function(classificationResource) {
+                        return classificationResource.hightlihted().$promise;
                     }
                 }
             })

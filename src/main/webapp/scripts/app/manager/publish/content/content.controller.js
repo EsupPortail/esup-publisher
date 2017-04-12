@@ -10,6 +10,7 @@ angular.module('publisherApp')
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
         $scope.enclosureDirty = false;
         $scope.$parent.linkedFilesInText = $scope.$parent.linkedFilesInText || [];
+        $scope.$parent.highlight = $scope.$parent.highlight || false;
 
         // I18n TextAngular Adds that can't be applied during app.config
         angular.forEach(taTranslations, function(key, value){
@@ -80,6 +81,7 @@ angular.module('publisherApp')
             $scope.$parent.item = angular.copy(loadedItem);
             $scope.updateMinDate(loadedItem);
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
+            $scope.$parent.item.highlight = $scope.$parent.highlight;
         }
         //if (loadedItem && loadedItem.startDate != '') {
         //    $scope.startdate = angular.copy(loadedItem.startDate);
@@ -211,6 +213,7 @@ angular.module('publisherApp')
                         summary: null,
                         body: null,
                         rssAllowed: false,
+                        highlight: $scope.$parent.highlight,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -232,6 +235,7 @@ angular.module('publisherApp')
                         status: null,
                         summary: null,
                         rssAllowed: false,
+                        highlight: $scope.$parent.highlight,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -254,6 +258,7 @@ angular.module('publisherApp')
                         summary: null,
                         ressourceUrl: null,
                         rssAllowed: false,
+                        highlight: $scope.$parent.highlight,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,
@@ -276,6 +281,7 @@ angular.module('publisherApp')
                         summary: null,
                         body: null,
                         rssAllowed: false,
+                        highlight: $scope.$parent.highlight,
                         createdBy: null,
                         createdDate: null,
                         lastModifiedBy: null,

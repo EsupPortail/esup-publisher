@@ -113,7 +113,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in items">
+                    <tr ng-repeat="item in items" ng-class="{ 'highlight' : item.highlight }">
                         <td class="hidden" data-label="ID"><a ui-sref="itemDetail({id:item.id})">{{item.id}}</a></td>
                         <td data-label="{{'publisherApp.item.type' | translate}}">{{'enum.itemType.' + item.type | translate}}</td>
                         <td class="longtext" data-label="{{'publisherApp.item.title' | translate}}">{{item.title}}</td>
@@ -188,6 +188,11 @@
                     <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
                 </ul>
             </nav>
+            <div class="legend">
+                <h5 translate="manager.contents.legend.title">Legend :</h5>
+                <span class="highlight" translate="manager.contents.legend.highlight" translate-value-name="{{classificationHighlighted.name}}">
+                    Elements Highlighted are in highlighted classifications</span>
+            </div>
         </div>
     </div>
 </div>

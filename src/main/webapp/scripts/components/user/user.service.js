@@ -55,6 +55,10 @@ angular.module('publisherApp')
                 url: 'api/users/perm/moderate',
                 method: 'GET'
             },
+            'canHighlight': {
+                url: 'api/users/perm/highlight',
+                method: 'GET'
+            },
             //'search': {
             //    url: 'api/users/search/:ctx_id/:ctx_type',
             //    method: 'GET', isArray: true,

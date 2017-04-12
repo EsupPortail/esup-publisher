@@ -394,6 +394,17 @@ dl {
 button, input, optgroup, select, textarea {
     font-family: "Roboto Slab", sans-serif;
 }
+
+/** css for all input[type="checkbox"] inside a label - not bootstrap */
+label > span + input[type="checkbox"] {
+    margin-left: 15px;
+}
+
+.highlight,
+.table > tbody > tr.highlight,
+.table-striped > tbody > tr.highlight {
+    background-color: rgba(244, 67, 54, 0.1);
+}
 /* ====================================
      All pages title on where user is
 ====================================== */
@@ -686,6 +697,30 @@ dl > dd > input[type="checkbox"] {
     height: auto;
 }
 
+.table td.action {
+    vertical-align: middle;
+}
+
+.manager.contents .legend {
+    border: 1px dashed #D0D0D0;
+    padding: 5px 10px;
+}
+.manager.contents .legend > h5 {
+    display:none;
+    text-decoration: underline;
+}
+.manager.contents .legend > span:before {
+    content: "\F6C3";
+    font: normal normal bold 12px/1 "Material Design Icons";
+    /*color: #F44336;*/
+    margin-right: 5px;
+}
+.manager.contents .legend > span {
+    height: 24px;
+    display: inline-block;
+    padding: 0 10px;
+}
+
 /* start Transform table into cards ! */
 @media screen and (max-width:991px) {
     .table-responsive-to-cards thead {
@@ -796,6 +831,7 @@ dl > dd > input[type="checkbox"] {
 .manager.contents.details .content .tab-content > #targets ul > li {
     border: none;
 }
+
 /* end manager details */
 /* ==========================================
     manager Treeview

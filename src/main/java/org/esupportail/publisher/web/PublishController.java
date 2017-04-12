@@ -38,7 +38,9 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
+import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
+import org.esupportail.publisher.service.bean.HighlightedClassification;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
@@ -48,6 +50,7 @@ import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.esupportail.publisher.web.rest.vo.CategoryProfilesUrl;
 import org.esupportail.publisher.web.rest.vo.FlashInfoVO;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
+import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -102,6 +105,8 @@ public class PublishController {
     @Inject
     private ServiceUrlHelper urlHelper;
 
+    @Inject
+    private HighlightedClassificationService highlightedClassificationService;
 
     @RequestMapping(value = "/flash/{organization_uai}",
         method = RequestMethod.GET,
@@ -264,7 +269,10 @@ public class PublishController {
                     itemsMap.get(itemId).getSecond().add(classif);
                 }
             }
-            returnedObj.setRubriques(rubriqueVOFactory.asVOList(cts));
+            final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
+            List<RubriqueVO> rubriques = Lists.newArrayList(rubriqueVOFactory.from(specialClassif));
+            rubriques.addAll(rubriqueVOFactory.asVOList(cts));
+            returnedObj.setRubriques(rubriques);
             returnedObj.setItems(new ArrayList<ItemVO>());
             for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
                 final AbstractItem item = entry.getValue().getFirst();
