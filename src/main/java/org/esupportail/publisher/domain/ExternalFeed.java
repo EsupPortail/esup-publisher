@@ -18,6 +18,13 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -30,12 +37,6 @@ import org.esupportail.publisher.domain.util.CstPropertiesLength;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.URL;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -50,44 +51,45 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ExternalFeed extends AbstractFeed implements Serializable {
 
-	/** */
-	private static final long serialVersionUID = -8867840101660141365L;
+    /** */
+    private static final long serialVersionUID = -8867840101660141365L;
 
-	@NotNull
-	@Size(max = CstPropertiesLength.URL)
-	@URL
-	@Column(name = "rss_url")
-	// @Column(nullable=false)
-	private String rssUrl;
+    @NotNull
+    @Size(max = CstPropertiesLength.URL)
+    @URL
+    @Column(name = "rss_url")
+    // @Column(nullable=false)
+    private String rssUrl;
 
-	public ExternalFeed() {
-		super();
-	}
+    public ExternalFeed() {
+        super();
+    }
 
-	/**
-	 * Constructor of InternalFeed.
-	 *
-	 * @param rssAllowed
-	 * @param name
-	 * @param iconUrl
-	 * @param lang
-	 * @param ttl
-	 * @param displayOrder
-	 * @param accessView
-	 * @param description
-	 * @param defaultDisplayOrder
-	 * @param publisher
-	 * @param parent
-	 */
-	public ExternalFeed(final boolean rssAllowed, final String name,
-			final String iconUrl, final String lang, final int ttl,
-			final int displayOrder, final AccessType accessView,
-			final String description,
-			final DisplayOrderType defaultDisplayOrder,
-			final Publisher publisher, final Category parent,
-			final String rssUrl) {
-		super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
-				description, defaultDisplayOrder, publisher, parent);
-		this.rssUrl = rssUrl;
-	}
+    /**
+     * Constructor of InternalFeed.
+     *
+     * @param rssAllowed
+     * @param name
+     * @param iconUrl
+     * @param lang
+     * @param ttl
+     * @param displayOrder
+     * @param accessView
+     * @param description
+     * @param defaultDisplayOrder
+     * @param color
+     * @param publisher
+     * @param parent
+     */
+    public ExternalFeed(final boolean rssAllowed, final String name,
+                        final String iconUrl, final String lang, final int ttl,
+                        final int displayOrder, final AccessType accessView,
+                        final String description,
+                        final DisplayOrderType defaultDisplayOrder, final String color,
+                        final Publisher publisher, final Category parent,
+                        final String rssUrl) {
+        super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
+            description, defaultDisplayOrder, color, publisher, parent);
+        this.rssUrl = rssUrl;
+    }
 }

@@ -18,6 +18,10 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -28,9 +32,6 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.Entity;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -45,39 +46,40 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class InternalFeed extends AbstractFeed implements Serializable {
 
-	/** */
-	private static final long serialVersionUID = -546691544337564686L;
+    /** */
+    private static final long serialVersionUID = -546691544337564686L;
 
-	/**
-	 * Empty Constructor of InternalFeed
-	 */
-	public InternalFeed() {
-		super();
-	}
+    /**
+     * Empty Constructor of InternalFeed
+     */
+    public InternalFeed() {
+        super();
+    }
 
-	/**
-	 * Constructor of InternalFeed.
-	 *
-	 * @param rssAllowed
-	 * @param name
-	 * @param iconUrl
-	 * @param lang
-	 * @param ttl
-	 * @param displayOrder
-	 * @param accessView
-	 * @param description
-	 * @param defaultDisplayOrder
-	 * @param publisher
-	 * @param parent
-	 */
-	public InternalFeed(final boolean rssAllowed, final String name,
-			final String iconUrl, final String lang, final int ttl,
-			final int displayOrder, final AccessType accessView,
-			final String description,
-			final DisplayOrderType defaultDisplayOrder,
-			final Publisher publisher, final Category parent) {
-		super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
-				description, defaultDisplayOrder, publisher, parent);
-	}
+    /**
+     * Constructor of InternalFeed.
+     *
+     * @param rssAllowed
+     * @param name
+     * @param iconUrl
+     * @param lang
+     * @param ttl
+     * @param displayOrder
+     * @param accessView
+     * @param description
+     * @param defaultDisplayOrder
+     * @param color
+     * @param publisher
+     * @param parent
+     */
+    public InternalFeed(final boolean rssAllowed, final String name,
+                        final String iconUrl, final String lang, final int ttl,
+                        final int displayOrder, final AccessType accessView,
+                        final String description,
+                        final DisplayOrderType defaultDisplayOrder, final String color,
+                        final Publisher publisher, final Category parent) {
+        super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
+            description, defaultDisplayOrder, color, publisher, parent);
+    }
 
 }

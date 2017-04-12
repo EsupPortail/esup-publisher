@@ -64,65 +64,65 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "T_CLASSIFICATION", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"name", "publisher_id", "type" }))
+    "name", "publisher_id", "type" }))
 @DiscriminatorColumn(name = "type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractClassification extends AbstractAuditingEntity
-		implements IContext, Serializable {
+    implements IContext, Serializable {
 
-	/** */
-	private static final long serialVersionUID = -131894558189162059L;
+    /** */
+    private static final long serialVersionUID = -131894558189162059L;
 
-	/** This field corresponds to the database column rss_allowed. */
-	@Column(length = 1, nullable = false, name = "rss_allowed")
-	private boolean rssAllowed = true;
-	/** This field corresponds to the database column name. */
-	@NotNull
-	@Size(min = 3, max = CstPropertiesLength.CLASSIF_NAME)
-	@Column(length = CstPropertiesLength.CLASSIF_NAME, nullable = false)
-	private String name;
-	/** This field corresponds to the database column icon. */
-	@Size(max = CstPropertiesLength.URL)
-	@Column(name = "icon_url", length = CstPropertiesLength.URL)
-	private String iconUrl;
-	/** This field corresponds to the database column lang. */
-	@Size(min = 2, max = CstPropertiesLength.LANG)
-	@Column(length = CstPropertiesLength.LANG)
-	private String lang = "fr";
-	@Min(value = 900)
-	@Max(value = 86400)
-	private int ttl = 3600;
-	/** This field corresponds to the database column display_order. */
-	@Max(999)
-	@Column(nullable = false, length = CstPropertiesLength.ORDER, name = "display_order")
-	private int displayOrder = 0;
-	/** This field corresponds to the database column public_view. */
-	@NotNull
-	@Column(length = 50, nullable = false, name = "access_view")
-	//@Convert(converter = AccessTypeConverter.class)
+    /** This field corresponds to the database column rss_allowed. */
+    @Column(length = 1, nullable = false, name = "rss_allowed")
+    private boolean rssAllowed = true;
+    /** This field corresponds to the database column name. */
+    @NotNull
+    @Size(min = 3, max = CstPropertiesLength.CLASSIF_NAME)
+    @Column(length = CstPropertiesLength.CLASSIF_NAME, nullable = false)
+    private String name;
+    /** This field corresponds to the database column icon. */
+    @Size(max = CstPropertiesLength.URL)
+    @Column(name = "icon_url", length = CstPropertiesLength.URL)
+    private String iconUrl;
+    /** This field corresponds to the database column lang. */
+    @Size(min = 2, max = CstPropertiesLength.LANG)
+    @Column(length = CstPropertiesLength.LANG)
+    private String lang = "fr";
+    @Min(value = 900)
+    @Max(value = 86400)
+    private int ttl = 3600;
+    /** This field corresponds to the database column display_order. */
+    @Max(999)
+    @Column(nullable = false, length = CstPropertiesLength.ORDER, name = "display_order")
+    private int displayOrder = 0;
+    /** This field corresponds to the database column public_view. */
+    @NotNull
+    @Column(length = 50, nullable = false, name = "access_view")
+    //@Convert(converter = AccessTypeConverter.class)
     @Enumerated(EnumType.STRING)
     //@JsonDeserialize(using = AccessTypeDeserializer.class)
     @JsonSerialize(using = CustomEnumSerializer.class)
-	private AccessType accessView = AccessType.PUBLIC;
-	/** This field corresponds to the database column description. */
-	@NotNull
-	@Size(min = 5, max = CstPropertiesLength.DESCRIPTION)
-	@Column(nullable = false, length = CstPropertiesLength.DESCRIPTION)
-	private String description;
-	/** This field corresponds to the database column default_display_order. */
-	@NotNull
-	@Column(nullable = false, length = 50, name = "default_display_order")
-	//@Convert(converter = DisplayOrderTypeConverter.class)
+    private AccessType accessView = AccessType.PUBLIC;
+    /** This field corresponds to the database column description. */
+    @NotNull
+    @Size(min = 5, max = CstPropertiesLength.DESCRIPTION)
+    @Column(nullable = false, length = CstPropertiesLength.DESCRIPTION)
+    private String description;
+    /** This field corresponds to the database column default_display_order. */
+    @NotNull
+    @Column(nullable = false, length = 50, name = "default_display_order")
+    //@Convert(converter = DisplayOrderTypeConverter.class)
     @Enumerated(EnumType.STRING)
     @JsonSerialize(using = CustomEnumSerializer.class)
     //@JsonDeserialize(using = DisplayOrderTypeDeserializer.class)
-	private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
+    private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
     /** This field corresponds to the database column color. */
     @Size(max = CstPropertiesLength.COLOR)
-	@Column(length = CstPropertiesLength.COLOR)
+    @Column(length = CstPropertiesLength.COLOR)
     private String color;
 
-	// @JsonIgnore
+    // @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "publisher_id", nullable = false)
@@ -130,42 +130,43 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
     private Publisher publisher;
 
 
-	public AbstractClassification() {
-		super();
-	}
+    public AbstractClassification() {
+        super();
+    }
 
-	/**
-	 * Constructor of Classification
-	 *
-	 * @param rssAllowed
-	 * @param name
-	 * @param iconUrl
-	 * @param lang
-	 * @param ttl
-	 * @param displayOrder
-	 * @param accessView
-	 * @param description
-	 * @param defaultDisplayOrder
-	 * @param publisher
-	 */
-	public AbstractClassification(final boolean rssAllowed, final String name,
-			final String iconUrl, final String lang, final int ttl,
-			final int displayOrder, final AccessType accessView,
-			final String description,
-			final DisplayOrderType defaultDisplayOrder,
-			final Publisher publisher) {
-		super();
-		this.rssAllowed = rssAllowed;
-		this.name = name;
-		this.iconUrl = iconUrl;
-		this.lang = lang;
-		this.ttl = ttl;
-		this.displayOrder = displayOrder;
-		this.accessView = accessView;
-		this.description = description;
-		this.defaultDisplayOrder = defaultDisplayOrder;
-		this.publisher = publisher;
-	}
+    /**
+     * Constructor of Classification
+     *
+     * @param rssAllowed
+     * @param name
+     * @param iconUrl
+     * @param lang
+     * @param ttl
+     * @param displayOrder
+     * @param accessView
+     * @param description
+     * @param defaultDisplayOrder
+     * @param publisher
+     */
+    public AbstractClassification(final boolean rssAllowed, final String name,
+                                  final String iconUrl, final String lang, final int ttl,
+                                  final int displayOrder, final AccessType accessView,
+                                  final String description,
+                                  final DisplayOrderType defaultDisplayOrder,
+                                  final String color, final Publisher publisher) {
+        super();
+        this.rssAllowed = rssAllowed;
+        this.name = name;
+        this.iconUrl = iconUrl;
+        this.lang = lang;
+        this.ttl = ttl;
+        this.displayOrder = displayOrder;
+        this.accessView = accessView;
+        this.description = description;
+        this.defaultDisplayOrder = defaultDisplayOrder;
+        this.color = color;
+        this.publisher = publisher;
+    }
 
     @Override
     public ContextKey getContextKey() {

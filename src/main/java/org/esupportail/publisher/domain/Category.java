@@ -18,6 +18,10 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -26,9 +30,6 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.Entity;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -41,37 +42,38 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Category extends AbstractClassification implements Serializable {
 
-	/** */
-	private static final long serialVersionUID = 4636692141596706871L;
+    /** */
+    private static final long serialVersionUID = 4636692141596706871L;
 
-	/**
-	 * Empty Constructor of Category.
-	 */
-	public Category() {
-		super();
-	}
+    /**
+     * Empty Constructor of Category.
+     */
+    public Category() {
+        super();
+    }
 
-	/**
-	 * Constructor of Category.
-	 * @param rssAllowed
-	 * @param name
-	 * @param iconUrl
-	 * @param lang
-	 * @param ttl
-	 * @param displayOrder
-	 * @param accessView
-	 * @param description
-	 * @param defaultDisplayOrder
-	 * @param publisher
-	 */
-	public Category(final boolean rssAllowed, final String name,
-			final String iconUrl, final String lang, final int ttl,
-			final int displayOrder, final AccessType accessView,
-			final String description,
-			final DisplayOrderType defaultDisplayOrder,
-			final Publisher publisher) {
-		super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
-				description, defaultDisplayOrder, publisher);
-	}
+    /**
+     * Constructor of Category.
+     * @param rssAllowed
+     * @param name
+     * @param iconUrl
+     * @param lang
+     * @param ttl
+     * @param displayOrder
+     * @param accessView
+     * @param description
+     * @param defaultDisplayOrder
+     * @param color
+     * @param publisher
+     */
+    public Category(final boolean rssAllowed, final String name,
+                    final String iconUrl, final String lang, final int ttl,
+                    final int displayOrder, final AccessType accessView,
+                    final String description,
+                    final DisplayOrderType defaultDisplayOrder,
+                    final String color, final Publisher publisher) {
+        super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
+            description, defaultDisplayOrder, color, publisher);
+    }
 
 }
