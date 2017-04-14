@@ -1,5 +1,8 @@
 package org.esupportail.publisher.config;
 
+import java.util.Arrays;
+import java.util.Set;
+
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
@@ -11,9 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
-
-import java.util.Arrays;
-import java.util.Set;
 
 /**
  *
@@ -45,6 +45,9 @@ public class LDAPConfiguration implements EnvironmentAware {
 	private static final String DEFAULT_USER_MAIL = "mail";
 	private static final String PROP_USER_GROUP = "userGroupAttribute";
 	private static final String DEFAULT_USER_GROUP = "isMemberOf";
+	private static final String PROP_USER_ID_ENTITY = "userEntityIdAttribute;";
+	private static final String DEFAULT_USER_ID_ENTITY = "ESCOUAICourant";
+
 	private static final String PROP_USER_SEARCHON = "userSearchAttribute";
 	private static final String DEFAULT_USER_SEARCHON = "cn";
 	private static final String PROP_USER_DISPLAYEDATTR = "otherUserDisplayedAttributes";
@@ -100,6 +103,7 @@ public class LDAPConfiguration implements EnvironmentAware {
 		final String userEmailAttribute = propertyResolver.getProperty(PROP_USER_MAIL, DEFAULT_USER_MAIL);
 		final String userSearchAttribute = propertyResolver.getProperty(PROP_USER_SEARCHON, DEFAULT_USER_SEARCHON);
 		final String userGroupAttribute = propertyResolver.getProperty(PROP_USER_GROUP, DEFAULT_USER_GROUP);
+		final String userEntityIdAttribute = propertyResolver.getProperty(PROP_USER_ID_ENTITY, DEFAULT_USER_ID_ENTITY);
         final String UserAttributes = propertyResolver.getRequiredProperty(PROP_USER_OTHERATTR);
 		final String userDisplayedAttributes = propertyResolver.getRequiredProperty(PROP_USER_DISPLAYEDATTR);
 		Set<String> otherUserDisplayedAttributes = null;
@@ -116,7 +120,7 @@ public class LDAPConfiguration implements EnvironmentAware {
 
 		final ExternalUserHelper ldapUh = new ExternalUserHelper(
 				userIdAttribute, userDisplayNameAttribute, userEmailAttribute,
-				userSearchAttribute, userGroupAttribute, otherUserAttributes,
+				userSearchAttribute, userGroupAttribute, userEntityIdAttribute, otherUserAttributes,
 				otherUserDisplayedAttributes, userDNSubPath);
 		log.debug("LdapAttributes for Users configured : {}", ldapUh);
 		return ldapUh;
