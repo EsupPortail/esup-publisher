@@ -76,17 +76,17 @@
             "tooltip":"Clear formatting"
         },
         "insertImage":{
-            "dialogPrompt":"Please enter an image URL to insert",
+            "dialogPrompt":"Please enter an image URL to insert \nNB : you can insert a picture by drag and drop in the text",
             "tooltip":"Insert image",
             "hotkey":"the - possibly language dependent hotkey ... for some future implementation"
         },
         "insertVideo":{
             "tooltip":"Insert video",
-            "dialogPrompt":"Please enter a youtube URL to embed"
+            "dialogPrompt":"Please enter a youtube URL to embed \nNB : you can insert a video by drag and drop in the text"
         },
         "insertLink":{
             "tooltip":"Insert / edit link",
-            "dialogPrompt":"Please enter a URL to insert"
+            "dialogPrompt":"Please enter a URL to insert \nNB : you can insert a file by drag and drop in the text"
         },
         "editLink":{
             "reLinkButton":{

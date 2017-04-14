@@ -76,15 +76,15 @@
             "tooltip":"Enlever le formattage"
         },
         "insertImage":{
-            "dialogPrompt":"Entrer l'url de l'image à insérer",
+            "dialogPrompt":"Entrer l'url de l'image à insérer \nNB: vous pouvez intégrer une image par glisser/déposer directement dans le texte",
             "tooltip":"Insérer une image"
         },
         "insertVideo":{
             "tooltip":"Insérer une video",
-            "dialogPrompt":"Entrer l'url youtube de la vidéo à insérer"
+            "dialogPrompt":"Entrer l'url youtube de la vidéo à insérer \nNB: vous pouvez intégrer une vidéo par glisser/déposer directement dans le texte"
         },
         "insertLink":{
-            "tooltip":"Insérer / éditer un lien ",
+            "tooltip":"Insérer / éditer un lien \nNB: vous pouvez intégrer un fichier par glisser/déposer directement dans le texte",
             "dialogPrompt":"Insérer une url"
         },
         "editLink":{
