@@ -10,7 +10,7 @@
 
     <groupId>org.esupportail.publisher</groupId>
     <artifactId>esup-publisher-ui</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>war</packaging>
 
     <name>esup-publisher-ui</name>
@@ -19,7 +19,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>1.1.0</tag>
         <url>https://github.com/EsupPortail/esup-publisher.git</url>
     </scm>
 
@@ -112,18 +112,6 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>${json-path.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock-on-mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock-on-mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -359,6 +347,18 @@
                     <groupId>org.eclipse.jetty</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock-on-mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock-on-mockito.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
