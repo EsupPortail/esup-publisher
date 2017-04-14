@@ -27,8 +27,9 @@
         </select>
     </div>
 
+    <div ng-show="publishers.length < 1" class="alert alert-danger" translate="manager.publish.publisher.emptyList" ></div>
 
-    <div class="text-center" ng-hide="publishers.length < 1">
+    <div class="text-center">
         <div class="btn-group" role="group">
             <button type="button" ui-sref="home" class="btn btn-default btn-nav">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
@@ -38,8 +39,6 @@
             </button>
         </div>
     </div>
-
-    <div ng-show="publishers.length < 1" class="alert alert-danger" translate="manager.publish.publisher.emptyList" ></div>
 
     <!--<div ng-show="isPublisherSelected()">
         <span translate="manager.publish.publisher.selected"
