@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -33,6 +34,7 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
@@ -117,6 +119,9 @@ public class PublishControllerTest {
     @Inject
     private ServiceUrlHelper urlHelper;
 
+    @Inject
+    private HighlightedClassificationService highlightedClassificationService;
+
 
     @PostConstruct
     public void setup() {
@@ -135,6 +140,7 @@ public class PublishControllerTest {
         ReflectionTestUtils.setField(publishController, "flashInfoVOFactory", flashInfoVOFactory);
         ReflectionTestUtils.setField(publishController, "subscriberService", subscriberService);
         ReflectionTestUtils.setField(publishController, "urlHelper", urlHelper);
+        ReflectionTestUtils.setField(publishController, "highlightedClassificationService", highlightedClassificationService);
 
 
         this.restPublishControllerMockMvc = MockMvcBuilders.standaloneSetup(publishController).build();
@@ -151,6 +157,7 @@ public class PublishControllerTest {
         organization.setDisplayOrder(200);
         organization.setName("A TESTER" );
         organization.setDisplayName("À tester");
+        organization.setIdentifiers(Sets.newHashSet("0450822X", "0370028X"));
 
         organization = organizationRepository.saveAndFlush(organization);
         Reader reader1 = ObjTest.newReader("1");
@@ -166,6 +173,7 @@ public class PublishControllerTest {
         flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false);
         flashInfo = publisherRepository.saveAndFlush(flashInfo);
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
+        // NB important, à la une isn't persisted, it's hardcoded and should be considered
         Category cat1 = ObjTest.newCategory("Cat1", newWay);
         cat1 = categoryRepository.saveAndFlush(cat1);
         Category cat2 = ObjTest.newCategory("cat2", newWay);
@@ -203,6 +211,7 @@ public class PublishControllerTest {
         sub.setSubscribeType(SubscribeType.FORCED);
         Subscriber sub2 = ObjTest.newSubscriberGroup(news1.getContextKey());
         Subscriber sub3 = ObjTest.newSubscriberGroup(news2.getContextKey());
+        sub3.setSubscribeType(SubscribeType.FORCED);
         Subscriber sub4 = ObjTest.newSubscriberPerson(news3.getContextKey());
         Subscriber sub5 = ObjTest.newSubscriberPerson(news4.getContextKey());
 
@@ -232,7 +241,7 @@ public class PublishControllerTest {
         restPublishControllerMockMvc.perform(get("/published/items/{publisher_id}", newWay.getId())
             .accept(MediaType.APPLICATION_XML)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_XML))
-            .andExpect(xpath("/actualites/rubriques/*").nodeCount(2))
+            .andExpect(xpath("/actualites/rubriques/*").nodeCount(3))
             .andExpect(xpath("/actualites/items/*").nodeCount(3))
             .andExpect(xpath("/actualites/items/item/article/pubDate").exists())
             .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())

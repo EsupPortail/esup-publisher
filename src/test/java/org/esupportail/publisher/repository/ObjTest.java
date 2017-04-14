@@ -272,13 +272,13 @@ public final class ObjTest {
 
 		return new Category(true, "CAT " + indice, "ICON_URL" + indice,
 				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), pub);
+				getRandomDisplayOrderType(), "#F44336", pub);
 	}
 
 	public static Category newCategory(final String indice) {
 		return new Category(true, "CAT " + indice, "ICON_URL" + indice,
 				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), newPublisher(indice));
+				getRandomDisplayOrderType(), "#F44336", newPublisher(indice));
 	}
 
 	public static Publisher newPublisher(final String indice) {
@@ -290,7 +290,7 @@ public final class ObjTest {
 	public static InternalFeed newInternalFeed(final String indice) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
 				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), newPublisher(indice),
+				getRandomDisplayOrderType(), "#F44336", newPublisher(indice),
 				newCategory(indice));
 	}
 
@@ -298,21 +298,21 @@ public final class ObjTest {
 			final Publisher publisher) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
 				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), publisher, newCategory(indice));
+				getRandomDisplayOrderType(), "#F44336", publisher, newCategory(indice));
 	}
 
 	public static InternalFeed newInternalFeed(final String indice,
 			final Publisher publisher, final Category category) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
 				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), publisher, category);
+				getRandomDisplayOrderType(), "#F44336", publisher, category);
 	}
 
 	public static News newNews(final String indice) {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
 				null, getRandomItemStatus(), "summary" + indice, true,
-				newOrganization(indice), newRedactor(indice));
+				true, newOrganization(indice), newRedactor(indice));
 	}
 
 	public static News newNews(final String indice,
@@ -320,7 +320,7 @@ public final class ObjTest {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
 				null, getRandomItemStatus(), "summary" + indice, true,
-				organization, newRedactor(indice));
+				true, organization, newRedactor(indice));
 	}
 
 	public static News newNews(final String indice,
@@ -328,7 +328,7 @@ public final class ObjTest {
 		return new News("Titre " + indice, "enclosure" + indice, "body"
 				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
 				null, getRandomItemStatus(), "summary" + indice, true,
-				organization, redactor);
+				true, organization, redactor);
 	}
 
     public static Flash newFlash(final String indice,
@@ -336,7 +336,7 @@ public final class ObjTest {
         return new Flash("Titre " + indice, "enclosure" + indice, "body"
             + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
             null, getRandomItemStatus(), "summary" + indice, true,
-            organization, redactor);
+            true, organization, redactor);
     }
 
 	public static Subscriber newSubscriber(final ContextKey context) {

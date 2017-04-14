@@ -104,17 +104,17 @@ public class ClassificationRepositoryTest {
 
 		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_1, DisplayOrderType.NAME, pub1);
+				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
 		repository.saveAndFlush(c1);
 
 		InternalFeed c2 = new InternalFeed(true, "CAT " + INDICE_2, "ICON_URL"
 				+ INDICE_2, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, pub2, c1);
+				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, "#F44336", pub2, c1);
 		repository.saveAndFlush(c2);
 
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_3, "ICON_URL"
 				+ INDICE_3, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, pub2, c1, URL);
+				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, "#F44336", pub2, c1, URL);
 		repository.saveAndFlush(c3);
 
 	}
@@ -140,7 +140,7 @@ public class ClassificationRepositoryTest {
 	public void testBadURL() {
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, pub2,
+				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
 				(Category) repository.findOne(ClassificationPredicates
 						.CategoryClassification()), "RSS_URL");
 		repository.saveAndFlush(c3);
@@ -150,7 +150,7 @@ public class ClassificationRepositoryTest {
 	public void testDuplicateCategoryName() {
 		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_1, DisplayOrderType.NAME, pub1);
+				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
 		repository.saveAndFlush(c1);
 	}
 
@@ -158,7 +158,7 @@ public class ClassificationRepositoryTest {
 	public void testInsert() {
 		Category c1 = new Category(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_4, DisplayOrderType.NAME, pub1);
+				+ INDICE_4, DisplayOrderType.NAME, "#F44336", pub1);
 		repository.saveAndFlush(c1);
 
 		log.info("Before insert : " + c1.toString());
@@ -241,7 +241,7 @@ public class ClassificationRepositoryTest {
 	public void testDelete() {
 		Category c1 = new Category(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_4, DisplayOrderType.NAME, pub1);
+				+ INDICE_4, DisplayOrderType.NAME, "#F44336", pub1);
 		repository.saveAndFlush(c1);
 		long count = repository.count();
 		repository.delete(c1);

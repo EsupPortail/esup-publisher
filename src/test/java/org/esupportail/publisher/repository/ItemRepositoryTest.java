@@ -1,9 +1,31 @@
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.Media;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.Resource;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
@@ -19,13 +41,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -80,23 +95,23 @@ public class ItemRepositoryTest {
 
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(), ObjTest.d2,
-				user2, DEFAULT_STATUS, "summary" + INDICE_1, true,
+				user2, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		News m2 = new News("Titre " + INDICE_2, "enclosure" + INDICE_2, "body"
 				+ INDICE_2, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
 				ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_2,  true,
-            org2, redactor2);
+            true, org2, redactor2);
 		repository.saveAndFlush(m2);
 		Resource m3 = new Resource("Titre " + INDICE_3, "enclosure" + INDICE_3,
 				"ressourceUrl" + INDICE_3, ObjTest.d1.toLocalDate(),
 				ObjTest.d3.toLocalDate(), ObjTest.d2, user2,
-				DEFAULT_STATUS, "summary" + INDICE_3,  true, org1, redactor2);
+				DEFAULT_STATUS, "summary" + INDICE_3,  true, true, org1, redactor2);
 		repository.saveAndFlush(m3);
         Flash m4 = new Flash("Titre " + INDICE_4, "enclosure" + INDICE_4, "body"
             + INDICE_4, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
             ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_4, true,
-            org2, redactor2);
+            true, org2, redactor2);
         repository.saveAndFlush(m4);
 	}
 
@@ -131,7 +146,7 @@ public class ItemRepositoryTest {
 	public void testDateOK() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -140,7 +155,7 @@ public class ItemRepositoryTest {
 	public void testDateOKUpdateKO() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		m1.setEndDate(ObjTest.d1.toLocalDate());
@@ -151,7 +166,7 @@ public class ItemRepositoryTest {
 	public void testDateKOLT() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d3.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -160,7 +175,7 @@ public class ItemRepositoryTest {
 	public void testDateKOEQ() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
-				user1, DEFAULT_STATUS, "summary" + INDICE_1, true,
+				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
@@ -170,7 +185,7 @@ public class ItemRepositoryTest {
 		News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
 				+ INDICE_A, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
 				ObjTest.d2, user1, ItemStatus.DRAFT, "summary"
-						+ INDICE_A,  true, org2, redactor2);
+						+ INDICE_A,  true, true, org2, redactor2);
 
 		log.info("Before insert : " + n1.toString());
 		repository.save(n1);
