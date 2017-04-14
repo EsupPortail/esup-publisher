@@ -24,7 +24,7 @@
                     <!--<div class="form-group">
                         <label class="control-label" for="organization" translate="publisherApp.publisher.context.organization">organization</label>
                         <select class="form-control" id="organization" name="organization" ng-model="editedContext.context.organization.id"
-                                ng-options="organization.id as organization.displayName for organization in organizations" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                                ng-options="organization.id as organization.displayName for organization in organizations" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
                         <div ng-show="editForm.organization.$invalid">
@@ -37,7 +37,7 @@
                     <div class="form-group">
                         <label class="control-label" for="reader" translate="publisherApp.publisher.context.reader">reader</label>
                         <select class="form-control" id="reader" name="reader" ng-model="editedContext.context.reader.id"
-                                ng-options="reader.id as reader.displayName for reader in readers" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                                ng-options="reader.id as reader.displayName for reader in readers" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
                         <div ng-show="editForm.reader.$invalid">
@@ -50,7 +50,7 @@
                     <div class="form-group">
                         <label class="control-label" for="redactor" translate="publisherApp.publisher.context.redactor">redactor</label>
                         <select class="form-control" id="redactor" name="redactor" ng-model="editedContext.context.redactor.id"
-                                ng-options="redactor.id as redactor.displayName for redactor in redactors" required ng-readonly="!isInRole('ROLE_ADMIN')">
+                                ng-options="redactor.id as redactor.displayName for redactor in redactors" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
                         <div ng-show="editForm.redactor.$invalid">
@@ -85,7 +85,7 @@
                     <div ng-show="canCreateCategory" class="form-group">
                         <label class="control-label" for="permissionType" translate="publisherApp.publisher.permissionType">PermissionType</label>
                         <select class="form-control" id="permissionType" name="permissionType" ng-model="editedContext.permissionType"
-                                ng-options="permission.name as permission.label | translate for permission in autorizedPermissionClassList" required ng-readonly="!canManage">
+                                ng-options="permission.name as permission.label | translate for permission in autorizedPermissionClassList" required ng-disabled="!canManage">
                         </select>
 
                         <div ng-show="editForm.permissionType.$invalid">
@@ -98,12 +98,12 @@
                     <div class="form-group">
                         <label class="control-label" for="used" translate="publisherApp.publisher.used">Used</label>
                         <input type="checkbox" class="form-control" id="used" name="used"
-                               ng-model="editedContext.used" ng-readonly="!canManage">
+                               ng-model="editedContext.used" ng-disabled="!canManage">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="defaultDisplayOrder" translate="publisherApp.publisher.defaultDisplayOrder">DefaultDisplayOrder</label>
                         <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" ng-model="editedContext.defaultDisplayOrder"
-                                ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in autorizedDisplayOrderTypeList" required ng-readonly="!canManage">
+                                ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in autorizedDisplayOrderTypeList" required ng-disabled="!canManage">
                         </select>
 
                         <div ng-show="editForm.defaultDisplayOrder.$invalid">
@@ -140,7 +140,7 @@
                     <div class="form-group" ng-show="canCreateCategory">
                         <label class="control-label" for="hasSubPermsManagement" translate="publisherApp.publisher.hasSubPermsManagement">HasSubPermsManagement</label>
                         <input type="checkbox" class="form-control" id="hasSubPermsManagement" name="hasSubPermsManagement"
-                               ng-model="editedContext.hasSubPermsManagement" readonly>
+                               ng-model="editedContext.hasSubPermsManagement" disabled>
                     </div>
                 </div>
                 <div class="modal-footer">
