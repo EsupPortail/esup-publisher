@@ -43,4 +43,8 @@ to "abort" or adding stop points with @IgnoreSizeOf annotations. If performance 
 Cache <sizeOfPolicy> elements maxDepth attribute. For more information, see the Ehcache configuration documentation.
 => read http://www.ehcache.org/documentation/2.8/configuration/cache-size.html#built-in-sizing-computation-and-enforcement
 
+# mvn param to debug xml binding :
+-Djaxb.debug=true
+this permit to view : javax.xml.bind - Trying to locate org/esupportail/publisher/web/rest/vo/jaxb.properties and other params
+
 

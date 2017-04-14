@@ -20,6 +20,9 @@ public final class PublisherPredicates {
     public static Predicate AllOfOrganization(long orgId) {
         return qobj.context.organization.id.eq(orgId);
     }
+    public static Predicate AllOfOrganizationByIdentifier(String orgIdentifier) {
+        return qobj.context.organization.identifiers.contains(orgIdentifier);
+    }
 
     public static Predicate notNull() {
         return qobj.isNotNull();

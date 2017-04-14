@@ -108,13 +108,13 @@ public class PublishController {
     @Inject
     private HighlightedClassificationService highlightedClassificationService;
 
-    @RequestMapping(value = "/flash/{organization_uai}",
+    @RequestMapping(value = "/flash/{organization_id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(Views.Flash.class)
     @Timed
-    public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_uai") String uai, final HttpServletRequest request ) throws URISyntaxException {
-        log.debug("Entering getFlashInfo with params : uai={}", uai);
+    public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
+        log.debug("Entering getFlashInfo with params : organization identifier={}", uai);
         Organization org = organizationRepository.findByIdentifiers(uai);
         if (org != null) {
             DisplayOrderType displayOrder = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
@@ -172,18 +172,48 @@ public class PublishController {
 
     @RequestMapping(value = "/contexts/{reader_id}/{redactor_id}",
         method = RequestMethod.GET,
-        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+        produces = {MediaType.APPLICATION_XML_VALUE})
     @Timed
     public CategoryProfilesUrl getAllPublisherContext(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId, final HttpServletRequest request ) {
         log.debug("Entering getAllPublisherContext with params :  reader_id={}, redactor_id={}", readerId, redactorId);
         BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
             .and(PublisherPredicates.AllOfReader(readerId))
             .and(PublisherPredicates.AllOfRedactor(redactorId));
-        List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
+        final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
         CategoryProfilesUrl cpu = new CategoryProfilesUrl();
         if (!publishers.isEmpty()) {
-            Redactor redactor = publishers.get(0).getContext().getRedactor();
-            String base = urlHelper.getRootAppUrl(request);
+            final Redactor redactor = publishers.get(0).getContext().getRedactor();
+            final String base = urlHelper.getRootAppUrl(request);
+            for (Publisher pub : publishers) {
+                String urlCategory = null;
+                String urlActualite = null;
+                if (redactor.getNbLevelsOfClassification() == 1 && WritingMode.TARGETS_ON_ITEM.equals(redactor.getWritingMode())) {
+                    urlActualite =  base + "published/items/" + pub.getId();
+                } else {
+                    urlCategory = base + "published/categories/" + pub.getId();
+                }
+                cpu.getCategoryProfilesUrl().add(categoryProfileFactory.from(pub, subscriberService.getDefaultsSubscribersOfContext(pub.getContextKey()), urlActualite, urlCategory));
+            }
+        }
+        return cpu;
+    }
+
+    @RequestMapping(value = "/contextOf/{organization_id}/{reader_id}/{redactor_id}",
+        method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_XML_VALUE})
+    @Timed
+    public CategoryProfilesUrl getPublisherContextOf(@PathVariable("organization_id") String id, @PathVariable("reader_id") Long readerId,
+                                                     @PathVariable("redactor_id") Long redactorId, final HttpServletRequest request ) {
+        log.debug("Entering getPublisherContextOf with params : organization_id={}, reader_id={}, redactor_id={}", id, readerId, redactorId);
+        BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
+            .and(PublisherPredicates.AllOfReader(readerId))
+            .and(PublisherPredicates.AllOfRedactor(redactorId))
+            .and(PublisherPredicates.AllOfOrganizationByIdentifier(id));
+        final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
+        CategoryProfilesUrl cpu = new CategoryProfilesUrl();
+        if (!publishers.isEmpty()) {
+            final Redactor redactor = publishers.get(0).getContext().getRedactor();
+            final String base = urlHelper.getRootAppUrl(request);
             for (Publisher pub : publishers) {
                 String urlCategory = null;
                 String urlActualite = null;
@@ -200,7 +230,7 @@ public class PublishController {
 
     @RequestMapping(value = "/items/{publisher_id}",
         method = RequestMethod.GET,
-        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+        produces = {MediaType.APPLICATION_XML_VALUE})
     @Timed
     public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId, HttpServletRequest request ) {
         //getting items on new way
