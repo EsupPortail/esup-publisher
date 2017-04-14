@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-         name="CM1"
+         name="PublisherCM"
          updateCheck="false"
-         maxBytesLocalHeap="16M">
+         maxBytesLocalHeap="50M">
 
     <!--
       This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the
@@ -12,7 +12,10 @@
 
     <diskStore path="java.io.tmpdir" />
 
-    <defaultCache eternal="false" overflowToDisk="false" />
+    <!-- Default sizeOfPolicy for computing the size of cache elements in memory -->
+    <sizeOfPolicy maxDepth="2000" maxDepthExceededBehavior="abort"/>
+
+    <defaultCache statistics="true" eternal="false" overflowToDisk="false" />
 
     <cache name="org.esupportail.publisher.domain.User" timeToLiveSeconds="3600">
     </cache>
@@ -57,6 +60,8 @@
     <cache name="org.esupportail.publisher.domain.Organization.availablePublisherContexts" timeToLiveSeconds="3600">
     </cache>
     <cache name="org.esupportail.publisher.domain.Redactor.organizationReaderRedactors" timeToLiveSeconds="3600">
+    </cache>
+    <cache name="org.esupportail.publisher.domain.LinkedFileItem" timeToLiveSeconds="3600">
     </cache>
 
     <cache name="org.esupportail.publisher.domain.externals.ExternalUser" timeToLiveSeconds="3600">
