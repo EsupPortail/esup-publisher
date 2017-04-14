@@ -22,13 +22,13 @@
             <span>{{context.description}}</span>
         </dd>
         <dt ng-if="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
-            <span translate="publisherApp.category.iconUrl">IconUrl</span>
+            <span>{{ 'publisherApp.category.iconUrl' | translate : 'IconUrl' }}</span>
         </dt>
         <dd ng-if="context.iconUrl && context.iconUrl != '' && context.iconUrl != 'http://' && inArray('ENCLOSURE',context.publisher.context.reader.classificationDecorations)">
             <img class="media-object" src="{{context.iconUrl}}" alt="image" />
         </dd>
         <dt ng-if="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
-            <span translate="publisherApp.category.color">Color</span>
+            <span>{{ 'publisherApp.category.color' | translate : 'Color' }}</span>
         </dt>
         <dd ng-if="inArray('COLOR',context.publisher.context.reader.classificationDecorations)">
             <!--<input ng-if="context.color" type="color" value="{{context.color}}" disabled>-->
