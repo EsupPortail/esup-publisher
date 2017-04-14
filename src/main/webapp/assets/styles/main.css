@@ -631,6 +631,12 @@ a.list-group-item div.bouton-action .div-text {
     body:not(.not-in-iframe) > div.container-fluid > div.well.site + div.footer {
         padding: 0 15%;
     }
+    body:not(.not-in-iframe) > div.container-fluid > div.well.site {
+        box-shadow: none;
+    }
+    body:not(.not-in-iframe) > div.container-fluid > div.well.site > div > div.content {
+        box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
 }
 
 /* ====================================
@@ -715,7 +721,7 @@ dl > dd > input[type="checkbox"] {
     /*color: #F44336;*/
     margin-right: 5px;
 }
-.manager.contents .legend > span {
+.manager.contents.owned .legend > span {
     height: 24px;
     display: inline-block;
     padding: 0 10px;
@@ -727,6 +733,7 @@ dl > dd > input[type="checkbox"] {
         display: none;
     }
 
+    .table-responsive-to-cards,
     .table-responsive-to-cards table > thead > tr > th,
     .table-responsive-to-cards table > tbody > tr > th,
     .table-responsive-to-cards table > tfoot > tr > th,
@@ -738,17 +745,20 @@ dl > dd > input[type="checkbox"] {
     }
 
     .table-responsive-to-cards tr {
-        display: block;
-        margin-bottom: 1.5rem;
+        /*display: block;*/
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        margin: 1.5rem 1rem 1rem 1rem;
         padding: 1rem 0.5rem 0.5rem 1rem;
         background-color: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(136, 136, 136, 0.5);
+        box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2), 0px 8px 20px 0 rgba(0, 0, 0, 0.19);
+        border: 1px solid rgba(136, 136, 136, 0.2);
     }
 
     .table-responsive-to-cards td {
         /* display block to show all td per line, else display inline-block*/
-        display: block;
+        /*display: block;*/
         margin: 0 0.5rem 0.5rem 0;
         padding: 0.5rem;
         text-align: left;
@@ -757,11 +767,8 @@ dl > dd > input[type="checkbox"] {
 
     }
 
+    .manager.contents .table-responsive-to-cards td,
     .container-fluid > .well > .manager.contents > .content .table-responsive.table-responsive-to-cards .table td > span {
-        display: inline-block;
-    }
-
-    .manager.contents .table-responsive-to-cards td {
         display: inline-block;
     }
 
@@ -774,14 +781,15 @@ dl > dd > input[type="checkbox"] {
         /*padding: 0.625rem 0.5rem 0.625rem;*/
         /*font-size: 0.75em;*/
         font-weight: bold;
-        background: rgba(208, 208, 208, 0.1);
+        background: rgba(208, 208, 208, 0.4);
     }
 
     .manager.contents .table-responsive-to-cards td.verylongtext,
     .table-responsive-to-cards td.verylongtext,
     .table-responsive-to-cards td.action {
-        display: block !important;
+        /*display: block !important;*/
         float: none;
+        flex-basis: 100%;
     }
 
     .table-responsive-to-cards td.verylongtext:before {
