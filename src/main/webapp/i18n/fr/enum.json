@@ -50,10 +50,10 @@
                 "title": "Super administrateur"
             },
             "manager": {
-                "title": "Manageur"
+                "title": "Gestionnaire"
             },
             "editor": {
-                "title": "Editeur"
+                "title": "Éditeur"
             },
             "contributor": {
                 "title": "Contributeur"
