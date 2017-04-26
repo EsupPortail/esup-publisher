@@ -107,6 +107,9 @@ app:
             color: "#F44336"
             description: "Rubrique contenant les publications à mettre en avant"
 
+        defaultTTL: 3600
+        defaultTimeout: 15000
+
     admin:
         userName: admin
         groupName: "esco:admin:central"

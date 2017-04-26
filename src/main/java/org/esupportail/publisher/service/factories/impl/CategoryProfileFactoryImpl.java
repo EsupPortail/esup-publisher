@@ -10,6 +10,7 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.vo.CategoryProfile;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -18,6 +19,12 @@ import org.springframework.util.Assert;
  */
 @Component
 public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
+
+    @Value("${app.service.defaultTTL:3600}")
+    private int defaultTTL;
+
+    @Value("${app.service.defaultTimeout:5000}")
+    private int defaultTimeout;
 
     @Inject
     private VisibilityFactory visibilityFactory;
@@ -30,8 +37,8 @@ public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
             cp.setName(publisher.getContext().getOrganization().getDisplayName());
             cp.setId(publisher.getId());
             cp.setAccess(AccessType.PUBLIC);
-            cp.setTimeout(10000);
-            cp.setTtl(86400);
+            cp.setTimeout(defaultTimeout);
+            cp.setTtl(defaultTTL);
             cp.setTrustCategory(true);
             cp.setVisibility(visibilityFactory.from(subscribers));
             cp.setUrlActualites(urlActualites);
