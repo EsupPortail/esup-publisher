@@ -82,6 +82,8 @@ angular.module('publisherApp')
             $scope.updateMinDate(loadedItem);
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
             $scope.$parent.item.highlight = $scope.$parent.highlight;
+        } else if ($scope.$parent.item) {
+            $scope.updateMinDate($scope.$parent.item);
         }
         //if (loadedItem && loadedItem.startDate != '') {
         //    $scope.startdate = angular.copy(loadedItem.startDate);
