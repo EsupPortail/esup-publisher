@@ -16,6 +16,7 @@ angular.module('publisherApp')
         $scope.search = {subject: {}, target: {}};
         $scope.edit = {authorizedSubject: {}};
         $scope.permissionAdvanced = false;//Principal.isInRole("ROLE_ADMIN") || false;
+        $scope.form = {};
 
         $scope.permissionTypeList = EnumDatas.getPermissionTypeList();
         $scope.permissionClassList = EnumDatas.getPermissionClassList();
@@ -253,9 +254,9 @@ angular.module('publisherApp')
                             lastModifiedDate: null,
                             id: null
                         };
-                        if ($scope.editCategoryForm) {
-                            $scope.editCategoryForm.$setPristine();
-                            $scope.editCategoryForm.$setUntouched();
+                        if ($scope.form.editCategoryForm) {
+                            $scope.form.editCategoryForm.$setPristine();
+                            $scope.form.editCategoryForm.$setUntouched();
                         }
                         div = "#saveCategoryModal";
                     }
@@ -377,13 +378,13 @@ angular.module('publisherApp')
                         }
                         jstree.refresh(parentNode);
                         $scope.editedContext = {};
-                        if ($scope.editForm) {
-                            $scope.editForm.$setPristine();
-                            $scope.editForm.$setUntouched();
+                        if ($scope.form.editForm) {
+                            $scope.form.editForm.$setPristine();
+                            $scope.form.editForm.$setUntouched();
                         }
-                        if ($scope.editCategoryForm) {
-                            $scope.editCategoryForm.$setPristine();
-                            $scope.editCategoryForm.$setUntouched();
+                        if ($scope.form.editCategoryForm) {
+                            $scope.form.editCategoryForm.$setPristine();
+                            $scope.form.editCategoryForm.$setUntouched();
                         }
                         $scope.load($scope.ctxType, $scope.context.id);
                     });

@@ -2,7 +2,7 @@
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="editForm" role="form" novalidate ng-submit="confirmUpdateContext('PUBLISHER')" show-validation>
+            <form name="form.editForm" role="form" novalidate ng-submit="confirmUpdateContext('PUBLISHER')" show-validation>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!--ng-click="clear()"-->
@@ -27,9 +27,9 @@
                                 ng-options="organization.id as organization.displayName for organization in organizations" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
-                        <div ng-show="editForm.organization.$invalid">
+                        <div ng-show="form.editForm.organization.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.organization.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.organization.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -40,9 +40,9 @@
                                 ng-options="reader.id as reader.displayName for reader in readers" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
-                        <div ng-show="editForm.reader.$invalid">
+                        <div ng-show="form.editForm.reader.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.reader.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.reader.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -53,9 +53,9 @@
                                 ng-options="redactor.id as redactor.displayName for redactor in redactors" required ng-disabled="!isInRole('ROLE_ADMIN')">
                         </select>
 
-                        <div ng-show="editForm.redactor.$invalid">
+                        <div ng-show="form.editForm.redactor.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.redactor.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.redactor.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -66,17 +66,17 @@
                         <input type="text" class="form-control" name="displayName" id="displayName"
                                ng-model="editedContext.displayName" required ng-minlength="3" ng-maxlength="50" ng-readonly="!isInRole('ROLE_ADMIN')">
 
-                        <div ng-show="editForm.displayName.$invalid">
+                        <div ng-show="form.editForm.displayName.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.displayName.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.displayName.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                             <p class="help-block"
-                               ng-show="editForm.displayName.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                               ng-show="form.editForm.displayName.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
                                 This field is required to be at least 3 characters.
                             </p>
                             <p class="help-block"
-                               ng-show="editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
+                               ng-show="form.editForm.displayName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
                                 This field cannot be longer than 50 characters.
                             </p>
                         </div>
@@ -88,9 +88,9 @@
                                 ng-options="permission.name as permission.label | translate for permission in autorizedPermissionClassList" required ng-disabled="!canManage">
                         </select>
 
-                        <div ng-show="editForm.permissionType.$invalid">
+                        <div ng-show="form.editForm.permissionType.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.permissionType.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.permissionType.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -106,9 +106,9 @@
                                 ng-options="displayOrderType.name as displayOrderType.label | translate for displayOrderType in autorizedDisplayOrderTypeList" required ng-disabled="!canManage">
                         </select>
 
-                        <div ng-show="editForm.defaultDisplayOrder.$invalid">
+                        <div ng-show="form.editForm.defaultDisplayOrder.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -118,21 +118,21 @@
                         <input type="number" class="form-control" id="displayOrder" name="displayOrder"
                                ng-model="editedContext.displayOrder" required min="0" max="99" ng-readonly="!isInRole('ROLE_ADMIN')">
 
-                        <div ng-show="editForm.displayOrder.$invalid">
+                        <div ng-show="form.editForm.displayOrder.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.displayOrder.$error.required" translate="entity.validation.required">
+                               ng-show="form.editForm.displayOrder.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                             <p class="help-block"
-                               ng-show="editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                               ng-show="form.editForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
                                 This field should be more than 0.
                             </p>
                             <p class="help-block"
-                               ng-show="editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="99">
+                               ng-show="form.editForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="99">
                                 This field cannot be more than 99.
                             </p>
                             <p class="help-block"
-                               ng-show="editForm.displayOrder.$error.number" translate="entity.validation.number">
+                               ng-show="form.editForm.displayOrder.$error.number" translate="entity.validation.number">
                                 This field should be a number.
                             </p>
                         </div>
@@ -147,7 +147,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal"> <!--ng-click="close()"-->
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="submit" ng-disabled="editForm.$invalid || !canManage" class="btn btn-primary">
+                    <button type="submit" ng-disabled="form.editForm.$invalid || !canManage" class="btn btn-primary">
                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                     </button>
                 </div>

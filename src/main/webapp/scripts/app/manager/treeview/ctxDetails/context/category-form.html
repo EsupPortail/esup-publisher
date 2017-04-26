@@ -2,7 +2,7 @@
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="editCategoryForm" role="form" novalidate ng-submit="confirmUpdateContext('CATEGORY')" show-validation>
+            <form name="form.editCategoryForm" role="form" novalidate ng-submit="confirmUpdateContext('CATEGORY')" show-validation>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><!-- ng-click="clear()"-->
@@ -20,17 +20,17 @@
                         <input type="text" class="form-control" name="name" id="name"
                                ng-model="editedContext.name" required ng-minlength="3" ng-maxlength="200">
 
-                        <div ng-show="editCategoryForm.name.$invalid">
+                        <div ng-show="form.editCategoryForm.name.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.name.$error.required" translate="entity.validation.required">
+                               ng-show="form.editCategoryForm.name.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                               ng-show="form.editCategoryForm.name.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
                                 This field is required to be at least 3 characters.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                               ng-show="form.editCategoryForm.name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
                                 This field cannot be longer than 200 characters.
                             </p>
                         </div>
@@ -40,17 +40,17 @@
                         <input type="text" class="form-control" name="description" id="description"
                                ng-model="editedContext.description" required ng-minlength="5" ng-maxlength="512">
 
-                        <div ng-show="editCategoryForm.description.$invalid">
+                        <div ng-show="form.editCategoryForm.description.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.description.$error.required" translate="entity.validation.required">
+                               ng-show="form.editCategoryForm.description.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                               ng-show="form.editCategoryForm.description.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
                                 This field is required to be at least 5 characters.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                               ng-show="form.editCategoryForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
                                 This field cannot be longer than 512 characters.
                             </p>
                         </div>
@@ -60,13 +60,13 @@
                         <input type="url" class="form-control" name="iconUrl" id="iconUrl" placeholder="http://..."
                                ng-model="editedContext.iconUrl" ng-maxlength="2048">
 
-                        <div ng-show="editCategoryForm.iconUrl.$invalid">
+                        <div ng-show="form.editCategoryForm.iconUrl.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.iconUrl.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
+                               ng-show="form.editCategoryForm.iconUrl.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="2048">
                                 This field cannot be longer than 2048 characters.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.iconUrl.$error.url" translate="entity.validation.url">
+                               ng-show="form.editCategoryForm.iconUrl.$error.url" translate="entity.validation.url">
                                 This field must be a valid URL.
                             </p>
                         </div>
@@ -76,9 +76,9 @@
                         <!--<input type="color" class="form-control" name="color" id="color"-->
                                <!--ng-model="editedContext.color" required>-->
 
-                        <!--<div ng-show="editCategoryForm.color.$invalid">-->
+                        <!--<div ng-show="form.editCategoryForm.color.$invalid">-->
                             <!--<p class="help-block"-->
-                               <!--ng-show="editCategoryForm.color.$error.required" translate="entity.validation.required">-->
+                               <!--ng-show="form.editCategoryForm.color.$error.required" translate="entity.validation.required">-->
                                 <!--This field is required.-->
                             <!--</p>-->
                         <!--</div>-->
@@ -95,9 +95,9 @@
                                 ng-options="accessType.name as accessType.label | translate for accessType in accessTypeList" required>
                         </select>
 
-                        <div ng-show="editCategoryForm.accessView.$invalid">
+                        <div ng-show="form.editCategoryForm.accessView.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.accessView.$error.required" translate="entity.validation.required">
+                               ng-show="form.editCategoryForm.accessView.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -115,9 +115,9 @@
                         <!-- <input type="text" class="form-control" name="defaultDisplayOrder"
                                 ng-model="context.defaultDisplayOrder" required>-->
 
-                        <div ng-show="editCategoryForm.defaultDisplayOrder.$invalid">
+                        <div ng-show="form.editCategoryForm.defaultDisplayOrder.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
+                               ng-show="form.editCategoryForm.defaultDisplayOrder.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                         </div>
@@ -130,18 +130,18 @@
                         <!--<input type="text" class="form-control" name="lang"
                                ng-model="editedContext.lang" ng-minlength="2" ng-maxlength="5">-->
 
-                        <div ng-show="editCategoryForm.lang.$invalid">
+                        <div ng-show="form.editCategoryForm.lang.$invalid">
                             <!--<p class="help-block"
-                               ng-show="editCategoryForm.lang.$error.minlength" translate="entity.validation.minlength" translate-value-min="2">
+                               ng-show="form.editCategoryForm.lang.$error.minlength" translate="entity.validation.minlength" translate-value-min="2">
                                 This field is required to be at least 2 characters.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.lang.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="5">
+                               ng-show="form.editCategoryForm.lang.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="5">
                                 This field cannot be longer than 5 characters.
                             </p>-->
-                            <div ng-show="editCategoryForm.lang.$invalid">
+                            <div ng-show="form.editCategoryForm.lang.$invalid">
                                 <p class="help-block"
-                                   ng-show="editCategoryForm.lang.$error.required" translate="entity.validation.required">
+                                   ng-show="form.editCategoryForm.lang.$error.required" translate="entity.validation.required">
                                     This field is required.
                                 </p>
                             </div>
@@ -152,17 +152,17 @@
                         <input type="number" class="form-control" name="ttl" id="ttl"
                                ng-model="editedContext.ttl" min="900" max="86400">
 
-                        <div ng-show="editCategoryForm.ttl.$invalid">
+                        <div ng-show="form.editCategoryForm.ttl.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.ttl.$error.min" translate="entity.validation.min" translate-value-min="900">
+                               ng-show="form.editCategoryForm.ttl.$error.min" translate="entity.validation.min" translate-value-min="900">
                                 This field should be more than 900.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.ttl.$error.max" translate="entity.validation.max" translate-value-max="86400">
+                               ng-show="form.editCategoryForm.ttl.$error.max" translate="entity.validation.max" translate-value-max="86400">
                                 This field cannot be more than 86400.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.ttl.$error.number" translate="entity.validation.number">
+                               ng-show="form.editCategoryForm.ttl.$error.number" translate="entity.validation.number">
                                 This field should be a number.
                             </p>
                         </div>
@@ -172,21 +172,21 @@
                         <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                ng-model="editedContext.displayOrder" required min="0" max="999">
 
-                        <div ng-show="editCategoryForm.displayOrder.$invalid">
+                        <div ng-show="form.editCategoryForm.displayOrder.$invalid">
                             <p class="help-block"
-                               ng-show="editCategoryForm.displayOrder.$error.required" translate="entity.validation.required">
+                               ng-show="form.editCategoryForm.displayOrder.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
+                               ng-show="form.editCategoryForm.displayOrder.$error.min" translate="entity.validation.min" translate-value-min="0">
                                 This field should be more than 0.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="999">
+                               ng-show="form.editCategoryForm.displayOrder.$error.max" translate="entity.validation.max" translate-value-max="999">
                                 This field cannot be more than 999.
                             </p>
                             <p class="help-block"
-                               ng-show="editCategoryForm.displayOrder.$error.number" translate="entity.validation.number">
+                               ng-show="form.editCategoryForm.displayOrder.$error.number" translate="entity.validation.number">
                                 This field should be a number.
                             </p>
                         </div>
@@ -203,7 +203,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal"><!--ng-click="clear()"-->
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="submit" ng-disabled="editCategoryForm.$invalid || !canManage" class="btn btn-primary">
+                    <button type="submit" ng-disabled="form.editCategoryForm.$invalid || !canManage" class="btn btn-primary">
                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                     </button>
                 </div>
