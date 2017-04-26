@@ -1,12 +1,19 @@
 package org.esupportail.publisher.web.rest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
-import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.PermissionOnContext;
-import org.esupportail.publisher.domain.QPermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.repository.PermissionOnContextRepository;
+import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.slf4j.Logger;
@@ -18,13 +25,11 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing PermissionOnContext.
@@ -38,8 +43,6 @@ public class PermissionOnContextResource {
 
 	@Inject
 	private PermissionOnContextRepository permissionOnContextRepository;
-
-    private QPermissionOnContext pObj = QPermissionOnContext.permissionOnContext;
 
     @Inject
     private IPermissionService permissionService;
@@ -92,7 +95,7 @@ public class PermissionOnContextResource {
 	@Timed
 	public List<PermissionOnContext> getAll() {
 		log.debug("REST request to get all PermissionOnContexts");
-		return permissionOnContextRepository.findAll();
+		return Lists.newArrayList(permissionOnContextRepository.findAll(PermissionPredicates.ofType(PermissionClass.CONTEXT, false)));
 	}
 
     /**
@@ -104,7 +107,7 @@ public class PermissionOnContextResource {
     @Timed
     public List<PermissionOnContext> getAllOf(@PathVariable("ctx_type") ContextType type, @PathVariable("ctx_id") Long id) {
         log.debug("REST request to get PermissionOnContext : CtxKey [{}, {}]", type, id);
-        return Lists.newArrayList(permissionOnContextRepository.findAll(pObj.context.eq(new ContextKey(id, type))));
+        return Lists.newArrayList(permissionOnContextRepository.findAll(PermissionPredicates.OnCtx(type, id, PermissionClass.CONTEXT, false)));
     }
 
 

@@ -1,11 +1,16 @@
 package org.esupportail.publisher.repository.predicates;
 
+import java.util.Collection;
+
 import com.mysema.query.types.Predicate;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.QAbstractPermission;
+import org.esupportail.publisher.domain.QPermissionOnClassificationWithSubjectList;
+import org.esupportail.publisher.domain.QPermissionOnContext;
+import org.esupportail.publisher.domain.QPermissionOnSubjects;
+import org.esupportail.publisher.domain.QPermissionOnSubjectsWithClassificationList;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-
-import java.util.Collection;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 22 juil. 2014
@@ -39,13 +44,13 @@ public final class PermissionPredicates {
         if (!onAbstract) {
             switch (type) {
                 case CONTEXT:
-                    return qPermCtx.context.keyType.eq(keyType);
+                    return qPermCtx.context.keyType.eq(keyType).and(qPermCtx._super.instanceOf(type.getType()));
                 case CONTEXT_WITH_SUBJECTS:
-                    return qPermCtxWSL.context.keyType.eq(keyType);
+                    return qPermCtxWSL.context.keyType.eq(keyType).and(qPermCtxWSL._super._super.instanceOf(type.getType()));
                 case SUBJECT_WITH_CONTEXT:
-                    return qPermSubjCtx.context.keyType.eq(keyType);
+                    return qPermSubjCtx.context.keyType.eq(keyType).and(qPermSubjCtx._super._super.instanceOf(type.getType()));
                 case SUBJECT:
-                    return qPermSubj.context.keyType.eq(keyType);
+                    return qPermSubj.context.keyType.eq(keyType).and(qPermSubj._super.instanceOf(type.getType()));
                 default:
                     throw new IllegalArgumentException("Enum property of PermissionClass not managed");
             }
@@ -60,13 +65,13 @@ public final class PermissionPredicates {
         if (!onAbstract) {
             switch (type) {
                 case CONTEXT:
-                    return qPermCtx.context.keyId.in(ids).and(qPermCtx.context.keyType.eq(keyType));
+                    return qPermCtx.context.keyId.in(ids).and(qPermCtx.context.keyType.eq(keyType)).and(qPermCtx._super.instanceOf(type.getType()));
                 case CONTEXT_WITH_SUBJECTS:
-                    return qPermCtxWSL.context.keyId.in(ids).and(qPermCtxWSL.context.keyType.eq(keyType));
+                    return qPermCtxWSL.context.keyId.in(ids).and(qPermCtxWSL.context.keyType.eq(keyType)).and(qPermCtxWSL._super._super.instanceOf(type.getType()));
                 case SUBJECT_WITH_CONTEXT:
-                    return qPermSubjCtx.context.keyId.in(ids).and(qPermSubjCtx.context.keyType.eq(keyType));
+                    return qPermSubjCtx.context.keyId.in(ids).and(qPermSubjCtx.context.keyType.eq(keyType)).and(qPermSubjCtx._super._super.instanceOf(type.getType()));
                 case SUBJECT:
-                    return qPermSubj.context.keyId.in(ids).and(qPermSubj.context.keyType.eq(keyType));
+                    return qPermSubj.context.keyId.in(ids).and(qPermSubj.context.keyType.eq(keyType)).and(qPermSubj._super.instanceOf(type.getType()));
                 default:
                     throw new IllegalArgumentException("Enum property of PermissionClass not managed");
             }
@@ -79,13 +84,13 @@ public final class PermissionPredicates {
         if (!onAbstract) {
             switch (type) {
                 case CONTEXT:
-                    return qPermCtx.context.keyId.eq(id).and(qPermCtx.context.keyType.eq(keyType));
+                    return qPermCtx.context.keyId.eq(id).and(qPermCtx.context.keyType.eq(keyType)).and(qPermCtx._super.instanceOf(type.getType()));
                 case CONTEXT_WITH_SUBJECTS:
-                    return qPermCtxWSL.context.keyId.eq(id).and(qPermCtxWSL.context.keyType.eq(keyType));
+                    return qPermCtxWSL.context.keyId.eq(id).and(qPermCtxWSL.context.keyType.eq(keyType)).and(qPermCtxWSL._super._super.instanceOf(type.getType()));
                 case SUBJECT_WITH_CONTEXT:
-                    return qPermSubjCtx.context.keyId.eq(id).and(qPermSubjCtx.context.keyType.eq(keyType));
+                    return qPermSubjCtx.context.keyId.eq(id).and(qPermSubjCtx.context.keyType.eq(keyType)).and(qPermSubjCtx._super._super.instanceOf(type.getType()));
                 case SUBJECT:
-                    return qPermSubj.context.keyId.eq(id).and(qPermSubj.context.keyType.eq(keyType));
+                    return qPermSubj.context.keyId.eq(id).and(qPermSubj.context.keyType.eq(keyType)).and(qPermSubj._super.instanceOf(type.getType()));
                 default:
                     throw new IllegalArgumentException("Enum property of PermissionClass not managed");
             }
@@ -98,18 +103,36 @@ public final class PermissionPredicates {
         if (!onAbstract) {
             switch (type) {
                 case CONTEXT:
-                    return qPermCtx.context.in(keys);
+                    return qPermCtx.context.in(keys).and(qPermCtx._super.instanceOf(type.getType()));
                 case CONTEXT_WITH_SUBJECTS:
-                    return qPermCtxWSL.context.in(keys);
+                    return qPermCtxWSL.context.in(keys).and(qPermCtxWSL._super._super.instanceOf(type.getType()));
                 case SUBJECT_WITH_CONTEXT:
-                    return qPermSubjCtx.context.in(keys);
+                    return qPermSubjCtx.context.in(keys).and(qPermSubjCtx._super._super.instanceOf(type.getType()));
                 case SUBJECT:
-                    return qPermSubj.context.in(keys);
+                    return qPermSubj.context.in(keys).and(qPermSubj._super.instanceOf(type.getType()));
                 default:
                     throw new IllegalArgumentException("Enum property of PermissionClass not managed");
             }
         }
 		return qobj.context.in(keys).and(qobj.instanceOf(type.getType()));
 	}
+
+    public static Predicate ofType(PermissionClass type, boolean onAbstract) {
+        if (!onAbstract) {
+            switch (type) {
+                case CONTEXT:
+                    return qPermCtx._super.instanceOf(type.getType());
+                case CONTEXT_WITH_SUBJECTS:
+                    return qPermCtxWSL._super._super.instanceOf(type.getType());
+                case SUBJECT_WITH_CONTEXT:
+                    return qPermSubjCtx._super._super.instanceOf(type.getType());
+                case SUBJECT:
+                    return qPermSubj._super.instanceOf(type.getType());
+                default:
+                    throw new IllegalArgumentException("Enum property of PermissionClass not managed");
+            }
+        }
+        return qobj.instanceOf(type.getType());
+    }
 
 }

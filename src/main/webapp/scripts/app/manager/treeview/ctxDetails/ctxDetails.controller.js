@@ -2,7 +2,7 @@
 
 angular.module('publisherApp')
     .controller('DetailsTreeViewController', function ($scope, $state, $stateParams, $filter, EnumDatas, Organization, Publisher, Classification, $rootScope,
-                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, Subscriber, User, Principal, toaster, $translate) {
+                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, PermissionOnClassificationWithSubjectList, Subscriber, User, Principal, toaster, $translate) {
 
         $scope.context = {};
         $scope.ctxType = $stateParams.ctxType;
@@ -50,6 +50,9 @@ angular.module('publisherApp')
         var jstree = $('.tree-browser > .jstree').jstree(true);
 
         $scope.load = function (ctxType, ctxId) {
+            $scope.permission = {};
+            $scope.targets={};
+            $scope.subscriber={};
             switch(ctxType) {
                 case 'ORGANIZATION' :
                     Organization.get({id: ctxId}, function(result) {
@@ -81,10 +84,11 @@ angular.module('publisherApp')
                         $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
                         setCanCreateCategory($scope.publisher);
-                    });
-                    PermissionOnContext.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
-                        $scope.permissions = result;
-                        $scope.loadAvailableRoles();
+                        selectPermissionManager($scope.ctxPermissionType).queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
+                            $scope.permissions = result;
+                            console.log("loaded permissions ", $scope.permissions);
+                            $scope.loadAvailableRoles();
+                        });
                     });
                     Subscriber.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                         $scope.targets = result;
@@ -100,10 +104,10 @@ angular.module('publisherApp')
                         $scope.ctxPermissionType = $scope.publisher.permissionType;
                         $scope.hasPermissionManagment = getHasPermissionManagment(ctxType);
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
-                    });
-                    Permission.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
-                        $scope.permissions = result;
-                        $scope.loadAvailableRoles();
+                        selectPermissionManager($scope.ctxPermissionType).queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
+                            $scope.permissions = result;
+                            $scope.loadAvailableRoles();
+                        });
                     });
                     Subscriber.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                         $scope.targets = result;
@@ -127,11 +131,12 @@ angular.module('publisherApp')
                         }
                         $scope.ctxPermissionType = $scope.publisher.permissionType;
                         selectTemplatePermissionTemplate($scope.ctxPermissionType);
+                        selectPermissionManager($scope.ctxPermissionType).queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
+                            $scope.permissions = result;
+                            $scope.loadAvailableRoles();
+                        });
                     });
-                    Permission.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
-                        $scope.permissions = result;
-                        $scope.loadAvailableRoles();
-                    });
+
                     Subscriber.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                         $scope.targets = result;
                     });
@@ -652,23 +657,12 @@ angular.module('publisherApp')
                     }
                 }
             }
-            switch ($scope.ctxPermissionType) {
-                case 'CONTEXT': PermissionOnContext.
-                    update($scope.permission,
-                        function () {
-                            $scope.load($scope.ctxType, $scope.context.id);
-                            $scope.clearPermission();
-                        });
-                    break;
-                case 'CONTEXT_WITH_SUBJECTS' :
-                    Permission.
-                        update($scope.permission,
-                        function () {
-                            $scope.load($scope.ctxType, $scope.context.id);
-                            $scope.clearPermission();
-                        });
-                    break;
-            }
+            selectPermissionManager($scope.ctxPermissionType).update($scope.permission,
+                function () {
+                    $scope.load($scope.ctxType, $scope.context.id);
+                    $scope.clearPermission();
+                });
+
         };
 
         $scope.updatePermission = function (id) {
@@ -684,7 +678,7 @@ angular.module('publisherApp')
                     });
                     break;
                 case 'CONTEXT_WITH_SUBJECTS' :
-                    Permission.get({id: id}, function (result) {
+                    PermissionOnClassificationWithSubjectList.get({id: id}, function (result) {
                         $scope.permission = result;
                         $scope.loadAvailableRoles(result.role);
                         //console.log("available roles : ", $scope.availableRoles);
@@ -896,6 +890,18 @@ angular.module('publisherApp')
                 /*,
                  {name: 'SUBJECT', url: 'scripts/app/manager/publish/content/resource.html'},
                  {name: 'SUBJECT_WITH_CONTEXT', url: 'scripts/app/manager/publish/content/resource.html'}];*/
+            }
+        }
+
+        function selectPermissionManager(permissionClass) {
+            switch (permissionClass) {
+                case 'CONTEXT': return PermissionOnContext;
+                case 'CONTEXT_WITH_SUBJECTS' :  return PermissionOnClassificationWithSubjectList;
+                default : console.log('Not Yet Implemented !'); return;
+
+                /*
+                 case 'SUBJECT'
+                 case 'SUBJECT_WITH_CONTEXT'*/
             }
         }
 
