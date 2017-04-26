@@ -15,7 +15,7 @@ angular.module('publisherApp')
             $scope.$parent.classifications = angular.copy(loadedClassifications);
         }
 
-        if (angular.equals({},$scope.$parent.item) && loadedItem) {
+        if ((!angular.isDefined($scope.$parent.item) || angular.equals({},$scope.$parent.item)) && loadedItem) {
             $scope.$parent.highlight = angular.copy(loadedItem.highlight);
         }
 
