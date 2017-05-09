@@ -18,6 +18,8 @@ public class FileUploadHelper {
 
     private String urlResourceMapping;
 
+    private List<String> unremovablePaths;
+
     private boolean useDefaultPath;
 
     private long fileMaxSize;

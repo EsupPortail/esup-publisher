@@ -43,6 +43,12 @@ public class FileService {
     public boolean deleteInternalResource(final String urlPath) {
         if (urlPath != null && !urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
             String path = urlPath.replace(publicFileUploadHelper.getUrlResourceMapping(), "");
+            for (String unremovablePath : publicFileUploadHelper.getUnremovablePaths()) {
+                if (!path.isEmpty() && !unremovablePath.isEmpty() && path.matches(unremovablePath)) {
+                    log.debug("Don't removing file in path {} as declared as unremovablePath in {} !", path, unremovablePath);
+                    return false;
+                }
+            }
             path = publicFileUploadHelper.getUploadDirectoryPath() + path;
             final File file = new File(path);
             if (file.exists()) {
@@ -67,6 +73,12 @@ public class FileService {
     public boolean deletePrivateResource(final String urlPath) {
         if (urlPath != null && !urlPath.startsWith("http://") && !urlPath.startsWith("https://")) {
             String path = urlPath.replace(protectedFileUploadHelper.getUrlResourceMapping(), "");
+            for (String unremovablePath : protectedFileUploadHelper.getUnremovablePaths()) {
+                if (!path.isEmpty() && !unremovablePath.isEmpty() && path.matches(unremovablePath)) {
+                    log.debug("Don't removing file in path {} as declared as unremovablePath in {} !", path, unremovablePath);
+                    return false;
+                }
+            }
             path = protectedFileUploadHelper.getUploadDirectoryPath() + path;
             final File file = new File(path);
             if (file.exists()) {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class FileUploadConfiguration {
     private Environment env;
 
     private static final String ENV_UPLOAD_PATH = "app.upload.path";
+    private static final String ENV_UNREMOVABLE_PATH = "app.upload.unremovablePathPattern";
     private static final String ENV_UPLOAD_PROTECTED_PATH = "app.upload.protectedPath";
     private static final String ENV_UPLOAD_IMAGESIZE = "app.upload.imageMaxSize";
     private static final String ENV_UPLOAD_FILESIZE = "app.upload.maxFileSize";
@@ -49,6 +51,7 @@ public class FileUploadConfiguration {
         fuh.setUrlResourceMapping("files/");
         fuh.setUseDefaultPath(false);
         fuh.setFileMaxSize(env.getProperty(ENV_UPLOAD_IMAGESIZE, long.class, defaultImageMaxSize));
+        fuh.setUnremovablePaths(Arrays.asList(env.getProperty(ENV_UNREMOVABLE_PATH, String[].class, new String[]{})));
         final String mimeTypesFilePath = env.getProperty(ENV_UPLOAD_FILE_AUTHORIZED_MIME_TYPE, defaultFileMimeTypes);
         try {
             List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), Charsets.UTF_8);
@@ -80,6 +83,7 @@ public class FileUploadConfiguration {
         fuh.setUrlResourceMapping(ViewController.FILE_VIEW.replaceFirst("/", ""));
         fuh.setUseDefaultPath(false);
         fuh.setFileMaxSize(env.getProperty(ENV_UPLOAD_FILESIZE, long.class, defaultFileMaxSize));
+        fuh.setUnremovablePaths(Arrays.asList(env.getProperty(ENV_UNREMOVABLE_PATH, String[].class, new String[]{})));
         final String mimeTypesFilePath = env.getProperty(ENV_UPLOAD_FILE_AUTHORIZED_MIME_TYPE, defaultFileMimeTypes);
         try {
             List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), Charsets.UTF_8);
