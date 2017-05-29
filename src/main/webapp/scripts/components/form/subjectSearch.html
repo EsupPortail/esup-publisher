@@ -80,7 +80,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearSubject()">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!container.subject.modelId" ng-click="submitSubject()">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!canSubmit()" ng-click="submitSubject()">
                         <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
                     </button>
                 </div>
@@ -104,7 +104,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearSubject()">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!container.subject.modelId" ng-click="submitSubject()">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!canSubmit" ng-click="submitSubject()">
                         <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
                     </button>
                 </div>
@@ -147,9 +147,15 @@
                         </div>
                         <div class="panel-body">
                             <div>
-                                <ul class="list-unstyled">
+                                <ul ng-if="!multiSelection" class="list-unstyled">
                                     <li ng-repeat="user in resultsArr">
                                         <input type="radio" ng-value="user" ng-model="container.subject" ng-model-options="{ updateOn: 'default' , allowInvalid:'true'}">
+                                        <span uib-tooltip-placement="top" uib-tooltip="{{ tooltipUser(user) }}"> {{user.displayName}}</span>
+                                    </li>
+                                </ul>
+                                <ul ng-if="multiSelection" class="list-unstyled">
+                                    <li ng-repeat="user in resultsArr">
+                                        <input type="checkbox" ng-checked="isSubjectKeySelected(user)" ng-click="toggleUser(user)">
                                         <span uib-tooltip-placement="top" uib-tooltip="{{ tooltipUser(user) }}"> {{user.displayName}}</span>
                                     </li>
                                 </ul>
@@ -176,7 +182,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearSubject()">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!container.subject.modelId" ng-click="submitSubject()">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!canSubmit()" ng-click="submitSubject()">
                         <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
                     </button>
                 </div>

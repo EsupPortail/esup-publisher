@@ -6,12 +6,9 @@ angular.module('publisherApp')
 
         $scope.selectedtargets = $scope.$parent.targets;
 
-        $scope.search = {target: {}};
-
-
+        $scope.search = {targets: []};
 
         if (angular.equals([],$scope.$parent.targets) && loadedTargets) {
-            //console.log('loaded targets :' + JSON.stringify(loadedTargets));
             // on récupère le subject car pas utile de mettre le subscribeType car FORCED par défaut
             if (loadedTargets.length > 0) {
                 for (var i = 0; i < loadedTargets.length; ++i) {
@@ -20,12 +17,15 @@ angular.module('publisherApp')
             }
         }
 
-        $scope.$watch('search.target', function(newData, oldData) {
-            //console.log("search selected :", newData, oldData);
-            if (angular.isDefined(newData) && !angular.equals({},newData) && newData.hasOwnProperty('modelId') && !containsSubcriber(newData.modelId)) {
-                var target = {modelId :newData.modelId, displayName: newData.displayName};
-                $scope.$parent.targets.push(target);
-
+        $scope.$watch('search.targets', function(newData, oldData) {
+            if (angular.isDefined(newData) && angular.isArray(newData) && newData.length > 0) {
+                newData.forEach(function(item) {
+                    if (!angular.equals({},item) && item.hasOwnProperty('modelId') && !containsSubcriber(item.modelId)) {
+                        //var target = {modelId: item.modelId, displayName: item.displayName};
+                        //$scope.$parent.targets.push(target);
+                        $scope.$parent.targets.push(angular.copy(item));
+                    }
+                });
             }
         });
 

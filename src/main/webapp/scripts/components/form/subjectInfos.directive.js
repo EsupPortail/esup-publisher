@@ -56,7 +56,7 @@ angular.module('publisherApp')
                     var attrs = subject.attributes;
                     var html = '';
                     for (index = 0; index < $scope.userAttrs.length; ++index){
-                        if (index > 0 && angular.isDefined(attrs[$scope.userAttrs[index]])) {
+                        if (index > 0 && angular.isDefined(attrs[$scope.userAttrs[index]]) && !angular.equals('', html)) {
                             html += " - ";
                         }
                         if (angular.isDefined(attrs[$scope.userAttrs[index]]) && angular.isArray(attrs[$scope.userAttrs[index]])) {
