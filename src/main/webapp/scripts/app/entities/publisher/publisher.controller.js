@@ -90,12 +90,12 @@ angular.module('publisherApp')
         function getEnumlabel (type, name) {
             switch(type) {
                 case 'permissionClass':
-                    return $scope.permissionClassList.filter(function(val) {
+                    return EnumDatas.getPermissionClassList().filter(function(val) {
                         return val.name === name;
                     })[0].label;
                     break;
                 case 'displayOrderType':
-                    return $scope.displayOrderTypeList.filter(function(val) {
+                    return EnumDatas.getDisplayOrderTypeList().filter(function(val) {
                         return val.name === name;
                     })[0].label;
                     break;
