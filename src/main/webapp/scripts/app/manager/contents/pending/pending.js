@@ -19,7 +19,7 @@ angular.module('publisherApp')
                     }],
                     classificationResource : 'Classification',
                     loadHighlightedClassification : function(classificationResource) {
-                        return classificationResource.hightlihted().$promise;
+                        return classificationResource.highlighted().$promise;
                     }
                 }
             }).state('pending.subject', {

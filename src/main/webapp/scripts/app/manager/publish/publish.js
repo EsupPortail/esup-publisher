@@ -90,7 +90,7 @@ angular.module('publisherApp')
                             return contentData.classifications;
                     },
                     loadHighlightedClassification : function(classificationResource) {
-                        return classificationResource.hightlihted().$promise;
+                        return classificationResource.highlighted().$promise;
                     }
                 }
             })

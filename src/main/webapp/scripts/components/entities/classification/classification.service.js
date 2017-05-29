@@ -16,7 +16,7 @@ angular.module('publisherApp')
                 }
             },
             'update': { method:'PUT' },
-            'hightlihted': {
+            'highlighted': {
                 method: 'GET',
                 url: 'api/classifications/highlighted'
             }
