@@ -144,6 +144,11 @@
                             <input type="checkbox" class="form-control" id="hasSubPermsManagement" name="hasSubPermsManagement"
                                    ng-model="publisher.hasSubPermsManagement">
                         </div>
+                        <div class="form-group">
+                            <label class="control-label" for="doHighlight" translate="publisherApp.publisher.doHighlight">DoHighlight</label>
+                            <input type="checkbox" class="form-control" id="doHighlight" name="doHighlight"
+                                   ng-model="publisher.doHighlight">
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -199,6 +204,7 @@
                     <th translate="publisherApp.publisher.used">Used</th>
                     <th translate="publisherApp.publisher.displayOrder">DisplayOrder</th>
                     <th translate="publisherApp.publisher.hasSubPermsManagement">HasSubPermsManagement</th>
+                    <th translate="publisherApp.publisher.doHighlight">DoHighlight</th>
                     <!--<th translate="publisherApp.publisher.createdBy">CreatedBy</th>
                     <th translate="publisherApp.publisher.createdDate">CreatedDate</th>
                     <th translate="publisherApp.publisher.lastModifiedBy">LastModifiedBy</th>
@@ -216,6 +222,7 @@
                     <td><input type="checkbox" ng-model="publisher.used" disabled/></td>
                     <td>{{publisher.displayOrder}}</td>
                     <td><input type="checkbox" ng-model="publisher.hasSubPermsManagement" disabled/></td>
+                    <td><input type="checkbox" ng-model="publisher.doHighlight" disabled/></td>
                     <!--<td>{{publisher.createdBy}}</td>
                     <td>{{publisher.createdDate}}</td>
                     <td>{{publisher.lastModifiedBy}}</td>

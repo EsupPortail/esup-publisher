@@ -69,7 +69,7 @@ angular.module('publisherApp')
             $scope.publisher = {
                 context: {organization: organization, redactor: redactor, reader: reader}, displayName: null,
                 used: false, displayOrder: 0, permissionType: $scope.permissionClassList[0].name, defaultDisplayOrder: $scope.displayOrderTypeList[0].name, id: null,
-                hasSubPermsManagement: true
+                hasSubPermsManagement: true, doHighlight: true
             };
             //console.log($scope.publisher);
             if ($scope.editForm) {

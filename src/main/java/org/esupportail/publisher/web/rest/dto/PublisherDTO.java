@@ -81,9 +81,13 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
     @Setter
     private boolean hasSubPermsManagement;
 
+    @Getter
+    @Setter
+    private boolean doHighlight;
+
     public PublisherDTO(@NotNull final Long modelId, @NotNull final OrganizationDTO organization, @NotNull final ReaderDTO reader, @NotNull final RedactorDTO redactor,
                         @NotNull final String displayName, final boolean used, final int displayOrder, @NotNull final PermissionClass permissionType,
-                        @NotNull final DisplayOrderType defaultDisplayOrder, final boolean hasSubPermsManagement) {
+                        @NotNull final DisplayOrderType defaultDisplayOrder, final boolean hasSubPermsManagement, final boolean doHighlight) {
         super(modelId);
         this.organization = organization;
         this.reader = reader;
@@ -94,5 +98,6 @@ public class PublisherDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lo
         this.permissionType = permissionType;
         this.defaultDisplayOrder = defaultDisplayOrder;
         this.hasSubPermsManagement = hasSubPermsManagement;
+        this.doHighlight = doHighlight;
     }
 }

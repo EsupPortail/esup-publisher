@@ -24,6 +24,7 @@
             "permissionType": "Type de permission",
             "defaultDisplayOrder": "Ordre d'affichage",
             "hasSubPermsManagement": "Permettre la gestion des permissions dans les rubriques",
+            "doHighlight": "Permettre de mettre en avant les publications",
             "createdBy": "Créé par",
             "createdDate": "Date de création",
             "lastModifiedBy": "Dernière modification par",

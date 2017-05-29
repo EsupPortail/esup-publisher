@@ -60,6 +60,10 @@ angular.module('publisherApp')
             }
         };
 
+        $scope.hasHighlightCats = function() {
+            return $scope.$parent.publisher.doHighlight;
+        };
+
         $scope.toggleSelection = function (contextKey) {
             var i = 0, idx=-1;
             for (var size = $scope.$parent.classifications.length; i < size; i++) {

@@ -96,6 +96,10 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
     @Column(length = 1, nullable = false, name = "has_sub_perms_management")
     private boolean hasSubPermsManagement = true;
 
+    /** This field corresponds to the database column has_sub_perms_management. */
+    @Column(length = 1, nullable = false, name = "do_highlight")
+    private boolean doHighlight = true;
+
 	public Publisher() {
 		super();
 	}
@@ -103,7 +107,8 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 	public Publisher(final Organization organization, final Reader reader,
 			final Redactor redactor, final String displayName,
 			final PermissionClass permissionType,
-			final boolean used, final boolean hasSubPermsManagement) {
+			final boolean used, final boolean hasSubPermsManagement,
+                     final boolean doHighlight) {
 		super();
 		this.context = new OrganizationReaderRedactorKey(organization, reader,
 				redactor);
@@ -111,6 +116,7 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 		this.permissionType = permissionType;
 		this.used = used;
         this.hasSubPermsManagement = hasSubPermsManagement;
+        this.doHighlight = doHighlight;
 	}
 
 	@Override

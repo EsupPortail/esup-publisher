@@ -45,7 +45,7 @@ public class PublisherDTOFactoryImpl extends AbstractDTOFactoryImpl<PublisherDTO
         if (model != null) {
             return new PublisherDTO(model.getId(), organizationDTOFactory.from(model.getContext().getOrganization()),readerFactory.from(model.getContext().getReader()),
                 redactorFactory.from(model.getContext().getRedactor()), model.getDisplayName(), model.isUsed(), model.getDisplayOrder(), model.getPermissionType(),
-                model.getDefaultDisplayOrder(), model.isHasSubPermsManagement());
+                model.getDefaultDisplayOrder(), model.isHasSubPermsManagement(), model.isDoHighlight());
         }
         return null;
     }

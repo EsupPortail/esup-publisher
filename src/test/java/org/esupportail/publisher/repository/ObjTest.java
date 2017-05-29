@@ -284,7 +284,7 @@ public final class ObjTest {
 	public static Publisher newPublisher(final String indice) {
 		return new Publisher(newOrganization(indice), newReader(indice),
 				newRedactor(indice), "PUB " + indice, PermissionClass.CONTEXT,
-				rnd.nextBoolean(), true);
+				rnd.nextBoolean(), true, true);
 	}
 
 	public static InternalFeed newInternalFeed(final String indice) {

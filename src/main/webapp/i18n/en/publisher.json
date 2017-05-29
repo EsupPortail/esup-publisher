@@ -24,6 +24,7 @@
             "permissionType": "Permission Type",
             "defaultDisplayOrder": "Display Order",
             "hasSubPermsManagement": "Permission management is possible in classifications",
+            "doHighlight": "Highlighting publications",
             "createdBy": "Created By",
             "createdDate": "Created Date",
             "lastModifiedBy": "Last Modified By",

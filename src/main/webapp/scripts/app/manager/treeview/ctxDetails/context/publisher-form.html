@@ -142,6 +142,11 @@
                         <input type="checkbox" class="form-control" id="hasSubPermsManagement" name="hasSubPermsManagement"
                                ng-model="editedContext.hasSubPermsManagement" disabled>
                     </div>
+                    <div class="form-group" has-role="ROLE_ADMIN">
+                        <label class="control-label" for="doHighlight" translate="publisherApp.publisher.doHighlight">DoHighlight</label>
+                        <input type="checkbox" class="form-control" id="doHighlight" name="doHighlight"
+                               ng-model="editedContext.doHighlight" ng-disabled="!isInRole('ROLE_ADMIN')">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"> <!--ng-click="close()"-->

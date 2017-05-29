@@ -299,9 +299,16 @@ public class PublishController {
                     itemsMap.get(itemId).getSecond().add(classif);
                 }
             }
-            final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
-            List<RubriqueVO> rubriques = Lists.newArrayList(rubriqueVOFactory.from(specialClassif));
-            rubriques.addAll(rubriqueVOFactory.asVOList(cts));
+            List<RubriqueVO> rubriques;
+            if (publisher.isDoHighlight()) {
+                final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
+                // to get the order of HighlightedClassification as first
+                rubriques = Lists.newArrayList(rubriqueVOFactory.from(specialClassif));
+                rubriques.addAll(rubriqueVOFactory.asVOList(cts));
+            } else {
+               rubriques = Lists.newArrayList(rubriqueVOFactory.asVOList(cts));
+            }
+
             returnedObj.setRubriques(rubriques);
             returnedObj.setItems(new ArrayList<ItemVO>());
             for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
