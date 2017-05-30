@@ -405,6 +405,11 @@ label > span + input[type="checkbox"] {
 .table-striped > tbody > tr.highlight {
     background-color: rgba(244, 67, 54, 0.1);
 }
+
+.modal-dialog{
+    max-height: calc(100vh - 100px);
+    overflow-y: initial !important;
+}
 /* ====================================
      All pages title on where user is
 ====================================== */
