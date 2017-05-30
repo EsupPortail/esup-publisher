@@ -86,7 +86,6 @@ angular.module('publisherApp')
                         setCanCreateCategory($scope.publisher);
                         selectPermissionManager($scope.ctxPermissionType).queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
                             $scope.permissions = result;
-                            console.log("loaded permissions ", $scope.permissions);
                             $scope.loadAvailableRoles();
                         });
                     });
