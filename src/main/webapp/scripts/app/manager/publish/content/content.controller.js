@@ -34,13 +34,14 @@ angular.module('publisherApp')
             });
         }
 
-        $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate'];
-        $scope.dtformat = $scope.dtformats[3];
+        $scope.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy','shortDate', 'yyyy-MM-dd'];
+        $scope.dtformat = $scope.dtformats[6];
 
         $scope.today = DateUtils.addDaysToLocalDate(new Date(), 0);
         //$scope.startdate = angular.copy($scope.today)
         // init default max and min date;
         $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 0);
+        $scope.endMinDate = DateUtils.addDaysToLocalDate($scope.today, 0);
         $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, 366);
         $scope.updateMaxDate = function(item) {
             if (angular.isDefined(item) && angular.isDefined(item.type) && angular.isDefined(item.startDate)) {
@@ -60,8 +61,12 @@ angular.module('publisherApp')
         // used when we edit an item to avoid to change startDate
         $scope.updateMinDate = function(item) {
             if (angular.isDefined(item) && angular.isDefined(item.type) && angular.isDefined(item.startDate)) {
-                    $scope.minDate = item.startDate;
-                    //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                $scope.minDate = item.startDate;
+                $scope.endMinDate = item.startDate;
+                //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                if (DateService.getDateDifference($scope.today, $scope.minDate) <= 0) {
+                    $scope.endMinDate = $scope.today;
+                }
             }
         };
 

@@ -59,11 +59,12 @@ angular.module('publisherApp')
 
                     });
 
-                    element.datepicker(settings);
+                    element.datepicker(settings).on('change input', function(evt) {
+                        onSelect(evt.target.value);
+                    });
                 }
 
                 function onSelect(date) {
-
                     scope.$apply(function () {
 
                         var parsedDate = jQuery.datepicker.parseDate(settings.dateFormat, date),

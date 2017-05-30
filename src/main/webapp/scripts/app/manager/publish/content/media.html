@@ -99,7 +99,7 @@
                 <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
                                 && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
                     <label class="control-label" for="endDate" translate="publisherApp.media.endDate">EndDate</label>
-                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min-date="{{minDate | date: dtformat}}" max={{maxDate}} ng-model="item.endDate"
+                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min="{{endMinDate}}" max={{maxDate}} ng-model="item.endDate"
                            alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
                     <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
@@ -110,6 +110,10 @@
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
                             This field is not a valid date.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{endMinDate | date: dtformat }}">
+                            A date after now is required.
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{maxDate | date: dtformat }}">
