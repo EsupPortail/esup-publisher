@@ -20,7 +20,7 @@
 - IMPORTANT : check for mysql that table names are in lower case in changelog files, do sames things for all table links...
 
 # to run tests :
-- `mvn test -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod
+- `mvn test -Dspring.profiles.active=dev,fast,ldapgrp,test` don't forget to change databasename between prod
 - `mvn test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
 
 # to run in dev :

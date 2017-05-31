@@ -1,0 +1,143 @@
+server:
+    #address: localhost
+    #address: 192.168.45.145
+    port: 8080
+    contextPath: /publisher
+
+multipart:
+    maxFileSize: 10MB
+    maxRequestSize: 10MB
+
+spring:
+    profiles:
+        active: dev
+        include: fast,ldapgrp
+
+    datasource:
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        url: jdbc:mysql://192.168.56.10:3306/publisher-test?autoreconnect=true
+        databaseName:
+        serverName:
+        username: jgribonvald
+        password: root
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+
+    jpa:
+        database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+        database: MYSQL
+        openInView: false
+        show_sql: true
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+
+    mail:
+        baseUrl: http://localhost:8080
+
+    thymeleaf:
+        mode: XHTML
+        cache: false
+
+logging:
+    config: "classpath:logback-dev.xml"
+
+metrics:
+    jmx.enabled: true
+    spark:
+        enabled: false
+        host: localhost
+        port: 9999
+    graphite:
+        enabled: false
+        host: localhost
+        port: 2003
+        prefix: publisher
+
+cache:
+    timeToLiveSeconds: 3600
+    ehcache:
+        maxBytesLocalHeap: 16M
+
+ldap:
+    base: dc=esco-centre,dc=fr
+    urls: ldap://chene:389/
+    userDn: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
+    password: LplmENT
+    timeLimit: 20000
+    countLimit: 2000
+    otherUserDisplayedAttributes: mail,ESCOUAI, ENTPersonProfils
+    userGroupAttribute: isMemberOf
+    userEntityIdAttribute: ESCOUAICourant
+    otherUserOtherAttributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure
+    otherGroupDisplayedAttributes: isMemberOf
+    groupDNContainsDisplayName: true
+    groupKeyMemberRegex: "cn=(.*),ou=groups,dc=esco-centre,dc=fr"
+    groupKeyMemberIndex: 1
+    userKeyMemberRegex: "uid=(.*),ou=people,dc=esco-centre,dc=fr"
+    userKeyMemberIndex: 1
+    groupDisplayNameRegex: ".*:([^:]*)"
+    groupResolveUserMember: true
+    groupResolveUserMemberByUserAttributes: true
+    escoGroupApplicationMatcher: "((esco)|(cfa)|(clg37)|(agri)):Applications:Publication_annonces:[^:]*"
+    escoGroupApplicationNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
+    escoGroupApplicationNameIndex: "1,2"
+
+cas:
+    url:
+        prefix: https://test.reciacas.fr/cas/
+        login: https://test.reciacas.fr/cas/login
+        logout: https://test.reciacas.fr/cas/logout
+
+app:
+    service:
+        security: j_spring_cas_security_check
+        redirectParamName: spring-security-redirect
+        #security: http://192.168.45.145:8080/j_spring_cas_security_check
+        authorizedDomainNames: http://localhost:8080,http://192.168.45.9:8080
+        protocol: http://
+        idKeyProvider: esco_cas_publisher
+
+        highlightClassification :
+            name: "À la une"
+            color: "#F44336"
+            description: "Rubrique contenant les publications à mettre en avant"
+
+        defaultTTL: 3600
+        defaultTimeout: 15000
+
+    admin:
+        userName: F08001ut
+        groupName: "esco:admin:central"
+
+    users:
+        groupName: "((esco)|(cfa)|(clg37)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*"
+
+    cors:
+        allowed:
+            origins: "*"
+
+    upload:
+        path: "/home/jgribonvald/tmp/"
+        # 128Kb max
+        imageMaxSize: 131072
+        protectedPath: "/home/jgribonvald/tmp/"
+        filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
+        # 10MB max should be equals or lower than multipart.maxFileSize
+        maxFileSize: 10485760
+        unremovablePathPattern: "default/welcome.*,test.*"
+
+    authorizedServices:
+        ipRange: "192.168.57.0/24"
+
+ws:
+    esup:
+        url: https://test.cas.ent/portail/services/UportalService
