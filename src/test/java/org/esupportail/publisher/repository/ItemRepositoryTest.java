@@ -33,6 +33,7 @@ import org.esupportail.publisher.service.factories.ItemDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.ItemDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +77,7 @@ public class ItemRepositoryTest {
 	private Organization org2;
 	private Redactor redactor1;
 	private Redactor redactor2;
+	private Redactor redactorOptionalEndDate;
 
     private User user1;private User user2;private User user3;
 
@@ -92,6 +94,9 @@ public class ItemRepositoryTest {
 
 		redactor1 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_1));
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
+		redactorOptionalEndDate = ObjTest.newRedactor(INDICE_3);
+        redactorOptionalEndDate.setOptionalPublishTime(true);
+        redactorOptionalEndDate = redactorRepo.saveAndFlush(redactorOptionalEndDate);
 
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(), ObjTest.d2,
@@ -151,6 +156,64 @@ public class ItemRepositoryTest {
 		repository.saveAndFlush(m1);
 	}
 
+    @Test (expected = javax.validation.ValidationException.class)
+    public void testOptionalDateOK() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            null, null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
+    @Test
+    public void testOptionalDateOK2() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
+    @Test
+    public void testOptionalDateOK3() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
+    @Test (expected = javax.validation.ValidationException.class)
+    public void testOptionalDateOK4() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            null, ObjTest.d2.toLocalDate(), ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
+
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testNotOptionalDateKO1() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            null, null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactor1);
+        repository.saveAndFlush(m1);
+    }
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testNotOptionalDateKO2() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            null, ObjTest.d2.toLocalDate(), ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactor1);
+        repository.saveAndFlush(m1);
+    }
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testNotOptionalDateKO3() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactor1);
+        repository.saveAndFlush(m1);
+    }
+
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateOKUpdateKO() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
@@ -162,6 +225,27 @@ public class ItemRepositoryTest {
 		repository.saveAndFlush(m1);
 	}
 
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testDateOptionalOKUpdateKO() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+        m1.setEndDate(ObjTest.d1.toLocalDate());
+        repository.saveAndFlush(m1);
+    }
+    @Test
+    public void testDateOptionalOKUpdateOK() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+        m1.setEndDate(ObjTest.d2.toLocalDate());
+        repository.saveAndFlush(m1);
+    }
+
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateKOLT() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
@@ -170,6 +254,14 @@ public class ItemRepositoryTest {
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testDateOptionalKOLT() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d3.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
 
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateKOEQ() {
@@ -179,6 +271,14 @@ public class ItemRepositoryTest {
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 	}
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testDateOptionalKOEQ() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            ObjTest.d1.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactorOptionalEndDate);
+        repository.saveAndFlush(m1);
+    }
 
 	@Test
 	public void testInsert() {
@@ -221,6 +321,81 @@ public class ItemRepositoryTest {
 		assertThat(repository.findAll().size(), is(4));
 		assertFalse(repository.exists(n2.getId()));
 	}
+
+    @Test
+    public void testRequestArchiving() {
+        News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
+            + INDICE_A, LocalDate.now().minusDays(7), LocalDate.now().minusDays(1),
+            ObjTest.d2, user1, ItemStatus.PUBLISHED, "summary"
+            + INDICE_A, true, true, org2, redactor2);
+
+        repository.save(n1);
+        assertNotNull(n1.getId());
+
+        repository.archiveExpiredPublished();
+
+        News n2 = (News) repository.findOne(n1.getId());
+        assertNotNull(n2);
+        assertNotNull(n2.getStatus());
+
+        assertTrue(ItemStatus.ARCHIVED.equals(n2.getStatus()));
+    }
+
+    @Test
+    public void testRequestArchivingOptionalDate() {
+        News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
+            + INDICE_A, LocalDate.now().minusDays(7), null,
+            ObjTest.d2, user1, ItemStatus.PUBLISHED, "summary"
+            + INDICE_A, true, true, org2, redactorOptionalEndDate);
+
+        repository.save(n1);
+        assertNotNull(n1.getId());
+
+        repository.archiveExpiredPublished();
+
+        News n2 = (News) repository.findOne(n1.getId());
+        assertNotNull(n2);
+
+        assertTrue(n1.equals(n2));
+    }
+
+    @Test
+    public void testRequestScheduledPublished() {
+        News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
+            + INDICE_A, LocalDate.now().minusDays(1), LocalDate.now().plusDays(1),
+            ObjTest.d2, user1, ItemStatus.SCHEDULED, "summary"
+            + INDICE_A, true, true, org2, redactor2);
+
+        repository.save(n1);
+        assertNotNull(n1.getId());
+
+        repository.publishScheduled();
+
+        News n2 = (News) repository.findOne(n1.getId());
+        assertNotNull(n2);
+        assertNotNull(n2.getStatus());
+
+        assertTrue(ItemStatus.PUBLISHED.equals(n2.getStatus()));
+    }
+
+    @Test
+    public void testRequestScheduledPublishedOptionalDate() {
+        News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
+            + INDICE_A, LocalDate.now().minusDays(1), null,
+            ObjTest.d2, user1, ItemStatus.SCHEDULED, "summary"
+            + INDICE_A, true, true, org2, redactorOptionalEndDate);
+
+        repository.save(n1);
+        assertNotNull(n1.getId());
+
+        repository.publishScheduled();
+
+        News n2 = (News) repository.findOne(n1.getId());
+        assertNotNull(n2);
+        assertNotNull(n2.getStatus());
+
+        assertTrue(ItemStatus.PUBLISHED.equals(n2.getStatus()));
+    }
 
 	/**
 	 * Test method for

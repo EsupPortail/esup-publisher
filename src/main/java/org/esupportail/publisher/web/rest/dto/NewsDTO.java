@@ -45,7 +45,7 @@ public class NewsDTO extends ItemDTO implements Serializable {
      * @param lastUpdateBy
      */
     public NewsDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
-            @NotNull final String body, @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
+            @NotNull final String body, @NotNull final LocalDate startDate, final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,

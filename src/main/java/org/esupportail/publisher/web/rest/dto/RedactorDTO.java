@@ -1,16 +1,17 @@
 package org.esupportail.publisher.web.rest.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.esupportail.publisher.domain.util.CstPropertiesLength;
+import java.io.Serializable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
 
 /**
  *
@@ -49,6 +50,10 @@ public class RedactorDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lon
     @Max(2)
     private int nbLevelsOfClassification;
 
+    @Getter
+    @Setter
+    private boolean optionalPublishTime = false;
+
     /**
      * @param modelId
      * @param name
@@ -57,12 +62,13 @@ public class RedactorDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lon
      * @param nbLevelsOfClassification
      */
     public RedactorDTO(@NotNull final Long modelId, @NotNull final String name, @NotNull final String displayName,
-            @NotNull final String description, @NotNull final int nbLevelsOfClassification) {
+            @NotNull final String description, @NotNull final int nbLevelsOfClassification, final boolean optionalPublishTime) {
         super(modelId);
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.nbLevelsOfClassification = nbLevelsOfClassification;
+        this.optionalPublishTime = optionalPublishTime;
     }
 
 

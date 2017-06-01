@@ -54,7 +54,7 @@ public class ResourceDTO extends ItemDTO implements Serializable {
      * @param ressourceUrl
      */
     public ResourceDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
-            @NotNull final String ressourceUrl, @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
+            @NotNull final String ressourceUrl, final LocalDate startDate, final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,

@@ -69,7 +69,8 @@ import org.joda.time.LocalDate;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "T_ITEM")
 @DiscriminatorColumn(name = "type")
-@ScriptAssert(lang = "javascript", script = "_this.startDate.isBefore(_this.endDate)")
+@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate)"
+    , message = "Not valid startDate that should be before endDate")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractItem extends AbstractAuditingEntity implements
     IContext, Serializable {
@@ -88,11 +89,10 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
     @Column(length = CstPropertiesLength.URL)
     private String enclosure;
 
-    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @NotNull
@@ -195,7 +195,7 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
                 if (this.startDate.isAfter(LocalDate.now())) {
                     status = ItemStatus.SCHEDULED;
                     return ItemStatus.SCHEDULED;
-                } else if (this.endDate.isBefore(LocalDate.now())) {
+                } else if (this.endDate != null && this.endDate.isBefore(LocalDate.now())) {
                     status = ItemStatus.ARCHIVED;
                     return ItemStatus.ARCHIVED;
                 }
@@ -215,5 +215,15 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
     @Override
     public String getDisplayName() {
         return this.title;
+    }
+
+    /** for scriptAssert validation. */
+    public static boolean complexeDateValidation(final boolean isPeriodOptional, final LocalDate startDate, final LocalDate endDate) {
+        if (!isPeriodOptional) {
+            return  startDate != null &&  endDate != null && startDate.isBefore(endDate);
+        } else if (startDate != null &&  endDate != null) {
+            return startDate.isBefore(endDate);
+        }
+        return true;
     }
 }

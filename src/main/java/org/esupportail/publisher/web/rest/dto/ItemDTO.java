@@ -21,7 +21,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 @ToString
-@ScriptAssert(lang = "javascript", script = "_this.startDate.before(_this.endDate)")
+@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate)"
+    , message = "Not valid startDate that should be before endDate")
 public abstract class ItemDTO extends PermissibleDTO {
 
     @Getter
@@ -44,7 +45,6 @@ public abstract class ItemDTO extends PermissibleDTO {
 
     @Getter
     @Setter
-    @NotNull
     @Future
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
@@ -110,7 +110,7 @@ public abstract class ItemDTO extends PermissibleDTO {
      * @param redactor
      */
     public ItemDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
-            @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
+            @NotNull final LocalDate startDate, final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,

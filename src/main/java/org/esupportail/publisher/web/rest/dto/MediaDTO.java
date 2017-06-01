@@ -33,7 +33,7 @@ public class MediaDTO extends ItemDTO implements Serializable {
      * @param lastUpdateBy
      */
     public MediaDTO(@NotNull final Long modelId, @NotNull final String title, @NotNull final String enclosure,
-            @NotNull final LocalDate startDate, @NotNull final LocalDate endDate,
+            @NotNull final LocalDate startDate, final LocalDate endDate,
             final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
             @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
