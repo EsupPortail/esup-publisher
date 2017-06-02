@@ -166,7 +166,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
             } else if (parentPerm.getFirst().getMask() > PermissionType.LOOKOVER.getMask()) {
                 pubsCtx.add(pub.getContextKey());
                 // we keep at least all childs with parent perm
-                ctxRoles.put(pub.getContextKey(), (PermOnCtxDTO) userSessionTree.getPermsFromContextTree(organizationCtx).getSecond());
+                ctxRoles.put(pub.getContextKey(), parentPerm.getSecond());
             } else {
                 pubsCtx.add(pub.getContextKey());
                 // we keep these contexts to find possible perm > LOOKOVER
@@ -374,7 +374,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
                 } else {
                     feedsCtx.add(feed.getContextKey());
                     //if (parentPerm != null && parentPerm.getMask() > PermissionType.LOOKOVER.getMask()) {
-                    ctxRoles.put(feed.getContextKey(), (PermOnCtxDTO) userSessionTree.getPermsFromContextTree(categoryCtx).getSecond());
+                    ctxRoles.put(feed.getContextKey(), parentPerm.getSecond());
                     // }
                 }
             }
@@ -404,7 +404,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
                     } else if (!ctxRoles.containsKey(perm.getContext())) {
                         // must not come here
                         log.warn("ContextKey " + perm.getContext() + " wasn't added to possible publishers where childs has a role");
-                        ctxRoles.put(perm.getContext(), (PermOnCtxDTO) userSessionTree.getPermsFromContextTree(categoryCtx).getSecond());
+                        ctxRoles.put(perm.getContext(), parentPerm.getSecond());
                     }
                 }
             }

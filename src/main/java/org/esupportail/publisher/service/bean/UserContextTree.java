@@ -3,6 +3,13 @@
  */
 package org.esupportail.publisher.service.bean;
 
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
@@ -22,12 +29,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -444,12 +445,13 @@ public class UserContextTree {
         StringBuilder str = new StringBuilder("UserContextTree{" +
             "superAdmin=" + superAdmin +
             ", userTreeLoaded=" + userTreeLoaded +
-            ", contexts= [\n");
+            ", contexts= [");
 
         for (Map.Entry<ContextKey, UserContextInfos> entry : contexts.entrySet()) {
-            str.append("{").append(entry.getKey()).append("=").append(entry.getValue()).append("}").append("\n");
+            str.append("\n{").append(entry.getKey()).append("=").append(entry.getValue()).append("}");
         }
-        str.append("}");
+        if (!contexts.entrySet().isEmpty()) str.append("\n");
+        str.append("]}");
 
         return str.toString();
     }
