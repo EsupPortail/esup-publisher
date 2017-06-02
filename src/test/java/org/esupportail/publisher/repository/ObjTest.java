@@ -56,6 +56,8 @@ import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserGroupEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
+import org.esupportail.publisher.web.rest.dto.SubjectDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -182,6 +184,18 @@ public final class ObjTest {
 				StringEvaluationMode.EXISTS));
 		return newOperatorEvaluator(type, evaluators);
 	}
+
+    public static OperatorEvaluator newGlobalEvaluatorOnUser(OperatorType type, String user) {
+        Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
+        evaluators.add(newUserAttributeEvaluatorForAttr("uid", user,
+            StringEvaluationMode.EXISTS));
+        return newOperatorEvaluator(type, evaluators);
+    }
+    public static OperatorEvaluator newGlobalEvaluatorOnGroup(OperatorType type, String group) {
+        Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
+        evaluators.add(newMVUEvaluatorForGroup(group));
+        return newOperatorEvaluator(type, evaluators);
+    }
 
 	public static OperatorEvaluator newGlobalEvaluator() {
 		return newGlobalEvaluator(OperatorType.OR);
@@ -347,6 +361,16 @@ public final class ObjTest {
     }
     public static Subscriber newSubscriberGroup(final ContextKey context) {
         return new Subscriber(subjectKey5, context, getRandomSubscribeType());
+    }
+
+    public static SubscriberFormDTO newSubscriberDTO() {
+        return new SubscriberFormDTO(new SubjectDTO(subjectKey3.getKeyId(), subjectKey3.getKeyType()), getRandomSubscribeType());
+    }
+    public static SubscriberFormDTO newSubscriberDTOPerson() {
+        return new SubscriberFormDTO(new SubjectDTO(subjectKey1.getKeyId(), subjectKey1.getKeyType()), getRandomSubscribeType());
+    }
+    public static SubscriberFormDTO newSubscriberDTOGroup() {
+        return new SubscriberFormDTO(new SubjectDTO(subjectKey5.getKeyId(), subjectKey5.getKeyType()), getRandomSubscribeType());
     }
 
 	public static AccessType getRandomAccessType() {

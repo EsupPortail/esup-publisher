@@ -109,7 +109,7 @@ public class ContentService {
 
     public ResponseEntity<?> saveContent(final ContentDTO content)  throws URISyntaxException {
         final boolean isUpdate = content.getItem().getId() != null;
-        if (content.getItem().getEndDate().isBefore(LocalDate.now())) {
+        if ((!content.getItem().getRedactor().isOptionalPublishTime() || content.getItem().getEndDate() != null) && content.getItem().getEndDate().isBefore(LocalDate.now())) {
             content.getItem().setStatus(ItemStatus.DRAFT);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -358,14 +358,14 @@ public class ContentService {
                 } else {
                     item.setStatus(ItemStatus.PUBLISHED);
                 }
-                if (item.getEndDate().isBefore(LocalDate.now())) {
+                if (item.getEndDate() != null && item.getEndDate().isBefore(LocalDate.now())) {
                     item.setStatus(ItemStatus.DRAFT);
                 }
             } else {
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
                 item.setStatus(ItemStatus.PENDING);
-                if (item.getEndDate().isBefore(LocalDate.now())) {
+                if (item.getEndDate() != null && item.getEndDate().isBefore(LocalDate.now())) {
                     item.setStatus(ItemStatus.DRAFT);
                 }
             }
