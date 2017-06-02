@@ -35,7 +35,8 @@ public class ContentResource {
     @Inject
     private ContentService contentService;
 
-    @Inject ContentDTOFactory ContentDTOFactory;
+    @Inject
+    private ContentDTOFactory contentDTOFactory;
 
     @Inject
     private UserSearchs userSearchResults;
@@ -51,7 +52,10 @@ public class ContentResource {
     public ResponseEntity<?> create(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to save ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
             content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
-        return contentService.createContent(content);
+        if (content.getItem().getId() != null) {
+            return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
+        }
+        return contentService.saveContent(content);
     }
 
     /**
@@ -66,7 +70,7 @@ public class ContentResource {
     public ResponseEntity<?> update(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
             content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
-        return contentService.updateContent(content);
+        return contentService.saveContent(content);
     }
 
     /**
@@ -82,7 +86,7 @@ public class ContentResource {
         log.debug("REST request to get ContentDTO : {}", id);
         ContentDTO content = null;
         try {
-            content = ContentDTOFactory.from(id);
+            content = contentDTOFactory.from(id);
         } catch (ObjectNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
