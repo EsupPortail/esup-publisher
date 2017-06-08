@@ -26,7 +26,8 @@
             "MEDIA": "Media",
             "RESOURCE": "Resource",
             "EVENT": "Event",
-            "FLASH": "Flash Info"
+            "FLASH": "Flash Info",
+            "ATTACHMENT": "Attachment"
         },
         "displayOrder": {
             "lastCreatedModifiedFirst": {

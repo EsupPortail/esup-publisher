@@ -1133,6 +1133,12 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     box-shadow: none;
     width: 100%;
 }
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline > .linkedFiles {
+    display: inline;
+}
+.manager.publish .publish-form-container .publish-content .form-group > .form-inline > .linkedFiles > span {
+    white-space: nowrap;
+}
 /** end specific publish.content */
 /** start specific publish.targets */
 .manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item,

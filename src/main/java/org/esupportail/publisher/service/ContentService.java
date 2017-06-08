@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Filter;
@@ -497,6 +498,35 @@ public class ContentService {
             linkedFileItemRepository.delete(oldToRemove);
         }
 
+    }
+
+    public ResponseEntity<?> removeLinkedFileToItem(final AbstractItem item, final String fileUri) {
+        if (item.getId() != null && fileUri != null && !fileUri.isEmpty()) {
+            log.debug("Try to remove Linked File {} on Item {}", fileUri, item);
+            Set<LinkedFileItem> linkedFileItems = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(item.getId()));
+            LinkedFileItem foundfile = null;
+            for (LinkedFileItem oldFile: linkedFileItems) {
+                if (oldFile.getUri().equals(fileUri)) {
+                    foundfile = oldFile;
+                    linkedFileItemRepository.delete(foundfile);
+                    break;
+                }
+            }
+
+            if (foundfile != null){
+                log.debug("Linked File found");
+                linkedFileItems.remove(foundfile);
+                if (item instanceof Attachment && linkedFileItems.isEmpty()) {
+                    log.debug("the item has no more Linked File, so we set the item state to DRAFT");
+                    item.setStatus(ItemStatus.DRAFT);
+                    itemRepository.save(item);
+                }
+                return ResponseEntity.ok(new ValueResource(item.getStatus()));
+            } else {
+                log.warn("The file {} wasn't found or isn't linked to the item specified {}", fileUri, item);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     /*private boolean isCompatiblePublishersContext(final Set<Publisher> publishers) {

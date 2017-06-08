@@ -1,0 +1,239 @@
+<div>
+    <div class="attachmentForm">
+        <div class="form-group hidden">
+            <label class="control-label" for="ID">ID</label>
+            <input type="text" class="form-control" name="id" id="ID"
+                   ng-model="item.id" readonly>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.title.$invalid && publishContentForm.title.$dirty }">
+            <label class="control-label" for="title" translate="publisherApp.attachment.title">Title</label>
+            <input type="text" class="form-control" name="title" id="title"
+                   ng-model="item.title" required ng-minlength="3" ng-maxlength="200">
+
+            <div ng-show="publishContentForm.title.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.minlength" translate="entity.validation.minlength" translate-value-min="3">
+                    This field is required to be at least 3 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.title.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="200">
+                    This field cannot be longer than 200 characters.
+                </p>
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+            <!--<label class="control-label" for="enclosure" translate="publisherApp.attachment.enclosure">Enclosure</label>-->
+            <!--<div class="form-inline">-->
+                <!--<button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">-->
+                    <!--<span>{{'publisherApp.attachment.enclosure.button' | translate}}</span>-->
+                <!--</button>-->
+
+                <!--<img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" class="img-responsive" />-->
+                <!--<a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">-->
+                    <!--<i class="glyphicon glyphicon-remove-circle text-danger"></i>-->
+                <!--</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group" ng-class="{ 'has-error': publishContentForm.summary.$invalid && publishContentForm.summary.$dirty }">
+            <label class="control-label" for="summary" translate="publisherApp.attachment.summary">Summary</label>
+            <textarea class="form-control" name="summary" id="summary" rows="3"
+                      ng-model="item.summary" required ng-minlength="5" ng-maxlength="512" />
+
+            <div ng-show="publishContentForm.summary.$invalid">
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.minlength" translate="entity.validation.minlength" translate-value-min="5">
+                    This field is required to be at least 5 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.summary.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="512">
+                    This field cannot be longer than 512 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-inline text-justify">
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan)
+                                && publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
+                    <label class="control-label" for="startDate" translate="publisherApp.attachment.startDate">StartDate</label>
+                    <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{minDate}} ng-model="item.startDate"
+                           alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
+
+                    <div ng-show="(publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan ) && publishContentForm.startDate.$invalid">
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.date" translate="entity.validation.date">
+                            This field is not a valid date.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{minDate | date: dtformat }}">
+                            A date after now is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{item.endDate | date: dtformat }}">
+                            A date before next year from now is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
+                           translate-value-field="{{'publisherApp.attachment.endDate' | translate}}">
+                            From date must be lower than to date.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
+                                && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
+                    <label class="control-label" for="endDate" translate="publisherApp.attachment.endDate">EndDate</label>
+                    <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min="{{endMinDate}}" max={{maxDate}} ng-model="item.endDate"
+                           alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
+
+                    <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.date" translate="entity.validation.date">
+                            This field is not a valid date.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.min" translate="entity.validation.mindate" translate-value-min="{{endMinDate | date: dtformat }}">
+                            A date after now is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.max" translate="entity.validation.maxdate" translate-value-max="{{maxDate | date: dtformat }}">
+                            A date before next year from now is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
+                           translate-value-field="{{'publisherApp.attachment.startDate' | translate}}">
+                            From date must be greater than from date.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="rssAllowed" translate="publisherApp.attachment.rssAllowed">Allow in RSS</label>
+                    <input type="checkbox" class="form-control" name="rssAllowed" id="rssAllowed" ng-model="item.rssAllowed"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': linkedFilesInText.length < 1 }">
+            <label class="control-label" for="linkedFiles" translate="publisherApp.attachment.linkedFiles">linkedFiles</label>
+            <div class="form-inline">
+                <div ng-repeat="attachment in linkedFilesInText" class="linkedFiles">
+                    <span>
+                        <a href="{{attachment.uri}}" target="_blank">
+                            <i class="{{getCssFileFromName(attachment.filename)}}"></i>{{attachment.filename}}</a>
+                        <a href="#" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}" ng-click="deleteAttachment(attachment)">
+                            <i class="glyphicon glyphicon-remove-circle text-danger"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div ng-show="publishContentForm.linkedFiles.$error || linkedFilesInText.length < 1">
+                <p class="help-block" ng-show="linkedFilesInText.length < 1" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.linkedFiles.$error.maxSize" translate="entity.validation.maxSize" translate-value-maxsize="10MB">
+                    The file size exceeded the maximum allowed size is 10MB.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.linkedFiles.$error.pattern" translate="entity.validation.filepattern">
+                    The file isn't a media type autorized.
+                </p>
+                <p class="help-block"
+                   ng-show="publishContentForm.linkedFiles.$error.maxDuration" translate="entity.validation.maxduration" translate-value-maxduration="3 min">
+                    The video exceeds the maximum allowed time of 3 min.
+                </p>
+            </div>
+            <div class="progress" ng-show="progress > 0">
+                <div class="progress-bar progress-bar-{{progressStatus}} progress-bar-striped active" role="progressbar"
+                     aria-valuenow="{{progress}}" aria-valuemin="0"
+                     aria-valuemax="100" ng-style="{'width': progress+'%'}">
+                    <span class="progress-text">{{progress}}%</span>
+                </div>
+            </div>
+            <button name="linkedFiles" id="linkedFiles" ngf-select="uploadAttachment($file)" class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="linkedFiles"
+                    ngf-pattern="'image/*,video/*,audio/*,application/pdf,application/ogg,application/vnd.oasis.*,application/vnd.ms-*,application/vnd.openxmlformats-officedocument*,application/msword'"
+                    ngf-accept="'image/*,video/*,audio/*,application/*'" ngf-max-duration="'3m" ngf-max-size="10MB">
+                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.media.inputfile.upload.button">Browse</span>
+            </button>
+        </div>
+    </div>
+    <!--<div class="modal fade modal-full-screen" id="cropImageModale" tabindex="-1" role="dialog" aria-labelledby="myCropImageModale" aria-hidden="true">-->
+        <!--<div class="modal-dialog">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
+                    <!--<h3 class="modal-title" translate="publisherApp.attachment.inputfile.title">Selection of a picture</h3>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+                    <!--<form name="publishContentEnclosureForm" role="form" novalidate class="panel-group">-->
+                        <!--<div class="well">-->
+                            <!--<div class="inputArea form-group" ng-class="{ 'has-error': publishContentForm.fileEnclosure.$error }">-->
+                                <!--<h3 translate="publisherApp.attachment.inputfile.upload.label">Selecting a file</h3>&nbsp;<button-->
+                                <!--class="btn btn-primary btn-file" name="fileEnclosure" ngf-select ngf-capture="'camera'" ng-model="content.file" ngf-pattern="'image/*'" ngf-accept="'image/*'"-->
+                                <!--ngf-max-size="10MB" ><i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.attachment.inputfile.upload.button">Browse</span></button>-->
+                                <!--<div ng-show="publishContentForm.fileEnclosure.$invalid">-->
+                                    <!--<p class="help-block"-->
+                                       <!--ng-show="publishContentForm.fileEnclosure.$error.pattern" translate="entity.validation.filepattern">-->
+                                        <!--The file hasn't a media type autorized.-->
+                                    <!--</p>-->
+                                    <!--<p class="help-block"-->
+                                       <!--ng-show="publishContentForm.fileEnclosure.$error.maxSize" translate="entity.validation.maxsize" translate-value-maxsize="10MB">-->
+                                        <!--The file size exceeded the maximum allowed size of 10MB.-->
+                                    <!--</p>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div data-ng-if="content.file" class="cropArea">-->
+                                <!--<ui-cropper-->
+                                    <!--image="content.file"-->
+                                    <!--result-image="content.resultImage"-->
+                                    <!--change-on-fly="cropperConf.changeOnFly"-->
+                                    <!--area-type="{{cropperConf.type}}"-->
+                                    <!--result-image-format="{{cropperConf.format}}"-->
+                                    <!--result-image-quality="cropperConf.quality"-->
+                                    <!--result-image-size="cropperConf.size"-->
+                                    <!--aspect-ratio="cropperConf.ratio"-->
+                                    <!--allow-crop-resize-on-corners="cropperConf.allowCropResizeOnCorners">-->
+                                <!--</ui-cropper>-->
+                            <!--</div>-->
+                            <!--<div ng-if="content.file && content.resultImage" class="previewCropArea">-->
+                                <!--<img ng-src="{{content.resultImage}}" ng-style="{'width':'100%', 'max-width': '240px'}"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="progress" ng-show="progress > 0">-->
+                            <!--<div class="progress-bar progress-bar-{{progressStatus}} progress-bar-striped active" role="progressbar"-->
+                                 <!--aria-valuenow="{{progress}}" aria-valuemin="0"-->
+                                 <!--aria-valuemax="100" ng-style="{'width': progress+'%'}">-->
+                                <!--<span class="progress-text">{{progress}}%</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button ng-click="uploadFile(content.file, content.resultImage)" class="btn btn-primary" ng-disabled="!content.file || !content.resultImage">-->
+                        <!--<span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span></button>-->
+                    <!--<button type="button" class="btn btn-default" ng-click="clearUpload()" ng-disabled="!content.file || !content.resultImage">-->
+                        <!--<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.reset">Reset</span>-->
+                    <!--</button>-->
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">-->
+                        <!--<span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>

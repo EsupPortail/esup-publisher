@@ -54,7 +54,11 @@ angular.module('publisherApp')
                         $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 90);
                         //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
                         break;
-                    default: throw "Type not managed :"+ newItem.type; break;
+                    case 'ATTACHMENT':
+                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 168);
+                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
+                        break;
+                    default: throw "Type not managed :"+ Item.type; break;
                 }
             }
         };
@@ -115,6 +119,7 @@ angular.module('publisherApp')
             {name: 'MEDIA', url: 'scripts/app/manager/publish/content/media.html'},
             {name: 'RESOURCE', url: 'scripts/app/manager/publish/content/resource.html'},
             {name: 'FLASH', url: 'scripts/app/manager/publish/content/flash.html'},
+            {name: 'ATTACHMENT', url: 'scripts/app/manager/publish/content/attachment.html'},
             {name: 'EVENT', url: 'scripts/app/manager/publish/content/resource.html'}];
 
         $scope.itemStatusList = EnumDatas.getItemStatusList();
@@ -130,7 +135,7 @@ angular.module('publisherApp')
             $scope.initCropper();
         }, true);
 
-        $scope.$watch('publishContentForm.$valid', function(newObj, oldObj){
+        $scope.$watch('publishContentForm.$valid + $parent.linkedFilesInText', function(newObj, oldObj){
             // checking validity after validators checks
             testItemValidity();
         }, true);
@@ -142,7 +147,11 @@ angular.module('publisherApp')
 
                 var booleanComplement = true;
                 // for MEDIA the body is optional
-                if ($scope.$parent.item.type != "MEDIA" && $scope.$parent.item.type != "RESOURCE" && ($scope.$parent.item.body == null || $scope.$parent.item.body.length <= 15)) {
+                if ($scope.$parent.item.type != "MEDIA" && $scope.$parent.item.type != "RESOURCE" && $scope.$parent.item.type != "ATTACHMENT" && ($scope.$parent.item.body == null || $scope.$parent.item.body.length <= 15)) {
+                    booleanComplement = false;
+                }
+                // for attachment
+                if ($scope.$parent.item.type == "ATTACHMENT" && $scope.$parent.linkedFilesInText.length < 1) {
                     booleanComplement = false;
                 }
                 // for flash and media enclosure is mandatory
@@ -154,6 +163,7 @@ angular.module('publisherApp')
             } else {
                 $scope.$parent.itemValidated = false;
             }
+            console.log("test validity returned ", $scope.$parent.itemValidated, $scope.$parent.linkedFilesInText);
         }
 
         $scope.isItemValidated = function() {
@@ -298,6 +308,28 @@ angular.module('publisherApp')
                         redactor: {id: redactorID}
                     };
                     break;
+                case 'ATTACHMENT':
+                    $scope.$parent.item = {
+                        type: "ATTACHMENT",
+                        title: null,
+                        enclosure: null,
+                        endDate: next4weeks,
+                        startDate: tomorrow,
+                        validatedBy: null,
+                        validatedDate: null,
+                        status: null,
+                        summary: null,
+                        rssAllowed: false,
+                        highlight: $scope.$parent.highlight,
+                        createdBy: null,
+                        createdDate: null,
+                        lastModifiedBy: null,
+                        lastModifiedDate: null,
+                        id: null,
+                        organization: {id: entityID},
+                        redactor: {id: redactorID}
+                    };
+                    break;
                 default: throw "Type not managed :" + $scope.content.type; break;
             }
             /*if (angular.isDefined($scope.$parent.item)) {
@@ -322,69 +354,59 @@ angular.module('publisherApp')
             var dataFile = (typeof dataUrl !== 'undefined') ? Upload.dataUrltoBlob(dataUrl, file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg") : file;
             //console.log("try to download ",dataFile);
             // we upload cropped file with extension jpg, it's lighter than png
-            if (dataFile.size <= $scope.imageSizeMax){
-                var upload = Upload.upload({
-                    url: 'app/upload/',
-                    data: {
-                        file: dataFile,
-                        isPublic: true,
-                        entityId: $scope.$parent.publisher.context.organization.id
-                    }
-                });
-                upload.then(function (response) {
-                    //SUCCESS
-                    $timeout(function () {
-                        $scope.result = response.headers("Location");
-                        if ($scope.$parent.item.id) {
-                            Item.patch({objectId:$scope.$parent.item.id, attribute : "enclosure", value: $scope.result}, function() {
-                                $scope.$parent.item.enclosure = $scope.result;
-                                $('#cropImageModale').modal('hide');
-                                $scope.progress = null;
-                                //$scope.publishContentForm.enclosure.$setValidity('url', true);
-                            });
-                        } else {
+            return uploadLinkedFile(dataFile, dataFile.name, true, true, function(response) {
+                $timeout(function () {
+                    $scope.result = response.headers("Location");
+                    if ($scope.$parent.item.id) {
+                        Item.patch({
+                            objectId: $scope.$parent.item.id,
+                            attribute: "enclosure",
+                            value: $scope.result
+                        }, function () {
                             $scope.$parent.item.enclosure = $scope.result;
                             $('#cropImageModale').modal('hide');
                             $scope.progress = null;
-                        }
-                    });
-                }, function (response) {
-                    //ERROR
-                    //console.log("error upload");
-                    manageUploadError(response);
-                }, function (evt) {
-                    $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                            //$scope.publishContentForm.enclosure.$setValidity('url', true);
+                        });
+                    } else {
+                        $scope.$parent.item.enclosure = $scope.result;
+                        $('#cropImageModale').modal('hide');
+                        $scope.progress = null;
+                    }
                 });
-            } else {
-                // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
-                $translate('errors.upload.filesize', {size: $filter('byteFmt')($scope.imageSizeMax,2)}).then(function (translatedValue) {
-                    toaster.pop({type: "warning", title: translatedValue});
-                });
-                return true;
-            }
+            });
         };
 
-        //$scope.clearUpload = function() {
-        //    $scope.content.file = null;
-        //    $scope.errorMsg = null;
-        //    $scope.progress = null;
-        //    $scope.enclosureDirty = true;
-        //};
+        $scope.uploadAttachment = function(inputfile) {
+            if (!inputfile) return;
+            var file = inputfile;
 
-        //$scope.fileCropChanged = function(e) {
-        //    if (e.target) {
-        //        var file = e.target.files[0];
-        //        var fileReader = new FileReader();
-        //        fileReader.onload = function (e) {
-        //            $scope.$apply(function () {
-        //                $scope.content.file = fileReader.result;
-        //            });
-        //        };
-        //        fileReader.readAsDataURL(file);
-        //    } else {
-        //        clearCrop();
-        //    }
-        //};
+            var doUpload = function(theFile, theFileName, theType){
+                return uploadLinkedFile(theFile, theFileName, theType, false, function (response) {
+                    // SUCCESS
+                    var resultUrl = response.headers("Location");
+                    $scope.$parent.linkedFilesInText.push({ uri: decodeURIComponent(resultUrl), filename: theFileName });
+                    $timeout(function() {
+                        $scope.progress = null;
+                    }, 5000);
+                });
+            };
+
+            //console.log("File type :", file.type, file.name, file.size);
+            var isImage = file.type.substring(0, 5) === 'image';
+            // In case of image we convert it into jpeg
+            if (isImage) {
+                return Upload.imageDimensions(file).then(function(dimensions){
+                     Upload.resize(inputfile, dimensions.width, dimensions.height, 0.9, 'image/jpeg')
+                         .then(function(resizedFile){
+                             var filename = file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg";
+                             return doUpload(resizedFile, filename, false); // isImage to false to avoid maxSize on Image as it's an attachment.
+                         });
+                });
+            }
+
+            return doUpload(file, file.name, false);
+        };
 
         $scope.clearUpload = function() {
             //console.log("clear crop");
@@ -429,6 +451,32 @@ angular.module('publisherApp')
                 });
         }
 
+        $scope.deleteAttachment = function (attachment) {
+            $scope.attachmentToDel = attachment;
+            $('#deleteAttachmentConfirmation').modal('show');
+        };
+
+        $scope.confirmDeleteAttachment = function (attachment) {
+            FileManager.delete({entityId: $scope.$parent.publisher.context.organization.id, isPublic: false, fileUri: Base64.encode(attachment.uri)},
+                function () {
+                    $scope.$parent.linkedFilesInText = $scope.$parent.linkedFilesInText.filter(function (val) {
+                        return val.uri !== attachment.uri;
+                    });
+                    if ($scope.$parent.item.id) {
+                        Item.patch({
+                            objectId: $scope.$parent.item.id,
+                            attribute: "attachment",
+                            value: attachment.uri
+                        }, function () {
+                            $('#deleteAttachmentConfirmation').modal('hide');
+                        });
+                    } else {
+                        $('#deleteAttachmentConfirmation').modal('hide');
+                    }
+
+                });
+        };
+
         $scope.validatePicUrl = function (picUrl) {
             //console.log("Set Enclosure :", picUrl);
             $scope.$parent.item.enclosure = picUrl;
@@ -472,7 +520,6 @@ angular.module('publisherApp')
         };
         function taUploadHandler(file, insertAction, filetype) {
             var isImage = filetype === 'image';
-            var maxSize = isImage ? $scope.imageSizeMax : $scope.fileSizeMax;
             // to show an icon depending on filetype
             var cssClassType = "mdi mdi-file mdi-dark mdi-lg";
             var fext = file.name.substr(file.name.lastIndexOf('.')+1);
@@ -491,17 +538,7 @@ angular.module('publisherApp')
             } else if (fext && fext.length > 2 && fext === 'txt') {
                 cssClassType = "mdi mdi-file-document mdi-dark mdi-lg";
             }
-            if (file.size <= maxSize){
-                $scope.progressStatus = 'success';
-                Upload.upload({
-                    url: 'app/upload/',
-                    data: {
-                        file : file,
-                        isPublic: filetype === 'image' || filetype === 'audio' || filetype === "video",
-                        entityId: $scope.$parent.publisher.context.organization.id,
-                        name: file.name
-                    }
-                }).then(function (response) {
+            return uploadLinkedFile(file, file.name, isImage, (filetype === 'image' || filetype === 'audio' || filetype === "video"),  function (response) {
                     // SUCCESS
                     var resultUrl = response.headers("Location");
                     if (isImage) {
@@ -513,6 +550,23 @@ angular.module('publisherApp')
                     $timeout(function() {
                         $scope.progress = null;
                     }, 5000);
+                });
+        }
+
+        function uploadLinkedFile(file, filename, isImage, isPublic, successCallBack) {
+            var maxSize = isImage ? $scope.imageSizeMax : $scope.fileSizeMax;
+            if (file.size <= maxSize){
+                $scope.progressStatus = 'success';
+                Upload.upload({
+                    url: 'app/upload/',
+                    data: {
+                        file : file,
+                        isPublic: isPublic,
+                        entityId: $scope.$parent.publisher.context.organization.id,
+                        name: filename
+                    }
+                }).then(function (response) {
+                    successCallBack(response);
                 }, function (response) {
                     // ERROR
                     manageUploadError(response);

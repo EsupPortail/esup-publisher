@@ -13,33 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
-* ESUP-Portail News - Copyright (c) 2009 ESUP-Portail consortium
-* For any information please refer to http://esup-helpdesk.sourceforge.net
-* You may obtain a copy of the licence at http://www.esup-portail.org/license/
-*/
-package org.esupportail.publisher.domain.enums;
+package org.esupportail.publisher.repository;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.esupportail.publisher.domain.Attachment;
 
 /**
- * Enum type for Item.
- * @author GIP RECIA - Gribonvald Julien
- * 08 février 2016
+ *
+ * @author GIP RECIA - Julien Gribonvald
+ * 2 Juin 2017
  */
-@JsonFormat(shape = JsonFormat.Shape.STRING)
-public enum ItemType {
-	/** For a News. **/
-	NEWS,
-	/** For a Media **/
-	MEDIA,
-    /** For a Resource */
-    RESOURCE,
-    /** For event */
-    EVENT,
-    /** For FlashInfo */
-    FLASH,
-    /** For Files attachment */
-    ATTACHMENT
-
-}
+public interface AttachmentRepository extends AbstractRepository<Attachment, Long> {}

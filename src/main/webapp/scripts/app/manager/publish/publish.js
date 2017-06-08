@@ -34,7 +34,8 @@ angular.module('publisherApp')
                         $translatePartialLoader.addPart('flash');
                         $translatePartialLoader.addPart('news');
                         $translatePartialLoader.addPart('media');
-                        $translatePartialLoader.addPart('resource');
+                        $translatePartialLoader.addPart('media');
+                        $translatePartialLoader.addPart('attachment');
                         $translatePartialLoader.addPart('manager');
                         return $translate.refresh();
                     }]

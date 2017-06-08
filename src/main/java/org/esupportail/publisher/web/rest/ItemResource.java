@@ -124,6 +124,8 @@ public class ItemResource {
                 return contentService.setEnclosureItem(action.getValue(), item);
             case "validate" :
                 return contentService.setValidationItem(Boolean.parseBoolean(action.getValue()), item);
+            case "attachment" :
+                return contentService.removeLinkedFileToItem(item, action.getValue());
             default : return ResponseEntity.badRequest().build();
         }
         //itemRepository.save(item);

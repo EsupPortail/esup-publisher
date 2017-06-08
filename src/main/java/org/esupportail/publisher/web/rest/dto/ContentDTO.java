@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.ContextKey;
+import org.hibernate.validator.constraints.ScriptAssert;
 
 /**
  * Created by jgribonvald on 22/04/15.
@@ -17,6 +19,7 @@ import org.esupportail.publisher.domain.ContextKey;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ScriptAssert(lang = "javascript", message = "Linked files should not be emtpy", script = "org.esupportail.publisher.web.rest.dto.ContentDTO.isValid(_this.item, _this.linkedFilesInText")
 public class ContentDTO {
 
     //private Publisher publisher;
@@ -28,5 +31,10 @@ public class ContentDTO {
     private List<SubscriberFormDTO> targets = new ArrayList<>();
 
     private Set<LinkedFileItemDTO> linkedFilesInText = new HashSet<>();
+
+
+    public static boolean isValid(final AbstractItem item, final Set<LinkedFileItemDTO> linkedFiles) {
+        return !(item instanceof Attachment && (linkedFiles == null || linkedFiles.isEmpty()));
+    }
 
 }

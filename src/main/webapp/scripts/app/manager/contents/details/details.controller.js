@@ -8,6 +8,7 @@ angular.module('publisherApp')
         $scope.targets = contentData[1].targets;
         //console.log("ContentDetailsController", $scope.item, $scope.classifications,$scope.targets);
         $scope.pubContexts = [];
+        $scope.linkedFiles =  contentData[1].linkedFilesInText || [];
 
         if ($scope.classifications && $scope.classifications.length > 0) {
             angular.forEach($scope.classifications, function(value, key) {
@@ -48,6 +49,10 @@ angular.module('publisherApp')
             case 'FLASH':
                 $scope.contentTemplate = 'scripts/app/manager/contents/details/templates/flash.html';
                 break;
+            case 'ATTACHMENT':
+                $scope.contentTemplate = 'scripts/app/manager/contents/details/templates/attachment.html';
+                break;
+            default:  throw "Type not managed :"+ $scope.item.type; break;
         }
 
         $scope.showInfo = function(){

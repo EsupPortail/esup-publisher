@@ -1,0 +1,46 @@
+{
+    "publisherApp": {
+        "attachment" : {
+            "home": {
+                "title": "Attachments",
+                "createLabel": "Create a new Attachment",
+                "createOrEditLabel": "Create or edit an Attachment"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Attachment {{ id }}?",
+                "enclosure": "Are you sure you want to delete this Attachment (no back action possible) ?"
+            },
+            "detail": {
+                "title": "Attachment"
+            },
+            "title": "Title",
+            "enclosure": "Enclosure",
+            "enclosure.button": "Selecting a file",
+            "endDate": "End Date",
+            "startDate": "Start Date",
+            "validatedBy": "Validated By",
+            "validatedDate": "Validated Date",
+            "status": "Status",
+            "summary": "Description",
+            "rssAllowed": "Access in public RSS feed",
+            "createdBy": "Created By",
+            "createdDate": "Created Date",
+            "lastModifiedBy": "Last Modified By",
+            "lastModifiedDate": "Last Modified Date",
+            "organization": "organization",
+            "redactor": "redactor",
+            "linkedFiles": "Files",
+            "action": {
+                "publish": "Save and Publish",
+                "save": "Save"
+            },
+            "inputfile": {
+                "title": "Select an Attachment",
+                "url.label": "Enter an external url",
+                "upload.label": "Upload a file",
+                "upload.button": "Select a file",
+                "file": "File"
+            }
+        }
+    }
+}

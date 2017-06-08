@@ -63,7 +63,8 @@ import org.joda.time.LocalDate;
     @JsonSubTypes.Type(value = News.class, name = "NEWS"),
     @JsonSubTypes.Type(value = Media.class, name = "MEDIA"),
     @JsonSubTypes.Type(value = Resource.class, name = "RESOURCE"),
-    @JsonSubTypes.Type(value = Flash.class, name = "FLASH")
+    @JsonSubTypes.Type(value = Flash.class, name = "FLASH"),
+    @JsonSubTypes.Type(value = Attachment.class, name = "ATTACHMENT")
 })
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
