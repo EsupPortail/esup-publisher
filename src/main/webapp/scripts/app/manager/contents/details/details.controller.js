@@ -8,7 +8,7 @@ angular.module('publisherApp')
         $scope.targets = contentData[1].targets;
         //console.log("ContentDetailsController", $scope.item, $scope.classifications,$scope.targets);
         $scope.pubContexts = [];
-        $scope.linkedFiles =  contentData[1].linkedFilesInText || [];
+        $scope.linkedFiles =  contentData[1].linkedFiles || [];
 
         if ($scope.classifications && $scope.classifications.length > 0) {
             angular.forEach($scope.classifications, function(value, key) {

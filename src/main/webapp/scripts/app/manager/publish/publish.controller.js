@@ -70,7 +70,7 @@ angular.module('publisherApp')
                 classifications: $scope.classifications,
                 item : $scope.item,
                 targets: targets,
-                linkedFilesInText: $scope.linkedFilesInText
+                linkedFiles: $scope.linkedFilesToContent
             };
             //console.log("publishing : ", content);
             if (content.item.id != null) {

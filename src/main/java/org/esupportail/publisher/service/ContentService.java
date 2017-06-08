@@ -127,7 +127,7 @@ public class ContentService {
                 item.setValidatedBy(null);
                 item.setValidatedDate(null);
                 item = itemRepository.save(item);
-                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
+                updateLinkedFilesToItem(item, content.getLinkedFiles());
                 if (isUpdate)
                     return ResponseEntity.ok(new ValueResource(item.getStatus()));
                 //else
@@ -213,7 +213,7 @@ public class ContentService {
                 }
 
                 item = itemRepository.save(item);
-                updateLinkedFilesToItem(item, content.getLinkedFilesInText());
+                updateLinkedFilesToItem(item, content.getLinkedFiles());
 
                 // now we save all linked classification and before clean olds not anymore linked
                 if (oldLinkedClassifications != null && !oldLinkedClassifications.isEmpty()) {
@@ -297,7 +297,7 @@ public class ContentService {
         }
         log.debug("Will save item {}", item);
         item = itemRepository.save(item);
-        updateLinkedFilesToItem(item, content.getLinkedFilesInText());
+        updateLinkedFilesToItem(item, content.getLinkedFiles());
 
         // now we save all linked classification
         if (oldLinkedClassifications != null && !oldLinkedClassifications.isEmpty()) {
@@ -488,7 +488,7 @@ public class ContentService {
             Set<LinkedFileItem> linkedFileItems = Sets.newLinkedHashSet();
             for (LinkedFileItemDTO fileLinked: filesLinked){
                 if (!filesPath.contains(fileLinked.getUri())) {
-                    linkedFileItems.add(new LinkedFileItem(fileLinked.getUri(), fileLinked.getFilename(), item));
+                    linkedFileItems.add(new LinkedFileItem(fileLinked.getUri(), fileLinked.getFilename(), item, fileLinked.isInBody(), fileLinked.getContentType()));
                 }
             }
             linkedFileItemRepository.save(linkedFileItems);

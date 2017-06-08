@@ -121,33 +121,51 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             return (-1 !== array.indexOf(item));
         };
         $rootScope.getCssFileFromName = function(fileName) {
-            if (!fileName) return;
             var cssClassType = "mdi mdi-file mdi-dark mdi-lg";
-            var fext = fileName.substr(fileName.lastIndexOf('.')+1).trim();
+            if (fileName) {
+                var fext = fileName.substr(fileName.lastIndexOf('.') + 1).trim();
 
-            var imageExt = ["jpg", "jpeg", "png", "bmp", "tif", "svg", "gif"];
-            var audioExt = ["wav","mp3","fla","flac","ra","rma","aif","aiff","aa","aac","aax","ac3","au","ogg","avr","3ga","flac","mid","midi","m4a","mp4a","amz","mka","asx","pcm","m3u","wma","xwma"];
-            var videoExt = ["avi","mpg","mp4","mkv","mov","wmv","vp6","264","vid","rv","webm","swf","h264","flv","mk3d","gifv","oggv","3gp","m4v","movie","divx"];
+                var imageExt = ["jpg", "jpeg", "png", "bmp", "tif", "svg", "gif"];
+                var audioExt = ["wav", "mp3", "fla", "flac", "ra", "rma", "aif", "aiff", "aa", "aac", "aax", "ac3", "au", "ogg", "avr", "3ga", "flac", "mid", "midi", "m4a", "mp4a", "amz", "mka", "asx", "pcm", "m3u", "wma", "xwma"];
+                var videoExt = ["avi", "mpg", "mp4", "mkv", "mov", "wmv", "vp6", "264", "vid", "rv", "webm", "swf", "h264", "flv", "mk3d", "gifv", "oggv", "3gp", "m4v", "movie", "divx"];
 
-            if (fext && fext.length > 2) {
-                if (imageExt.indexOf(fext) > -1) {
-                    cssClassType = "mdi mdi-file-image mdi-dark mdi-lg";
-                } else if (videoExt.indexOf(fext) > -1) {
-                    cssClassType = "mdi mdi-file-video mdi-dark mdi-lg";
-                } else if (audioExt.indexOf(fext) > -1) {
-                    cssClassType = "mdi mdi-file-music mdi-dark mdi-lg";
-                } else if (fext === 'pdf') {
-                    cssClassType = "mdi mdi-file-pdf mdi-dark mdi-lg";
-                } else if (fext === 'odt' || fext === 'doc' || fext === 'docx') {
-                    cssClassType = "mdi mdi-file-word mdi-dark mdi-lg";
-                } else if (fext === 'ods' || fext === 'xls' || fext === 'xlsx') {
-                    cssClassType = "mdi mdi-file-excel mdi-dark mdi-lg";
-                } else if (fext === 'odp' || fext === 'ppt' || fext === 'pptx') {
-                    cssClassType = "mdi mdi-file-powerpoint mdi-dark mdi-lg";
-                } else if (fext === 'txt') {
-                    cssClassType = "mdi mdi-file-document mdi-dark mdi-lg";
+                if (fext && fext.length > 2) {
+                    if (imageExt.indexOf(fext) > -1) {
+                        cssClassType = "mdi mdi-file-image mdi-dark mdi-lg";
+                    } else if (videoExt.indexOf(fext) > -1) {
+                        cssClassType = "mdi mdi-file-video mdi-dark mdi-lg";
+                    } else if (audioExt.indexOf(fext) > -1) {
+                        cssClassType = "mdi mdi-file-music mdi-dark mdi-lg";
+                    } else if (fext === 'pdf') {
+                        cssClassType = "mdi mdi-file-pdf mdi-dark mdi-lg";
+                    } else if (fext === 'odt' || fext === 'doc' || fext === 'docx') {
+                        cssClassType = "mdi mdi-file-word mdi-dark mdi-lg";
+                    } else if (fext === 'ods' || fext === 'xls' || fext === 'xlsx') {
+                        cssClassType = "mdi mdi-file-excel mdi-dark mdi-lg";
+                    } else if (fext === 'odp' || fext === 'ppt' || fext === 'pptx') {
+                        cssClassType = "mdi mdi-file-powerpoint mdi-dark mdi-lg";
+                    } else if (fext === 'txt') {
+                        cssClassType = "mdi mdi-file-document mdi-dark mdi-lg";
+                    }
                 }
             }
+            return cssClassType;
+        };
+        $rootScope.getCssFileFromType = function(fileType, fileName) {
+            var cssClassType;
+            if (fileType) {
+                var subFiletype = fileType.substring(0, 5);
+                // to show an icon depending on filetype
+                if (subFiletype === 'image' || subFiletype === "video") {
+                    cssClassType = "mdi mdi-file-" + subFiletype + " mdi-dark mdi-lg";
+                } else if (subFiletype === 'audio') {
+                    cssClassType = "mdi mdi-file-music mdi-dark mdi-lg";
+                } else if (fileType === 'application/pdf') {
+                    cssClassType = "mdi mdi-file-pdf mdi-dark mdi-lg";
+                }
+            }
+            if (!cssClassType)
+                cssClassType = $rootScope.getCssFileFromName(fileName);
             return cssClassType;
         }
     })

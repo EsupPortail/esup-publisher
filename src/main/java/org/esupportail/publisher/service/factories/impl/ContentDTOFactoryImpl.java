@@ -95,10 +95,10 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
         Set<LinkedFileItemDTO> pathFiles = Sets.newLinkedHashSet();
         if (!files.isEmpty()) {
             for (LinkedFileItem file: files) {
-                pathFiles.add(new LinkedFileItemDTO(file.getUri(), file.getFilename()));
+                pathFiles.add(new LinkedFileItemDTO(file.getUri(), file.getFilename(), file.isInBody(), file.getContentType()));
             }
         }
-        dto.setLinkedFilesInText(pathFiles);
+        dto.setLinkedFiles(pathFiles);
         return dto;
     }
 

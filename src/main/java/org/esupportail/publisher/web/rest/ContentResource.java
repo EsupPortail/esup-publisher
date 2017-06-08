@@ -51,7 +51,7 @@ public class ContentResource {
     @Timed
     public ResponseEntity<?> create(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to save ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
-            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
+            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFiles());
         if (content.getItem().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
         }
@@ -69,7 +69,7 @@ public class ContentResource {
     @Timed
     public ResponseEntity<?> update(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
-            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFilesInText());
+            content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFiles());
         return contentService.saveContent(content);
     }
 

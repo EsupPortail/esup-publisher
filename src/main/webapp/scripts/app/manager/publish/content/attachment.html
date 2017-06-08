@@ -127,21 +127,21 @@
                 </div>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': linkedFilesInText.length < 1 }">
+        <div class="form-group" ng-class="{ 'has-error': linkedFiles.length < 1 }">
             <label class="control-label" for="linkedFiles" translate="publisherApp.attachment.linkedFiles">linkedFiles</label>
             <div class="form-inline">
-                <div ng-repeat="attachment in linkedFilesInText" class="linkedFiles">
+                <div ng-repeat="attachment in linkedFilesToContent | filter: {inBody : 'false'}" class="linkedFiles">
                     <span>
                         <a href="{{attachment.uri}}" target="_blank">
-                            <i class="{{getCssFileFromName(attachment.filename)}}"></i>{{attachment.filename}}</a>
+                            <i class="{{getCssFileFromType(attachment.contentType, attachment.filename)}}"></i>{{attachment.filename}}</a>
                         <a href="#" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}" ng-click="deleteAttachment(attachment)">
                             <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                         </a>
                     </span>
                 </div>
             </div>
-            <div ng-show="publishContentForm.linkedFiles.$error || linkedFilesInText.length < 1">
-                <p class="help-block" ng-show="linkedFilesInText.length < 1" translate="entity.validation.required">
+            <div ng-show="publishContentForm.linkedFiles.$error || linkedFiles.length < 1">
+                <p class="help-block" ng-show="linkedFiles.length < 1" translate="entity.validation.required">
                     This field is required.
                 </p>
                 <p class="help-block"
@@ -164,7 +164,7 @@
                     <span class="progress-text">{{progress}}%</span>
                 </div>
             </div>
-            <button name="linkedFiles" id="linkedFiles" ngf-select="uploadAttachment($file)" class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="linkedFiles"
+            <button name="linkedFiles" id="linkedFiles" ngf-select="uploadAttachment($file)" class="btn btn-primary btn-file" ngf-capture="'camera'" ng-model="unusedFiles"
                     ngf-pattern="'image/*,video/*,audio/*,application/pdf,application/ogg,application/vnd.oasis.*,application/vnd.ms-*,application/vnd.openxmlformats-officedocument*,application/msword'"
                     ngf-accept="'image/*,video/*,audio/*,application/*'" ngf-max-duration="'3m" ngf-max-size="10MB">
                 <i class="glyphicon glyphicon-folder-open"></i>&nbsp;<span translate="publisherApp.media.inputfile.upload.button">Browse</span>

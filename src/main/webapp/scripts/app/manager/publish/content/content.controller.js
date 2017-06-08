@@ -1,6 +1,6 @@
 'use strict';
 angular.module('publisherApp')
-    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, loadedFilesInText,
+    .controller('ContentWriteController', function ($scope, $state, EnumDatas, $rootScope, loadedItem, loadedFilesInContent,
                                                     Item, Upload, Configuration, $timeout, FileManager, Base64,
                                                     DateService, $translate, taTranslations, DateUtils, $filter, toaster) {
         $scope.$parent.item = $scope.$parent.item || {};
@@ -9,7 +9,7 @@ angular.module('publisherApp')
         $scope.content = {type : '', file: '', resultImage: '', picUrl: ''};
         $scope.itemTypeList = $scope.$parent.publisher.context.reader.authorizedTypes;
         $scope.enclosureDirty = false;
-        $scope.$parent.linkedFilesInText = $scope.$parent.linkedFilesInText || [];
+        $scope.$parent.linkedFilesToContent = $scope.$parent.linkedFilesToContent || [];
         $scope.$parent.highlight = $scope.$parent.highlight || false;
 
         // I18n TextAngular Adds that can't be applied during app.config
@@ -98,11 +98,11 @@ angular.module('publisherApp')
         //    $scope.startdate = angular.copy(loadedItem.startDate);
         //    //console.log('loaded Item start date:' + JSON.stringify(loadedItem.startDate));
         //}
-        if (angular.equals([],$scope.$parent.linkedFilesInText) && loadedFilesInText) {
-            $scope.$parent.linkedFilesInText = angular.copy(loadedFilesInText);
+        if (angular.equals([],$scope.$parent.linkedFilesToContent) && loadedFilesInContent) {
+            $scope.$parent.linkedFilesToContent = angular.copy(loadedFilesInContent);
 
         }
-        //console.log('after loaded parent loadedFilesInText :' , $scope.$parent.linkedFilesInText);
+        //console.log('after loaded parent loadedFilesInContent :' , $scope.$parent.linkedFiles);
 
 
         if ($scope.$parent.item.type) {
@@ -135,7 +135,7 @@ angular.module('publisherApp')
             $scope.initCropper();
         }, true);
 
-        $scope.$watch('publishContentForm.$valid + $parent.linkedFilesInText', function(newObj, oldObj){
+        $scope.$watch('publishContentForm.$valid + $parent.linkedFilesToContent', function(newObj, oldObj){
             // checking validity after validators checks
             testItemValidity();
         }, true);
@@ -151,7 +151,7 @@ angular.module('publisherApp')
                     booleanComplement = false;
                 }
                 // for attachment
-                if ($scope.$parent.item.type == "ATTACHMENT" && $scope.$parent.linkedFilesInText.length < 1) {
+                if ($scope.$parent.item.type == "ATTACHMENT" && $scope.$parent.linkedFilesToContent.length < 1) {
                     booleanComplement = false;
                 }
                 // for flash and media enclosure is mandatory
@@ -163,7 +163,7 @@ angular.module('publisherApp')
             } else {
                 $scope.$parent.itemValidated = false;
             }
-            console.log("test validity returned ", $scope.$parent.itemValidated, $scope.$parent.linkedFilesInText);
+            //console.log("test validity returned ", $scope.$parent.itemValidated, $scope.$parent.linkedFilesToContent);
         }
 
         $scope.isItemValidated = function() {
@@ -385,7 +385,7 @@ angular.module('publisherApp')
                 return uploadLinkedFile(theFile, theFileName, theType, false, function (response) {
                     // SUCCESS
                     var resultUrl = response.headers("Location");
-                    $scope.$parent.linkedFilesInText.push({ uri: decodeURIComponent(resultUrl), filename: theFileName });
+                    $scope.$parent.linkedFilesToContent.push({ uri: decodeURIComponent(resultUrl), filename: theFileName, inBody: false, contentType: theFile.type });
                     $timeout(function() {
                         $scope.progress = null;
                     }, 5000);
@@ -459,7 +459,7 @@ angular.module('publisherApp')
         $scope.confirmDeleteAttachment = function (attachment) {
             FileManager.delete({entityId: $scope.$parent.publisher.context.organization.id, isPublic: false, fileUri: Base64.encode(attachment.uri)},
                 function () {
-                    $scope.$parent.linkedFilesInText = $scope.$parent.linkedFilesInText.filter(function (val) {
+                    $scope.$parent.linkedFilesToContent = $scope.$parent.linkedFilesToContent.filter(function (val) {
                         return val.uri !== attachment.uri;
                     });
                     if ($scope.$parent.item.id) {
@@ -519,26 +519,10 @@ angular.module('publisherApp')
             return taUploadHandler(file, insertAction, filetype);
         };
         function taUploadHandler(file, insertAction, filetype) {
-            var isImage = filetype === 'image';
             // to show an icon depending on filetype
-            var cssClassType = "mdi mdi-file mdi-dark mdi-lg";
-            var fext = file.name.substr(file.name.lastIndexOf('.')+1);
-            if (filetype === 'image' || filetype === "video") {
-                cssClassType = "mdi mdi-file-" + filetype + " mdi-dark mdi-lg";
-            } else if (filetype === 'audio') {
-                cssClassType = "mdi mdi-file-music mdi-dark mdi-lg";
-            } else if (file.type === 'application/pdf') {
-                cssClassType = "mdi mdi-file-pdf mdi-dark mdi-lg";
-            } else if (fext && fext.length > 2 && (fext === 'odt' || fext === 'doc' || fext === 'docx')) {
-                cssClassType = "mdi mdi-file-word mdi-dark mdi-lg";
-            } else if (fext && fext.length > 2 && (fext === 'ods' || fext === 'xls' || fext === 'xlsx')) {
-                cssClassType = "mdi mdi-file-excel mdi-dark mdi-lg";
-            } else if (fext && fext.length > 2 && (fext === 'odp' || fext === 'ppt' || fext === 'pptx')) {
-                cssClassType = "mdi mdi-file-powerpoint mdi-dark mdi-lg";
-            } else if (fext && fext.length > 2 && fext === 'txt') {
-                cssClassType = "mdi mdi-file-document mdi-dark mdi-lg";
-            }
-            return uploadLinkedFile(file, file.name, isImage, (filetype === 'image' || filetype === 'audio' || filetype === "video"),  function (response) {
+            var cssClassType = $rootscope.getCssFileFromType(file.type, file.name);
+
+            return uploadLinkedFile(file, file.name, filetype === 'image', (filetype === 'image' || filetype === 'audio' || filetype === "video"),  function (response) {
                     // SUCCESS
                     var resultUrl = response.headers("Location");
                     if (isImage) {
@@ -546,7 +530,7 @@ angular.module('publisherApp')
                     } else {
                         insertAction('createLink', [resultUrl, file.name, cssClassType], true);
                     }
-                    $scope.$parent.linkedFilesInText.push({ uri: decodeURIComponent(resultUrl), filename: file.name });
+                    $scope.$parent.linkedFilesToContent.push({ uri: decodeURIComponent(resultUrl), filename: file.name, inBody: true, contentType: file.type });
                     $timeout(function() {
                         $scope.progress = null;
                     }, 5000);

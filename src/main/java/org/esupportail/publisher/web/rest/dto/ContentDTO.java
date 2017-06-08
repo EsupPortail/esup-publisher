@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ScriptAssert(lang = "javascript", message = "Linked files should not be emtpy", script = "org.esupportail.publisher.web.rest.dto.ContentDTO.isValid(_this.item, _this.linkedFilesInText")
+@ScriptAssert(lang = "javascript", message = "Linked files should not be emtpy", script = "org.esupportail.publisher.web.rest.dto.ContentDTO.isValid(_this.item, _this.linkedFiles")
 public class ContentDTO {
 
     //private Publisher publisher;
@@ -30,7 +30,7 @@ public class ContentDTO {
 
     private List<SubscriberFormDTO> targets = new ArrayList<>();
 
-    private Set<LinkedFileItemDTO> linkedFilesInText = new HashSet<>();
+    private Set<LinkedFileItemDTO> linkedFiles = new HashSet<>();
 
 
     public static boolean isValid(final AbstractItem item, final Set<LinkedFileItemDTO> linkedFiles) {

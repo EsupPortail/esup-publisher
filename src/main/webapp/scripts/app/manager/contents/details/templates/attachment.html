@@ -30,7 +30,7 @@
             </div>
 
             <section>
-                <span ng-repeat="attachment in linkedFiles"><a href="{{attachment.uri}}" target="_blank" class="text-nowrap"><i class="{{getCssFileFromName(attachment.filename)}}"></i>{{attachment.filename}}</a> </span>
+                <span ng-repeat="attachment in linkedFiles | filter: {inBody : 'false'}"><a href="{{attachment.uri}}" target="_blank" class="text-nowrap"><i class="{{getCssFileFromType(attachment.contentType, attachment.filename)}}"></i>{{attachment.filename}}</a> </span>
             </section>
         </article>
     </div>

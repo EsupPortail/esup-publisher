@@ -24,8 +24,16 @@ public class LinkedFileItemDTO implements Serializable {
     @Getter
     private String filename;
 
-    public LinkedFileItemDTO(@NotNull final String uri, final String filename) {
+    @Getter
+    private boolean inBody = true;
+
+    @Getter
+    private String contentType;
+
+    public LinkedFileItemDTO(@NotNull final String uri, final String filename, final boolean inBody, final String contentType) {
         this.uri = uri;
         this.filename = filename;
+        this.inBody = inBody;
+        this.contentType = contentType;
     }
 }

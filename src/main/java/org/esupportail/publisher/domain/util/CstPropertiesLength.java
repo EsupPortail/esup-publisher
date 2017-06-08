@@ -39,5 +39,6 @@ public final class CstPropertiesLength {
 	public static final int ORDER = 3;
 	public static final int USER_DISPLAYNAME = 100;
 	public static final int COLOR = 7;
+    public static final int CONTENT_TYPE = 150;
 
 }
