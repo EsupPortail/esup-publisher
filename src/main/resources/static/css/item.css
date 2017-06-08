@@ -295,6 +295,16 @@ body {
 .publisher-view article header .details .pubInfo > p > span:not(.label)::after {
     content: ", "
 }
+
+.publisher-view article > section.attachments > div > a > span::before {
+    content: "\f214";
+    font: normal normal normal 24px/1 "Material Design Icons";
+}
+.publisher-view article > section.attachments > div {
+    display: inline-block;
+    padding: 0.5em;
+}
+
 .publisher-view footer {
     text-align: right;
     padding: 0 1rem;

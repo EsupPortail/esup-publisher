@@ -10,5 +10,6 @@ import org.esupportail.publisher.domain.LinkedFileItem;
 public interface LinkedFileItemRepository extends AbstractRepository<LinkedFileItem, Long> {
 
     List<LinkedFileItem> findByAbstractItemId(final Long itemId);
+    List<LinkedFileItem> findByAbstractItemIdAndInBody(final Long itemId, final boolean inBody);
     List<LinkedFileItem> findByUri(final String fileUri);
 }

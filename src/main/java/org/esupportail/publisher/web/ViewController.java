@@ -9,17 +9,19 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.SecurityConfiguration;
 import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Media;
@@ -42,6 +44,7 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -90,6 +93,7 @@ public class ViewController {
     }
 
     @RequestMapping(value = ITEM_VIEW + "{item_id}", produces = MediaType.TEXT_HTML_VALUE )
+    @Transactional(readOnly=true)
     public String itemView(Map<String, Object> model, @PathVariable("item_id") Long itemId, HttpServletRequest request) {
         log.debug("Request to render in viewer, item with id {}", itemId);
         if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
@@ -99,7 +103,7 @@ public class ViewController {
         if (item == null) return "objectNotFound";
 
         try {
-            if (!canView(item.getContextKey())) {
+            if (!canView(item)) {
                 return "403";
             }
         } catch (AccessDeniedException ade) {
@@ -117,12 +121,15 @@ public class ViewController {
         } else if (item instanceof Flash) {
             ((Flash) item).setBody(replaceBodyUrl(((Flash) item).getBody(), baseUrl));
         } else if (item instanceof Resource) {
-            ((Resource)item).setRessourceUrl(replaceRelativeUrl(((Resource)item).getRessourceUrl(), baseUrl));
-        } else if (!(item instanceof Media)) {
+            ((Resource) item).setRessourceUrl(replaceRelativeUrl(((Resource) item).getRessourceUrl(), baseUrl));
+        } else if (!(item instanceof Media) && !(item instanceof Attachment)) {
             log.error("Warning a new type of Item wasn't managed at this place, the item is :", item);
             throw new IllegalStateException("Warning missing type management of :" + item.toString());
         }
         model.put("item", item);
+
+        Set<LinkedFileItem> attachments = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false));
+        model.put("attachments", attachments);
 
         return "item";
     }
@@ -147,7 +154,7 @@ public class ViewController {
         for (LinkedFileItem lfiles: itemsFiles){
             final AbstractItem item = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(), ItemStatus.PUBLISHED));
             try {
-                if (item != null && canView(item.getContextKey())) {
+                if (item != null && canView(item)) {
                     canView = true;
                     filename = lfiles.getFilename();
                     break;
@@ -188,19 +195,21 @@ public class ViewController {
         } else throw new FileNotFoundException(filePath);
     }
 
-    private boolean canView(final ContextKey ctx) throws AccessDeniedException {
-        List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(ctx)));
+    private boolean canView(final AbstractItem item) throws AccessDeniedException {
+        List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(item.getContextKey())));
         // TODO we consider that all items have targets directly on
         // for targets defined only on classification a check will be needed
         if (subscribers.isEmpty()) {
-            log.trace("Subscribers on item {} are empty -> true", ctx);
+            log.trace("Subscribers on item {} are empty -> true", item.getContextKey());
             return true;
         }
         final CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
         if (user == null) {
             log.trace("user is not authenticated -> throw an error to redirect on authentication");
             throw new AccessDeniedException("Access is denied to anonymous !");
-        } else if (user.getRoles().contains(AuthoritiesConstants.ADMIN)) {
+        } else if (user.getRoles().contains(AuthoritiesConstants.ADMIN)
+            || user.getUser().getLogin().equalsIgnoreCase(item.getCreatedBy().getLogin())
+            || user.getUser().getLogin().equalsIgnoreCase(item.getLastModifiedBy().getLogin())) {
             return true;
         } else {
             final UserDTO userDTO = user.getUser();
@@ -228,7 +237,7 @@ public class ViewController {
                         break;
                     case PERSON:
                         if (subject.getKeyId().equalsIgnoreCase(userDTO.getLogin())) {
-                            log.trace("Cjeck if the user key {} match subscriber key {} -> true", userDTO.getLogin(), subject.getKeyId());
+                            log.trace("Check if the user key {} match subscriber key {} -> true", userDTO.getLogin(), subject.getKeyId());
                             return true;
                         }
                         break;

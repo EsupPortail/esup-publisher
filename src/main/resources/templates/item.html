@@ -7,34 +7,38 @@
 <div class="publisher-view" th:classappend="${item.getClass().getSimpleName()}">
     <article>
         <header>
-            <div th:if="${item.enclosure} != null" class="image">
+            <div th:if="${item.enclosure != null}" class="image">
                 <img class="img-responsive" th:src="${item.enclosure}" th:alt-title="${item.title}" />
             </div>
             <div class="title">
                 <h1 class="hyphenate" th:text="${item.title}"></h1>
-                <p th:if="${item.getClass().getSimpleName()} != 'Flash'"><span th:text="#{item.author}">Author</span>: <span th:text="${item.createdBy.displayName}"></span>, <span
+                <p th:if="${item.getClass().getSimpleName() != 'Flash'}"><span th:text="#{item.author}">Author</span>: <span th:text="${item.createdBy.displayName}"></span>, <span
                     th:text="#{item.pubDate}">published </span> <time pubdate="pubdate" th:datetime="${item.startDate}"
-                                                                    th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}"/></p>
+                                                                      th:text="${#dates.format(item.startDate, 'dd MMMM yyyy')}"/></p>
             </div>
             <div class="details" onclick="showInfo()">
                 <div class="summary">
-                    <span th:if="${item.getClass().getSimpleName()} != 'Flash'" class="caret-right"></span>
+                    <span th:if="${item.getClass().getSimpleName() != 'Flash'}" class="caret-right"></span>
                     <span th:utext="${item.summary}"></span>
                 </div>
-                <div th:if="${item.getClass().getSimpleName()} != 'Flash'" class="pubInfo">
+                <div th:if="${item.getClass().getSimpleName() != 'Flash'}" class="pubInfo">
                     <p><span class="label" th:text="#{item.createdBy}">Created by</span><span th:text="${item.createdBy.displayName}"></span><span
                         class="label" th:text="#{item.when}">on</span><time th:datetime="${item.createdDate}" th:text="${#dates.format(item.createdDate)}"></time>
-                    </p><p th:if="${item.lastModifiedDate} != null">
+                    </p><p th:if="${item.lastModifiedDate != null}">
                     <span class="label" th:text="#{item.lastModifiedBy}">Last modification by</span><span th:text="${item.lastModifiedBy.displayName}"></span><span
                     class="label" th:text="#{item.when}">on</span><time th:datetime="${item.lastModifiedDate}" th:text="${#dates.format(item.lastModifiedDate)}"></time>
-                </p><p th:if="${item.validatedBy} != null">
+                </p><p th:if="${item.validatedBy != null}">
                     <span class="label" th:text="#{item.validatedBy}">Validated by</span><span th:text="${item.validatedBy.displayName}"></span><span
                     class="label" th:text="#{item.when}">on</span><time th:datetime="${item.validatedDate}" th:text="${#dates.format(item.validatedDate)}"></time>
                 </p>
                 </div>
             </div>
         </header>
-        <section th:utext="${item.body}"></section>
+        <section class="body" th:if="${item.getClass().getSimpleName() != 'Media' and item.getClass().getSimpleName() != 'Attachment'}" th:utext="${item.body}"></section>
+        <section class="attachments" th:if="${not #lists.isEmpty(attachments)}">
+            <div th:each="attachment: ${attachments}">
+                <a th:href="@{'/' + ${attachment.uri}}"><span th:text="${attachment.filename}"/></a></div>
+        </section>
     </article>
     <footer th:replace="fragments/footer">
     </footer>
