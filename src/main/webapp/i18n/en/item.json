@@ -14,7 +14,8 @@
             "validate.question" : "Are you sure you want to validate this Item {{ id }} ?",
             "unvalidate.question" : "Are you sure you want to invalidate this Item {{ id }} ?",
             "detail": {
-                "title": "Item"
+                "title": "Item",
+                "unlimitedEndDate": "Don't set a date for unlimitted period"
             },
             "title": "Title",
             "author": "Author",

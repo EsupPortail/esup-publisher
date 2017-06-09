@@ -99,8 +99,11 @@
                 <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
                                 && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
                     <label class="control-label" for="endDate" translate="publisherApp.media.endDate">EndDate</label>
+                    <span class="tooltip-touch" translate="publisherApp.media.detail.unlimitedEndDate"></span>
                     <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min="{{endMinDate}}" max={{maxDate}} ng-model="item.endDate"
-                           alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
+                           uib-tooltip="{{ 'publisherApp.media.detail.unlimitedEndDate' | translate}}" tooltip-enable="publisher.context.redactor.optionalPublishTime"
+                           ng-required="!publisher.context.redactor.optionalPublishTime"
+                           alt-datepicker date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
                     <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
                         <p class="help-block"

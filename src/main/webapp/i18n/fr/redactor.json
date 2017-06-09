@@ -18,6 +18,7 @@
             "format": "Format du rédacteur",
             "writingMode": "Mode de saisie",
             "nbLevelsOfClassification": "Niveau(x) d'arborescence",
+            "optionalPublishTime": "Fin de publication optionnelle",
             "organizationReaderRedactors": "Liste des contextes associés"
         }
     }

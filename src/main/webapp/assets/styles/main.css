@@ -247,6 +247,11 @@ ul#strength {
     opacity: 0.65;
 }
 
+/** as tooltip on hover aren't possible on mobiles we set a text with .tooltip-touch class in replacement and we hidde it on no-touch compatibility.*/
+.no-touch .tooltip-touch {
+    display: none;
+}
+
 /* start For enumarated values in entities views */
 .list-comma::before {
     content: ', ';

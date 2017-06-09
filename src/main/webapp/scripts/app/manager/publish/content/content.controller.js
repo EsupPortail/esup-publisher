@@ -142,8 +142,10 @@ angular.module('publisherApp')
 
         function testItemValidity(){
             if (angular.isDefined($scope.publishContentForm) && $scope.publishContentForm.$valid
-                && angular.isDefined($scope.$parent.item) && DateService.getDateDifference($scope.today, $scope.$parent.item.endDate) > 0
-                && DateService.isValidDateRange($scope.$parent.item.startDate, $scope.$parent.item.endDate)) {
+                && angular.isDefined($scope.$parent.item)
+                && ($scope.$parent.publisher.context.redactor.optionalPublishTime && $scope.$parent.item.endDate == null
+                    || (DateService.getDateDifference($scope.today, $scope.$parent.item.endDate) > 0
+                    && DateService.isValidDateRange($scope.$parent.item.startDate, $scope.$parent.item.endDate)))) {
 
                 var booleanComplement = true;
                 // for MEDIA the body is optional
@@ -222,7 +224,7 @@ angular.module('publisherApp')
                         type: "NEWS",
                         title: null,
                         enclosure: null,
-                        endDate: next4weeks,
+                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
                         startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
@@ -245,7 +247,7 @@ angular.module('publisherApp')
                         type: "MEDIA",
                         title: null,
                         enclosure: null,
-                        endDate: next4weeks,
+                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
                         startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
@@ -267,7 +269,7 @@ angular.module('publisherApp')
                         type: "RESOURCE",
                         title: null,
                         enclosure: null,
-                        endDate: next4weeks,
+                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
                         startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
@@ -290,7 +292,7 @@ angular.module('publisherApp')
                         type: "FLASH",
                         title: null,
                         enclosure: null,
-                        endDate: DateUtils.addDaysToLocalDate($scope.today, 14),
+                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : DateUtils.addDaysToLocalDate($scope.today, 14),
                         startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
@@ -313,7 +315,7 @@ angular.module('publisherApp')
                         type: "ATTACHMENT",
                         title: null,
                         enclosure: null,
-                        endDate: next4weeks,
+                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
                         startDate: tomorrow,
                         validatedBy: null,
                         validatedDate: null,
@@ -603,5 +605,4 @@ angular.module('publisherApp')
                 return val.name === name;
             })[0].label;
         };
-
     });

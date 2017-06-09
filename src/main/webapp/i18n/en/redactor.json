@@ -17,7 +17,8 @@
             "description": "Description",
             "format": "Format of redactor",
             "writingMode": "Writing mode",
-            "nbLevelsOfClassification": "NbLevelsOfClassification",
+            "nbLevelsOfClassification": "Tree levels of Classification",
+            "optionalPublishTime": "Optional end of publication",
             "organizationReaderRedactors": "organizationReaderRedactors"
         }
     }

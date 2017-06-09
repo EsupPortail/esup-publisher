@@ -30,7 +30,7 @@
             <label class="control-label" for="enclosure" translate="publisherApp.resource.enclosure">Enclosure</label>
             <div class="form-inline">
                 <button ng-if="!item.enclosure" class="btn btn-file" data-toggle="modal" data-target="#cropImageModale" ng-click="clearUpload()">
-                    <span>{{'publisherApp.news.enclosure.button' | translate}}</span>
+                    <span>{{'publisherApp.resource.enclosure.button' | translate}}</span>
                 </button>
 
                 <img ng-if="item.enclosure" name="enclosure" id="enclosure" ng-src="{{item.enclosure}}"  class="img-responsive" />
@@ -62,7 +62,7 @@
             <div class="form-inline text-justify">
                 <div class="form-group" ng-class="{ 'has-error': (publishContentForm.endDate.$valid || publishContentForm.endDate.$error.dateGreaterThan)
                                 && publishContentForm.startDate.$invalid && publishContentForm.startDate.$dirty }">
-                    <label class="control-label" for="startDate" translate="publisherApp.news.startDate">StartDate</label>
+                    <label class="control-label" for="startDate" translate="publisherApp.resource.startDate">StartDate</label>
                     <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" min={{minDate}} ng-model="item.startDate"
                            alt-datepicker required date-lower-than="{{item.endDate | date: 'yyyy-MM-dd' }}">
 
@@ -85,16 +85,19 @@
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.startDate.$error.dateLowerThan" translate="entity.validation.dateLowerThan"
-                           translate-value-field="{{'publisherApp.news.endDate' | translate}}">
+                           translate-value-field="{{'publisherApp.resource.endDate' | translate}}">
                             From date must be lower than to date.
                         </p>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': (publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan)
                                 && publishContentForm.endDate.$invalid && publishContentForm.endDate.$dirty }">
-                    <label class="control-label" for="endDate" translate="publisherApp.news.endDate">EndDate</label>
+                    <label class="control-label" for="endDate" translate="publisherApp.resource.endDate">EndDate</label>
+                    <span class="tooltip-touch" translate="publisherApp.resource.detail.unlimitedEndDate"></span>
                     <input type="date" class="form-control" name="endDate" id="endDate" placeholder="jj/mm/aaaa" min="{{endMinDate}}" max={{maxDate}} ng-model="item.endDate"
-                           alt-datepicker required date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
+                           uib-tooltip="{{ 'publisherApp.resource.detail.unlimitedEndDate' | translate}}" tooltip-enable="publisher.context.redactor.optionalPublishTime"
+                           ng-required="!publisher.context.redactor.optionalPublishTime"
+                           alt-datepicker date-greater-than="{{item.startDate | date: 'yyyy-MM-dd' }}">
 
                     <div ng-show="(publishContentForm.startDate.$valid || publishContentForm.startDate.$error.dateLowerThan ) && publishContentForm.endDate.$invalid">
                         <p class="help-block"
@@ -115,7 +118,7 @@
                         </p>
                         <p class="help-block"
                            ng-show="publishContentForm.endDate.$error.dateGreaterThan" translate="entity.validation.dateGreaterThan"
-                           translate-value-field="{{'publisherApp.news.startDate' | translate}}">
+                           translate-value-field="{{'publisherApp.resource.startDate' | translate}}">
                             From date must be greater than from date.
                         </p>
                     </div>

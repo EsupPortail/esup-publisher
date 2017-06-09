@@ -133,6 +133,10 @@
                                 </p>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label" for="optionalPublishTime" translate="publisherApp.redactor.optionalPublishTime">Optional Publish End</label>
+                            <input type="checkbox" class="form-control" name="optionalPublishTime" id="optionalPublishTime" ng-model="redactor.optionalPublishTime"/>
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -184,6 +188,7 @@
                     <th translate="publisherApp.redactor.format">Format</th>
                     <th translate="publisherApp.redactor.writingMode">WritingMode</th>
                     <th translate="publisherApp.redactor.nbLevelsOfClassification">NbLevelsOfClassification</th>
+                    <th translate="publisherApp.redactor.optionalPublishTime">optionalPublishTime</th>
                     <th></th>
                 </tr>
             </thead>
@@ -196,6 +201,7 @@
                     <td>{{redactor.format}}</td>
                     <td>{{getWritingModeLabel(redactor.writingMode) | translate}}</td>
                     <td>{{redactor.nbLevelsOfClassification}}</td>
+                    <td><input type="checkbox" ng-model="redactor.optionalPublishTime" disabled/></td>
                     <td>
                         <button type="submit"
                                 ui-sref="redactorDetail({id:redactor.id})"

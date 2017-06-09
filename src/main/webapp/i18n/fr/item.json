@@ -14,7 +14,8 @@
             "validate.question" : "Etes-vous certain de vouloir valider cette publication {{ id }} ?",
             "unvalidate.question" : "Etes-vous certain de vouloir invalider cette publication {{ id }} ?",
             "detail": {
-                "title": "Publication"
+                "title": "Publication",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
             },
             "title": "Titre",
             "author": "Auteur",

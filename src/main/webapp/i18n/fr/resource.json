@@ -10,7 +10,8 @@
                 "question": "Etes-vous certain de vouloir supprimer la ressource {{ id }} ?"
             },
             "detail": {
-                "title": "Ressource"
+                "title": "Ressource",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
             },
             "title": "Titre",
             "enclosure": "Illustration",

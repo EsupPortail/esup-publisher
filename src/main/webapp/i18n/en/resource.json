@@ -10,7 +10,8 @@
                 "question": "Are you sure you want to delete Resource {{ id }}?"
             },
             "detail": {
-                "title": "Resource"
+                "title": "Resource",
+                "unlimitedEndDate": "Don't set a date for unlimitted period"
             },
             "title": "Title",
             "enclosure": "Enclosure",

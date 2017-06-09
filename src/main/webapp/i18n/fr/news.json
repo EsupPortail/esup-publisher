@@ -11,7 +11,8 @@
                 "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
             },
             "detail": {
-                "title": "News"
+                "title": "News",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
             },
             "title": "Titre",
             "enclosure": "Illustration",

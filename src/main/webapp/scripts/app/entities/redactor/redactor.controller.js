@@ -46,7 +46,8 @@ angular.module('publisherApp')
         };
 
         $scope.clear = function () {
-            $scope.redactor = {name: null, displayName: null, description: null, format: $scope.writingFormatList[0], writingMode: $scope.writingModeList[0].name, nbLevelsOfClassification: 1, id: null};
+            $scope.redactor = {name: null, displayName: null, description: null, format: $scope.writingFormatList[0],
+                writingMode: $scope.writingModeList[0].name, nbLevelsOfClassification: 1, optionalPublishTime: false, id: null};
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
         };

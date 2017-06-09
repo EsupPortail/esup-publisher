@@ -11,7 +11,8 @@
                 "enclosure": "Are you sure you want to delete this picture (no back action possible) ?"
             },
             "detail": {
-                "title": "News"
+                "title": "News",
+                "unlimitedEndDate": "Don't set a date for unlimitted period"
             },
             "title": "Title",
             "enclosure": "Picture",
