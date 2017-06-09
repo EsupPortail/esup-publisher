@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -61,5 +62,9 @@ public class ArticleVO implements Serializable {
     @XmlElement(name="date", namespace = "http://purl.org/dc/elements/1.1/")
     @XmlJavaTypeAdapter(ISO8601DateTimeXmlAdapter.class)
     private DateTime date;
+
+    @XmlElementWrapper(name = "files")
+    @XmlElement(name = "url")
+    private List<String> files;
 
 }

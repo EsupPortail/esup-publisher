@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
@@ -35,10 +36,12 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
     @Inject
     private HighlightedClassificationService highlightedClassificationService;
 
-    public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers, final HttpServletRequest request) {
+    public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers,
+                       final List<LinkedFileItem> linkedFiles, final HttpServletRequest request) {
         if (item != null) {
             ItemVO vo = new ItemVO();
             vo.setRubriques(new ArrayList<Long>());
+            vo.setType(item.getClass().getSimpleName());
             ArticleVO article = new ArticleVO();
             article.setTitle(item.getTitle());
             article.setLink(urlHelper.getContextPath() + urlHelper.getItemUri() + item.getId());
@@ -63,6 +66,12 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             }
             article.setCreator(item.getCreatedBy().getDisplayName());
             article.setDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
+            article.setFiles(new ArrayList<String>());
+            for (LinkedFileItem linkedFile: linkedFiles) {
+                if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
+                    article.getFiles().add(urlHelper.getRootAppUrl(request) + linkedFile.getUri());
+                }
+            }
             vo.setArticle(article);
             vo.setCreator(item.getCreatedBy().getId().getKeyId());
             vo.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()).toString());

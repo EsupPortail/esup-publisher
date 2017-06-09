@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 
@@ -14,5 +15,6 @@ import org.esupportail.publisher.web.rest.vo.ItemVO;
  */
 public interface ItemVOFactory {
 
-    ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers, final HttpServletRequest request);
+    ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers,
+                final List<LinkedFileItem> linkedFiles, final HttpServletRequest request);
 }

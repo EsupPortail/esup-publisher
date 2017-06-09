@@ -1,14 +1,19 @@
 package org.esupportail.publisher.web.rest.vo;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
-
-import javax.xml.bind.annotation.*;
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by jgribonvald on 03/06/16.
@@ -22,6 +27,8 @@ import java.util.List;
 public class ItemVO implements Serializable {
 
     private ArticleVO article;
+
+    private String type;
 
     private String creator;
 

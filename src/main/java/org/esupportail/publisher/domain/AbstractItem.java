@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
@@ -67,6 +68,7 @@ import org.joda.time.LocalDate;
     @JsonSubTypes.Type(value = Attachment.class, name = "ATTACHMENT")
 })
 @Entity
+@Slf4j
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "T_ITEM")
 @DiscriminatorColumn(name = "type")
@@ -220,6 +222,7 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
 
     /** for scriptAssert validation. */
     public static boolean complexeDateValidation(final boolean isPeriodOptional, final LocalDate startDate, final LocalDate endDate) {
+        log.debug("complexeDateValidation isPeriodOptional : '{}', startDate: '{}', endDate '{}'", isPeriodOptional, startDate, endDate);
         if (!isPeriodOptional) {
             return  startDate != null &&  endDate != null && startDate.isBefore(endDate);
         } else if (startDate != null &&  endDate != null) {

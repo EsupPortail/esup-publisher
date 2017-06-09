@@ -25,6 +25,7 @@ import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ContextType;
@@ -39,6 +40,7 @@ import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.LinkedFileItemRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
@@ -108,9 +110,20 @@ public class ContentService {
     @Inject
     private FileService fileService;
 
+    @Inject
+    private RedactorRepository redactorRepository;
+
     public ResponseEntity<?> saveContent(final ContentDTO content)  throws URISyntaxException {
+        final Redactor redactor = redactorRepository.findOne(content.getItem().getRedactor().getId());
+        if (redactor == null) {
+            log.error("The redactor id wasn't passed !");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        content.getItem().setRedactor(redactor);
         final boolean isUpdate = content.getItem().getId() != null;
-        if ((!content.getItem().getRedactor().isOptionalPublishTime() || content.getItem().getEndDate() != null) && content.getItem().getEndDate().isBefore(LocalDate.now())) {
+        // status DRAFT if endDate mandatory and is null or if endDate is before now
+        if ((!content.getItem().getRedactor().isOptionalPublishTime() && content.getItem().getEndDate() == null)
+            || ( content.getItem().getEndDate() != null && content.getItem().getEndDate().isBefore(LocalDate.now()))) {
             content.getItem().setStatus(ItemStatus.DRAFT);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

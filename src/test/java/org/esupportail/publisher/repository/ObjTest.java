@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Filter;
@@ -349,6 +350,12 @@ public final class ObjTest {
                                final Organization organization, final Redactor redactor) {
         return new Flash("Titre " + indice, "enclosure" + indice, "body"
             + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
+            null, getRandomItemStatus(), "summary" + indice, true,
+            true, organization, redactor);
+    }
+    public static Attachment newAttachment(final String indice,
+                                 final Organization organization, final Redactor redactor) {
+        return new Attachment("Titre " + indice, "enclosure" + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
             null, getRandomItemStatus(), "summary" + indice, true,
             true, organization, redactor);
     }

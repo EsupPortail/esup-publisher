@@ -5,17 +5,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
@@ -23,11 +27,13 @@ import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.SubscribeType;
 import org.esupportail.publisher.repository.CategoryRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.ObjTest;
 import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
@@ -55,6 +61,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by jgribonvald on 08/06/16.
@@ -122,6 +129,9 @@ public class PublishControllerTest {
     @Inject
     private HighlightedClassificationService highlightedClassificationService;
 
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
+
 
     @PostConstruct
     public void setup() {
@@ -141,12 +151,14 @@ public class PublishControllerTest {
         ReflectionTestUtils.setField(publishController, "subscriberService", subscriberService);
         ReflectionTestUtils.setField(publishController, "urlHelper", urlHelper);
         ReflectionTestUtils.setField(publishController, "highlightedClassificationService", highlightedClassificationService);
+        ReflectionTestUtils.setField(publishController, "linkedFileItemRepository", linkedFileItemRepository);
 
 
         this.restPublishControllerMockMvc = MockMvcBuilders.standaloneSetup(publishController).build();
     }
 
     private Publisher newWay;
+    private Publisher filesPub;
     private Publisher flashInfo;
     private Organization organization;
 
@@ -164,14 +176,24 @@ public class PublishControllerTest {
         reader1 = readerRepository.saveAndFlush(reader1);
         Reader reader2 = ObjTest.newReader("2");
         reader2 = readerRepository.saveAndFlush(reader2);
+        Reader reader3 = ObjTest.newReader("3");
+        reader3.getAuthorizedTypes().clear();
+        reader3.getAuthorizedTypes().add(ItemType.ATTACHMENT);
+        reader3 = readerRepository.saveAndFlush(reader3);
         Redactor redactor1 = ObjTest.newRedactor("1");
         redactor1 = redactorRepository.saveAndFlush(redactor1);
         Redactor redactor2 = ObjTest.newRedactor("2");
         redactor2 = redactorRepository.saveAndFlush(redactor2);
+        Redactor redactor3 = ObjTest.newRedactor("3");
+        redactor3.setOptionalPublishTime(true);
+        redactor3 = redactorRepository.saveAndFlush(redactor3);
+
         newWay = new Publisher(organization, reader1, redactor1, "PUB 1", PermissionClass.CONTEXT, true,true, true);
         newWay = publisherRepository.saveAndFlush(newWay);
-        flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false, true);
+        flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false, false);
         flashInfo = publisherRepository.saveAndFlush(flashInfo);
+        filesPub = new Publisher(organization, reader3, redactor3, "PUB 3", PermissionClass.CONTEXT, true,true, false);
+        filesPub = publisherRepository.saveAndFlush(filesPub);
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
         // NB important, à la une isn't persisted, it's hardcoded and should be considered
         Category cat1 = ObjTest.newCategory("Cat1", newWay);
@@ -180,6 +202,9 @@ public class PublishControllerTest {
         cat2 = categoryRepository.saveAndFlush(cat2);
         Category cat3 = ObjTest.newCategory("cat3", flashInfo);
         cat3 = categoryRepository.saveAndFlush(cat3);
+        Category cat4 = ObjTest.newCategory("cat4", filesPub);
+        cat4 = categoryRepository.saveAndFlush(cat4);
+
         News news1 = ObjTest.newNews("news 1", organization, newWay.getContext().getRedactor());
         news1.setEndDate(LocalDate.now().plusMonths(1));
         news1.setStatus(ItemStatus.PUBLISHED);
@@ -200,12 +225,21 @@ public class PublishControllerTest {
         flash.setStatus(ItemStatus.PUBLISHED);
         flash.setEndDate(LocalDate.now().plusMonths(1));
         flash = itemRepository.saveAndFlush(flash);
+        Attachment attachment = ObjTest.newAttachment("file 1", organization, filesPub.getContext().getRedactor());
+        attachment.setEndDate(null);
+        attachment.setStatus(ItemStatus.PUBLISHED);
+        attachment = itemRepository.saveAndFlush(attachment);
+        log.debug("==============+> Saved attachment {}", attachment);
+        List<LinkedFileItem> files = new ArrayList<>();
+        linkedFileItemRepository.saveAndFlush(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
+        linkedFileItemRepository.saveAndFlush(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
 
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news1, cat1, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat1, 1));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news3, cat2, 2));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news4, cat2, 3));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(flash, cat3, 0));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(attachment, cat4, 0));
 
         Subscriber sub = ObjTest.newSubscriberPerson(organization.getContextKey());
         sub.setSubscribeType(SubscribeType.FORCED);
@@ -214,14 +248,14 @@ public class PublishControllerTest {
         sub3.setSubscribeType(SubscribeType.FORCED);
         Subscriber sub4 = ObjTest.newSubscriberPerson(news3.getContextKey());
         Subscriber sub5 = ObjTest.newSubscriberPerson(news4.getContextKey());
+        Subscriber sub6 = ObjTest.newSubscriberPerson(attachment.getContextKey());
 
         sub = subscriberRepository.saveAndFlush(sub);
         sub2 = subscriberRepository.saveAndFlush(sub2);
         sub3 = subscriberRepository.saveAndFlush(sub3);
         sub4 = subscriberRepository.saveAndFlush(sub4);
         sub5 = subscriberRepository.saveAndFlush(sub5);
-
-
+        sub6 = subscriberRepository.saveAndFlush(sub6);
     }
 
     @Test
@@ -244,13 +278,33 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/rubriques/*").nodeCount(3))
             .andExpect(xpath("/actualites/items/*").nodeCount(3))
             .andExpect(xpath("/actualites/items/item/article/pubDate").exists())
+            .andExpect(xpath("/actualites/items/item/type").exists())
+            .andExpect(xpath("/actualites/items/item/type").string(News.class.getSimpleName()))
             .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged/regular").exists())
             .andExpect(xpath("/actualites/items/item/visibility/allowed").exists())
-            .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists())
-        ;
+            .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists());
+    }
+
+    @Test
+    public void getItemsAttachmentFromPublisherTest() throws Exception {
+        restPublishControllerMockMvc.perform(get("/published/items/{publisher_id}", filesPub.getId())
+            .accept(MediaType.APPLICATION_XML)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_XML))
+            .andExpect(xpath("/actualites/rubriques/*").nodeCount(1))
+            .andExpect(xpath("/actualites/items/*").nodeCount(1))
+            .andExpect(xpath("/actualites/items/item/article/pubDate").exists())
+            .andExpect(xpath("/actualites/items/item/type").exists())
+            .andExpect(xpath("/actualites/items/item/type").string(Attachment.class.getSimpleName()))
+            .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())
+            .andExpect(xpath("/actualites/items/item/article/files/url").exists())
+            .andExpect(xpath("/actualites/items/item/visibility").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/allowed").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists());
     }
 
 }

@@ -22,6 +22,7 @@ import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.QAbstractItem;
@@ -33,6 +34,7 @@ import org.esupportail.publisher.domain.enums.WritingMode;
 import org.esupportail.publisher.domain.util.Views;
 import org.esupportail.publisher.repository.CategoryRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
@@ -107,6 +109,9 @@ public class PublishController {
 
     @Inject
     private HighlightedClassificationService highlightedClassificationService;
+
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
 
     @RequestMapping(value = "/flash/{organization_id}",
         method = RequestMethod.GET,
@@ -313,10 +318,10 @@ public class PublishController {
             returnedObj.setItems(new ArrayList<ItemVO>());
             for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
                 final AbstractItem item = entry.getValue().getFirst();
+                final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
                 returnedObj.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
-                    subscriberService.getDefinedSubcribersOfContext(item.getContextKey()), request));
+                    subscriberService.getDefinedSubcribersOfContext(item.getContextKey()), linkedFiles, request));
             }
-
         }
 
         /*List<Category> cts = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.categoryOfPublisher(publisher.getId()),
