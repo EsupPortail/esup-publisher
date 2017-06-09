@@ -14,8 +14,10 @@ angular.module('publisherApp')
         $scope.load($stateParams.id);
 
         $scope.getWritingModeLabel = function(name) {
-            return $scope.writingModeList.filter(function(val) {
-                return val.name === name;
-            })[0].label;
+            if (name) {
+                return $scope.writingModeList.filter(function (val) {
+                    return val.name === name;
+                })[0].label;
+            }
         };
     });
