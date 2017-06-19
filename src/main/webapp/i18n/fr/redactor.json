@@ -2,15 +2,15 @@
     "publisherApp": {
         "redactor" : {
             "home": {
-                "title": "Redacteurs",
-                "createLabel": "Créer un nouveau Redacteur",
-                "createOrEditLabel": "Créer ou éditer un Redacteur"
+                "title": "Rédacteurs",
+                "createLabel": "Créer un nouveau Rédacteur",
+                "createOrEditLabel": "Créer ou éditer un Rédacteur"
             },
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Redacteur {{ id }} ?"
+                "question": "Êtes-vous certain de vouloir supprimer le Rédacteur {{ id }} ?"
             },
             "detail": {
-                "title": "Redacteur"
+                "title": "Rédacteur"
             },
             "name": "Nom",
             "displayName": "Nom d'affichage",
@@ -19,6 +19,7 @@
             "writingMode": "Mode de saisie",
             "nbLevelsOfClassification": "Niveau(x) d'arborescence",
             "optionalPublishTime": "Fin de publication optionnelle",
+            "nbDaysMaxDuration": "Durée maximum de publication en jours",
             "organizationReaderRedactors": "Liste des contextes associés"
         }
     }

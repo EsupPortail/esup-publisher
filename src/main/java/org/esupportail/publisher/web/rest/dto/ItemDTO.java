@@ -21,8 +21,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 @ToString
-@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate)"
-    , message = "Not valid startDate that should be before endDate")
+@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate, _this.redactor.nbDaysMaxDuration)"
+    , message = "Not valid startDate that should be before endDate or with maximum number of days duration")
 public abstract class ItemDTO extends PermissibleDTO {
 
     @Getter

@@ -19,6 +19,7 @@
             "writingMode": "Writing mode",
             "nbLevelsOfClassification": "Tree levels of Classification",
             "optionalPublishTime": "Optional end of publication",
+            "nbDaysMaxDuration": "Maximum publishing duration in days",
             "organizationReaderRedactors": "organizationReaderRedactors"
         }
     }

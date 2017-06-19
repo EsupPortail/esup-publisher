@@ -1,5 +1,19 @@
 package org.esupportail.publisher.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.WritingFormat;
@@ -17,14 +31,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the RedactorResource REST controller.
@@ -54,6 +60,9 @@ public class RedactorResourceTest {
     private static final Integer DEFAULT_NB_LEVELS_CLASSIFICATION = 1;
     private static final Integer UPDATED_NB_LEVELS_CLASSIFICATION = 2;
 
+    private static final int DEFAULT_NB_DAYS_MAX_DURATION = 90;
+    private static final int UPDATED_NB_DAYS_MAX_DURATION = 120;
+
     @Inject
     private RedactorRepository redactorRepository;
 
@@ -80,6 +89,7 @@ public class RedactorResourceTest {
         redactor.setFormat(DEFAULT_WRITING_FORMAT);
         redactor.setWritingMode(DEFAULT_WRITING_MODE);
         redactor.setNbLevelsOfClassification(DEFAULT_NB_LEVELS_CLASSIFICATION);
+        redactor.setNbDaysMaxDuration(DEFAULT_NB_DAYS_MAX_DURATION);
     }
 
     @Test
@@ -110,7 +120,8 @@ public class RedactorResourceTest {
             DEFAULT_WRITING_FORMAT);
         assertThat(testRedactor.getNbLevelsOfClassification()).isEqualTo(
             DEFAULT_NB_LEVELS_CLASSIFICATION);
-        ;
+        assertThat(testRedactor.getNbDaysMaxDuration()).isEqualTo(
+            DEFAULT_NB_DAYS_MAX_DURATION);
     }
 
     @Test
@@ -143,7 +154,10 @@ public class RedactorResourceTest {
                     DEFAULT_WRITING_MODE.name()))
             .andExpect(
                 jsonPath("$.[0].nbLevelsOfClassification").value(
-                    DEFAULT_NB_LEVELS_CLASSIFICATION));
+                    DEFAULT_NB_LEVELS_CLASSIFICATION))
+            .andExpect(
+                jsonPath("$.[0].nbDaysMaxDuration").value(
+                    DEFAULT_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -173,7 +187,10 @@ public class RedactorResourceTest {
                     DEFAULT_WRITING_MODE.name()))
             .andExpect(
                 jsonPath("$.nbLevelsOfClassification").value(
-                    DEFAULT_NB_LEVELS_CLASSIFICATION));
+                    DEFAULT_NB_LEVELS_CLASSIFICATION))
+            .andExpect(
+                jsonPath("$.nbDaysMaxDuration").value(
+                    DEFAULT_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -197,6 +214,7 @@ public class RedactorResourceTest {
         redactor.setFormat(UPDATED_WRITING_FORMAT);
         redactor.setWritingMode(UPDATED_WRITING_MODE);
         redactor.setNbLevelsOfClassification(UPDATED_NB_LEVELS_CLASSIFICATION);
+        redactor.setNbDaysMaxDuration(UPDATED_NB_DAYS_MAX_DURATION);
         restRedactorMockMvc.perform(
             put("/api/redactors").contentType(
                 TestUtil.APPLICATION_JSON_UTF8).content(
@@ -218,7 +236,8 @@ public class RedactorResourceTest {
             UPDATED_WRITING_FORMAT);
         assertThat(testRedactor.getNbLevelsOfClassification()).isEqualTo(
             UPDATED_NB_LEVELS_CLASSIFICATION);
-        ;
+        assertThat(testRedactor.getNbDaysMaxDuration()).isEqualTo(
+            UPDATED_NB_DAYS_MAX_DURATION);
     }
 
     @Test

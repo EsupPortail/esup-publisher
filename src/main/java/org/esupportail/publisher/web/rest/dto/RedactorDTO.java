@@ -54,6 +54,12 @@ public class RedactorDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lon
     @Setter
     private boolean optionalPublishTime = false;
 
+    @Getter
+    @Setter
+    @Min(1)
+    @Max(999)
+    private int nbDaysMaxDuration;
+
     /**
      * @param modelId
      * @param name
@@ -62,13 +68,15 @@ public class RedactorDTO extends AbstractIdDTO<Long> implements IAbstractDTO<Lon
      * @param nbLevelsOfClassification
      */
     public RedactorDTO(@NotNull final Long modelId, @NotNull final String name, @NotNull final String displayName,
-            @NotNull final String description, @NotNull final int nbLevelsOfClassification, final boolean optionalPublishTime) {
+            @NotNull final String description, @NotNull final int nbLevelsOfClassification, final boolean optionalPublishTime,
+                       final int nbDaysMaxDuration) {
         super(modelId);
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.nbLevelsOfClassification = nbLevelsOfClassification;
         this.optionalPublishTime = optionalPublishTime;
+        this.nbDaysMaxDuration = nbDaysMaxDuration;
     }
 
 

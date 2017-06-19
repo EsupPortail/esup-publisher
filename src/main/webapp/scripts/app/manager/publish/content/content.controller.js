@@ -42,24 +42,11 @@ angular.module('publisherApp')
         // init default max and min date;
         $scope.minDate = DateUtils.addDaysToLocalDate($scope.today, 0);
         $scope.endMinDate = DateUtils.addDaysToLocalDate($scope.today, 0);
-        $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, 366);
+        $scope.defaultMaxDuration = $scope.$parent.publisher.context.redactor.nbDaysMaxDuration > 0 ? $scope.$parent.publisher.context.redactor.nbDaysMaxDuration : 365;
+        $scope.maxDate = DateUtils.addDaysToLocalDate($scope.today, $scope.defaultMaxDuration);
         $scope.updateMaxDate = function(item) {
             if (angular.isDefined(item) && angular.isDefined(item.type) && angular.isDefined(item.startDate)) {
-                switch (item.type) {
-                    case 'NEWS':
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 168);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    case 'FLASH':
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 90);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    case 'ATTACHMENT':
-                        $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, 168);
-                        //console.log("date : ", $filter('date')($scope.maxDate, 'yyyy-MM-dd'));
-                        break;
-                    default: throw "Type not managed :"+ Item.type; break;
-                }
+                $scope.maxDate = DateUtils.addDaysToLocalDate(item.startDate, $scope.defaultMaxDuration);
             }
         };
         // used when we edit an item to avoid to change startDate
@@ -212,6 +199,7 @@ angular.module('publisherApp')
 
             // tomorrow isn't more tomorrow as param should be 1 instead of 0
             var tomorrow = DateUtils.addDaysToLocalDate($scope.today, 0);
+            // warning should be < $scope.defaultMaxDuration
             var next4weeks = DateUtils.addDaysToLocalDate($scope.today, 28);
 
             $scope.$parent.item = {};

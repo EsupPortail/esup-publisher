@@ -257,7 +257,7 @@ public final class ObjTest {
 
 	public static Redactor newRedactor(final String indice) {
 		return new Redactor("lecture_" + indice, "lecture des trucs " + indice, "DESC des " + indice
-            , WritingFormat.HTML, WritingMode.TARGETS_ON_ITEM, 1, false);
+            , WritingFormat.HTML, WritingMode.TARGETS_ON_ITEM, 1, false, 90);
 	}
 
 	/*

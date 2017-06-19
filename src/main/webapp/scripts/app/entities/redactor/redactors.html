@@ -137,6 +137,30 @@
                             <label class="control-label" for="optionalPublishTime" translate="publisherApp.redactor.optionalPublishTime">Optional Publish End</label>
                             <input type="checkbox" class="form-control" name="optionalPublishTime" id="optionalPublishTime" ng-model="redactor.optionalPublishTime"/>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label" for="nbDaysMaxDuration" translate="publisherApp.redactor.nbDaysMaxDuration">nbDaysMaxDuration</label>
+                            <input type="number" class="form-control" name="nbDaysMaxDuration" id="nbDaysMaxDuration"
+                                   ng-model="redactor.nbDaysMaxDuration" required min="1" max="999">
+
+                            <div ng-show="editForm.nbDaysMaxDuration.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.nbDaysMaxDuration.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.nbDaysMaxDuration.$error.min" translate="entity.validation.min" translate-value-min="1">
+                                    This field should be more than 1.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.nbDaysMaxDuration.$error.max" translate="entity.validation.max" translate-value-max="999">
+                                    This field cannot be more than 999.
+                                </p>
+                                <p class="help-block"
+                                   ng-show="editForm.nbDaysMaxDuration.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p>
+                            </div>
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -189,6 +213,7 @@
                     <th translate="publisherApp.redactor.writingMode">WritingMode</th>
                     <th translate="publisherApp.redactor.nbLevelsOfClassification">NbLevelsOfClassification</th>
                     <th translate="publisherApp.redactor.optionalPublishTime">optionalPublishTime</th>
+                    <th translate="publisherApp.redactor.nbDaysMaxDuration">nbDaysMaxDuration</th>
                     <th></th>
                 </tr>
             </thead>
@@ -202,6 +227,7 @@
                     <td>{{getWritingModeLabel(redactor.writingMode) | translate}}</td>
                     <td>{{redactor.nbLevelsOfClassification}}</td>
                     <td><input type="checkbox" ng-model="redactor.optionalPublishTime" disabled/></td>
+                    <td>{{redactor.nbDaysMaxDuration}}</td>
                     <td>
                         <button type="submit"
                                 ui-sref="redactorDetail({id:redactor.id})"

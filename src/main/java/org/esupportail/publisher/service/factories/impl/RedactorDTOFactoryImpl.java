@@ -34,7 +34,7 @@ public class RedactorDTOFactoryImpl extends AbstractDTOFactoryImpl<RedactorDTO, 
         log.debug("Model to DTO of {}", model);
         if (model != null) {
             return new RedactorDTO(model.getId(), model.getName(), model.getDisplayName(), model.getDescription(),
-                    model.getNbLevelsOfClassification(), model.isOptionalPublishTime());
+                    model.getNbLevelsOfClassification(), model.isOptionalPublishTime(), model.getNbDaysMaxDuration());
         }
         return null;
     }

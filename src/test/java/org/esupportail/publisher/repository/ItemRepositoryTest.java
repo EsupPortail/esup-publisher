@@ -73,6 +73,8 @@ public class ItemRepositoryTest {
     final static ItemStatus DEFAULT_STATUS = ItemStatus.PUBLISHED;
     final static ItemStatus UPDATED_STATUS = ItemStatus.ARCHIVED;
 
+    final static int nbDaysMaxDuration = 90;
+
 	private Organization org1;
 	private Organization org2;
 	private Redactor redactor1;
@@ -96,6 +98,7 @@ public class ItemRepositoryTest {
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 		redactorOptionalEndDate = ObjTest.newRedactor(INDICE_3);
         redactorOptionalEndDate.setOptionalPublishTime(true);
+        redactorOptionalEndDate.setNbDaysMaxDuration(nbDaysMaxDuration);
         redactorOptionalEndDate = redactorRepo.saveAndFlush(redactorOptionalEndDate);
 
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
@@ -209,6 +212,14 @@ public class ItemRepositoryTest {
     public void testNotOptionalDateKO3() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
+            org1, redactor1);
+        repository.saveAndFlush(m1);
+    }
+    @Test(expected = javax.validation.ValidationException.class)
+    public void testMaxEndDateKO() {
+        Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
+            null, ObjTest.d2.toLocalDate(), ObjTest.d2.plusDays(nbDaysMaxDuration+1),
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
         repository.saveAndFlush(m1);
