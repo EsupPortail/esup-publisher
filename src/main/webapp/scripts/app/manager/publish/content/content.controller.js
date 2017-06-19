@@ -218,125 +218,49 @@ angular.module('publisherApp')
 
             $scope.initCropper();
 
+            // generic item
+            $scope.$parent.item = {
+                title: null,
+                enclosure: null,
+                endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
+                startDate: tomorrow,
+                validatedBy: null,
+                validatedDate: null,
+                status: null,
+                summary: null,
+                rssAllowed: false,
+                highlight: $scope.$parent.highlight,
+                createdBy: null,
+                createdDate: null,
+                lastModifiedBy: null,
+                lastModifiedDate: null,
+                id: null,
+                organization: {id: entityID},
+                redactor: {id: redactorID}
+            };
+
             switch ($scope.content.type) {
                 case 'NEWS':
-                    $scope.$parent.item = {
-                        type: "NEWS",
-                        title: null,
-                        enclosure: null,
-                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
-                        startDate: tomorrow,
-                        validatedBy: null,
-                        validatedDate: null,
-                        status: null,
-                        summary: null,
-                        body: null,
-                        rssAllowed: false,
-                        highlight: $scope.$parent.highlight,
-                        createdBy: null,
-                        createdDate: null,
-                        lastModifiedBy: null,
-                        lastModifiedDate: null,
-                        id: null,
-                        organization: {id: entityID},
-                        redactor: {id: redactorID}
-                    };
+                    $scope.$parent.item.type = "NEWS";
+                    $scope.$parent.item.body = null;
                     break;
                 case 'MEDIA':
-                    $scope.$parent.item = {
-                        type: "MEDIA",
-                        title: null,
-                        enclosure: null,
-                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
-                        startDate: tomorrow,
-                        validatedBy: null,
-                        validatedDate: null,
-                        status: null,
-                        summary: null,
-                        rssAllowed: false,
-                        highlight: $scope.$parent.highlight,
-                        createdBy: null,
-                        createdDate: null,
-                        lastModifiedBy: null,
-                        lastModifiedDate: null,
-                        id: null,
-                        organization: {id: entityID},
-                        redactor: {id: redactorID}
-                    };
+                    $scope.$parent.item.type = "MEDIA";
                     break;
                 case 'RESOURCE':
-                    $scope.$parent.item = {
-                        type: "RESOURCE",
-                        title: null,
-                        enclosure: null,
-                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
-                        startDate: tomorrow,
-                        validatedBy: null,
-                        validatedDate: null,
-                        status: null,
-                        summary: null,
-                        ressourceUrl: null,
-                        rssAllowed: false,
-                        highlight: $scope.$parent.highlight,
-                        createdBy: null,
-                        createdDate: null,
-                        lastModifiedBy: null,
-                        lastModifiedDate: null,
-                        id: null,
-                        organization: {id: entityID},
-                        redactor: {id: redactorID}
-                    };
+                    $scope.$parent.item.type = "RESOURCE";
+                    $scope.$parent.item.ressourceUrl = null;
                     break;
                 case 'FLASH':
-                    $scope.$parent.item = {
-                        type: "FLASH",
-                        title: null,
-                        enclosure: null,
-                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : DateUtils.addDaysToLocalDate($scope.today, 14),
-                        startDate: tomorrow,
-                        validatedBy: null,
-                        validatedDate: null,
-                        status: null,
-                        summary: null,
-                        body: null,
-                        rssAllowed: false,
-                        highlight: $scope.$parent.highlight,
-                        createdBy: null,
-                        createdDate: null,
-                        lastModifiedBy: null,
-                        lastModifiedDate: null,
-                        id: null,
-                        organization: {id: entityID},
-                        redactor: {id: redactorID}
-                    };
+                    $scope.$parent.item.type = "FLASH";
+                    $scope.$parent.item.body = null;
+                    $scope.$parent.item.endDate = $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : DateUtils.addDaysToLocalDate($scope.today, 14);
                     break;
                 case 'ATTACHMENT':
-                    $scope.$parent.item = {
-                        type: "ATTACHMENT",
-                        title: null,
-                        enclosure: null,
-                        endDate: $scope.$parent.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
-                        startDate: tomorrow,
-                        validatedBy: null,
-                        validatedDate: null,
-                        status: null,
-                        summary: null,
-                        rssAllowed: false,
-                        highlight: $scope.$parent.highlight,
-                        createdBy: null,
-                        createdDate: null,
-                        lastModifiedBy: null,
-                        lastModifiedDate: null,
-                        id: null,
-                        organization: {id: entityID},
-                        redactor: {id: redactorID}
-                    };
+                    $scope.$parent.item.type = "ATTACHMENT";
                     break;
                 default: throw "Type not managed :" + $scope.content.type; break;
             }
-            /*if (angular.isDefined($scope.$parent.item)) {
-             console.log("inited item :", $scope.$parent.item.type, $scope.$parent.item.startDate, $scope.$parent.item.endDate);
-             }*/
             if ($scope.publishContentForm) {
                 $scope.publishContentForm.$setPristine();
                 $scope.publishContentForm.$setUntouched();
