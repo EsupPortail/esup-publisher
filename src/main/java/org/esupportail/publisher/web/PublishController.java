@@ -53,6 +53,7 @@ import org.esupportail.publisher.web.rest.vo.CategoryProfilesUrl;
 import org.esupportail.publisher.web.rest.vo.FlashInfoVO;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,6 +117,7 @@ public class PublishController {
     @RequestMapping(value = "/flash/{organization_id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @Deprecated
     @JsonView(Views.Flash.class)
     @Timed
     public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
@@ -130,7 +132,7 @@ public class PublishController {
             List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
 
             if (!itemsClasss.isEmpty()) {
-                Map<Flash, List<AbstractClassification>> itemsMap= Maps.newHashMap();
+                Map<Flash, List<AbstractClassification>> itemsMap= Maps.newLinkedHashMap();
 
                 for ( ItemClassificationOrder ico: itemsClasss) {
                     final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
@@ -143,6 +145,58 @@ public class PublishController {
                     }
                 }
                 return flashInfoVOFactory.asVOList(itemsMap, request);
+            }
+        }
+        return Lists.newArrayList();
+    }
+
+    @RequestMapping(value = "/flash/{reader_id}/{redactor_id}/{organization_id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(Views.Flash.class)
+    @Timed
+    public List<FlashInfoVO> getFlashInfo(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId,
+                                          @PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
+        log.debug("Entering getFlashInfo with params : organization identifier={}, reader_id={}, redactor_id={}", readerId, redactorId, uai);
+        final Organization org = organizationRepository.findByIdentifiers(uai);
+        if (org != null) {
+            final BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
+                .and(PublisherPredicates.AllOfReader(readerId))
+                .and(PublisherPredicates.AllOfRedactor(redactorId))
+                .and(PublisherPredicates.AllOfOrganization(org));
+            try {
+                final Publisher publisher = publisherRepository.findOne(builder);
+                if (publisher != null) {
+                    final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id.in(new JPASubQuery()
+                        .from(QAbstractItem.abstractItem)
+                        .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId()))
+                        .list(QAbstractItem.abstractItem.id)).and(ItemPredicates.itemsClassOfPublisher(publisher));
+                    final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
+                        ItemPredicates.orderByClassifDefinition(publisher.getDefaultDisplayOrder())));
+                    for (ItemClassificationOrder ico : itemsClasss) {
+                        log.debug("Flash Obtained {}", ico);
+                    }
+                    if (!itemsClasss.isEmpty()) {
+                        Map<Flash, List<AbstractClassification>> itemsMap = Maps.newLinkedHashMap();
+                        for (ItemClassificationOrder ico : itemsClasss) {
+                            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+                            //categories.add(classif);
+                            final Flash flash = (Flash) ico.getItemClassificationId().getAbstractItem();
+                            if (!itemsMap.containsKey(flash)) {
+                                itemsMap.put(flash, Lists.newArrayList(classif));
+                            } else {
+                                itemsMap.get(flash).add(classif);
+                            }
+                        }
+                        final List<FlashInfoVO> listVos = flashInfoVOFactory.asVOList(itemsMap, request);
+                        for (FlashInfoVO vo : listVos) {
+                            log.debug("Vo Obtained {}", vo);
+                        }
+                        return listVos;
+                    }
+                }
+            }catch(IncorrectResultSizeDataAccessException e){
+                log.error("The request to obtain all Flash-Info on an organization found more than one Flash context. Solve this problem !");
             }
         }
         return Lists.newArrayList();
@@ -291,7 +345,7 @@ public class PublishController {
         log.debug("list of itemsClasss associated to publisher : {}", itemsClasss);
         if (!itemsClasss.isEmpty()) {
             //Set<AbstractClassification> categories = Sets.newHashSet();
-            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap= Maps.newHashMap();
+            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
 
             // get unique items associated to all his classifs
             for ( ItemClassificationOrder ico: itemsClasss) {
@@ -328,7 +382,7 @@ public class PublishController {
             ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
         returnedObj.setRubriques(rubriqueVOFactory.asVOList(cts));
         returnedObj.setItems(new ArrayList<ItemVO>());
-        Map<AbstractItem,List<Category>> map = Maps.newHashMap();
+        Map<AbstractItem,List<Category>> map = Maps.newLinkedHashMap();
         for (Category cat: cts) {
             BooleanBuilder builder = new BooleanBuilder(ItemPredicates.itemsClassOfClassification(cat));
             builder.and(ItemPredicates.OwnedItemsOfStatus(null, ItemStatus.PUBLISHED.getId()));
