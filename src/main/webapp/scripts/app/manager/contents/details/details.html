@@ -21,7 +21,7 @@
                     <p><span translate="manager.contents.details.publisher.redactor"></span> {{context.publisher.context.redactor.description}}</p>
                 </div>
                 <!-- List group -->
-                <div class="panel-footer">
+                <div class="panel-footer" ng-show="context.classifications.length > 0">
                     <h4 translate="manager.contents.details.classifications"></h4>
                     <ul class="list-group">
                         <li ng-repeat="classification in context.classifications" class="list-group-item">

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('publisherApp')
-    .controller('ContentDetailsController', function ($scope, $state, EnumDatas, contentData) {
+    .controller('ContentDetailsController', function ($scope, $rootScope, $state, EnumDatas, contentData) {
 //console.log("enter ContentDetailsController",contentData);
         $scope.item = contentData[1].item;
         $scope.classifications = contentData[0];
@@ -12,15 +12,25 @@ angular.module('publisherApp')
 
         if ($scope.classifications && $scope.classifications.length > 0) {
             angular.forEach($scope.classifications, function(value, key) {
+                //wee keep only classifications that are not for Flash
                 var found = false;
                 angular.forEach($scope.pubContexts, function(v, k) {
                     if (v.id === value.publisher.id) {
-                        $scope.pubContexts[k].classifications.push(value);
-                        found = true;
+                        if (!(value.publisher.context.redactor.writingMode == "STATIC" &&
+                            $rootScope.inArray('FLASH', value.publisher.context.reader.authorizedTypes))) {
+                            $scope.pubContexts[k].classifications.push(value);
+                            found = true;
+                        }
                     }
                 });
                 if (!found) {
-                    $scope.pubContexts.push({id: value.publisher.id, publisher: value.publisher, classifications: [value]});
+                    var classifs = [];
+                    if (!(value.publisher.context.redactor.writingMode == "STATIC" &&
+                        $rootScope.inArray('FLASH', value.publisher.context.reader.authorizedTypes))) {
+                        classifs.push(value);
+                    }
+
+                    $scope.pubContexts.push({id: value.publisher.id, publisher: value.publisher, classifications: classifs});
                 }
             });
             //console.log("Constructed map : ", $scope.pubContexts);
