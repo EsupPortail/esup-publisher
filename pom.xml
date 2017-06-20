@@ -24,7 +24,7 @@
     </scm>
 
     <properties>
-
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <!--<HikariCP.version>2.2.5</HikariCP.version>-->
         <HikariCP.version>2.4.5</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version>
