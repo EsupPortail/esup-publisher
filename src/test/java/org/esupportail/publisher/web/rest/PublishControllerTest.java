@@ -272,7 +272,7 @@ public class PublishControllerTest {
             .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/obliged").exists())
             .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/allowed").exists())
             .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/autoSubscribed").exists())
-            .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/obliged/regular").exists());
+            .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists());
             //.andExpect(xpath("/categoryProfilesUrl//categoryProfile/visibility//").exists());
     }
 
@@ -289,7 +289,7 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
-            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
             .andExpect(xpath("/actualites/items/item/visibility/allowed").exists())
             .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists());
     }
@@ -308,7 +308,7 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/items/item/article/files/url").exists())
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
-            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
             .andExpect(xpath("/actualites/items/item/visibility/allowed").exists())
             .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists());
     }
