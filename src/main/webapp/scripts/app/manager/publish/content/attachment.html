@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group" ng-class="{ 'has-error': linkedFiles.length < 1 }">
+        <div class="form-group" ng-class="{ 'has-error': linkedFilesToContent.length < 1 && publishContentForm.linkedFiles.$dirty }">
             <label class="control-label" for="linkedFiles" translate="publisherApp.attachment.linkedFiles">linkedFiles</label>
             <div class="form-inline">
                 <div ng-repeat="attachment in linkedFilesToContent | filter: {inBody : 'false'}" class="linkedFiles">
@@ -143,8 +143,9 @@
                     </span>
                 </div>
             </div>
-            <div ng-show="publishContentForm.linkedFiles.$error || linkedFiles.length < 1">
-                <p class="help-block" ng-show="linkedFiles.length < 1" translate="entity.validation.required">
+            <div ng-show="publishContentForm.linkedFiles.$invalid || linkedFilesToContent.length < 1"
+                 ng-class="{ 'has-error': (publishContentForm.linkedFiles.$invalid || linkedFilesToContent.length < 1) && publishContentForm.linkedFiles.$dirty}" >
+                <p class="help-block" ng-show="linkedFilesToContent.length < 1" translate="entity.validation.required">
                     This field is required.
                 </p>
                 <p class="help-block"
