@@ -25,16 +25,17 @@ angular.module('publisherApp')
                 if (!modernizr.hasOwnProperty('inputtypes') || !modernizr.inputtypes.date) {
 
                     if(attrs.min) {
-                        settings.minDate = new Date(attrs.min);
+                        settings.minDate = dateFromISO8601(attrs.min);
+                        //console.log("setting mindate ",settings.minDate, dateFromISO8601(attrs.min), attrs.min);
                     }
 
                     if(attrs.max) {
-                        settings.maxDate = new Date(attrs.max);
+                        settings.maxDate = dateFromISO8601(attrs.max);
+                        //console.log("setting maxdate ",settings.maxDate, dateFromISO8601(attrs.max), attrs.max);
                     }
 
                     // I wanted a year selector if minDate and maxDate are set
                     if(settings.hasOwnProperty('minDate') && settings.hasOwnProperty('maxDate')) {
-
                         var minYear = settings.minDate.getFullYear(),
                             maxYear = settings.maxDate.getFullYear();
 
@@ -72,6 +73,14 @@ angular.module('publisherApp')
 
                         ngModelCtrl.$setViewValue(mysqlDate);
                     });
+                }
+
+                function dateFromISO8601(isoDateString) {
+                    var parts = isoDateString.match(/\d+/g);
+                    var isoTime = Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
+                    var isoDate = new Date(isoTime);
+
+                    return isoDate;
                 }
             }
         };
