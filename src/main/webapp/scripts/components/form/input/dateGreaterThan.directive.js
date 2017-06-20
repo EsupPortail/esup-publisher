@@ -11,7 +11,7 @@ angular.module('publisherApp')
                     var comparisonMin = attrs.minDate;
                     if(!inputValue || !(comparison || comparisonMin)){
                         // It's valid because we have nothing to compare against
-                        ctrl.$setValidity('dateLowerThan', true);
+                        ctrl.$setValidity('dateGreaterThan', true);
                         return inputValue;
                     }
                     var fromDate = DateService.normalize(comparison);
