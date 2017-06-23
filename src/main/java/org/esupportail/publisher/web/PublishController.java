@@ -173,9 +173,7 @@ public class PublishController {
                         .list(QAbstractItem.abstractItem.id)).and(ItemPredicates.itemsClassOfPublisher(publisher));
                     final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
                         ItemPredicates.orderByClassifDefinition(publisher.getDefaultDisplayOrder())));
-                    for (ItemClassificationOrder ico : itemsClasss) {
-                        log.debug("Flash Obtained {}", ico);
-                    }
+
                     if (!itemsClasss.isEmpty()) {
                         Map<Flash, List<AbstractClassification>> itemsMap = Maps.newLinkedHashMap();
                         for (ItemClassificationOrder ico : itemsClasss) {
@@ -188,11 +186,7 @@ public class PublishController {
                                 itemsMap.get(flash).add(classif);
                             }
                         }
-                        final List<FlashInfoVO> listVos = flashInfoVOFactory.asVOList(itemsMap, request);
-                        for (FlashInfoVO vo : listVos) {
-                            log.debug("Vo Obtained {}", vo);
-                        }
-                        return listVos;
+                        return flashInfoVOFactory.asVOList(itemsMap, request);
                     }
                 }
             }catch(IncorrectResultSizeDataAccessException e){
