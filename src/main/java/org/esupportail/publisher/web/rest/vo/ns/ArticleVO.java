@@ -19,6 +19,7 @@ import org.esupportail.publisher.web.rest.util.ISO8601DateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.util.RFC822DateTimeSerializer;
 import org.esupportail.publisher.web.rest.util.RFC822DateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.util.SeparatorListXMLAdapter;
+import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -64,7 +65,7 @@ public class ArticleVO implements Serializable {
     private DateTime date;
 
     @XmlElementWrapper(name = "files")
-    @XmlElement(name = "url")
-    private List<String> files;
+    @XmlElement(name = "file")
+    private List<LinkedFileVO> files;
 
 }

@@ -15,6 +15,7 @@ import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
+import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
 import org.esupportail.publisher.web.rest.vo.Visibility;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
 import org.joda.time.DateTimeZone;
@@ -66,10 +67,14 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             }
             article.setCreator(item.getCreatedBy().getDisplayName());
             article.setDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
-            article.setFiles(new ArrayList<String>());
+            article.setFiles(new ArrayList<LinkedFileVO>());
             for (LinkedFileItem linkedFile: linkedFiles) {
                 if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
-                    article.getFiles().add(urlHelper.getRootAppUrl(request) + linkedFile.getUri());
+                    LinkedFileVO fileVO = new LinkedFileVO();
+                    fileVO.setUri(urlHelper.getRootAppUrl(request) + linkedFile.getUri());
+                    fileVO.setFileName(linkedFile.getFilename());
+                    fileVO.setContentType(linkedFile.getContentType());
+                    article.getFiles().add(fileVO);
                 }
             }
             vo.setArticle(article);

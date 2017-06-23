@@ -161,6 +161,7 @@ public class PublishControllerTest {
     private Publisher filesPub;
     private Publisher flashInfo;
     private Organization organization;
+    private List<LinkedFileItem> files = new ArrayList<>();
 
     @Before
     public void initTest() {
@@ -236,9 +237,10 @@ public class PublishControllerTest {
         attachment.setStatus(ItemStatus.PUBLISHED);
         attachment = itemRepository.saveAndFlush(attachment);
         log.debug("==============+> Saved attachment {}", attachment);
-        List<LinkedFileItem> files = new ArrayList<>();
-        linkedFileItemRepository.saveAndFlush(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
-        linkedFileItemRepository.saveAndFlush(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
+
+        files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
+        files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
+        linkedFileItemRepository.save(files);
 
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news1, cat1, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat1, 1));
@@ -305,7 +307,12 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/items/item/type").exists())
             .andExpect(xpath("/actualites/items/item/type").string(Attachment.class.getSimpleName()))
             .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())
-            .andExpect(xpath("/actualites/items/item/article/files/url").exists())
+            .andExpect(xpath("/actualites/items/item/article/files").exists())
+            .andExpect(xpath("/actualites/items/item/article/files/*").nodeCount(files.size()))
+            .andExpect(xpath("/actualites/items/item/article/files/file").exists())
+            .andExpect(xpath("/actualites/items/item/article/files/file/uri").exists())
+            .andExpect(xpath("/actualites/items/item/article/files/file/fileName").exists())
+            .andExpect(xpath("/actualites/items/item/article/files/file/contentType").exists())
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
             .andExpect(xpath("/actualites/items/item/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
