@@ -157,7 +157,7 @@ public class PublishController {
     @Timed
     public List<FlashInfoVO> getFlashInfo(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId,
                                           @PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
-        log.debug("Entering getFlashInfo with params : organization identifier={}, reader_id={}, redactor_id={}", readerId, redactorId, uai);
+        log.debug("Entering getFlashInfo with params : organization identifier={}, reader_id={}, redactor_id={}", uai, readerId, redactorId);
         final Organization org = organizationRepository.findByIdentifiers(uai);
         if (org != null) {
             final BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
