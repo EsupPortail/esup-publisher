@@ -18,12 +18,7 @@
  */
 package org.esupportail.publisher.domain;
 
-import com.mysema.query.annotations.QueryInit;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -31,7 +26,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
+import com.mysema.query.annotations.QueryInit;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 25 juin 2014
@@ -40,7 +39,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "T_CLASSIFICATION_ITEM")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ItemClassificationOrder implements Serializable,
 		IEntity<ItemClassificationKey> {
 	/** */
@@ -67,5 +66,4 @@ public class ItemClassificationOrder implements Serializable,
 	public ItemClassificationKey getId() {
 		return this.getItemClassificationId();
 	}
-
 }

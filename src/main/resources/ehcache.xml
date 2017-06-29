@@ -37,8 +37,8 @@
     </cache>
     <cache name="org.esupportail.publisher.domain.AbstractPermission" timeToLiveSeconds="3600">
     </cache>
-    <cache name="org.esupportail.publisher.domain.ItemClassificationOrder" timeToLiveSeconds="3600">
-    </cache>
+    <!--<cache name="org.esupportail.publisher.domain.ItemClassificationOrder" timeToLiveSeconds="3600">-->
+    <!--</cache>-->
     <cache name="org.esupportail.publisher.domain.Publisher" timeToLiveSeconds="3600">
     </cache>
     <cache name="org.esupportail.publisher.domain.AbstractItem" timeToLiveSeconds="3600">
