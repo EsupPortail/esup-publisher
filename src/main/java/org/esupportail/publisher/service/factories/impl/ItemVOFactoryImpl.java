@@ -71,7 +71,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             for (LinkedFileItem linkedFile: linkedFiles) {
                 if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
                     LinkedFileVO fileVO = new LinkedFileVO();
-                    fileVO.setUri(urlHelper.getRootAppUrl(request) + linkedFile.getUri());
+                    fileVO.setUri(urlHelper.getContextPath() + "/" + linkedFile.getUri());
                     fileVO.setFileName(linkedFile.getFilename());
                     fileVO.setContentType(linkedFile.getContentType());
                     article.getFiles().add(fileVO);
