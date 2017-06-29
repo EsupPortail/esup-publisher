@@ -434,12 +434,12 @@ angular.module('publisherApp')
         };
         function taUploadHandler(file, insertAction, filetype) {
             // to show an icon depending on filetype
-            var cssClassType = $rootscope.getCssFileFromType(file.type, file.name);
+            var cssClassType = $rootScope.getCssFileFromType(file.type, file.name);
 
             return uploadLinkedFile(file, file.name, filetype === 'image', (filetype === 'image' || filetype === 'audio' || filetype === "video"),  function (response) {
                     // SUCCESS
                     var resultUrl = response.headers("Location");
-                    if (isImage) {
+                    if (filetype === 'image') {
                         insertAction('insertImage', resultUrl, true);
                     } else {
                         insertAction('createLink', [resultUrl, file.name, cssClassType], true);
