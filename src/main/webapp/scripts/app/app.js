@@ -71,6 +71,8 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
                 Auth.authorize();
             }
 
+            $rootScope.appUrl = $location.absUrl().substr(0, $location.absUrl().lastIndexOf("#"));
+
             // Update the language
             Language.getCurrent().then(function (language) {
                 $translate.use(language);

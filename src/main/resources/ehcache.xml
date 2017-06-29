@@ -67,5 +67,7 @@
     <cache name="org.esupportail.publisher.domain.externals.ExternalUser" timeToLiveSeconds="3600">
     </cache>
 
+    <cache name="feed" timeToLiveSeconds="3600">
+    </cache>
 </ehcache>
 

@@ -71,6 +71,13 @@
         <dd has-role="ROLE_ADMIN">
             <span>{{context.ttl}}</span>
         </dd>
+        <dt>
+            <i class="fa fa-rss fa-lg"></i>
+        </dt>
+        <dd>
+            <a href="feed/rss/{{context.publisher.context.organization.id}}?pid={{context.publisher.id}}&cid={{context.id}}" target="_blank">
+                {{appUrl}}feed/rss/{{context.publisher.context.organization.id}}?pid={{context.publisher.id}}&cid={{context.id}}</a>
+        </dd>
     </dl>
 
 

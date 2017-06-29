@@ -43,9 +43,13 @@ public class ServiceUrlHelper {
 
     public String getRootAppUrl(final HttpServletRequest request) {
         final String contextPath = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+        return getRootDomainUrl(request) + contextPath;
+    }
+
+    public String getRootDomainUrl(final HttpServletRequest request) {
         final String url = request.getRequestURL().toString();
         final String uri = request.getRequestURI();
-        return url.substring(0, url.length() - uri.length()) + contextPath;
+        return url.substring(0, url.length() - uri.length());
     }
 
     @Override

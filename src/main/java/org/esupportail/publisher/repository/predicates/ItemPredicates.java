@@ -45,6 +45,12 @@ public final class ItemPredicates {
     public static Predicate itemsClassOfPublisher(final long publisherId) {
         return qItemClass.itemClassificationId.abstractClassification.publisher.id.eq(publisherId);
     }
+    public static Predicate itemsClassOfOrganization(final Organization organization) {
+        return itemsClassOfOrganization(organization.getId());
+    }
+    public static Predicate itemsClassOfOrganization(final long organizationId) {
+        return qItemClass.itemClassificationId.abstractItem.organization.id.eq(organizationId);
+    }
 
     public static Predicate notNull() {
         return qItemClass.isNotNull();
@@ -161,6 +167,10 @@ public final class ItemPredicates {
             }
         }
         return onStatus;
+    }
+
+    public static Predicate OwnedItemsClassOfRSSAllowed(final boolean isAllowed) {
+        return qItemClass.itemClassificationId.abstractItem.rssAllowed.eq(isAllowed);
     }
 
     public static Predicate NewsItems() {

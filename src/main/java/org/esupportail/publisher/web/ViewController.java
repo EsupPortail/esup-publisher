@@ -196,6 +196,8 @@ public class ViewController {
     }
 
     private boolean canView(final AbstractItem item) throws AccessDeniedException {
+        // when RssAllowed is set then the content published is public
+        if (item.isRssAllowed()) return true;
         List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(item.getContextKey())));
         // TODO we consider that all items have targets directly on
         // for targets defined only on classification a check will be needed
