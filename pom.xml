@@ -568,6 +568,13 @@
                         <!-- <include>**/esupnews.js</include> -->
                         <include>**/*.css</include>
                     </includes>
+                    <excludes>
+                        <exclude>node_modules/**</exclude>
+                        <exclude>**/dist/**</exclude>
+                        <exclude>**/bower_components/**</exclude>
+                        <exclude>.tmp/**</exclude>
+                        <exclude>src/main/webapp/META-INF/**</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
