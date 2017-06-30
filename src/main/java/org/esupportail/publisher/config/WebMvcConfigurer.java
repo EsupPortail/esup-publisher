@@ -37,7 +37,6 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
         registry.addResourceHandler("/" + publicFileUploadHelper.getUrlResourceMapping() + "**").addResourceLocations(publicFileUploadHelper.getResourceLocation());
-        registry.addResourceHandler("/assets/styles/images/**").addResourceLocations("/bower_components/jquery-ui/themes/smoothness/");
     }
 
     /*@Override

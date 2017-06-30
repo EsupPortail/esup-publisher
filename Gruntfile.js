@@ -163,7 +163,8 @@ module.exports = function (grunt) {
                         '<%= yeoman.dist %>/scripts/**/*.js',
                         '<%= yeoman.dist %>/assets/styles/**/*.css',
                         '<%= yeoman.dist %>/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
-                        '<%= yeoman.dist %>/assets/fonts/*'
+                        '<%= yeoman.dist %>/assets/fonts/*',
+                        '<%= yeoman.dist %>/assets/styles/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                     ]
                 }
             }
@@ -204,7 +205,13 @@ module.exports = function (grunt) {
                     cwd: 'src/main/webapp/assets/images',
                     src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
                     dest: '<%= yeoman.dist %>/assets/images'
-                }]
+                },
+                    {
+                        expand : true,
+                        cwd : 'src/main/webapp/bower_components/jquery-ui/themes/smoothness/images',
+                        src : '**/*.{png,jpg,jpeg,gif}',
+                        dest : '<%= yeoman.dist %>/assets/styles/images'
+                    }]
             }
         },
         svgmin: {
