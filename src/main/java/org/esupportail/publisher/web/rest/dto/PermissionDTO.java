@@ -18,14 +18,14 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.web.rest.dto.evaluators.EvaluatorDTO;
 import org.joda.time.DateTime;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -59,7 +59,7 @@ public abstract class PermissionDTO extends AuditableDTO implements IAbstractDTO
     }
 
     public String toStringLite() {
-        return "PermissionDTO{" +
+        return getClass().getSimpleName() + "{" +
             "context=" + context +
             ", evaluator=" + evaluator +
             '}';
