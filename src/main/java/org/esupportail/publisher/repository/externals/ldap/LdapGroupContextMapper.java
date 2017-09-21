@@ -15,19 +15,24 @@
  */
 package org.esupportail.publisher.repository.externals.ldap;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.externals.*;
-import org.springframework.ldap.core.ContextMapper;
-import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.util.Assert;
-
-import javax.naming.NamingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+
+import javax.naming.NamingException;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.domain.externals.ExternalGroup;
+import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
+import org.esupportail.publisher.domain.externals.IExternalGroup;
+import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 juin. 2015
@@ -66,30 +71,32 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
         List<String> filteredMembers = Lists.newArrayList();
         if ((externalGroupHelper.isExtractGroupMembers() || externalGroupHelper.isExtractUserMembers()) && !members.isEmpty()) {
             for (String mbr : members) {
-                Matcher mgroup = externalGroupHelper.getGroupKeyMemberRegex().matcher(mbr);
-                Matcher muser = externalGroupHelper.getUserKeyMemberRegex().matcher(mbr);
-                if (externalGroupHelper.isExtractGroupMembers() && mgroup.find()) {
-                    String id = mgroup.group(externalGroupHelper.getGroupKeyMemberIndex());
-                    log.debug("Matcher found group id, value is : {}", id);
-                    group.getGroupMembers().add(id);
-                    filteredMembers.add(mbr);
-                } else if (mgroup.matches()) {
-                    log.debug("Matcher match Group, value is : {}", mbr);
-                    group.getGroupMembers().add(mbr);
-                    filteredMembers.add(mbr);
-                } else if (externalGroupHelper.isGroupResolveUserMember() && externalGroupHelper.isExtractUserMembers() && muser.find()) {
-                    String id = muser.group(externalGroupHelper.getUserKeyMemberIndex());
-                    log.debug("Matcher found user id, value is : {}", id);
-                    group.getUserMembers().add(id);
-                    filteredMembers.add(mbr);
-                } else if (externalGroupHelper.isGroupResolveUserMember() && muser.matches()) {
-                    log.debug("Matcher match Group, value is : {}", mbr);
-                    group.getUserMembers().add(mbr);
-                    filteredMembers.add(mbr);
-                } else if (!externalGroupHelper.isGroupResolveUserMember()) {
-                    log.debug("Configuration is set to doesn't resolve user members !");
-                } else {
-                    log.error("This value {} doesn't match patterns defined to identify user or group member", mbr);
+                if (StringUtils.hasText(mbr)) {
+                    Matcher mgroup = externalGroupHelper.getGroupKeyMemberRegex().matcher(mbr);
+                    Matcher muser = externalGroupHelper.getUserKeyMemberRegex().matcher(mbr);
+                    if (externalGroupHelper.isExtractGroupMembers() && mgroup.find()) {
+                        String id = mgroup.group(externalGroupHelper.getGroupKeyMemberIndex());
+                        log.debug("Matcher found group id, value is : {}", id);
+                        group.getGroupMembers().add(id);
+                        filteredMembers.add(mbr);
+                    } else if (mgroup.matches()) {
+                        log.debug("Matcher match Group, value is : {}", mbr);
+                        group.getGroupMembers().add(mbr);
+                        filteredMembers.add(mbr);
+                    } else if (externalGroupHelper.isGroupResolveUserMember() && externalGroupHelper.isExtractUserMembers() && muser.find()) {
+                        String id = muser.group(externalGroupHelper.getUserKeyMemberIndex());
+                        log.debug("Matcher found user id, value is : {}", id);
+                        group.getUserMembers().add(id);
+                        filteredMembers.add(mbr);
+                    } else if (externalGroupHelper.isGroupResolveUserMember() && muser.matches()) {
+                        log.debug("Matcher match Group, value is : {}", mbr);
+                        group.getUserMembers().add(mbr);
+                        filteredMembers.add(mbr);
+                    } else if (!externalGroupHelper.isGroupResolveUserMember()) {
+                        log.debug("Configuration is set to doesn't resolve user members !");
+                    } else {
+                        log.error("This value '{}' doesn't match patterns defined to identify user or group member of group '{}'", mbr, group.getId());
+                    }
                 }
             }
         }
