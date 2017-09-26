@@ -53,6 +53,7 @@ import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.factories.PermissionDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
+import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -178,38 +179,43 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 
 		final List<Publisher> publishers = Lists.newArrayList(publisherDao.findAll(PublisherPredicates
 				.AllOfOrganization(organization)));
-		Map<ContextKey, PermOnCtxDTO> ctxRoles = Maps.newHashMap();
-		//Map<ContextKey, Publisher> ctxPubInfos = Maps.newHashMap();
-		List<ContextKey> pubsCtx = Lists.newArrayList();
-		for (Publisher pub : publishers) {
-			if (!checkPerms) {
-				ctxRoles.put(pub.getContextKey(), parentPerm.getSecond());
-			} else if (parentPerm.getFirst().getMask() > PermissionType.LOOKOVER.getMask()) {
-				pubsCtx.add(pub.getContextKey());
-				// we keep at least all childs with parent perm
-				ctxRoles.put(pub.getContextKey(), parentPerm.getSecond());
-			} else {
-				pubsCtx.add(pub.getContextKey());
-				// we keep these contexts to find possible perm > LOOKOVER
-				ctxRoles.put(pub.getContextKey(), null);
-			}
+        Map<ContextKey, PermissionDTO> ctxRoles = Maps.newHashMap();
+        //Map<ContextKey, Publisher> ctxPubInfos = Maps.newHashMap();
+        Map<PermissionClass, List<ContextKey>> pubsCtx = Maps.newHashMap();
+        for (Publisher pub : publishers) {
+            if (!checkPerms) {
+                ctxRoles.put(pub.getContextKey(), parentPerm.getSecond());
+            } else {
+                PermissionDTO perm = null;
+                if (parentPerm.getFirst().getMask() > PermissionType.LOOKOVER.getMask()) {
+                    // we keep at least all childs with parent perm
+                    perm = parentPerm.getSecond();
+                }
+                if (pubsCtx.containsKey(pub.getPermissionType())) {
+                    pubsCtx.get(pub.getPermissionType()).add(pub.getContextKey());
+                } else {
+                    pubsCtx.put(pub.getPermissionType(), Lists.newArrayList(pub.getContextKey()));
+                }
+                // we keep at least all childs with parent perm
+                ctxRoles.put(pub.getContextKey(), perm);
+            }
 
-			//ctxPubInfos.put(pub.getContextKey(), pub);
-			// managed type should be checked before to obtain permission of a type managed
-			if (!contextPermsType.contains(pub.getPermissionType())) {
-				log.error(String.format("Permission of type %s not yet managed in publisher %s",
-						pub.getPermissionType(), pub));
-				throw new IllegalStateException(String.format("Permission of type %s not yet managed",
+            //ctxPubInfos.put(pub.getContextKey(), pub);
+            // managed type should be checked before to obtain permission of a type managed
+            if (!contextPermsType.contains(pub.getPermissionType())) {
+                log.error(String.format("Permission of type %s not yet managed in publisher %s",
+                    pub.getPermissionType(), pub));
+                throw new IllegalStateException(String.format("Permission of type %s not yet managed",
 						pub.getPermissionType()));
-			}
-		}
+            }
+        }
 
 		if (checkPerms) {
-			List<? extends PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(
-					PermissionClass.CONTEXT).findAll(
-					PermissionPredicates.OnCtx(pubsCtx, PermissionClass.CONTEXT, false)));
-			perms.addAll(Lists.newArrayList(permissionDao.getPermissionDao(PermissionClass.CONTEXT_WITH_SUBJECTS)
-					.findAll(PermissionPredicates.OnCtx(pubsCtx, PermissionClass.CONTEXT_WITH_SUBJECTS, false))));
+            List<? extends PermissionOnContext> perms = Lists.newArrayList();
+            for (Map.Entry<PermissionClass, List<ContextKey>> ctx : pubsCtx.entrySet()) {
+                perms.addAll(Lists.newArrayList(permissionDao.getPermissionDao(ctx.getKey())
+                    .findAll(PermissionPredicates.OnCtx(ctx.getValue(), ctx.getKey(), false))));
+            }
 			// we need to evaluate all permissions of a publisher to get the
 			// greater possible permission before to continue
 			// there can be no permission defined so we kept all ctx in ctxRoles in case with parent perm
@@ -220,15 +226,15 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 						log.debug("TreeLoader should add {}", perm.getContext());
 					}
 					if (ctxRoles.containsKey(perm.getContext())) {
-						PermOnCtxDTO role = ctxRoles.get(perm.getContext());
-						if (role == null || perm.getRole().getMask() > role.getRole().getMask()) {
-							ctxRoles.put(perm.getContext(), (PermOnCtxDTO) permissionDTOFactory.from(perm));
+						PermissionDTO role = ctxRoles.get(perm.getContext());
+						if (role == null || perm.getRole().getMask() > ((PermOnCtxDTO)role).getRole().getMask()) {
+							ctxRoles.put(perm.getContext(), permissionDTOFactory.from(perm));
 						}
 					} else {
 						// must not come here
 						log.warn("ContextKey " + perm.getContext()
 								+ " wasn't added to possible publishers where childs has a role");
-						ctxRoles.put(perm.getContext(), (PermOnCtxDTO) permissionDTOFactory.from(perm));
+						ctxRoles.put(perm.getContext(), permissionDTOFactory.from(perm));
 					}
 				} else if (!ctxRoles.containsKey(perm.getContext())) {
 					// must not come here
@@ -241,26 +247,27 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 		}
 		// now we can go on childs
 		if (!ctxRoles.isEmpty()) {
-			for (Map.Entry<ContextKey, PermOnCtxDTO> ctx : ctxRoles.entrySet()) {
-				if (!checkPerms) {
-					userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, null);
-					loadAuthorizedPublisherChilds(user, ctx.getKey(), false, parentPerm);
-				} else if (ctx.getValue() != null
-						&& PermissionType.MANAGER.getMask() <= ctx.getValue().getRole().getMask()) {
-					userSessionTree.addCtx(organizationCtx, false, null, null, null, parentPerm.getFirst());// it doesn't add organisation if already loaded, when perm > LOOKOVER
-					userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, ctx.getValue());
-					loadAuthorizedPublisherChilds(user, ctx.getKey(), false, new Pair<PermissionType, PermOnCtxDTO>(ctx
-							.getValue().getRole(), ctx.getValue()));
-				} else if (ctx.getValue() != null) {
-					// if != null perm is more than lookover
-					userSessionTree.addCtx(organizationCtx, false, null, null, null, parentPerm.getFirst());// it doesn't add organisation if already loaded, when perm > LOOKOVER
-					userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, ctx.getValue());
-					loadAuthorizedPublisherChilds(user, ctx.getKey(), true, new Pair<PermissionType, PermOnCtxDTO>(ctx
-							.getValue().getRole(), ctx.getValue()));
-				} else {
-					// we need to find a child with perm > LOOKOVER
-					findAuthorizedPublisherChilds(user, ctx.getKey());
-				}
+			for (Map.Entry<ContextKey, PermissionDTO> ctx : ctxRoles.entrySet()) {
+                if (ctx.getValue() instanceof PermOnCtxDTO) {
+                    final PermOnCtxDTO perm = (PermOnCtxDTO)ctx.getValue();
+                    if (!checkPerms) {
+                        userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, null);
+                        loadAuthorizedPublisherChilds(user, ctx.getKey(), false, parentPerm);
+                    } else if (perm != null
+                        && PermissionType.MANAGER.getMask() <= perm.getRole().getMask()) {
+                        userSessionTree.addCtx(organizationCtx, false, null, null, null, parentPerm.getFirst());// it doesn't add organisation if already loaded, when perm > LOOKOVER
+                        userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, perm);
+                        loadAuthorizedPublisherChilds(user, ctx.getKey(), false, new Pair<>(perm.getRole(), perm));
+                    } else if (ctx.getValue() != null) {
+                        // if != null perm is more than lookover
+                        userSessionTree.addCtx(organizationCtx, false, null, null, null, parentPerm.getFirst());// it doesn't add organisation if already loaded, when perm > LOOKOVER
+                        userSessionTree.addCtx(ctx.getKey(), false, organizationCtx, null, perm);
+                        loadAuthorizedPublisherChilds(user, ctx.getKey(), true, new Pair<>(perm.getRole(), perm));
+                    } else {
+                        // we need to find a child with perm > LOOKOVER
+                        findAuthorizedPublisherChilds(user, ctx.getKey());
+                    }
+                }
 			}
 		}
 		// case of no rights upper than lookover are given on publishers - eg a user should have a role of USER or UPPER on publishers

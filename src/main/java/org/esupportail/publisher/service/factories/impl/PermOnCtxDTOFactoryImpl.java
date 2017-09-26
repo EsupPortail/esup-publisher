@@ -15,10 +15,14 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
 import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.repository.PermissionOnContextRepository;
@@ -27,14 +31,12 @@ import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.service.factories.EvaluatorDTOSelectorFactory;
 import org.esupportail.publisher.service.factories.PermOnCtxDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
+import org.esupportail.publisher.web.rest.dto.PermOnClassifWSubjDTO;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -87,7 +89,7 @@ implements PermOnCtxDTOFactory {
     }
 
     public boolean isDTOFactoryImpl(PermissionDTO dtoObject) {
-        if (dtoObject instanceof PermOnCtxDTO) {
+        if (dtoObject instanceof PermOnCtxDTO && !(dtoObject instanceof PermOnClassifWSubjDTO)) {
             log.debug("PermOnCtxDTOFactoryImpl selected : {}", this.getClass().getCanonicalName());
             return true;
        }
@@ -95,7 +97,7 @@ implements PermOnCtxDTOFactory {
     }
 
     public boolean isDTOFactoryImpl(AbstractPermission model) {
-        if (model instanceof PermissionOnContext) {
+        if (model instanceof PermissionOnContext && !(model instanceof PermissionOnClassificationWithSubjectList)) {
             log.debug("PermOnCtxDTOFactoryImpl selected : {}", this.getClass().getCanonicalName());
             return true;
         }
