@@ -15,15 +15,15 @@
  */
 package org.esupportail.publisher.repository.externals.ldap;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroup;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by jgribonvald on 11/06/15.
@@ -40,6 +40,7 @@ public class LdapGroupMemberDesignerImpl implements IGroupMemberDesigner {
     private static final String endMatch = ":Profs";
 
     private static final String endRequestPattern = ":*:Profs_*";
+    private static final String endRequestPattern2 = ":*:Profs Principaux";
 
     private static final String rootMatch = "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*";
 
@@ -51,7 +52,8 @@ public class LdapGroupMemberDesignerImpl implements IGroupMemberDesigner {
         Matcher profMatcher = patternProfs.matcher(group.getId());
         log.debug("Designe for group id {} with matcher {}, and is matching {}", group.getId(), profMatcher.toString(), profMatcher.matches());
         if (profMatcher.matches()) {
-            final String filter = "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(endMatch, endRequestPattern) + ")";
+            final String filter = "(|(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(endMatch, endRequestPattern) + ")"
+                + "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(endMatch, endRequestPattern2) + "))";
             log.debug(" ldap filter that will be used : {}", filter);
             List<IExternalGroup> members = externalGroupDao.getGroupsWithFilter(filter, null, false);
             if (members!=null) {

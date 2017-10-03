@@ -84,9 +84,19 @@ ldap:
     groupDisplayNameRegex: ".*:([^:]*)"
     groupResolveUserMember: true
     groupResolveUserMemberByUserAttributes: true
-    escoGroupApplicationMatcher: "((esco)|(cfa)|(clg37)|(agri)):Applications:Publication_annonces:[^:]*"
-    escoGroupApplicationNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
-    escoGroupApplicationNameIndex: "1,2"
+     # for formatters
+    escoGroupRegexp:
+        properties:
+            -
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):admin:Publication_contenus:[^:]*"
+                groupNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
+                groupNameIndex: "1,2"
+                groupRecomposerSeparator: ":"
+            -
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*_[0-9]{7}[a-zA-Z]:[^:]*:Profs Principaux"
+                groupNameRegex: "[^:]*:Etablissements:[^:]*:([^:]*):(Profs Principaux)"
+                groupNameIndex: "2,1"
+                groupRecomposerSeparator: " - "
 
 cas:
     url:
