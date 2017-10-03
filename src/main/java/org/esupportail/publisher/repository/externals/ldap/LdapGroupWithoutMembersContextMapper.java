@@ -15,21 +15,22 @@
  */
 package org.esupportail.publisher.repository.externals.ldap;
 
-    import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.externals.ExternalGroup;
-import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
-    import org.esupportail.publisher.domain.externals.IExternalGroup;
-    import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
-import org.springframework.ldap.core.ContextMapper;
-import org.springframework.ldap.core.DirContextAdapter;
-import org.springframework.util.Assert;
-
-import javax.naming.NamingException;
-import java.util.Arrays;
+    import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.naming.NamingException;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.domain.externals.ExternalGroup;
+import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
+import org.esupportail.publisher.domain.externals.IExternalGroup;
+import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.util.Assert;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 juin. 2015
@@ -39,15 +40,15 @@ public class LdapGroupWithoutMembersContextMapper implements ContextMapper<IExte
 
     private ExternalGroupHelper externalGroupHelper;
 
-    private IExternalGroupDisplayNameFormatter groupDisplayNameFormatter;
+    private List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters;
 
     /**
      * @param externalGroupHelper
      */
-    public LdapGroupWithoutMembersContextMapper(ExternalGroupHelper externalGroupHelper, IExternalGroupDisplayNameFormatter groupDisplayNameFormatter) {
+    public LdapGroupWithoutMembersContextMapper(ExternalGroupHelper externalGroupHelper, List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters) {
         super();
         this.externalGroupHelper = externalGroupHelper;
-        this.groupDisplayNameFormatter = groupDisplayNameFormatter;
+        this.groupDisplayNameFormatters = groupDisplayNameFormatters;
     }
 
     @Override
@@ -74,7 +75,9 @@ public class LdapGroupWithoutMembersContextMapper implements ContextMapper<IExte
         }
         group.setAttributes(attrs);
 
-        group = groupDisplayNameFormatter.format(group);
+        for (IExternalGroupDisplayNameFormatter formatter: groupDisplayNameFormatters){
+            group = formatter.format(group);
+        }
 
         return group;
     }

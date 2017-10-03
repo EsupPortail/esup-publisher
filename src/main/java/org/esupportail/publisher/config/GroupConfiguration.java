@@ -47,6 +47,7 @@ import org.springframework.ldap.core.support.LdapContextSource;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -210,7 +211,7 @@ public class GroupConfiguration {
         }
 
         @Inject
-        private IExternalGroupDisplayNameFormatter externalGroupDisplayNameFormatter;
+        private List<IExternalGroupDisplayNameFormatter> externalGroupDisplayNameFormatters;
 
         @Inject
         private IGroupMemberDesigner groupMemberDesigner;
@@ -220,14 +221,14 @@ public class GroupConfiguration {
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
         public IExternalGroupDao ldapExternalGroupDao() {
             log.debug("Configuring IExternalGroupDao with LDAP DAO");
-            return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), externalGroupDisplayNameFormatter, externalUserDao, groupMemberDesigner);
+            return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), externalGroupDisplayNameFormatters, externalUserDao, groupMemberDesigner);
         }
 
         @Bean
         @Profile(Constants.SPRING_PROFILE_WS_GROUP)
         public IExternalGroupDao wsExternalGroupDao() {
             log.debug("Configuring IExternalGroupDao with WS ESUP DAO");
-            return new WSEsupGroupDaoImpl(portalService(), externalGroupDisplayNameFormatter);
+            return new WSEsupGroupDaoImpl(portalService(), externalGroupDisplayNameFormatters);
         }
 
         @Bean

@@ -42,15 +42,15 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
 
 	private ExternalGroupHelper externalGroupHelper;
 
-    private IExternalGroupDisplayNameFormatter groupDisplayNameFormatter;
+    private List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters;
 
 	/**
 	 * @param externalGroupHelper
 	 */
-	public LdapGroupContextMapper(ExternalGroupHelper externalGroupHelper, IExternalGroupDisplayNameFormatter groupDisplayNameFormatter) {
+	public LdapGroupContextMapper(ExternalGroupHelper externalGroupHelper, List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters) {
 		super();
 		this.externalGroupHelper = externalGroupHelper;
-        this.groupDisplayNameFormatter = groupDisplayNameFormatter;
+        this.groupDisplayNameFormatters = groupDisplayNameFormatters;
 	}
 
 	@Override
@@ -112,7 +112,9 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
 		}
 		group.setAttributes(attrs);
 
-        group = groupDisplayNameFormatter.format(group);
+        for (IExternalGroupDisplayNameFormatter formatter: groupDisplayNameFormatters){
+            group = formatter.format(group);
+        }
 
 		return group;
 	}

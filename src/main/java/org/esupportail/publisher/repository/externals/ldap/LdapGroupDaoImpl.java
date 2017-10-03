@@ -64,7 +64,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
     private ExternalGroupHelper externalGroupHelper;
 
     @Autowired
-    private IExternalGroupDisplayNameFormatter groupDisplayNameFormatter;
+    private List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters;
 
     @Autowired
     private IExternalUserDao externalUserDao;
@@ -90,9 +90,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         }
         ContextMapper<IExternalGroup> mapper;
         if (withMembers) {
-            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         } else {
-            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         }
         // SearchControls constraints = new SearchControls();
         // constraints.setReturningAttributes((String[])
@@ -132,9 +132,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         }
         ContextMapper<IExternalGroup> mapper;
         if (withMembers) {
-            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         } else {
-            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         }
         // SearchControls constraints = new SearchControls();
         // constraints.setReturningAttributes((String[])
@@ -169,9 +169,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         }
         ContextMapper<IExternalGroup> mapper;
         if (withMembers) {
-            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         } else {
-            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         }
         // SearchControls constraints = new SearchControls();
         // constraints.setReturningAttributes((String[])
@@ -311,9 +311,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         }
         ContextMapper<IExternalGroup> mapper;
         if (withMembers) {
-            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         } else {
-            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatter);
+            mapper = new LdapGroupWithoutMembersContextMapper(this.externalGroupHelper, this.groupDisplayNameFormatters);
         }
         // SearchControls constraints = new SearchControls();
         // constraints.setReturningAttributes((String[])

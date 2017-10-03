@@ -15,6 +15,13 @@
  */
 package org.esupportail.publisher.repository.externals.ws;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
@@ -30,12 +37,6 @@ import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.hibernate.cfg.NotYetImplementedException;
 
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 /**
  * Created by jgribonvald on 10/06/15.
  */
@@ -47,7 +48,7 @@ public class WSEsupGroupDaoImpl implements IExternalGroupDao {
     private PortalService portalService;
 
     @Inject
-    private IExternalGroupDisplayNameFormatter externalGroupDisplayNameFormatter;
+    private List<IExternalGroupDisplayNameFormatter> externalGroupDisplayNameFormatters;
 
     @Override
     public IExternalGroup getGroupById(@NotNull String id, boolean withMembers) {
@@ -193,7 +194,11 @@ public class WSEsupGroupDaoImpl implements IExternalGroupDao {
 
     private ExternalGroup toExternal(final PortalGroup portalGroup) {
         if (portalGroup == null) return null;
-        return externalGroupDisplayNameFormatter.format(new ExternalGroup(portalGroup.getId(), portalGroup.getName(), null));
+        ExternalGroup group = new ExternalGroup(portalGroup.getId(), portalGroup.getName(), null);
+        for (IExternalGroupDisplayNameFormatter formatter: externalGroupDisplayNameFormatters) {
+           group = formatter.format(group);
+        }
+        return group;
     }
 
     private List<IExternalGroup> toExternal(final List<PortalGroup> portalGroups) {
