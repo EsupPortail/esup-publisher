@@ -15,16 +15,17 @@
  */
 package org.esupportail.publisher.config;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.portal.ws.client.PortalService;
 import org.esupportail.portal.ws.client.support.uportal.BasicUportalServiceImpl;
-import org.esupportail.publisher.domain.externals.EmptyExternalGroupDisplayNameFormatter;
+import org.esupportail.publisher.config.bean.GroupRegexProperties;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
 import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.externals.*;
-import org.esupportail.publisher.repository.externals.ldap.LdapGroupDisplayNameFormatterESCO;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCO;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupMemberDesignerImpl;
 import org.esupportail.publisher.repository.externals.ws.WSEsupGroupDaoImpl;
@@ -39,7 +40,6 @@ import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
@@ -103,6 +103,9 @@ public class GroupConfiguration {
 
         @Inject
         public IExternalUserDao externalUserDao;
+
+        @Inject
+        public GroupRegexConfiguration groupRegexConfiguration;
 
         @Bean
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
@@ -187,31 +190,6 @@ public class GroupConfiguration {
             return portalService;
         }
 
-        @Bean
-        @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
-        public IExternalGroupDisplayNameFormatter ldapExternalGroupDisplayNameFormatter() {
-            RelaxedPropertyResolver propertyResolver = new RelaxedPropertyResolver(environment, ENV_LDAP);
-            String applicationGroupMatcher = propertyResolver.getProperty("escoGroupApplicationMatcher");
-            String applicationGroupNameRegex = propertyResolver.getProperty("escoGroupApplicationNameRegex");
-            String applicationGroupNameIndex = propertyResolver.getProperty("escoGroupApplicationNameIndex");
-
-            return new LdapGroupDisplayNameFormatterESCO(externalGroupHelper(), applicationGroupMatcher, applicationGroupNameRegex, applicationGroupNameIndex);
-        }
-
-        @Bean
-        @ConditionalOnMissingClass({LdapGroupDaoImpl.class,WSEsupGroupDaoImpl.class})
-        public IExternalGroupDisplayNameFormatter externalGroupDisplayNameFormatter() {
-            return new EmptyExternalGroupDisplayNameFormatter();
-        }
-
-        @Bean
-        @Profile(Constants.SPRING_PROFILE_WS_GROUP)
-        public IExternalGroupDisplayNameFormatter wsExternalGroupDisplayNameFormatter() {
-            return new WSExternalGroupDisplayNameFormatter();
-        }
-
-        @Inject
-        private List<IExternalGroupDisplayNameFormatter> externalGroupDisplayNameFormatters;
 
         @Inject
         private IGroupMemberDesigner groupMemberDesigner;
@@ -221,14 +199,20 @@ public class GroupConfiguration {
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
         public IExternalGroupDao ldapExternalGroupDao() {
             log.debug("Configuring IExternalGroupDao with LDAP DAO");
-            return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), externalGroupDisplayNameFormatters, externalUserDao, groupMemberDesigner);
+            List<IExternalGroupDisplayNameFormatter> formatters = Lists.newArrayList();
+            for (GroupRegexProperties grp: groupRegexConfiguration.getProperties()) {
+                formatters.add(new LdapGroupRegexpDisplayNameFormatterESCO(externalGroupHelper(), grp.getGroupMatcher(),
+                    grp.getGroupNameRegex(), grp.getGroupNameIndex(), grp.getGroupRecomposerSeparator()));
+            }
+            return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), formatters, externalUserDao, groupMemberDesigner);
         }
 
         @Bean
         @Profile(Constants.SPRING_PROFILE_WS_GROUP)
         public IExternalGroupDao wsExternalGroupDao() {
             log.debug("Configuring IExternalGroupDao with WS ESUP DAO");
-            return new WSEsupGroupDaoImpl(portalService(), externalGroupDisplayNameFormatters);
+            IExternalGroupDisplayNameFormatter formatter = new WSExternalGroupDisplayNameFormatter();
+            return new WSEsupGroupDaoImpl(portalService(), Lists.newArrayList(formatter));
         }
 
         @Bean

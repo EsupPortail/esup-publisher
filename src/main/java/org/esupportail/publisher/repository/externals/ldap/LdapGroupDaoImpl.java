@@ -31,7 +31,6 @@ import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
@@ -57,19 +56,19 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
     /**
      * Spring template used to perform search in the ldap.
      */
-    @Autowired
+    //@Autowired
     private LdapTemplate ldapTemplate;
 
-    @Autowired
+    //@Autowired
     private ExternalGroupHelper externalGroupHelper;
 
-    @Autowired
+    //@Autowired
     private List<IExternalGroupDisplayNameFormatter> groupDisplayNameFormatters;
 
-    @Autowired
+    //@Autowired
     private IExternalUserDao externalUserDao;
 
-    @Autowired
+    //@Autowired
     private IGroupMemberDesigner groupMemberDesigner;
 
     /**
