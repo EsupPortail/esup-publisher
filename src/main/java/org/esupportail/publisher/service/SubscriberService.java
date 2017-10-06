@@ -95,7 +95,7 @@ public class SubscriberService {
         }
     }
 
-    public List<Subscriber> getDefinedSubcribersOfContext(@NotNull final ContextKey contextKey) {
+    public List<Subscriber> getDefinedSubscribersOfContext(@NotNull final ContextKey contextKey) {
         return Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(contextKey)));
     }
 

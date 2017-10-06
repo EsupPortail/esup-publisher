@@ -383,7 +383,7 @@ public class PublishController {
                 final AbstractItem item = entry.getValue().getFirst();
                 final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
                 returnedObj.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
-                    subscriberService.getDefinedSubcribersOfContext(item.getContextKey()), linkedFiles, request));
+                    subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
             }
         }
 
@@ -404,7 +404,7 @@ public class PublishController {
         }
 
         returnedObj.getItems().add(itemVOFactory.from(item.getItemClassificationId().getAbstractItem(),
-            subscriberService.getDefinedSubcribersOfContext(item.getItemClassificationId().getAbstractItem().getContextKey()));*/
+            subscriberService.getDefinedSubscribersOfContext(item.getItemClassificationId().getAbstractItem().getContextKey()));*/
 
         return returnedObj;
     }
