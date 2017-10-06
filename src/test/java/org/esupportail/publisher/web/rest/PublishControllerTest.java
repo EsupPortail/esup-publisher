@@ -29,35 +29,17 @@ import javax.inject.Inject;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.Attachment;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.Flash;
-import org.esupportail.publisher.domain.ItemClassificationOrder;
-import org.esupportail.publisher.domain.LinkedFileItem;
-import org.esupportail.publisher.domain.News;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
-import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.SubscribeType;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
-import org.esupportail.publisher.repository.ItemRepository;
-import org.esupportail.publisher.repository.LinkedFileItemRepository;
-import org.esupportail.publisher.repository.ObjTest;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
-import org.esupportail.publisher.repository.ReaderRepository;
-import org.esupportail.publisher.repository.RedactorRepository;
-import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.domain.enums.WritingMode;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
+import org.esupportail.publisher.service.factories.CategoryFactory;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
@@ -77,6 +59,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * Created by jgribonvald on 08/06/16.
@@ -133,6 +116,9 @@ public class PublishControllerTest {
     private CategoryProfileFactory categoryProfileFactory;
 
     @Inject
+    private CategoryFactory categoryFactory;
+
+    @Inject
     private SubscriberService subscriberService;
 
     @Inject
@@ -162,6 +148,7 @@ public class PublishControllerTest {
         ReflectionTestUtils.setField(publishController, "rubriqueVOFactory", rubriqueVOFactory);
         ReflectionTestUtils.setField(publishController, "itemVOFactory", itemVOFactory);
         ReflectionTestUtils.setField(publishController, "categoryProfileFactory", categoryProfileFactory);
+        ReflectionTestUtils.setField(publishController, "categoryFactory", categoryFactory);
         ReflectionTestUtils.setField(publishController, "flashInfoVOFactory", flashInfoVOFactory);
         ReflectionTestUtils.setField(publishController, "subscriberService", subscriberService);
         ReflectionTestUtils.setField(publishController, "urlHelper", urlHelper);
@@ -175,8 +162,10 @@ public class PublishControllerTest {
     private Publisher newWay;
     private Publisher filesPub;
     private Publisher flashInfo;
+    private Publisher esupLectureWay;
     private Organization organization;
     private List<LinkedFileItem> files = new ArrayList<>();
+    private List<Category> catsOfEsupLectureWay = new ArrayList<>();
 
     @Before
     public void initTest() {
@@ -203,6 +192,10 @@ public class PublishControllerTest {
         Redactor redactor3 = ObjTest.newRedactor("3");
         redactor3.setOptionalPublishTime(true);
         redactor3 = redactorRepository.saveAndFlush(redactor3);
+        Redactor redactor4 = ObjTest.newRedactor("4");
+        redactor4.setWritingMode(WritingMode.STATIC);
+        redactor4 = redactorRepository.saveAndFlush(redactor4);
+
 
         newWay = new Publisher(organization, reader1, redactor1, "PUB 1", PermissionClass.CONTEXT, true,true, true);
         newWay = publisherRepository.saveAndFlush(newWay);
@@ -210,6 +203,8 @@ public class PublishControllerTest {
         flashInfo = publisherRepository.saveAndFlush(flashInfo);
         filesPub = new Publisher(organization, reader3, redactor3, "PUB 3", PermissionClass.CONTEXT, true,true, false);
         filesPub = publisherRepository.saveAndFlush(filesPub);
+        esupLectureWay = new Publisher(organization, reader1, redactor4, "PUB 4 ", PermissionClass.CONTEXT, true, true, false);
+        esupLectureWay = publisherRepository.saveAndFlush(esupLectureWay);
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
         // NB important, à la une isn't persisted, it's hardcoded and should be considered
         Category cat1 = ObjTest.newCategory("Cat1", newWay);
@@ -220,6 +215,12 @@ public class PublishControllerTest {
         cat3 = categoryRepository.saveAndFlush(cat3);
         Category cat4 = ObjTest.newCategory("cat4", filesPub);
         cat4 = categoryRepository.saveAndFlush(cat4);
+        Category cat5 = ObjTest.newCategory("Cat5", esupLectureWay);
+        cat5 = categoryRepository.saveAndFlush(cat5);
+        catsOfEsupLectureWay.add(cat5);
+        Category cat6 = ObjTest.newCategory("cat6", esupLectureWay);
+        cat6 = categoryRepository.saveAndFlush(cat6);
+        catsOfEsupLectureWay.add(cat6);
 
         News news1 = ObjTest.newNews("news 1", organization, newWay.getContext().getRedactor());
         news1.setStartDate(LocalDate.now());
@@ -252,6 +253,16 @@ public class PublishControllerTest {
         attachment.setStatus(ItemStatus.PUBLISHED);
         attachment = itemRepository.saveAndFlush(attachment);
         log.debug("==============+> Saved attachment {}", attachment);
+        News news5 = ObjTest.newNews("news 5", organization, esupLectureWay.getContext().getRedactor());
+        news5.setStartDate(LocalDate.now());
+        news5.setEndDate(LocalDate.now().plusMonths(1));
+        news5.setStatus(ItemStatus.PUBLISHED);
+        news5 = itemRepository.saveAndFlush(news5);
+        News news6 = ObjTest.newNews("news 5", organization, esupLectureWay.getContext().getRedactor());
+        news6.setStartDate(LocalDate.now());
+        news6.setEndDate(LocalDate.now().plusMonths(1));
+        news6.setStatus(ItemStatus.PUBLISHED);
+        news6 = itemRepository.saveAndFlush(news6);
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
         files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
@@ -263,6 +274,8 @@ public class PublishControllerTest {
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news4, cat2, 3));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(flash, cat3, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(attachment, cat4, 0));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news5, cat5, 0));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news6, cat6, 0));
 
         Subscriber sub = ObjTest.newSubscriberPerson(organization.getContextKey());
         sub.setSubscribeType(SubscribeType.FORCED);
@@ -272,6 +285,7 @@ public class PublishControllerTest {
         Subscriber sub4 = ObjTest.newSubscriberPerson(news3.getContextKey());
         Subscriber sub5 = ObjTest.newSubscriberPerson(news4.getContextKey());
         Subscriber sub6 = ObjTest.newSubscriberPerson(attachment.getContextKey());
+        Subscriber sub7 = ObjTest.newSubscriberGroup(cat5.getContextKey());
 
         sub = subscriberRepository.saveAndFlush(sub);
         sub2 = subscriberRepository.saveAndFlush(sub2);
@@ -279,6 +293,7 @@ public class PublishControllerTest {
         sub4 = subscriberRepository.saveAndFlush(sub4);
         sub5 = subscriberRepository.saveAndFlush(sub5);
         sub6 = subscriberRepository.saveAndFlush(sub6);
+        sub7 = subscriberRepository.saveAndFlush(sub7);
     }
 
     @Test
@@ -291,6 +306,32 @@ public class PublishControllerTest {
             .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/autoSubscribed").exists())
             .andExpect(xpath("/categoryProfilesUrl/categoryProfile/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists());
             //.andExpect(xpath("/categoryProfilesUrl//categoryProfile/visibility//").exists());
+    }
+
+    @Test
+    public void getEsupLectureCategoriesContextTest() throws Exception {
+        restPublishControllerMockMvc.perform(get("/published/categories/{publisher_id}", esupLectureWay.getId())
+            .accept(MediaType.APPLICATION_XML)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_XML))
+            .andExpect(xpath("/category").exists())
+            .andExpect(xpath("/category[@name]").exists())
+            .andExpect(xpath("/category[@edit]").exists())
+            .andExpect(xpath("/category[@ttl]").exists())
+            .andExpect(xpath("/category/visibility").exists())
+            .andExpect(xpath("/category/visibility/obliged").exists())
+            .andExpect(xpath("/category/visibility/allowed").exists())
+            .andExpect(xpath("/category/visibility/autoSubscribed").exists())
+            .andExpect(xpath("/category/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
+            .andExpect(xpath("/category/sourceProfiles").exists())
+            .andExpect(xpath("/category/sourceProfiles/*").nodeCount(catsOfEsupLectureWay.size()))
+            .andExpect(xpath("/category/sourceProfiles/sourceProfile").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@name]").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@id]").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@url]").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@specificUserContent]").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@access]").exists())
+            .andExpect(xpath("/category/sourceProfiles/*[@ttl]").exists())
+            .andExpect(xpath("/category/sourceProfiles/sourceProfile/visibility/*[self::obliged or self::allowed or self::autoSubscribed]").exists());
     }
 
     @Test

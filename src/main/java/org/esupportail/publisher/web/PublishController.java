@@ -34,6 +34,7 @@ import com.mysema.query.jpa.JPASubQuery;
 import com.mysema.query.types.expr.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
@@ -43,11 +44,13 @@ import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.QAbstractItem;
 import org.esupportail.publisher.domain.QItemClassificationOrder;
 import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.WritingMode;
 import org.esupportail.publisher.domain.util.Views;
 import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.FeedRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.OrganizationRepository;
@@ -59,15 +62,18 @@ import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.HighlightedClassification;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
+import org.esupportail.publisher.service.factories.CategoryFactory;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 import org.esupportail.publisher.web.rest.vo.Actualite;
+import org.esupportail.publisher.web.rest.vo.Category;
 import org.esupportail.publisher.web.rest.vo.CategoryProfilesUrl;
 import org.esupportail.publisher.web.rest.vo.FlashInfoVO;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,8 +102,8 @@ public class PublishController {
     @Inject
     private CategoryRepository categoryRepository;
 
-//    @Inject
-//    private FeedRepository<AbstractFeed> feedRepository;
+    @Inject
+    private FeedRepository<AbstractFeed> feedRepository;
 
 //    @Inject
 //    private ItemRepository itemRepository;
@@ -116,6 +122,9 @@ public class PublishController {
 
     @Inject
     private CategoryProfileFactory categoryProfileFactory;
+
+    @Inject
+    private CategoryFactory categoryFactory;
 
     @Inject
     private SubscriberService subscriberService;
@@ -285,12 +294,25 @@ public class PublishController {
             for (Publisher pub : publishers) {
                 String urlCategory = null;
                 String urlActualite = null;
-                if (redactor.getNbLevelsOfClassification() == 1 && WritingMode.TARGETS_ON_ITEM.equals(redactor.getWritingMode())) {
-                    urlActualite =  base + "published/items/" + pub.getId();
+                if (redactor.getNbLevelsOfClassification() == 1) {
+                    if (WritingMode.TARGETS_ON_ITEM.equals(redactor.getWritingMode())) {
+                        urlActualite = base + "published/items/" + pub.getId();
+                    } else {
+                        urlCategory = base + "published/categories/" + pub.getId();
+                    }
+                    cpu.getCategoryProfilesUrl().add(categoryProfileFactory.from(pub, subscriberService.getDefaultsSubscribersOfContext(pub.getContextKey()), urlActualite, urlCategory));
                 } else {
-                    urlCategory = base + "published/categories/" + pub.getId();
+                    // we don't manager more than redactor.getNbLevelsOfClassification() > 2
+                    // systeme classic esup-lecture/esup-news
+                    if (WritingMode.TARGETS_ON_ITEM.equals(redactor.getWritingMode())) throw new NotYetImplementedException();
+                    List<? extends AbstractClassification> cts = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(pub.getId()),
+                        ClassificationPredicates.categoryOrderByDisplayOrderType(pub.getDefaultDisplayOrder())));
+                    log.debug("list of categories associated to publisher : {}", cts);
+                    for (AbstractClassification classif: cts) {
+                        final String urlFeeds = base + "published/feeds/" + classif.getId();
+                        cpu.getCategoryProfilesUrl().add(categoryProfileFactory.from(pub, classif, subscriberService.getDefinedSubscribersOfContext(classif.getContextKey()), urlFeeds, true));
+                    }
                 }
-                cpu.getCategoryProfilesUrl().add(categoryProfileFactory.from(pub, subscriberService.getDefaultsSubscribersOfContext(pub.getContextKey()), urlActualite, urlCategory));
             }
         }
         return cpu;
@@ -308,33 +330,59 @@ public class PublishController {
         return getItemsOnPublisherNewWay(publisher, request);
     }
 
-    /*@RequestMapping(value = "/categories/{publisher_id}",
+    @RequestMapping(value = "/categories/{publisher_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @PreAuthorize("hasIpAddress(@appIpVariableHolder.getIpRange())")
     @Timed
-    public Object getCategories(@PathVariable("publisher_id") Long publisherId) {
-        //getting items on new way
+    public Category getCategories(@PathVariable("publisher_id") Long publisherId, final HttpServletRequest request) {
         log.debug("Entering getCategories with param : publisher_id={}", publisherId);
         Publisher publisher = publisherRepository.findOne(publisherId);
 
-        log.error("Warning this request isn't yet implemented !");
+        if (publisher != null && publisher.isUsed() && WritingMode.STATIC.equals(publisher.getContext().getRedactor().getWritingMode())) {
+            final String baseUrl = urlHelper.getRootAppUrl(request);
+            if (publisher.getContext().getRedactor().getNbLevelsOfClassification() == 1) {
+                // systeme classic esup-lecture/esup-news mais sans le niveau des thèmes
+                List<? extends AbstractClassification> cts = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()),
+                    ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
+                log.debug("list of categories associated to publisher : {}", cts);
+                Map<AbstractClassification, List<Subscriber>> classifSubscribers = Maps.newHashMap();
+                for (AbstractClassification classif: cts) {
+                    classifSubscribers.put(classif, subscriberService.getDefinedSubscribersOfContext(classif.getContextKey()));
+                }
+                return categoryFactory.fromCategoriesClassifs(publisher, baseUrl, subscriberService.getDefaultsSubscribersOfContext(publisher.getContextKey()), classifSubscribers);
+            } else {
 
-        return Lists.newArrayList();
-    }*/
+                throw new IllegalAccessError("Wrong call of methods with more than one level in classifications, you should call instead getAbstractFeeds method");
+            }
+        }
 
+        return new Category();
+    }
 
+    @RequestMapping(value = "/feeds/{category_id}",
+        method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @Timed
+    public Category getAbstractFeeds(@PathVariable("category_id") Long categoryId, final HttpServletRequest request) {
+        // systeme classic esup-lecture/esup-news
+        log.debug("Entering getAbstractFeeds with param : category_id={}", categoryId);
+        org.esupportail.publisher.domain.Category category = categoryRepository.findOne(categoryId);
 
+        if (category != null && category.getPublisher().isUsed() && WritingMode.STATIC.equals(category.getPublisher().getContext().getRedactor().getWritingMode())) {
+            final String baseUrl = urlHelper.getRootAppUrl(request);
+            List<? extends AbstractFeed> cts = Lists.newArrayList(feedRepository.findAll(ClassificationPredicates.AbstractFeedsOfCategory(categoryId),
+                ClassificationPredicates.feedOrderByDisplayOrderType(category.getDefaultDisplayOrder())));
+            log.debug("list of feeds associated to category : {}", cts);
+            Map<AbstractFeed, List<Subscriber>> classifSubscribers = Maps.newHashMap();
+            for (AbstractFeed feed: cts) {
+                classifSubscribers.put(feed, subscriberService.getDefinedSubscribersOfContext(feed.getContextKey()));
+            }
+            return categoryFactory.fromAbstractFeeds(category, baseUrl, true, subscriberService.getDefaultsSubscribersOfContext(category.getContextKey()), classifSubscribers);
 
-//    private Object getItemsOfPublisher(@NotNull Publisher publisher, final HttpServletRequest request ) {
-//        if (publisher.getContext().getRedactor().getNbLevelsOfClassification() == 1
-//            && WritingMode.TARGETS_ON_ITEM.equals(publisher.getContext().getRedactor().getWritingMode())) {
-//            return getItemsOnPublisherNewWay(publisher, request);
-//        }
-//        log.error("Warning this request isn't yet implemented for !");
-//        return Lists.newArrayList();
-//    }
+        }
 
+        return new Category();
+    }
 
     //@Transactional
     private Actualite getItemsOnPublisherNewWay(@NotNull Publisher publisher, final HttpServletRequest request  ) {

@@ -16,17 +16,21 @@
 package org.esupportail.publisher.service.factories;
 
 import java.util.List;
+import java.util.Map;
 
 import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.web.rest.vo.CategoryProfile;
+import org.esupportail.publisher.web.rest.vo.Category;
 
 /**
  * Created by jgribonvald on 03/06/16.
  */
-public interface CategoryProfileFactory {
+public interface CategoryFactory {
 
-    CategoryProfile from(final Publisher publisher, final List<Subscriber> subscribers, final String urlActualites, final String urlCategory);
-    CategoryProfile from(final Publisher publisher, AbstractClassification classif, final List<Subscriber> subscribers, final String urlFeeds, final boolean withOrganizationName);
+    Category fromCategoriesClassifs(final Publisher publisher, final String baseURL, final List<Subscriber> subscribers,
+                                    final Map<AbstractClassification, List<Subscriber>> categoriesSubscribers);
+    Category fromAbstractFeeds(final org.esupportail.publisher.domain.Category category, final String baseURL, final boolean withOrganizationName,
+                               final List<Subscriber> subscribers,final Map<AbstractFeed, List<Subscriber>> feedsSubscribers);
 }

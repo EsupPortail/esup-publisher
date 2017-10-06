@@ -16,68 +16,45 @@
 package org.esupportail.publisher.web.rest.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.esupportail.publisher.domain.enums.AccessType;
-import org.esupportail.publisher.web.rest.util.CustomLCEnumSerializer;
 
 /**
  * Created by jgribonvald on 06/06/16.
  */
 @Data
 @NoArgsConstructor
-@JsonTypeName("categoryProfile")
-@XmlRootElement(name = "categoryProfile")
+@JsonTypeName("category")
+@XmlRootElement(name = "category")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CategoryProfile implements Serializable {
+public class Category implements Serializable {
 
     //@JacksonXmlProperty(isAttribute = true)
     @NotNull
-    @XmlAttribute(required = true)
+    @XmlAttribute
     private String name;
 
-    //@JacksonXmlProperty(isAttribute = true)
-    @NotNull
-    @XmlAttribute(required = true)
-    private long id;
+    @XmlAttribute
+    private String edit = "all";
 
     //@JacksonXmlProperty(isAttribute = true)
     @XmlAttribute
-    private String urlActualites;
-
-    //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute
-    private String urlCategory;
-
-    //@JacksonXmlProperty(isAttribute = true)
-    @NotNull
-    @XmlAttribute(required = true)
-    private boolean trustCategory;
-
-    //@JacksonXmlProperty(isAttribute = true)
-    @NotNull
-    @XmlAttribute(required = true)
-    @JsonSerialize(using = CustomLCEnumSerializer.class)
-    private AccessType access;
-
-    //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute(required = true)
     private int ttl = 3600;
 
-    //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute
-    private int timeout;
+    private String description;
 
     private Visibility visibility;
 
-
+    //@JacksonXmlProperty(localName = "sourceProfile")
+    //@JacksonXmlElementWrapper(useWrapping = false)
+    @XmlElementWrapper(name = "sourceProfiles")
+    @XmlElement(name = "sourceProfile")
+    private List<SourceProfile> sourceProfiles = new ArrayList<>();
 }

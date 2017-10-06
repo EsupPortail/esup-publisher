@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.AccessType;
@@ -60,6 +61,28 @@ public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
             cp.setUrlCategory(urlCategory);
             return cp;
         }
-        return null;
+        return new CategoryProfile();
+    }
+
+    @Override
+    public CategoryProfile from(final Publisher publisher, final AbstractClassification classif, final List<Subscriber> subscribers, final String urlFeeds, final boolean withOrganizationName) {
+        Assert.isTrue(urlFeeds != null);
+        if (publisher != null && classif != null) {
+            CategoryProfile cp = new CategoryProfile();
+            if (withOrganizationName) {
+                cp.setName(publisher.getContext().getOrganization().getDisplayName() + " - " + classif.getDisplayName());
+            } else {
+                cp.setName(classif.getDisplayName());
+            }
+            cp.setId(classif.getId());
+            cp.setAccess(classif.getAccessView());
+            cp.setTimeout(defaultTimeout);
+            cp.setTtl((classif.getTtl() > 0) ? classif.getTtl() : defaultTTL);
+            cp.setTrustCategory(true);
+            cp.setVisibility(visibilityFactory.from(subscribers));
+            cp.setUrlCategory(urlFeeds);
+            return cp;
+        }
+        return new CategoryProfile();
     }
 }

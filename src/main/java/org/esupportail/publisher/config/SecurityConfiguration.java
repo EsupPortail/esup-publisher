@@ -43,6 +43,7 @@ import org.esupportail.publisher.service.evaluators.IEvaluation;
 import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
 import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
 import org.esupportail.publisher.service.evaluators.UserMultivaluedAttributesEvaluation;
+import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.springframework.context.annotation.Bean;
@@ -312,6 +313,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
+            + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers(FeedController.PRIVATE_RSS_FEED_URL_PATH + "**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
             + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
             .antMatchers(PROTECTED_PATH + "**").authenticated()
             .antMatchers("/view/**").permitAll();

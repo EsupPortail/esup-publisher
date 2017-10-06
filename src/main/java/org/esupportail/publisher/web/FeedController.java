@@ -47,9 +47,15 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by jgribonvald on 28/06/17.
  */
 @Controller
-@RequestMapping("/feed")
+@RequestMapping(FeedController.FEED_CONTROLLER_PATH)
 @Slf4j
 public class FeedController {
+
+    public static final String FEED_CONTROLLER_PATH = "/feed";
+    public static final String PRIVATE_RSS_METHOD_PATH = "/privaterss/";
+
+
+    public static final String PRIVATE_RSS_FEED_URL_PATH = FEED_CONTROLLER_PATH + PRIVATE_RSS_METHOD_PATH;
 
     @Inject
     private OrganizationRepository organizationRepository;
@@ -83,6 +89,15 @@ public class FeedController {
         return mav;
     }
 
+    //@PreAuthorize("hasIpAddress(@appIpVariableHolder.getIpRange())")
+    @RequestMapping(value = FeedController.PRIVATE_RSS_METHOD_PATH + "{classification_id}", method = RequestMethod.GET, produces = "application/*")
+    public ModelAndView getPrivateRssFeed(@PathVariable("classification_id") Long classifId) {
+        log.debug("Entering getPrivateRssFeed with params : classification_id={}", classifId);
+        ModelAndView mav = getAllObjects(classifId);
+        mav.setViewName("publisherRssFeedView");
+        return mav;
+    }
+
     @Cacheable(value = "feed", key = "#id.concat('-').concat(#publisherId.toString()).concat('-').concat(#classifId.toString())")
     private ModelAndView getObjects(String id, Long publisherId, Long classifId) {
         ModelAndView mav = new ModelAndView();
@@ -97,7 +112,7 @@ public class FeedController {
         if (org == null) return mav;
 
         mav.addObject(PublisherRssFeedView.ORG_PARAM, org);
-        final BooleanBuilder builder = new BooleanBuilder(ItemPredicates.itemsClassOfOrganization(org));
+        BooleanBuilder builder = new BooleanBuilder(ItemPredicates.itemsClassOfOrganization(org));
         builder.and(ItemPredicates.OwnedItemsClassOfStatus(false, ItemStatus.PUBLISHED));
         builder.and(ItemPredicates.OwnedItemsClassOfRSSAllowed(true));
         OrderSpecifier<?> orderSpecifier = ItemPredicates.orderByClassifDefinition(DisplayOrderType.START_DATE);
@@ -117,6 +132,32 @@ public class FeedController {
                 orderSpecifier = ItemPredicates.orderByClassifDefinition(classif.getDefaultDisplayOrder());
             }
         }
+        log.debug("The sql filter to obtain items for the rss feed is {}", builder.toString());
+        List<ItemClassificationOrder> items = Lists.newArrayList(itemClassificationOrderRepository.findAll(
+            builder, orderSpecifier));
+        log.debug("Rss feed wil show {} ItemClassificationOrder", items.size());
+
+        mav.addObject(PublisherRssFeedView.ITEMS_PARAM, items);
+        return mav;
+    }
+
+    @Cacheable(value = "feed", key = "#classifId.toString()")
+    private ModelAndView getAllObjects(final Long classifId) {
+        ModelAndView mav = new ModelAndView();
+
+        AbstractClassification classif = classificationRepository.findOne(classifId);
+        if (classif == null) {
+            return mav;
+        }
+
+        mav.addObject(PublisherRssFeedView.ORG_PARAM, classif.getPublisher().getContext().getOrganization());
+        mav.addObject(PublisherRssFeedView.PUB_PARAM, classif.getPublisher());
+        mav.addObject(PublisherRssFeedView.CLASSIF_PARAM, classif);
+
+        OrderSpecifier<?> orderSpecifier = ItemPredicates.orderByClassifDefinition(classif.getDefaultDisplayOrder());
+        BooleanBuilder builder = new BooleanBuilder(ItemPredicates.itemsClassOfClassification(classifId));
+        builder.and(ItemPredicates.OwnedItemsClassOfStatus(false, ItemStatus.PUBLISHED));
+
         log.debug("The sql filter to obtain items for the rss feed is {}", builder.toString());
         List<ItemClassificationOrder> items = Lists.newArrayList(itemClassificationOrderRepository.findAll(
             builder, orderSpecifier));

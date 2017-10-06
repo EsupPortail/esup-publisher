@@ -35,10 +35,10 @@ import org.esupportail.publisher.web.rest.util.CustomLCEnumSerializer;
  */
 @Data
 @NoArgsConstructor
-@JsonTypeName("categoryProfile")
-@XmlRootElement(name = "categoryProfile")
+@JsonTypeName("sourceProfile")
+@XmlRootElement(name = "sourceProfile")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CategoryProfile implements Serializable {
+public class SourceProfile implements Serializable {
 
     //@JacksonXmlProperty(isAttribute = true)
     @NotNull
@@ -51,17 +51,13 @@ public class CategoryProfile implements Serializable {
     private long id;
 
     //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute
-    private String urlActualites;
-
-    //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute
-    private String urlCategory;
-
-    //@JacksonXmlProperty(isAttribute = true)
     @NotNull
     @XmlAttribute(required = true)
-    private boolean trustCategory;
+    private String url;
+
+    //@JacksonXmlProperty(isAttribute = true)
+    @XmlAttribute(required = true)
+    private boolean specificUserContent;
 
     //@JacksonXmlProperty(isAttribute = true)
     @NotNull
@@ -74,10 +70,8 @@ public class CategoryProfile implements Serializable {
     private int ttl = 3600;
 
     //@JacksonXmlProperty(isAttribute = true)
-    @XmlAttribute
-    private int timeout;
-
+//    @XmlAttribute
+//    private int timeout;
     private Visibility visibility;
-
 
 }
