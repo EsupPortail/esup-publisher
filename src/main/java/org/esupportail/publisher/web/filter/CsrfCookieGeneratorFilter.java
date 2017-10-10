@@ -47,11 +47,11 @@ public class CsrfCookieGeneratorFilter extends OncePerRequestFilter {
             cookie.setMaxAge(-1);
             cookie.setHttpOnly(false);
             String applicationPath = request.getServletContext().getContextPath();
-            log.debug(" ContextPath is '{}'", applicationPath);
             if (applicationPath.isEmpty()) {
                 applicationPath = "/";
             }
             if (!applicationPath.endsWith("/")) {
+                log.warn("Warning overriding Csrf Cookie Context Path from {} to {}/",applicationPath,applicationPath);
                 applicationPath += "/";
             }
             cookie.setPath(applicationPath);
