@@ -2,7 +2,8 @@
 
 angular.module('publisherApp')
     .controller('DetailsTreeViewController', function ($scope, $state, $stateParams, $filter, EnumDatas, Organization, Publisher, Classification, $rootScope,
-                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, PermissionOnClassificationWithSubjectList, Subscriber, User, Principal, toaster, $translate) {
+                                                       Category, Item, ContentDTO, Permission, PermissionOnContext, PermissionOnClassificationWithSubjectList,
+                                                       Subscriber, User, Principal, toaster, $translate, Base64) {
 
         $scope.context = {};
         $scope.ctxType = $stateParams.ctxType;
@@ -67,7 +68,6 @@ angular.module('publisherApp')
                         $scope.loadAvailableRoles();
                     });
                     Subscriber.queryForCtx({ctx_type: ctxType, ctx_id: ctxId}, function(result) {
-                        //console.log(result);
                         $scope.targets = result;
                     });
                     $scope.contextTemplate = 'scripts/app/manager/treeview/ctxDetails/context/organization-detail.html';
@@ -169,8 +169,6 @@ angular.module('publisherApp')
                     break;
 
             }
-
-
         };
         $scope.load($stateParams.ctxType, $stateParams.ctxId);
 
@@ -200,6 +198,7 @@ angular.module('publisherApp')
                 case 'ITEM' :
                     manager = ContentDTO;
                     break;
+                default: throw "not yet implemented";
             }
             if (manager) {
                 manager.delete({id: $scope.context.contextKey.keyId},
@@ -238,7 +237,7 @@ angular.module('publisherApp')
                     inArray('FLASH', $scope.context.context.reader.authorizedTypes))) {
                         // in waiting all access are PUBLIC
                         var defaultColor = inArray('COLOR',$scope.context.context.reader.classificationDecorations) ? $rootScope.paletteColorPicker[0] : null;
-                        console.log("Default color ", defaultColor);
+                        //console.log("Default color ", defaultColor);
                         $scope.editedContext = {
                             type: 'CATEGORY',
                             publisher: $scope.context,
@@ -410,7 +409,15 @@ angular.module('publisherApp')
 
         $scope.createSubscriber = function () {
             //console.log("call create subscriber");
-            var subscriber = {subscribeType: $scope.subscriber.subscribeType, subjectCtxId: {subject: $scope.selectedSubject.modelId, context: $scope.context.contextKey}};
+            var subject = ($scope.selectedSubject.modelId && !angular.equals({},$scope.selectedSubject.modelId)) ?
+            {keyValue: $scope.selectedSubject.modelId.keyId, keyAttribute: "ID", keyType: $scope.selectedSubject.modelId.keyType} : $scope.selectedSubject;
+            var subscriber = {
+                subscribeType: $scope.subscriber.subscribeType,
+                subjectCtxId:{
+                    subject: subject,
+                    context: $scope.context.contextKey
+                }
+            };
             Subscriber.save(subscriber, function() {
                     //console.log("createSubscriber POST is done");
                     $scope.clearSubscriber();
@@ -424,21 +431,48 @@ angular.module('publisherApp')
         };
 
         $scope.deleteSubscriber = function (target) {
-            Subscriber.get({subject_id: target.subjectDTO.modelId.keyId, subject_type: $scope.getSubjectTypeList(target.subjectDTO.modelId.keyType),
-                ctx_id: target.contextKeyDTO.keyId,ctx_type: target.contextKeyDTO.keyType}, function(result) {
+            var subjectCtx = (target.subjectDTO && !angular.equals({},target.subjectDTO)) ?
+                {subject_id: Base64.encode(target.subjectDTO.modelId.keyId), subject_type: $scope.getSubjectTypeList(target.subjectDTO.modelId.keyType),
+                    subject_attribute: "ID", ctx_id: target.contextKeyDTO.keyId, ctx_type: target.contextKeyDTO.keyType} :
+                {subject_id:Base64.encode(target.subjectKeyExtendedDTO.keyValue), subject_type: $scope.getSubjectTypeList(target.subjectKeyExtendedDTO.keyType),
+                    subject_attribute: target.subjectKeyExtendedDTO.keyAttribute, ctx_id: target.contextKeyDTO.keyId, ctx_type: target.contextKeyDTO.keyType};
+            Subscriber.get(subjectCtx, function(result) {
                 $scope.subscriber = result;
                 $('#deleteTargetConfirmation').modal('show');
             });
         };
 
         $scope.confirmDeleteSubscriber = function (target) {
-            Subscriber.delete({subject_id: target.subjectCtxId.subject.keyId, subject_type: $scope.getSubjectTypeList(target.subjectCtxId.subject.keyType),
-                    ctx_id: target.subjectCtxId.context.keyId,ctx_type: target.subjectCtxId.context.keyType},
+            /* will be possible with angularjs >= 1.6.4
+            var subjectCtx = {
+                subjectKey: {
+                    keyValue: target.subjectCtxId.subject.keyValue,
+                    keyType: target.subjectCtxId.subject.keyType,
+                    keyAttribute: target.subjectCtxId.subject.keyAttribute
+                },
+                contextKey: {keyId: target.subjectCtxId.context.keyId, keyType: target.subjectCtxId.context.keyType}
+            };
+            Subscriber.delete({}, subjectCtx,
                 function () {
                     $scope.subscriber = {};
                     $('#deleteTargetConfirmation').modal('hide');
                     $scope.load($scope.ctxType, $scope.context.id);
                 });
+            */
+            var subjectCtx = {
+                subject_id: Base64.encode(target.subjectCtxId.subject.keyValue),
+                subject_type: $scope.getSubjectTypeList(target.subjectCtxId.subject.keyType),
+                subject_attribute: target.subjectCtxId.subject.keyAttribute,
+                ctx_id: target.subjectCtxId.context.keyId,
+                ctx_type: target.subjectCtxId.context.keyType
+            };
+            Subscriber.delete(subjectCtx,
+                function () {
+                    $scope.subscriber = {};
+                    $('#deleteTargetConfirmation').modal('hide');
+                    $scope.load($scope.ctxType, $scope.context.id);
+                });
+
         };
 
         $scope.$watch("search.target", function(newVal, oldVal) {
@@ -446,7 +480,7 @@ angular.module('publisherApp')
             if (angular.isDefined(newVal) && !angular.equals({}, newVal) && !angular.equals(newVal, oldVal)) {
                 var found = false;
                 for (var i = 0; i < $scope.targets.length; i++) {
-                    if(angular.equals(newVal.modelId, $scope.targets[i].subjectDTO.modelId)) {
+                    if($scope.targets[i].subjectDTO && angular.equals(newVal.modelId, $scope.targets[i].subjectDTO.modelId)) {
                         found = true;
                         break;
                     }
@@ -686,7 +720,7 @@ angular.module('publisherApp')
                         $scope.addPerm = true;
                     });
                     break;
-                default : console.log("Case Not Managed !");
+                default : throw "not yet implemented";
             }
         };
         function setSelectedSubjectsFromEvaluator(evaluator) {
@@ -706,6 +740,7 @@ angular.module('publisherApp')
                         case "USERGROUP":
                             $scope.selectedSubjects.push({keyType: 'GROUP', keyId: subjectEval.group});
                             break;
+                        default : throw "not yet implemented";
                     }
                 }
             }
@@ -884,7 +919,7 @@ angular.module('publisherApp')
                     break;
                 case 'CONTEXT_WITH_SUBJECTS' :  $scope.permissionTemplate =  'scripts/app/manager/treeview/ctxDetails/permissions/permissionOnCtxWithSubjects-detail.html';
                     break;
-                default : break;
+                default : throw "not yet implemented";
 
                 /*,
                  {name: 'SUBJECT', url: 'scripts/app/manager/publish/content/resource.html'},
@@ -896,7 +931,7 @@ angular.module('publisherApp')
             switch (permissionClass) {
                 case 'CONTEXT': return PermissionOnContext;
                 case 'CONTEXT_WITH_SUBJECTS' :  return PermissionOnClassificationWithSubjectList;
-                default : console.log('Not Yet Implemented !'); return;
+                default : throw "not yet implemented"; return;
 
                 /*
                  case 'SUBJECT'

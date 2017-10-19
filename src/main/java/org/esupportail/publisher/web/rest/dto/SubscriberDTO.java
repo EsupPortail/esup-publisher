@@ -15,42 +15,47 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.io.Serializable;
+
+import javax.validation.constraints.NotNull;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import org.esupportail.publisher.domain.enums.SubscribeType;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
  * 29 Oct. 2014
  */
-@ToString(callSuper=true)
-@EqualsAndHashCode(callSuper=true)
-public class SubscriberDTO extends AbstractIdDTO<SubjectContextKeyDTO> implements IAbstractDTO<SubjectContextKeyDTO>, Serializable {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class SubscriberDTO extends AbstractIdDTO<SubjectContextKeyDTO> implements IAbstractDTO<SubjectContextKeyDTO>,
+		Serializable {
 
-    /** */
-    private static final long serialVersionUID = 3469782122300041730L;
+	/** */
+	private static final long serialVersionUID = 3469782122300041730L;
 
-    @NotNull
-    @Getter
-    @Setter
-    @JsonSerialize(using = CustomEnumSerializer.class)
-    private SubscribeType subscribeType;
+	@NotNull
+	@Getter
+	@Setter
+	@JsonSerialize(using = CustomEnumSerializer.class)
+	private SubscribeType subscribeType;
 
-    /**
-     * @param subjectKey
-     * @param contextKey
-     * @param subscribeType
-     */
-    public SubscriberDTO(@NotNull final SubjectKeyDTO subjectKey, @NotNull final ContextKeyDTO contextKey, @NotNull final SubscribeType subscribeType) {
-        super(new SubjectContextKeyDTO(subjectKey, contextKey));
-        this.subscribeType = subscribeType;
-    }
+	/**
+	 * @param subjectKey
+	 * @param contextKey
+	 * @param subscribeType
+	 */
+	public SubscriberDTO(@NotNull final SubjectKeyExtendedDTO subjectKey, @NotNull final ContextKeyDTO contextKey,
+			@NotNull final SubscribeType subscribeType) {
+		super(new SubjectContextKeyDTO(subjectKey, contextKey));
+		this.subscribeType = subscribeType;
+	}
 
 }

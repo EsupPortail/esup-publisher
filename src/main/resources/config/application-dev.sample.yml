@@ -76,8 +76,7 @@ ldap:
     countLimit: 2000
     otherUserDisplayedAttributes: mail,ESCOUAI, ENTPersonProfils
     userGroupAttribute: isMemberOf
-    userEntityIdAttribute: ESCOUAICourant
-    otherUserOtherAttributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure
+    otherUserOtherAttributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure, ESCOUAICourant, ESCOSIRENCourant
     otherGroupDisplayedAttributes: isMemberOf
     groupDNContainsDisplayName: true
     groupKeyMemberRegex: "cn=(.*),ou=groups,dc=esco-centre,dc=fr"

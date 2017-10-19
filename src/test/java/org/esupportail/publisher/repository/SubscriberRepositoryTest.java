@@ -15,6 +15,19 @@
  */
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
@@ -32,14 +45,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -96,6 +101,9 @@ public class SubscriberRepositoryTest {
 
 		Subscriber s2 = ObjTest.newSubscriber(news1.getContextKey());
 		s2 = repository.saveAndFlush(s2);
+
+        Subscriber s3 = ObjTest.newSubscriberPersonFromAttr(org1.getContextKey());
+        s3 = repository.saveAndFlush(s3);
 	}
 
 	// @Test
@@ -150,18 +158,19 @@ public class SubscriberRepositoryTest {
 		s = repository.getOne(s.getSubjectCtxId());
 		assertNotNull(s);
 		log.info("After select : " + s.toString());
-		assertTrue(repository.count() == 4);
+		assertTrue(repository.count() == 5);
 
 		List<Subscriber> results = repository.findAll();
-		assertThat(results.size(), is(4));
+        log.info("List of all subscribers {}", results);
+		assertThat(results.size(), is(5));
 		assertThat(results, hasItem(s));
 
 		results = Lists.newArrayList(repository.findAll(SubscriberPredicates
 				.onCtx(org1.getContextKey())));
-		assertThat(results.size(), is(1));
+		assertThat(results.size(), is(2));
 
 		repository.delete(s.getSubjectCtxId());
-		assertTrue(repository.findAll().size() == 3);
+		assertTrue(repository.findAll().size() == 4);
 		assertFalse(repository.exists(s.getSubjectCtxId()));
 
 	}
@@ -172,7 +181,7 @@ public class SubscriberRepositoryTest {
 	 */
 	@Test
 	public void testFindAll() {
-		assertThat(repository.findAll().size(), is(2));
+		assertThat(repository.findAll().size(), is(3));
 	}
 
 	/**
@@ -185,7 +194,7 @@ public class SubscriberRepositoryTest {
 		Subscriber s1 = ObjTest.newSubscriber(org2.getContextKey());
 		Subscriber s2 = ObjTest.newSubscriber(news2.getContextKey());
 		repository.save(Arrays.asList(s1, s2));
-		assertThat(repository.findAll().size(), is(4));
+		assertThat(repository.findAll().size(), is(5));
 	}
 
 	/**
@@ -206,7 +215,7 @@ public class SubscriberRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertTrue(repository.count() == 3);
 	}
 
 	/**
@@ -217,7 +226,7 @@ public class SubscriberRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == 1);
+		assertTrue(repository.count() == 2);
 	}
 
 	/**

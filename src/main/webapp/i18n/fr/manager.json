@@ -103,7 +103,9 @@
                     "targets" : {
                         "user": "Recherche d'un utilisateur",
                         "group": "Recherche d'un groupe",
-                        "userFromGroup": "Recherche d'un utilisateur à partir d'un groupe"
+                        "userFromGroup": "Recherche d'un utilisateur à partir d'un groupe",
+                        "userAttrs": "Définition d'une valeur vérifiant un attribut utilisateur",
+                        "userRegexAttr": "Définition d'une expression régulière vérifiant une valeur d'un attribut utilisateur"
                     }
                 }
             }

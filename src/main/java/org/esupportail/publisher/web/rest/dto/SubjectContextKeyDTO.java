@@ -15,10 +15,16 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
-import lombok.*;
+import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -27,30 +33,38 @@ import java.io.Serializable;
  */
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
 public class SubjectContextKeyDTO implements Serializable {
 
-    /** */
-    private static final long serialVersionUID = -3963584394811440859L;
+	/** */
+	private static final long serialVersionUID = -3963584394811440859L;
 
-    @NotNull
-    @NonNull
-    @Getter
-    @Setter
-    private SubjectKeyDTO subjectKey;
+	@NotNull
+	@NonNull
+	@Getter
+	@Setter
+	private SubjectKeyExtendedDTO subjectKey;
 
-    @NotNull
-    @NonNull
-    @Getter
-    @Setter
-    private ContextKeyDTO contextKey;
-    /**
-     * @param subjectKey
-     * @param contextKey
-     */
-    public SubjectContextKeyDTO(@NotNull final SubjectKeyDTO subjectKey, @NotNull final ContextKeyDTO contextKey) {
-        super();
-        this.subjectKey = subjectKey;
-        this.contextKey = contextKey;
-    }
+	@NotNull
+	@NonNull
+	@Getter
+	@Setter
+	private ContextKeyDTO contextKey;
+
+	/**
+	 * @param subjectKey
+	 * @param contextKey
+	 */
+	public SubjectContextKeyDTO(@NotNull final SubjectKeyExtendedDTO subjectKey, @NotNull final ContextKeyDTO contextKey) {
+		super();
+		this.subjectKey = subjectKey;
+		this.contextKey = contextKey;
+	}
+
+	public SubjectContextKeyDTO(@NotNull final SubjectDTO subject, @NotNull final ContextKeyDTO contextKey) {
+		super();
+		this.subjectKey = new SubjectKeyExtendedDTO(subject.getModelId().getKeyId(), subject.getModelId().getKeyType());
+		this.contextKey = contextKey;
+	}
 
 }

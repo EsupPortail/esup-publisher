@@ -9,12 +9,22 @@
                 "label": "Search on",
                 "user": "Person",
                 "group": "Group",
-                "userfromgroup": "Person from group"
+                "userfromgroup": "Person from group",
+                "userfromattr": "Person with an attribute value",
+                "userfromregexattr": "Person with an attribute matching a regular expression"
             },
             "user.search": {
                 "label": "Search a person",
                 "desc": "Search style : NAME Firstname, without accent, enter the maximum of characters, 3 characters minimum",
                 "placeholder": "Search..."
+            },
+            "userAttr": {
+                "attribute.label": "User's attribute",
+                "value.label": "Attribute's value"
+            },
+            "userRegexAttr": {
+                "attribute.label": "User's attribute",
+                "value.label": "Regular expression"
             },
             "results": {
                 "users": "Users search result"

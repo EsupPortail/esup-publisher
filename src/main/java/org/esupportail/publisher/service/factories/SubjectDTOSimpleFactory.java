@@ -15,12 +15,13 @@
  */
 package org.esupportail.publisher.service.factories;
 
-import org.esupportail.publisher.domain.SubjectKey;
-import org.esupportail.publisher.web.rest.dto.SubjectDTO;
-
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
+import org.esupportail.publisher.domain.SubjectKey;
+import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 
 /**
  *
@@ -29,7 +30,8 @@ import java.util.List;
  */
 public interface SubjectDTOSimpleFactory {
 
-    SubjectDTO from(@NotNull SubjectKey modelKey);
-    List<SubjectDTO> asDTOList(@NotNull Collection<SubjectKey> modelKey);
+	SubjectDTO from(@NotNull SubjectKey modelKey);
+
+	List<SubjectDTO> asDTOList(@NotNull Collection<SubjectKey> modelKey);
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="jgribonvald (generated)" id="1508159309563-1">
+        <addColumn tableName="T_SUBSCRIBER">
+            <column name="subject_attribute_name" type="varchar(64)" defaultValue="ID">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="jgribonvald (generated)" id="1508159309563-2">
+        <renameColumn tableName="T_SUBSCRIBER"
+                      columnDataType="varchar(512)"
+                      newColumnName="subject_attribute_value"
+                      oldColumnName="subject_id"/>
+    </changeSet>
+    <changeSet author="jgribonvald (generated)" id="1508159309563-3">
+        <dropPrimaryKey tableName="T_SUBSCRIBER"/>
+        <addPrimaryKey columnNames="ctx_id, ctx_type, subject_attribute_name, subject_type, subject_attribute_value" constraintName="T_SUBSCRIBERPK" tableName="T_SUBSCRIBER"/>
+    </changeSet>
+</databaseChangeLog>

@@ -26,11 +26,11 @@
                 <div class="form-group">
                     <label class="control-label" translate="manager.publish.targets.search">Search a target</label>
                     <subject-search-button ng-hide="isSubjectSelected()" search-id="targetSubject" subject="search.target" context-key="context.contextKey"
-                                           text="{{ 'entity.action.add' | translate : 'Add' }}"></subject-search-button>
+                                           text="{{ 'entity.action.add' | translate : 'Add' }}" with-extended="true" ></subject-search-button>
                     <ul ng-show="isSubjectSelected()" class="list-group list-unstyled">
                         <li class="list-group-item">
                             <subject-infos subject="selectedSubject" resolve-key="true" ng-click="viewSubject(selectedSubject)">
-                                <a href ng-click="removeSelectedSubject()" uib-tooltip="{{ 'manager.publish.targets.remove' | translate}}"><i class="glyphicon glyphicon-remove-circle text-danger" ></i></a>&nbsp;
+                                <a href ng-click="removeSelectedSubject(); $event.stopPropagation()" uib-tooltip="{{ 'manager.publish.targets.remove' | translate}}"><i class="glyphicon glyphicon-remove-circle text-danger" ></i></a>&nbsp;
                             </subject-infos>
                         </li>
                     </ul>
@@ -95,7 +95,8 @@
                 <tbody>
                 <tr ng-repeat="target in targets">
                     <td data-label="{{'publisherApp.subscriber.subscribeType' | translate}}" ng-if="showSubscribeType()">{{getSubscribeTypeLabel(target.subscribeType) | translate}}</td>
-                    <td data-label="{{'publisherApp.subscriber.subject' | translate}}"><subject-infos subject="target.subjectDTO" ng-click="viewSubject(target)"></subject-infos></td>
+                    <td data-label="{{'publisherApp.subscriber.subject' | translate}}" ng-if="target.subjectDTO"><subject-infos subject="target.subjectDTO" ng-click="viewSubject(target)"></subject-infos></td>
+                    <td data-label="{{'publisherApp.subscriber.subject' | translate}}" ng-if="!target.subjectDTO"><subject-infos subject="target.subjectKeyExtendedDTO"></subject-infos></td>
                     <td class="action"><button type="submit" can-edit-targets="context.contextKey"
                                 ng-click="deleteSubscriber(target)"
                                 class="btn btn-danger">

@@ -15,6 +15,17 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -24,10 +35,6 @@ import org.esupportail.publisher.domain.enums.SubscribeType;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 Juin 2014
@@ -45,6 +52,7 @@ public class Subscriber extends AbstractEntity<SubjectContextKey> implements IEn
 
 	/** Composite key of the subject and context. */
 	@EmbeddedId
+    @Valid
 	private SubjectContextKey subjectCtxId;
 
 	/** This field corresponds to the database column news_subscribers.sub_type. */
@@ -60,7 +68,7 @@ public class Subscriber extends AbstractEntity<SubjectContextKey> implements IEn
 		super();
 	}
 
-	public Subscriber(@NotNull final SubjectKey subject,
+	public Subscriber(@NotNull final SubjectKeyExtended subject,
 			@NotNull final ContextKey context,
 			@NotNull final SubscribeType subscribeType) {
 		super();

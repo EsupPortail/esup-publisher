@@ -18,13 +18,15 @@
  */
 package org.esupportail.publisher.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
+import javax.validation.Valid;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 20 juin 2014
@@ -41,7 +43,8 @@ public class SubjectContextKey implements Serializable {
 	@Basic
 	// @JsonSerialize(using = SubjectKeySerializer.class)
 	// @JsonDeserialize(using = SubjectKeyDeserializer.class)
-	private SubjectKey subject;
+    @Valid
+	private SubjectKeyExtended subject;
 	/** The context. */
 	@Basic
 	// @JsonSerialize(using = ContextKeySerializer.class)

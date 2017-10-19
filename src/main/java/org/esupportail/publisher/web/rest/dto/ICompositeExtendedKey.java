@@ -15,30 +15,24 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
-import java.io.Serializable;
-
-
-public interface ICompositeKey<ID extends Serializable,TYPE> extends Serializable {
+public interface ICompositeExtendedKey<VAL,ATTR,TYPE> {
 
     /**
-     * @return the keyId
+     * @return the keyValue
      */
-    public ID getKeyId();
+    public VAL getKeyValue();
 
     /**
-     * @param keyId the keyId to set
+     * @return the keyAttribute
      */
-    //public void setKeyId(final ID keyId);
+    public ATTR getKeyAttribute();
 
     /**
      * @return the keyType
      */
     public TYPE getKeyType();
 
-    /**
-     * @param keyType the keyType to set
-     */
-    //public void setKeyType(final TYPE keyType);
+
 
 
 

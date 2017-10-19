@@ -103,7 +103,9 @@
                     "targets" : {
                         "user": "Search on user",
                         "group": "Search on group",
-                        "userFromGroup": "Search on user from group"
+                        "userFromGroup": "Search on user from group",
+                        "userAttrs": "Setting a value that will match a user attribute",
+                        "userRegexAttr": "Setting a regular expression matching the value of a user attribute"
                     }
                 }
             }

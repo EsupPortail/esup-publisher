@@ -13,43 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.web.rest.dto;
-
-import java.io.Serializable;
+package org.esupportail.publisher.service.factories;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.SubjectKeyExtended;
+import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 
 /**
+ *
  * @author GIP RECIA - Julien Gribonvald
- * 14 juin 2012
+ * 17 oct. 2014
  */
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-public class ContextKeyDTO implements ICompositeKey<Long, ContextType>, Serializable {
+public interface SubjectDTOToExtendedKeyConverterFactory {
 
-    @NotNull
-    @Getter
-    private Long keyId;
-
-    @NotNull
-    @Getter
-    private ContextType keyType;
-
-    /**
-     * Contructor of the object ContextKey.java.
-     * @param keyId
-     * @param keyType
-     */
-    public ContextKeyDTO(@NotNull final long keyId, @NotNull final ContextType keyType) {
-        this.keyId = keyId;
-        this.keyType = keyType;
-    }
+	SubjectKeyExtended convertToModelKey(@NotNull SubjectDTO dto);
 
 }

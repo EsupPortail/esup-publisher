@@ -89,6 +89,8 @@ angular.module('publisherApp')
                             html = htmlFromDTO(subject);
                         } else if (subject.hasOwnProperty('keyType') && subject.hasOwnProperty('keyId')) {
                             html = htmlFromKey(subject);
+                        } else if (subject.hasOwnProperty('keyValue') && subject.hasOwnProperty('keyAttribute') && subject.hasOwnProperty('keyType')) {
+                            html = htmlFromExtendedKey(subject);
                         }
                     }
                     append(html);
@@ -152,11 +154,37 @@ angular.module('publisherApp')
                         case "PERSON":
                             css = "fa fa-user subject-infos";
                             break;
+                        default: throw "Subject Type not managed and should not be tested :" + type;
+                            break;
                     }
                     if (css) {
                         elem = '<a href class="' + css + '" data-subject-id="' + id + '"><span class="fa fa-question" uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"></span></a>';
                     }
                     //console.log("htmlFromKey returned : ", elem);
+                    return elem;
+                }
+
+                function htmlFromExtendedKey (subject) {
+                    var css = "fa fa-users subject-infos";
+                    var elem = '<span class="fa fa-question subject-infos"></span>';
+                    console.log("subjectInfos htmlFromExtendedKey", subject);
+                    var type = subject.keyType;
+                    var id = subject.keyValue;
+                    var attr = subject.keyAttribute;
+                    switch (type) {
+                        case "GROUP" :
+                        case "PERSON":
+                            css = "fa fa-user subject-infos";
+                            elem = '<a href class="' + css + '" data-subject-id="' + id + '">' +
+                                '<span class="fa fa-question" uib-tooltip-placement="top" uib-tooltip="{{ tooltipSubject(subject) }}"></span></a>';
+                            break;
+                        case "PERSON_ATTR" :
+                        case "PERSON_ATTR_REGEX" :
+                            elem = '<span class="' + css + '" data-subject-id="' + id + '"> ' + attr + " = \"" + id + '\"</span>';
+                            break;
+                        default : throw "Subject Type not managed :" + type;
+                    }
+                    //console.log("htmlFromExtendedKey returned : ", elem);
                     return elem;
                 }
             }

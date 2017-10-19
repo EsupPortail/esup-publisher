@@ -15,6 +15,15 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,10 +33,6 @@ import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.esupportail.publisher.web.rest.dto.ICompositeKey;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 14 juin 2014

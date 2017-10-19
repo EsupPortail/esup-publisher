@@ -20,9 +20,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.mysema.commons.lang.Pair;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Subscriber;
@@ -50,6 +47,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.mysema.commons.lang.Pair;
+
 /**
  * Service class for managing users.
  */
@@ -65,8 +66,8 @@ public class UserService {
 	@Inject
 	private UserRepository userRepository;
 
-    @Inject
-    private IExternalUserDao externalUserDao;
+	@Inject
+	private IExternalUserDao externalUserDao;
 
 	@Inject
 	private UserDTOFactory userDTOFactory;
@@ -74,17 +75,17 @@ public class UserService {
 	@Inject
 	private IAuthorityService autorityService;
 
-    @Inject
-    private IPermissionService permissionService;
+	@Inject
+	private IPermissionService permissionService;
 
-    @Inject
-    private SubscriberService subscriberService;
+	@Inject
+	private SubscriberService subscriberService;
 
-    @Inject
-    private FilterRepository filterRepository;
+	@Inject
+	private FilterRepository filterRepository;
 
-    @Inject
-    private ContextService contextService;
+	@Inject
+	private ContextService contextService;
 
 	// @Inject
 	// private PersistentTokenRepository persistentTokenRepository;
@@ -115,13 +116,13 @@ public class UserService {
 	// }
 
 	public void updateUserInformation() {
-        User user = SecurityUtils.getCurrentUser();
-        if (user != null) {
-            user = userRepository.save(user);
-            log.debug("Changed Information for User: {}", user);
-        } else {
-            log.warn("Tried to update lastAccess of unknown user !");
-        }
+		User user = SecurityUtils.getCurrentUser();
+		if (user != null) {
+			user = userRepository.save(user);
+			log.debug("Changed Information for User: {}", user);
+		} else {
+			log.warn("Tried to update lastAccess of unknown user !");
+		}
 	}
 
 	// /**
@@ -163,107 +164,122 @@ public class UserService {
 	// }
 	// }
 
-    // TODO when several context are selected
-    public List<UserDTO> getUserFromSearchInCtx(final ContextKey contextKey, final List<ContextKey> subContextKeys, final String search) {
-        if (search == null || search.isEmpty() || search.length() < 3) return Lists.newArrayList();
-        if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
-            return Lists.newArrayList();
-        }
-        Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), contextKey);
-        if ((perms == null || PermissionType.LOOKOVER.equals(perms.getFirst())) && subContextKeys != null) {
-            Pair<PermissionType, PermissionDTO> lowerPerm = null;
-            // we need to get the lower perm to apply rules on lower context to avoid problems of rights !
-            for (ContextKey ctxKey: subContextKeys) {
-                perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), ctxKey);
-                if (perms != null && (lowerPerm == null || perms.getFirst().getMask() < lowerPerm.getFirst().getMask())) {
-                    lowerPerm = perms;
-                    // if contributor if found we have the lower rights !
-                    if (lowerPerm.getFirst().getMask() == PermissionType.CONTRIBUTOR.getMask()) break;
-                }
-            }
-        }
-        log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(), perms.getSecond());
-        if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst()) && perms.getSecond() == null) {
-            return Lists.newArrayList();
-        }
+	// TODO when several context are selected
+	public List<UserDTO> getUserFromSearchInCtx(final ContextKey contextKey, final List<ContextKey> subContextKeys,
+			final String search) {
+		if (search == null || search.isEmpty() || search.length() < 3)
+			return Lists.newArrayList();
+		if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
+			return Lists.newArrayList();
+		}
+		Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder
+				.getContext().getAuthentication(), contextKey);
+		if ((perms == null || PermissionType.LOOKOVER.equals(perms.getFirst())) && subContextKeys != null) {
+			Pair<PermissionType, PermissionDTO> lowerPerm = null;
+			// we need to get the lower perm to apply rules on lower context to avoid problems of rights !
+			for (ContextKey ctxKey : subContextKeys) {
+				perms = permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext()
+						.getAuthentication(), ctxKey);
+				if (perms != null && (lowerPerm == null || perms.getFirst().getMask() < lowerPerm.getFirst().getMask())) {
+					lowerPerm = perms;
+					// if contributor if found we have the lower rights !
+					if (lowerPerm.getFirst().getMask() == PermissionType.CONTRIBUTOR.getMask())
+						break;
+				}
+			}
+		}
+		log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
+				perms.getSecond());
+		if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst())
+				&& perms.getSecond() == null) {
+			return Lists.newArrayList();
+		}
 
-        // if ADMIN perms.getSecond() is null as all is authorized
-        if (PermissionType.ADMIN.getMask() <= perms.getFirst().getMask()) {
-            final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
-            if (rootCtx != null){
-                Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(), FilterType.LDAP));
-                if (filter != null) {
-                    return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(filter.getPattern(), search), false);
-                }
-            }
-            // can be very long and finish with timeout
-            return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(null, search), false);
-        }
+		// if ADMIN perms.getSecond() is null as all is authorized
+		if (PermissionType.ADMIN.getMask() <= perms.getFirst().getMask()) {
+			final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
+			if (rootCtx != null) {
+				Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+						FilterType.LDAP));
+				if (filter != null) {
+					return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(filter.getPattern(), search),
+							false);
+				}
+			}
+			// can be very long and finish with timeout
+			return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(null, search), false);
+		}
 
-        if (PermissionType.CONTRIBUTOR.getMask() <= perms.getFirst().getMask()) {
-            PermissionDTO perm = perms.getSecond();
-            if (perm != null) {
-                if (perm instanceof PermOnClassifWSubjDTO) {
-                    Set<SubjectKeyDTO> authorizedSubjects = ((PermOnClassifWSubjDTO) perm).getAuthorizedSubjects();
-                    // TODO à voir si on offre le choix de ne pas définir des AuthorizedSubjects et que dans ce cas par défaut recherche sur filtre par défaut (idem perm classiques)
+		if (PermissionType.CONTRIBUTOR.getMask() <= perms.getFirst().getMask()) {
+			PermissionDTO perm = perms.getSecond();
+			if (perm != null) {
+				if (perm instanceof PermOnClassifWSubjDTO) {
+					Set<SubjectKeyDTO> authorizedSubjects = ((PermOnClassifWSubjDTO) perm).getAuthorizedSubjects();
+					// TODO à voir si on offre le choix de ne pas définir des AuthorizedSubjects et que dans ce cas par défaut recherche sur filtre par défaut (idem perm classiques)
 
-                    // non sens de ne récupérer que des utilisateurs définis, il faut aussi les chercher dans les groupes autorisés
-                    Set<String> authorizedUsers = Sets.newHashSet();
-                    Set<String> authorizedGroups = Sets.newHashSet();
-                    for (SubjectKeyDTO subjDto : authorizedSubjects) {
-                        switch (subjDto.getKeyType()) {
-                            case PERSON:
-                                authorizedUsers.add(subjDto.getKeyId());
-                                break;
-                            case GROUP:
-                                authorizedGroups.add(subjDto.getKeyId());
-                                break;
-                            default:
-                                log.error("Case not managed");
-                                throw new IllegalArgumentException("Type of subject not managed " + subjDto.getKeyType());
-                        }
-                    }
-                    // uniquement les utilisateurs définis
-                    Set<IExternalUser> filteredSearch = Sets.newHashSet(externalUserDao.getUsersByUidsWithFilter(authorizedUsers, search));
-                    // et à partir des groupes
-                    filteredSearch.addAll(externalUserDao.getUsersFromParentGroups(authorizedGroups, search));
-                    return userDTOFactory.asDTOList(filteredSearch, false);
-                } else if (perm instanceof PermOnCtxDTO) {
-                    final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
-                    if (rootCtx != null) {
-                        final Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(), FilterType.LDAP));
-                        if (filter != null) {
-                            return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(filter.getPattern(), search), false);
-                        }
-                    }
-                    log.warn("No filters are defined for context {}, we procced on default subscribers", rootCtx);
-                    // Cas ou aucun filtre n'est défini on tente à partir des subscriber définis par défaut au niveau organization
-                    List<Subscriber> subscribers = subscriberService.getDefaultsSubscribersOfContext(contextKey);
-                    Set<String> userIds = Sets.newHashSet();
-                    Set<String> groupIds = Sets.newHashSet();
-                    for (Subscriber subscriber : subscribers) {
-                        switch (subscriber.getSubjectCtxId().getSubject().getKeyType()) {
-                            case PERSON:
-                                userIds.add(subscriber.getSubjectCtxId().getSubject().getKeyId());
-                                break;
-                            case GROUP:
-                                groupIds.add(subscriber.getSubjectCtxId().getSubject().getKeyId());
-                                break;
-                            default:
-                                log.error("Case not managed");
-                                throw new IllegalArgumentException("Type of subject not managed " + subscriber.getSubjectCtxId().getSubject().getKeyType());
-                        }
-                    }
-                    // uniquement les utilisateurs définis
-                    Set<IExternalUser> filteredSearch = Sets.newHashSet(externalUserDao.getUsersByUidsWithFilter(userIds, search));
-                    // et à partir des groupes
-                    filteredSearch.addAll(externalUserDao.getUsersFromParentGroups(groupIds, search));
+					// non sens de ne récupérer que des utilisateurs définis, il faut aussi les chercher dans les groupes autorisés
+					Set<String> authorizedUsers = Sets.newHashSet();
+					Set<String> authorizedGroups = Sets.newHashSet();
+					for (SubjectKeyDTO subjDto : authorizedSubjects) {
+						switch (subjDto.getKeyType()) {
+						case PERSON:
+							authorizedUsers.add(subjDto.getKeyId());
+							break;
+						case GROUP:
+							authorizedGroups.add(subjDto.getKeyId());
+							break;
+						default:
+							log.error("Case not managed");
+							throw new IllegalArgumentException("Type of subject not managed " + subjDto.getKeyType());
+						}
+					}
+					// uniquement les utilisateurs définis
+					Set<IExternalUser> filteredSearch = Sets.newHashSet(externalUserDao.getUsersByUidsWithFilter(
+							authorizedUsers, search));
+					// et à partir des groupes
+					filteredSearch.addAll(externalUserDao.getUsersFromParentGroups(authorizedGroups, search));
+					return userDTOFactory.asDTOList(filteredSearch, false);
+				} else if (perm instanceof PermOnCtxDTO) {
+					final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
+					if (rootCtx != null) {
+						final Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
+								rootCtx.getKeyId(), FilterType.LDAP));
+						if (filter != null) {
+							return userDTOFactory.asDTOList(
+									externalUserDao.getUsersWithFilter(filter.getPattern(), search), false);
+						}
+					}
+					log.warn("No filters are defined for context {}, we procced on default subscribers", rootCtx);
+					// Cas ou aucun filtre n'est défini on tente à partir des subscriber définis par défaut au niveau organization
+					List<Subscriber> subscribers = subscriberService.getDefaultsSubscribersOfContext(contextKey);
+					Set<String> userIds = Sets.newHashSet();
+					Set<String> groupIds = Sets.newHashSet();
+					for (Subscriber subscriber : subscribers) {
+						switch (subscriber.getSubjectCtxId().getSubject().getKeyType()) {
+						case PERSON:
+							userIds.add(subscriber.getSubjectCtxId().getSubject().getKeyValue());
+							break;
+						case GROUP:
+							groupIds.add(subscriber.getSubjectCtxId().getSubject().getKeyValue());
+							break;
+						default:
+							log.error("Case not managed");
+							throw new IllegalArgumentException("Type of subject not managed "
+									+ subscriber.getSubjectCtxId().getSubject().getKeyType());
+						}
+					}
+					// uniquement les utilisateurs définis
+					Set<IExternalUser> filteredSearch = Sets.newHashSet(externalUserDao.getUsersByUidsWithFilter(
+							userIds, search));
+					// et à partir des groupes
+					filteredSearch.addAll(externalUserDao.getUsersFromParentGroups(groupIds, search));
 
-                    return userDTOFactory.asDTOList(filteredSearch, false);
-                } else
-                    throw new NotYetImplementedException(String.format("Management of %s type is not yet implemented", perm.getClass()));
-            }
-        }
-        return Lists.newArrayList();
-    }
+					return userDTOFactory.asDTOList(filteredSearch, false);
+				} else
+					throw new NotYetImplementedException(String.format("Management of %s type is not yet implemented",
+							perm.getClass()));
+			}
+		}
+		return Lists.newArrayList();
+	}
 }

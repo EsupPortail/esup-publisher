@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
 import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.ContextKey;
@@ -36,6 +35,7 @@ import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKey;
+import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.SubjectPermKey;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.AccessType;
@@ -63,6 +63,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.google.common.collect.Sets;
+
 public final class ObjTest {
 
 	public final static String subject1 = "user";
@@ -70,36 +72,30 @@ public final class ObjTest {
 	public final static String group1 = "cfa:Etablissements:ECOLE HUBERT CURIEN_0180865T:Apprenti INGE 1ère année:Eleves_ERE IGR 1ère année";
 	public final static String group2 = "esco:admin:central";
 	public final static String subject3 = "admin";
+	public final static String subjectAttrUAI = "0450822X";
+	public final static String subjectAttrKeyUAI = "ESCOUAICourant";
 
-    // Must be a Person
-	public final static SubjectKey subjectKey1 = new SubjectKey(subject1,
-			SubjectType.PERSON);
-    // Must be a Person
-	public final static SubjectKey subjectKey2 = new SubjectKey(subject2,
-			SubjectType.PERSON);
-    // Must be a Person
-	public final static SubjectKey subjectKey3 = new SubjectKey(subject3,
-			SubjectType.PERSON);
-    //Must be a Group
-	public final static SubjectKey subjectKey4 = new SubjectKey(group1,
-			SubjectType.GROUP);
-    //Must be a Group
-	public final static SubjectKey subjectKey5 = new SubjectKey(group2,
-			SubjectType.GROUP);
+	// Must be a Person
+	public final static SubjectKey subjectKey1 = new SubjectKey(subject1, SubjectType.PERSON);
+	// Must be a Person
+	public final static SubjectKey subjectKey2 = new SubjectKey(subject2, SubjectType.PERSON);
+	// Must be a Person
+	public final static SubjectKey subjectKey3 = new SubjectKey(subject3, SubjectType.PERSON);
+	// A Person attribut
+	public final static SubjectKeyExtended subjectKeyFromUserAttr = new SubjectKeyExtended(subjectAttrUAI,
+			subjectAttrKeyUAI, SubjectType.PERSON_ATTR);
+	//Must be a Group
+	public final static SubjectKey subjectKey4 = new SubjectKey(group1, SubjectType.GROUP);
+	//Must be a Group
+	public final static SubjectKey subjectKey5 = new SubjectKey(group2, SubjectType.GROUP);
 
-	public final static SubjectPermKey subjectPerm1 = new SubjectPermKey(subjectKey1,
-			false);
-	public final static SubjectPermKey subjectPerm1WithValidation = new SubjectPermKey(
-			subjectKey1, true);
-	public final static SubjectPermKey subjectPerm2 = new SubjectPermKey(subjectKey2,
-			false);
-	public final static SubjectPermKey subjectPerm3 = new SubjectPermKey(subjectKey3,
-			false);
-	public final static SubjectPermKey subjectPerm4 = new SubjectPermKey(subjectKey4,
-			false);
+	public final static SubjectPermKey subjectPerm1 = new SubjectPermKey(subjectKey1, false);
+	public final static SubjectPermKey subjectPerm1WithValidation = new SubjectPermKey(subjectKey1, true);
+	public final static SubjectPermKey subjectPerm2 = new SubjectPermKey(subjectKey2, false);
+	public final static SubjectPermKey subjectPerm3 = new SubjectPermKey(subjectKey3, false);
+	public final static SubjectPermKey subjectPerm4 = new SubjectPermKey(subjectKey4, false);
 
-	public final static SubjectPermKey[] subkeys1 = { subjectPerm1, subjectPerm2,
-			subjectPerm3 };
+	public final static SubjectPermKey[] subkeys1 = { subjectPerm1, subjectPerm2, subjectPerm3 };
 	public final static SubjectPermKey[] subkeys2 = { subjectPerm2, subjectPerm3 };
 	public final static SubjectPermKey[] subkeys3 = { subjectPerm1, subjectPerm2 };
 	public final static SubjectPermKey[] subkeys4 = { subjectPerm3 };
@@ -113,8 +109,7 @@ public final class ObjTest {
 	public static DateTime d4 = null;
 	public static DateTime d5 = null;
 	public static DateTime d6 = null;
-	public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat
-			.forPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 	static {
 
@@ -137,8 +132,7 @@ public final class ObjTest {
 		return e;
 	}
 
-	public static PermissionOnContext newPermissionOnCtx(String indice,
-			PermissionType role, Organization org) {
+	public static PermissionOnContext newPermissionOnCtx(String indice, PermissionType role, Organization org) {
 		PermissionOnContext e = new PermissionOnContext();
 		e.setContext(org.getContextKey());
 		e.setRole(role);
@@ -146,8 +140,8 @@ public final class ObjTest {
 		return e;
 	}
 
-	public static PermissionOnClassificationWithSubjectList newPermissionOnClassificationWSL(
-			String indice, PermissionType role, Organization org, Set<SubjectKey> subjects) {
+	public static PermissionOnClassificationWithSubjectList newPermissionOnClassificationWSL(String indice,
+			PermissionType role, Organization org, Set<SubjectKey> subjects) {
 		PermissionOnClassificationWithSubjectList e = new PermissionOnClassificationWithSubjectList();
 		e.setContext(org.getContextKey());
 		e.setRole(role);
@@ -156,8 +150,8 @@ public final class ObjTest {
 		return e;
 	}
 
-	public static PermissionOnSubjects newPermissionOnSubjects(String indice,
-			Organization org, Set<SubjectPermKey> subjects) {
+	public static PermissionOnSubjects newPermissionOnSubjects(String indice, Organization org,
+			Set<SubjectPermKey> subjects) {
 		PermissionOnSubjects e = new PermissionOnSubjects();
 		e.setContext(org.getContextKey());
 		e.setEvaluator(newGlobalEvaluator());
@@ -165,9 +159,8 @@ public final class ObjTest {
 		return e;
 	}
 
-	public static PermissionOnSubjectsWithClassificationList newPermissionOnSubjectsWCL(
-			String indice, Organization org,
-			Set<SubjectPermKey> subjects, Set<ContextKey> contexts) {
+	public static PermissionOnSubjectsWithClassificationList newPermissionOnSubjectsWCL(String indice,
+			Organization org, Set<SubjectPermKey> subjects, Set<ContextKey> contexts) {
 		PermissionOnSubjectsWithClassificationList e = new PermissionOnSubjectsWithClassificationList();
 		e.setContext(org.getContextKey());
 		e.setEvaluator(newGlobalEvaluator());
@@ -181,31 +174,28 @@ public final class ObjTest {
 		evaluators.add(newMVUEvaluatorForGroup("esco:admin:central"));
 		evaluators.add(newRoleEvaluatorForGroup("esco:admin:central"));
 		// evaluators.add(newPrefEvaluatorForAttr("portletCtx", "test"));
-		evaluators.add(newUserAttributeEvaluatorForAttr("uid", subject3,
-				StringEvaluationMode.EXISTS));
+		evaluators.add(newUserAttributeEvaluatorForAttr("uid", subject3, StringEvaluationMode.EXISTS));
 		return newOperatorEvaluator(type, evaluators);
 	}
 
-    public static OperatorEvaluator newGlobalEvaluatorOnUser(OperatorType type, String user) {
-        Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
-        evaluators.add(newUserAttributeEvaluatorForAttr("uid", user,
-            StringEvaluationMode.EXISTS));
-        return newOperatorEvaluator(type, evaluators);
-    }
-    public static OperatorEvaluator newGlobalEvaluatorOnGroup(OperatorType type, String group) {
-        Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
-        evaluators.add(newMVUEvaluatorForGroup(group));
-        return newOperatorEvaluator(type, evaluators);
-    }
+	public static OperatorEvaluator newGlobalEvaluatorOnUser(OperatorType type, String user) {
+		Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
+		evaluators.add(newUserAttributeEvaluatorForAttr("uid", user, StringEvaluationMode.EXISTS));
+		return newOperatorEvaluator(type, evaluators);
+	}
+
+	public static OperatorEvaluator newGlobalEvaluatorOnGroup(OperatorType type, String group) {
+		Set<AbstractEvaluator> evaluators = new HashSet<AbstractEvaluator>();
+		evaluators.add(newMVUEvaluatorForGroup(group));
+		return newOperatorEvaluator(type, evaluators);
+	}
 
 	public static OperatorEvaluator newGlobalEvaluator() {
 		return newGlobalEvaluator(OperatorType.OR);
 	}
 
-	public static UserMultivaluedAttributesEvaluator newMVUEvaluatorForGroup(
-			final String group) {
-		return newMultiValuedUserAttributeEvaluatorForAttr("isMemberOf", group,
-				StringEvaluationMode.EQUALS);
+	public static UserMultivaluedAttributesEvaluator newMVUEvaluatorForGroup(final String group) {
+		return newMultiValuedUserAttributeEvaluatorForAttr("isMemberOf", group, StringEvaluationMode.EQUALS);
 	}
 
 	public static UserGroupEvaluator newRoleEvaluatorForGroup(final String group) {
@@ -218,46 +208,39 @@ public final class ObjTest {
 	// PreferenceEvaluator umv = new PreferenceEvaluator(attribute, value);
 	// return umv;
 	// }
-	public static UserAttributesEvaluator newUserAttributeEvaluatorForAttr(
-			final String attribute, final String value,
+	public static UserAttributesEvaluator newUserAttributeEvaluatorForAttr(final String attribute, final String value,
 			final StringEvaluationMode mode) {
-		UserAttributesEvaluator umv = new UserAttributesEvaluator(attribute,
-				value, mode);
+		UserAttributesEvaluator umv = new UserAttributesEvaluator(attribute, value, mode);
 		return umv;
 	}
 
 	public static UserMultivaluedAttributesEvaluator newMultiValuedUserAttributeEvaluatorForAttr(
-			final String attribute, final String value,
-			final StringEvaluationMode mode) {
-		UserMultivaluedAttributesEvaluator umv = new UserMultivaluedAttributesEvaluator(
-				attribute, value, mode);
+			final String attribute, final String value, final StringEvaluationMode mode) {
+		UserMultivaluedAttributesEvaluator umv = new UserMultivaluedAttributesEvaluator(attribute, value, mode);
 		return umv;
 	}
 
-	public static OperatorEvaluator newOperatorEvaluator(
-			final OperatorType operator, Set<AbstractEvaluator> evaluators) {
+	public static OperatorEvaluator newOperatorEvaluator(final OperatorType operator, Set<AbstractEvaluator> evaluators) {
 		return new OperatorEvaluator(operator, evaluators);
 	}
 
-	public static Filter newFilterLDAP(final String pattern,
-			final Organization organization) {
+	public static Filter newFilterLDAP(final String pattern, final Organization organization) {
 		return new Filter(pattern, FilterType.LDAP, organization);
 	}
 
-	public static Filter newFilterGroup(final String pattern,
-			final Organization organization) {
+	public static Filter newFilterGroup(final String pattern, final Organization organization) {
 		return new Filter(pattern, FilterType.GROUP, organization);
 	}
 
 	public static Reader newReader(final String indice) {
-		return new Reader("lecture_" + indice, "lecture des trucs " + indice,
-				"DESC des " + indice, Sets.newHashSet(ItemType.NEWS, ItemType.MEDIA, ItemType.RESOURCE)
-            , Sets.newHashSet(ClassificationDecorType.COLOR, ClassificationDecorType.ENCLOSURE));
+		return new Reader("lecture_" + indice, "lecture des trucs " + indice, "DESC des " + indice, Sets.newHashSet(
+				ItemType.NEWS, ItemType.MEDIA, ItemType.RESOURCE), Sets.newHashSet(ClassificationDecorType.COLOR,
+				ClassificationDecorType.ENCLOSURE));
 	}
 
 	public static Redactor newRedactor(final String indice) {
-		return new Redactor("lecture_" + indice, "lecture des trucs " + indice, "DESC des " + indice
-            , WritingFormat.HTML, WritingMode.TARGETS_ON_ITEM, 1, false, 90);
+		return new Redactor("lecture_" + indice, "lecture des trucs " + indice, "DESC des " + indice,
+				WritingFormat.HTML, WritingMode.TARGETS_ON_ITEM, 1, false, 90);
 	}
 
 	/*
@@ -285,109 +268,98 @@ public final class ObjTest {
 		// cat.setCreationDate(c.getTime());
 		// return cat;
 
-		return new Category(true, "CAT " + indice, "ICON_URL" + indice,
-				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), "#F44336", pub);
+		return new Category(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", pub);
 	}
 
 	public static Category newCategory(final String indice) {
-		return new Category(true, "CAT " + indice, "ICON_URL" + indice,
-				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), "#F44336", newPublisher(indice));
+		return new Category(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", newPublisher(indice));
 	}
 
 	public static Publisher newPublisher(final String indice) {
-		return new Publisher(newOrganization(indice), newReader(indice),
-				newRedactor(indice), "PUB " + indice, PermissionClass.CONTEXT,
-				rnd.nextBoolean(), true, true);
+		return new Publisher(newOrganization(indice), newReader(indice), newRedactor(indice), "PUB " + indice,
+				PermissionClass.CONTEXT, rnd.nextBoolean(), true, true);
 	}
 
 	public static InternalFeed newInternalFeed(final String indice) {
-		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
-				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), "#F44336", newPublisher(indice),
-				newCategory(indice));
+		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", newPublisher(indice), newCategory(indice));
 	}
 
-	public static InternalFeed newInternalFeed(final String indice,
-			final Publisher publisher) {
-		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
-				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), "#F44336", publisher, newCategory(indice));
+	public static InternalFeed newInternalFeed(final String indice, final Publisher publisher) {
+		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", publisher, newCategory(indice));
 	}
 
-	public static InternalFeed newInternalFeed(final String indice,
-			final Publisher publisher, final Category category) {
-		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice,
-				"fr_fr", 3600, 200, getRandomAccessType(), "A DESC" + indice,
-				getRandomDisplayOrderType(), "#F44336", publisher, category);
+	public static InternalFeed newInternalFeed(final String indice, final Publisher publisher, final Category category) {
+		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", publisher, category);
 	}
 
 	public static News newNews(final String indice) {
-		return new News("Titre " + indice, "enclosure" + indice, "body"
-				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice, true,
-				true, newOrganization(indice), newRedactor(indice));
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+				d2, null, getRandomItemStatus(), "summary" + indice, true, true, newOrganization(indice),
+				newRedactor(indice));
 	}
 
-	public static News newNews(final String indice,
-			final Organization organization) {
-		return new News("Titre " + indice, "enclosure" + indice, "body"
-				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice, true,
-				true, organization, newRedactor(indice));
+	public static News newNews(final String indice, final Organization organization) {
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, newRedactor(indice));
 	}
 
-	public static News newNews(final String indice,
-			final Organization organization, final Redactor redactor) {
-		return new News("Titre " + indice, "enclosure" + indice, "body"
-				+ indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-				null, getRandomItemStatus(), "summary" + indice, true,
-				true, organization, redactor);
+	public static News newNews(final String indice, final Organization organization, final Redactor redactor) {
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
 	}
 
-    public static Flash newFlash(final String indice,
-                               final Organization organization, final Redactor redactor) {
-        return new Flash("Titre " + indice, "enclosure" + indice, "body"
-            + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-            null, getRandomItemStatus(), "summary" + indice, true,
-            true, organization, redactor);
-    }
-    public static Attachment newAttachment(final String indice,
-                                 final Organization organization, final Redactor redactor) {
-        return new Attachment("Titre " + indice, "enclosure" + indice, d1.toLocalDate(), d3.toLocalDate(), d2,
-            null, getRandomItemStatus(), "summary" + indice, true,
-            true, organization, redactor);
-    }
+	public static Flash newFlash(final String indice, final Organization organization, final Redactor redactor) {
+		return new Flash("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
+	}
+
+	public static Attachment newAttachment(final String indice, final Organization organization, final Redactor redactor) {
+		return new Attachment("Titre " + indice, "enclosure" + indice, d1.toLocalDate(), d3.toLocalDate(), d2, null,
+				getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
+	}
 
 	public static Subscriber newSubscriber(final ContextKey context) {
-		return new Subscriber(subjectKey3, context, getRandomSubscribeType());
+		return new Subscriber(new SubjectKeyExtended(subjectKey3), context, getRandomSubscribeType());
 	}
-    public static Subscriber newSubscriberPerson(final ContextKey context) {
-        return new Subscriber(subjectKey1, context, getRandomSubscribeType());
-    }
-    public static Subscriber newSubscriberGroup(final ContextKey context) {
-        return new Subscriber(subjectKey5, context, getRandomSubscribeType());
-    }
 
-    public static SubscriberFormDTO newSubscriberDTO() {
-        return new SubscriberFormDTO(new SubjectDTO(subjectKey3.getKeyId(), subjectKey3.getKeyType()), getRandomSubscribeType());
-    }
-    public static SubscriberFormDTO newSubscriberDTOPerson() {
-        return new SubscriberFormDTO(new SubjectDTO(subjectKey1.getKeyId(), subjectKey1.getKeyType()), getRandomSubscribeType());
-    }
-    public static SubscriberFormDTO newSubscriberDTOGroup() {
-        return new SubscriberFormDTO(new SubjectDTO(subjectKey5.getKeyId(), subjectKey5.getKeyType()), getRandomSubscribeType());
-    }
+	public static Subscriber newSubscriberPerson(final ContextKey context) {
+		return new Subscriber(new SubjectKeyExtended(subjectKey1), context, getRandomSubscribeType());
+	}
+
+	public static Subscriber newSubscriberPersonFromAttr(final ContextKey context) {
+		return new Subscriber(subjectKeyFromUserAttr, context, getRandomSubscribeType());
+	}
+
+	public static Subscriber newSubscriberGroup(final ContextKey context) {
+		return new Subscriber(new SubjectKeyExtended(subjectKey5), context, getRandomSubscribeType());
+	}
+
+	public static SubscriberFormDTO newSubscriberDTO() {
+		return new SubscriberFormDTO(new SubjectDTO(subjectKey3.getKeyId(), subjectKey3.getKeyType()),
+				getRandomSubscribeType());
+	}
+
+	public static SubscriberFormDTO newSubscriberDTOPerson() {
+		return new SubscriberFormDTO(new SubjectDTO(subjectKey1.getKeyId(), subjectKey1.getKeyType()),
+				getRandomSubscribeType());
+	}
+
+	public static SubscriberFormDTO newSubscriberDTOGroup() {
+		return new SubscriberFormDTO(new SubjectDTO(subjectKey5.getKeyId(), subjectKey5.getKeyType()),
+				getRandomSubscribeType());
+	}
 
 	public static AccessType getRandomAccessType() {
-		return AccessType
-				.valueOf(rnd.nextInt(AccessType.values().length - 1) + 1);
+		return AccessType.valueOf(rnd.nextInt(AccessType.values().length - 1) + 1);
 	}
 
 	public static DisplayOrderType getRandomDisplayOrderType() {
-		return DisplayOrderType
-				.valueOf(rnd.nextInt(DisplayOrderType.values().length - 1));
+		return DisplayOrderType.valueOf(rnd.nextInt(DisplayOrderType.values().length - 1));
 	}
 
 	public static ItemStatus getRandomItemStatus() {
@@ -395,8 +367,7 @@ public final class ObjTest {
 	}
 
 	public static SubscribeType getRandomSubscribeType() {
-		return SubscribeType
-				.valueOf(rnd.nextInt(SubscribeType.values().length - 1));
+		return SubscribeType.valueOf(rnd.nextInt(SubscribeType.values().length - 1));
 	}
 
 }

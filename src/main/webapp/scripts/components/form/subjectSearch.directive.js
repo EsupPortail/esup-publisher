@@ -8,13 +8,14 @@ angular.module('publisherApp')
             scope: {
                 searchType: '@?',
                 contextKey: '=',
-                // subject or subject are mandatory but only once at time, it's checked in the controller
+                // subject or subjects are mandatory but only once at time, it's checked in the controller
                 subject: '=?',
                 subjects: '=?',
                 subjectId :'=?',
                 text: "@?",
                 searchId: "@",
-                subContextKeys: '=?'
+                subContextKeys: '=?',
+                withExtended: "@?"
             },
             controller: 'subjectSearchButtonController',
             template: '<div class="subject-search-button">' +
@@ -26,7 +27,8 @@ angular.module('publisherApp')
 
                 scope.$watch('subject', function(newVal, oldVal){
                     //console.log("link dir subject", scope.subject);
-                    if (angular.isDefined(newVal) && !angular.equals(newVal, oldVal) && newVal.hasOwnProperty("modelId")) {
+                    if (angular.isDefined(newVal) && !angular.equals(newVal, oldVal) && (newVal.hasOwnProperty("modelId") || newVal.hasOwnProperty("keyValue")
+                    && newVal.hasOwnProperty("keyAttribute"))) {
                         $('body').removeClass('modal-open');
                         $('.modal-backdrop').remove();
                     }
@@ -50,6 +52,7 @@ angular.module('publisherApp')
         }
 
         $scope.userAttrs = Subject.getUserDisplayedAttrs();
+        $scope.extendedAttrs = Subject.getUserFonctionalAttrs();
         $scope.userResult = [];
         $scope.resultsArr = [];
 
@@ -126,6 +129,11 @@ angular.module('publisherApp')
                 }
             });
 
+        };
+
+        $scope.initExtendedSubject = function(type) {
+            $scope.clearSubject();
+            $scope.container.extendedSubject = {keyAttribute: null, keyValue: null, keyType: type};
         };
 
         //$scope.$watch('container.subject', function() {
@@ -276,6 +284,11 @@ angular.module('publisherApp')
                     }
                     $scope.subject = $scope.container.subject;
                 }
+            } else if (angular.isDefined($scope.container.extendedSubject) && !angular.equals({},$scope.container.extendedSubject)){
+                    if (angular.isDefined($scope.subjectId)) {
+                        $scope.subjectId = $scope.container.extendedSubject.keyValue + $scope.container.extendedSubject.keyAttribute;
+                    }
+                    $scope.subject = $scope.container.extendedSubject;
             } else {
                 if ($scope.multiSelection) {
                     $scope.subjects = [];
@@ -292,6 +305,7 @@ angular.module('publisherApp')
         $scope.canSubmit = function() {
             return (angular.isDefined($scope.container.subject) && angular.isDefined($scope.container.subject.modelId)
                     && !angular.equals({},$scope.container.subject.modelId))
+                || (angular.isDefined($scope.container.extendedSubject) && !angular.equals({},$scope.container.extendedSubject))
                 || (angular.isDefined($scope.container.subjects) && $scope.container.subjects.length > 0
                     && angular.isDefined($scope.container.subjects[$scope.container.subjects.length - 1].modelId)
                     && !angular.equals({},$scope.container.subjects[$scope.container.subjects.length - 1].modelId));
@@ -305,6 +319,7 @@ angular.module('publisherApp')
             $scope.currentPage = 1;
             $scope.numPerPage = 10;
             $scope.container.subjects = [];
+            delete $scope.container.initExtendedSubject;
             delete $scope.subject;
             delete $scope.subjects;
             delete $scope.subjectId;

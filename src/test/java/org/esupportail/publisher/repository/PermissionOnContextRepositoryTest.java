@@ -18,6 +18,18 @@
  */
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
@@ -27,6 +39,7 @@ import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.PermissionType;
+import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,13 +49,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
@@ -60,6 +66,9 @@ public class PermissionOnContextRepositoryTest {
 
 	@Inject
 	private PermissionRepository<AbstractPermission> abstractRepo;
+
+    @Inject
+    private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
 
 	@Inject
 	private OrganizationRepository orgRepo;
@@ -214,6 +223,7 @@ public class PermissionOnContextRepositoryTest {
 	public void testDeleteAll() {
 		repository.deleteAll();
 		assertTrue(repository.count() == 0);
+        assertTrue(evaluatorRepository.count() == 0);
 	}
 
 }

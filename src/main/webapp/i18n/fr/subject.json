@@ -9,12 +9,22 @@
                 "label": "Type : ",
                 "user": "Personne",
                 "group": "Groupe",
-                "userfromgroup": "Personne d'un groupe"
+                "userfromgroup": "Personne d'un groupe",
+                "userfromattr": "Valeur d'un attribut utilisateur",
+                "userfromregexattr": "Expression régulière sur un attribut utilisateur"
             },
             "user.search": {
                 "label": "Rechercher un utilisateur",
                 "desc": "Recherche sous la forme : \n NOM Prénom, sans accent, saisissez un maximum de caractères, 3 caractères minimum",
                 "placeholder": "Recherche..."
+            },
+            "userAttr": {
+                "attribute.label": "Attribut utilisateur",
+                "value.label": "Valeur de l'attribut"
+            },
+            "userRegexAttr": {
+                "attribute.label": "Attribut utilisateur",
+                "value.label": "Expression régulière"
             },
             "results": {
                 "users": "Liste des utilisateurs de la recherche"

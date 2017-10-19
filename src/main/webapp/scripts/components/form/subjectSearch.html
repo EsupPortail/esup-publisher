@@ -10,6 +10,70 @@
             <i class="fa fa-plus fa-fw"></i><span translate="publisherApp.subject.type.userfromgroup"></span>
         </button>
     </div>
+    <div ng-if="withExtended" class="btn-group no-padding" role="group" aria-label="SearchOnUserType">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#userAttributeModal{{searchId}}" ng-click="initExtendedSubject('PERSON_ATTR')">
+            <i class="fa fa-plus fa-fw"></i><span translate="publisherApp.subject.type.userfromattr"></span>
+        </button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#userAttributeRegexModal{{searchId}}" ng-click="initExtendedSubject('PERSON_ATTR_REGEX')">
+            <i class="fa fa-plus fa-fw"></i><span translate="publisherApp.subject.type.userfromregexattr"></span>
+        </button>
+    </div>
+
+    <div class="modal fade" id="userAttributeRegexModal{{searchId}}" tabindex="-1" role="dialog" aria-labelledby="myUserAttributeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            ng-click="clearSubject()">&times;</button>
+                    <h4 class="modal-title" translate="manager.treeview.details.search.targets.userRegexAttr">Attributes definition</h4>
+                </div>
+                <div class="modal-body">
+                    <label class="control-label" for="userRegexAttribute" translate="publisherApp.subject.userRegexAttr.attribute.label">attribute</label>
+                    <select class="form-control" id="userRegexAttribute" name="userRegexAttribute" ng-model="container.extendedSubject.keyAttribute"
+                            ng-options="attr for attr in extendedAttrs | orderBy:'toString()'" required>
+                    </select>
+                    <label class="control-label" for="userRegexValue" translate="publisherApp.subject.userRegexAttr.value.label">value</label>
+                    <input type="test" class="form-control" id="userRegexValue" name="userRegexValue" ng-model="container.extendedSubject.keyValue" required ng-minlength="3" ng-maxlength="512">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearSubject()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!canSubmit" ng-click="submitSubject()">
+                        <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="userAttributeModal{{searchId}}" tabindex="-1" role="dialog" aria-labelledby="myUserAttributeLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            ng-click="clearSubject()">&times;</button>
+                    <h4 class="modal-title" translate="manager.treeview.details.search.targets.userAttrs">Attributes definition</h4>
+                </div>
+                <div class="modal-body">
+                    <label class="control-label" for="userAttribute" translate="publisherApp.subject.userAttr.attribute.label">attribute</label>
+                    <select class="form-control" id="userAttribute" name="userAttribute" ng-model="container.extendedSubject.keyAttribute"
+                            ng-options="attr for attr in extendedAttrs | orderBy:'toString()'" required>
+                    </select>
+                    <label class="control-label" for="userValue" translate="publisherApp.subject.userAttr.value.label">value</label>
+                    <input type="test" class="form-control" id="userValue" name="userValue" ng-model="container.extendedSubject.keyValue" required ng-minlength="3" ng-maxlength="512">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearSubject()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!canSubmit" ng-click="submitSubject()">
+                        <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="userListModal{{searchId}}" tabindex="-1" role="dialog" aria-labelledby="myUserListLabel" aria-hidden="true">
         <div class="modal-dialog">

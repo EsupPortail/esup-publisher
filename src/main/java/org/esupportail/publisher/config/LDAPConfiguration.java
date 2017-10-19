@@ -18,8 +18,8 @@ package org.esupportail.publisher.config;
 import java.util.Arrays;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
+
+import com.google.common.collect.Sets;
 
 /**
  *
@@ -60,13 +62,11 @@ public class LDAPConfiguration implements EnvironmentAware {
 	private static final String DEFAULT_USER_MAIL = "mail";
 	private static final String PROP_USER_GROUP = "userGroupAttribute";
 	private static final String DEFAULT_USER_GROUP = "isMemberOf";
-	private static final String PROP_USER_ID_ENTITY = "userEntityIdAttribute;";
-	private static final String DEFAULT_USER_ID_ENTITY = "ESCOUAICourant";
 
 	private static final String PROP_USER_SEARCHON = "userSearchAttribute";
 	private static final String DEFAULT_USER_SEARCHON = "cn";
 	private static final String PROP_USER_DISPLAYEDATTR = "otherUserDisplayedAttributes";
-    private static final String PROP_USER_OTHERATTR = "otherUserOtherAttributes";
+	private static final String PROP_USER_OTHERATTR = "otherUserOtherAttributes";
 
 	private RelaxedPropertyResolver propertyResolver;
 
@@ -75,23 +75,19 @@ public class LDAPConfiguration implements EnvironmentAware {
 	@Override
 	public void setEnvironment(Environment environment) {
 		this.environment = environment;
-		this.propertyResolver = new RelaxedPropertyResolver(environment,
-				ENV_LDAP);
+		this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_LDAP);
 	}
 
 	@Bean
 	public LdapContextSource contextSource() {
 		log.debug("Configuring LdapContextSource");
 		final LdapContextSource ldapCtx = new LdapContextSource();
-		if (propertyResolver.getProperty(PROP_URLS) == null
-				&& propertyResolver.getProperty(PROP_BASE) == null) {
-			log.error(
-					"Your LDAP connection configuration is incorrect! The application"
-							+ "cannot start. Please check your Spring profile, current profiles are: {}",
+		if (propertyResolver.getProperty(PROP_URLS) == null && propertyResolver.getProperty(PROP_BASE) == null) {
+			log.error("Your LDAP connection configuration is incorrect! The application"
+					+ "cannot start. Please check your Spring profile, current profiles are: {}",
 					Arrays.toString(environment.getActiveProfiles()));
 
-			throw new ApplicationContextException(
-					"LDAP connection is not configured correctly");
+			throw new ApplicationContextException("LDAP connection is not configured correctly");
 		}
 		ldapCtx.setAnonymousReadOnly(propertyResolver.getProperty(PROP_ANONYMRO, Boolean.class, false));
 		ldapCtx.setBase(propertyResolver.getProperty(PROP_BASE));
@@ -114,28 +110,27 @@ public class LDAPConfiguration implements EnvironmentAware {
 	@Bean
 	public ExternalUserHelper externalUserHelper() {
 		final String userIdAttribute = propertyResolver.getProperty(PROP_USER_ID, DEFAULT_USER_ID);
-		final String userDisplayNameAttribute = propertyResolver.getProperty(PROP_USER_DISPLAYNAME, DEFAULT_USER_DISPLAYNAME);
+		final String userDisplayNameAttribute = propertyResolver.getProperty(PROP_USER_DISPLAYNAME,
+				DEFAULT_USER_DISPLAYNAME);
 		final String userEmailAttribute = propertyResolver.getProperty(PROP_USER_MAIL, DEFAULT_USER_MAIL);
 		final String userSearchAttribute = propertyResolver.getProperty(PROP_USER_SEARCHON, DEFAULT_USER_SEARCHON);
 		final String userGroupAttribute = propertyResolver.getProperty(PROP_USER_GROUP, DEFAULT_USER_GROUP);
-		final String userEntityIdAttribute = propertyResolver.getProperty(PROP_USER_ID_ENTITY, DEFAULT_USER_ID_ENTITY);
-        final String UserAttributes = propertyResolver.getRequiredProperty(PROP_USER_OTHERATTR);
+		final String UserAttributes = propertyResolver.getRequiredProperty(PROP_USER_OTHERATTR);
 		final String userDisplayedAttributes = propertyResolver.getRequiredProperty(PROP_USER_DISPLAYEDATTR);
 		Set<String> otherUserDisplayedAttributes = null;
-		if (userDisplayedAttributes != null	&& !userDisplayedAttributes.isEmpty()) {
-            String[] attrs = userDisplayedAttributes.trim().replaceAll("\\s", "").split(",");
+		if (userDisplayedAttributes != null && !userDisplayedAttributes.isEmpty()) {
+			String[] attrs = userDisplayedAttributes.trim().replaceAll("\\s", "").split(",");
 			otherUserDisplayedAttributes = Sets.newHashSet(attrs);
 		}
-        Set<String> otherUserAttributes = null;
-        if (UserAttributes != null	&& !UserAttributes.isEmpty()) {
-            String[] attrs = UserAttributes.trim().replaceAll("\\s", "").split(",");
-            otherUserAttributes = Sets.newHashSet(attrs);
-        }
+		Set<String> otherUserAttributes = null;
+		if (UserAttributes != null && !UserAttributes.isEmpty()) {
+			String[] attrs = UserAttributes.trim().replaceAll("\\s", "").split(",");
+			otherUserAttributes = Sets.newHashSet(attrs);
+		}
 		final String userDNSubPath = propertyResolver.getProperty(PROP_USERDN_SUBPATH, DEFAULT_USERDN_SUBPATH);
 
-		final ExternalUserHelper ldapUh = new ExternalUserHelper(
-				userIdAttribute, userDisplayNameAttribute, userEmailAttribute,
-				userSearchAttribute, userGroupAttribute, userEntityIdAttribute, otherUserAttributes,
+		final ExternalUserHelper ldapUh = new ExternalUserHelper(userIdAttribute, userDisplayNameAttribute,
+				userEmailAttribute, userSearchAttribute, userGroupAttribute, otherUserAttributes,
 				otherUserDisplayedAttributes, userDNSubPath);
 		log.debug("LdapAttributes for Users configured : {}", ldapUh);
 		return ldapUh;

@@ -754,6 +754,9 @@ dl > dd > input[type="checkbox"] {
 
 /* start Transform table into cards ! */
 @media screen and (max-width:991px) {
+    .table-responsive.table-responsive-to-cards {
+        overflow-x: hidden;
+    }
     .table-responsive-to-cards thead {
         display: none;
     }
@@ -888,6 +891,12 @@ dl > dd > input[type="checkbox"] {
     overflow:hidden;
     min-width: 60%;
     max-width: 1024px;
+}
+@media screen and (min-width:991px) {
+    .manager.treeview > .content > .treeview > div:last-child {
+        float: none;
+        max-width: 100%;
+    }
 }
 
 .manager.treeview > .content > .treeview .context-viewer .form-group input[type=checkbox].form-control {
@@ -1207,6 +1216,7 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
 ===========================================*/
 .subject-infos {
     display: inline;
+    white-space: normal;
 }
 .subject-search {
     display: inline;

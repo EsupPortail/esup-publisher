@@ -55,11 +55,6 @@ public class ExternalUserHelper {
     private String userGroupAttribute;
 
     /**
-     * The organization identifier user attribute.
-     */
-    private String userEntityIdentifierAttribute;
-
-    /**
      * The other attributes desired for fonctional use, facultative
      */
     private Set<String> otherUserAttributes;
@@ -81,7 +76,6 @@ public class ExternalUserHelper {
         set.add(userEmailAttribute);
         set.add(userSearchAttribute);
         set.add(userGroupAttribute);
-        set.add(userEntityIdentifierAttribute);
         set.addAll(otherUserAttributes);
         return set;
     }

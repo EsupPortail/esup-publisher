@@ -15,12 +15,12 @@
  */
 package org.esupportail.publisher.web.rest;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * Utility class for testing REST controllers.
@@ -46,6 +46,21 @@ public class TestUtil {
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		return mapper.writeValueAsBytes(object);
 	}
+
+    /**
+     * Convert an object to JSON String.
+     *
+     * @param object
+     *            the object to convert
+     * @return the JSON String
+     * @throws IOException
+     */
+//    public static String convertObjectToJsonString(Object object)
+//        throws IOException {
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//        return mapper.writeValueAsString(object);
+//    }
 
 	/**
 	 * Convert JSON byte array to an Object.
