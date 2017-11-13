@@ -44,9 +44,9 @@ public final class OrganizationPredicates {
         return QOrganization.organization.isNotNull();
     }
 
-	public static OrderSpecifier<?> orderBy() {
+	public static OrderSpecifier<?>[] orderBy() {
 		final QOrganization qorg = QOrganization.organization;
-		return qorg.displayOrder.asc();
+		return new OrderSpecifier<?>[]{qorg.displayOrder.asc(), qorg.displayName.asc()};
 	}
 
 }
