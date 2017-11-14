@@ -850,7 +850,8 @@ angular.module('publisherApp')
                     //return true;
                     return Principal.isInRole('ROLE_ADMIN');
                 case 'PUBLISHER' :
-                    return false;
+                    return Principal.isInRole('ROLE_ADMIN') && angular.equals($scope.publisher.context.redactor.writingMode,'STATIC') &&
+                        !inArray('FLASH', $scope.context.context.reader.authorizedTypes);
                 case 'CATEGORY' :
                     if (!angular.equals({},$scope.publisher)) {
                        // console.log("getHasTargetManagment ",  !angular.equals($scope.publisher.context.redactor.writingMode,'TARGETS_ON_ITEM') && $scope.publisher.hasSubPermsManagement,
