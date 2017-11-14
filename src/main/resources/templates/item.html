@@ -96,6 +96,8 @@
     window.onload = function () {
         replaceVideo();
     };
+    // used when this content is loaded from a modal because the window.onload isn't fired.
+    window.setTimeout(replaceVideo(), 3000);
     /*]]>*/
 </script>
 </body>
