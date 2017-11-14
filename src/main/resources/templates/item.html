@@ -76,6 +76,26 @@
             }
         }
     }
+
+    function replaceVideo() {
+        [].forEach.call(
+            document.body.querySelectorAll(".publisher-view > article > .body img[ta-insert-video]"),
+            function(el){
+                var iframe = document.createElement('iframe');
+                var attributes = el.attributes;
+                // loop through element attributes and apply them on iframe
+                for (var i = attributes.length - 1; i >= 0; i--) {
+                    iframe.setAttribute(attributes[i].name, attributes[i].value);
+                }
+                iframe.setAttribute('src', iframe.getAttribute('ta-insert-video'));
+                el.parentNode.replaceChild(iframe, el);
+            }
+        );
+    }
+
+    window.onload = function () {
+        replaceVideo();
+    };
     /*]]>*/
 </script>
 </body>
