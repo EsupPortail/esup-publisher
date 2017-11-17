@@ -155,21 +155,25 @@ public class PublishController {
                 .list(QAbstractItem.abstractItem.id));
             List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
 
-            if (!itemsClasss.isEmpty()) {
-                Map<Flash, List<AbstractClassification>> itemsMap= Maps.newLinkedHashMap();
+            return getFlashInfo(itemsClasss, request);
+        }
+        return Lists.newArrayList();
+    }
 
-                for ( ItemClassificationOrder ico: itemsClasss) {
-                    final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-                    //categories.add(classif);
-                    final Flash flash = (Flash) ico.getItemClassificationId().getAbstractItem();
-                    if (!itemsMap.containsKey(flash)) {
-                        itemsMap.put(flash, Lists.newArrayList(classif));
-                    } else {
-                        itemsMap.get(flash).add(classif);
-                    }
+    private List<FlashInfoVO> getFlashInfo(final List<ItemClassificationOrder> itemsClasss, final HttpServletRequest request){
+        if (!itemsClasss.isEmpty()) {
+            Map<Flash, List<AbstractClassification>> itemsMap= Maps.newLinkedHashMap();
+            for (ItemClassificationOrder ico: itemsClasss) {
+                final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+                //categories.add(classif);
+                final Flash flash = (Flash) ico.getItemClassificationId().getAbstractItem();
+                if (!itemsMap.containsKey(flash)) {
+                    itemsMap.put(flash, Lists.newArrayList(classif));
+                } else {
+                    itemsMap.get(flash).add(classif);
                 }
-                return flashInfoVOFactory.asVOList(itemsMap, request);
             }
+            return flashInfoVOFactory.asVOList(itemsMap, request);
         }
         return Lists.newArrayList();
     }
@@ -198,20 +202,7 @@ public class PublishController {
                     final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
                         ItemPredicates.orderByClassifDefinition(publisher.getDefaultDisplayOrder())));
 
-                    if (!itemsClasss.isEmpty()) {
-                        Map<Flash, List<AbstractClassification>> itemsMap = Maps.newLinkedHashMap();
-                        for (ItemClassificationOrder ico : itemsClasss) {
-                            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-                            //categories.add(classif);
-                            final Flash flash = (Flash) ico.getItemClassificationId().getAbstractItem();
-                            if (!itemsMap.containsKey(flash)) {
-                                itemsMap.put(flash, Lists.newArrayList(classif));
-                            } else {
-                                itemsMap.get(flash).add(classif);
-                            }
-                        }
-                        return flashInfoVOFactory.asVOList(itemsMap, request);
-                    }
+                    return getFlashInfo(itemsClasss, request);
                 }
             }catch(IncorrectResultSizeDataAccessException e){
                 log.error("The request to obtain all Flash-Info on an organization found more than one Flash context. Solve this problem !");
