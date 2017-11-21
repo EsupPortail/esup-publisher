@@ -391,39 +391,37 @@ public class PublishController {
         List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder,
             ItemPredicates.orderByPublisherDefinition(publisher.getDefaultDisplayOrder()), ItemPredicates.orderByClassifDefinition(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST)));
         log.debug("list of itemsClasss associated to publisher : {}", itemsClasss);
-        if (!itemsClasss.isEmpty()) {
-            //Set<AbstractClassification> categories = Sets.newHashSet();
-            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
 
-            // get unique items associated to all his classifs
-            for ( ItemClassificationOrder ico: itemsClasss) {
-                final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-                //categories.add(classif);
-                final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
-                if (!itemsMap.containsKey(itemId)) {
-                    itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(),Lists.newArrayList(classif)));
-                } else {
-                    itemsMap.get(itemId).getSecond().add(classif);
-                }
-            }
-            List<RubriqueVO> rubriques;
-            if (publisher.isDoHighlight()) {
-                final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
-                // to get the order of HighlightedClassification as first
-                rubriques = Lists.newArrayList(rubriqueVOFactory.from(specialClassif));
-                rubriques.addAll(rubriqueVOFactory.asVOList(cts));
+        Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
+
+        // get unique items associated to all his classifs
+        for ( ItemClassificationOrder ico: itemsClasss) {
+            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+            //categories.add(classif);
+            final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
+            if (!itemsMap.containsKey(itemId)) {
+                itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(),Lists.newArrayList(classif)));
             } else {
-               rubriques = Lists.newArrayList(rubriqueVOFactory.asVOList(cts));
+                itemsMap.get(itemId).getSecond().add(classif);
             }
+        }
+        List<RubriqueVO> rubriques;
+        if (publisher.isDoHighlight()) {
+            final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
+            // to get the order of HighlightedClassification as first
+            rubriques = Lists.newArrayList(rubriqueVOFactory.from(specialClassif));
+            rubriques.addAll(rubriqueVOFactory.asVOList(cts));
+        } else {
+           rubriques = Lists.newArrayList(rubriqueVOFactory.asVOList(cts));
+        }
 
-            returnedObj.setRubriques(rubriques);
-            returnedObj.setItems(new ArrayList<ItemVO>());
-            for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
-                final AbstractItem item = entry.getValue().getFirst();
-                final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
-                returnedObj.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
-                    subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
-            }
+        returnedObj.setRubriques(rubriques);
+        returnedObj.setItems(new ArrayList<ItemVO>());
+        for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
+            final AbstractItem item = entry.getValue().getFirst();
+            final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
+            returnedObj.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
+                subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
         }
 
         /*List<Category> cts = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.categoryOfPublisher(publisher.getId()),
