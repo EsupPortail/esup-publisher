@@ -145,7 +145,7 @@ public class ContentService {
 		}
 		content.getItem().setRedactor(redactor);
 		final boolean isUpdate = content.getItem().getId() != null;
-		// status DRAFT if endDate mandatory and is null or if endDate is before now
+		// status DRAFT if endDate is mandatory and is null or if endDate is before now
 		if ((!content.getItem().getRedactor().isOptionalPublishTime() && content.getItem().getEndDate() == null)
 				|| (content.getItem().getEndDate() != null && content.getItem().getEndDate().isBefore(LocalDate.now()))) {
 			content.getItem().setStatus(ItemStatus.DRAFT);
