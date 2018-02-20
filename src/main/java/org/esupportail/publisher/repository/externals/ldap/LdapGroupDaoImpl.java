@@ -69,7 +69,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
     private IExternalUserDao externalUserDao;
 
     //@Autowired
-    private IGroupMemberDesigner groupMemberDesigner;
+    private List<IGroupMemberDesigner> groupMemberDesigners;
 
     /**
      * constructor.
@@ -106,7 +106,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
             group = null;
         }
         if (withMembers) {
-            group = groupMemberDesigner.designe(group, this);
+            for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
+                group = gpDesigner.designe(group, this);
+            }
         }
 
         if (log.isDebugEnabled()) {
@@ -144,7 +146,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         if (withMembers) {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
-                tmp.add(groupMemberDesigner.designe(group, this));
+                for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
+                    tmp.add(gpDesigner.designe(group, this));
+                }
             }
             groups = tmp;
         }
@@ -181,7 +185,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         if (withMembers) {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
-                tmp.add(groupMemberDesigner.designe(group, this));
+                for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
+                    tmp.add(gpDesigner.designe(group, this));
+                }
             }
             groups = tmp;
         }
@@ -210,7 +216,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         if (withMembers) {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
-                tmp.add(groupMemberDesigner.designe(group, this));
+                for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
+                    tmp.add(gpDesigner.designe(group, this));
+                }
             }
             groups = tmp;
         }

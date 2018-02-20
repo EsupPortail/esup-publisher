@@ -18,6 +18,7 @@ package org.esupportail.publisher.repository.externals.ldap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroup;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
@@ -28,13 +29,14 @@ import org.springframework.util.StringUtils;
 /**
  * Created by jgribonvald on 04/06/15.
  */
+@ToString(of = {"grpPattern","grpNameRegex","grpNameIndex","grpSeparator"})
 @Slf4j
 public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDisplayNameFormatter {
 
-    private static Pattern grpPattern;
-    private static Pattern grpNameRegex;
-    private static int[] grpNameIndex;
-    private static String grpSeparator = "";
+    private Pattern grpPattern;
+    private Pattern grpNameRegex;
+    private int[] grpNameIndex;
+    private String grpSeparator = "";
 
     private ExternalGroupHelper externalGroupHelper;
 
@@ -44,60 +46,60 @@ public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDi
         Assert.hasText(groupNameRegex, "You should provide a Group Matcher to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         Assert.hasText(strIndex, "You should provide a Group Index to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         this.externalGroupHelper = externalGroupHelper;
-        LdapGroupRegexpDisplayNameFormatterESCO.grpPattern = Pattern.compile(groupNamePattern);
-        LdapGroupRegexpDisplayNameFormatterESCO.grpNameRegex = Pattern.compile(groupNameRegex);
+        this.grpPattern = Pattern.compile(groupNamePattern);
+        this.grpNameRegex = Pattern.compile(groupNameRegex);
         String[] indexes = strIndex.split(",");
-        LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex = new int[indexes.length];
+        this.grpNameIndex = new int[indexes.length];
         for (int i = 0; i < indexes.length; i++) {
-            LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex[i] = Integer.valueOf(indexes[i]);
+            this.grpNameIndex[i] = Integer.valueOf(indexes[i]);
         }
-        Assert.isTrue(LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex.length > 0,
+        Assert.isTrue(this.grpNameIndex.length > 0,
             "You should provide a Group Index to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         if (StringUtils.hasLength(strSeparator)) {
-            LdapGroupRegexpDisplayNameFormatterESCO.grpSeparator = strSeparator;
+            this.grpSeparator = strSeparator;
         }
     }
 
     @Override
-    public ExternalGroup format(ExternalGroup input) {
+    public ExternalGroup format(final ExternalGroup input) {
+        ExternalGroup group = input;
+        String formatted = null;
         if (externalGroupHelper.isFormattingDisplayName() && externalGroupHelper.isGroupDNContainsDisplayName()) {
             // setting as displayName the id group formatted
-            input.setDisplayName(format(input.getId()));
+            formatted = format(input.getId());
         } else if (externalGroupHelper.isFormattingDisplayName()) {
             // setting as new displayName the origin displayName formatted
-            input.setDisplayName(format(input.getDisplayName()));
+            formatted = format(input.getDisplayName());
         }
-        return input;
+
+        if (formatted != null) {
+            group.setDisplayName(formatted);
+        }
+        log.debug("DisplayNameFormatter renamed {} to {}", input.getDisplayName(), group.getDisplayName());
+        return group;
     }
 
     private String format(String input) {
         if (input != null && !input.isEmpty()) {
-            Matcher matcher = LdapGroupRegexpDisplayNameFormatterESCO.grpPattern.matcher(input);
+            Matcher matcher = this.grpPattern.matcher(input);
             if (matcher.matches()){
-                Matcher group = LdapGroupRegexpDisplayNameFormatterESCO.grpNameRegex.matcher(input);
+                Matcher group = this.grpNameRegex.matcher(input);
                 if (group.find()) {
                     String displayName = "";
-                    for (int i = 0; i < LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex.length; i++) {
+                    for (int i = 0; i < this.grpNameIndex.length; i++) {
                         if (i > 0) {
-                            displayName += LdapGroupRegexpDisplayNameFormatterESCO.grpSeparator
-                                + group.group(LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex[i]);
+                            displayName += this.grpSeparator
+                                + group.group(this.grpNameIndex[i]);
                         } else {
-                            displayName += group.group(LdapGroupRegexpDisplayNameFormatterESCO.grpNameIndex[i]);
+                            displayName += group.group(this.grpNameIndex[i]);
                         }
                     }
                     log.debug("Matcher found group displayName, value is : {}", displayName);
-                    return displayName.replaceFirst("Tous_","").replaceAll("_", " ");
+                    return displayName;
                 }
             }
-
-            Matcher dnMatcher = externalGroupHelper.getGroupDisplayNameRegex().matcher(input);
-            if (dnMatcher.find()) {
-                final String displayName = dnMatcher.group(1);
-                log.debug("Matcher found group displayName, value is : {}", displayName);
-                return displayName.replaceFirst("Tous_","").replaceAll("_", " ");
-            }
-            log.warn("No displayname formatting will be done as pattern isn't matching !");
+            log.debug("No displayname formatting will be done as pattern isn't matching !");
         }
-        return input;
+        return null;
     }
 }

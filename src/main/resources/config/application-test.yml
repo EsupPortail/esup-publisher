@@ -90,9 +90,9 @@ ldap:
     escoGroupRegexp:
         properties:
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):admin:Publication_contenus:[^:]*"
-                groupNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
-                groupNameIndex: "1,2"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
+                groupNameRegex: "[^:]+:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:(groupes_locaux):Publication_contenus"
+                groupNameIndex: "1"
                 groupRecomposerSeparator: ":"
             -
                 groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*_[0-9]{7}[a-zA-Z]:[^:]*:Profs Principaux"

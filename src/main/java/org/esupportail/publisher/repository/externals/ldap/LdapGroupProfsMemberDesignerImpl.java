@@ -29,11 +29,11 @@ import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
  * Created by jgribonvald on 11/06/15.
  */
 @Slf4j
-public class LdapGroupMemberDesignerImpl implements IGroupMemberDesigner {
+public class LdapGroupProfsMemberDesignerImpl implements IGroupMemberDesigner {
 
     private ExternalGroupHelper externalGroupHelper;
 
-    public LdapGroupMemberDesignerImpl(ExternalGroupHelper externalGroupHelper) {
+    public LdapGroupProfsMemberDesignerImpl(ExternalGroupHelper externalGroupHelper) {
         this.externalGroupHelper = externalGroupHelper;
     }
 
@@ -50,7 +50,7 @@ public class LdapGroupMemberDesignerImpl implements IGroupMemberDesigner {
         if (group == null) return group;
 
         Matcher profMatcher = patternProfs.matcher(group.getId());
-        log.debug("Designe for group id {} with matcher {}, and is matching {}", group.getId(), profMatcher.toString(), profMatcher.matches());
+        log.debug("Design for group id {} with matcher {}, and is matching {}", group.getId(), profMatcher.toString(), profMatcher.matches());
         if (profMatcher.matches()) {
             final String filter = "(|(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(endMatch, endRequestPattern) + ")"
                 + "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(endMatch, endRequestPattern2) + "))";

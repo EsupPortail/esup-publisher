@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.repository.externals.ws;
+package org.esupportail.publisher.repository.externals.ldap;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroup;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
@@ -25,34 +23,25 @@ import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameForma
 /**
  * Created by jgribonvald on 04/06/15.
  */
+@ToString(of = {})
 @Slf4j
-public class WSExternalGroupDisplayNameFormatter implements IExternalGroupDisplayNameFormatter {
+public class LdapGroupRegexpDisplayNameFormatterESCOReplace implements IExternalGroupDisplayNameFormatter {
 
-    private static final String dnPattern = ".*:([^:]*)";
 
-    private Pattern pattern = Pattern.compile(dnPattern);
-
-    public WSExternalGroupDisplayNameFormatter() {
-        super();
-    }
+    public LdapGroupRegexpDisplayNameFormatterESCOReplace() { }
 
     @Override
     public ExternalGroup format(final ExternalGroup input) {
         ExternalGroup group = input;
         // setting as new displayName the origin displayName formatted
         group.setDisplayName(format(input.getDisplayName()));
+        log.debug("DisplayNameFormatter renamed {} to {}", input.getDisplayName(), group.getDisplayName());
         return group;
     }
 
     private String format(String input) {
         if (input != null && !input.isEmpty()) {
-            Matcher m = pattern.matcher(input);
-            if (m.find()) {
-                final String displayName = m.group(1);
-                log.debug("Matcher found group displayName, value is : {}", displayName);
-                return displayName.replaceAll("_", " ");
-            }
-            log.warn("No displayname formatting will be done as pattern isn't matching !");
+                return input.replaceFirst("Tous_","").replaceAll("_", " ");
         }
         return input;
     }
