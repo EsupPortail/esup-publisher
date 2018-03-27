@@ -1,17 +1,46 @@
-# to add NOTICE
+# migration help
+ 
+## migrating from utf8 to utf8mb4
+- old liquibase migration files where removed and a new init schema was initiated
+- to migrate :
+__Don't forget to make a a save of your datas before suche operation__
+1. dump datas with 
+```sql
+  mysqldump -h hostname -u user -p --no-create-info --complete-insert --extended-insert --ignore-table="publisher.databasechangeloglock" --ignore-table="publisher.databasechangelog" --ignore-table="publisher.t_persistent_audit_event" --ignore-table="publisher.t_persistent_audit_event_data" "publisher" > "publisher.sql"
+```
+2. drop and recreate database
+```sql
+  drop database publisher;
+  create database publisher DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+```
+3. run the publisher app or run
+```mvn
+mvn compile liquibase:update
+```
+4. import dumped datas
+```sql
+  delete from publisher.t_user;
+  \. publisher.sql
+```
+
+# mvn commands
+
+## to add NOTICE
 'mvn notice:check' Checks that a NOTICE file exists and that its content match what would be generated.
 'mvn notice:generate' Generates a new NOTICE file, replacing any existing NOTICE file.
 
 
-# to add licence headers
+## to add licence headers
 'mvn license:check' verify if some files miss license header
 'mvn license:format' add the license header when missing. If a header is existing, it is updated to the new one.
 'mvn license:remove' remove existing license header
 
-# In dev process when changing the entities
+
+## In dev process when changing the entities
 'mvn clean generate-sources' will generates new or modified Q__ classes or to update evaluator's entites when updating evaluator lib
 
-# Liquibase memento :
+
+## Liquibase memento :
 - see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
 - on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
 - 'mvn compile liquibase:update' will apply changelog not loaded (from liquibase files) to the database
@@ -19,33 +48,35 @@
 - 'mvn compile liquibase:diff' to generate each diff
 - IMPORTANT : check for mysql that table names are in lower case in changelog files, do sames things for all table links...
 
-# to run tests :
+
+## to run tests :
 - `mvn test -Dspring.profiles.active=dev,fast,ldapgrp,test` don't forget to change databasename between prod
 - `mvn test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
 
-# to run in dev :
+
+## to run in dev :
 - `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
 
-# mvn remember :
+
+## mvn remember :
 - `mvn release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
 - on release run 'grunt ngconstant' to update version in angular app constant, we should try to watch on a grunt task to make release
 
+## mvn param to debug xml binding :
+-Djaxb.debug=true
+this permit to view : javax.xml.bind - Trying to locate org/esupportail/publisher/web/rest/vo/jaxb.properties and other params
 
 # TODO
 
-# TODO dependencies update
+## TODO dependencies update
 //@JsonFormat(shape = JsonFormat.Shape.STRING) should works with jackson 2.5, until use @JsonSerialize with custom serializer
 
-# TODO with cache
+## TODO with cache
 error appear :
 [WARN] net.sf.ehcache.pool.sizeof.ObjectGraphWalker - The configured limit of 1 000 object references was reached while attempting to calculate the size of the object graph.
 Severe performance degradation could occur if the sizing operation continues. This can be avoided by setting the CacheManger or Cache <sizeOfPolicy> elements maxDepthExceededBehavior
 to "abort" or adding stop points with @IgnoreSizeOf annotations. If performance degradation is NOT an issue at the configured limit, raise the limit value using the CacheManager or
 Cache <sizeOfPolicy> elements maxDepth attribute. For more information, see the Ehcache configuration documentation.
 => read http://www.ehcache.org/documentation/2.8/configuration/cache-size.html#built-in-sizing-computation-and-enforcement
-
-# mvn param to debug xml binding :
--Djaxb.debug=true
-this permit to view : javax.xml.bind - Trying to locate org/esupportail/publisher/web/rest/vo/jaxb.properties and other params
 
 

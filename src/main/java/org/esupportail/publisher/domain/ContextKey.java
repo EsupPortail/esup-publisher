@@ -15,15 +15,23 @@
  */
 package org.esupportail.publisher.domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.esupportail.publisher.web.rest.dto.ICompositeKey;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 14 juin 2014
@@ -47,7 +55,7 @@ public class ContextKey implements ICompositeKey<Long, ContextType>, Serializabl
 	@NonNull
     @NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ctx_type", nullable = false)
+	@Column(length = 25, name = "ctx_type", nullable = false)
     @JsonSerialize(using = CustomEnumSerializer.class)
 	private ContextType keyType;
 

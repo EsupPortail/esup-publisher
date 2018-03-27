@@ -25,17 +25,18 @@
 <!--     <include file="classpath:config/liquibase/changelog/20141118120129_main_schema.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="classpath:config/liquibase/changelog/20141124120129_main_schema.xml" relativeToChangelogFile="false"/> -->
     <!-- JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20160523135456_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20160524132648_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20160609145256_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170307113007_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170407164038_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170411135053_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170412095246_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170529151340_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170531084529_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170608100853_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170619134854_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20171012132552_changelog.xml" relativeToChangelogFile="false"/>
+    <!--<include file="config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20160523135456_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20160524132648_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20160609145256_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170307113007_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170407164038_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170411135053_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170412095246_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170529151340_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170531084529_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170608100853_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20170619134854_changelog.xml" relativeToChangelogFile="false"/>-->
+    <!--<include file="config/liquibase/changelog/20171012132552_changelog.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20180326145110_main_schema.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
