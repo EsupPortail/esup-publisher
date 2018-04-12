@@ -60,7 +60,7 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -71,7 +71,7 @@ import org.springframework.util.Assert;
  * Warning permission of type OnSubjects can be on publisher, but they won't be applied
  */
 @Slf4j
-@Component
+@Service
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 
@@ -108,9 +108,36 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 				((CustomUserDetails) authentication.getPrincipal()).getAuthorities());
 	}
 
-	public void loadUserTree(final UserDTO user, final Collection<? extends GrantedAuthority> authorities) {
+	public synchronized void loadUserTree(final UserDTO user, final Collection<? extends GrantedAuthority> authorities) {
 		// init userTree
-		userSessionTree.cleanup();
+        if (!userSessionTree.loadingCanBeDone()) {
+            return;
+        }
+        if (userSessionTree.isTreeLoadInProgress()) {
+            // we should wait that the loading is done
+            long totalSleep = 0;
+            boolean isInterrupted = false;
+            log.debug("watching loading : {}", userSessionTree.toString());
+            while (userSessionTree.isTreeLoadInProgress() && totalSleep < 10000) {
+                try {
+                    log.debug("waiting loading : {}", userSessionTree.toString());
+                    Thread.sleep(300);
+                    totalSleep += 300;
+                } catch (InterruptedException e) {
+                    isInterrupted = true;
+                }
+            }
+            if (totalSleep > 10000) {
+                isInterrupted = true;
+            }
+
+            if (isInterrupted) {
+                throw new IllegalStateException("The tree loader was interrupted for the user " + user.toString());
+            }
+            return;
+        }
+        log.warn("========================= WARNING loadingUserTree ========================");
+		userSessionTree.processingLoading();
 		if (authorities.contains(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN))) {
 			userSessionTree.setSuperAdmin(true);
 		} else if (authorities.contains(new SimpleGrantedAuthority(AuthoritiesConstants.USER))) {
@@ -157,7 +184,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 		} else {
 			userSessionTree.setSuperAdmin(false);
 		}
-		userSessionTree.setUserTreeLoaded(true);
+		userSessionTree.notifyEndLoading();
 		if (log.isDebugEnabled()) {
 			log.debug("Tree loaded : {}", userSessionTree.toString());
 		}

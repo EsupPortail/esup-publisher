@@ -40,6 +40,8 @@ import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+import org.joda.time.Duration;
+import org.joda.time.Instant;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -68,8 +70,17 @@ public class UserContextTree {
     @Getter
     private PermissionType upperPerm;
 
-    @Setter
     private boolean userTreeLoaded;
+
+    /**
+     * Estimated duration before a reload can be done, here 10 seconds.
+     * It's important for performance to avoid too much useless reload.
+     * More several reload are made when the user connect to to several async call
+     * requesting user permissions and contexts
+     * */
+    private Duration duration = new Duration(10000);
+    private volatile Instant expiringInstant;
+    private volatile boolean loadingInProgress = false;
 
     public UserContextTree() {
         super();
@@ -350,10 +361,28 @@ public class UserContextTree {
         return superAdmin != null && userTreeLoaded;
     }
 
-    public void cleanup() {
+    public boolean isTreeLoadInProgress() {
+        return loadingInProgress;
+    }
+
+    public boolean loadingCanBeDone() {
+        return (this.expiringInstant == null || this.expiringInstant.isBeforeNow()) && !this.loadingInProgress;
+    }
+
+    public void processingLoading() {
+        loadingInProgress = true;
         contexts.clear();
         superAdmin = null;
         userTreeLoaded = false;
+        log.debug("============ >>>>>>> processingLoading");
+    }
+
+    public void notifyEndLoading() {
+        userTreeLoaded = true;
+        // we set this expiration time to avoid to make several reload at the same time
+        expiringInstant = new Instant().plus(duration);
+        loadingInProgress = false;
+        log.debug("============ >>>>>>> notifyEndLoading");
     }
 
     private class UserContextInfos {
