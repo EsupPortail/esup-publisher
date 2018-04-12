@@ -18,15 +18,16 @@
  */
 package org.esupportail.publisher.domain.externals;
 
-import com.google.common.collect.Lists;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 11 juil. 2014
@@ -39,8 +40,8 @@ public class ExternalGroup implements IExternalGroup {
 
     private Map<String, List<String>> attributes = new HashMap<String, List<String>>();
 
-    private List<String> groupMembers = Lists.newArrayList();
-    private List<String> userMembers = Lists.newArrayList();
+    private Set<String> groupMembers = Sets.newHashSet();
+    private Set<String> userMembers = Sets.newHashSet();
 
     public ExternalGroup(String id, String displayName, Map<String, List<String>> attributes ) {
         this.id = id;
@@ -83,11 +84,11 @@ public class ExternalGroup implements IExternalGroup {
         return this.attributes;
     }
 
-    public List<String> getGroupMembers() {
+    public Set<String> getGroupMembers() {
         return this.groupMembers;
     }
 
-    public List<String> getUserMembers() {
+    public Set<String> getUserMembers() {
         return this.userMembers;
     }
 
@@ -103,11 +104,11 @@ public class ExternalGroup implements IExternalGroup {
         this.attributes = attributes;
     }
 
-    public void setGroupMembers(List<String> groupMembers) {
+    public void setGroupMembers(Set<String> groupMembers) {
         this.groupMembers = groupMembers;
     }
 
-    public void setUserMembers(List<String> userMembers) {
+    public void setUserMembers(Set<String> userMembers) {
         this.userMembers = userMembers;
     }
 
