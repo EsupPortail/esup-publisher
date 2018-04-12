@@ -147,8 +147,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
                 for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
-                    tmp.add(gpDesigner.designe(group, this));
+                    group = gpDesigner.designe(group, this);
                 }
+                tmp.add(group);
             }
             groups = tmp;
         }
@@ -186,8 +187,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
                 for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
-                    tmp.add(gpDesigner.designe(group, this));
+                    group = gpDesigner.designe(group, this);
                 }
+                tmp.add(group);
             }
             groups = tmp;
         }
@@ -217,8 +219,9 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
             List<IExternalGroup> tmp = Lists.newArrayList();
             for (IExternalGroup group : groups) {
                 for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
-                    tmp.add(gpDesigner.designe(group, this));
+                    group = gpDesigner.designe(group, this);
                 }
+                tmp.add(group);
             }
             groups = tmp;
         }
