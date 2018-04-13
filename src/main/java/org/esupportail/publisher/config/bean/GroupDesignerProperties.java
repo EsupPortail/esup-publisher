@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.repository.externals;
+package org.esupportail.publisher.config.bean;
 
-import org.esupportail.publisher.domain.externals.IExternalGroup;
+import java.util.List;
 
-/**
- * Created by jgribonvald on 11/06/15.
- */
-public interface IGroupMemberDesigner {
+import javax.validation.constraints.NotNull;
 
-   IExternalGroup designe(IExternalGroup group, final IExternalGroupDao externalGroupDao);
+import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+@Data
+public class GroupDesignerProperties {
+
+    @NotNull
+    private String groupRootPattern;
+    @NotNull
+    private String groupAttachEndMatch;
+    @NotEmpty
+    private List<String> groupToAttachEndPattern;
+
 }

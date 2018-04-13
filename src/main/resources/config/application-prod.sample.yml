@@ -96,6 +96,17 @@ ldap:
                 groupNameRegex: "[^:]*:Etablissements:[^:]*:([^:]*):(Profs Principaux)"
                 groupNameIndex: "2,1"
                 groupRecomposerSeparator: " - "
+     # for designers  can be commented - used to attach groups that are not in the tree root or membrers on
+    escoGroupDesigner:
+        properties:
+            -
+                groupRootPattern: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*"
+                groupAttachEndMatch: ":Profs"
+                groupToAttachEndPattern: ":*:Profs_*,:*:Profs Principaux"
+            -
+                groupRootPattern: "ef2s:Etablissements:[^:]*"
+                groupAttachEndMatch: ":Formateurs"
+                groupToAttachEndPattern: ":*:Formateurs_*, :*:Responsable de formation"
 
 cas:
     url:

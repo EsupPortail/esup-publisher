@@ -27,6 +27,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.portal.ws.client.PortalService;
 import org.esupportail.portal.ws.client.support.uportal.BasicUportalServiceImpl;
+import org.esupportail.publisher.config.bean.GroupDesignerProperties;
 import org.esupportail.publisher.config.bean.GroupRegexProperties;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
@@ -36,8 +37,8 @@ import org.esupportail.publisher.repository.externals.EmptyGroupMemberDesignerIm
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupAttachMemberDesignerImpl;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl;
-import org.esupportail.publisher.repository.externals.ldap.LdapGroupProfsMemberDesignerImpl;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatter;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCO;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCOReplace;
@@ -117,6 +118,9 @@ public class GroupConfiguration {
 
         @Inject
         public GroupRegexConfiguration groupRegexConfiguration;
+
+        @Inject
+        public GroupDesignerConfiguration groupDesignerConfiguration;
 
         @Bean
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
@@ -216,8 +220,10 @@ public class GroupConfiguration {
             formatters.add(new LdapGroupRegexpDisplayNameFormatterESCOReplace());
 
             List<IGroupMemberDesigner> designers = Lists.newArrayList();
-            designers.add(new LdapGroupProfsMemberDesignerImpl(externalGroupHelper()));
-            //designers.add(new LdapGroupLocauxMemberDesignerImpl(externalGroupHelper()));
+            for (GroupDesignerProperties grp: groupDesignerConfiguration.getProperties()) {
+                 designers.add(new LdapGroupAttachMemberDesignerImpl(externalGroupHelper(), grp.getGroupRootPattern(),
+                     grp.getGroupAttachEndMatch(), grp.getGroupToAttachEndPattern()));
+            }
             return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), formatters, externalUserDao, designers);
         }
 
@@ -236,7 +242,7 @@ public class GroupConfiguration {
             return new EmptyGroupDaoImpl();
         }
 
-        @Bean
+        /*@Bean
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
         public IGroupMemberDesigner ldapGroupMemberDesigner() {
             return new LdapGroupProfsMemberDesignerImpl(externalGroupHelper());
@@ -246,7 +252,7 @@ public class GroupConfiguration {
         @ConditionalOnMissingClass({LdapGroupDaoImpl.class,WSEsupGroupDaoImpl.class})
         public IGroupMemberDesigner emptyGroupMemberDesigner() {
             return new EmptyGroupMemberDesignerImpl();
-        }
+        }*/
     }
 
     @Inject
