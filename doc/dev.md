@@ -1,9 +1,9 @@
 # migration help
  
 ## migrating from utf8 to utf8mb4
-- old liquibase migration files where removed and a new init schema was initiated
+- old liquibase migration files where removed and a new init schema was generated
 - to migrate :
-__Don't forget to make a a save of your datas before suche operation__
+__Don't forget to make a dump of your datas before such operation__
 1. dump datas with 
 ```sql
   mysqldump -h hostname -u user -p --no-create-info --complete-insert --extended-insert --ignore-table="publisher.databasechangeloglock" --ignore-table="publisher.databasechangelog" --ignore-table="publisher.t_persistent_audit_event" --ignore-table="publisher.t_persistent_audit_event_data" "publisher" > "publisher.sql"
@@ -57,10 +57,13 @@ mvn compile liquibase:update
 ## to run in dev :
 - `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
 
-
 ## mvn remember :
 - `mvn release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
 - on release run 'grunt ngconstant' to update version in angular app constant, we should try to watch on a grunt task to make release
+
+## to deploy :
+- before you should build the war package : `mvn clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+- and deploy the war into your webapps directory `unzip esup-publisher-ui-x.y.z.war -d publisher`
 
 ## mvn param to debug xml binding :
 -Djaxb.debug=true
