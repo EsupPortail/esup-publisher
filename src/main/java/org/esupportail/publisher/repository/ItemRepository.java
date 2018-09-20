@@ -16,10 +16,8 @@
 package org.esupportail.publisher.repository;
 
 import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -33,6 +31,6 @@ public interface ItemRepository<T extends AbstractItem> extends
     Integer archiveExpiredPublished();
 
     @Modifying(clearAutomatically = true)
-    @Query("update #{#entityName} e set e.status = org.esupportail.publisher.domain.enums.ItemStatus.PUBLISHED where e.status = org.esupportail.publisher.domain.enums.ItemStatus.SCHEDULED and e.startDate is not null e.startDate <= CURRENT_DATE")
+    @Query("update #{#entityName} e set e.status = org.esupportail.publisher.domain.enums.ItemStatus.PUBLISHED where e.status = org.esupportail.publisher.domain.enums.ItemStatus.SCHEDULED and e.startDate is not null and e.startDate <= CURRENT_DATE")
     Integer publishScheduled();
 }
