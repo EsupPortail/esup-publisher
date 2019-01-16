@@ -25,17 +25,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.QUser;
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -45,13 +50,23 @@ import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.repository.UserRepository;
+import org.esupportail.publisher.security.AuthoritiesConstants;
+import org.esupportail.publisher.security.CustomUserDetails;
+import org.esupportail.publisher.security.UserContextLoaderService;
+import org.esupportail.publisher.security.UserContextLoaderServiceImpl;
 import org.esupportail.publisher.service.bean.UserContextTree;
+import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -93,6 +108,9 @@ public class CategoryResourceTest {
 	private static final Integer DEFAULT_TTL = 1000;
 	private static final Integer UPDATED_TTL = 10000;
 
+    private static final String USER_ADMIN = "admin";
+    private static final String USER = "user";
+
 	@Inject
 	private CategoryRepository categoryRepository;
 
@@ -117,22 +135,41 @@ public class CategoryResourceTest {
 	private RedactorRepository redactorRepository;
 	private Redactor redactor;
 
+    @Inject
+    private UserRepository userRepo;
+
+    private Authentication authUserAdmin;
+    private CustomUserDetails userAdminDetails;
+
 	@PostConstruct
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		CategoryResource categoryResource = new CategoryResource();
 		OrganizationResource organizationResource = new OrganizationResource();
-        UserContextTree userContextTree = new UserContextTree();
+        UserContextLoaderService userSessionTreeLoader = new UserContextLoaderServiceImpl();
+        UserContextTree userSessionTree = new UserContextTree();
 		ReaderResource readerResource = new ReaderResource();
 		RedactorResource redactorResource = new RedactorResource();
 		PublisherResource publisherResource = new PublisherResource();
+        ReflectionTestUtils.setField(userSessionTreeLoader, "userSessionTree", userSessionTree);
 		ReflectionTestUtils.setField(categoryResource, "categoryRepository", categoryRepository);
 		ReflectionTestUtils.setField(organizationResource, "organizationRepository", organizationRepository);
 		ReflectionTestUtils.setField(readerResource, "readerRepository", readerRepository);
 		ReflectionTestUtils.setField(redactorResource, "redactorRepository", redactorRepository);
 		ReflectionTestUtils.setField(publisherResource, "publisherRepository", publisherRepository);
-        ReflectionTestUtils.setField(categoryResource, "userSessionTree", userContextTree);
+        ReflectionTestUtils.setField(categoryResource, "userSessionTreeLoader", userSessionTreeLoader);
 		this.restCategoryMockMvc = MockMvcBuilders.standaloneSetup(categoryResource).build();
+
+        User userPart1 = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
+        Map<String, List<String>> userAttrs1 = Maps.newHashMap();
+        userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));
+        userAttrs1.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
+        userAttrs1.put("mail", Lists.newArrayList(userPart1.getDisplayName()));
+        userAttrs1.put("displayName",Lists.newArrayList("Admin User"));
+        userAttrs1.put("isMemberOf", Lists.newArrayList("esco:Applications:Publication_contenus:ADMIN:Mon_ETAB1","esco:Etablissements:Mon_ETAB1:Profs"));
+        UserDTO userDTOPart1 = new UserDTO(USER_ADMIN, userPart1.getDisplayName(), true, true, userPart1.getEmail(), userAttrs1);
+        userAdminDetails = new CustomUserDetails(userDTOPart1, userPart1, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
+        authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
 	}
 
 	@Before
@@ -164,6 +201,8 @@ public class CategoryResourceTest {
 	public void createCategory() throws Exception {
 		// Validate the database is empty
 		assertThat(categoryRepository.findAll()).hasSize(0);
+
+        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
 		// Create the Category
 		restCategoryMockMvc.perform(
