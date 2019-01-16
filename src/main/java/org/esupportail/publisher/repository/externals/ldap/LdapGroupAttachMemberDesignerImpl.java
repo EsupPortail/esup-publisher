@@ -78,6 +78,14 @@ public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
         return group;
     }
 
+    @Override
+    public boolean isDesignerMatchGroup(String groupId) {
+        if (groupId != null && !groupId.isEmpty()) {
+           return patternGroupIntoAttach.matcher(groupId).matches();
+        }
+        return false;
+    }
+
     @PostConstruct
     public void debug() {
         log.debug("Configuration du bean: {}", this.toString());

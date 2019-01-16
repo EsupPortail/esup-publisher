@@ -15,9 +15,16 @@
  */
 package org.esupportail.publisher.repository.externals.ldap;
 
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Sets;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.externals.*;
+import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
+import org.esupportail.publisher.domain.externals.IExternalGroup;
+import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.junit.Assert;
@@ -34,10 +41,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.List;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -183,6 +186,13 @@ public class LdapServiceTest {
     }
 
     @Test
+    public void testGroupIsMemberOfGroupWithDesigner() {
+        org.springframework.util.Assert.notNull(externalGroupDao);
+        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:FICTIF_0450822X:PREMIERE GENERALE et TECHNO YC BT:Profs_601", "esco:Etablissements:FICTIF_0450822X:Profs");
+        Assert.assertTrue(ret);
+    }
+
+    @Test
     public void testGroupIsMemberOfGroupFromFilter() {
         org.springframework.util.Assert.notNull(externalGroupDao);
         final String StringFilter = "(|(cn=esco:Etablissements:FICTIF_0450822X:Tous_FICTIF*)(cn=esco:Applications:Publication_annonces:FICTIF_0450822X))";
@@ -190,6 +200,14 @@ public class LdapServiceTest {
         Assert.assertTrue(ret);
 
         ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:FICTIF_0450822X:Tous_FICTIF");
+        Assert.assertTrue(ret);
+    }
+
+    @Test
+    public void testGroupIsMemberOfGroupFromFilterWithDesigner() {
+        org.springframework.util.Assert.notNull(externalGroupDao);
+        final String StringFilter = "(|(cn=esco:Etablissements:FICTIF_0450822X:Tous_FICTIF)(cn=esco:Applications:Publication_annonces:FICTIF_0450822X))";
+        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:FICTIF_0450822X:PREMIERE GENERALE et TECHNO YC BT:Profs_601");
         Assert.assertTrue(ret);
     }
 

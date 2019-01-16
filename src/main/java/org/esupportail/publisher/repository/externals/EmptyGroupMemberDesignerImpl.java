@@ -26,4 +26,9 @@ public class EmptyGroupMemberDesignerImpl implements IGroupMemberDesigner {
     public IExternalGroup designe(IExternalGroup group, IExternalGroupDao externalGroupDao) {
         return group;
     }
+
+    @Override
+    public boolean isDesignerMatchGroup(String groupId) {
+        return false;
+    }
 }

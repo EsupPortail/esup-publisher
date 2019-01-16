@@ -23,4 +23,6 @@ import org.esupportail.publisher.domain.externals.IExternalGroup;
 public interface IGroupMemberDesigner {
 
    IExternalGroup designe(IExternalGroup group, final IExternalGroupDao externalGroupDao);
+
+   boolean isDesignerMatchGroup(String groupId);
 }

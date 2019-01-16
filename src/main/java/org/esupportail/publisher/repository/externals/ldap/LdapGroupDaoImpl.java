@@ -176,7 +176,17 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         if (log.isDebugEnabled()) {
             log.debug("isGroupMemberOfGroup LDAP filter applied : {}", filter);
         }
-        return !searchWithFilter(filter, false).isEmpty();
+
+        boolean found = !searchWithFilter(filter, false).isEmpty();
+        // FIX: to watch on group where applied designers
+        if (!found) {
+            List<IExternalGroup> groups = searchWithFilter(new LikeFilter(externalGroupHelper.getGroupSearchAttribute(), parent + "*"), true);
+            for (IExternalGroup gp: groups){
+                if (gp.getGroupMembers().contains(member)) return true;
+            }
+        }
+
+        return found;
     }
 
     @Override
@@ -189,7 +199,29 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         or.append(new EqualsFilter(externalGroupHelper.getGroupSearchAttribute(), member));
         filter.and(or);
 
-        return !searchWithFilter(filter, false).isEmpty();
+        boolean found = !searchWithFilter(filter, false).isEmpty();
+        // FIX : to watch on applied designers
+        if (!found) {
+            List<IExternalGroup> groups = searchWithFilter(new HardcodedFilter(stringFilter), true);
+            for (IExternalGroup gp: groups){
+                if (gp.getGroupMembers().contains(member)) return true;
+                // looking for childs of root
+                for (String child: gp.getGroupMembers()) {
+                    boolean isDesigneApply = false;
+                    for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
+                        if (gpDesigner.isDesignerMatchGroup(child)) {
+                            isDesigneApply = true;
+                        }
+                    }
+                    if (isDesigneApply) {
+                        IExternalGroup designedGroup = this.getGroupById(child, true);
+                        if (designedGroup.getGroupMembers().contains(member)) return true;
+                    }
+                }
+            }
+        }
+
+        return found;
 
     }
 
