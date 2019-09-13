@@ -30,7 +30,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${catalina.base}/logs/publisher.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.base}/logs/archives/publisher.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${catalina.base}/logs/archives/publisher.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
             <maxHistory>366</maxHistory>
         </rollingPolicy>
         <encoder>
