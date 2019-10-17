@@ -714,9 +714,9 @@
                 <version>${liquibase.version}</version>
                 <dependencies>
                     <dependency>
-                        <groupId>org.esco.mysql</groupId>
-                        <artifactId>custom-dialects</artifactId>
-                        <version>0.0.1</version>
+                        <groupId>org.jasig.portal</groupId>
+                        <artifactId>uPortal-hibernate4-dialects</artifactId>
+                        <version>5.6.1</version>
                     </dependency>
                     <dependency>
                         <groupId>org.hibernate</groupId>
