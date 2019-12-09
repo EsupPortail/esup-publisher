@@ -97,8 +97,10 @@ public class GroupService implements IGroupService {
 				}
 			}
 		}
-		log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
-				perms.getSecond());
+		if(perms != null) {
+			log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
+					perms.getSecond());
+		}
 		if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst())
 				&& perms.getSecond() == null) {
 			return Lists.newArrayList();
