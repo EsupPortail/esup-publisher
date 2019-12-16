@@ -67,7 +67,7 @@ public class LdapServiceTest {
 	@Before
 	public void beforeMethod() {
 		try {
-			externalUserDao.getUsersWithFilter("(ESCOUAI=0410017W)", "ALE");
+			externalUserDao.getUsersWithFilter("(ESCOUAI=0290009C)", "ALE");
 		} catch (CommunicationException e) {
 			log.warn("WARNING no LDAP connection acquired !");
 			org.junit.Assume.assumeTrue(
@@ -79,13 +79,13 @@ public class LdapServiceTest {
 	public void testFindUserWithFilter() {
 		org.springframework.util.Assert.notNull(externalUserDao);
 		List<IExternalUser> lus = externalUserDao.getUsersWithFilter(
-				"(ESCOUAI=0410017W)", "ALE");
+				"(ESCOUAI=0290009C)", "ALE");
 		Assert.assertNotNull(lus);
 		Assert.assertTrue(!lus.isEmpty());
 		Assert.assertNotNull(lus.get(0).getId());
 		Assert.assertNotEquals(lus.get(0).getId(), "");
 
-		lus = externalUserDao.getUsersWithFilter("(ESCOUAI=0410017W)", "ALE");
+		lus = externalUserDao.getUsersWithFilter("(ESCOUAI=0290009C)", "ALE");
 
 		for (IExternalUser lu : lus) {
 			log.debug(lu.toString());
@@ -95,13 +95,13 @@ public class LdapServiceTest {
     @Test
     public void testFindGroupWithFilter() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        List<IExternalGroup> lgps = externalGroupDao.getGroupsWithFilter("(cn=esco:Etablissements:FICTIF_0450822X:*)", "Profs Principaux", true);
+        List<IExternalGroup> lgps = externalGroupDao.getGroupsWithFilter("(cn=esco:Etablissements:DE L IROISE_0290009C:*)", "Profs Principaux", true);
         Assert.assertNotNull(lgps);
         Assert.assertTrue(!lgps.isEmpty());
         Assert.assertNotNull(lgps.get(0).getId());
         Assert.assertNotEquals(lgps.get(0).getId(), "");
 
-        lgps = externalGroupDao.getGroupsWithFilter("(cn=esco:Etablissements:FICTIF_0450822X:*)", "Profs Principaux", true);
+        lgps = externalGroupDao.getGroupsWithFilter("(cn=esco:Etablissements:DE L IROISE_0290009C:*)", "Profs Principaux", true);
 
         for (IExternalGroup lgp : lgps) {
             log.debug(lgp.toString());
@@ -111,7 +111,7 @@ public class LdapServiceTest {
 	@Test
 	public void testFindUserUid() {
 		org.springframework.util.Assert.notNull(externalUserDao);
-		IExternalUser lu = externalUserDao.getUserByUid("F1000ugr");
+		IExternalUser lu = externalUserDao.getUserByUid("F1700k3r");
 		Assert.assertNotNull(lu);
 		log.debug(lu.toString());
 
@@ -129,7 +129,7 @@ public class LdapServiceTest {
     @Test
     public void testFindGroupId() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        IExternalGroup group = externalGroupDao.getGroupById("esco:Etablissements:FICTIF_0450822X:Administratifs:Tous_Administratifs", true);
+        IExternalGroup group = externalGroupDao.getGroupById("esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs", true);
         Assert.assertNotNull(group);
         log.debug(group.toString());
 
@@ -162,60 +162,60 @@ public class LdapServiceTest {
     @Test
     public void testIsUserFoundFromFilter() {
         org.springframework.util.Assert.notNull(externalUserDao);
-        final String StringFilter = "(isMemberOf=esco:Etablissements:FICTIF_0450822X*)";
-        boolean ret = externalUserDao.isUserFoundWithFilter(StringFilter, "F1000ugr");
+        final String StringFilter = "(isMemberOf=esco:Etablissements:DE L IROISE_0290009C*)";
+        boolean ret = externalUserDao.isUserFoundWithFilter(StringFilter, "F1700k3r");
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testIsNotUserFoundFromFilter() {
         org.springframework.util.Assert.notNull(externalUserDao);
-        final String StringFilter = "(isMemberOf=esco:Etablissements:FICTIF_0450822X*)";
-        boolean ret = externalUserDao.isUserFoundWithFilter(StringFilter, "F08001ut");
+        final String StringFilter = "(isMemberOf=esco:Etablissements:DE L IROISE_0290009C*)";
+        boolean ret = externalUserDao.isUserFoundWithFilter(StringFilter, "F1700k2y");
         Assert.assertTrue(!ret);
     }
 
     @Test
     public void testGroupIsMemberOfGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:DIRECTION","esco:Applications:Publication_contenus:FICTIF_0450822X");
+        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:admin:local:admin_DE L IROISE_0290009C","esco:admin:Publication_contenus:DE L IROISE_0290009C:MANAGER");
         Assert.assertTrue(ret);
 
-        ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:DIRECTION","esco:Applications:Publication_contenus");
+        ret = externalGroupDao.isGroupMemberOfGroup("esco:admin:local:admin_DE L IROISE_0290009C","esco:admin:Publication_contenus");
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testGroupIsMemberOfGroupWithDesigner() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:FICTIF_0450822X:PREMIERE GENERALE et TECHNO YC BT:Profs_1 S1", "esco:Etablissements:FICTIF_0450822X:Profs");
+        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TECHNO YC BT:Profs_2NDE3", "esco:Etablissements:DE L IROISE_0290009C:Profs");
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testGroupIsMemberOfGroupFromFilter() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        final String StringFilter = "(|(cn=esco:Etablissements:FICTIF_0450822X:Tous_FICTIF*)(cn=esco:Applications:Publication_contenus:FICTIF_0450822X))";
-        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:FICTIF_0450822X:Administratifs:ORIENTATION");
+        final String StringFilter = "(|(cn=esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE*)(cn=esco:Applications:Publication_contenus:DE L IROISE_0290009C))";
+        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:DE L IROISE_0290009C:Administratifs:ORIENTATION");
         Assert.assertTrue(ret);
 
-        ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:FICTIF_0450822X:Tous_FICTIF");
+        ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE");
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testGroupIsMemberOfGroupFromFilterWithDesigner() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        final String StringFilter = "(|(cn=esco:Etablissements:FICTIF_0450822X:Tous_FICTIF)(cn=esco:Applications:Publication_contenus:FICTIF_0450822X))";
-        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:FICTIF_0450822X:PREMIERE GENERALE et TECHNO YC BT:Profs_1 S1");
+        final String StringFilter = "(|(cn=esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE)(cn=esco:Applications:Publication_contenus:DE L IROISE_0290009C))";
+        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:DE L IROISE_0290009C:SECONDE GENERALE et TECHNO YC BT:Profs_2NDE3");
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testGroupIsNotMemberOfGroupFromFilter() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        final String StringFilter = "(|(cn=esco:Etablissements:FICTIF_0450822X:Tous_FICTIF*)(cn=esco:Applications:Publication_contenus:FICTIF_0450822X))";
-        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "cfa:Etablissements:FICTIF_0333333Y:Administratifs:Tous_Administratifs");
+        final String StringFilter = "(|(cn=esco:Etablissements:DE L IROISE_0290009C:Tous_DE L IROISE*)(cn=esco:Applications:Publication_contenus:DE L IROISE_0290009C))";
+        boolean ret = externalGroupDao.isGroupMemberOfGroupFilter(StringFilter, "esco:Etablissements:DE L IROISE_0291595B:Administratifs:Tous_Administratifs");
         Assert.assertTrue(!ret);
 
     }
@@ -223,56 +223,56 @@ public class LdapServiceTest {
     @Test
     public void testGroupIsNotMemberOfGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:Tous_Administratifs","esco:admin:central");
+        boolean ret = externalGroupDao.isGroupMemberOfGroup("esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs","esco:admin:central");
         Assert.assertFalse(ret);
     }
 
     @Test
     public void testGroupIsMemberOfAtLeastOneGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:FICTIF_0450822X","esco:Applications:GRR:FICTIF_0450822X");
-        boolean ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:Tous_Administratifs", groups);
+        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:DE L IROISE_0290009C","esco:Applications:mediacentre:GAR:DE L IROISE_0290009C");
+        boolean ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs", groups);
         Assert.assertTrue(ret);
 
-        groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:FICTIF_0450822X","esco:Etablissements:FICTIF_0450822X");
-        ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:Tous_Administratifs",groups);
+        groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:DE L IROISE_0290009C","esco:Etablissements:DE L IROISE_0290009C");
+        ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs",groups);
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testGroupIsNotMemberOfAtLeastOneGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:FICTIF_0450822X", "esco:Etablissements:FICTIF_0450822X:Profs");
-        boolean ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:FICTIF_0450822X:Administratifs:Tous_Administratifs", groups);
+        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:DE L IROISE_0290009C", "esco:Etablissements:DE L IROISE_0290009C:Profs");
+        boolean ret = externalGroupDao.isGroupMemberOfAtLeastOneGroup("esco:Etablissements:DE L IROISE_0290009C:Administratifs:Tous_Administratifs", groups);
         Assert.assertFalse(ret);
     }
 
     @Test
     public void testUserIsMemberOfGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        boolean ret = externalGroupDao.isUserMemberOfGroup("F1000ugr", "esco:Applications:Publication_contenus:FICTIF_0450822X");
+        boolean ret = externalGroupDao.isUserMemberOfGroup("F1700k3r", "esco:Applications:Publication_contenus:DE L IROISE_0290009C");
         Assert.assertTrue(ret);
     }
     @Test
     public void testUserIsNotMemberOfGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        boolean ret = externalGroupDao.isUserMemberOfGroup("F08001ut", "esco:Applications:Publication_contenus:FICTIF_0450822X");
+        boolean ret = externalGroupDao.isUserMemberOfGroup("F1700k2y", "esco:Applications:Publication_contenus:DE L IROISE_0290009C");
         Assert.assertFalse(ret);
     }
 
     @Test
     public void testUserIsMemberOfAtLeastOneGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:FICTIF_0450822X","esco:Applications:Publication_contenus:FICTIF_0450822X");
-        boolean ret = externalGroupDao.isUserMemberOfAtLeastOneGroup("F1000ugr", groups);
+        Set<String> groups = Sets.newHashSet("esco:admin:central","esco:Applications:mail:DE L IROISE_0290009C","esco:Applications:Publication_contenus:DE L IROISE_0290009C");
+        boolean ret = externalGroupDao.isUserMemberOfAtLeastOneGroup("F1700k3r", groups);
         Assert.assertTrue(ret);
     }
 
     @Test
     public void testUserIsNotMemberOfAtLeastOneGroup() {
         org.springframework.util.Assert.notNull(externalGroupDao);
-        Set<String> groups = Sets.newHashSet("esco:Applications:mail:FICTIF_0450822X","esco:Applications:Publication_contenus:FICTIF_0450822X","esco:Applications:GRR:FICTIF_0450822X");
-        boolean ret = externalGroupDao.isUserMemberOfAtLeastOneGroup("F08001ut", groups);
+        Set<String> groups = Sets.newHashSet("esco:Applications:mail:DE L IROISE_0290009C","esco:Applications:Publication_contenus:DE L IROISE_0290009C","esco:Applications:GRR:DE L IROISE_0290009C");
+        boolean ret = externalGroupDao.isUserMemberOfAtLeastOneGroup("F1700k2y", groups);
         Assert.assertFalse(ret);
     }
 

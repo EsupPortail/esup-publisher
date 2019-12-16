@@ -15,10 +15,10 @@ spring:
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://192.168.56.10:3306/publisher-test?autoreconnect=true
+        url: jdbc:mysql://127.0.0.1:3306/publisher_test?autoreconnect=true
         databaseName:
         serverName:
-        username: jgribonvald
+        username: root
         password: root
         cachePrepStmts: true
         prepStmtCacheSize: 250
@@ -69,9 +69,9 @@ cache:
 
 ldap:
     base: dc=esco-centre,dc=fr
-    urls: ldap://chene:389/
+    urls: ldap://127.0.0.1:389/
     userDn: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
-    password: LplmENT
+    password: admin
     timeLimit: 20000
     countLimit: 2000
     otherUserDisplayedAttributes: mail,ESCOUAI, ENTPersonProfils
@@ -90,13 +90,18 @@ ldap:
     escoGroupRegexp:
         properties:
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)|(ef2s)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
                 groupNameRegex: "[^:]+:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:(groupes_locaux):Publication_contenus"
                 groupNameIndex: "1"
                 groupRecomposerSeparator: ":"
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*_[0-9]{7}[a-zA-Z]:[^:]*:Profs Principaux"
-                groupNameRegex: "[^:]*:Etablissements:[^:]*:([^:]*):(Profs Principaux)"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Profs Principaux"
+                groupNameRegex: "[^:]+:Etablissements:[^:]+:([^:]+):(Profs Principaux)"
+                groupNameIndex: "2,1"
+                groupRecomposerSeparator: " - "
+            -
+                groupMatcher: "ef2s:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Responsable de formation"
+                groupNameRegex: "ef2s:Etablissements:[^:]+:([^:]+):(Responsable de formation)"
                 groupNameIndex: "2,1"
                 groupRecomposerSeparator: " - "
      # for designers  can be commented - used to attach groups that are not in the tree root or membrers on
