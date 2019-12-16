@@ -36,7 +36,7 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     }
 
     @Override
-    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = this.determineTargetUrl(request, response);
         if(response.isCommitted()) {
             this.logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);

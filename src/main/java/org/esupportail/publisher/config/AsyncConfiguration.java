@@ -20,8 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -36,25 +35,21 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @EnableScheduling
 //@Profile("!" + Constants.SPRING_PROFILE_FAST)
-public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
+public class AsyncConfiguration implements AsyncConfigurer {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
-
-    private RelaxedPropertyResolver propertyResolver;
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "async.");
-    }
+    
+    @Autowired
+    private Environment env;
 
     @Override
     @Bean
     public Executor getAsyncExecutor() {
         log.debug("Creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(propertyResolver.getProperty("corePoolSize", Integer.class, 2));
-        executor.setMaxPoolSize(propertyResolver.getProperty("maxPoolSize", Integer.class, 50));
-        executor.setQueueCapacity(propertyResolver.getProperty("queueCapacity", Integer.class, 10000));
+        executor.setCorePoolSize(env.getProperty("async.corePoolSize", Integer.class, 2));
+        executor.setMaxPoolSize(env.getProperty("async.maxPoolSize", Integer.class, 50));
+        executor.setQueueCapacity(env.getProperty("async.queueCapacity", Integer.class, 10000));
         executor.setThreadNamePrefix("publisher-Executor-");
         return new ExceptionHandlingAsyncTaskExecutor(executor);
     }

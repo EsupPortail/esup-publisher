@@ -16,6 +16,7 @@
 package org.esupportail.publisher.web.rest;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
@@ -82,7 +84,8 @@ public class UserResource {
 	@RolesAllowed(AuthoritiesConstants.USER)
 	public User getUser(@PathVariable String login, HttpServletResponse response) {
 		log.debug("REST request to get User : {}", login);
-		User user = userRepository.findOne(login);
+		Optional<User> optionalUser =  userRepository.findById(login);
+		User user = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
 		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}

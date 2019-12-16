@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Authenticate a user from the database.
@@ -67,7 +68,8 @@ public class UserDetailsService implements
 
 	@Transactional
 	public CustomUserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User internal = userDao.findOne(userName);
+		Optional<User> optionalUser = userDao.findById(userName);
+		User internal = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
 		final IExternalUser external = extDao.getUserByUid(userName);
 		if (external == null) {
 			throw new UsernameNotFoundException(String.format(
@@ -86,7 +88,8 @@ public class UserDetailsService implements
 							AuthoritiesConstants.ADMIN));
 			if (authorities != null && !authorities.isEmpty() && isAtLeastUser) {
 				internal = userDao.saveAndFlush(userDTOFactory.from(user));
-				internal = userDao.findOne(userName);
+				Optional<User> optionalU = userDao.findById(userName);
+				internal = optionalU == null || !optionalU.isPresent() ? null : optionalU.get();
 				if (internal == null) {
 					log.error(
 							"User with username {} could not be read back after being created.",

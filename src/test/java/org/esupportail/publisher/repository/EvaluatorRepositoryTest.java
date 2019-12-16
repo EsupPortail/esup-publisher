@@ -26,10 +26,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
-
-import lombok.extern.slf4j.Slf4j;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.enums.OperatorType;
@@ -39,21 +38,23 @@ import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author GIP RECIA - Julien Gribonvald 1 oct. 2014
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class EvaluatorRepositoryTest {
@@ -105,9 +106,8 @@ public class EvaluatorRepositoryTest {
 		repository.saveAndFlush(oe);
 		assertNotNull(oe.getId());
 		log.info("After insert : " + oe.toString());
-
-		OperatorEvaluator oe2 = (OperatorEvaluator) repository.findOne(oe
-				.getId());
+		Optional<AbstractEvaluator> optionalEvaluator = repository.findById(oe.getId());
+		OperatorEvaluator oe2 = optionalEvaluator == null || !optionalEvaluator.isPresent()? null : (OperatorEvaluator) optionalEvaluator.get();
 		log.info("After select : " + oe2.toString());
 		assertNotNull(oe2);
 		assertEquals(oe, oe2);
@@ -117,7 +117,7 @@ public class EvaluatorRepositoryTest {
 		repository.save(oe3);
 		log.info("After insert : " + oe3.toString());
 		assertNotNull(oe3.getId());
-		assertTrue(repository.exists(oe3.getId()));
+		assertTrue(repository.existsById(oe3.getId()));
 		oe = (OperatorEvaluator) repository.getOne(oe3.getId());
 		assertNotNull(oe);
 		log.info("After select : " + oe.toString());
@@ -127,11 +127,11 @@ public class EvaluatorRepositoryTest {
 		assertThat(results.size(), is(16));
 		assertThat(results, hasItem(oe));
 
-		repository.delete(oe.getId());
+		repository.deleteById(oe.getId());
 		assertTrue(repository.findAll().size() == 12);
-		assertFalse(repository.exists(oe.getId()));
+		assertFalse(repository.existsById(oe.getId()));
 
-		AbstractEvaluator ae = repository.findOne((long) 0);
+		AbstractEvaluator ae = repository.findById((long) 0).get();
 		assertNull(ae);
 
 	}
@@ -154,7 +154,7 @@ public class EvaluatorRepositoryTest {
 	public void testSaveIterableOfS() {
 		OperatorEvaluator e = ObjTest.newGlobalEvaluator(OperatorType.OR);
 		OperatorEvaluator e2 = ObjTest.newGlobalEvaluator(OperatorType.AND);
-		repository.save(Arrays.asList(e, e2));
+		repository.saveAll(Arrays.asList(e, e2));
 		assertThat(repository.findAll().size(), is(16));
 	}
 
@@ -165,7 +165,7 @@ public class EvaluatorRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(oe1.getId()));
+		assertTrue(repository.existsById(oe1.getId()));
 
 	}
 
@@ -185,7 +185,7 @@ public class EvaluatorRepositoryTest {
 	 */
 	@Test
 	public void testDelete() {
-		repository.delete(oe2.getId());
+		repository.deleteById(oe2.getId());
 		assertTrue(repository.count() == 4);
 	}
 
@@ -195,7 +195,7 @@ public class EvaluatorRepositoryTest {
 	 */
 	@Test
 	public void testDeleteAll() {
-		repository.delete(Lists.newArrayList(oe1, oe2));
+		repository.deleteAll(Lists.newArrayList(oe1, oe2));
 		// AbstractEvaluator ae1 = ObjTest.newPrefEvaluatorForAttr("portletCtx",
 		// "test");
 		AbstractEvaluator ae2 = ObjTest.newMVUEvaluatorForGroup("test1");
@@ -203,7 +203,7 @@ public class EvaluatorRepositoryTest {
 		AbstractEvaluator ae4 = ObjTest.newUserAttributeEvaluatorForAttr("uid",
 				"F08001ut", StringEvaluationMode.EXISTS);
 		// repository.save(Arrays.asList(ae1, ae2, ae3, ae4));
-		repository.save(Arrays.asList(ae2, ae3, ae4));
+		repository.saveAll(Arrays.asList(ae2, ae3, ae4));
 		repository.deleteAll();
 		assertTrue(repository.count() == 0);
 	}

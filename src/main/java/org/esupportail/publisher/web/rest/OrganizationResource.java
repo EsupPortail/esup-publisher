@@ -15,7 +15,13 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.enums.ContextType;
@@ -34,12 +40,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST controller for managing Organization.
@@ -100,7 +108,8 @@ public class OrganizationResource {
 
         // a manager role can only update DisplayName and if Notifications are allowed
 		if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
-            Organization model = organizationRepository.findOne(organization.getId());
+			Optional<Organization> optionalOrganization =  organizationRepository.findById(organization.getId());
+			Organization model = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
             model.setDisplayName(organization.getDisplayName());
             model.setAllowNotifications(organization.isAllowNotifications());
             organizationRepository.save(organization);
@@ -160,7 +169,8 @@ public class OrganizationResource {
 	@Timed
 	public ResponseEntity<Organization> get(@PathVariable Long id) {
 		log.debug("REST request to get Organization : {}", id);
-		Organization organization = organizationRepository.findOne(id);
+		Optional<Organization> optionalOrganization =  organizationRepository.findById(id);
+		Organization organization = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
 		if (organization == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -175,7 +185,7 @@ public class OrganizationResource {
 	@Timed
 	public void delete(@PathVariable Long id) {
 		log.debug("REST request to delete Organization : {}", id);
-		organizationRepository.delete(id);
+		organizationRepository.deleteById(id);
 		userSessionTree.removeCtx(new ContextKey(id, ContextType.ORGANIZATION));
 	}
 
@@ -186,6 +196,6 @@ public class OrganizationResource {
 	 * @return
 	 */
 	private Sort sortByDisplayOrderAsc() {
-		return new Sort(Sort.Direction.ASC, "displayOrder");
+		return Sort.by(Sort.Direction.ASC, "displayOrder");
 	}
 }

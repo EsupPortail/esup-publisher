@@ -15,34 +15,53 @@
  */
 package org.esupportail.publisher.repository;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.InternalFeed;
+import org.esupportail.publisher.domain.ItemClassificationKey;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.Lists;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class ItemClassificationOrderRepositoryTest {
@@ -139,9 +158,8 @@ public class ItemClassificationOrderRepositoryTest {
 				.getAbstractClassification());
 		assertNotNull(ico3.getItemClassificationId().getAbstractItem());
 		log.info("After insert : " + ico3.toString());
-
-		ItemClassificationOrder ico4 = repository.findOne(ico3
-				.getItemClassificationId());
+		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
+		ItemClassificationOrder ico4 = optionalItemClassif == null || !optionalItemClassif.isPresent()? null : optionalItemClassif.get();
 		log.info("After select : " + ico4.toString());
 		assertNotNull(ico4);
 		assertEquals(ico3, ico4);
@@ -155,7 +173,7 @@ public class ItemClassificationOrderRepositoryTest {
 		repository.save(ico4);
 		log.info("After insert : " + ico4.toString());
 		assertNotNull(ico4.getItemClassificationId());
-		assertTrue(repository.exists(ico4.getItemClassificationId()));
+		assertTrue(repository.existsById(ico4.getItemClassificationId()));
 		ico3 = repository.getOne(ico4.getItemClassificationId());
 		assertNotNull(ico3);
 		log.info("After select : " + ico3.toString());
@@ -165,11 +183,12 @@ public class ItemClassificationOrderRepositoryTest {
 		assertThat(results.size(), is(4));
 		assertThat(results, hasItem(ico4));
 
-		repository.delete(ico4.getItemClassificationId());
+		repository.deleteById(ico4.getItemClassificationId());
 		assertTrue(repository.findAll().size() == 3);
-		assertFalse(repository.exists(ico4.getItemClassificationId()));
-
-		ico4 = repository.findOne(new ItemClassificationKey());
+		assertFalse(repository.existsById(ico4.getItemClassificationId()));
+		
+		Optional<ItemClassificationOrder> optionalItem = repository.findById(new ItemClassificationKey());
+		ico4 =optionalItem == null || !optionalItem.isPresent()? null : optionalItem.get();
 		assertNull(ico4);
 
 	}
@@ -190,7 +209,7 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testSaveIterableOfS() {
-		repository.save(Arrays.asList(new ItemClassificationOrder(news1, feed2,
+		repository.saveAll(Arrays.asList(new ItemClassificationOrder(news1, feed2,
 				28), new ItemClassificationOrder(news2, feed1, 1)));
 		assertThat(repository.findAll().size(), is(4));
 	}
@@ -202,7 +221,7 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0)
+		assertTrue(repository.existsById(repository.findAll().get(0)
 				.getItemClassificationId()));
 
 	}

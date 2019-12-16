@@ -24,11 +24,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
@@ -39,17 +38,21 @@ import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class PublisherRepositoryTest {
@@ -115,8 +118,8 @@ public class PublisherRepositoryTest {
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-
-		Publisher e2 = repository.findOne(e.getId());
+		Optional<Publisher> optionalPublisher = repository.findById(e.getId());
+		Publisher e2 = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertEquals(e, e2);
@@ -126,7 +129,7 @@ public class PublisherRepositoryTest {
 		repository.save(e);
 		log.info("After update : " + e.toString());
 		assertNotNull(e.getId());
-		assertTrue(repository.exists(e.getId()));
+		assertTrue(repository.existsById(e.getId()));
 		e = repository.getOne(e.getId());
 		assertNotNull(e);
 		log.info("After select : " + e.toString());
@@ -140,10 +143,10 @@ public class PublisherRepositoryTest {
 		assertThat(result.size(), is(2));
 		assertThat(result, hasItem(e));
 
-		repository.delete(e.getId());
+		repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.exists(e.getId()));
+		assertFalse(repository.existsById(e.getId()));
 	}
 
 	/**
@@ -162,7 +165,7 @@ public class PublisherRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

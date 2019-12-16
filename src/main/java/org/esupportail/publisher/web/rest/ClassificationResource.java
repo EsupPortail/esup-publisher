@@ -18,13 +18,11 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.ContextType;
@@ -52,6 +50,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
+import com.querydsl.core.types.Predicate;
 
 /**
  * REST controller for managing AbstractClassification.
@@ -123,7 +125,8 @@ public class ClassificationResource {
                                                @RequestParam(value = "isPublishing", required = false) Boolean isPublishing) {
         log.debug("REST request to get all AbstractClassifications");
         if (publisherId != null) {
-            Publisher publisher = publisherRepository.findOne(publisherId);
+    	    Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+            Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
             if (publisher == null)
                 return new ClassificationList(new ArrayList<AbstractClassification>());
             Predicate where;
@@ -163,7 +166,8 @@ public class ClassificationResource {
     @Timed
     public ResponseEntity<AbstractClassification> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get AbstractClassification : {}", id);
-        AbstractClassification classification = classificationRepository.findOne(id);
+        Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(id);
+        AbstractClassification classification = optionalAbstractClassification == null || !optionalAbstractClassification.isPresent()? null : optionalAbstractClassification.get();
         if (classification == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -182,7 +186,7 @@ public class ClassificationResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractClassification : {}", id);
-        classificationRepository.delete(id);
+        classificationRepository.deleteById(id);
     }
 
     /**

@@ -22,10 +22,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Sets;
-import com.mysema.commons.lang.Pair;
-import com.mysema.query.types.Predicate;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.QAbstractClassification;
 import org.esupportail.publisher.domain.QAbstractFeed;
@@ -50,6 +46,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Sets;
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.types.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service(value = "permissionService")
 @Lazy

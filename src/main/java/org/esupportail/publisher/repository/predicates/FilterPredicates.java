@@ -18,10 +18,11 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.QFilter;
 import org.esupportail.publisher.domain.QOrganization;
 import org.esupportail.publisher.domain.enums.FilterType;
+
+import com.querydsl.core.types.Predicate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 10 juin 2015

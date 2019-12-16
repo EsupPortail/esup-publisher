@@ -27,11 +27,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Flash;
@@ -52,16 +51,20 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class ItemRepositoryTest {
@@ -102,9 +105,9 @@ public class ItemRepositoryTest {
 	public void setUp() throws Exception {
 		log.info("starting up " + this.getClass().getName());
 
-        user1 = userRepo.findOne(ObjTest.subject1);
-        user2 = userRepo.findOne(ObjTest.subject2);
-        user3 = userRepo.findOne(ObjTest.subject3);
+        user1 = userRepo.findById(ObjTest.subject1).get();
+        user2 = userRepo.findById(ObjTest.subject2).get();
+        user3 = userRepo.findById(ObjTest.subject3).get();
 
 		org1 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_1));
 		org2 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_2));
@@ -317,8 +320,9 @@ public class ItemRepositoryTest {
 		repository.save(n1);
 		assertNotNull(n1.getId());
 		log.info("After insert : " + n1.toString());
-
-		News n2 = (News) repository.findOne(n1.getId());
+		
+		Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
+		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
 		log.info("After select : " + n2.toString());
 		assertNotNull(n2);
 		assertEquals(n1, n2);
@@ -328,7 +332,7 @@ public class ItemRepositoryTest {
 		n2.setStatus(DEFAULT_STATUS);
 		repository.save(n2);
 		log.info("After update : " + n2.toString());
-		assertTrue(repository.exists(n2.getId()));
+		assertTrue(repository.existsById(n2.getId()));
 		n2 = (News) repository.getOne(n2.getId());
 		assertNotNull(n2);
 		log.info("After select : " + n2.toString());
@@ -342,10 +346,10 @@ public class ItemRepositoryTest {
 		assertThat(result.size(), is(2));
 		assertThat(result, hasItem(n2));
 
-		repository.delete(n2.getId());
+		repository.deleteById(n2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(4));
-		assertFalse(repository.exists(n2.getId()));
+		assertFalse(repository.existsById(n2.getId()));
 	}
 
     @Test
@@ -359,8 +363,8 @@ public class ItemRepositoryTest {
         assertNotNull(n1.getId());
 
         repository.archiveExpiredPublished();
-
-        News n2 = (News) repository.findOne(n1.getId());
+        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
+		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
@@ -378,8 +382,8 @@ public class ItemRepositoryTest {
         assertNotNull(n1.getId());
 
         repository.archiveExpiredPublished();
-
-        News n2 = (News) repository.findOne(n1.getId());
+        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
+		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
         assertNotNull(n2);
 
         assertTrue(n1.equals(n2));
@@ -397,7 +401,8 @@ public class ItemRepositoryTest {
 
         repository.publishScheduled();
 
-        News n2 = (News) repository.findOne(n1.getId());
+        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
+		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
@@ -416,7 +421,8 @@ public class ItemRepositoryTest {
 
         repository.publishScheduled();
 
-        News n2 = (News) repository.findOne(n1.getId());
+        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
+		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
@@ -439,7 +445,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

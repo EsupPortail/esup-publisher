@@ -57,7 +57,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -67,7 +66,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.Assert;
 
 @Configuration
-@EnableWebMvcSecurity
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -130,7 +128,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public IAuthoritiesDefinition mainRolesDefs() {
-        Assert.notNull(env);
+        Assert.notNull(env, "environment must not be null");
         AuthoritiesDefinition defs = new AuthoritiesDefinition();
 
         Set<IEvaluation> set = new HashSet<IEvaluation>();
@@ -260,7 +258,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web){
         web.ignoring().antMatchers("/scripts/**/*.{js,html}").antMatchers("/bower_components/**")
             .antMatchers("/i18n/**").antMatchers("/assets/**").antMatchers("/swagger-ui/**")
             .antMatchers("/test/**").antMatchers("/console/**");
@@ -291,6 +289,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .headers()
             .frameOptions()
             .disable()
+            .and()
             .authorizeRequests()
             .antMatchers("/app/**").authenticated()
             .antMatchers("/api/register").denyAll()

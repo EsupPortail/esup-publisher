@@ -1,34 +1,35 @@
 package org.esupportail.publisher.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.esupportail.publisher.Application;
+import org.esupportail.publisher.config.audit.AuditEventConverter;
+import org.esupportail.publisher.domain.PersistentAuditEvent;
+import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
+import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.esupportail.publisher.config.audit.AuditEventConverter;
-import org.esupportail.publisher.domain.PersistentAuditEvent;
-import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
-import org.esupportail.publisher.service.AuditEventService;
-import org.joda.time.LocalDateTime;
 
 @RunWith(PowerMockRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class AuditEventServiceTest {
 	
@@ -64,12 +65,11 @@ public class AuditEventServiceTest {
 		dataAuditEvent2.put("remoteAddress", "0:0:0:0:0:0:0:1");
 		dataAuditEvent2.put("sessionId", "9DEF13CA85D3836A4980BBF1C48C3F0E");
 
-		
-		AuditEvent auditEvent = new AuditEvent(new Date(), "F1800nmj",
+		AuditEvent auditEvent = new AuditEvent(Instant.now(), "F1800nmj",
 				"AUTHENTICATION_SUCCESS",dataAuditEvent);
-		AuditEvent auditEvent1 = new AuditEvent(new Date(), "F1800nmj",
+		AuditEvent auditEvent1 = new AuditEvent(Instant.now(), "F1800nmj",
 				"AUTHENTICATION_SUCCESS",dataAuditEvent1);
-		AuditEvent auditEvent2 = new AuditEvent(new Date(), "F1800nmj",
+		AuditEvent auditEvent2 = new AuditEvent(Instant.now(), "F1800nmj",
 				"AUTHENTICATION_SUCCESS",dataAuditEvent2);
 		auditEventList.add(auditEvent);
 		auditEventList.add(auditEvent1);
@@ -106,9 +106,9 @@ public class AuditEventServiceTest {
 		dataAuditEvent1.put("sessionId", "08200478A2A327F89204B6CD3BF2CC7C");
 
 		
-		AuditEvent auditEvent = new AuditEvent(new LocalDateTime(2018, 04, 30, 10, 00).toDate(), "F1800nmj",
+		AuditEvent auditEvent = new AuditEvent(new LocalDateTime(2018, 04, 30, 10, 00).toDate().toInstant(), "F1800nmj",
 				"AUTHENTICATION_SUCCESS",dataAuditEvent);
-		AuditEvent auditEvent1 = new AuditEvent(new LocalDateTime(2018, 06, 02, 14, 50).toDate(), "F1800nmj",
+		AuditEvent auditEvent1 = new AuditEvent(new LocalDateTime(2018, 06, 02, 14, 50).toDate().toInstant(), "F1800nmj",
 				"AUTHENTICATION_SUCCESS",dataAuditEvent1);
 		auditEventList.add(auditEvent);
 		auditEventList.add(auditEvent1);

@@ -27,10 +27,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
-import com.mysema.query.annotations.QueryInit;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
+
+import com.querydsl.core.annotations.QueryInit;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.esupportail.publisher.domain.util.CstPropertiesLength;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 25 juin 2014

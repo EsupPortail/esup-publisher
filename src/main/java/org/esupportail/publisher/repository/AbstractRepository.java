@@ -21,7 +21,7 @@ package org.esupportail.publisher.repository;
 import java.io.Serializable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**
@@ -29,4 +29,4 @@ import org.springframework.data.repository.NoRepositoryBean;
  * 17 juil. 2014
  */
 @NoRepositoryBean
-public interface AbstractRepository<M , ID extends Serializable> extends JpaRepository<M, ID>, QueryDslPredicateExecutor<M> {}
+public interface AbstractRepository<M , ID extends Serializable> extends JpaRepository<M, ID>, QuerydslPredicateExecutor<M> {}

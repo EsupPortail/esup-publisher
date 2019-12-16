@@ -22,30 +22,21 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class CORSInterceptor extends HandlerInterceptorAdapter implements
-		EnvironmentAware {
+public class CORSInterceptor extends HandlerInterceptorAdapter{
 
-	private static final String ENV_APP_CORS = "app.cors.";
-
-	private RelaxedPropertyResolver propertyResolver;
-
-	@Override
-	public void setEnvironment(Environment environment) {
-		this.propertyResolver = new RelaxedPropertyResolver(environment,
-				ENV_APP_CORS);
-	}
+	@Autowired
+	private Environment env;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 
 		Set<String> allowedOrigins = new HashSet<String>(
-				Arrays.asList(propertyResolver.getProperty("allowed.origins")
+				Arrays.asList(env.getProperty("app.cors.allowed.origins")
 						.split(",")));
 
 		String origin = request.getHeader("Origin");

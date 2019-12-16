@@ -29,7 +29,7 @@ import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -54,6 +54,7 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractEntity<SubjectKey> implements Serializable, Subject {
 
+	 private static final long serialVersionUID = 1L;
 
     //@Id
     //@GeneratedValue(strategy = GenerationType.AUTO)

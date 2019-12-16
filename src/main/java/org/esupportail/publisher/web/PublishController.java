@@ -19,20 +19,12 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
-import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mysema.commons.lang.Pair;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.JPASubQuery;
-import com.mysema.query.types.expr.BooleanExpression;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -80,6 +72,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 22/01/16.
@@ -149,10 +152,10 @@ public class PublishController {
         Organization org = organizationRepository.findByIdentifiers(uai);
         if (org != null) {
             DisplayOrderType displayOrder = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
-            final BooleanExpression builder = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id.in(new JPASubQuery()
-                .from(QAbstractItem.abstractItem)
-                .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId()))
-                .list(QAbstractItem.abstractItem.id));
+            final BooleanExpression builder = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
+            	.in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
+            		.from(QAbstractItem.abstractItem)
+                    .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId())));
             List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
 
             return getFlashInfo(itemsClasss, request);
@@ -193,12 +196,14 @@ public class PublishController {
                 .and(PublisherPredicates.AllOfRedactor(redactorId))
                 .and(PublisherPredicates.AllOfOrganization(org));
             try {
-                final Publisher publisher = publisherRepository.findOne(builder);
+            	Optional<Publisher> optionalPublisher =  publisherRepository.findOne(builder);
+                final Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
                 if (publisher != null) {
-                    final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id.in(new JPASubQuery()
-                        .from(QAbstractItem.abstractItem)
-                        .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId()))
-                        .list(QAbstractItem.abstractItem.id)).and(ItemPredicates.itemsClassOfPublisher(publisher));
+                    final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
+                    	.in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
+                    		.from(QAbstractItem.abstractItem)
+                        	.where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId())))
+                    	.and(ItemPredicates.itemsClassOfPublisher(publisher));
                     final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
                         ItemPredicates.orderByClassifDefinition(publisher.getDefaultDisplayOrder())));
 
@@ -316,7 +321,8 @@ public class PublishController {
     public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId, HttpServletRequest request ) {
         //getting items on new way
         log.debug("Entering getItems with param : publisher_id={}", publisherId);
-        Publisher publisher = publisherRepository.findOne(publisherId);
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
 
         return getItemsOnPublisherNewWay(publisher, request);
     }
@@ -327,7 +333,8 @@ public class PublishController {
     @Timed
     public Category getCategories(@PathVariable("publisher_id") Long publisherId, final HttpServletRequest request) {
         log.debug("Entering getCategories with param : publisher_id={}", publisherId);
-        Publisher publisher = publisherRepository.findOne(publisherId);
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
 
         if (publisher != null && publisher.isUsed() && WritingMode.STATIC.equals(publisher.getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);
@@ -357,7 +364,8 @@ public class PublishController {
     public Category getAbstractFeeds(@PathVariable("category_id") Long categoryId, final HttpServletRequest request) {
         // systeme classic esup-lecture/esup-news
         log.debug("Entering getAbstractFeeds with param : category_id={}", categoryId);
-        org.esupportail.publisher.domain.Category category = categoryRepository.findOne(categoryId);
+        Optional<org.esupportail.publisher.domain.Category> optionalCategory =  categoryRepository.findById(categoryId);
+        org.esupportail.publisher.domain.Category category = optionalCategory == null || !optionalCategory.isPresent()? null : optionalCategory.get();
 
         if (category != null && category.getPublisher().isUsed() && WritingMode.STATIC.equals(category.getPublisher().getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);

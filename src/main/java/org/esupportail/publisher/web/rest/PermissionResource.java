@@ -18,6 +18,7 @@ package org.esupportail.publisher.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.AbstractPermission;
+import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.repository.PermissionRepository;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
@@ -39,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing AbstractPermission.
@@ -139,7 +141,8 @@ public class PermissionResource {
 	public ResponseEntity<AbstractPermission> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get AbstractPermission : {}", id);
-		AbstractPermission permission = permissionRepository.findOne(id);
+		Optional<AbstractPermission> optionalPermission =  permissionRepository.findById(id);
+		AbstractPermission permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 		if (permission == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -155,7 +158,8 @@ public class PermissionResource {
 	@Timed
     public ResponseEntity delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractPermission : {}", id);
-        AbstractPermission permission = permissionRepository.findOne(id);
+        Optional<AbstractPermission> optionalPermission =  permissionRepository.findById(id);
+		AbstractPermission permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
         if (permission == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

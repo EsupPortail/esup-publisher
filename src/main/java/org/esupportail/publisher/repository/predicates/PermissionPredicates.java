@@ -17,7 +17,6 @@ package org.esupportail.publisher.repository.predicates;
 
 import java.util.Collection;
 
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.QAbstractPermission;
 import org.esupportail.publisher.domain.QPermissionOnClassificationWithSubjectList;
@@ -26,6 +25,8 @@ import org.esupportail.publisher.domain.QPermissionOnSubjects;
 import org.esupportail.publisher.domain.QPermissionOnSubjectsWithClassificationList;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
+
+import com.querydsl.core.types.Predicate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 22 juil. 2014

@@ -18,8 +18,6 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
-import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.ExternalFeed;
@@ -29,6 +27,9 @@ import org.esupportail.publisher.domain.QAbstractClassification;
 import org.esupportail.publisher.domain.QAbstractFeed;
 import org.esupportail.publisher.domain.QCategory;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
+
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 24 juil. 2014

@@ -49,7 +49,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @see NewsResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class NewsResourceTest {
 
@@ -139,9 +139,9 @@ public class NewsResourceTest {
 		organization = organizationRepository.saveAndFlush(ObjTest
 				.newOrganization(name));
 		redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor(name));
-        user1 = userRepo.findOne(ObjTest.subject1);
-        user2 = userRepo.findOne(ObjTest.subject2);
-        user3 = userRepo.findOne(ObjTest.subject3);
+        user1 = userRepo.findById(ObjTest.subject1).get();
+        user2 = userRepo.findById(ObjTest.subject2).get();
+        user3 = userRepo.findById(ObjTest.subject3).get();
 
 		news = new News();
 		news.setTitle(DEFAULT_TITLE);

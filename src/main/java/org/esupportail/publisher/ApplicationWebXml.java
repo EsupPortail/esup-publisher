@@ -18,8 +18,9 @@ package org.esupportail.publisher;
 import org.esupportail.publisher.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * This is an helper Java class that provides an alternative to creating a web.xml.
@@ -31,7 +32,7 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.profiles(addDefaultProfile())
-                .showBanner(false)
+                .bannerMode(Mode.OFF)
 				.sources(Application.class);
 	}
 

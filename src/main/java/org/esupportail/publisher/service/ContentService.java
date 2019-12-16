@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -40,6 +41,7 @@ import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.FilterType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -138,7 +140,8 @@ public class ContentService {
 	private RedactorRepository redactorRepository;
 
 	public ResponseEntity<?> saveContent(final ContentDTO content) throws URISyntaxException {
-		final Redactor redactor = redactorRepository.findOne(content.getItem().getRedactor().getId());
+		Optional<Redactor> optionalRedactor = redactorRepository.findById(content.getItem().getRedactor().getId());
+		Redactor redactor = optionalRedactor == null || !optionalRedactor.isPresent() ? null : optionalRedactor.get();
 		if (redactor == null) {
 			log.error("The redactor id wasn't passed !");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -158,7 +161,7 @@ public class ContentService {
 		}
 		if (content.getClassifications() == null || content.getClassifications().isEmpty()) {
 			if (oldLinkedClassifications != null && !oldLinkedClassifications.isEmpty())
-				itemClassificationOrderRepository.delete(oldLinkedClassifications);
+				itemClassificationOrderRepository.deleteAll(oldLinkedClassifications);
 			// we can save the item as DRAFT if there is at least a validated item
 			if (ItemStatus.DRAFT.equals(content.getItem().getStatus())) {
 				AbstractItem item = content.getItem();
@@ -183,7 +186,8 @@ public class ContentService {
 		Pair<PermissionType, PermissionDTO> lowerClassifPerm = null;
 		// filter authorized classifs and check constraints
 		for (ContextKey classif : content.getClassifications()) {
-			AbstractClassification classification = classificationRepository.findOne(classif.getKeyId());
+			Optional<AbstractClassification> optionalClassif = classificationRepository.findById(classif.getKeyId());
+			AbstractClassification classification = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
 			log.debug("entering filtering : {}", classification);
 			if (permissionService.canCreateInCtx(authentication, classif)) {
 				log.debug("==> can create = true");
@@ -233,7 +237,7 @@ public class ContentService {
 		}
 		if (content.getTargets() == null || content.getTargets().isEmpty()) {
 			if (isUpdate)
-				subscriberRepository.delete(oldSubscribers);
+				subscriberRepository.deleteAll(oldSubscribers);
 			log.debug("no targets are provided, will save as draft or is a Static redactor !");
 			// we can save the item as DRAFT if there is at least a validated item or we can save
 			if (ItemStatus.DRAFT.equals(content.getItem().getStatus())
@@ -273,7 +277,7 @@ public class ContentService {
 							oldToRemoves.add(ico);
 						}
 					}
-					itemClassificationOrderRepository.delete(oldToRemoves);
+					itemClassificationOrderRepository.deleteAll(oldToRemoves);
 				}
 				Set<ItemClassificationOrder> classifs = new HashSet<>();
 				for (AbstractClassification classif : authorizedClassifications) {
@@ -281,7 +285,7 @@ public class ContentService {
 							itemClassificationOrderRepository.getNextDisplayOrderInClassification(classif.getId()));
 					classifs.add(ico);
 				}
-				itemClassificationOrderRepository.save(classifs);
+				itemClassificationOrderRepository.saveAll(classifs);
 
 				if (isUpdate)
 					return ResponseEntity.ok(new ValueResource(item.getStatus()));
@@ -365,7 +369,7 @@ public class ContentService {
 				}
 			}
 			log.debug("remove old/unautorized classif classifications {}", oldToRemoves);
-			itemClassificationOrderRepository.delete(oldToRemoves);
+			itemClassificationOrderRepository.deleteAll(oldToRemoves);
 		}
 		Set<ItemClassificationOrder> classifs = new HashSet<>();
 		for (AbstractClassification classif : authorizedClassifications) {
@@ -374,7 +378,7 @@ public class ContentService {
 			classifs.add(ico);
 		}
 		log.debug("saving associated classifications {}", classifs);
-		itemClassificationOrderRepository.save(classifs);
+		itemClassificationOrderRepository.saveAll(classifs);
 
 		// now we save all subscribers if there is
 		if (!authorizedSubscribers.isEmpty()) {
@@ -388,10 +392,10 @@ public class ContentService {
 						oldSubsToRemoves.add(sub);
 					}
 				}
-				subscriberRepository.delete(oldSubsToRemoves);
+				subscriberRepository.deleteAll(oldSubsToRemoves);
 			}
 			log.debug("Will save associated targets :{}", authorizedSubscribers);
-			subscriberRepository.save(persistSubscribers);
+			subscriberRepository.saveAll(persistSubscribers);
 		}
 
 		if (isUpdate)
@@ -517,10 +521,12 @@ public class ContentService {
 			final ContextKeyDTO ctx) {
 		Assert.isTrue(ContextType.ORGANIZATION.equals(ctx.getKeyType()));
 		Set<SubscriberFormDTO> filteredSubjects = Sets.newHashSet();
-		Filter filterGroup = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
+		Optional<Filter> optionalFilterGroup = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
 				FilterType.GROUP));
-		Filter filterUser = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
+		Filter filterGroup = optionalFilterGroup == null || !optionalFilterGroup.isPresent() ? null : optionalFilterGroup.get();
+		Optional<Filter> optionalFilterUser = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
 				FilterType.LDAP));
+		Filter filterUser = optionalFilterUser == null || !optionalFilterUser.isPresent() ? null : optionalFilterUser.get();
 		for (SubscriberFormDTO subscriberFormDTO : targets) {
 			switch (subscriberFormDTO.getSubject().getModelId().getKeyType()) {
 			case GROUP:
@@ -574,11 +580,11 @@ public class ContentService {
 							fileLinked.isInBody(), fileLinked.getContentType()));
 				}
 			}
-			linkedFileItemRepository.save(linkedFileItems);
+			linkedFileItemRepository.saveAll(linkedFileItems);
 		}
 
 		if (!oldToRemove.isEmpty()) {
-			linkedFileItemRepository.delete(oldToRemove);
+			linkedFileItemRepository.deleteAll(oldToRemove);
 		}
 
 	}
@@ -630,20 +636,21 @@ public class ContentService {
 	}*/
 
 	public void deleteContent(Long id) {
-		final AbstractItem item = itemRepository.findOne(id);
+		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
+		AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
 		fileService.deleteInternalResource(item.getEnclosure());
 		final Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates
 				.onCtx(new ContextKey(id, ContextType.ITEM)));
-		subscriberRepository.delete(subscribersToDel);
+		subscriberRepository.deleteAll(subscribersToDel);
 		final Iterable<ItemClassificationOrder> classificationsLinksToDel = itemClassificationOrderRepository
 				.findAll(ItemPredicates.itemsClassOfItem(id));
-		itemClassificationOrderRepository.delete(classificationsLinksToDel);
+		itemClassificationOrderRepository.deleteAll(classificationsLinksToDel);
 		final Iterable<LinkedFileItem> filesToDelete = linkedFileItemRepository.findByAbstractItemId(id);
-		linkedFileItemRepository.delete(filesToDelete);
+		linkedFileItemRepository.deleteAll(filesToDelete);
 		for (LinkedFileItem lFile : filesToDelete) {
 			fileService.deletePrivateResource(lFile.getUri());
 		}
-		itemRepository.delete(id);
+		itemRepository.deleteById(id);
 	}
 
 	@Scheduled(cron = "1 0 0 * * ?")

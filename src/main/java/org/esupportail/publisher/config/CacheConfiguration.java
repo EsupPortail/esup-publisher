@@ -39,7 +39,7 @@ import java.util.SortedSet;
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = {MetricsConfiguration.class, DatabaseConfiguration.class})
+@AutoConfigureAfter(value = {DatabaseConfiguration.class})
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class CacheConfiguration {
 

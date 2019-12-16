@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
 @Configuration
-@ConfigurationProperties(prefix="ldap.escoGroupDesigner")
+@ConfigurationProperties(prefix="ldap.esco-group-designer")
 @Validated
 @Data
 @Slf4j

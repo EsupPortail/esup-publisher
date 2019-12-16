@@ -16,17 +16,15 @@
 package org.esupportail.publisher.web;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.OrderSpecifier;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.repository.ClassificationRepository;
@@ -42,6 +40,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 28/06/17.
@@ -105,7 +109,8 @@ public class FeedController {
         Organization org;
         try {
             long orgId = Long.parseLong(id);
-            org = organizationRepository.findOne(orgId);
+            Optional<Organization> optionalOrg =  organizationRepository.findById(orgId);
+            org = optionalOrg == null || !optionalOrg.isPresent() ? null : optionalOrg.get();
         } catch (NumberFormatException e) {
             org = organizationRepository.findByIdentifiers(id);
         }
@@ -118,7 +123,8 @@ public class FeedController {
         OrderSpecifier<?> orderSpecifier = ItemPredicates.orderByClassifDefinition(DisplayOrderType.START_DATE);
         if (publisherId != null) {
             builder.and(ItemPredicates.itemsClassOfPublisher(publisherId));
-            Publisher pub = publisherRepository.findOne(publisherId);
+            Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+            Publisher pub = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
             if (pub != null) {
                 mav.addObject(PublisherRssFeedView.PUB_PARAM, pub);
                 orderSpecifier = ItemPredicates.orderByPublisherDefinition(pub.getDefaultDisplayOrder());
@@ -126,7 +132,8 @@ public class FeedController {
         }
         if (classifId != null) {
             builder.and(ItemPredicates.itemsClassOfClassification(classifId));
-            AbstractClassification classif = classificationRepository.findOne(classifId);
+            Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
+            AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
             if (classif != null) {
                 mav.addObject(PublisherRssFeedView.CLASSIF_PARAM, classif);
                 orderSpecifier = ItemPredicates.orderByClassifDefinition(classif.getDefaultDisplayOrder());
@@ -145,7 +152,8 @@ public class FeedController {
     private ModelAndView getAllObjects(final Long classifId) {
         ModelAndView mav = new ModelAndView();
 
-        AbstractClassification classif = classificationRepository.findOne(classifId);
+        Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
+        AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();;
         if (classif == null) {
             return mav;
         }

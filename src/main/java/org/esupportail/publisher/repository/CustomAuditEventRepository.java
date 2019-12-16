@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -49,8 +51,9 @@ public class CustomAuditEventRepository {
             @Inject
             private AuditEventConverter auditEventConverter;
 
+
             @Override
-            public List<AuditEvent> find(String principal, Date after) {
+            public List<AuditEvent> find(String principal, Instant after, String type) {
                 Iterable<PersistentAuditEvent> persistentAuditEvents;
                 if (principal == null && after == null) {
                     persistentAuditEvents = persistenceAuditEventRepository.findAll();

@@ -1,9 +1,13 @@
 package org.esupportail.publisher.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.ContextKey;
@@ -13,12 +17,9 @@ import org.esupportail.publisher.domain.enums.FilterType;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.FilterRepository;
-import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.predicates.FilterPredicates;
 import org.esupportail.publisher.security.IPermissionService;
-import org.esupportail.publisher.service.ContextService;
-import org.esupportail.publisher.service.UserService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
@@ -27,20 +28,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
-import com.mysema.query.types.Predicate;
 
 @RunWith(PowerMockRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class UserServiceTest {
 	
@@ -55,8 +54,6 @@ public class UserServiceTest {
 	
 	@Mock
 	private UserDTOFactory userDTOFactory;
-
-	private UserRepository userRepository;
 
 	@Mock
 	private FilterRepository filterRepository;
@@ -184,7 +181,8 @@ public class UserServiceTest {
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
 		
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
-		Filter filter = new Filter();
+		Optional<Filter> optionalFilter = Optional.empty();
+		String filter = optionalFilter.isPresent() ? optionalFilter.get().getPattern() : null;
 		
 		List<IExternalUser> externalUserList = new ArrayList<>();
 		List<UserDTO> userList = new ArrayList<>();
@@ -196,15 +194,15 @@ public class UserServiceTest {
 				.getContext().getAuthentication(), contextKey1)).thenReturn(perms);
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(contextKey);
 		when(filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(contextKey.getKeyId(),
-				FilterType.LDAP))).thenReturn(filter);
-		when(externalUserDao.getUsersWithFilter(filter.getPattern(), search)).thenReturn(externalUserList);
+				FilterType.LDAP))).thenReturn(optionalFilter);
+		when(externalUserDao.getUsersWithFilter(filter, search)).thenReturn(externalUserList);
 		when(userDTOFactory.asDTOList(externalUserList, false)).thenReturn(userList);
 		
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 		
 		//THEN
-		verify(externalUserDao).getUsersWithFilter(filter.getPattern(), search);
+		verify(externalUserDao).getUsersWithFilter(filter, search);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
 		assertThat(resultList.size()).isEqualTo(0);

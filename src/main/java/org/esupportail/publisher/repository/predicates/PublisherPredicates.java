@@ -15,12 +15,12 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.OrderSpecifier;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.QPublisher;
 
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 22 juil. 2014

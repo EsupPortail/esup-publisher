@@ -18,6 +18,7 @@ package org.esupportail.publisher.service.factories.impl;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -85,7 +86,8 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
 
 	@Override
 	public ContentDTO from(@NotNull Long id) throws ObjectNotFoundException {
-		AbstractItem model = itemRepository.findOne(id);
+		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
+		AbstractItem model = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
 		if (model == null)
 			throw new ObjectNotFoundException(id, AbstractItem.class);
 		return from(model);

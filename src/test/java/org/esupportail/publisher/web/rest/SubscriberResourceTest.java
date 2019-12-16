@@ -31,8 +31,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.ContextKey;
@@ -57,7 +55,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -66,13 +64,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Test class for the SubscriberResource REST controller.
  *
  * @see SubscriberResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 public class SubscriberResourceTest {
@@ -243,7 +245,7 @@ public class SubscriberResourceTest {
         Subscriber s2 = ObjTest.newSubscriberPerson(DEFAULT_CTX);
         Subscriber s3 = ObjTest.newSubscriberPersonFromAttr(DEFAULT_CTX);
         List<Subscriber> subscribers = Lists.newArrayList(s1, s2, s3);
-        subscriberRepository.save(subscribers);
+        subscriberRepository.saveAll(subscribers);
         subscriberRepository.flush();
 
         final SubscriberResolvedDTO subDTO1 = subscriberResolvedDTOFactory.from(s1);

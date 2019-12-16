@@ -25,11 +25,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Organization;
@@ -40,16 +39,20 @@ import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class SubscriberRepositoryTest {
@@ -139,8 +142,9 @@ public class SubscriberRepositoryTest {
 		log.info("Before insert : " + s.toString());
 		s = repository.saveAndFlush(s);
 		log.info("After insert : " + s.toString());
-
-		Subscriber s2 = repository.findOne(s.getSubjectCtxId());
+		
+		Optional<Subscriber> optionalSubscriber = repository.findById(s.getSubjectCtxId());
+		Subscriber s2 = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
 		log.info("After select : " + s2.toString());
 		assertNotNull(s2);
 		assertEquals(s, s2);
@@ -154,7 +158,7 @@ public class SubscriberRepositoryTest {
 		repository.save(s4);
 		log.info("After insert : " + s4.toString());
 		assertNotNull(s4.getSubjectCtxId());
-		assertTrue(repository.exists(s4.getSubjectCtxId()));
+		assertTrue(repository.existsById(s4.getSubjectCtxId()));
 		s = repository.getOne(s.getSubjectCtxId());
 		assertNotNull(s);
 		log.info("After select : " + s.toString());
@@ -169,9 +173,9 @@ public class SubscriberRepositoryTest {
 				.onCtx(org1.getContextKey())));
 		assertThat(results.size(), is(2));
 
-		repository.delete(s.getSubjectCtxId());
+		repository.deleteById(s.getSubjectCtxId());
 		assertTrue(repository.findAll().size() == 4);
-		assertFalse(repository.exists(s.getSubjectCtxId()));
+		assertFalse(repository.existsById(s.getSubjectCtxId()));
 
 	}
 
@@ -193,7 +197,7 @@ public class SubscriberRepositoryTest {
 	public void testSaveIterableOfS() {
 		Subscriber s1 = ObjTest.newSubscriber(org2.getContextKey());
 		Subscriber s2 = ObjTest.newSubscriber(news2.getContextKey());
-		repository.save(Arrays.asList(s1, s2));
+		repository.saveAll(Arrays.asList(s1, s2));
 		assertThat(repository.findAll().size(), is(5));
 	}
 
@@ -204,7 +208,7 @@ public class SubscriberRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0)
+		assertTrue(repository.existsById(repository.findAll().get(0)
 				.getSubjectCtxId()));
 
 	}

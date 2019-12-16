@@ -31,13 +31,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 @Slf4j
 public class CrossOriginFilter implements Filter {
-
-	private static final String ENV_APP_CORS = "app.cors.";
 
 	// private RelaxedPropertyResolver propertyResolver;
 
@@ -76,13 +74,13 @@ public class CrossOriginFilter implements Filter {
 	// @Override
 	// public void destroy() {
 	// }
-
+	private Environment env;
+	
 	private List<String> allowedOrigins = new ArrayList<String>();
 
 	public CrossOriginFilter(Environment environment) throws ServletException {
-		String origins = new RelaxedPropertyResolver(environment, ENV_APP_CORS)
-				.getRequiredProperty("allowed.origins", String.class);
-		this.setAllowedOrigins(origins);
+		this.env = environment;
+		this.setAllowedOrigins(env.getProperty("app.cors.allowed.origins", String.class));
 	}
 
 	// preflight cache duration in the browser

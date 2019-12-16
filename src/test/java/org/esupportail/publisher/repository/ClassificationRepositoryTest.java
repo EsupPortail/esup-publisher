@@ -24,11 +24,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Category;
@@ -45,20 +44,24 @@ import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class ClassificationRepositoryTest {
@@ -157,7 +160,7 @@ public class ClassificationRepositoryTest {
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
 				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
 				(Category) repository.findOne(ClassificationPredicates
-						.CategoryClassification()), "RSS_URL");
+						.CategoryClassification()).get(), "RSS_URL");
 		repository.saveAndFlush(c3);
 	}
 
@@ -180,8 +183,8 @@ public class ClassificationRepositoryTest {
 		repository.save(c1);
 		assertNotNull(c1.getId());
 		log.info("After insert : " + c1.toString());
-
-		Category c2 = (Category) repository.findOne(c1.getId());
+		Optional<AbstractClassification> optionalClassif = repository.findById(c1.getId());
+		Category c2 = optionalClassif == null || !optionalClassif.isPresent()? null : (Category) optionalClassif.get();
 		log.info("After select : " + c2.toString());
 		assertNotNull(c2);
 		assertEquals(c1, c2);
@@ -190,7 +193,7 @@ public class ClassificationRepositoryTest {
 		c2.setDefaultDisplayOrder(DisplayOrderType.ONLY_LAST_CREATED_FIRST);
 		c2 = repository.save(c2);
 		log.info("After update : " + c2.toString());
-		assertTrue(repository.exists(c2.getId()));
+		assertTrue(repository.existsById(c2.getId()));
 		c2 = (Category) repository.getOne(c2.getId());
 		assertNotNull(c2);
 		log.info("After select : " + c2.toString());
@@ -204,10 +207,10 @@ public class ClassificationRepositoryTest {
 		assertThat(result.size(), is(2));
 		assertThat(result, hasItem(c2));
 
-		repository.delete(c2.getId());
+		repository.deleteById(c2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.exists(c2.getId()));
+		assertFalse(repository.existsById(c2.getId()));
 	}
 
 	/**
@@ -234,7 +237,7 @@ public class ClassificationRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

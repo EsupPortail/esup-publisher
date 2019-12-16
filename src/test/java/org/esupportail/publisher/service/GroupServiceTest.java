@@ -1,9 +1,13 @@
 package org.esupportail.publisher.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.esupportail.publisher.Application;
@@ -18,8 +22,6 @@ import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.security.IPermissionService;
-import org.esupportail.publisher.service.ContextService;
-import org.esupportail.publisher.service.GroupService;
 import org.esupportail.publisher.service.factories.TreeJSDTOFactory;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
@@ -31,20 +33,20 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 
 @RunWith(PowerMockRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class GroupServiceTest {
 	
@@ -345,7 +347,8 @@ public class GroupServiceTest {
 		
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
-		Filter filter = new Filter();
+		Optional<Filter> optionalFilter = Optional.of(new Filter());
+		String filter = optionalFilter.get().getPattern();
 		
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 
@@ -356,9 +359,9 @@ public class GroupServiceTest {
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey1)).thenReturn(perms);
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(contextKey);
-		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(filter);
+		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(optionalFilter);
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
-		when(externalGroupDao.getGroupsWithFilter(filter.getPattern(), null, false)).thenReturn(null);
+		when(externalGroupDao.getGroupsWithFilter(filter, null, false)).thenReturn(null);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
 		
 		//WHEN
@@ -369,7 +372,7 @@ public class GroupServiceTest {
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		verify(externalGroupDao).getGroupsWithFilter(filter.getPattern(), null, false);
+		verify(externalGroupDao).getGroupsWithFilter(filter, null, false);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
 	
@@ -388,7 +391,8 @@ public class GroupServiceTest {
 		
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
-		Filter filter = new Filter();
+		Optional<Filter> optionalFilter = Optional.of(new Filter());
+		String filter = optionalFilter.get().getPattern();
 		
 		ExternalGroup externalGroup1 = new ExternalGroup();
 		externalGroup1.setId("1");
@@ -407,9 +411,9 @@ public class GroupServiceTest {
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey1)).thenReturn(perms);
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(contextKey);
-		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(filter);
+		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(optionalFilter);
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
-		when(externalGroupDao.getGroupsWithFilter(filter.getPattern(), null, false)).thenReturn(groups);
+		when(externalGroupDao.getGroupsWithFilter(filter, null, false)).thenReturn(groups);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
 		
 		//WHEN
@@ -420,7 +424,7 @@ public class GroupServiceTest {
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		verify(externalGroupDao).getGroupsWithFilter(filter.getPattern(), null, false);
+		verify(externalGroupDao).getGroupsWithFilter(filter, null, false);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
 

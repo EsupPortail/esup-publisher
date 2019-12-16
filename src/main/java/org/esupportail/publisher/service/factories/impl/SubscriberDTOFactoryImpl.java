@@ -17,6 +17,7 @@ package org.esupportail.publisher.service.factories.impl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.SubjectContextKey;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.repository.SubscriberRepository;
@@ -83,9 +85,10 @@ public class SubscriberDTOFactoryImpl implements SubscriberDTOFactory {
 	public Subscriber from(final SubscriberDTO dtObject) throws ObjectNotFoundException {
 		log.debug("DTO to Model of {}", dtObject);
 		if (dtObject != null) {
-			Subscriber model = dao.findOne(new SubjectContextKey(subjectConverter.convertToModelKey(dtObject
+			Optional<Subscriber> optionalSubscriber = dao.findById(new SubjectContextKey(subjectConverter.convertToModelKey(dtObject
 					.getModelId().getSubjectKey()), contextConverter.convertToModelKey(dtObject.getModelId()
 					.getContextKey())));
+			Subscriber model = optionalSubscriber == null || !optionalSubscriber.isPresent() ? null : optionalSubscriber.get();
 			if (model == null) {
 				model = new Subscriber(subjectConverter.convertToModelKey(dtObject.getModelId().getSubjectKey()),
 						contextConverter.convertToModelKey(dtObject.getModelId().getContextKey()),
@@ -101,8 +104,10 @@ public class SubscriberDTOFactoryImpl implements SubscriberDTOFactory {
 
 	@Override
 	public Subscriber from(final SubjectContextKeyDTO id) throws ObjectNotFoundException {
-		return dao.findOne(new SubjectContextKey(subjectConverter.convertToModelKey(id.getSubjectKey()),
+		Optional<Subscriber> optionalSubscriber = dao.findById(new SubjectContextKey(subjectConverter.convertToModelKey(id.getSubjectKey()),
 				contextConverter.convertToModelKey(id.getContextKey())));
+		Subscriber model = optionalSubscriber == null || !optionalSubscriber.isPresent() ? null : optionalSubscriber.get();
+		return model;
 	}
 
 	@Override

@@ -24,9 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -42,29 +41,23 @@ import java.util.Arrays;
 @EnableJpaRepositories("org.esupportail.publisher.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-public class DatabaseConfiguration implements EnvironmentAware {
+public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
-	private RelaxedPropertyResolver propertyResolver;
-
+//	private RelaxedPropertyResolver propertyResolver;
+    @Autowired
 	private Environment env;
 
 	@Autowired(required = false)
 	private MetricRegistry metricRegistry;
 
-	@Override
-	public void setEnvironment(Environment env) {
-		this.env = env;
-        this.propertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
-	}
-
 	@Bean(destroyMethod = "close")
-	@ConditionalOnMissingClass(name = "org.esupportail.publisher.config.HerokuDatabaseConfiguration")
+	@ConditionalOnMissingClass(value = "org.esupportail.publisher.config.HerokuDatabaseConfiguration")
 	@Profile("!" + Constants.SPRING_PROFILE_CLOUD)
 	public DataSource dataSource() {
 		log.debug("Configuring Datasource");
-        if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
+        if (env.getProperty("spring.datasource.url") == null && env.getProperty("spring.datasource.databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     "cannot start. Please check your Spring profile, current profiles are: {}",
 					Arrays.toString(env.getActiveProfiles()));
@@ -72,23 +65,23 @@ public class DatabaseConfiguration implements EnvironmentAware {
             throw new ApplicationContextException("Database connection pool is not configured correctly");
 		}
 		HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-        if (propertyResolver.getProperty("url") == null || "".equals(propertyResolver.getProperty("url"))) {
-            config.addDataSourceProperty("databaseName", propertyResolver.getProperty("databaseName"));
-            config.addDataSourceProperty("serverName", propertyResolver.getProperty("serverName"));
+        config.setDataSourceClassName(env.getProperty("spring.datasource.dataSourceClassName"));
+        if (env.getProperty("spring.datasource.url") == null || "".equals(env.getProperty("spring.datasource.url"))) {
+            config.addDataSourceProperty("databaseName", env.getProperty("spring.datasource.databaseName"));
+            config.addDataSourceProperty("serverName", env.getProperty("spring.datasource.serverName"));
 
 		} else {
-            config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
+            config.addDataSourceProperty("url", env.getProperty("spring.datasource.url"));
 		}
-        config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
-        config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
+        config.addDataSourceProperty("user", env.getProperty("spring.datasource.username"));
+        config.addDataSourceProperty("password", env.getProperty("spring.datasource.password"));
 
         //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
-            config.addDataSourceProperty("cachePrepStmts", propertyResolver.getProperty("cachePrepStmts", "true"));
-            config.addDataSourceProperty("prepStmtCacheSize", propertyResolver.getProperty("prepStmtCacheSize", "250"));
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
-            config.addDataSourceProperty("useServerPrepStmts", propertyResolver.getProperty("useServerPrepStmts", "true"));
+        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(env.getProperty("spring.datasource.dataSourceClassName"))) {
+            config.addDataSourceProperty("cachePrepStmts", env.getProperty("spring.datasource.cachePrepStmts", "true"));
+            config.addDataSourceProperty("prepStmtCacheSize", env.getProperty("spring.datasource.prepStmtCacheSize", "250"));
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", env.getProperty("spring.datasource.prepStmtCacheSqlLimit", "2048"));
+            config.addDataSourceProperty("useServerPrepStmts", env.getProperty("spring.datasource.useServerPrepStmts", "true"));
 		}
 		log.debug("Use config  {}", config.getDataSourceProperties().toString());
 		if (metricRegistry != null) {
@@ -105,7 +98,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");
 		liquibase.setContexts("development, production");
 		if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
-			if ("org.h2.jdbcx.JdbcDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
+			if ("org.h2.jdbcx.JdbcDataSource".equals(env.getProperty("spring.datasource.dataSourceClassName"))) {
                 liquibase.setShouldRun(true);
                 log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
                     " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);

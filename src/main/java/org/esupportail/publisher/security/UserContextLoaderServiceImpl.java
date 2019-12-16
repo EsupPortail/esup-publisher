@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.PermissionType;
@@ -194,7 +196,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 	private void loadAuthorizedOrganizationChilds(final UserDTO user, final ContextKey organizationCtx,
 			final boolean checkPerms, final Pair<PermissionType, ? extends PermOnCtxDTO> parentPerm) {
 		log.debug("Call loadAuthorizedOrganizationChilds {},{}", organizationCtx, checkPerms);
-		final Organization organization = organizationDao.findOne(organizationCtx.getKeyId());
+		Optional<Organization> optionalOrganization = organizationDao.findById(organizationCtx.getKeyId());
+		Organization organization = optionalOrganization == null || !optionalOrganization.isPresent() ? null : optionalOrganization.get();
 		//final PermissionType parentPerm = userSessionTree.getRoleFromContextTree(organizationCtx);
 		// in this case only Perm could be LOOKOVER
 		Assert.isTrue(parentPerm != null && parentPerm.getFirst() != null && parentPerm.getSecond() != null
@@ -312,7 +315,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 	private void loadAuthorizedPublisherChilds(final UserDTO user, final ContextKey publisherCtx,
 			final boolean checkPerms, final Pair<PermissionType, ? extends PermOnCtxDTO> parentPerm) {
 		log.debug("Call loadAuthorizedPublisherChilds {},{}", publisherCtx, checkPerms);
-		final Publisher publisher = publisherDao.findOne(publisherCtx.getKeyId());
+		Optional<Publisher> optionalPublisher = publisherDao.findById(publisherCtx.getKeyId());
+		Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
 		//final PermissionType parentPerm = userSessionTree.getRoleFromContextTree(publisherCtx);
 		Assert.isTrue(parentPerm != null && parentPerm.getFirst() != null && parentPerm.getSecond() != null
 				&& parentPerm.getFirst().getMask() > PermissionType.LOOKOVER.getMask(),
@@ -420,7 +424,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 		log.debug("Call loadAuthorizedCategoryChilds {},{}, {}", categoryCtx, checkPerms, permClass);
 		Assert.isTrue(contextPermsType.contains(permClass),
 				String.format("Permission of type %s not yet managed loadAuthorizedCategoryChilds", permClass));
-		final Category category = categoryDao.findOne(categoryCtx.getKeyId());
+		Optional<Category> optionalCategory = categoryDao.findById(categoryCtx.getKeyId());
+		Category category = optionalCategory == null || !optionalCategory.isPresent() ? null : optionalCategory.get();
 		//final PermissionType parentPerm = userSessionTree.getRoleFromContextTree(categoryCtx);
 
 		Assert.isTrue(parentPerm != null && parentPerm.getFirst() != null && parentPerm.getSecond() != null
@@ -485,7 +490,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 				} else {
 					userSessionTree.addCtx(ctx.getKey(), !hasFeeds, categoryCtx, null, ctx.getValue());
 				}
-				loadAllItemsOf(feedDao.findOne(ctx.getKey().getKeyId()));
+				loadAllItemsOf(feedDao.findById(ctx.getKey().getKeyId()).get());
 			}
 		} else {
 			loadAllItemsOf(category);
@@ -499,7 +504,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 	 */
 	private void findAuthorizedPublisherChilds(final UserDTO user, final ContextKey publisherCtx) {
 		log.debug("Call findAuthorizedPublisherChilds {}", publisherCtx);
-		final Publisher publisher = publisherDao.findOne(publisherCtx.getKeyId());
+		Optional<Publisher> optionalPublisher = publisherDao.findById(publisherCtx.getKeyId());
+		Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
 		// if no subcontext permission management it's useless to find possible rights.
 		if (!publisher.isHasSubPermsManagement())
 			return;
@@ -617,7 +623,8 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 				String.format("Permission of type %s not yet managed findAuthorizedCategoryChilds", permClass));
 		Map<ContextKey, PermissionOnContext> found = Maps.newHashMap();
 
-		final Category category = categoryDao.findOne(categoryCtx.getKeyId());
+		Optional<Category> optionalCategory = categoryDao.findById(categoryCtx.getKeyId());
+		Category category = optionalCategory == null || !optionalCategory.isPresent() ? null : optionalCategory.get();
 
 		final boolean hasFeeds = category.getPublisher().getContext().getRedactor().getNbLevelsOfClassification() > 1;
 
@@ -653,7 +660,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 			// now we can go on childs
 			for (Map.Entry<ContextKey, ? extends PermissionOnContext> ctx : ctxRoles.entrySet()) {
 				found.put(ctx.getKey(), ctx.getValue());
-				for (OwnerContextKey itemCtx : getItemsCtxOf(feedDao.findOne(ctx.getKey().getKeyId()))) {
+				for (OwnerContextKey itemCtx : getItemsCtxOf(feedDao.findById(ctx.getKey().getKeyId()).get())) {
 					found.put(itemCtx, null);
 				}
 			}

@@ -28,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -62,7 +62,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -75,13 +75,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
  * Test class for the NewsResource REST controller.
  *
  * @see NewsResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class ItemResourceOptionalDateTest {
 
@@ -155,7 +157,8 @@ public class ItemResourceOptionalDateTest {
         ReflectionTestUtils.setField(redactorResource, "redactorRepository", redactorRepository);
         this.restNewsMockMvc = MockMvcBuilders.standaloneSetup(itemResource, organizationResource).build();
 
-        User userPart = userRepo.findOne(QUser.user.login.like("system"));
+        Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
+        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));
@@ -169,9 +172,9 @@ public class ItemResourceOptionalDateTest {
         redactor = ObjTest.newRedactor(name);
         redactor.setOptionalPublishTime(true);
         redactor = redactorRepository.saveAndFlush(redactor);
-        user1 = userRepo.findOne(ObjTest.subject1);
-        user2 = userRepo.findOne(ObjTest.subject2);
-        user3 = userRepo.findOne(ObjTest.subject3);
+        user1 = userRepo.findById(ObjTest.subject1).get();
+        user2 = userRepo.findById(ObjTest.subject2).get();
+        user3 = userRepo.findById(ObjTest.subject3).get();
 
 
 

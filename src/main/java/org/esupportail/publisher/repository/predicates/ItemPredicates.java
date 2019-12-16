@@ -20,9 +20,6 @@ package org.esupportail.publisher.repository.predicates;
 
 import java.util.EnumSet;
 
-import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.Media;
@@ -37,6 +34,11 @@ import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.joda.time.LocalDate;
+
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 24 juil. 2014

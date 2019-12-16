@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,8 +122,9 @@ public class GroupServiceEsco implements IGroupService {
 			Set<String> groupIds = Sets.newHashSet();
 			Set<TreeJS> tree = Sets.newHashSet();
 			if (rootCtx != null) {
-				Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.GROUP));
+				Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 				if (filter != null) {
 					List<IExternalGroup> groups = externalGroupDao
 							.getGroupsWithFilter(filter.getPattern(), null, false);
@@ -163,8 +165,9 @@ public class GroupServiceEsco implements IGroupService {
 					final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 					Set<TreeJS> tree = Sets.newHashSet();
 					if (rootCtx != null) {
-						Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
-								rootCtx.getKeyId(), FilterType.GROUP));
+						Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+								FilterType.GROUP));
+						Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 						if (filter != null) {
 							List<IExternalGroup> groups = externalGroupDao.getGroupsWithFilter(filter.getPattern(),
 									null, false);

@@ -15,10 +15,15 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.Predicate;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
+import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.PublisherRepository;
@@ -35,13 +40,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 
 /**
  * REST controller for managing Publisher.
@@ -104,7 +113,8 @@ public class PublisherResource {
 
         // a manager role can only update DisplayName and if Notifications are allowed
         if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
-            Publisher model = publisherRepository.findOne(publisher.getId());
+        	Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisher.getId());
+        	Publisher model = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
             model.setPermissionType(publisher.getPermissionType());
             model.setDefaultDisplayOrder(publisher.getDefaultDisplayOrder());
             model.setUsed(publisher.isUsed());
@@ -127,7 +137,8 @@ public class PublisherResource {
         + " && hasPermission(#action.objectId, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_MANAGER + "')")
     @Timed
     public ResponseEntity<Void> doChange(@RequestBody ActionDTO action) {
-        Publisher publisher = publisherRepository.findOne(action.getObjectId());
+    	Optional<Publisher> optionalPublisher =  publisherRepository.findById(action.getObjectId());
+    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
         log.debug("REST request with Action {} of Publisher : {}", action, publisher);
         if (publisher != null) {
             boolean doUpdate = false;
@@ -177,7 +188,8 @@ public class PublisherResource {
     @Timed
     public ResponseEntity<Publisher> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Publisher : {}", id);
-        Publisher publisher = publisherRepository.findOne(id);
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(id);
+    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
         if (publisher == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -196,6 +208,6 @@ public class PublisherResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Publisher : {}", id);
-        publisherRepository.delete(id);
+        publisherRepository.deleteById(id);
     }
 }

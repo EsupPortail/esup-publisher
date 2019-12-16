@@ -22,6 +22,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.SubjectType;
@@ -37,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -67,7 +70,8 @@ public class SubjectDTOFactoryImpl implements SubjectDTOFactory {
     public User from(final SubjectDTO dtObject) throws ObjectNotFoundException {
         log.debug("DTO to Model of {}", dtObject);
         if (dtObject != null && SubjectType.PERSON.equals(dtObject.getModelId().getKeyType())) {
-            User user = getDao().findOne(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId());
+        	Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId());
+        	User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
             if (user == null) {
                 user = new User(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId(), dtObject.getDisplayName());
             }
@@ -107,8 +111,11 @@ public class SubjectDTOFactoryImpl implements SubjectDTOFactory {
     }
 
     public User from(final SubjectKeyDTO id) throws ObjectNotFoundException {
-        if (SubjectType.PERSON.equals(id.getKeyType()))
-            return getDao().findOne(subjectConverter.convertToModelKey(id).getKeyId());
+        if (SubjectType.PERSON.equals(id.getKeyType())) {
+        	Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(id).getKeyId());
+        	User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+            return user;
+        }
         return null;
     }
 

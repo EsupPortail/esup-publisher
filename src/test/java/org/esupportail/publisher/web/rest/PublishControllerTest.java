@@ -26,16 +26,34 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Attachment;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.Flash;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.SubscribeType;
 import org.esupportail.publisher.domain.enums.WritingMode;
-import org.esupportail.publisher.repository.*;
+import org.esupportail.publisher.repository.CategoryRepository;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
+import org.esupportail.publisher.repository.ItemRepository;
+import org.esupportail.publisher.repository.LinkedFileItemRepository;
+import org.esupportail.publisher.repository.ObjTest;
+import org.esupportail.publisher.repository.OrganizationRepository;
+import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.ReaderRepository;
+import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
@@ -50,7 +68,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -60,12 +78,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * Created by jgribonvald on 08/06/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 @Transactional
@@ -266,7 +288,7 @@ public class PublishControllerTest {
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
         files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
-        linkedFileItemRepository.save(files);
+        linkedFileItemRepository.saveAll(files);
 
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news1, cat1, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat1, 1));

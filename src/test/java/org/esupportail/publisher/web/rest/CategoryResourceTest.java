@@ -26,13 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.Organization;
@@ -61,7 +59,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -74,13 +72,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Test class for the CategoryResource REST controller.
  *
  * @see CategoryResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 public class CategoryResourceTest {
@@ -160,7 +163,8 @@ public class CategoryResourceTest {
         ReflectionTestUtils.setField(categoryResource, "userSessionTreeLoader", userSessionTreeLoader);
 		this.restCategoryMockMvc = MockMvcBuilders.standaloneSetup(categoryResource).build();
 
-        User userPart1 = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
+		Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
+        User userPart1 = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         Map<String, List<String>> userAttrs1 = Maps.newHashMap();
         userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));
         userAttrs1.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));

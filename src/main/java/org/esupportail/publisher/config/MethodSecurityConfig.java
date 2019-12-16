@@ -37,6 +37,10 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	public MethodSecurityConfig(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
 	@Bean
 	public RoleHierarchyVoter roleVoter() {

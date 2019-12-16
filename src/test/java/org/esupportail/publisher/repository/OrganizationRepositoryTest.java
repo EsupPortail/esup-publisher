@@ -29,13 +29,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.QOrganization;
@@ -43,19 +41,24 @@ import org.esupportail.publisher.repository.predicates.OrganizationPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class OrganizationRepositoryTest {
@@ -94,8 +97,9 @@ public class OrganizationRepositoryTest {
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
         assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS3.size()));
-
-		Organization e2 = repository.findOne(e.getId());
+        
+        Optional<Organization> optionalOrganization = repository.findById(e.getId());
+        Organization e2 = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
         //e2.setIdentifiers(DEFAULT_IDS3);
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
@@ -106,7 +110,7 @@ public class OrganizationRepositoryTest {
 		repository.save(e);
 		log.info("After insert : " + e.toString());
 		assertNotNull(e.getId());
-		assertTrue(repository.exists(e.getId()));
+		assertTrue(repository.existsById(e.getId()));
 		e = repository.getOne(e.getId());
 		assertNotNull(e);
 		log.info("After select : " + e.toString());
@@ -150,11 +154,12 @@ public class OrganizationRepositoryTest {
 		 * assertTrue(repository.selectLinkedType(e.getId()).size() == 0);
 		 */
 
-		repository.delete(e.getId());
+		repository.deleteById(e.getId());
 		assertTrue(repository.findAll().size() == 3);
-		assertFalse(repository.exists(e.getId()));
-
-		e = repository.findOne((long) 0);
+		assertFalse(repository.existsById(e.getId()));
+		
+		Optional<Organization> optionalO = repository.findById((long) 0);
+        e2 = optionalO == null || !optionalO.isPresent()? null : optionalO.get();
 		assertNull(e);
 	}
 
@@ -176,7 +181,7 @@ public class OrganizationRepositoryTest {
 	public void testSaveIterableOfS() {
 		Organization e = ObjTest.newOrganization("init3");
 		Organization e2 = ObjTest.newOrganization("init4");
-		repository.save(Arrays.asList(e, e2));
+		repository.saveAll(Arrays.asList(e, e2));
 		assertThat(repository.findAll().size(), is(4));
 	}
 
@@ -187,7 +192,7 @@ public class OrganizationRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

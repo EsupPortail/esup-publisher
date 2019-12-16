@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.esupportail.publisher.domain.AbstractPermission;
 
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 
 /**
  *

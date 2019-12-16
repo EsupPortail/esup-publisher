@@ -27,11 +27,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Organization;
@@ -44,19 +43,23 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class PermissionOnContextRepositoryTest {
@@ -136,8 +139,9 @@ public class PermissionOnContextRepositoryTest {
 		assertNotNull(e.getId());
         assertNotNull(e.getEvaluator());
 		log.info("After insert : " + e.toString());
-
-		PermissionOnContext e2 = repository.findOne(e.getId());
+		
+		Optional<PermissionOnContext> optionalPermissionOnContext = repository.findById(e.getId());
+		PermissionOnContext e2 = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertEquals(e, e2);
@@ -149,7 +153,7 @@ public class PermissionOnContextRepositoryTest {
 		repository.save(e);
 		log.info("After update : " + e.toString());
 		assertNotNull(e.getId());
-		assertTrue(repository.exists(e.getId()));
+		assertTrue(repository.existsById(e.getId()));
 		e = repository.getOne(e.getId());
 		assertNotNull(e);
 		log.info("After select : " + e.toString());
@@ -168,10 +172,10 @@ public class PermissionOnContextRepositoryTest {
         List<PermissionOnContext> result3 = Lists.newArrayList(repository
             .findAll(PermissionPredicates.OnCtxType(
                 ContextType.ORGANIZATION, PermissionClass.CONTEXT, false)));
-        repository.delete(e.getId());
+        repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.exists(e.getId()));
+		assertFalse(repository.existsById(e.getId()));
 	}
 
 	/**
@@ -190,7 +194,7 @@ public class PermissionOnContextRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 
