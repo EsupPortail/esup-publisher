@@ -1,8 +1,8 @@
 driver: com.mysql.jdbc.Driver
-url: jdbc:mysql://127.0.0.1:3306/publisher?useUnicode=true&characterEncoding=UTF-8
+url: jdbc:mysql://localhost:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8
 defaultSchema: publisher_dev
 username: root
-password: root
+password:
 promptOnNonLocalDatabase: true
 referenceUrl: hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.apereo.portal.utils.hibernate4.dialects.MySQL5InnoDBCompressedDialect
 verbose: true

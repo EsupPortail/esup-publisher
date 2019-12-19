@@ -51,9 +51,10 @@ public class PermissionOnClassificationWithSubjectList extends
 	/** */
 	private static final long serialVersionUID = 6155776530760516244L;
 
+	@Embedded
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "T_PERM_AUTHORIZED_SUBJECTS")
-	@AttributeOverrides({ @AttributeOverride(name = "PermissionOnClassificationWithSubjectList_id", column = @Column(name = "perm_id")) })
+	@AttributeOverrides({ @AttributeOverride(name = "permission_on_classification_with_subject_list_id", column = @Column(name = "perm_id")) })
 	private Set<SubjectKey> authorizedSubjects = new HashSet<SubjectKey>();
 
 	/**

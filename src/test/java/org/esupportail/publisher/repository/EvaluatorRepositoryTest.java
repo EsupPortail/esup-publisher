@@ -131,7 +131,8 @@ public class EvaluatorRepositoryTest {
 		assertTrue(repository.findAll().size() == 12);
 		assertFalse(repository.existsById(oe.getId()));
 
-		AbstractEvaluator ae = repository.findById((long) 0).get();
+		Optional<AbstractEvaluator> optionalAe = repository.findById((long) 0);
+		AbstractEvaluator ae = optionalAe.isPresent() ? optionalAe.get() : null;
 		assertNull(ae);
 
 	}

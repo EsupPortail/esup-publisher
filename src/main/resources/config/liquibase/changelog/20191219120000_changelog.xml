@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="zoe_coquard(infotel)" id="renameColumn_permission">
+        <renameColumn
+            newColumnName="permission_on_classification_with_subject_list_id"
+            oldColumnName="PermissionOnClassificationWithSubjectList_id"
+            columnDataType="bigint(20)"
+            tableName="t_perm_authorized_subjects"/>
+    </changeSet>
+    <changeSet author="zoe_coquard(infotel)" id="changePrimaryKey_t_perm_authorized_subjects">
+        <dropPrimaryKey tableName="t_perm_authorized_subjects"/>
+        <addPrimaryKey columnNames="permission_on_classification_with_subject_list_id,subject_id,subject_type" constraintName="T_SUBSCRIBERPK" tableName="t_perm_authorized_subjects"/>
+    </changeSet>
+    <changeSet author="zoe_coquard(infotel)" id="dropForeignKeyConstraint_t_perm_authorized_subjects">
+	    <dropForeignKeyConstraint
+	            baseTableName="t_perm_authorized_subjects"
+	            constraintName="FK_p4bkbe6ocagf8wwaqtre0ppaf"/>
+	     <addForeignKeyConstraint baseColumnNames="permission_on_classification_with_subject_list_id,subject_id"
+	            baseTableName="t_perm_authorized_subjects"
+	            constraintName="FK_p4bkbe6ocagf8wwaqtre0ppaf"
+	            onDelete="RESTRICT"
+            	onUpdate="RESTRICT"
+	            referencedColumnNames="id"
+	            referencedTableName="t_permission"/>
+	</changeSet>
+</databaseChangeLog>
