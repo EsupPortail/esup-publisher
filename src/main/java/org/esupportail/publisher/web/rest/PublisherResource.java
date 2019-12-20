@@ -173,6 +173,8 @@ public class PublisherResource {
             where = new BooleanBuilder(PublisherPredicates.AllOfOrganization(organizationId)).and(PublisherPredicates.AllOfUsedState(true));
         } else if (used != null) {
             where = PublisherPredicates.AllOfUsedState(true);
+        } else {
+        	where = new BooleanBuilder();
         }
        return Lists.newArrayList(publisherRepository.findAll(where, PublisherPredicates.orderByOrganizations(), PublisherPredicates.orderByDisplayOrder()));
     }

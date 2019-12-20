@@ -223,6 +223,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public CasAuthenticationFilter casAuthenticationFilter() throws Exception {
         CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
+        casAuthenticationFilter.setFilterProcessesUrl("/" + env.getRequiredProperty(CAS_SERVICE_URI));
         casAuthenticationFilter.setAuthenticationManager(authenticationManager());
         casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource(
             serviceUrlHelper(), serviceProperties(), getCasTargetUrlParameter()));

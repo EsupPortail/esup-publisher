@@ -109,6 +109,8 @@ public final class ObjTest {
 	public static DateTime d4 = null;
 	public static DateTime d5 = null;
 	public static DateTime d6 = null;
+	public static DateTime d7 = null;
+	public static DateTime d8 = null;
 	public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 	static {
@@ -121,6 +123,8 @@ public final class ObjTest {
 		d4 = dateTimeFormatter.parseDateTime("2016-01-15 07:23:30");
 		d5 = dateTimeFormatter.parseDateTime("2016-02-15 07:23:30");
 		d6 = dateTimeFormatter.parseDateTime("2016-03-15 07:23:30");
+		d7 = dateTimeFormatter.parseDateTime("2019-12-01 07:23:30");
+		d8 = dateTimeFormatter.parseDateTime("2020-01-15 07:23:30");
 	}
 
 	public static Organization newOrganization(String indice) {
@@ -313,6 +317,11 @@ public final class ObjTest {
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
 	}
 
+	public static News newNewsPublished(final String indice, final Organization organization, final Redactor redactor) {
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d7.toLocalDate(), d8.toLocalDate(),
+				d2, null, ItemStatus.PUBLISHED, "summary" + indice, true, true, organization, redactor);
+	}
+	
 	public static Flash newFlash(final String indice, final Organization organization, final Redactor redactor) {
 		return new Flash("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
