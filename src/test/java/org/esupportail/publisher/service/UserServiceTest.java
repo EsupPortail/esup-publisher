@@ -228,7 +228,7 @@ public class UserServiceTest {
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 		
 		//THEN
-		verify(permissionService, times(2));
+//		verify(permissionService, times(2));
 		assertThat(resultList.size()).isEqualTo(0);
 	}
 

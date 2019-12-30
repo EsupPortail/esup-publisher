@@ -14,6 +14,10 @@ async:
     queueCapacity: 10000
 
 spring:
+    profiles:
+        active: test
+    main:
+        allow-bean-definition-overriding: true
     mail:
         host: localhost
         port: 25

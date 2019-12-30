@@ -160,7 +160,7 @@ public class OrganizationRepositoryTest {
 		
 		Optional<Organization> optionalO = repository.findById((long) 0);
         e2 = optionalO == null || !optionalO.isPresent()? null : optionalO.get();
-		assertNull(e);
+		assertNull(e2);
 	}
 
 	/**

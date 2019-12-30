@@ -2,7 +2,7 @@ server:
     #address: localhost
     #address: 192.168.45.145
     port: 8080
-    contextPath: /publisher
+    contextPath: 
 
 multipart:
     maxFileSize: 10MB
@@ -11,15 +11,15 @@ multipart:
 spring:
     profiles:
         active: dev
-        include: fast,ldapgrp
+        include: ldapgrp
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://192.168.56.10:3306/publisher-test?autoreconnect=true
+        url: jdbc:mysql://localhost:3306/pub?autoreconnect=true
         databaseName:
         serverName:
-        username: jgribonvald
-        password: root
+        username: root
+        password:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
@@ -29,7 +29,7 @@ spring:
         database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
         database: MYSQL
         openInView: false
-        show_sql: true
+        show_sql: false
         generate-ddl: false
         hibernate:
             ddl-auto: none
@@ -38,7 +38,7 @@ spring:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+#            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
 
     mail:
         baseUrl: http://localhost:8080
@@ -69,9 +69,9 @@ cache:
 
 ldap:
     base: dc=esco-centre,dc=fr
-    urls: ldap://chene:389/
+    urls: ldap://172.16.6.9:389/
     userDn: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
-    password: LplmENT
+    password: admin
     timeLimit: 20000
     countLimit: 2000
     otherUserDisplayedAttributes: mail,ESCOUAI, ENTPersonProfils
@@ -86,20 +86,20 @@ ldap:
     groupDisplayNameRegex: ".*:([^:]*)"
     groupResolveUserMember: true
     groupResolveUserMemberByUserAttributes: true
-     # for formatters
+     # for formatters can be commented
     escoGroupRegexp:
         properties:
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
-                groupNameRegex: "[^:]+:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:(groupes_locaux):Publication_contenus"
-                groupNameIndex: "1"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):admin:Publication_contenus:[^:]*"
+                groupNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
+                groupNameIndex: "1,2"
                 groupRecomposerSeparator: ":"
             -
                 groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*_[0-9]{7}[a-zA-Z]:[^:]*:Profs Principaux"
                 groupNameRegex: "[^:]*:Etablissements:[^:]*:([^:]*):(Profs Principaux)"
                 groupNameIndex: "2,1"
                 groupRecomposerSeparator: " - "
-     # for designers  can be commented - used to attach groups that are not in the tree root or membrers on
+    # for designers  can be commented - used to attach groups that are not in the tree root or membrers on
     escoGroupDesigner:
         properties:
             -
@@ -113,16 +113,16 @@ ldap:
 
 cas:
     url:
-        prefix: https://test.reciacas.fr/cas/
-        login: https://test.reciacas.fr/cas/login
-        logout: https://test.reciacas.fr/cas/logout
+        prefix: https://secure.giprecia.net/cas_old/
+        login: https://secure.giprecia.net/cas_old/login
+        logout: https://secure.giprecia.net/cas_old/logout
 
 app:
     service:
         security: j_spring_cas_security_check
         redirectParamName: spring-security-redirect
         #security: http://192.168.45.145:8080/j_spring_cas_security_check
-        authorizedDomainNames: http://localhost:8080,http://192.168.45.9:8080
+        authorizedDomainNames: http://localhost:8080,http://192.168.1.1:8080
         protocol: http://
         idKeyProvider: esco_cas_publisher
 
@@ -146,18 +146,17 @@ app:
             origins: "*"
 
     upload:
-        path: "/home/jgribonvald/tmp/"
+        path: "C:\\DATA\\03_workspace\\W_RECIA\\tmp"
         # 128Kb max
         imageMaxSize: 131072
-        protectedPath: "/home/jgribonvald/tmp/"
+        protectedPath: "C:\\DATA\\03_workspace\\W_RECIA\\tmp"
         filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
         # 10MB max should be equals or lower than multipart.maxFileSize
         maxFileSize: 10485760
-        unremovablePathPattern: "default/welcome.*,test.*"
 
     authorizedServices:
         ipRange: "192.168.57.0/24"
 
 ws:
     esup:
-        url: https://test.cas.ent/portail/services/UportalService
+        url: https://www.univ.fr/portail/services/UportalService

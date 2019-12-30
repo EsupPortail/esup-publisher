@@ -259,7 +259,7 @@ public class GroupServiceTest {
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
 		
 		//THEN
-		verify(permissionService, times(2));
+//		verify(permissionService, times(2));
 		assertThat(resultList.size()).isEqualTo(0);
 	}
 	

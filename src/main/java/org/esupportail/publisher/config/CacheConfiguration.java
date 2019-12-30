@@ -44,7 +44,6 @@ import org.springframework.core.env.Environment;
 
 import com.codahale.metrics.MetricRegistry;
 
-@Configuration
 @EnableCaching
 @AutoConfigureAfter(value = {DatabaseConfiguration.class})
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
