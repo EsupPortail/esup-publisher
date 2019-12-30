@@ -34,7 +34,7 @@
                 </button>
 
                 <img ng-if="item.enclosure" name="enclosure" id="enclosure"	ng-src="{{item.enclosure}}" class="img-responsive" />
-                <a ng-if="item.enclosure" href="#" data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
+                <a ng-if="item.enclosure" href data-toggle="modal" data-target="#deleteEnclosureConfirmation" uib-tooltip-placement="top" uib-tooltip="{{ 'entity.action.delete' | translate }}">
                     <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                 </a>
             </div>

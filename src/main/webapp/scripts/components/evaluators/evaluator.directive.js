@@ -156,11 +156,11 @@ angular.module('publisherApp')
                     '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                     '{{ \'publisherApp.evaluators.add.button\' | translate }} <span class="caret"></span></button>' +
                     '<ul class="dropdown-menu">' +
-                    '<li><a href="#" ng-click="addEvaluator(evaluator,\'OPERATOR\')">{{ \'publisherApp.evaluators.add.Operator\' | translate }}</a></li>' +
-                    '<li><a href="#" ng-click="addEvaluator(evaluator,\'USER\')">{{ \'publisherApp.evaluators.add.User\' | translate }}</a></li>' +
-                    '<li><a href="#" ng-click="addEvaluator(evaluator,\'GROUP\')">{{ \'publisherApp.evaluators.add.Group\' | translate }}</a></li>' +
-                    '<li><a href="#" ng-click="addEvaluator(evaluator,\'AUTH\')">{{ \'publisherApp.evaluators.add.AuthenticatedUsers\' | translate }}</a></li>' +
-                    '<li><a href="#" ng-click="addEvaluator(evaluator,\'ATTRIBUTE\')">{{ \'publisherApp.evaluators.add.UserAttribute\' | translate }}</a></li>' +
+                    '<li><a href ng-click="addEvaluator(evaluator,\'OPERATOR\')">{{ \'publisherApp.evaluators.add.Operator\' | translate }}</a></li>' +
+                    '<li><a href ng-click="addEvaluator(evaluator,\'USER\')">{{ \'publisherApp.evaluators.add.User\' | translate }}</a></li>' +
+                    '<li><a href ng-click="addEvaluator(evaluator,\'GROUP\')">{{ \'publisherApp.evaluators.add.Group\' | translate }}</a></li>' +
+                    '<li><a href ng-click="addEvaluator(evaluator,\'AUTH\')">{{ \'publisherApp.evaluators.add.AuthenticatedUsers\' | translate }}</a></li>' +
+                    '<li><a href ng-click="addEvaluator(evaluator,\'ATTRIBUTE\')">{{ \'publisherApp.evaluators.add.UserAttribute\' | translate }}</a></li>' +
                     '</ul></div>' +
                     '<button type="button" class="btn btn-default" ng-click="deleteEvaluators(evaluator)" ng-show="evaluator.evaluators && evaluator.evaluators.length > 0">' +
                     '<span>{{ \'publisherApp.evaluators.Operator.removeChilds\' | translate }}</span></button></div>';
