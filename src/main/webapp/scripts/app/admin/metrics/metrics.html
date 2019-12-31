@@ -86,20 +86,20 @@
     <div class="col-md-4">
         <b translate="metrics.jvm.gc.title">Garbage collections</b>
         <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+            <div class="col-md-9" translate="metrics.jvm.gc.oldgenerationcount">Old generation count</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.G1-Old-Generation.count'].value}}</div>
         </div>
         <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+            <div class="col-md-9" translate="metrics.jvm.gc.oldgenerationtime">Old generation time</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.G1-Old-Generation.time'].value}}ms</div>
         </div>
         <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+            <div class="col-md-9" translate="metrics.jvm.gc.younggenerationcount">Young generation count</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.G1-Young-Generation.count'].value}}</div>
         </div>
         <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+            <div class="col-md-9" translate="metrics.jvm.gc.younggenerationtime">Young generation time</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.G1-Young-Generation.time'].value}}ms</div>
         </div>
     </div>
 </div>

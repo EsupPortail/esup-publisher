@@ -33,10 +33,10 @@
             },
             "gc": {
                 "title": "Garbage collections",
-                "marksweepcount": "Total de \"Mark Sweep\"",
-                "marksweeptime": "Temps \"Mark Sweep\"",
-                "scavengecount": "Total \"Scavenge\"",
-                "scavengetime": "Temps \"Scavenge\""
+                "oldgenerationcount": "Total Old generation",
+                "oldgenerationtime": "Temps Old generation",
+                "younggenerationcount": "Total Young generation",
+                "younggenerationtime": "Temps Young generation"
             },
             "http": {
                 "title": "Requêtes HTTP requests (évènements par seconde)",
