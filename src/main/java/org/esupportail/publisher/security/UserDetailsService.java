@@ -69,7 +69,6 @@ public class UserDetailsService implements
 	@Transactional
 	public CustomUserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Optional<User> optionalUser = userDao.findById(userName);
-		userName = "admin";
 		User internal = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
 		final IExternalUser external = extDao.getUserByUid(userName);
 		if (external == null) {
