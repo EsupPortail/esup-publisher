@@ -15,7 +15,8 @@ async:
 
 spring:
     profiles:
-        active: test
+        active: dev
+        include: fast
     main:
         allow-bean-definition-overriding: true
     mail:

@@ -63,17 +63,12 @@ import com.google.common.collect.Lists;
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
 @PrepareForTest({SecurityUtils.class})
 @SpringBootTest(classes = Application.class)
-@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
+@PowerMockIgnore({"javax.management.*","com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class AccountResourceTest {
 
 	@Inject
 	private UserRepository userRepository;
-    @Inject
-    private UserDTOFactory userDTOFactory;
-
-//	@Mock
-//	private UserService userService;
 
 	private MockMvc restUserMockMvc;
 
@@ -107,7 +102,7 @@ public class AccountResourceTest {
 	public void testGetExistingAccount() throws Exception {
 		Optional<User> optionalUser = userRepository.findOne(QUser.user.login.like("admin"));
         User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
-		UserDTO userDTOPart = userDTOFactory.from(userPart);
+		UserDTO userDTOPart = new UserDTO("admin", "admin", true, true);
 		CustomUserDetails user = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
 
         PowerMockito.mockStatic(SecurityUtils.class);
