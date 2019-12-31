@@ -43,7 +43,7 @@ angular.module('publisherApp')
 
         $scope.refreshThreadDumpData = function () {
             MonitoringService.threadDump().then(function (data) {
-                $scope.threadDump = data;
+                $scope.threadDump = data.threads;
 
                 $scope.threadDumpRunnable = 0;
                 $scope.threadDumpWaiting = 0;
