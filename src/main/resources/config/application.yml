@@ -28,7 +28,18 @@ spring:
 
     messageSource:
         cacheSeconds: 1
-
+        
+management:
+  endpoints:
+    web:
+      base-path: 
+      exposure:
+        include: ['configprops', 'health', 'env', 'threaddump']
+  endpoint:
+    health:
+      show-details: when-authorized
+      roles: 'ROLE_ADMIN'
+      
 logging:
     config: "classpath:logback.xml"
 

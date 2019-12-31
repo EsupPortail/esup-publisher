@@ -11,7 +11,7 @@ angular.module('publisherApp')
                 $scope.healthData = $scope.transformHealthData(response);
                 $scope.updatingHealth = false;
             }, function (response) {
-                $scope.healthData =  $scope.transformHealthData(response.data);
+                $scope.healthData =  $scope.transformHealthData(response.data.components);
                 $scope.updatingHealth = false;
             });
         };

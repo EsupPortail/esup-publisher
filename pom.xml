@@ -159,11 +159,6 @@
             <version>1.7.3</version>
         </dependency>
         <dependency>
-		  <groupId>io.dropwizard.metrics</groupId>
-		  <artifactId>metrics-jmx</artifactId>
-		  <version>4.1.0</version>
-		</dependency>
-        <dependency>
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
             <version>${metrics-spring.version}</version>
@@ -244,16 +239,12 @@
             <artifactId>metrics-ehcache</artifactId>
             <version>${dropwizard-metrics.version}</version>
             <exclusions>
-            	<exclusion>
-            		 <groupId>net.sf.ehcache</groupId>
-	    			<artifactId>ehcache</artifactId>
-            	</exclusion>
+                <exclusion>
+                    <artifactId>ehcache</artifactId>
+                    <groupId>net.sf.ehcache</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-	    <groupId>org.ehcache</groupId>
-	    <artifactId>ehcache</artifactId>
-	</dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-graphite</artifactId>
@@ -262,6 +253,11 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-healthchecks</artifactId>
             <version>${dropwizard-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-jmx</artifactId>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -325,13 +321,17 @@
             <version>4.4.1</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jcache</artifactId>
-            <!-- <version>${hibernate.version}</version> -->
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <!-- <version>${hibernate.version}</version> -->
         </dependency>
         <!-- <dependency>
             <groupId>org.hibernate</groupId>
@@ -388,7 +388,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
