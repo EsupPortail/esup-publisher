@@ -74,7 +74,7 @@ public class CustomAuditEventRepository {
                     PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
                     persistentAuditEvent.setPrincipal(event.getPrincipal());
                     persistentAuditEvent.setAuditEventType(event.getType());
-                    persistentAuditEvent.setAuditEventDate(new LocalDateTime(event.getTimestamp()));
+                    persistentAuditEvent.setAuditEventDate(new LocalDateTime(new org.joda.time.Instant(event.getTimestamp().toEpochMilli())));
                     persistentAuditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
 
                     persistenceAuditEventRepository.save(persistentAuditEvent);
