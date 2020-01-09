@@ -2,7 +2,7 @@ server:
     #address: localhost
     #address: 192.168.45.145
     port: 8080
-    contextPath: /publisher
+    contextPath: 
 
 multipart:
     maxFileSize: 10MB
@@ -11,11 +11,11 @@ multipart:
 spring:
     profiles:
         active: dev
-        include: fast,ldapgrp
+        include: ldapgrp
 
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://127.0.0.1:3306/publisher_test?autoreconnect=true
+        url: jdbc:mysql://localhost:3306/pub?autoreconnect=true
         databaseName:
         serverName:
         username: root
@@ -29,7 +29,7 @@ spring:
         database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
         database: MYSQL
         openInView: false
-        show_sql: true
+        show_sql: false
         generate-ddl: false
         hibernate:
             ddl-auto: none
@@ -69,7 +69,7 @@ cache:
 
 ldap:
     base: dc=esco-centre,dc=fr
-    urls: ldap://127.0.0.1:389/
+    urls: ldap://172.16.6.9:389/
     userDn: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
     password: admin
     timeLimit: 20000
@@ -118,9 +118,9 @@ ldap:
 
 cas:
     url:
-        prefix: https://test.reciacas.fr/cas/
-        login: https://test.reciacas.fr/cas/login
-        logout: https://test.reciacas.fr/cas/logout
+        prefix: https://secure.giprecia.net/cas_old/
+        login: https://secure.giprecia.net/cas_old/login
+        logout: https://secure.giprecia.net/cas_old/logout
 
 app:
     service:
@@ -151,18 +151,17 @@ app:
             origins: "*"
 
     upload:
-        path: "/home/jgribonvald/tmp/"
+        path: "C:\\DATA\\03_workspace\\W_RECIA\\tmp"
         # 128Kb max
         imageMaxSize: 131072
-        protectedPath: "/home/jgribonvald/tmp/"
+        protectedPath: "C:\\DATA\\03_workspace\\W_RECIA\\tmp"
         filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
         # 10MB max should be equals or lower than multipart.maxFileSize
         maxFileSize: 10485760
-        unremovablePathPattern: "default/welcome.*,test.*"
 
     authorizedServices:
         ipRange: "192.168.57.0/24"
 
 ws:
     esup:
-        url: https://test.cas.ent/portail/services/UportalService
+        url: https://www.univ.fr/portail/services/UportalService
