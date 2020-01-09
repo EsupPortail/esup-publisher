@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -106,8 +105,7 @@ public class EvaluatorRepositoryTest {
 		repository.saveAndFlush(oe);
 		assertNotNull(oe.getId());
 		log.info("After insert : " + oe.toString());
-		Optional<AbstractEvaluator> optionalEvaluator = repository.findById(oe.getId());
-		OperatorEvaluator oe2 = optionalEvaluator == null || !optionalEvaluator.isPresent()? null : (OperatorEvaluator) optionalEvaluator.get();
+		OperatorEvaluator oe2 = (OperatorEvaluator) repository.getOne(oe.getId());
 		log.info("After select : " + oe2.toString());
 		assertNotNull(oe2);
 		assertEquals(oe, oe2);
@@ -131,8 +129,7 @@ public class EvaluatorRepositoryTest {
 		assertTrue(repository.findAll().size() == 12);
 		assertFalse(repository.existsById(oe.getId()));
 
-		Optional<AbstractEvaluator> optionalAe = repository.findById((long) 0);
-		AbstractEvaluator ae = optionalAe.isPresent() ? optionalAe.get() : null;
+		AbstractEvaluator ae = repository.getOne((long) 0);
 		assertNull(ae);
 
 	}

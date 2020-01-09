@@ -18,12 +18,10 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
 import org.slf4j.Logger;
@@ -97,8 +95,7 @@ public class EvaluatorResource {
 	public ResponseEntity<AbstractEvaluator> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get Evaluator : {}", id);
-		Optional<AbstractEvaluator> optionalAbstractEvaluator =  evaluatorRepository.findById(id);
-		AbstractEvaluator evaluator = optionalAbstractEvaluator == null || !optionalAbstractEvaluator.isPresent()? null : optionalAbstractEvaluator.get();
+		AbstractEvaluator evaluator = evaluatorRepository.getOne(id);
 		if (evaluator == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

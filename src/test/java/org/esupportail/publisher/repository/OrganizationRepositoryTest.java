@@ -29,7 +29,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -98,8 +97,7 @@ public class OrganizationRepositoryTest {
 		log.info("After insert : " + e.toString());
         assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS3.size()));
         
-        Optional<Organization> optionalOrganization = repository.findById(e.getId());
-        Organization e2 = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+        Organization e2 = repository.getOne(e.getId());
         //e2.setIdentifiers(DEFAULT_IDS3);
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
@@ -158,8 +156,7 @@ public class OrganizationRepositoryTest {
 		assertTrue(repository.findAll().size() == 3);
 		assertFalse(repository.existsById(e.getId()));
 		
-		Optional<Organization> optionalO = repository.findById((long) 0);
-        e2 = optionalO == null || !optionalO.isPresent()? null : optionalO.get();
+        e2 = repository.getOne((long) 0);
 		assertNull(e2);
 	}
 

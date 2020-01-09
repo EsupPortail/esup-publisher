@@ -16,7 +16,6 @@
 package org.esupportail.publisher.web;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -24,7 +23,6 @@ import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.repository.ClassificationRepository;
@@ -109,8 +107,7 @@ public class FeedController {
         Organization org;
         try {
             long orgId = Long.parseLong(id);
-            Optional<Organization> optionalOrg =  organizationRepository.findById(orgId);
-            org = optionalOrg == null || !optionalOrg.isPresent() ? null : optionalOrg.get();
+            org = organizationRepository.getOne(orgId);
         } catch (NumberFormatException e) {
             org = organizationRepository.findByIdentifiers(id);
         }
@@ -123,8 +120,7 @@ public class FeedController {
         OrderSpecifier<?> orderSpecifier = ItemPredicates.orderByClassifDefinition(DisplayOrderType.START_DATE);
         if (publisherId != null) {
             builder.and(ItemPredicates.itemsClassOfPublisher(publisherId));
-            Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
-            Publisher pub = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
+            Publisher pub = publisherRepository.getOne(publisherId);
             if (pub != null) {
                 mav.addObject(PublisherRssFeedView.PUB_PARAM, pub);
                 orderSpecifier = ItemPredicates.orderByPublisherDefinition(pub.getDefaultDisplayOrder());
@@ -132,8 +128,7 @@ public class FeedController {
         }
         if (classifId != null) {
             builder.and(ItemPredicates.itemsClassOfClassification(classifId));
-            Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
-            AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
+            AbstractClassification classif = classificationRepository.getOne(classifId);
             if (classif != null) {
                 mav.addObject(PublisherRssFeedView.CLASSIF_PARAM, classif);
                 orderSpecifier = ItemPredicates.orderByClassifDefinition(classif.getDefaultDisplayOrder());
@@ -152,8 +147,7 @@ public class FeedController {
     private ModelAndView getAllObjects(final Long classifId) {
         ModelAndView mav = new ModelAndView();
 
-        Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
-        AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();;
+        AbstractClassification classif = classificationRepository.getOne(classifId);
         if (classif == null) {
             return mav;
         }

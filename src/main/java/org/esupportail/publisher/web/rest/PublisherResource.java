@@ -18,12 +18,10 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.PublisherRepository;
@@ -113,8 +111,7 @@ public class PublisherResource {
 
         // a manager role can only update DisplayName and if Notifications are allowed
         if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
-        	Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisher.getId());
-        	Publisher model = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+        	Publisher model = publisherRepository.getOne(publisher.getId());
             model.setPermissionType(publisher.getPermissionType());
             model.setDefaultDisplayOrder(publisher.getDefaultDisplayOrder());
             model.setUsed(publisher.isUsed());
@@ -137,8 +134,7 @@ public class PublisherResource {
         + " && hasPermission(#action.objectId, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_MANAGER + "')")
     @Timed
     public ResponseEntity<Void> doChange(@RequestBody ActionDTO action) {
-    	Optional<Publisher> optionalPublisher =  publisherRepository.findById(action.getObjectId());
-    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+    	Publisher publisher = publisherRepository.getOne(action.getObjectId());
         log.debug("REST request with Action {} of Publisher : {}", action, publisher);
         if (publisher != null) {
             boolean doUpdate = false;
@@ -190,8 +186,7 @@ public class PublisherResource {
     @Timed
     public ResponseEntity<Publisher> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Publisher : {}", id);
-        Optional<Publisher> optionalPublisher =  publisherRepository.findById(id);
-    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+    	Publisher publisher = publisherRepository.getOne(id);
         if (publisher == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

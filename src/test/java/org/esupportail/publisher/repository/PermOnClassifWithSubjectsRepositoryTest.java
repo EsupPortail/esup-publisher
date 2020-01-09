@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -120,8 +119,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
 		
-		Optional<PermissionOnClassificationWithSubjectList> optionalPerm = repository.findById(e.getId());
-		PermissionOnClassificationWithSubjectList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
+		PermissionOnClassificationWithSubjectList e2 = repository.getOne(e.getId());
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertTrue(e.getAuthorizedSubjects().equals(Sets.newHashSet(subkeys3)));
@@ -131,8 +129,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		e2.getAuthorizedSubjects().remove(subkeys3[1]);
 		repository.save(e2);
 		
-		Optional<PermissionOnClassificationWithSubjectList> optionalPermission = repository.findById(e2.getId());
-		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		e = repository.getOne(e2.getId());
 
 		assertFalse(e.getAuthorizedSubjects().equals(Sets.newHashSet(subkeys3)));
 

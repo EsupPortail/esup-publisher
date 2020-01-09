@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -154,8 +153,7 @@ public class PermissionRepositoryTest {
 		assertNotNull(p1.getId());
 		log.info("After insert : " + p1.toString());
 		
-		Optional<AbstractPermission> optionalPerm = repository.findById(p1.getId());
-		PermissionOnContext p2 = optionalPerm == null || !optionalPerm.isPresent()? null : (PermissionOnContext) optionalPerm.get();
+		PermissionOnContext p2 = (PermissionOnContext) repository.getOne(p1.getId());
 		log.info("After select : " + p2.toString());
 		assertNotNull(p2);
 		assertEquals(p1, p2);

@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -158,8 +157,7 @@ public class ItemClassificationOrderRepositoryTest {
 				.getAbstractClassification());
 		assertNotNull(ico3.getItemClassificationId().getAbstractItem());
 		log.info("After insert : " + ico3.toString());
-		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
-		ItemClassificationOrder ico4 = optionalItemClassif == null || !optionalItemClassif.isPresent()? null : optionalItemClassif.get();
+		ItemClassificationOrder ico4 = repository.getOne(ico3.getItemClassificationId());
 		log.info("After select : " + ico4.toString());
 		assertNotNull(ico4);
 		assertEquals(ico3, ico4);
@@ -187,8 +185,7 @@ public class ItemClassificationOrderRepositoryTest {
 		assertTrue(repository.findAll().size() == 3);
 		assertFalse(repository.existsById(ico4.getItemClassificationId()));
 		
-		Optional<ItemClassificationOrder> optionalItem = repository.findById(new ItemClassificationKey());
-		ico4 =optionalItem == null || !optionalItem.isPresent()? null : optionalItem.get();
+		ico4 = repository.getOne(new ItemClassificationKey());
 		assertNull(ico4);
 
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Esup Portail http://www.esup-portail.org
+la  * Copyright (C) 2014 Esup Portail http://www.esup-portail.org
  * @Author (C) 2012 Julien Gribonvald <julien.gribonvald@recia.fr>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,11 @@ package org.esupportail.publisher.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.InternalFeed;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -136,8 +134,7 @@ public class ItemResource {
     @Timed
     public ResponseEntity<?> update(@RequestBody ActionDTO action) throws URISyntaxException {
         log.debug("REST request to update Item with action : {}", action);
-        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(action.getObjectId());
-        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
+        AbstractItem item = itemRepository.getOne(action.getObjectId());
         switch(action.getAttribute()) {
             case "enclosure" :
                 return contentService.setEnclosureItem(action.getValue(), item);
@@ -188,8 +185,7 @@ public class ItemResource {
     @Timed
     public ResponseEntity<AbstractItem> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Item : {}", id);
-        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
-        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
+        AbstractItem item = itemRepository.getOne(id);
         if (item == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -209,8 +205,7 @@ public class ItemResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Item : {}", id);
-        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
-        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
+        AbstractItem item = itemRepository.getOne(id);
         fileService.deleteInternalResource(item.getEnclosure());
         itemRepository.deleteById(id);
     }

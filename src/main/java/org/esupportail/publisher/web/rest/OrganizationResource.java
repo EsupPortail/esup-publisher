@@ -18,7 +18,6 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -108,8 +107,7 @@ public class OrganizationResource {
 
         // a manager role can only update DisplayName and if Notifications are allowed
 		if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
-			Optional<Organization> optionalOrganization =  organizationRepository.findById(organization.getId());
-			Organization model = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+			Organization model = organizationRepository.getOne(organization.getId());
             model.setDisplayName(organization.getDisplayName());
             model.setAllowNotifications(organization.isAllowNotifications());
             organizationRepository.save(organization);
@@ -169,8 +167,7 @@ public class OrganizationResource {
 	@Timed
 	public ResponseEntity<Organization> get(@PathVariable Long id) {
 		log.debug("REST request to get Organization : {}", id);
-		Optional<Organization> optionalOrganization =  organizationRepository.findById(id);
-		Organization organization = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+		Organization organization = organizationRepository.getOne(id);
 		if (organization == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

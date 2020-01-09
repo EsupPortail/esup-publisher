@@ -15,20 +15,21 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.esupportail.publisher.domain.AbstractEntity;
 import org.esupportail.publisher.repository.AbstractRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.DTOFactory;
 import org.esupportail.publisher.web.rest.dto.AbstractIdDTO;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -119,8 +120,7 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
         if (dtObject.getModelId() == null) {
             return newModel();
         }
-        Optional<M> optionalM = getDao().findById(dtObject.getModelId());
-        M model = optionalM == null || !optionalM.isPresent() ? null : optionalM.get();
+        M model = getDao().getOne(dtObject.getModelId());
         if (model == null) {
             throw new ObjectNotFoundException(
                     "id provided, but not valid: "
@@ -131,8 +131,7 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
 
     public M from(final ID id) throws ObjectNotFoundException {
         log.debug("find model of {} whith id {}", this.mClass, id);
-        Optional<M> optionalM = getDao().findById(id);
-        M model = optionalM == null || !optionalM.isPresent() ? null : optionalM.get();
+        M model = getDao().getOne(id);
         if (model == null) throw new ObjectNotFoundException(id, this.mClass);
         return model;
     }

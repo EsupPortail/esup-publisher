@@ -20,18 +20,10 @@ package org.esupportail.publisher.service.factories.impl;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
-import org.esupportail.publisher.domain.SubjectContextKey;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.UserRepository;
@@ -40,6 +32,12 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 25 juil. 2014
@@ -80,8 +78,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 		log.debug("External to DTO of {}", extModel);
 		User model = null;
 		if (extModel != null && withInternal) {
-			Optional<User> optionalUser = dao.findById(extModel.getId());
-			model = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+			model = dao.getOne(extModel.getId());
 		}
 		return from(model, extModel);
 	}
@@ -106,8 +103,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 	public User from(final UserDTO dtObject) {
 		log.debug("DTO to model of {}", dtObject);
 		if (dtObject != null) {
-			Optional<User> optionalUser = getDao().findById(dtObject.getLogin());
-			User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+			User user = getDao().getOne(dtObject.getLogin());
 			if (user == null) {
 				user = new User(dtObject.getLogin(), dtObject.getDisplayName());
 				// set UID from LDAP UserDTO

@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -81,8 +80,7 @@ public class RedactorRepositoryTest {
 		repository.saveAndFlush(r);
 		assertNotNull(r.getId());
 		log.info("After insert : " + r.toString());
-		Optional<Redactor> optionalRedactor = repository.findById(r.getId());
-		Redactor r2 = optionalRedactor == null || !optionalRedactor.isPresent()? null : optionalRedactor.get();
+		Redactor r2 = repository.getOne(r.getId());
 		log.info("After select : " + r2.toString());
 		assertNotNull(r2);
 		assertEquals(r, r2);
@@ -118,8 +116,7 @@ public class RedactorRepositoryTest {
 		assertTrue(repository.findAll().size() == 3);
 		assertFalse(repository.existsById(r.getId()));
 
-		Optional<Redactor> optionalR = repository.findById((long) 0);
-		r = optionalR == null || !optionalR.isPresent()? null : optionalR.get();
+		r = repository.getOne((long) 0);
 		assertNull(r);
 
 	}

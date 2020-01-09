@@ -27,7 +27,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -105,9 +104,9 @@ public class ItemRepositoryTest {
 	public void setUp() throws Exception {
 		log.info("starting up " + this.getClass().getName());
 
-        user1 = userRepo.findById(ObjTest.subject1).get();
-        user2 = userRepo.findById(ObjTest.subject2).get();
-        user3 = userRepo.findById(ObjTest.subject3).get();
+        user1 = userRepo.getOne(ObjTest.subject1);
+        user2 = userRepo.getOne(ObjTest.subject2);
+        user3 = userRepo.getOne(ObjTest.subject3);
 
 		org1 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_1));
 		org2 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_2));
@@ -321,8 +320,7 @@ public class ItemRepositoryTest {
 		assertNotNull(n1.getId());
 		log.info("After insert : " + n1.toString());
 		
-		Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2 = (News) repository.getOne(n1.getId());
 		log.info("After select : " + n2.toString());
 		assertNotNull(n2);
 		assertEquals(n1, n2);
@@ -363,8 +361,7 @@ public class ItemRepositoryTest {
         assertNotNull(n1.getId());
 
         repository.archiveExpiredPublished();
-        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2 = (News) repository.getOne(n1.getId());
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
@@ -382,8 +379,7 @@ public class ItemRepositoryTest {
         assertNotNull(n1.getId());
 
         repository.archiveExpiredPublished();
-        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2 = (News) repository.getOne(n1.getId());
         assertNotNull(n2);
 
         assertTrue(n1.equals(n2));
@@ -401,8 +397,7 @@ public class ItemRepositoryTest {
 
         repository.publishScheduled();
 
-        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2 = (News) repository.getOne(n1.getId());
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
@@ -421,8 +416,7 @@ public class ItemRepositoryTest {
 
         repository.publishScheduled();
 
-        Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2 = (News) repository.getOne(n1.getId());
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 

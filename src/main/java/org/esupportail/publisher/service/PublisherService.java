@@ -15,17 +15,14 @@
  */
 package org.esupportail.publisher.service;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.inject.Inject;
 
-import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -51,8 +48,7 @@ public class PublisherService {
             publisherRepository.setUpperDisplayOrderOfRange(publisher.getContext().getOrganization().getId(),newPos, curPos);
 		} else
 			return;
-		Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getId());
-		Publisher mpublisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
+		Publisher mpublisher = publisherRepository.getOne(publisher.getId());
         mpublisher.setDisplayOrder(newPos);
         publisherRepository.save(mpublisher);
 

@@ -16,16 +16,12 @@
 package org.esupportail.publisher.web.rest;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.ContextKey;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
@@ -51,6 +47,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
 
 /**
  * REST controller for managing users.
@@ -84,8 +83,7 @@ public class UserResource {
 	@RolesAllowed(AuthoritiesConstants.USER)
 	public User getUser(@PathVariable String login, HttpServletResponse response) {
 		log.debug("REST request to get User : {}", login);
-		Optional<User> optionalUser =  userRepository.findById(login);
-		User user = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
+		User user = userRepository.getOne(login);
 		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}

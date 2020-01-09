@@ -172,9 +172,9 @@ public class ItemResourceOptionalDateTest {
         redactor = ObjTest.newRedactor(name);
         redactor.setOptionalPublishTime(true);
         redactor = redactorRepository.saveAndFlush(redactor);
-        user1 = userRepo.findById(ObjTest.subject1).get();
-        user2 = userRepo.findById(ObjTest.subject2).get();
-        user3 = userRepo.findById(ObjTest.subject3).get();
+        user1 = userRepo.getOne(ObjTest.subject1);
+        user2 = userRepo.getOne(ObjTest.subject2);
+        user3 = userRepo.getOne(ObjTest.subject3);
 
 
 

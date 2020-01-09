@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -118,8 +117,7 @@ public class PublisherRepositoryTest {
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-		Optional<Publisher> optionalPublisher = repository.findById(e.getId());
-		Publisher e2 = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+		Publisher e2 = repository.getOne(e.getId());
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertEquals(e, e2);
