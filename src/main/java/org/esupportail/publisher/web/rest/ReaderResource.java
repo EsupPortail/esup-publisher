@@ -15,13 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import com.codahale.metrics.annotation.Timed;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-
+import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.security.SecurityConstants;
@@ -31,13 +27,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
+import javax.inject.Inject;
+import java.net.URI;
+import java.net.URISyntaxException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Reader.
@@ -108,7 +105,8 @@ public class ReaderResource {
     @Timed
     public ResponseEntity<Reader> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Reader : {}", id);
-        Reader reader = readerRepository.getOne(id);
+        Optional<Reader> optionalReader =  readerRepository.findById(id);
+        Reader reader = optionalReader == null || !optionalReader.isPresent()? null : optionalReader.get();
         if (reader == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

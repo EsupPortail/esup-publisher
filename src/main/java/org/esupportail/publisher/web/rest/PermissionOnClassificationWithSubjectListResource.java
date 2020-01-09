@@ -18,10 +18,15 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
+
+import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -43,9 +48,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
 
 /**
  * REST controller for managing PermissionOnContext.
@@ -136,7 +138,8 @@ public class PermissionOnClassificationWithSubjectListResource {
 	public ResponseEntity<PermissionOnClassificationWithSubjectList> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get permissionOnClassificationWithSubjectLists : {}", id);
-		PermissionOnClassificationWithSubjectList permission = permissionRepository.getOne(id);
+		Optional<PermissionOnClassificationWithSubjectList> optionalPermission =  permissionRepository.findById(id);
+		PermissionOnClassificationWithSubjectList permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 		if (permission == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -152,7 +155,8 @@ public class PermissionOnClassificationWithSubjectListResource {
 	@Timed
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete permissionOnClassificationWithSubjectLists : {}", id);
-		PermissionOnClassificationWithSubjectList permission = permissionRepository.getOne(id);
+		Optional<PermissionOnClassificationWithSubjectList> optionalPermission =  permissionRepository.findById(id);
+		PermissionOnClassificationWithSubjectList permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
         if (permission == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -17,6 +17,7 @@ package org.esupportail.publisher.service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -99,13 +100,13 @@ public class ContextService {
                 case ORGANIZATION :
                     return ctxKey;
                 case PUBLISHER :
-                    return publisherRepository.getOne(ctxKey.getKeyId()).getContext().getOrganization().getContextKey();
+                    return publisherRepository.findById(ctxKey.getKeyId()).get().getContext().getOrganization().getContextKey();
                 case CATEGORY :
-                    return categoryRepository.getOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                    return categoryRepository.findById(ctxKey.getKeyId()).get().getPublisher().getContext().getOrganization().getContextKey();
                 case FEED :
-                    return feedRepository.getOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                    return feedRepository.findById(ctxKey.getKeyId()).get().getPublisher().getContext().getOrganization().getContextKey();
                 case ITEM :
-                    return itemRepository.getOne(ctxKey.getKeyId()).getOrganization().getContextKey();
+                    return itemRepository.findById(ctxKey.getKeyId()).get().getOrganization().getContextKey();
                 default: throw new IllegalArgumentException("The context Type " + ctxKey.getKeyType() + " is not managed") ;
             }
         }
@@ -116,13 +117,13 @@ public class ContextService {
         switch (fromCtx.getKeyType()) {
             case ORGANIZATION: return true;
             case PUBLISHER:
-                final Publisher pub = publisherRepository.getOne(fromCtx.getKeyId());
+                final Publisher pub = publisherRepository.findById(fromCtx.getKeyId()).get();
                 return pub != null && pub.isHasSubPermsManagement();
             case CATEGORY:
-                final Category cat = categoryRepository.getOne(fromCtx.getKeyId());
+                final Category cat = categoryRepository.findById(fromCtx.getKeyId()).get();
                 return cat != null && cat.getPublisher() != null && cat.getPublisher().isHasSubPermsManagement();
             case FEED:
-                final AbstractFeed feed = feedRepository.getOne(fromCtx.getKeyId());
+                final AbstractFeed feed = feedRepository.findById(fromCtx.getKeyId()).get();
                 return feed != null && feed.getPublisher() != null && feed.getPublisher().isHasSubPermsManagement();
             case ITEM : return false; // we can't know if permission management is done as several publisher can be set to an item
             default:
@@ -147,7 +148,7 @@ public class ContextService {
                 builder.and(filter);
                 return Lists.newArrayList(publisherRepository.findAll(builder, PublisherPredicates.orderByDisplayOrder()));
             case PUBLISHER :
-                displayOrder = publisherRepository.getOne(ctx.getKeyId()).getDefaultDisplayOrder();
+                displayOrder = publisherRepository.findById(ctx.getKeyId()).get().getDefaultDisplayOrder();
                 filter = permissionService.filterAuthorizedChildsOfContext(SecurityContextHolder.getContext().getAuthentication(),
                     ctx, minPerm, ClassificationPredicates.CategoryOfPublisher(ctx.getKeyId()));
                 builder = new BooleanBuilder(filter);
@@ -167,7 +168,8 @@ public class ContextService {
                 }
                 return myList;
             case CATEGORY :
-                Category category = categoryRepository.getOne(ctx.getKeyId());
+            	Optional<Category> optionalCategory = categoryRepository.findById(ctx.getKeyId());
+                Category category = optionalCategory == null || !optionalCategory.isPresent() ? null : optionalCategory.get();
                 displayOrder = category.getDefaultDisplayOrder();
                 if (category.getPublisher().getContext().getRedactor().getNbLevelsOfClassification() > 1) {
                     filter = permissionService.filterAuthorizedChildsOfContext(SecurityContextHolder.getContext().getAuthentication(),

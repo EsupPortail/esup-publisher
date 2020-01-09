@@ -321,7 +321,8 @@ public class PublishController {
     public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId, HttpServletRequest request ) {
         //getting items on new way
         log.debug("Entering getItems with param : publisher_id={}", publisherId);
-        Publisher publisher = publisherRepository.getOne(publisherId);
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
 
         return getItemsOnPublisherNewWay(publisher, request);
     }
@@ -332,7 +333,8 @@ public class PublishController {
     @Timed
     public Category getCategories(@PathVariable("publisher_id") Long publisherId, final HttpServletRequest request) {
         log.debug("Entering getCategories with param : publisher_id={}", publisherId);
-        Publisher publisher = publisherRepository.getOne(publisherId);
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
 
         if (publisher != null && publisher.isUsed() && WritingMode.STATIC.equals(publisher.getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);
@@ -362,7 +364,8 @@ public class PublishController {
     public Category getAbstractFeeds(@PathVariable("category_id") Long categoryId, final HttpServletRequest request) {
         // systeme classic esup-lecture/esup-news
         log.debug("Entering getAbstractFeeds with param : category_id={}", categoryId);
-        org.esupportail.publisher.domain.Category category = categoryRepository.getOne(categoryId);
+        Optional<org.esupportail.publisher.domain.Category> optionalCategory =  categoryRepository.findById(categoryId);
+        org.esupportail.publisher.domain.Category category = optionalCategory == null || !optionalCategory.isPresent()? null : optionalCategory.get();
 
         if (category != null && category.getPublisher().isUsed() && WritingMode.STATIC.equals(category.getPublisher().getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);

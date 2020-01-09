@@ -18,10 +18,13 @@ package org.esupportail.publisher.service.factories.impl;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -51,8 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 22/04/15.
@@ -85,7 +86,8 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
 
 	@Override
 	public ContentDTO from(@NotNull Long id) throws ObjectNotFoundException {
-		AbstractItem model = itemRepository.getOne(id);
+		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
+		AbstractItem model = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
 		if (model == null)
 			throw new ObjectNotFoundException(id, AbstractItem.class);
 		return from(model);

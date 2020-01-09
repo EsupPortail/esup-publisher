@@ -26,6 +26,8 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -39,6 +41,7 @@ import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.FilterType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -86,8 +89,6 @@ import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
@@ -139,7 +140,8 @@ public class ContentService {
 	private RedactorRepository redactorRepository;
 
 	public ResponseEntity<?> saveContent(final ContentDTO content) throws URISyntaxException {
-		Redactor redactor = redactorRepository.getOne(content.getItem().getRedactor().getId());
+		Optional<Redactor> optionalRedactor = redactorRepository.findById(content.getItem().getRedactor().getId());
+		Redactor redactor = optionalRedactor == null || !optionalRedactor.isPresent() ? null : optionalRedactor.get();
 		if (redactor == null) {
 			log.error("The redactor id wasn't passed !");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -184,7 +186,8 @@ public class ContentService {
 		Pair<PermissionType, PermissionDTO> lowerClassifPerm = null;
 		// filter authorized classifs and check constraints
 		for (ContextKey classif : content.getClassifications()) {
-			AbstractClassification classification = classificationRepository.getOne(classif.getKeyId());
+			Optional<AbstractClassification> optionalClassif = classificationRepository.findById(classif.getKeyId());
+			AbstractClassification classification = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
 			log.debug("entering filtering : {}", classification);
 			if (permissionService.canCreateInCtx(authentication, classif)) {
 				log.debug("==> can create = true");
@@ -633,7 +636,8 @@ public class ContentService {
 	}*/
 
 	public void deleteContent(Long id) {
-		AbstractItem item = itemRepository.getOne(id);
+		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
+		AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
 		fileService.deleteInternalResource(item.getEnclosure());
 		final Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates
 				.onCtx(new ContextKey(id, ContextType.ITEM)));

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -83,7 +84,8 @@ public class ReaderRepositoryTest {
 		repository.saveAndFlush(r);
 		assertNotNull(r.getId());
 		log.info("After insert : " + r.toString());
-		Reader r2 = repository.getOne(r.getId());
+		Optional<Reader> optionalReader = repository.findById(r.getId());
+		Reader r2 = optionalReader == null || !optionalReader.isPresent()? null : optionalReader.get();
 		log.info("After select : " + r2.toString());
 		assertNotNull(r2);
 		assertEquals(r, r2);
@@ -119,7 +121,8 @@ public class ReaderRepositoryTest {
 		assertTrue(repository.findAll().size() == 3);
 		assertFalse(repository.existsById(r.getId()));
 		
-		r = repository.getOne((long) 0);
+		Optional<Reader> optionalR = repository.findById((long) 0);
+		r = optionalR == null || !optionalR.isPresent()? null : optionalR.get();
 		assertNull(r);
 
 	}

@@ -22,11 +22,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.User;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,7 +69,8 @@ public class UserRepositoryTest {
 	public void testInserted() {
         long count = repository.count();
 		DateTime d = new DateTime();
-		User u = repository.getOne(ObjTest.subject1);
+		Optional<User> optionalUser = repository.findById(ObjTest.subject1);
+		User u = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
 		log.debug("loaded user :" + u.toString());
 		assertNotNull(u);
 		log.debug(ObjTest.subjectKey1.toString() + " test equals with "
@@ -80,19 +86,22 @@ public class UserRepositoryTest {
 
 		u.setAcceptNotifications(true);
 		repository.saveAndFlush(u);
-		u = repository.getOne(ObjTest.subject2);
+		Optional<User> optionalU = repository.findById(ObjTest.subject2);
+		u = optionalU == null || !optionalU.isPresent()? null : optionalU.get();
 		assertFalse(u.equals(u2));
 		u2.setAcceptNotifications(true);
 		// assertEquals(u, u2);
 
 		repository.saveAndFlush(u);
-		u = repository.getOne(ObjTest.subject1);
+		Optional<User> optionalU1 = repository.findById(ObjTest.subject1);
+		u = optionalU1 == null || !optionalU1.isPresent()? null : optionalU1.get();
 		assertTrue(u.equals(u2));
 		assertEquals(u, u2);
 
 		u.setEnabled(false);
 		repository.saveAndFlush(u);
-		u2 = repository.getOne(ObjTest.subject1);
+		Optional<User> optionalU2 = repository.findById(ObjTest.subject1);
+		u2 = optionalU2 == null || !optionalU2.isPresent()? null : optionalU2.get();
 		assertTrue(u.equals(u2));
 		u2.setEnabled(true);
 		assertTrue(u.equals(u2));

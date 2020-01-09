@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -142,7 +143,8 @@ public class SubscriberRepositoryTest {
 		s = repository.saveAndFlush(s);
 		log.info("After insert : " + s.toString());
 		
-		Subscriber s2 = repository.getOne(s.getSubjectCtxId());
+		Optional<Subscriber> optionalSubscriber = repository.findById(s.getSubjectCtxId());
+		Subscriber s2 = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
 		log.info("After select : " + s2.toString());
 		assertNotNull(s2);
 		assertEquals(s, s2);

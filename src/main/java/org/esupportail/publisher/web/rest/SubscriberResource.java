@@ -21,15 +21,19 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
 import org.apache.commons.codec.binary.Base64;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectContextKey;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
@@ -62,9 +66,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriUtils;
-
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
 
 /**
  * REST controller for managing Subscriber.
@@ -103,7 +104,8 @@ public class SubscriberResource {
 	public ResponseEntity<Void> create(@Validated @RequestBody Subscriber subscriber) throws URISyntaxException,
 			UnsupportedEncodingException {
 		log.debug("REST request to save Subscriber : {}", subscriber);
-		Subscriber subscriberRepo = subscriberRepository.getOne(subscriber.getId());
+		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(subscriber.getId());
+		Subscriber subscriberRepo = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
         
 		if (subscriberRepo != null) {
 			return ResponseEntity.badRequest().header("Failure", "The subscriber should not already exist").build();
@@ -121,8 +123,9 @@ public class SubscriberResource {
 		case CATEGORY:
 
 		case FEED:
-			AbstractClassification classif = classificationRepository.getOne(subscriber.getSubjectCtxId().getContext()
+			Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(subscriber.getSubjectCtxId().getContext()
 					.getKeyId());
+			AbstractClassification classif = optionalAbstractClassification == null || !optionalAbstractClassification.isPresent()? null : optionalAbstractClassification.get();
 			if (classif != null
 					&& !WritingMode.TARGETS_ON_ITEM.equals(classif.getPublisher().getContext().getRedactor()
 							.getWritingMode()) && classif.getPublisher().isHasSubPermsManagement()) {
@@ -130,7 +133,8 @@ public class SubscriberResource {
 			}
 			break;
 		case ITEM:
-			AbstractItem item = itemRepository.getOne(subscriber.getSubjectCtxId().getContext().getKeyId());
+			Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(subscriber.getSubjectCtxId().getContext().getKeyId());
+			AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
 			if (item != null && WritingMode.TARGETS_ON_ITEM.equals(item.getRedactor().getWritingMode())) {
 				subscribersOnCtx = true;
 			}
@@ -244,7 +248,8 @@ public class SubscriberResource {
 		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(Base64.decodeBase64(subjectId)), subjectAttr,
             SubjectType.valueOf(subjectType)), new ContextKey(ctxId, ctxType));
 		log.debug("REST request to get SubjectContextKey : {}", id);
-		Subscriber subscriber = subscriberRepository.getOne(id);
+		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(id);
+		Subscriber subscriber = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
 		if (subscriber == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -182,7 +183,8 @@ public class ClassificationRepositoryTest {
 		repository.save(c1);
 		assertNotNull(c1.getId());
 		log.info("After insert : " + c1.toString());
-		Category c2 = (Category) repository.getOne(c1.getId());
+		Optional<AbstractClassification> optionalClassif = repository.findById(c1.getId());
+		Category c2 = optionalClassif == null || !optionalClassif.isPresent()? null : (Category) optionalClassif.get();
 		log.info("After select : " + c2.toString());
 		assertNotNull(c2);
 		assertEquals(c1, c2);

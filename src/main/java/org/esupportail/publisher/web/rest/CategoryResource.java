@@ -18,11 +18,14 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
+import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.repository.CategoryRepository;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.security.UserContextLoaderService;
@@ -39,8 +42,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST controller for managing Category.
@@ -120,7 +121,8 @@ public class CategoryResource {
     @Timed
     public ResponseEntity<Category> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Category : {}", id);
-        Category category = categoryRepository.getOne(id);
+        Optional<Category> optionalCategory =  categoryRepository.findById(id);
+        Category category = optionalCategory == null || !optionalCategory.isPresent()? null : optionalCategory.get();
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

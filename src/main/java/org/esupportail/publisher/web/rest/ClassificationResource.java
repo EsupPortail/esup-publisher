@@ -18,6 +18,7 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -124,7 +125,8 @@ public class ClassificationResource {
                                                @RequestParam(value = "isPublishing", required = false) Boolean isPublishing) {
         log.debug("REST request to get all AbstractClassifications");
         if (publisherId != null) {
-            Publisher publisher = publisherRepository.getOne(publisherId);
+    	    Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+            Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
             if (publisher == null)
                 return new ClassificationList(new ArrayList<AbstractClassification>());
             Predicate where;
@@ -164,7 +166,8 @@ public class ClassificationResource {
     @Timed
     public ResponseEntity<AbstractClassification> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get AbstractClassification : {}", id);
-        AbstractClassification classification = classificationRepository.getOne(id);
+        Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(id);
+        AbstractClassification classification = optionalAbstractClassification == null || !optionalAbstractClassification.isPresent()? null : optionalAbstractClassification.get();
         if (classification == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

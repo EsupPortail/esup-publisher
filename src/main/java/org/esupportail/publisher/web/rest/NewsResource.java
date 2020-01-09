@@ -15,13 +15,7 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-
+import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.repository.NewsRepository;
@@ -36,14 +30,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.codahale.metrics.annotation.Timed;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing News.
@@ -120,7 +114,8 @@ public class NewsResource {
     @Timed
     public ResponseEntity<News> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get News : {}", id);
-        News news = newsRepository.getOne(id);
+        Optional<News> optionalNews =  newsRepository.findById(id);
+        News news = optionalNews == null || !optionalNews.isPresent()? null : optionalNews.get();
         if (news == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -137,7 +132,8 @@ public class NewsResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete News : {}", id);
-        AbstractItem item = newsRepository.getOne(id);
+        Optional<News> optionalNews =  newsRepository.findById(id);
+        AbstractItem item = optionalNews == null || !optionalNews.isPresent()? null : optionalNews.get();
         fileService.deleteInternalResource(item.getEnclosure());
         newsRepository.deleteById(id);
     }

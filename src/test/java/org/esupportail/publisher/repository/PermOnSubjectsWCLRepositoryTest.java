@@ -24,6 +24,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -120,7 +121,8 @@ public class PermOnSubjectsWCLRepositoryTest {
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-		PermissionOnSubjectsWithClassificationList e2 = repository.getOne(e.getId());
+		Optional<PermissionOnSubjectsWithClassificationList> optionalPerm = repository.findById(e.getId());
+		PermissionOnSubjectsWithClassificationList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertTrue(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
@@ -130,7 +132,8 @@ public class PermOnSubjectsWCLRepositoryTest {
 		e2.getRolesOnSubjects().remove(ObjTest.subjectPerm1);
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
-		e = repository.getOne(e2.getId());
+		Optional<PermissionOnSubjectsWithClassificationList> optionalPermission = repository.findById(e2.getId());
+		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 		assertFalse(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
 
 		e = ObjTest.newPermissionOnSubjectsWCL(PERM_INDICE_4,

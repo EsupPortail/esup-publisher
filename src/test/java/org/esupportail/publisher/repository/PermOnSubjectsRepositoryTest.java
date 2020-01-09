@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -109,7 +110,8 @@ public class PermOnSubjectsRepositoryTest {
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-		PermissionOnSubjects e2 = repository.getOne(e.getId());
+		Optional<PermissionOnSubjects> optionalPerm = repository.findById(e.getId());
+		PermissionOnSubjects e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertTrue(e.getRolesOnSubjects().equals(
@@ -120,7 +122,8 @@ public class PermOnSubjectsRepositoryTest {
 		e2.getRolesOnSubjects().remove(ObjTest.subjectPerm1);
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
-		e = repository.getOne(e2.getId());
+		Optional<PermissionOnSubjects> optionalPermission = repository.findById(e2.getId());
+		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 		assertFalse(e.getRolesOnSubjects().equals(
 				Sets.newHashSet(ObjTest.subkeys3)));
 
