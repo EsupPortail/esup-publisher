@@ -41,6 +41,7 @@ mvn compile liquibase:update
 
 
 ## Liquibase memento :
+[WARN]JAVA 8 use: Don't forget to add `-Djadira.usertype.useJdbc42Apis=false` jvm arg to the command line
 - see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
 - on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
 - 'mvn compile liquibase:update' will apply changelog not loaded (from liquibase files) to the database
