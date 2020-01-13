@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -99,7 +100,7 @@ public class DatabaseConfiguration {
         liquibase.setIgnoreClasspathPrefix(true);
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");
 		liquibase.setContexts("development, production");
-		if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
+		if (env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
 			if ("org.h2.jdbcx.JdbcDataSource".equals(env.getProperty("spring.datasource.dataSourceClassName"))) {
                 liquibase.setShouldRun(true);
                 log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
