@@ -31,7 +31,6 @@
     </scm>
 
     <properties>
-        <!--<HikariCP.version>2.2.5</HikariCP.version>-->
         <HikariCP.version>3.4.1</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
@@ -43,8 +42,6 @@
         <java.version>11</java.version>
         <javax.inject.version>1</javax.inject.version>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version>
-        <!--<jackson.version>2.7.4</jackson.version>-->
-        <lombok.version>1.18.10</lombok.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <eclipse-maven-plugin.version>2.10</eclipse-maven-plugin.version>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
@@ -363,7 +360,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -408,6 +404,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
