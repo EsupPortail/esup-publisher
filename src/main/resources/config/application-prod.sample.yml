@@ -1,6 +1,7 @@
 server:
     port: 8443
-    contextPath: /publisher
+    servlet:
+        contextPath: /publisher
 
 multipart:
     maxFileSize: 10MB

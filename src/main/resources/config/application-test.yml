@@ -2,7 +2,8 @@ server:
     #address: localhost
     #address: 192.168.45.145
     port: 8080
-    contextPath: 
+    servlet:
+        contextPath: /publisher
 
 multipart:
     maxFileSize: 10MB
