@@ -44,7 +44,7 @@ spring:
         baseUrl: http://localhost:8080
 
     thymeleaf:
-        mode: XHTML
+        mode: HTML
         cache: true
 
 logging:
