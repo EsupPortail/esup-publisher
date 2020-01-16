@@ -40,7 +40,9 @@ spring:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+            hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
     mail:
         baseUrl: http://localhost:8080
