@@ -2,7 +2,8 @@ server:
     #address: localhost
     #address: 192.168.45.145
     port: 8080
-    contextPath: /publisher
+    servlet:
+        contextPath: /publisher
 
 multipart:
     maxFileSize: 10MB
@@ -33,18 +34,21 @@ spring:
         generate-ddl: false
         hibernate:
             ddl-auto: none
-            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         properties:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+            hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
     mail:
         baseUrl: http://localhost:8080
 
     thymeleaf:
-        mode: XHTML
+        mode: HTML
         cache: false
 
 logging:

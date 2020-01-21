@@ -21,7 +21,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-   <!--  <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/> -->
+     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
 <!--     <include file="classpath:config/liquibase/changelog/20141118120129_main_schema.xml" relativeToChangelogFile="false"/> -->
 <!--     <include file="classpath:config/liquibase/changelog/20141124120129_main_schema.xml" relativeToChangelogFile="false"/> -->
     <!-- JHipster will add liquibase changelogs here -->
@@ -39,5 +39,4 @@
     <!--<include file="config/liquibase/changelog/20170619134854_changelog.xml" relativeToChangelogFile="false"/>-->
     <!--<include file="config/liquibase/changelog/20171012132552_changelog.xml" relativeToChangelogFile="false"/>-->
     <include file="config/liquibase/changelog/20180326145110_main_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20191219120000_changelog.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

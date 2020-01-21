@@ -81,7 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
     private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
     private static final String APP_USERS_GROUP_NAME = "app.users.groupName";
-    private static final String APP_CONTEXT_PATH = "server.contextPath";
+    private static final String APP_CONTEXT_PATH = "server.servlet.contextPath";
     private static final String APP_PROTOCOL = "app.service.protocol";
 
     private static final String DefaultTargetUrlParameter = "spring-security-redirect";
