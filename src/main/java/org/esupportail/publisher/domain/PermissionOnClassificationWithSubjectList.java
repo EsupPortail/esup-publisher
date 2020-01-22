@@ -54,7 +54,6 @@ public class PermissionOnClassificationWithSubjectList extends
 	@Embedded
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "T_PERM_AUTHORIZED_SUBJECTS")
-	@AttributeOverrides({ @AttributeOverride(name = "permission_on_classification_with_subject_list_id", column = @Column(name = "perm_id")) })
 	private Set<SubjectKey> authorizedSubjects = new HashSet<SubjectKey>();
 
 	/**
