@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.codahale.metrics.jvm.JvmAttributeGaugeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
 import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
 import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
 import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
+import com.codahale.metrics.jcache.JCacheGaugeSet;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 
@@ -60,11 +62,15 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     private static final String PROP_PORT = "metrics.graphite.port";
     private static final String PROP_HOST = "metrics.graphite.host";
+
     private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
     private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
     private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
     private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
     private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
+    private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
+
+    private static final String PROP_METRIC_REG_JCACHE_STATISTICS = "jcache.statistics";
 
     private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
@@ -74,7 +80,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     @Autowired
     private Environment env;
-
 
     @Override
     @Bean
@@ -96,6 +101,8 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
         metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+        metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
+        metricRegistry.register(PROP_METRIC_REG_JCACHE_STATISTICS, new JCacheGaugeSet());
         if (env.getProperty(PROP_JMX_ENABLED, Boolean.class, false)) {
             log.info("Initializing Metrics JMX reporting");
             JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();

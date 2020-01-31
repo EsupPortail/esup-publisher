@@ -37,6 +37,21 @@ angular.module('publisherApp')
                     };
                 }
             });
+            angular.forEach(newValue.gauges, function (value, key) {
+                if (key.indexOf('jcache.statistics') !== -1) {
+                    // Clean prefix name and gets or puts, etc...
+                    var index = key.lastIndexOf('.');
+                    var readableKey = key.substring('jcache.statistics.'.length, index);
+
+                    // Keep the class name
+                    index = key.lastIndexOf(".");
+                    var newKey = key.substr(0, index);
+                    $scope.cachesStats[newKey] = {
+                        'name': readableKey,
+                        'value': value
+                    };
+                }
+            });
         });
 
         $scope.refresh();

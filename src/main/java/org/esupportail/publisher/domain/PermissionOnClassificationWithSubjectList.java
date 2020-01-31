@@ -26,8 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -44,7 +42,6 @@ import java.util.Set;
 @JsonTypeName("PERMONCTXWSUBJS")
 @Entity
 @DiscriminatorValue("OnContextWithSubjectListFilter")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PermissionOnClassificationWithSubjectList extends
 		PermissionOnContext {
 

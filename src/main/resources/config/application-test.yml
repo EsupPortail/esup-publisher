@@ -67,9 +67,9 @@ metrics:
         prefix: publisher
 
 cache:
-    timeToLiveSeconds: 3600
     ehcache:
-        maxBytesLocalHeap: 16M
+        timeToLiveSeconds: 3600
+        mexEntries: 500
 
 ldap:
     base: dc=esco-centre,dc=fr

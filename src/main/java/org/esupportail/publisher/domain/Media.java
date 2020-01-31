@@ -28,8 +28,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -42,7 +40,6 @@ import org.joda.time.LocalDate;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonTypeName("MEDIA")
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Media extends AbstractItem implements Serializable {
 
     /** */

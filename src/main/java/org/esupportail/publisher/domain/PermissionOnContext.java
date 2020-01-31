@@ -27,8 +27,6 @@ import lombok.ToString;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,7 +41,6 @@ import javax.validation.constraints.NotNull;
 @JsonTypeName("PERMONCTX")
 @Entity
 @DiscriminatorValue("OnContext")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PermissionOnContext extends AbstractPermission {
 
 	/** */

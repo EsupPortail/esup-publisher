@@ -33,8 +33,6 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -47,7 +45,6 @@ import org.joda.time.LocalDate;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonTypeName("RESOURCE")
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Resource extends AbstractItem implements Serializable {
 
     /** */
