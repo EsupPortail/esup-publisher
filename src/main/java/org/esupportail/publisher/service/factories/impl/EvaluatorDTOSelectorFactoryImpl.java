@@ -16,7 +16,6 @@
 package org.esupportail.publisher.service.factories.impl;
 
 import lombok.Getter;
-import org.apache.commons.lang.IllegalClassException;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
@@ -66,14 +65,14 @@ public class EvaluatorDTOSelectorFactoryImpl extends AbstractDTOFactoryImpl<Eval
         for (AEvaluatorDTOFactory<? extends EvaluatorDTO, ? extends AbstractEvaluator> factory : evaluatorFactories) {
             if (factory.isDTOFactoryImpl(dtoObject)) return factory;
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
     }
 
     private AEvaluatorDTOFactory<? extends EvaluatorDTO, ? extends AbstractEvaluator> getFactory(final AbstractEvaluator model) {
         for (AEvaluatorDTOFactory<? extends EvaluatorDTO, ? extends AbstractEvaluator> factory : evaluatorFactories) {
             if (factory.isDTOFactoryImpl(model)) return factory;
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
     }
 
 

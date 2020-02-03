@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +27,6 @@ import com.google.common.io.Files;
 import com.mysema.commons.lang.Pair;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.NullArgumentException;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -173,7 +173,7 @@ public class FileService {
             log.warn("File {} with ContentType {} isn't authorized", file.getName(), detectedType);
             return new Pair<Boolean, MultipartException>(false, new UnsupportedMimeTypeException(detectedType));
         }
-        return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type of an empty file", new NullArgumentException("file")));
+        return new Pair<Boolean, MultipartException>(false, new MultipartException("Unable to read the content type of an empty file", new FileNotFoundException("file")));
     }
 
 }

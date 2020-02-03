@@ -17,7 +17,6 @@ package org.esupportail.publisher.service.factories.impl;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.IllegalClassException;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
@@ -71,7 +70,7 @@ public class ItemDTOSelectorFactoryImpl extends AbstractDTOFactoryImpl<ItemDTO, 
                 return factory;
             }
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
     }
 
     private AItemDTOFactory<? extends ItemDTO, ? extends AbstractItem> getFactory(final AbstractItem model) {
@@ -81,7 +80,7 @@ public class ItemDTOSelectorFactoryImpl extends AbstractDTOFactoryImpl<ItemDTO, 
                 return factory;
             }
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
     }
 
 }

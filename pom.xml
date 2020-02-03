@@ -35,7 +35,6 @@
         <assertj-core.version>1.6.1</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
         <gatling-maven-plugin.version>2.1.2</gatling-maven-plugin.version>
         <gatling.version>2.1.4</gatling.version>
         <hibernate.version>5.4.9.Final</hibernate.version>
@@ -185,9 +184,8 @@
             <version>${commons-io.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
