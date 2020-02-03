@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -25,8 +24,6 @@ import javax.inject.Inject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.portal.ws.client.PortalService;
-import org.esupportail.portal.ws.client.support.uportal.BasicUportalServiceImpl;
 import org.esupportail.publisher.config.bean.GroupDesignerProperties;
 import org.esupportail.publisher.config.bean.GroupRegexProperties;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
@@ -41,19 +38,15 @@ import org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatter;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCO;
 import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCOReplace;
-import org.esupportail.publisher.repository.externals.ws.WSEsupGroupDaoImpl;
-import org.esupportail.publisher.repository.externals.ws.WSExternalGroupDisplayNameFormatter;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.service.ContextService;
 import org.esupportail.publisher.service.GroupService;
 import org.esupportail.publisher.service.GroupServiceEmpty;
-import org.esupportail.publisher.service.GroupServiceWS;
 import org.esupportail.publisher.service.IGroupService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.factories.TreeJSDTOFactory;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -88,8 +81,6 @@ public class GroupConfiguration {
     private static final String PROP_GROUP_DISPLAYNAME_IN_DN = "ldap.groupDNContainsDisplayName";
     private static final String PROP_GROUP_RESOLVE_USERMEMBER = "ldap.groupResolveUserMember";
     private static final String PROP_GROUP_RESOLVE_USERMEMBER_BYUSER = "ldap.groupResolveUserMemberByUserAttributes";
-
-    private static final String PROP_URL = "ws.esup.url";
 
     @Inject
     public LdapContextSource contextSource;
@@ -169,38 +160,6 @@ public class GroupConfiguration {
         }
 
         @Bean
-        @Profile(Constants.SPRING_PROFILE_WS_GROUP)
-        public PortalService portalService() {
-            log.debug("Configuring PortalService");
-
-            final BasicUportalServiceImpl portalService = new BasicUportalServiceImpl();
-            String url = environment.getProperty(PROP_URL);
-
-            if (url == null) {
-                log.error(
-                    "Your WS Portal Service connection configuration is incorrect! The application"
-                        + "cannot start. Please check your properties current, profiles are: {}",
-                    Arrays.toString(environment.getActiveProfiles()));
-
-                throw new ApplicationContextException(
-                    "WS Portal Service is not configured correctly");
-            }
-            portalService.setUrl(url);
-            try {
-                portalService.getRootGroup();
-            } catch (RuntimeException re) {
-                log.error(
-                    "Your WS Portal Service connection configuration is incorrect! The application"
-                        + "cannot start. Please check your properties, current url property is: {}",
-                    url);
-
-                throw new ApplicationContextException(
-                    "WS Portal Service is not configured correctly");
-            }
-            return portalService;
-        }
-
-        @Bean
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
         public IExternalGroupDao ldapExternalGroupDao() {
             log.debug("Configuring IExternalGroupDao with LDAP DAO");
@@ -223,31 +182,11 @@ public class GroupConfiguration {
         }
 
         @Bean
-        @Profile(Constants.SPRING_PROFILE_WS_GROUP)
-        public IExternalGroupDao wsExternalGroupDao() {
-            log.debug("Configuring IExternalGroupDao with WS ESUP DAO");
-            IExternalGroupDisplayNameFormatter formatter = new WSExternalGroupDisplayNameFormatter();
-            return new WSEsupGroupDaoImpl(portalService(), Lists.newArrayList(formatter));
-        }
-
-        @Bean
-        @ConditionalOnMissingClass({"org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl", "org.esupportail.publisher.repository.externals.ws.WSEsupGroupDaoImpl"})
+        @ConditionalOnMissingClass("org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl")
         public IExternalGroupDao emptyExternalGroupDao() {
             log.debug("Configuring emtpy IExternalGroupDao");
             return new EmptyGroupDaoImpl();
         }
-
-        /*@Bean
-        @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
-        public IGroupMemberDesigner ldapGroupMemberDesigner() {
-            return new LdapGroupProfsMemberDesignerImpl(externalGroupHelper());
-        }
-
-        @Bean
-        @ConditionalOnMissingClass({LdapGroupDaoImpl.class,WSEsupGroupDaoImpl.class})
-        public IGroupMemberDesigner emptyGroupMemberDesigner() {
-            return new EmptyGroupMemberDesignerImpl();
-        }*/
     }
 
     @Inject
@@ -272,13 +211,7 @@ public class GroupConfiguration {
     private IExternalGroupDao externalGroupDao;
 
     @Bean
-    @Profile(Constants.SPRING_PROFILE_WS_GROUP)
-    public IGroupService wsGroupService() {
-        return new GroupServiceWS(permissionService,treeJSDTOFactory, userDTOFactory, externalGroupDao, subscriberService, filterRepository, contextService);
-    }
-
-    @Bean
-    @ConditionalOnMissingClass({"org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl", "org.esupportail.publisher.repository.externals.ws.WSEsupGroupDaoImpl"})
+    @ConditionalOnMissingClass("org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl")
     public IGroupService emptyGroupService() {
         return new GroupServiceEmpty();
     }
