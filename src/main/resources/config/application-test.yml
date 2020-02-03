@@ -15,34 +15,35 @@ spring:
         include: ldapgrp
 
     datasource:
-        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://localhost:3306/pub?autoreconnect=true
-        databaseName:
-        serverName:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mariadb://localhost:3306/publisher_test?useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password: root
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
+        hikari:
+            poolName: Hikari
+            auto-commit: false
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
 
     jpa:
-        database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+        database-platform: org.hibernate.dialect.MariaDB10Dialect
         database: MYSQL
-        openInView: false
-        show_sql: false
-        generate-ddl: false
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         properties:
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
             hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
-            hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+            #hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
     mail:
         baseUrl: http://localhost:8080
@@ -69,11 +70,11 @@ metrics:
 cache:
     ehcache:
         timeToLiveSeconds: 3600
-        mexEntries: 500
+        maxEntries: 1000
 
 ldap:
     base: dc=esco-centre,dc=fr
-    urls: ldap://172.16.6.9:389/
+    urls: ldap://127.0.0.1:389/
     userDn: cn=admin,ou=administrateurs,dc=esco-centre,dc=fr
     password: admin
     timeLimit: 20000
@@ -167,6 +168,3 @@ app:
     authorizedServices:
         ipRange: "192.168.57.0/24"
 
-ws:
-    esup:
-        url: https://www.univ.fr/portail/services/UportalService
