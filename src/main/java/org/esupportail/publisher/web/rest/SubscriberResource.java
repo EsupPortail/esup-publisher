@@ -26,10 +26,10 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
-import org.apache.commons.codec.binary.Base64;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ContextKey;
@@ -106,7 +106,7 @@ public class SubscriberResource {
 		log.debug("REST request to save Subscriber : {}", subscriber);
 		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(subscriber.getId());
 		Subscriber subscriberRepo = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
-        
+
 		if (subscriberRepo != null) {
 			return ResponseEntity.badRequest().header("Failure", "The subscriber should not already exist").build();
 		}
@@ -148,7 +148,7 @@ public class SubscriberResource {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		subscriberRepository.save(subscriber);
-		String composedIdURL = new String(Base64.encodeBase64(subscriber.getId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8))) + "/";
+		String composedIdURL = DatatypeConverter.printBase64Binary(subscriber.getId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)) + "/";
 		composedIdURL += subscriber.getId().getSubject().getKeyType().getId() + "/";
 		composedIdURL += subscriber.getId().getSubject().getKeyAttribute() + "/";
 		composedIdURL += subscriber.getId().getContext().getKeyId() + "/";
@@ -245,7 +245,7 @@ public class SubscriberResource {
 			@PathVariable("subject_type") int subjectType, @PathVariable("subject_attribute") String subjectAttr,
 			@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
 			HttpServletResponse response) {
-		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(Base64.decodeBase64(subjectId)), subjectAttr,
+		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(DatatypeConverter.parseBase64Binary(subjectId)), subjectAttr,
             SubjectType.valueOf(subjectType)), new ContextKey(ctxId, ctxType));
 		log.debug("REST request to get SubjectContextKey : {}", id);
 		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(id);
@@ -268,7 +268,7 @@ public class SubscriberResource {
 	public void delete(@PathVariable("subject_id") String subjectId, @PathVariable("subject_type") int subjectType,
 			@PathVariable("subject_attribute") String subjectAttr, @PathVariable("ctx_id") Long ctxId,
 			@PathVariable("ctx_type") ContextType ctxType) {
-		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(Base64.decodeBase64(subjectId)), subjectAttr,
+		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(DatatypeConverter.parseBase64Binary(subjectId)), subjectAttr,
             SubjectType.valueOf(subjectType)), new ContextKey(ctxId, ctxType));
 		log.debug("REST request to delete Subscriber : {}", id);
 		subscriberRepository.deleteById(id);

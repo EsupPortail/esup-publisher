@@ -30,8 +30,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.codec.binary.Base64;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.SubjectContextKey;
@@ -143,8 +143,8 @@ public class SubscriberResourceTest {
                         TestUtil.convertObjectToJsonBytes(subscriber)))
                 .andExpect(status().isCreated())
                 .andExpect(redirectedUrl("/api/subscribers/" +
-                    new String(Base64.encodeBase64(
-                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8))) + "/" +
+                    DatatypeConverter.printBase64Binary(
+                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)) + "/" +
                     subscriber.getSubjectCtxId().getSubject().getKeyType().getId() + "/" +
                     subscriber.getSubjectCtxId().getSubject().getKeyAttribute() + "/" +
                     subscriber.getSubjectCtxId().getContext().getKeyId() + "/" +
@@ -207,8 +207,8 @@ public class SubscriberResourceTest {
 		restSubscriberMockMvc
 				.perform(
                     get("/api/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}",
-                        new String(Base64.encodeBase64(
-                            subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8))),
+                        DatatypeConverter.printBase64Binary(
+                            subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)),
                         subscriber.getSubjectCtxId().getSubject().getKeyType().getId(),
                         subscriber.getSubjectCtxId().getSubject().getKeyAttribute(),
                         subscriber.getSubjectCtxId().getContext().getKeyId(),
@@ -286,8 +286,8 @@ public class SubscriberResourceTest {
         restSubscriberMockMvc
             .perform(
                 get("/api/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}",
-                    new String(Base64.encodeBase64(
-                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8))),
+                    DatatypeConverter.printBase64Binary(
+                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)),
                     subscriber.getSubjectCtxId().getSubject().getKeyType().getId(),
                     subscriber.getSubjectCtxId().getSubject().getKeyAttribute(),
                     subscriber.getSubjectCtxId().getContext().getKeyId(),
@@ -305,8 +305,8 @@ public class SubscriberResourceTest {
         restSubscriberMockMvc
             .perform(
                 delete("/api/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}",
-                    new String(Base64.encodeBase64(
-                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8))),
+                    DatatypeConverter.printBase64Binary(
+                        subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)),
                     subscriber.getSubjectCtxId().getSubject().getKeyType().getId(),
                     subscriber.getSubjectCtxId().getSubject().getKeyAttribute(),
                     subscriber.getSubjectCtxId().getContext().getKeyId(),
