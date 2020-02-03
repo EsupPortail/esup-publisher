@@ -24,9 +24,9 @@ import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.service.evaluators.IEvaluationVisitor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
