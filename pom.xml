@@ -155,20 +155,6 @@
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
             <version>${metrics-spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>metrics-annotation</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>metrics-core</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>metrics-healthchecks</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>com.zaxxer</groupId>-->
@@ -309,6 +295,10 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>

@@ -15,9 +15,6 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.Set;
-import java.util.SortedSet;
-
 import java.time.Duration;
 
 import com.codahale.metrics.MetricRegistry;
@@ -27,17 +24,17 @@ import org.ehcache.jsr107.Eh107Configuration;
 
 import org.hibernate.cache.jcache.ConfigSettings;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
-
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.util.Assert;
 
 @Configuration
@@ -48,9 +45,8 @@ public class CacheConfiguration {
 
     private Environment env;
 
-    @Inject
+    @Autowired(required = false)
     private MetricRegistry metricRegistry;
-
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
@@ -96,7 +92,9 @@ public class CacheConfiguration {
             createCache(cm, org.esupportail.publisher.domain.Subscriber.class.getName());
             createCache(cm, "feed");
             //createCache(cm, org.esupportail.publisher.domain.AbstractClassification.class.getName() + ".books");
-            this.metricRegistry.register("jcache.statistics", new JCacheGaugeSet());
+            if (!env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
+                this.metricRegistry.register("jcache.statistics", new JCacheGaugeSet());
+            }
         };
     }
 
