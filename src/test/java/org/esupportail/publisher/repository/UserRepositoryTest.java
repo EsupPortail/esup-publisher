@@ -22,13 +22,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.User;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +68,7 @@ public class UserRepositoryTest {
 	@Test
 	public void testInserted() {
         long count = repository.count();
-		DateTime d = new DateTime();
+		Instant d = Instant.now();
 		Optional<User> optionalUser = repository.findById(ObjTest.subject1);
 		User u = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
 		log.debug("loaded user :" + u.toString());
@@ -121,7 +121,7 @@ public class UserRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test

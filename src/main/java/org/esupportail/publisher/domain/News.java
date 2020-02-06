@@ -30,8 +30,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -81,7 +81,7 @@ public class News extends AbstractItem implements Serializable {
      */
     public News(final String title, final String enclosure, final String body,
                 final LocalDate startDate, final LocalDate endDate,
-                final DateTime validatedDate, final User validatedBy,
+                final Instant validatedDate, final User validatedBy,
                 final ItemStatus status, final String summary, final boolean rssAllowed,
                 final boolean highlight, final Organization organization, final Redactor redactor) {
         super(title, enclosure, startDate, endDate, validatedDate, validatedBy,

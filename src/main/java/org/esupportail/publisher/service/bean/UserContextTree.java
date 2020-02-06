@@ -18,6 +18,8 @@
  */
 package org.esupportail.publisher.service.bean;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,8 +42,6 @@ import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
-import org.joda.time.Duration;
-import org.joda.time.Instant;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -78,7 +78,7 @@ public class UserContextTree {
      * More several reload are made when the user connect to to several async call
      * requesting user permissions and contexts
      * */
-    private Duration duration = new Duration(10000);
+    private Duration duration = Duration.ofSeconds(10000);
     private volatile Instant expiringInstant;
     private volatile boolean loadingInProgress = false;
 
@@ -222,7 +222,7 @@ public class UserContextTree {
         final ContextKey ctx = new ContextKey(itemId, ContextType.ITEM);
         if (userTreeLoaded && userId != null) {
             UserContextInfos infos = contexts.get(ctx);
-            if (infos != null && userId.equals(infos.getOwner())) return true;
+            return infos != null && userId.equals(infos.getOwner());
         } else {
             log.warn("Call isItemOwner - User Tree is not loaded or userId null !");
         }
@@ -324,7 +324,7 @@ public class UserContextTree {
                     ctxs.add(ctx.getKeyId());
                 }
             }
-            if (!ctxs.isEmpty()) return true;
+            return !ctxs.isEmpty();
         } else {
             log.warn("Call hasChildsOnContext - User Tree is not loaded or context is unknown !");
         }
@@ -366,7 +366,7 @@ public class UserContextTree {
     }
 
     public boolean loadingCanBeDone() {
-        return (this.expiringInstant == null || this.expiringInstant.isBeforeNow()) && !this.loadingInProgress;
+        return (this.expiringInstant == null || this.expiringInstant.isBefore(Instant.now())) && !this.loadingInProgress;
     }
 
     public void processingLoading() {
@@ -380,7 +380,7 @@ public class UserContextTree {
     public void notifyEndLoading() {
         userTreeLoaded = true;
         // we set this expiration time to avoid to make several reload at the same time
-        expiringInstant = new Instant().plus(duration);
+        expiringInstant = Instant.now().plus(duration);
         loadingInProgress = false;
         log.debug("============ >>>>>>> notifyEndLoading");
     }

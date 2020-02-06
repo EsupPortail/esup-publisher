@@ -17,7 +17,7 @@ package org.esupportail.publisher.repository;
 
 import org.esupportail.publisher.config.audit.AuditEventConverter;
 import org.esupportail.publisher.domain.PersistentAuditEvent;
-import org.joda.time.LocalDateTime;
+import java.time.Instant;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +59,7 @@ public class CustomAuditEventRepository {
                     persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal(principal);
                 } else {
                     persistentAuditEvents =
-                            persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfter(principal, new LocalDateTime(after));
+                            persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfter(principal, after);
                 }
                 return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
             }
@@ -74,7 +72,7 @@ public class CustomAuditEventRepository {
                     PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
                     persistentAuditEvent.setPrincipal(event.getPrincipal());
                     persistentAuditEvent.setAuditEventType(event.getType());
-                    persistentAuditEvent.setAuditEventDate(new LocalDateTime(new org.joda.time.Instant(event.getTimestamp().toEpochMilli())));
+                    persistentAuditEvent.setAuditEventDate(event.getTimestamp());
                     persistentAuditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
 
                     persistenceAuditEventRepository.save(persistentAuditEvent);

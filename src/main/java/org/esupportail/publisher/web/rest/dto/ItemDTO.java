@@ -19,21 +19,15 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.esupportail.publisher.domain.util.CustomDateTimeDeserializer;
-import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
-import org.esupportail.publisher.domain.util.CustomLocalDateSerializer;
-import org.esupportail.publisher.domain.util.ISO8601LocalDateDeserializer;
 import org.hibernate.validator.constraints.ScriptAssert;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDate;
 
 @ToString
 @ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate, _this.redactor.nbDaysMaxDuration)"
@@ -54,27 +48,19 @@ public abstract class ItemDTO extends PermissibleDTO {
     @Getter
     @Setter
     @NotNull
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     private LocalDate startDate;
 
     @Getter
     @Setter
     @Future
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     private LocalDate endDate;
 
     @Getter
     @Setter
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    private DateTime validatedDate;
+    private Instant validatedDate;
 
     @Getter
     @Setter
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     private SubjectDTO validatedBy;
 
     @NotNull
@@ -126,9 +112,9 @@ public abstract class ItemDTO extends PermissibleDTO {
      */
     public ItemDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
             @NotNull final LocalDate startDate, final LocalDate endDate,
-            final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
+            final Instant validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
-            @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
+            @NotNull final RedactorDTO redactor, @NotNull final Instant creationDate, final Instant lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy) {
         super(modelId, creationDate, lastUpdateDate, createdBy, lastUpdateBy, ContextType.ITEM);
         this.title = title;

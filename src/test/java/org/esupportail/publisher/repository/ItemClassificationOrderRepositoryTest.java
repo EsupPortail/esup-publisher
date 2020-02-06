@@ -159,7 +159,7 @@ public class ItemClassificationOrderRepositoryTest {
 		assertNotNull(ico3.getItemClassificationId().getAbstractItem());
 		log.info("After insert : " + ico3.toString());
 		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
-		ItemClassificationOrder ico4 = optionalItemClassif == null || !optionalItemClassif.isPresent()? null : optionalItemClassif.get();
+		ItemClassificationOrder ico4 = optionalItemClassif.orElse(null);
 		log.info("After select : " + ico4.toString());
 		assertNotNull(ico4);
 		assertEquals(ico3, ico4);
@@ -177,18 +177,18 @@ public class ItemClassificationOrderRepositoryTest {
 		ico3 = repository.getOne(ico4.getItemClassificationId());
 		assertNotNull(ico3);
 		log.info("After select : " + ico3.toString());
-		assertTrue(repository.count() == 4);
+        assertEquals(4, repository.count());
 
 		List<ItemClassificationOrder> results = repository.findAll();
 		assertThat(results.size(), is(4));
 		assertThat(results, hasItem(ico4));
 
 		repository.deleteById(ico4.getItemClassificationId());
-		assertTrue(repository.findAll().size() == 3);
+        assertEquals(3, repository.findAll().size());
 		assertFalse(repository.existsById(ico4.getItemClassificationId()));
-		
+
 		Optional<ItemClassificationOrder> optionalItem = repository.findById(new ItemClassificationKey());
-		ico4 =optionalItem == null || !optionalItem.isPresent()? null : optionalItem.get();
+		ico4 = optionalItem.orElse(null);
 		assertNull(ico4);
 
 	}
@@ -204,7 +204,7 @@ public class ItemClassificationOrderRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.jpa.repository.JpaRepository#save(java.lang.Iterable)}
+	 * {@link org.springframework.data.jpa.repository.JpaRepository#saveAll(java.lang.Iterable)}
 	 * .
 	 */
 	@Test
@@ -216,7 +216,7 @@ public class ItemClassificationOrderRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
@@ -232,7 +232,7 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+        assertEquals(2, repository.count());
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == 1);
+        assertEquals(1, repository.count());
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+        assertEquals(0, repository.count());
 	}
 
 	@Test
@@ -438,17 +438,17 @@ public class ItemClassificationOrderRepositoryTest {
 		News news3 = ObjTest.newNews(INDICE_3, org1, redactor2);
 		News news4 = ObjTest.newNews(INDICE_4, org1, redactor2);
 
-		news1.setStartDate(ObjTest.d4.toLocalDate());
-		news1.setEndDate(ObjTest.d5.toLocalDate());
+		news1.setStartDate(ObjTest.instantToLocalDate(ObjTest.d4));
+		news1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d5));
 		news1 = itemRepo.saveAndFlush(news1);
-		news2.setStartDate(ObjTest.d2.toLocalDate());
-		news2.setEndDate(ObjTest.d3.toLocalDate());
+		news2.setStartDate(ObjTest.instantToLocalDate(ObjTest.d2));
+		news2.setEndDate(ObjTest.instantToLocalDate(ObjTest.d3));
 		news2 = itemRepo.saveAndFlush(news2);
-		news3.setStartDate(ObjTest.d1.toLocalDate());
-		news3.setEndDate(ObjTest.d2.toLocalDate());
+		news3.setStartDate(ObjTest.instantToLocalDate(ObjTest.d1));
+		news3.setEndDate(ObjTest.instantToLocalDate(ObjTest.d2));
 		news3 = itemRepo.saveAndFlush(news3);
-		news4.setStartDate(ObjTest.d5.toLocalDate());
-		news4.setEndDate(ObjTest.d6.toLocalDate());
+		news4.setStartDate(ObjTest.instantToLocalDate(ObjTest.d5));
+		news4.setEndDate(ObjTest.instantToLocalDate(ObjTest.d6));
 		news4 = itemRepo.saveAndFlush(news4);
 
 		ItemClassificationOrder icoa = repository

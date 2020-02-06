@@ -21,7 +21,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -70,7 +70,7 @@ public class OrganizationDTO extends PermissibleDTO implements IAbstractDTO<Long
      * @param displayOrder
      * @param allowNotifications
      */
-    public OrganizationDTO(@NotNull final Long modelId, @NonNull final DateTime creationDate, final DateTime lastUpdateDate,
+    public OrganizationDTO(@NotNull final Long modelId, @NonNull final Instant creationDate, final Instant lastUpdateDate,
             @NonNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy,
             @NonNull final String name, final String displayName,
             @NonNull final String description,final int displayOrder, final boolean allowNotifications) {

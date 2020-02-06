@@ -136,7 +136,7 @@ public class UserService {
 	// */
 	// @Scheduled(cron = "0 0 0 * * ?")
 	// public void removeOldPersistentTokens() {
-	// LocalDate now = new LocalDate();
+	// Instant now = Instant.now();
 	// List<PersistentToken> tokens = persistentTokenRepository
 	// .findByTokenDateBefore(now.minusMonths(1));
 	// for (PersistentToken token : tokens) {
@@ -156,7 +156,7 @@ public class UserService {
 	 */
 	// @Scheduled(cron = "0 0 1 * * ?")
 	// public void removeNotActivatedUsers() {
-	// DateTime now = new DateTime();
+	// Instant now = Instant.now();
 	// List<User> users = userRepository
 	// .findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
 	// for (User user : users) {
@@ -204,7 +204,7 @@ public class UserService {
 			if (rootCtx != null) {
 				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.LDAP));
-				Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
+				Filter filter = optionalFilter.orElse(null);
 				if (filter != null) {
 					return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(filter.getPattern(), search),
 							false);
@@ -248,7 +248,7 @@ public class UserService {
 					if (rootCtx != null) {
 						Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 								FilterType.LDAP));
-						Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
+						Filter filter = optionalFilter.orElse(null);
 						if (filter != null) {
 							return userDTOFactory.asDTOList(
 									externalUserDao.getUsersWithFilter(filter.getPattern(), search), false);

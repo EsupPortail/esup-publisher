@@ -32,7 +32,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,17 +39,12 @@ import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.esupportail.publisher.domain.util.CustomDateTimeDeserializer;
-import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
-import org.esupportail.publisher.domain.util.CustomLocalDateSerializer;
-import org.esupportail.publisher.domain.util.ISO8601LocalDateDeserializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.ScriptAssert;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 24 Juin 2014
@@ -90,16 +84,10 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
     @Column(length = CstPropertiesLength.URL)
     private String enclosure;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     @Column(name = "end_date")
     private LocalDate endDate;
 
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
@@ -107,11 +95,8 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
     @JoinColumn(name = "validated_by")
     private User validatedBy;
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "validated_date")
-    private DateTime validatedDate;
+    private Instant validatedDate;
 
     /** This field corresponds to the database column status. */
     @NotNull
@@ -172,7 +157,7 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
      */
     public AbstractItem(final String title, final String enclosure,
                         final LocalDate startDate, final LocalDate endDate,
-                        final DateTime validatedDate, final User validatedBy,
+                        final Instant validatedDate, final User validatedBy,
                         final ItemStatus status, final String summary, final boolean rssAllowed,
                         final boolean highlight, final Organization organization, final Redactor redactor) {
         super();

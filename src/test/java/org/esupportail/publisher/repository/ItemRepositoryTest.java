@@ -26,6 +26,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +50,6 @@ import org.esupportail.publisher.service.factories.ItemDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.ItemDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -120,22 +122,22 @@ public class ItemRepositoryTest {
         redactorOptionalEndDate = redactorRepo.saveAndFlush(redactorOptionalEndDate);
 
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-				ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(), ObjTest.d2,
+            ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.d2,
 				user2, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		News m2 = new News("Titre " + INDICE_2, "enclosure" + INDICE_2, "body"
-				+ INDICE_2, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
+				+ INDICE_2, ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d3),
 				ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_2,  true,
             true, org2, redactor2);
 		repository.saveAndFlush(m2);
 		Resource m3 = new Resource("Titre " + INDICE_3, "enclosure" + INDICE_3,
-				"ressourceUrl" + INDICE_3, ObjTest.d1.toLocalDate(),
-				ObjTest.d3.toLocalDate(), ObjTest.d2, user2,
+				"ressourceUrl" + INDICE_3, ObjTest.instantToLocalDate(ObjTest.d1),
+				ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.d2, user2,
 				DEFAULT_STATUS, "summary" + INDICE_3,  true, true, org1, redactor2);
 		repository.saveAndFlush(m3);
         Flash m4 = new Flash("Titre " + INDICE_4, "enclosure" + INDICE_4, "body"
-            + INDICE_4, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
+            + INDICE_4, ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d3),
             ObjTest.d2, user2, DEFAULT_STATUS, "summary" + INDICE_4, true,
             true, org2, redactor2);
         repository.saveAndFlush(m4);
@@ -171,7 +173,7 @@ public class ItemRepositoryTest {
 	@Test
 	public void testDateOK() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
+				ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
@@ -188,7 +190,7 @@ public class ItemRepositoryTest {
     @Test
     public void testOptionalDateOK2() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
+            ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
@@ -196,7 +198,7 @@ public class ItemRepositoryTest {
     @Test
     public void testOptionalDateOK3() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
@@ -204,7 +206,7 @@ public class ItemRepositoryTest {
     @Test (expected = javax.validation.ValidationException.class)
     public void testOptionalDateOK4() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            null, ObjTest.d2.toLocalDate(), ObjTest.d3,
+            null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
@@ -221,7 +223,7 @@ public class ItemRepositoryTest {
     @Test(expected = javax.validation.ValidationException.class)
     public void testNotOptionalDateKO2() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            null, ObjTest.d2.toLocalDate(), ObjTest.d3,
+            null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
         repository.saveAndFlush(m1);
@@ -229,7 +231,7 @@ public class ItemRepositoryTest {
     @Test(expected = javax.validation.ValidationException.class)
     public void testNotOptionalDateKO3() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
         repository.saveAndFlush(m1);
@@ -237,7 +239,7 @@ public class ItemRepositoryTest {
     @Test(expected = javax.validation.ValidationException.class)
     public void testMaxEndDateKO() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            null, ObjTest.d2.toLocalDate(), ObjTest.d2.plusDays(nbDaysMaxDuration+1),
+            null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d2.plus(nbDaysMaxDuration+1, ChronoUnit.DAYS),
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
         repository.saveAndFlush(m1);
@@ -246,39 +248,39 @@ public class ItemRepositoryTest {
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateOKUpdateKO() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-				ObjTest.d1.toLocalDate(), ObjTest.d2.toLocalDate(), ObjTest.d3,
+				ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
-		m1.setEndDate(ObjTest.d1.toLocalDate());
+		m1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d1));
 		repository.saveAndFlush(m1);
 	}
 
     @Test(expected = javax.validation.ValidationException.class)
     public void testDateOptionalOKUpdateKO() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
-        m1.setEndDate(ObjTest.d1.toLocalDate());
+        m1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d1));
         repository.saveAndFlush(m1);
     }
     @Test
     public void testDateOptionalOKUpdateOK() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), null, ObjTest.d3,
+            ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
-        m1.setEndDate(ObjTest.d2.toLocalDate());
+        m1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d2));
         repository.saveAndFlush(m1);
     }
 
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateKOLT() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-				ObjTest.d3.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+				ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
@@ -286,7 +288,7 @@ public class ItemRepositoryTest {
     @Test(expected = javax.validation.ValidationException.class)
     public void testDateOptionalKOLT() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d3.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+            ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
@@ -295,7 +297,7 @@ public class ItemRepositoryTest {
 	@Test(expected = javax.validation.ValidationException.class)
 	public void testDateKOEQ() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-				ObjTest.d1.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+				ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
 		repository.saveAndFlush(m1);
@@ -303,7 +305,7 @@ public class ItemRepositoryTest {
     @Test(expected = javax.validation.ValidationException.class)
     public void testDateOptionalKOEQ() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
-            ObjTest.d1.toLocalDate(), ObjTest.d1.toLocalDate(), ObjTest.d1,
+            ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
@@ -312,7 +314,7 @@ public class ItemRepositoryTest {
 	@Test
 	public void testInsert() {
 		News n1 = new News("Titre " + INDICE_A, "enclosure" + INDICE_A, "body"
-				+ INDICE_A, ObjTest.d1.toLocalDate(), ObjTest.d3.toLocalDate(),
+				+ INDICE_A, ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d3),
 				ObjTest.d2, user1, ItemStatus.DRAFT, "summary"
 						+ INDICE_A,  true, true, org2, redactor2);
 
@@ -320,15 +322,15 @@ public class ItemRepositoryTest {
 		repository.save(n1);
 		assertNotNull(n1.getId());
 		log.info("After insert : " + n1.toString());
-		
+
 		Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2= (News) optionalItem.orElse(null);
 		log.info("After select : " + n2.toString());
 		assertNotNull(n2);
 		assertEquals(n1, n2);
 
 		n2.setBody("UPDATE BODY");
-		n2.setEndDate(ObjTest.d3.toLocalDate());
+		n2.setEndDate(ObjTest.instantToLocalDate(ObjTest.d3));
 		n2.setStatus(DEFAULT_STATUS);
 		repository.save(n2);
 		log.info("After update : " + n2.toString());
@@ -336,7 +338,7 @@ public class ItemRepositoryTest {
 		n2 = (News) repository.getOne(n2.getId());
 		assertNotNull(n2);
 		log.info("After select : " + n2.toString());
-		assertTrue(repository.count() == 5);
+        assertEquals(5, repository.count());
 
 		List<AbstractItem> result = repository.findAll();
 		assertThat(result.size(), is(5));
@@ -364,11 +366,11 @@ public class ItemRepositoryTest {
 
         repository.archiveExpiredPublished();
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2= (News) optionalItem.orElse(null);
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
-        assertTrue(ItemStatus.ARCHIVED.equals(n2.getStatus()));
+        assertEquals(ItemStatus.ARCHIVED, n2.getStatus());
     }
 
     @Test
@@ -383,10 +385,10 @@ public class ItemRepositoryTest {
 
         repository.archiveExpiredPublished();
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2= (News) optionalItem.orElse(null);
         assertNotNull(n2);
 
-        assertTrue(n1.equals(n2));
+        assertEquals(n1, n2);
     }
 
     @Test
@@ -402,11 +404,11 @@ public class ItemRepositoryTest {
         repository.publishScheduled();
 
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2= (News) optionalItem.orElse(null);
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
-        assertTrue(ItemStatus.PUBLISHED.equals(n2.getStatus()));
+        assertEquals(ItemStatus.PUBLISHED, n2.getStatus());
     }
 
     @Test
@@ -422,11 +424,11 @@ public class ItemRepositoryTest {
         repository.publishScheduled();
 
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2=optionalItem == null || !optionalItem.isPresent()? null : (News) optionalItem.get();
+		News n2= (News) optionalItem.orElse(null);
         assertNotNull(n2);
         assertNotNull(n2.getStatus());
 
-        assertTrue(ItemStatus.PUBLISHED.equals(n2.getStatus()));
+        assertEquals(ItemStatus.PUBLISHED, n2.getStatus());
     }
 
 	/**
@@ -440,7 +442,7 @@ public class ItemRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)} (java.io.Serializable)}
 	 * .
 	 */
 	@Test
@@ -455,7 +457,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 4);
+        assertEquals(4, repository.count());
 	}
 
 	/**
@@ -467,7 +469,7 @@ public class ItemRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == count - 1);
+        assertEquals(repository.count(), count - 1);
 	}
 
 	/**
@@ -477,7 +479,7 @@ public class ItemRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+        assertEquals(0, repository.count());
 	}
 
 }

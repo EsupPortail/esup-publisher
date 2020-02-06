@@ -26,8 +26,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  *
@@ -70,9 +70,9 @@ public class ResourceDTO extends ItemDTO implements Serializable {
      */
     public ResourceDTO(@NotNull final Long modelId, @NotNull final String title, final String enclosure,
             @NotNull final String ressourceUrl, final LocalDate startDate, final LocalDate endDate,
-            final DateTime validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
+            final Instant validatedDate, final SubjectDTO validatedBy, @NotNull final ItemStatus status,
             @NotNull final String summary, final boolean rssAllowed, final boolean highlight, @NotNull final OrganizationDTO organization,
-            @NotNull final RedactorDTO redactor, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
+            @NotNull final RedactorDTO redactor, @NotNull final Instant creationDate, final Instant lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy) {
         super(modelId, title, enclosure, startDate, endDate, validatedDate,
                 validatedBy, status, summary, rssAllowed, highlight, organization, redactor,

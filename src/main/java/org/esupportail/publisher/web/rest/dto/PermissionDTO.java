@@ -25,7 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.web.rest.dto.evaluators.EvaluatorDTO;
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -45,7 +45,7 @@ public abstract class PermissionDTO extends AuditableDTO implements IAbstractDTO
     @Valid
     private EvaluatorDTO evaluator;
 
-    public PermissionDTO(@NotNull final Long modelId, final DateTime creationDate, final DateTime lastUpdateDate,
+    public PermissionDTO(@NotNull final Long modelId, final Instant creationDate, final Instant lastUpdateDate,
                                       @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy,
                                       @NotNull final ContextKeyDTO context, @NotNull final EvaluatorDTO evaluator) {
         super(modelId, creationDate, lastUpdateDate, createdBy, lastUpdateBy);

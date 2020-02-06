@@ -18,6 +18,7 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
+import java.time.LocalDate;
 import java.util.EnumSet;
 
 import org.esupportail.publisher.domain.AbstractClassification;
@@ -33,7 +34,6 @@ import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.joda.time.LocalDate;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -228,7 +228,7 @@ public final class ItemPredicates {
     }
 
     private static Predicate itemsEndDateOlderThanNMonth(final int nmonth) {
-        return qItem.endDate.isNotNull().and(qItem.endDate.before(new LocalDate().minusMonths(nmonth)));
+        return qItem.endDate.isNotNull().and(qItem.endDate.before(LocalDate.now().minusMonths(nmonth)));
     }
 
     public static Predicate itemsOwnedOfOrganizationWithoutClassif(final UserDTO user, final long orgId) {

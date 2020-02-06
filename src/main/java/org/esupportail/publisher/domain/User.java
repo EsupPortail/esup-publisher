@@ -16,21 +16,15 @@
 package org.esupportail.publisher.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.esupportail.publisher.domain.util.CustomDateTimeDeserializer;
-import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 import javax.validation.constraints.Email;
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -41,6 +35,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * A user.
@@ -89,18 +84,12 @@ public class User extends AbstractEntity<SubjectKey> implements Serializable, Su
 
     @CreatedDate
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "created_date", nullable = false)
-    private DateTime createdDate = DateTime.now();
+    private Instant createdDate = Instant.now();
 
     @LastModifiedDate
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "last_modified_date")
-    private DateTime lastModifiedDate = DateTime.now();
+    private Instant lastModifiedDate = Instant.now();
 
     // @Size(min = 0, max = 20)
     // @Column(name = "activation_key", length = 20)

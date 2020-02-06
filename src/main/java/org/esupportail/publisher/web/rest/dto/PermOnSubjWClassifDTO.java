@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.esupportail.publisher.web.rest.dto.evaluators.EvaluatorDTO;
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -49,8 +49,8 @@ public class PermOnSubjWClassifDTO extends PermOnSubjDTO implements Serializable
      * @param rolesOnSubjects
      * @param authorizedContexts
      */
-    public PermOnSubjWClassifDTO(@NotNull final Long modelId, final DateTime creationDate,
-            final DateTime lastUpdateDate, @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy,
+    public PermOnSubjWClassifDTO(@NotNull final Long modelId, final Instant creationDate,
+            final Instant lastUpdateDate, @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy,
             @NotNull final ContextKeyDTO context, @NotNull final EvaluatorDTO evaluator,
             @NotNull @Size(min=1) final Set<SubjectPermKeyDTO> rolesOnSubjects,
             final Set<ContextKeyDTO> authorizedContexts) {

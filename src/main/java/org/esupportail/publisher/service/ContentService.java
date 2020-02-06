@@ -17,6 +17,7 @@ package org.esupportail.publisher.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,6 @@ import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.FilterType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -76,8 +76,7 @@ import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -141,7 +140,7 @@ public class ContentService {
 
 	public ResponseEntity<?> saveContent(final ContentDTO content) throws URISyntaxException {
 		Optional<Redactor> optionalRedactor = redactorRepository.findById(content.getItem().getRedactor().getId());
-		Redactor redactor = optionalRedactor == null || !optionalRedactor.isPresent() ? null : optionalRedactor.get();
+		Redactor redactor = optionalRedactor.orElse(null);
 		if (redactor == null) {
 			log.error("The redactor id wasn't passed !");
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -187,9 +186,9 @@ public class ContentService {
 		// filter authorized classifs and check constraints
 		for (ContextKey classif : content.getClassifications()) {
 			Optional<AbstractClassification> optionalClassif = classificationRepository.findById(classif.getKeyId());
-			AbstractClassification classification = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
+			AbstractClassification classification = optionalClassif.orElse(null);
 			log.debug("entering filtering : {}", classification);
-			if (permissionService.canCreateInCtx(authentication, classif)) {
+			if (classification != null && permissionService.canCreateInCtx(authentication, classif)) {
 				log.debug("==> can create = true");
 				Pair<PermissionType, PermissionDTO> classifPerms = permissionService.getPermsOfUserInContext(
 						authentication, classif);
@@ -205,7 +204,7 @@ public class ContentService {
 					lowerClassifPerm = classifPerms;
 				}
 				//publishers.add(classification.getPublisher());
-				if (classification.getPublisher().getPermissionType() != null) {
+				if (classification.getPublisher() != null && classification.getPublisher().getPermissionType() != null) {
 					contextPermClass = classification.getPublisher().getPermissionType();
 				}
 				if (isValidatedLevelLink(classification)) {
@@ -256,7 +255,7 @@ public class ContentService {
 							item.setStatus(ItemStatus.SCHEDULED);
 						}
 						item.setValidatedBy(SecurityUtils.getCurrentUser());
-						item.setValidatedDate(DateTime.now());
+						item.setValidatedDate(Instant.now());
 					} else {
 						item.setStatus(ItemStatus.PENDING);
 					}
@@ -343,7 +342,7 @@ public class ContentService {
 					item.setStatus(ItemStatus.SCHEDULED);
 				}
 				item.setValidatedBy(SecurityUtils.getCurrentUser());
-				item.setValidatedDate(DateTime.now());
+				item.setValidatedDate(Instant.now());
 			} else {
 				item.setStatus(ItemStatus.PENDING);
 				item.setValidatedBy(null);
@@ -414,24 +413,21 @@ public class ContentService {
 		if (PermissionType.CONTRIBUTOR.getMask() < permType.getMask()) {
 			if (validation) {
 				item.setValidatedBy(SecurityUtils.getCurrentUser());
-				item.setValidatedDate(DateTime.now());
+				item.setValidatedDate(Instant.now());
 				if (item.getStartDate().isAfter(LocalDate.now())) {
 					item.setStatus(ItemStatus.SCHEDULED);
 				} else {
 					item.setStatus(ItemStatus.PUBLISHED);
 				}
-				if (item.getEndDate() != null && item.getEndDate().isBefore(LocalDate.now())) {
-					item.setStatus(ItemStatus.DRAFT);
-				}
-			} else {
+            } else {
 				item.setValidatedBy(null);
 				item.setValidatedDate(null);
 				item.setStatus(ItemStatus.PENDING);
-				if (item.getEndDate() != null && item.getEndDate().isBefore(LocalDate.now())) {
-					item.setStatus(ItemStatus.DRAFT);
-				}
-			}
-			itemRepository.save(item);
+            }
+            if (item.getEndDate() != null && item.getEndDate().isBefore(LocalDate.now())) {
+                item.setStatus(ItemStatus.DRAFT);
+            }
+            itemRepository.save(item);
 			return ResponseEntity.ok(new ValueResource(item.getStatus()));
 		}
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -519,14 +515,14 @@ public class ContentService {
 
 	private Set<SubscriberFormDTO> filterSubcribersOnDefault(final Set<SubscriberFormDTO> targets,
 			final ContextKeyDTO ctx) {
-		Assert.isTrue(ContextType.ORGANIZATION.equals(ctx.getKeyType()));
+		Assert.isTrue(ContextType.ORGANIZATION.equals(ctx.getKeyType()), "ContextType should be Organization");
 		Set<SubscriberFormDTO> filteredSubjects = Sets.newHashSet();
 		Optional<Filter> optionalFilterGroup = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
 				FilterType.GROUP));
-		Filter filterGroup = optionalFilterGroup == null || !optionalFilterGroup.isPresent() ? null : optionalFilterGroup.get();
+		Filter filterGroup = optionalFilterGroup.orElse(null);
 		Optional<Filter> optionalFilterUser = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(ctx.getKeyId(),
 				FilterType.LDAP));
-		Filter filterUser = optionalFilterUser == null || !optionalFilterUser.isPresent() ? null : optionalFilterUser.get();
+		Filter filterUser = optionalFilterUser.orElse(null);
 		for (SubscriberFormDTO subscriberFormDTO : targets) {
 			switch (subscriberFormDTO.getSubject().getModelId().getKeyType()) {
 			case GROUP:
@@ -555,7 +551,7 @@ public class ContentService {
 	}
 
 	private void updateLinkedFilesToItem(final AbstractItem item, final Set<LinkedFileItemDTO> filesLinked) {
-		Assert.notNull(item.getId());
+		Assert.notNull(item.getId(), "Item id is null");
 		Set<LinkedFileItem> old = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemId(item.getId()));
 		Set<LinkedFileItem> oldToRemove = Sets.newHashSet();
 		Set<String> filesPath = Sets.newHashSet();
@@ -637,9 +633,8 @@ public class ContentService {
 
 	public void deleteContent(Long id) {
 		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
-		AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
-		fileService.deleteInternalResource(item.getEnclosure());
-		final Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates
+        optionalAbstractItem.ifPresent(item -> fileService.deleteInternalResource(item.getEnclosure()));
+        final Iterable<Subscriber> subscribersToDel = subscriberRepository.findAll(SubscriberPredicates
 				.onCtx(new ContextKey(id, ContextType.ITEM)));
 		subscriberRepository.deleteAll(subscribersToDel);
 		final Iterable<ItemClassificationOrder> classificationsLinksToDel = itemClassificationOrderRepository

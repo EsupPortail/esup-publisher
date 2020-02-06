@@ -49,28 +49,28 @@ import com.querydsl.core.types.Predicate;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class GroupServiceTest {
-	
+
 	@Mock
 	private IExternalGroupDao externalGroupDao;
-	
+
 	@Mock
 	private UserDTOFactory userDTOFactory;
-	
+
 	@Mock
 	private TreeJSDTOFactory treeJSDTOFactory;
-	
+
 	@Mock
 	private IPermissionService permissionService;
-	
+
 	@Mock
 	private ContextService contextService;
-	
+
 	@Mock
 	private FilterRepository filterRepository;
-	
+
 	@InjectMocks
 	private GroupService groupService;
-	
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
@@ -89,20 +89,20 @@ public class GroupServiceTest {
 		externalUserList.add((IExternalUser)externalUser);
 		result.add(user1);
 		result.add(user2);
-		
+
 		// GIVEN SERVICES
 		when(externalGroupDao.getDirectUserMembers(idCalled)).thenReturn(externalUserList);
 		when(userDTOFactory.asDTOList(externalUserList, false)).thenReturn(result);
-		
+
 		// WHEN
 		final List<UserDTO> userList = groupService.getUserMembers(idCalled);
-		
+
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
 		assertThat(userList.size()).isEqualTo(2);
 	}
-	
+
 	@Test
 	public void getUserMembers_shouldBeEmpty_becauseUsersIsEmpty() {
 		// GIVEN
@@ -112,18 +112,18 @@ public class GroupServiceTest {
 		UserDTO user2 = new UserDTO("25", "", true, true);
 		result.add(user1);
 		result.add(user2);
-		
+
 		// GIVEN SERVICES
 		when(externalGroupDao.getDirectUserMembers(idCalled)).thenReturn(Mockito.anyList());
-		
+
 		// WHEN
 		final List<UserDTO> userList = groupService.getUserMembers(idCalled);
-		
+
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
 		assertThat(userList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserMembers_shouldBeEmpty_becauseUsersIsNull() {
 		// GIVEN
@@ -133,50 +133,50 @@ public class GroupServiceTest {
 		UserDTO user2 = new UserDTO("25", "", true, true);
 		result.add(user1);
 		result.add(user2);
-		
+
 		// GIVEN SERVICES
 		when(externalGroupDao.getDirectUserMembers(idCalled)).thenReturn(null);
-		
+
 		// WHEN
 		final List<UserDTO> userList = groupService.getUserMembers(idCalled);
-		
+
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
 		assertThat(userList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getGroupMembers_shoudlBeEmpty_becauseGroupsIsNull() {
 		// GIVEN
 		String idCalled = "15";
-		
+
 		//GIVEN SERVICE
 		when(externalGroupDao.getDirectGroupMembers(idCalled, true)).thenReturn(null);
-		
+
 		//WHEN
 		final List<TreeJS> treeList = groupService.getGroupMembers(idCalled);
-		
+
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		assertThat(treeList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getGroupMembers_shoudlBeEmpty_becauseGroupsIsEmpty() {
 		// GIVEN
 		String idCalled = "15";
-		
+
 		//GIVEN SERVICE
 		when(externalGroupDao.getDirectGroupMembers(idCalled, true)).thenReturn(new ArrayList<IExternalGroup>());
-		
+
 		//WHEN
 		final List<TreeJS> treeList = groupService.getGroupMembers(idCalled);
-		
+
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		assertThat(treeList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getGroupMembers_shouldBeReturn2Group() {
 		// GIVEN
@@ -188,7 +188,7 @@ public class GroupServiceTest {
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		externalGroupList.add((IExternalGroup) externalGroup1);
 		externalGroupList.add((IExternalGroup) externalGroup2);
-		
+
 		List<TreeJS> treeList = new ArrayList<>();
 		TreeJS tree1 = new TreeJS();
 		tree1.setId(externalGroup1.getId());
@@ -196,20 +196,20 @@ public class GroupServiceTest {
 		tree2.setId(externalGroup2.getId());
 		treeList.add(tree1);
 		treeList.add(tree2);
-		
+
 		//GIVEN SERVICE
 		when(externalGroupDao.getDirectGroupMembers(idCalled, true)).thenReturn(externalGroupList);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeList);
-		
+
 		//WHEN
 		final List<TreeJS> result = groupService.getGroupMembers(idCalled);
-		
+
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
 		assertThat(result.size()).isEqualTo(2);
 	}
-	
+
 	@Test
 	public void getGroupMembers_shouldBeEmpty_becauseMembersHasNoMembers() {
 		// GIVEN
@@ -227,58 +227,58 @@ public class GroupServiceTest {
 		externalGroupList.add((IExternalGroup) externalGroup2);
 
 		List<TreeJS> treeList = new ArrayList<>();
-		
+
 		//GIVEN SERVICE
 		when(externalGroupDao.getDirectGroupMembers(idCalled, true)).thenReturn(externalGroupList);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeList);
-		
+
 		//WHEN
 		final List<TreeJS> result = groupService.getGroupMembers(idCalled);
-		
+
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
 		assertThat(result.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getRootNodes_shouldBeEmpty_becausePermsIsNull() {
 		//GIVEN
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
-		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});;
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
+		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(null);
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey1)).thenReturn(null);
-		
+
 		//WHEN
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
-		
+
 		//THEN
 //		verify(permissionService, times(2));
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getRootNodes_IfPermissionTypeADMINAndRootCtxIsNull_shouldBeIsEmpty() {
 		//GIVEN
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		Set<String> groupsIds = Sets.newHashSet();
-		
+
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -287,10 +287,10 @@ public class GroupServiceTest {
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(null);
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
-		
+
 		//WHEN
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
-		
+
 		//THEN
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
@@ -301,19 +301,19 @@ public class GroupServiceTest {
 	@Test
 	public void getRootNodes_IfPermissionTypeADMINAndFilterIsNull_shouldBeIsEmpty() {
 		//GIVEN
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
 
 		Set<String> groupsIds = Sets.newHashSet();
-		
+
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -323,10 +323,10 @@ public class GroupServiceTest {
 		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(null);
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
-		
+
 		//WHEN
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
-		
+
 		//THEN
 		verify(filterRepository).findOne(Mockito.any(Predicate.class));
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
@@ -334,25 +334,25 @@ public class GroupServiceTest {
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getRootNodes_IfPermissionTypeADMIN_RootCtxAndfilterAreNotNull_GroupsIsNull_shouldBeIsEmpty() {
 		//GIVEN
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
 
 		Set<String> groupsIds = Sets.newHashSet();
-		
+
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
 		Optional<Filter> optionalFilter = Optional.of(new Filter());
 		String filter = optionalFilter.get().getPattern();
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -363,10 +363,10 @@ public class GroupServiceTest {
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
 		when(externalGroupDao.getGroupsWithFilter(filter, null, false)).thenReturn(null);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
-		
+
 		//WHEN
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
-		
+
 		//THEN
 		verify(filterRepository).findOne(Mockito.any(Predicate.class));
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
@@ -375,25 +375,25 @@ public class GroupServiceTest {
 		verify(externalGroupDao).getGroupsWithFilter(filter, null, false);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getRootNodes_IfPermissionTypeADMIN_RootCtxAndfilterAndGroupsAreNotNull_shouldBeIsEmpty() {
-		
+
 		//GIVEN
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
 
 		Set<String> groupsIds = Sets.newHashSet();
 		groupsIds.add("1");
 		groupsIds.add("2");
-		
+
 		List<IExternalGroup> externalGroupList = new ArrayList<>();
 		List<TreeJS> treeJSList = new ArrayList<TreeJS>();
 		Optional<Filter> optionalFilter = Optional.of(new Filter());
 		String filter = optionalFilter.get().getPattern();
-		
+
 		ExternalGroup externalGroup1 = new ExternalGroup();
 		externalGroup1.setId("1");
 		ExternalGroup externalGroup2 = new ExternalGroup();
@@ -401,10 +401,10 @@ public class GroupServiceTest {
 		List<IExternalGroup> groups = new ArrayList<>();
 		groups.add((IExternalGroup) externalGroup1);
 		groups.add((IExternalGroup) externalGroup2);
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -415,10 +415,10 @@ public class GroupServiceTest {
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
 		when(externalGroupDao.getGroupsWithFilter(filter, null, false)).thenReturn(groups);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
-		
+
 		//WHEN
 		final List<TreeJS> resultList = groupService.getRootNodes(contextKey, subContextKeys);
-		
+
 		//THEN
 		verify(filterRepository).findOne(Mockito.any(Predicate.class));
 		verify(externalGroupDao).getGroupsById(groupsIds, true);

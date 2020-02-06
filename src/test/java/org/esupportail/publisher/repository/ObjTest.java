@@ -15,6 +15,10 @@
  */
 package org.esupportail.publisher.repository;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -59,9 +63,6 @@ import org.esupportail.publisher.domain.evaluators.UserGroupEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.collect.Sets;
 
@@ -103,28 +104,28 @@ public final class ObjTest {
 
 	public final static Random rnd = new Random();
 
-	public static DateTime d1 = null;
-	public static DateTime d2 = null;
-	public static DateTime d3 = null;
-	public static DateTime d4 = null;
-	public static DateTime d5 = null;
-	public static DateTime d6 = null;
-	public static DateTime d7 = null;
-	public static DateTime d8 = null;
-	public static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+	public static Instant d1 = null;
+	public static Instant d2 = null;
+	public static Instant d3 = null;
+	public static Instant d4 = null;
+	public static Instant d5 = null;
+	public static Instant d6 = null;
+	public static Instant d7 = null;
+	public static Instant d8 = null;
+	public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
 	static {
 
 		// df.setLenient(false);
 		// df.setTimeZone(TimeZone.getTimeZone("CET"));
-		d1 = dateTimeFormatter.parseDateTime("2015-01-15 07:23:30");
-		d2 = dateTimeFormatter.parseDateTime("2015-02-15 07:23:30");
-		d3 = dateTimeFormatter.parseDateTime("2015-03-15 07:23:30");
-		d4 = dateTimeFormatter.parseDateTime("2016-01-15 07:23:30");
-		d5 = dateTimeFormatter.parseDateTime("2016-02-15 07:23:30");
-		d6 = dateTimeFormatter.parseDateTime("2016-03-15 07:23:30");
-		d7 = dateTimeFormatter.parseDateTime("2019-12-01 07:23:30");
-		d8 = dateTimeFormatter.parseDateTime("2020-01-15 07:23:30");
+		d1 = Instant.from(dateTimeFormatter.parse("2015-01-15 07:23:30"));
+		d2 = Instant.from(dateTimeFormatter.parse("2015-02-15 07:23:30"));
+		d3 = Instant.from(dateTimeFormatter.parse("2015-03-15 07:23:30"));
+		d4 = Instant.from(dateTimeFormatter.parse("2016-01-15 07:23:30"));
+		d5 = Instant.from(dateTimeFormatter.parse("2016-02-15 07:23:30"));
+		d6 = Instant.from(dateTimeFormatter.parse("2016-03-15 07:23:30"));
+		d7 = Instant.from(dateTimeFormatter.parse("2019-12-01 07:23:30"));
+		d8 = Instant.from(dateTimeFormatter.parse("2020-01-15 07:23:30"));
 	}
 
 	public static Organization newOrganization(String indice) {
@@ -302,33 +303,33 @@ public final class ObjTest {
 	}
 
 	public static News newNews(final String indice) {
-		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, instantToLocalDate(d1), instantToLocalDate(d3),
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, newOrganization(indice),
 				newRedactor(indice));
 	}
 
 	public static News newNews(final String indice, final Organization organization) {
-		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, instantToLocalDate(d1), instantToLocalDate(d3),
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, newRedactor(indice));
 	}
 
 	public static News newNews(final String indice, final Organization organization, final Redactor redactor) {
-		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, instantToLocalDate(d1), instantToLocalDate(d3),
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
 	}
 
 	public static News newNewsPublished(final String indice, final Organization organization, final Redactor redactor) {
-		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, d7.toLocalDate(), d8.toLocalDate(),
+		return new News("Titre " + indice, "enclosure" + indice, "body" + indice, instantToLocalDate(d7), instantToLocalDate(d8),
 				d2, null, ItemStatus.PUBLISHED, "summary" + indice, true, true, organization, redactor);
 	}
-	
+
 	public static Flash newFlash(final String indice, final Organization organization, final Redactor redactor) {
-		return new Flash("Titre " + indice, "enclosure" + indice, "body" + indice, d1.toLocalDate(), d3.toLocalDate(),
+		return new Flash("Titre " + indice, "enclosure" + indice, "body" + indice, instantToLocalDate(d1), instantToLocalDate(d3),
 				d2, null, getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
 	}
 
 	public static Attachment newAttachment(final String indice, final Organization organization, final Redactor redactor) {
-		return new Attachment("Titre " + indice, "enclosure" + indice, d1.toLocalDate(), d3.toLocalDate(), d2, null,
+		return new Attachment("Titre " + indice, "enclosure" + indice, instantToLocalDate(d1), instantToLocalDate(d3), d2, null,
 				getRandomItemStatus(), "summary" + indice, true, true, organization, redactor);
 	}
 
@@ -378,5 +379,9 @@ public final class ObjTest {
 	public static SubscribeType getRandomSubscribeType() {
 		return SubscribeType.valueOf(rnd.nextInt(SubscribeType.values().length - 1));
 	}
+
+	public static LocalDate instantToLocalDate(final Instant instant) {
+	    return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    }
 
 }

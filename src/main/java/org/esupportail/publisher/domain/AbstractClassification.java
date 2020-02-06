@@ -34,6 +34,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
@@ -44,7 +45,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.querydsl.core.annotations.QueryInit;
 
 import lombok.Data;

@@ -16,6 +16,7 @@
 package org.esupportail.publisher.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -27,11 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.Constants;
@@ -54,16 +61,15 @@ import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -76,6 +82,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
+import org.springframework.validation.Validator;
 
 /**
  * Test class for the NewsResource REST controller.
@@ -109,15 +116,26 @@ public class ItemResourceOptionalDateTest {
     private static final Boolean DEFAULT_RSS_ALLOWED = true;
     private static final Boolean UPDATED_RSS_ALLOWED = false;
 
-    private static final DateTime DEFAULT_VALIDATION_DATE = ObjTest.d1;
-    private static final DateTime UPDATED_VALIDATION_DATE = ObjTest.d1.plusDays(1);
+    private static final Instant DEFAULT_VALIDATION_DATE = ObjTest.d1;
+    private static final Instant UPDATED_VALIDATION_DATE = ObjTest.d1.plus(1, ChronoUnit.DAYS);
 
     private static final String DEFAULT_BODY = "SAMPLE_TEXT";
     private static final String UPDATED_BODY = "UPDATED_TEXT";
-    private static final DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTime();
 
     @Inject
     private ItemRepository<AbstractItem> itemRepository;
+
+    @Autowired
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
+    @Autowired
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private Validator validator;
+
+    @Autowired
+    private EntityManager em;
 
     private MockMvc restNewsMockMvc;
 
@@ -155,10 +173,16 @@ public class ItemResourceOptionalDateTest {
         ReflectionTestUtils.setField(organizationResource, "organizationRepository", organizationRepository);
         ReflectionTestUtils.setField(itemResource, "contentService", contentService);
         ReflectionTestUtils.setField(redactorResource, "redactorRepository", redactorRepository);
-        this.restNewsMockMvc = MockMvcBuilders.standaloneSetup(itemResource, organizationResource).build();
+        this.restNewsMockMvc = MockMvcBuilders.standaloneSetup(itemResource, organizationResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            //.setControllerAdvice(exceptionTranslator)
+            .setConversionService(TestUtil.createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator)
+            .build();
 
         Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
-        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+        User userPart = optionalUser.orElse(null);
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));
@@ -238,21 +262,20 @@ public class ItemResourceOptionalDateTest {
             .perform(get("/api/items"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[0].id").value(item.getId().intValue()))
-            .andExpect(jsonPath("$.[0].title").value(DEFAULT_TITLE.toString()))
-            .andExpect(jsonPath("$.[0].summary").value(DEFAULT_SUMMARY.toString()))
-            .andExpect(jsonPath("$.[0].enclosure").value(DEFAULT_ENCLOSURE.toString()))
-            .andExpect(jsonPath("$.[0].endDate").value(DEFAULT_END_DATE_STRING))
-            .andExpect(jsonPath("$.[0].startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.[0].status").value(DEFAULT_STATUS.getName()))
-            .andExpect(jsonPath("$.[0].validatedBy.subject.keyId").value(ObjTest.subject1))
-            .andExpect(jsonPath("$.[0].validatedDate").value(
-                DEFAULT_VALIDATION_DATE.toString(dateTimeFormatter.withZoneUTC())))
-            .andExpect(jsonPath("$.[0].body").value(DEFAULT_BODY.toString()))
-            .andExpect(jsonPath("$.[0].rssAllowed").value(DEFAULT_RSS_ALLOWED.booleanValue()))
-            .andExpect(jsonPath("$.[0].organization.id").value(organization.getId().intValue()))
-            .andExpect(jsonPath("$.[0].redactor.id").value(redactor.getId().intValue()));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(item.getId().intValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].summary").value(hasItem(DEFAULT_SUMMARY)))
+            .andExpect(jsonPath("$.[*].enclosure").value(hasItem(DEFAULT_ENCLOSURE)))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE_STRING)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.getName())))
+            .andExpect(jsonPath("$.[*].validatedBy.subject.keyId").value(hasItem(ObjTest.subject1)))
+            .andExpect(jsonPath("$.[*].validatedDate").value(
+                hasItem(DEFAULT_VALIDATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY)))
+            .andExpect(jsonPath("$.[*].rssAllowed").value(hasItem(DEFAULT_RSS_ALLOWED)))
+            .andExpect(jsonPath("$.[*].organization.id").value(hasItem(organization.getId().intValue())))
+            .andExpect(jsonPath("$.[*].redactor.id").value(hasItem(redactor.getId().intValue())));
     }
     @Test
     @Transactional
@@ -265,23 +288,22 @@ public class ItemResourceOptionalDateTest {
             .perform(get("/api/items/").requestAttr("item_status", DEFAULT_STATUS.getId()).requestAttr("owned", true))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$", hasSize(1)))
-            .andExpect(jsonPath("$.[0].createdBy.subject.keyId").value(Constants.SYSTEM_ACCOUNT.toString()))
-            .andExpect(jsonPath("$.[0].id").value(item.getId().intValue()))
-            .andExpect(jsonPath("$.[0].title").value(DEFAULT_TITLE.toString()))
-            .andExpect(jsonPath("$.[0].summary").value(DEFAULT_SUMMARY.toString()))
-            .andExpect(jsonPath("$.[0].enclosure").value(DEFAULT_ENCLOSURE.toString()))
-            .andExpect(jsonPath("$.[0].endDate").value(DEFAULT_END_DATE_STRING))
-            .andExpect(jsonPath("$.[0].startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.[0].status").value(DEFAULT_STATUS.getName()))
-            .andExpect(jsonPath("$.[0].validatedBy.subject.keyId").value(ObjTest.subject1))
-            .andExpect(jsonPath("$.[0].validatedDate").value(
-                DEFAULT_VALIDATION_DATE.toString(dateTimeFormatter.withZoneUTC())))
-            .andExpect(jsonPath("$.[0].body").value(DEFAULT_BODY.toString()))
-            .andExpect(jsonPath("$.[0].rssAllowed").value(DEFAULT_RSS_ALLOWED.booleanValue()))
-            .andExpect(jsonPath("$.[0].organization.id").value(organization.getId().intValue()))
-            .andExpect(jsonPath("$.[0].redactor.id").value(redactor.getId().intValue()));
+            .andExpect(jsonPath("$.[*].createdBy.subject.keyId").value(hasItem(Constants.SYSTEM_ACCOUNT)))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(item.getId().intValue())))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].summary").value(hasItem(DEFAULT_SUMMARY)))
+            .andExpect(jsonPath("$.[*].enclosure").value(hasItem(DEFAULT_ENCLOSURE)))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE_STRING)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.getName())))
+            .andExpect(jsonPath("$.[*].validatedBy.subject.keyId").value(hasItem(ObjTest.subject1)))
+            .andExpect(jsonPath("$.[*].validatedDate").value(
+                hasItem(DEFAULT_VALIDATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY)))
+            .andExpect(jsonPath("$.[*].rssAllowed").value(DEFAULT_RSS_ALLOWED))
+            .andExpect(jsonPath("$.[*].organization.id").value(hasItem(organization.getId().intValue())))
+            .andExpect(jsonPath("$.[*].redactor.id").value(hasItem(redactor.getId().intValue())));
     }
 
 
@@ -297,17 +319,17 @@ public class ItemResourceOptionalDateTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(item.getId().intValue()))
-            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
-            .andExpect(jsonPath("$.summary").value(DEFAULT_SUMMARY.toString()))
-                //.andExpect(jsonPath("$.enclosure").value(DEFAULT_ENCLOSURE.toString()))
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
+            .andExpect(jsonPath("$.summary").value(DEFAULT_SUMMARY))
+            .andExpect(jsonPath("$.enclosure").value(DEFAULT_ENCLOSURE))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE_STRING))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.getName()))
             .andExpect(jsonPath("$.validatedBy.subject.keyId").value(ObjTest.subject1))
             .andExpect(jsonPath("$.validatedDate").value(
-                    DEFAULT_VALIDATION_DATE.toString(dateTimeFormatter.withZoneUTC())))
-                //.andExpect(jsonPath("$.body").value(DEFAULT_BODY.toString()))
-            .andExpect(jsonPath("$.rssAllowed").value(DEFAULT_RSS_ALLOWED.booleanValue()))
+                    DEFAULT_VALIDATION_DATE.toString()))
+            .andExpect(jsonPath("$.body").value(DEFAULT_BODY))
+            .andExpect(jsonPath("$.rssAllowed").value(DEFAULT_RSS_ALLOWED))
             .andExpect(jsonPath("$.organization.id").value(organization.getId().intValue()))
             .andExpect(jsonPath("$.redactor.id").value(redactor.getId().intValue()));
     }
@@ -325,25 +347,29 @@ public class ItemResourceOptionalDateTest {
         // Initialize the database
         itemRepository.saveAndFlush(item);
 
+        int databaseSizeBeforeUpdate = itemRepository.findAll().size();
+
+        AbstractItem updatedItem = itemRepository.findById(item.getId()).get();
+        em.detach(updatedItem);
         // Update the news
-        item.setTitle(UPDATED_TITLE);
-        item.setSummary(UPDATED_SUMMARY);
-        item.setEnclosure(UPDATED_ENCLOSURE);
-        item.setEndDate(UPDATED_END_DATE);
-        item.setStartDate(UPDATED_START_DATE);
-        item.setStatus(UPDATED_STATUS);
-        item.setRssAllowed(UPDATED_RSS_ALLOWED);
-        item.setValidatedDate(UPDATED_VALIDATION_DATE);
-        item.setValidatedBy(user2);
-        ((News) item).setBody(UPDATED_BODY);
+        updatedItem.setTitle(UPDATED_TITLE);
+        updatedItem.setSummary(UPDATED_SUMMARY);
+        updatedItem.setEnclosure(UPDATED_ENCLOSURE);
+        updatedItem.setEndDate(UPDATED_END_DATE);
+        updatedItem.setStartDate(UPDATED_START_DATE);
+        updatedItem.setStatus(UPDATED_STATUS);
+        updatedItem.setRssAllowed(UPDATED_RSS_ALLOWED);
+        updatedItem.setValidatedDate(UPDATED_VALIDATION_DATE);
+        updatedItem.setValidatedBy(user2);
+        ((News) updatedItem).setBody(UPDATED_BODY);
         restNewsMockMvc.perform(
             put("/api/items").contentType(TestUtil.APPLICATION_JSON_UTF8).content(
-                TestUtil.convertObjectToJsonBytes(item))).andDo(print()).andExpect(status().isOk());
+                TestUtil.convertObjectToJsonBytes(updatedItem))).andDo(print()).andExpect(status().isOk());
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
-        AbstractItem item = items.iterator().next();
+        assertThat(items).hasSize(databaseSizeBeforeUpdate);
+        AbstractItem item = items.get((items.size() - 1));
         org.junit.Assert.assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
         assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
@@ -358,7 +384,6 @@ public class ItemResourceOptionalDateTest {
         assertThat(testNews.isRssAllowed()).isEqualTo(UPDATED_RSS_ALLOWED);
         assertThat(testNews.getRedactor()).isEqualTo(redactor);
         assertThat(testNews.getOrganization()).isEqualTo(organization);
-        ;
     }
 
     @Test
@@ -367,12 +392,14 @@ public class ItemResourceOptionalDateTest {
         // Initialize the database
         itemRepository.saveAndFlush(item);
 
+        int databaseSizeBeforeDelete = itemRepository.findAll().size();
+
         // Get the news
         restNewsMockMvc.perform(delete("/api/items/{id}", item.getId()).accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
         // Validate the database is empty
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(0);
+        assertThat(items).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

@@ -15,11 +15,9 @@
  */
 package org.esupportail.publisher.domain;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDateTime;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,8 +40,7 @@ public class PersistentAuditEvent {
 	private String principal;
 
 	@Column(name = "event_date")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")
-	private LocalDateTime auditEventDate;
+	private Instant auditEventDate;
 
 	@Column(name = "event_type")
 	private String auditEventType;
@@ -70,11 +67,11 @@ public class PersistentAuditEvent {
 		this.principal = principal;
 	}
 
-	public LocalDateTime getAuditEventDate() {
+	public Instant getAuditEventDate() {
 		return auditEventDate;
 	}
 
-	public void setAuditEventDate(LocalDateTime auditEventDate) {
+	public void setAuditEventDate(Instant auditEventDate) {
 		this.auditEventDate = auditEventDate;
 	}
 

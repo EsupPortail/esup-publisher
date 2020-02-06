@@ -42,116 +42,116 @@ import com.mysema.commons.lang.Pair;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class UserServiceTest {
-	
+
 	@Mock
 	private IPermissionService permissionService;
-	
+
 	@Mock
 	private ContextService contextService;
-	
+
 	@Mock
 	private IExternalUserDao externalUserDao;
-	
+
 	@Mock
 	private UserDTOFactory userDTOFactory;
 
 	@Mock
 	private FilterRepository filterRepository;
-	
+
 	@InjectMocks
 	private UserService userService;
-	
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx_ShouldBeEmpty_becauseSearchIsNull() {
 		//GIVEN
 		String search = null;
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		assertThat(resultList.size()).isEqualTo(0);
-		
+
 	}
 
 	@Test
 	public void getUserFromSearchInCtx_ShouldBeEmpty_becauseSearchIsEmpty() {
 		//GIVEN
 		String search = "";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx_ShouldBeEmpty_becauseLengthSearchSmallerThan3() {
 		//GIVEN
 		String search = "se";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx_ifPermsIsNull_ShouldBeEmpty() {
 		//GIVEN
 		String search = "admin";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext()
 				.getAuthentication(), contextKey)).thenReturn(null);
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder.getContext()
 				.getAuthentication(), contextKey1)).thenReturn(null);
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx__IfPermissionTypeADMIN_RootCtxIsNull_shouldBeIsEmpty() {
 		//GIVEN
 		String search = "admin";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 		Filter filter = new Filter();
-		
+
 		List<IExternalUser> externalUserList = new ArrayList<>();
 		List<UserDTO> userList = new ArrayList<>();
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -160,33 +160,33 @@ public class UserServiceTest {
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(null);
 		when(externalUserDao.getUsersWithFilter(null, search)).thenReturn(externalUserList);
 		when(userDTOFactory.asDTOList(externalUserList, false)).thenReturn(userList);
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		verify(externalUserDao).getUsersWithFilter(filter.getPattern(), search);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx__IfPermissionTypeADMIN_shouldBeIsEmpty() {
 		//GIVEN
 		String search = "admin";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
-		
+
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.ADMIN, null);
 		Optional<Filter> optionalFilter = Optional.empty();
-		String filter = optionalFilter.isPresent() ? optionalFilter.get().getPattern() : null;
-		
+		String filter = optionalFilter.map(Filter::getPattern).orElse(null);
+
 		List<IExternalUser> externalUserList = new ArrayList<>();
 		List<UserDTO> userList = new ArrayList<>();
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
@@ -197,36 +197,36 @@ public class UserServiceTest {
 				FilterType.LDAP))).thenReturn(optionalFilter);
 		when(externalUserDao.getUsersWithFilter(filter, search)).thenReturn(externalUserList);
 		when(userDTOFactory.asDTOList(externalUserList, false)).thenReturn(userList);
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 		verify(externalUserDao).getUsersWithFilter(filter, search);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
 		assertThat(resultList.size()).isEqualTo(0);
 	}
-	
+
 	@Test
 	public void getUserFromSearchInCtx__IfPermissionTypeIsCONTRIBUTORAndPermsSecondIsNull_shouldBeIsEmpty() {
 		//GIVEN
 		String search = "admin";
-		ContextKey contextKey = Utils.contextKeyValue(new Long(1), ContextType.ORGANIZATION);
-		ContextKey contextKey1 = Utils.contextKeyValue(new Long(2), ContextType.PUBLISHER);
-		
+		ContextKey contextKey = Utils.contextKeyValue(1L, ContextType.ORGANIZATION);
+		ContextKey contextKey1 = Utils.contextKeyValue(2L, ContextType.PUBLISHER);
+
 		List<ContextKey> subContextKeys = Utils.subContextKeys(new ContextKey[] {contextKey, contextKey1});
 		Pair<PermissionType, PermissionDTO> perms = new Pair<>(PermissionType.CONTRIBUTOR, null);
-		
+
 		//GIVEN SERVICE
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey)).thenReturn(perms);
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey1)).thenReturn(perms);
-		
+
 		//WHEN
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
-		
+
 		//THEN
 //		verify(permissionService, times(2));
 		assertThat(resultList.size()).isEqualTo(0);

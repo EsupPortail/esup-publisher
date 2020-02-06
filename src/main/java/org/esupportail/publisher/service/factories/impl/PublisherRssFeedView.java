@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,9 +135,9 @@ public class PublisherRssFeedView extends AbstractRssFeedView {
                 if (publication.getCreatedBy() != null)
                     item.setAuthor(publication.getCreatedBy().getDisplayName());
                 if (publication.getStartDate() != null)
-                    item.setPubDate(publication.getStartDate().toDate());
+                    item.setPubDate(Date.from(publication.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 if (publication.getEndDate() != null)
-                    item.setExpirationDate(publication.getEndDate().toDate());
+                    item.setExpirationDate(Date.from(publication.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 if (publication.getId() != null) {
                     Guid guid = new Guid();
                     guid.setValue(publication.getId().toString());

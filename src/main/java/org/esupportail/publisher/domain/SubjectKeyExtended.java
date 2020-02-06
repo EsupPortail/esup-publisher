@@ -26,6 +26,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,7 +40,6 @@ import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.esupportail.publisher.web.rest.dto.ICompositeExtendedKey;
 import org.hibernate.validator.constraints.ScriptAssert;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 12 octobre 2017

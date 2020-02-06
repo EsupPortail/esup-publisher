@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,6 @@ import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 import org.esupportail.publisher.web.PublishController;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

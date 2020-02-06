@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -151,13 +152,13 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
                     item.setContributors(Lists.newArrayList(contributor));
                 }
                 if (publication.getStartDate() != null)
-                    item.setPublished(publication.getStartDate().toDate());
+                    item.setPublished(Date.from(publication.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
                 if (publication.getCreatedDate() != null)
-                    item.setCreated(publication.getCreatedDate().toDate());
+                    item.setCreated(Date.from(publication.getCreatedDate()));
                 if (publication.getLastModifiedDate() != null)
-                    item.setModified(publication.getLastModifiedDate().toDate());
+                    item.setModified(Date.from(publication.getLastModifiedDate()));
                 if (publication.getValidatedDate() != null)
-                    item.setIssued(publication.getValidatedDate().toDate());
+                    item.setIssued(Date.from(publication.getValidatedDate()));
                 if (publication.getId() != null) {
                     item.setId(publication.getId().toString());
                 }

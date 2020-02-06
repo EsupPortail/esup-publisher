@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,6 @@ import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
 import org.esupportail.publisher.web.rest.vo.Visibility;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -69,7 +68,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
                 }
             }
             article.setDescription(item.getSummary());
-            article.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
+            article.setPubDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setGuid(item.getId().hashCode());
             article.setCategories(new ArrayList<String>());
             for (AbstractClassification classif: classifications) {
@@ -81,7 +80,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
                 vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
             }
             article.setCreator(item.getCreatedBy().getDisplayName());
-            article.setDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
+            article.setDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setFiles(new ArrayList<LinkedFileVO>());
             for (LinkedFileItem linkedFile: linkedFiles) {
                 if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
@@ -94,10 +93,10 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             }
             vo.setArticle(article);
             vo.setCreator(item.getCreatedBy().getId().getKeyId());
-            vo.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()).toString());
-            vo.setCreatedDate(item.getCreatedDate().toDateTime(DateTimeZone.getDefault()).toString());
+            vo.setPubDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toString());
+            vo.setCreatedDate(item.getCreatedDate().toString());
             if (item.getLastModifiedDate() != null)
-                vo.setModifiedDate(item.getLastModifiedDate().toDateTime(DateTimeZone.getDefault()).toString());
+                vo.setModifiedDate(item.getLastModifiedDate().toString());
             vo.setUuid(item.getId().toString());
             if (subscribers != null && !subscribers.isEmpty()) {
                 vo.setVisibility(visibilityFactory.from(subscribers));

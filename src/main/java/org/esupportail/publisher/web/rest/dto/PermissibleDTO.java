@@ -19,7 +19,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +30,7 @@ public abstract class PermissibleDTO extends AuditableDTO {
     @Getter(value= AccessLevel.PROTECTED)
     private ContextType type;
 
-    public PermissibleDTO(@NotNull final Long modelId, @NotNull final DateTime creationDate, final DateTime lastUpdateDate,
+    public PermissibleDTO(@NotNull final Long modelId, @NotNull final Instant creationDate, final Instant lastUpdateDate,
             @NotNull final SubjectDTO createdBy, final SubjectDTO lastUpdateBy, @NotNull final ContextType type) {
         super(modelId, creationDate, lastUpdateDate, createdBy, lastUpdateBy);
         this.type = type;
