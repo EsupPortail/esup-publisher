@@ -4,7 +4,7 @@ defaultSchema: publisher_dev
 username: root
 password:
 promptOnNonLocalDatabase: true
-referenceUrl: hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.apereo.portal.utils.hibernate4.dialects.MySQL5InnoDBCompressedDialect
+referenceUrl: hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.hibernate.dialect.MariaDB10Dialect
 verbose: true
 dropFirst: false
 logging: debug
