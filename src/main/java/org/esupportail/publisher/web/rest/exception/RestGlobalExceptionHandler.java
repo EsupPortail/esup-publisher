@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.FileUploadBase;
+import org.apache.tomcat.util.http.fileupload.impl.SizeException;
 import org.esupportail.publisher.service.exceptions.UnsupportedMimeTypeException;
 import org.esupportail.publisher.web.rest.dto.ErrorMessage;
 import org.springframework.http.HttpStatus;
@@ -46,9 +46,9 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.debug("Handle MultipartException with exception :", ex);
         // to be able to obtain the sizelimit cause when using default MultiPart
         if (ex.getCause() != null && ex.getCause().getCause() != null
-            && ex.getCause().getCause() instanceof FileUploadBase.SizeException) {
+            && ex.getCause().getCause() instanceof SizeException) {
             return new ResponseEntity<Object>(new ErrorMessage("errors.upload.filesize",
-                ImmutableMap.of("size", ((FileUploadBase.SizeException) ex.getCause().getCause()).getPermittedSize())),status);
+                ImmutableMap.of("size", ((SizeException) ex.getCause().getCause()).getPermittedSize())),status);
         }
         return new ResponseEntity<Object>(new ErrorMessage("errors.upload.generic"),status);
     }
