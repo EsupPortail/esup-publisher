@@ -33,7 +33,7 @@ public class DisplayOrderTypeDeserializer extends JsonDeserializer<DisplayOrderT
         if (type != null) {
             return type;
         }
-        throw new JsonMappingException(String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
+        throw new JsonMappingException(jp, String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
             DisplayOrderType.class.getSimpleName(), DisplayOrderType.values().toString()));
     }
 }

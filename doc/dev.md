@@ -15,7 +15,7 @@ __Don't forget to make a dump of your datas before such operation__
 ```
 3. run the publisher app or run
 ```mvn
-mvn compile liquibase:update
+./mvnw compile liquibase:update
 ```
 4. import dumped datas
 ```sql
@@ -26,44 +26,47 @@ mvn compile liquibase:update
 # mvn commands
 
 ## to add NOTICE
-'mvn notice:check' Checks that a NOTICE file exists and that its content match what would be generated.
-'mvn notice:generate' Generates a new NOTICE file, replacing any existing NOTICE file.
+`./mvnw notice:check` Checks that a NOTICE file exists and that its content match what would be generated.
+`./mvnw notice:generate` Generates a new NOTICE file, replacing any existing NOTICE file.
 
 
 ## to add licence headers
-'mvn license:check' verify if some files miss license header
-'mvn license:format' add the license header when missing. If a header is existing, it is updated to the new one.
-'mvn license:remove' remove existing license header
+`./mvnw license:check` verify if some files miss license header
+`./mvnw license:format` add the license header when missing. If a header is existing, it is updated to the new one.
+`./mvnw license:remove` remove existing license header
 
 
 ## In dev process when changing the entities
-'mvn clean generate-sources' will generates new or modified Q__ classes or to update evaluator's entites when updating evaluator lib
+`./mvnw clean generate-sources` will generates new or modified Q__ classes or to update evaluator's entites when updating evaluator lib
+
+## To see deprecated code and warnings
+ `./mvnw compile -Dmaven.compiler.showWarnings=true -Dmaven.compiler.showDeprecation=true`
 
 
 ## Liquibase memento :
 [WARN]JAVA 8 use: Don't forget to add `-Djadira.usertype.useJdbc42Apis=false` jvm arg to the command line
 - see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
 - on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
-- 'mvn compile liquibase:update' will apply changelog not loaded (from liquibase files) to the database
-- 'mvn compile liquibase:generateChangeLog' will generate the creation of database changelog file
-- 'mvn compile liquibase:diff' to generate each diff
+- `./mvnw compile liquibase:update` will apply changelog not loaded (from liquibase files) to the database
+- `./mvnw compile liquibase:generateChangeLog` will generate the creation of database changelog file
+- `./mvnw compile liquibase:diff` to generate each diff
 - IMPORTANT : check for mysql that table names are in lower case in changelog files, do sames things for all table links...
 
 
 ## to run tests :
-- `mvn test -Dspring.profiles.active=dev,fast,ldapgrp,test` don't forget to change databasename between prod
-- `mvn test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
+- `./mvnw test -Dspring.profiles.active=dev,fast,ldapgrp,test` don't forget to change databasename between prod
+- `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
 
 
 ## to run in dev :
-- `mvn clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
+- `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
 
-## mvn remember :
-- `mvn release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
-- on release run 'grunt ngconstant' to update version in angular app constant, we should try to watch on a grunt task to make release
+## ./mvnw remember :
+- `./mvnw release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
+- on release run `grunt ngconstant` to update version in angular app constant, we should try to watch on a grunt task to make release
 
 ## to deploy :
-- before you should build the war package : `mvn clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+- before you should build the war package : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
 - and deploy the war into your webapps directory `unzip esup-publisher-ui-x.y.z.war -d publisher`
 
 ## mvn param to debug xml binding :

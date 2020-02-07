@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -60,7 +61,7 @@ public class Application implements InitializingBean {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
-            Collection activeProfiles = Arrays.asList(env.getActiveProfiles());
+            final List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
             if (activeProfiles.contains("dev") && activeProfiles.contains("prod")) {
                 log.error("You have misconfigured your application! " +
                     "It should not run with both the 'dev' and 'prod' profiles at the same time.");
@@ -125,6 +126,6 @@ public class Application implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

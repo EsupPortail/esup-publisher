@@ -16,6 +16,8 @@
 package org.esupportail.publisher.security;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.esupportail.publisher.config.SecurityConfiguration;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
+import org.jasig.cas.client.Protocol;
 import org.jasig.cas.client.util.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +70,19 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
     @Deprecated
     private boolean encodeServiceUrlWithSessionId = true;
 
+    /** From CAS org.jasig.cas.client.util.CommonUtils to replace deprecated use of constructServiceUrl(...) .*/
+    private static final String SERVICE_PARAMETER_NAMES;
+
+    static {
+        final Set<String> serviceParameterSet = new HashSet<String>(4);
+        for (final Protocol protocol : Protocol.values()) {
+            serviceParameterSet.add(protocol.getServiceParameterName());
+        }
+        SERVICE_PARAMETER_NAMES = serviceParameterSet.toString()
+            .replaceAll("\\[|\\]", "")
+            .replaceAll("\\s", "");
+    }
+
     // ~ Methods
     // ========================================================================================================
 
@@ -104,7 +120,7 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
         log.debug("=====================================================================> postMessage {}", isPostMessage);
         // String doCASAuth = servletRequest.getHeader("X-request-AuthCAS");
 
-        boolean isViewServingPage = (resourcePath != null && resourcePath.startsWith(SecurityConfiguration.PROTECTED_PATH)) ? true : false;
+        boolean isViewServingPage = resourcePath.startsWith(SecurityConfiguration.PROTECTED_PATH);
         log.debug("=====================================================================> isViewServingPage {}", isViewServingPage);
 
         if (this.pathLogin.equals(resourcePath) || isViewServingPage /*&& isPostMessage && springSecurityUser == null*/) {
@@ -148,7 +164,7 @@ public class RememberCasAuthenticationEntryPoint implements AuthenticationEntryP
             service += String.format("?%s=%s", this.targetUrlParameter, uri);
         }
         log.debug("serviceURL = {}", service);
-        return CommonUtils.constructServiceUrl(null, response, service, null,
+        return CommonUtils.constructServiceUrl(null, response, service, null, SERVICE_PARAMETER_NAMES,
             this.serviceProperties.getArtifactParameter(), this.encodeServiceUrlWithSessionId);
     }
 

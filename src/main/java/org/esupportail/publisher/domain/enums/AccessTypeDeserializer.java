@@ -33,7 +33,7 @@ public class AccessTypeDeserializer extends JsonDeserializer<AccessType> {
         if (type != null) {
             return type;
         }
-        throw new JsonMappingException(String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
+        throw new JsonMappingException(jp, String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
             AccessType.class.getSimpleName(), AccessType.values().toString()));
     }
 }

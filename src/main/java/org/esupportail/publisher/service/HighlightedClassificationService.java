@@ -45,13 +45,13 @@ public class HighlightedClassificationService {
 
     @PostConstruct
     public void init() {
-        Assert.notNull(name);
-        Assert.notNull(description);
-        Assert.notNull(color);
+        Assert.notNull(name, "The highlighted classification name property `app.service.highlightClassification.name` is not defined");
+        Assert.notNull(description, "The highlighted classification description property `app.service.highlightClassification.description` is not defined");
+        Assert.notNull(color, "The highlighted classification color property `app.service.highlightClassification.color` is not defined");
         classification = new HighlightedClassification(name, description, color);
         log.debug("Contructed {}", classification);
 
-        Assert.notNull(classification);
+        Assert.notNull(classification, "The constructed Highlighted Classification should not be null!");
     }
 
 }

@@ -121,7 +121,7 @@ public class FileService {
         }
         // Checking ContentType
         Pair<Boolean, MultipartException> isAuthorized = isAuthorizedMimeType(file,fileUploadHelper);
-        Assert.notNull(isAuthorized.getFirst());
+        Assert.notNull(isAuthorized.getFirst(), "The result should not return a null boolean");
         if (!isAuthorized.getFirst()) {
             if (isAuthorized.getSecond() != null)
                 throw isAuthorized.getSecond();

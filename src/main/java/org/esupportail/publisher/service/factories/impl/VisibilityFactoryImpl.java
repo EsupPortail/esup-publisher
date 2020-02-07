@@ -21,7 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;

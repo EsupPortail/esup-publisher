@@ -55,7 +55,7 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
 
 	@Override
 	public ExternalGroup mapFromContext(Object ctx) throws NamingException {
-		Assert.notNull(externalGroupHelper);
+		Assert.notNull(externalGroupHelper, "The externalGroupHelper should not be null !");
 		DirContextAdapter context = (DirContextAdapter) ctx;
 		Map<String, List<String>> attrs = new HashMap<String, List<String>>();
 		ExternalGroup group = new ExternalGroup();

@@ -24,17 +24,14 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 @ToString
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class GroupDTO extends SubjectDTO {
 
-    @Getter
     private boolean hasChilds;
 
-	@Getter
 	private Map<String, List<String>> attributes;
-	@Getter
-	private boolean foundOnExternalSource;
 
 	public GroupDTO(@NotNull final String groupId, final String displayName, final boolean foundOnExternalSource) {
         super(new SubjectKeyDTO(groupId, SubjectType.GROUP), displayName, foundOnExternalSource);
@@ -48,7 +45,5 @@ public class GroupDTO extends SubjectDTO {
         super(new SubjectKeyDTO(groupId, SubjectType.GROUP), displayName, displayName != null);
         this.hasChilds = hasChilds;
         this.attributes = attributes;
-		if (displayName != null)
-            this.foundOnExternalSource = true;
 	}
-    }
+}

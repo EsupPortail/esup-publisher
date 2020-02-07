@@ -26,17 +26,16 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class NodeDTO implements Serializable {
 
     @NonNull
     private IContext contextObject;
-    @NonNull
+
     private boolean hasChilds;
     @NonNull
     private PermissionType userPerms;
-
-
+    
 }
