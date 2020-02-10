@@ -49,7 +49,6 @@ spring:
         baseUrl: http://localhost:8080
 
     thymeleaf:
-        mode: HTML
         cache: false
 
 logging:
@@ -166,5 +165,5 @@ app:
         unremovablePathPattern: "default/welcome.*,test.*"
 
     authorizedServices:
-        ipRange: "192.168.57.0/24"
+        ipRange: "192.168.0.0/16"
 
