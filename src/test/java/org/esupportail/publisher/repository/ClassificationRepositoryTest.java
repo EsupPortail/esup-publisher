@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,7 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
+import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +71,9 @@ public class ClassificationRepositoryTest {
 	@Inject
 	private ClassificationRepository<AbstractClassification> repository;
 
+    @Inject
+    private CategoryRepository catRepo;
+
 	@Inject
 	private OrganizationRepository orgRepo;
 	@Inject
@@ -96,10 +101,11 @@ public class ClassificationRepositoryTest {
 	private Redactor redactor2;
 	private Publisher pub1;
 	private Publisher pub2;
+    private Category cat1;
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		// userRepo.save(new User(ObjTest.subject1, "test"));
 		// userRepo.save(new User(ObjTest.subject2, "test"));
@@ -120,19 +126,19 @@ public class ClassificationRepositoryTest {
             PermissionClass.CONTEXT, false, true, true);
 		pub2 = publisherRepo.saveAndFlush(pub2);
 
-		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
+		cat1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
 				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
-		repository.saveAndFlush(c1);
+		cat1 = catRepo.saveAndFlush(cat1);
 
 		InternalFeed c2 = new InternalFeed(true, "CAT " + INDICE_2, "ICON_URL"
 				+ INDICE_2, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, "#F44336", pub2, c1);
+				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, "#F44336", pub2, cat1);
 		repository.saveAndFlush(c2);
 
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_3, "ICON_URL"
 				+ INDICE_3, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, "#F44336", pub2, c1, URL);
+				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, "#F44336", pub2, cat1, URL);
 		repository.saveAndFlush(c3);
 
 	}
@@ -159,8 +165,7 @@ public class ClassificationRepositoryTest {
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
 				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
-				(Category) repository.findOne(ClassificationPredicates
-						.CategoryClassification()).get(), "RSS_URL");
+				(Category) repository.getOne(cat1.getId()), "RSS_URL");
 		repository.saveAndFlush(c3);
 	}
 
@@ -179,25 +184,25 @@ public class ClassificationRepositoryTest {
 				+ INDICE_4, DisplayOrderType.NAME, "#F44336", pub1);
 		repository.saveAndFlush(c1);
 
-		log.info("Before insert : " + c1.toString());
+		log.info("Before insert : {}", c1);
 		repository.save(c1);
 		assertNotNull(c1.getId());
-		log.info("After insert : " + c1.toString());
+		log.info("After insert : {}", c1);
 		Optional<AbstractClassification> optionalClassif = repository.findById(c1.getId());
-		Category c2 = optionalClassif == null || !optionalClassif.isPresent()? null : (Category) optionalClassif.get();
-		log.info("After select : " + c2.toString());
+		Category c2 = (Category) optionalClassif.orElse(null);
+		log.info("After select {} ", c2);
 		assertNotNull(c2);
 		assertEquals(c1, c2);
 
 		c2.setName("UPDATED CAT");
 		c2.setDefaultDisplayOrder(DisplayOrderType.ONLY_LAST_CREATED_FIRST);
 		c2 = repository.save(c2);
-		log.info("After update : " + c2.toString());
+		log.info("After update : {}", c2);
 		assertTrue(repository.existsById(c2.getId()));
 		c2 = (Category) repository.getOne(c2.getId());
 		assertNotNull(c2);
-		log.info("After select : " + c2.toString());
-		assertTrue(repository.count() == 4);
+		log.info("After select : {}", c2);
+        assertEquals(4, repository.count());
 
 		List<AbstractClassification> result = repository.findAll();
 		assertThat(result.size(), is(4));
@@ -212,6 +217,100 @@ public class ClassificationRepositoryTest {
 		assertThat(repository.findAll().size(), is(3));
 		assertFalse(repository.existsById(c2.getId()));
 	}
+
+	@Test
+    public void testOrderLastModifiedCreated() throws InterruptedException {
+        Thread.sleep(1000);
+        Category cat = ObjTest.newCategory(INDICE_4, pub1);
+        cat = repository.saveAndFlush(cat);
+        Thread.sleep(1000);
+        Category cat2 = ObjTest.newCategory("A name", pub1);
+        cat2 = repository.saveAndFlush(cat2);
+
+        Category[] tab = { cat2, cat, cat1 };
+
+        Arrays.stream(tab).forEach(c -> log.debug("Category order {}, {}, {}", c.getName(), c.getCreatedDate(), c.getLastModifiedDate()));
+
+        List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST)));
+
+        result.forEach(c -> log.debug("Obtained Category order {}, {}, {}", c.getName(), c.getCreatedDate(), c.getLastModifiedDate()));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab));
+
+        cat.setColor("blue");
+        cat = repository.saveAndFlush(cat);
+
+        Category[] tab2 = { cat, cat2, cat1 };
+
+        result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST)));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab2));
+    }
+
+    @Test
+    public void testOrderName() {
+        Category cat = ObjTest.newCategory(INDICE_4, pub1);
+        cat = repository.saveAndFlush(cat);
+        Category cat2 = ObjTest.newCategory("A name", pub1);
+        cat2 = repository.saveAndFlush(cat2);
+
+        Category[] tab = { cat2, cat1, cat };
+
+        List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.NAME)));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab));
+    }
+
+    @Test
+    public void testOrderLastCreatedFirst() {
+        Category cat = ObjTest.newCategory(INDICE_4, pub1);
+        cat = repository.saveAndFlush(cat);
+        Category cat2 = ObjTest.newCategory("A name", pub1);
+        cat2 = repository.saveAndFlush(cat2);
+
+        Category[] tab = { cat1, cat, cat2 };
+
+        List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.ONLY_LAST_CREATED_FIRST)));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab));
+    }
+
+    @Test
+    public void testOrderStartDate() {
+	    // there is no startdate ! it's falling back to createdDate
+        Category cat = ObjTest.newCategory(INDICE_4, pub1);
+        cat = repository.saveAndFlush(cat);
+        Category cat2 = ObjTest.newCategory("A name", pub1);
+        cat2 = repository.saveAndFlush(cat2);
+
+        Category[] tab = { cat1, cat, cat2 };
+
+        List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.START_DATE)));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab));
+    }
+
+    @Test
+    public void testOrderCustom() {
+        Category cat = ObjTest.newCategory(INDICE_4, pub1);
+        cat.setDisplayOrder(cat1.getDisplayOrder() + 5);
+        cat = repository.saveAndFlush(cat);
+        Category cat2 = ObjTest.newCategory("A name", pub1);
+        cat2.setDisplayOrder(cat1.getDisplayOrder() - 5 );
+        cat2 = repository.saveAndFlush(cat2);
+
+        Category[] tab = { cat, cat1, cat2 };
+
+        List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
+            .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.CUSTOM)));
+
+        assertThat(result, IsIterableContainingInOrder.contains(tab));
+    }
 
 	/**
 	 * Test method for
@@ -232,7 +331,7 @@ public class ClassificationRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test

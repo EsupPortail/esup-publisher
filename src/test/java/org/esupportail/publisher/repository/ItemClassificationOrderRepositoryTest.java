@@ -329,15 +329,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
-					.getItemClassificationId().getAbstractItem().getTitle(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}",
 					ico.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
 							.getAbstractItem().getLastModifiedDate(),
 					ico.getDisplayOrder(), ico.getItemClassificationId()
 							.getAbstractItem().getStartDate(), ico
 							.getItemClassificationId().getAbstractItem()
-							.getEndDate());
+							.getEndDate(), ico.getItemClassificationId()
+                    .getAbstractItem().getTitle());
 		}
 		ItemClassificationOrder[] tab = { icob, icoa, icod, icoc };
 
@@ -368,15 +368,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico.getDisplayOrder(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
+                    .getItemClassificationId().getAbstractItem()
+                    .getTitle(), ico.getDisplayOrder(),
 					ico.getItemClassificationId().getAbstractItem()
 							.getStartDate(), ico.getItemClassificationId()
 							.getAbstractItem().getEndDate(), ico
 							.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
-							.getAbstractItem().getLastModifiedDate(), ico
-							.getItemClassificationId().getAbstractItem()
-							.getTitle());
+							.getAbstractItem().getLastModifiedDate());
 		}
 		ItemClassificationOrder[] tab = { icoa, icob, icoc, icod };
 
@@ -415,15 +415,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
-					.getItemClassificationId().getAbstractItem().getTitle(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}",
 					ico.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
 							.getAbstractItem().getLastModifiedDate(),
 					ico.getDisplayOrder(), ico.getItemClassificationId()
 							.getAbstractItem().getStartDate(), ico
 							.getItemClassificationId().getAbstractItem()
-							.getEndDate());
+							.getEndDate(),ico
+                    .getItemClassificationId().getAbstractItem().getTitle());
 		}
 		ItemClassificationOrder[] tab = { icod, icoc, icob, icoa };
 

@@ -13,21 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.web.rest;
+package org.esupportail.publisher.web;
 
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.blankOrNullString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.esupportail.publisher.Application;
+import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Category;
@@ -40,6 +46,7 @@ import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.Subscriber;
+import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -55,6 +62,7 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
@@ -63,13 +71,19 @@ import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
-import org.esupportail.publisher.web.PublishController;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Repeat;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -95,65 +109,68 @@ public class PublishControllerTest {
 
     private MockMvc restPublishControllerMockMvc;
 
-    @Inject
+    @Autowired
     private OrganizationRepository organizationRepository;
 
-    @Inject
+    @Autowired
     private PublisherRepository publisherRepository;
 
-//    @Inject
+//    @Autowired
 //    private ClassificationRepository<AbstractClassification> classificationRepository;
 
-    @Inject
+    @Autowired
     private CategoryRepository categoryRepository;
 //
 //    @Inject
 //    private FeedRepository<AbstractFeed> feedRepository;
 
-    @Inject
+    @Autowired
     private ReaderRepository readerRepository;
 
-    @Inject
+    @Autowired
     private RedactorRepository redactorRepository;
 
-    @Inject
+    @Autowired
     private ItemRepository<AbstractItem> itemRepository;
 
 //    @Inject
 //    private FlashRepository flashRepository;
 
-    @Inject
+    @Autowired
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
 
-    @Inject
+    @Autowired
     private FlashInfoVOFactory flashInfoVOFactory;
 
-    @Inject
+    @Autowired
     private RubriqueVOFactory rubriqueVOFactory;
 
-    @Inject
+    @Autowired
     private ItemVOFactory itemVOFactory;
 
-    @Inject
+    @Autowired
     private CategoryProfileFactory categoryProfileFactory;
 
-    @Inject
+    @Autowired
     private CategoryFactory categoryFactory;
 
-    @Inject
+    @Autowired
     private SubscriberService subscriberService;
 
-    @Inject
+    @Autowired
     private SubscriberRepository subscriberRepository;
 
-    @Inject
+    @Autowired
     private ServiceUrlHelper urlHelper;
 
-    @Inject
+    @Autowired
     private HighlightedClassificationService highlightedClassificationService;
 
-    @Inject
+    @Autowired
     private LinkedFileItemRepository linkedFileItemRepository;
+
+    private static final Map<String, String> namespaces =
+        Collections.singletonMap("dc", "http://purl.org/dc/elements/1.1/");
 
 
     @PostConstruct
@@ -188,6 +205,7 @@ public class PublishControllerTest {
     private Organization organization;
     private List<LinkedFileItem> files = new ArrayList<>();
     private List<Category> catsOfEsupLectureWay = new ArrayList<>();
+    private News savedNews;
 
     @Before
     public void initTest() {
@@ -220,6 +238,7 @@ public class PublishControllerTest {
 
 
         newWay = new Publisher(organization, reader1, redactor1, "PUB 1", PermissionClass.CONTEXT, true,true, true);
+        newWay.setDefaultDisplayOrder(DisplayOrderType.NAME);
         newWay = publisherRepository.saveAndFlush(newWay);
         flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false, false);
         flashInfo = publisherRepository.saveAndFlush(flashInfo);
@@ -229,34 +248,34 @@ public class PublishControllerTest {
         esupLectureWay = publisherRepository.saveAndFlush(esupLectureWay);
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
         // NB important, à la une isn't persisted, it's hardcoded and should be considered
-        Category cat1 = ObjTest.newCategory("Cat1", newWay);
+        Category cat1 = ObjTest.newCategory("Cat A", newWay);
         cat1 = categoryRepository.saveAndFlush(cat1);
-        Category cat2 = ObjTest.newCategory("cat2", newWay);
+        Category cat2 = ObjTest.newCategory("cat B", newWay);
         cat2 = categoryRepository.saveAndFlush(cat2);
-        Category cat3 = ObjTest.newCategory("cat3", flashInfo);
+        Category cat3 = ObjTest.newCategory("cat C", flashInfo);
         cat3 = categoryRepository.saveAndFlush(cat3);
-        Category cat4 = ObjTest.newCategory("cat4", filesPub);
+        Category cat4 = ObjTest.newCategory("cat D", filesPub);
         cat4 = categoryRepository.saveAndFlush(cat4);
-        Category cat5 = ObjTest.newCategory("Cat5", esupLectureWay);
+        Category cat5 = ObjTest.newCategory("Cat E", esupLectureWay);
         cat5 = categoryRepository.saveAndFlush(cat5);
         catsOfEsupLectureWay.add(cat5);
-        Category cat6 = ObjTest.newCategory("cat6", esupLectureWay);
+        Category cat6 = ObjTest.newCategory("cat F", esupLectureWay);
         cat6 = categoryRepository.saveAndFlush(cat6);
         catsOfEsupLectureWay.add(cat6);
 
         News news1 = ObjTest.newNews("news 1", organization, newWay.getContext().getRedactor());
         news1.setStartDate(LocalDate.now());
         news1.setEndDate(LocalDate.now().plusMonths(1));
-        news1.setStatus(ItemStatus.PUBLISHED);
+        news1.setStatus(ItemStatus.SCHEDULED);
         news1 = itemRepository.saveAndFlush(news1);
         News news2 = ObjTest.newNews("news 2", organization, newWay.getContext().getRedactor());
-        news2.setStartDate(LocalDate.now());
+        news2.setStartDate(LocalDate.now().minusDays(1));
         news2.setEndDate(LocalDate.now().plusMonths(1));
         news2.setStatus(ItemStatus.PUBLISHED);
         news2 = itemRepository.saveAndFlush(news2);
         News news3 = ObjTest.newNews("news 3", organization, newWay.getContext().getRedactor());
         news3.setStatus(ItemStatus.PUBLISHED);
-        news3.setStartDate(LocalDate.now());
+        news3.setStartDate(LocalDate.now().minusDays(2));
         news3.setEndDate(LocalDate.now().plusMonths(1));
         news3 = itemRepository.saveAndFlush(news3);
         News news4 = ObjTest.newNews("news 4", organization, newWay.getContext().getRedactor());
@@ -264,7 +283,7 @@ public class PublishControllerTest {
         news4.setStartDate(LocalDate.now().minusMonths(1));
         news4.setEndDate(LocalDate.now().minusDays(1));
         news4 = itemRepository.saveAndFlush(news4);
-        Flash flash = ObjTest.newFlash("news 1", organization, flashInfo.getContext().getRedactor());
+        Flash flash = ObjTest.newFlash("flash 1", organization, flashInfo.getContext().getRedactor());
         flash.setStatus(ItemStatus.PUBLISHED);
         flash.setStartDate(LocalDate.now());
         flash.setEndDate(LocalDate.now().plusMonths(1));
@@ -280,11 +299,17 @@ public class PublishControllerTest {
         news5.setEndDate(LocalDate.now().plusMonths(1));
         news5.setStatus(ItemStatus.PUBLISHED);
         news5 = itemRepository.saveAndFlush(news5);
-        News news6 = ObjTest.newNews("news 5", organization, esupLectureWay.getContext().getRedactor());
-        news6.setStartDate(LocalDate.now());
+        News news6 = ObjTest.newNews("news 6", organization, esupLectureWay.getContext().getRedactor());
+        news6.setStartDate(LocalDate.now().minusDays(1));
         news6.setEndDate(LocalDate.now().plusMonths(1));
         news6.setStatus(ItemStatus.PUBLISHED);
         news6 = itemRepository.saveAndFlush(news6);
+
+        int nbModif = itemRepository.publishScheduled();
+        // test news1 SCHEDULED => PUBLISHED + update datemodification and move it to First news in order
+        Assert.assertEquals(1, nbModif);
+        news1 = (News)itemRepository.findById(news1.getId()).orElse(null);
+        Assert.assertNotNull(news1);
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
         files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));
@@ -316,6 +341,13 @@ public class PublishControllerTest {
         sub5 = subscriberRepository.saveAndFlush(sub5);
         sub6 = subscriberRepository.saveAndFlush(sub6);
         sub7 = subscriberRepository.saveAndFlush(sub7);
+
+        // should be order as first news
+        savedNews = (News) itemRepository.getOne(news1.getId());
+
+        log.debug("News1 {}, {}", news1.getCreatedDate(), news1.getLastModifiedDate());
+        log.debug("News2 {}, {}", news2.getCreatedDate(), news2.getLastModifiedDate());
+        log.debug("News3 {}, {}", news3.getCreatedDate(), news3.getLastModifiedDate());
     }
 
     @Test
@@ -358,18 +390,61 @@ public class PublishControllerTest {
 
     @Test
     public void getItemsFromPublisherTest() throws Exception {
+        log.info("try to compare to {}", savedNews);
         restPublishControllerMockMvc.perform(get("/published/items/{publisher_id}", newWay.getId())
             .accept(MediaType.APPLICATION_XML)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_XML))
+            // FOR XPATH help watch examples on https://howtodoinjava.com/xml/xpath-attribute-evaluate/
             .andExpect(xpath("/actualites/rubriques/*").nodeCount(3))
+            .andExpect(xpath("/actualites/rubriques/rubrique/uuid").exists())
+            .andExpect(xpath("/actualites/rubriques/rubrique/uuid").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/rubriques/rubrique/name").exists())
+            .andExpect(xpath("/actualites/rubriques/rubrique/name").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/rubriques/rubrique/color").exists())
+            .andExpect(xpath("/actualites/rubriques/rubrique/color").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/rubriques/rubrique/highlight").exists())
+            .andExpect(xpath("/actualites/rubriques/rubrique/highlight").booleanValue(true))
             .andExpect(xpath("/actualites/items/*").nodeCount(3))
+            .andExpect(xpath("/actualites/items/item/article/title").exists())
+            .andExpect(xpath("/actualites/items/item/article/title").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/link").exists())
+            .andExpect(xpath("/actualites/items/item/article/link").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/enclosure").exists())
+            .andExpect(xpath("/actualites/items/item/article/enclosure").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/description").exists())
+            .andExpect(xpath("/actualites/items/item/article/description").string(not(blankOrNullString())))
             .andExpect(xpath("/actualites/items/item/article/pubDate").exists())
+            .andExpect(xpath("/actualites/items/item/article/pubDate").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/guid").exists())
+            .andExpect(xpath("/actualites/items/item/article/guid").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/category").exists())
+            .andExpect(xpath("/actualites/items/item/article/category").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/dc:date", namespaces).exists())
+            .andExpect(xpath("/actualites/items/item/article/dc:date", namespaces).string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/article/files").exists())
             .andExpect(xpath("/actualites/items/item/type").exists())
             .andExpect(xpath("/actualites/items/item/type").string(News.class.getSimpleName()))
-            .andExpect(xpath("/actualites/items/item/rubriques/uuid").exists())
+            .andExpect(xpath("/actualites/items/item/creator").exists())
+            .andExpect(xpath("/actualites/items/item/creator").string(Constants.SYSTEM_ACCOUNT))
+            .andExpect(xpath("/actualites/items/item/pubDate").exists())
+            .andExpect(xpath("/actualites/items/item/pubDate").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/createdDate").exists())
+            .andExpect(xpath("/actualites/items/item/createdDate").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/modifiedDate").exists())
+            .andExpect(xpath("/actualites/items/item/modifiedDate").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/uuid").exists())
+            .andExpect(xpath("/actualites/items/item/uuid").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item[1]/article/title").string(savedNews.getTitle()))
+            .andExpect(xpath("/actualites/items/item[1]/article/description").string(savedNews.getSummary()))
+            .andExpect(xpath("/actualites/items/item[1]/article/pubDate").string(
+                DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.systemDefault()).format(savedNews.getStartDate().atStartOfDay(ZoneId.systemDefault()))))
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
             .andExpect(xpath("/actualites/items/item/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular/@attribute").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular/@attribute").string(not(blankOrNullString())))
+            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular/@value").exists())
+            .andExpect(xpath("/actualites/items/item/visibility/obliged/regular/@value").string(not(blankOrNullString())))
             .andExpect(xpath("/actualites/items/item/visibility/allowed").exists())
             .andExpect(xpath("/actualites/items/item/visibility/autoSubscribed").exists());
     }

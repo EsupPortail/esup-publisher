@@ -196,11 +196,11 @@ public class PublishController {
                 .and(PublisherPredicates.AllOfRedactor(redactorId))
                 .and(PublisherPredicates.AllOfOrganization(org));
             try {
-            	Optional<Publisher> optionalPublisher =  publisherRepository.findOne(builder);
-                final Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
+                Optional<Publisher> optionalPublisher =  publisherRepository.findOne(builder);
+                final Publisher publisher = optionalPublisher.orElse(null);
                 if (publisher != null) {
                     final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
-                    	.in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
+                        .in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
                     		.from(QAbstractItem.abstractItem)
                         	.where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId())))
                     	.and(ItemPredicates.itemsClassOfPublisher(publisher));
@@ -322,7 +322,7 @@ public class PublishController {
         //getting items on new way
         log.debug("Entering getItems with param : publisher_id={}", publisherId);
         Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
-        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+        Publisher publisher = optionalPublisher.orElse(null);
 
         return getItemsOnPublisherNewWay(publisher, request);
     }
@@ -334,7 +334,7 @@ public class PublishController {
     public Category getCategories(@PathVariable("publisher_id") Long publisherId, final HttpServletRequest request) {
         log.debug("Entering getCategories with param : publisher_id={}", publisherId);
         Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
-        Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+        Publisher publisher = optionalPublisher.orElse(null);
 
         if (publisher != null && publisher.isUsed() && WritingMode.STATIC.equals(publisher.getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);
@@ -365,7 +365,7 @@ public class PublishController {
         // systeme classic esup-lecture/esup-news
         log.debug("Entering getAbstractFeeds with param : category_id={}", categoryId);
         Optional<org.esupportail.publisher.domain.Category> optionalCategory =  categoryRepository.findById(categoryId);
-        org.esupportail.publisher.domain.Category category = optionalCategory == null || !optionalCategory.isPresent()? null : optionalCategory.get();
+        org.esupportail.publisher.domain.Category category = optionalCategory.orElse(null);
 
         if (category != null && category.getPublisher().isUsed() && WritingMode.STATIC.equals(category.getPublisher().getContext().getRedactor().getWritingMode())) {
             final String baseUrl = urlHelper.getRootAppUrl(request);

@@ -17,6 +17,7 @@ package org.esupportail.publisher.web.rest.vo.ns;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,7 +29,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import org.esupportail.publisher.web.rest.util.ISO8601LocalDateTimeXmlAdapter;
+import org.esupportail.publisher.web.rest.util.RFC822LocalDateTimeSerializer;
+import org.esupportail.publisher.web.rest.util.RFC822LocalDateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.util.SeparatorListXMLAdapter;
 import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
 
@@ -50,6 +55,8 @@ public class ArticleVO implements Serializable {
     private String description;
 
     //Must be RFC2822 format
+    @JsonSerialize(using = RFC822LocalDateTimeSerializer.class)
+    @XmlJavaTypeAdapter(RFC822LocalDateTimeXmlAdapter.class)
     private Instant pubDate;
 
     private int guid;
@@ -65,6 +72,7 @@ public class ArticleVO implements Serializable {
     //Must be ISO8601 format
     @JsonProperty(value = "dc:date")
     @XmlElement(name="date", namespace = "http://purl.org/dc/elements/1.1/")
+    @XmlJavaTypeAdapter(ISO8601LocalDateTimeXmlAdapter.class)
     private Instant date;
 
     @XmlElementWrapper(name = "files")

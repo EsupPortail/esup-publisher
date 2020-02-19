@@ -54,7 +54,7 @@ public final class ClassificationPredicates {
             case START_DATE: //no start date is available on classif, so use the created date.
                 return classif.createdDate.desc();
             case CUSTOM:
-                return classif.displayOrder.asc();
+                return classif.displayOrder.desc();
             default:
                 return classif.name.asc();
         }
@@ -69,7 +69,7 @@ public final class ClassificationPredicates {
             case START_DATE: //no start date is available on classif, so use the created date.
                 return classif.createdDate.desc();
             case CUSTOM:
-                return classif.displayOrder.asc();
+                return classif.displayOrder.desc();
             default:
                 return classif.name.asc();
         }
@@ -84,7 +84,7 @@ public final class ClassificationPredicates {
             case START_DATE: //no start date is available on classif, so use the created date.
                 return classif.createdDate.desc();
             case CUSTOM:
-                return classif.displayOrder.asc();
+                return classif.displayOrder.desc();
             default:
                 return classif.name.asc();
         }

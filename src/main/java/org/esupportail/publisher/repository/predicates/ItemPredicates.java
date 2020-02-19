@@ -87,20 +87,17 @@ public final class ItemPredicates {
         switch (displayOrder) {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItemClass.itemClassificationId.abstractItem.lastModifiedDate
-                    .coalesce(
-                        qItemClass.itemClassificationId.abstractItem.createdDate)
-                    .desc();
+                    .coalesce(qItemClass.itemClassificationId.abstractItem.createdDate).desc();
             case ONLY_LAST_CREATED_FIRST:
-                return qItemClass.itemClassificationId.abstractItem.createdDate
-                    .desc();
+                return qItemClass.itemClassificationId.abstractItem.createdDate.desc();
             case NAME:
                 return qItemClass.itemClassificationId.abstractItem.title.asc();
-            case START_DATE:
-                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
             case CUSTOM:
                 return qItemClass.displayOrder.desc();
+//            case START_DATE:
+//                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
             default:
-                return qItemClass.itemClassificationId.abstractItem.startDate.asc();
+                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
         }
     }
 
@@ -109,19 +106,15 @@ public final class ItemPredicates {
         switch (displayOrder) {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItemClass.itemClassificationId.abstractClassification.lastModifiedDate
-                    .coalesce(
-                        qItemClass.itemClassificationId.abstractClassification.createdDate)
-                    .desc();
-            case ONLY_LAST_CREATED_FIRST:
-                return qItemClass.itemClassificationId.abstractClassification.createdDate
-                    .desc();
+                    .coalesce(qItemClass.itemClassificationId.abstractClassification.createdDate).desc();
             case NAME:
                 return qItemClass.itemClassificationId.abstractClassification.name.asc();
             case CUSTOM:
                 return qItemClass.displayOrder.desc();
+//            case ONLY_LAST_CREATED_FIRST:
+//                return qItemClass.itemClassificationId.abstractClassification.createdDate.desc();
             default:
-                return qItemClass.itemClassificationId.abstractClassification.createdDate
-                    .desc();
+                return qItemClass.itemClassificationId.abstractClassification.createdDate.desc();
         }
     }
 
@@ -131,14 +124,13 @@ public final class ItemPredicates {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItem.lastModifiedDate.coalesce(qItem.createdDate).desc();
             case ONLY_LAST_CREATED_FIRST:
-                return qItem.createdDate
-                    .desc();
+                return qItem.createdDate.desc();
             case NAME:
                 return qItem.title.asc();
-            case START_DATE:
-                return qItem.startDate.desc();
             case CUSTOM:
                 return qItem.id.desc();
+//            case START_DATE:
+//                return qItem.startDate.desc();
             default:
                 return qItem.startDate.desc();
         }

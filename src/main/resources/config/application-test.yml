@@ -16,7 +16,7 @@ spring:
 
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false
         username: root
         password: root
         hikari:

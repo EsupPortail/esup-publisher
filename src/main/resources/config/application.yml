@@ -10,7 +10,7 @@ spring:
     jpa:
         open-in-view: false
         properties:
-            hibernate.jdbc.time_zone: UTC
+            #hibernate.jdbc.time_zone: GMT+1
         hibernate:
             ddl-auto: none
     main:
