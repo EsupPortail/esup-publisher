@@ -10,7 +10,10 @@
 ######################
 /node/**
 /node_modules/**
-
+######################
+# bower components
+######################
+/src/main/webapp/bower_components/components-font-awesome/fonts/**
 ######################
 # SASS
 ######################
