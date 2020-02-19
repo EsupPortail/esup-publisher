@@ -12,6 +12,8 @@ Database Initialization
 The database server should be a recent version supporting utf8mb4 characters and the collation indicated bellow.
 As example you can use this [mariadb configuration](https://github.com/GIP-RECIA/docker-mariadb/) the application is qualified on a such server.
 
+Running with openjdk 8 or 11
+
 ### Initialization
 
 ```sql
@@ -22,7 +24,6 @@ run mvn command to init the database
 ```shell
 ./mvnw compile liquibase:update
 ```
-under `java 8` provide `-Djadira.usertype.useJdbc42Apis=false` to previous command
 
 or deploy and run directly the app
 
