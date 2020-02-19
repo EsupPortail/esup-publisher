@@ -5,6 +5,7 @@
 #/src/main/webapp/bower_components
 /src/main/resources/config/application-dev.yml
 /src/main/resources/config/application-prod.yml
+/src/main/webapp/META-INF/**
 ######################
 # Node
 ######################
@@ -13,7 +14,7 @@
 ######################
 # bower components
 ######################
-/src/main/webapp/bower_components/components-font-awesome/fonts/**
+/src/main/webapp/bower_components/components-font-awesome/fonts/*
 ######################
 # SASS
 ######################
