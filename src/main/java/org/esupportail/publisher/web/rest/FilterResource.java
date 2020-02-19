@@ -16,6 +16,8 @@
 package org.esupportail.publisher.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import org.esupportail.publisher.domain.ExternalFeed;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.security.SecurityConstants;
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Filter.
@@ -102,7 +105,8 @@ public class FilterResource {
     @Timed
     public ResponseEntity<Filter> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Filter : {}", id);
-        Filter filter = filterRepository.findOne(id);
+        Optional<Filter> optionalFilter =  filterRepository.findById(id);
+        Filter filter = optionalFilter == null || !optionalFilter.isPresent()? null : optionalFilter.get();
         if (filter == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -119,6 +123,6 @@ public class FilterResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Filter : {}", id);
-        filterRepository.delete(id);
+        filterRepository.deleteById(id);
     }
 }

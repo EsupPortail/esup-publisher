@@ -33,7 +33,7 @@ public class PermissionClassDeserializer extends JsonDeserializer<PermissionClas
         if (type != null) {
             return type;
         }
-        throw new JsonMappingException(String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
+        throw new JsonMappingException(jp, String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
             PermissionClass.class.getSimpleName(), PermissionClass.values().toString()));
     }
 }

@@ -17,13 +17,14 @@ package org.esupportail.publisher.security;
 
 import javax.validation.constraints.NotNull;
 
-import com.mysema.commons.lang.Pair;
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.springframework.security.core.Authentication;
+
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.types.Predicate;
 
 public interface IPermissionService {
 

@@ -15,15 +15,14 @@
  */
 package org.esupportail.publisher.web.rest.util;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Utility class for handling pagination.
@@ -55,10 +54,10 @@ public class PaginationUtil {
             limit = DEFAULT_LIMIT;
         }
         if (sort != null) {
-            return new PageRequest(offset - 1, limit, sort);
+            return PageRequest.of(offset - 1, limit, sort);
         }
 
-        return new PageRequest(offset - 1, limit);
+        return PageRequest.of(offset - 1, limit);
     }
 
     public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl, Integer offset, Integer limit)

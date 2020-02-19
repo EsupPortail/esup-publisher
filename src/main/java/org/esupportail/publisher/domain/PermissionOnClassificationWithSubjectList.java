@@ -26,8 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -44,16 +42,15 @@ import java.util.Set;
 @JsonTypeName("PERMONCTXWSUBJS")
 @Entity
 @DiscriminatorValue("OnContextWithSubjectListFilter")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PermissionOnClassificationWithSubjectList extends
 		PermissionOnContext {
 
 	/** */
 	private static final long serialVersionUID = 6155776530760516244L;
 
+	@Embedded
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "T_PERM_AUTHORIZED_SUBJECTS")
-	@AttributeOverrides({ @AttributeOverride(name = "PermissionOnClassificationWithSubjectList_id", column = @Column(name = "perm_id")) })
 	private Set<SubjectKey> authorizedSubjects = new HashSet<SubjectKey>();
 
 	/**

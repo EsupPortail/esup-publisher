@@ -33,7 +33,7 @@ public class SubscribeTypeDeserializer extends JsonDeserializer<SubscribeType> {
         if (type != null) {
             return type;
         }
-        throw new JsonMappingException(String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
+        throw new JsonMappingException(jp, String.format("Invalid value '%s' for %s, must be in range of %s", jp.getValueAsString(),
             SubscribeType.class.getSimpleName(), SubscribeType.values().toString()));
     }
 }

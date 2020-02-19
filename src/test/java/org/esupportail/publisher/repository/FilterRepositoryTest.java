@@ -21,25 +21,25 @@ import static org.junit.Assert.assertTrue;
 
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Organization;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class FilterRepositoryTest {
@@ -105,7 +105,7 @@ public class FilterRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

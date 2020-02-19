@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -109,8 +110,9 @@ public class GroupServiceWS implements IGroupService {
 			final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 			Set<String> groupIds = Sets.newHashSet();
 			if (rootCtx != null) {
-				Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.GROUP));
+				Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 				if (filter != null) {
 					IExternalGroup group = externalGroupDao.getGroupById(filter.getPattern(), false);
 					if (group != null) {
@@ -142,8 +144,9 @@ public class GroupServiceWS implements IGroupService {
 				}
 				final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 				if (rootCtx != null) {
-					Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+					Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 							FilterType.GROUP));
+					Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 					if (filter != null) {
 						IExternalGroup group = externalGroupDao.getGroupById(filter.getPattern(), false);
 						if (group != null) {

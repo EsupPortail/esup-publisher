@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 
@@ -115,11 +116,15 @@ public class ViewController {
 		log.debug("Request to render in viewer, item with id {}", itemId);
 		if (itemId == null)
 			throw new IllegalArgumentException("No item identifier was provided to the request!");
-
-		final AbstractItem item = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED));
-		log.debug("Item found {}", item);
-		if (item == null)
+		Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED));
+		
+		AbstractItem item = null;
+		if (optionnalItem == null || !optionnalItem.isPresent()) {
 			return "objectNotFound";
+		} else {
+			item = optionnalItem.get();
+			log.debug("Item found {}", item);
+		}
 
 		try {
 			if (!canView(item)) {
@@ -173,8 +178,9 @@ public class ViewController {
 		boolean canView = false;
 		String filename = null;
 		for (LinkedFileItem lfiles : itemsFiles) {
-			final AbstractItem item = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
+			Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
 					ItemStatus.PUBLISHED));
+			AbstractItem item = optionnalItem == null || !optionnalItem.isPresent() ? null : optionnalItem.get();	
 			try {
 				if (item != null && canView(item)) {
 					canView = true;

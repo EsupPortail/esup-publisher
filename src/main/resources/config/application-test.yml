@@ -2,7 +2,8 @@ server:
     #address: localhost
     #address: 192.168.45.145
     port: 8080
-    contextPath: /publisher
+    servlet:
+        contextPath: /publisher
 
 multipart:
     maxFileSize: 10MB
@@ -11,40 +12,43 @@ multipart:
 spring:
     profiles:
         active: dev
-        include: fast,ldapgrp
+        include: ldapgrp
 
     datasource:
-        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://127.0.0.1:3306/publisher_test?autoreconnect=true
-        databaseName:
-        serverName:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false
         username: root
         password: root
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
+        hikari:
+            poolName: Hikari
+            auto-commit: false
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
 
     jpa:
-        database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+        database-platform: org.hibernate.dialect.MariaDB10Dialect
         database: MYSQL
-        openInView: false
-        show_sql: true
-        generate-ddl: false
+        show-sql: true
         hibernate:
             ddl-auto: none
-            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         properties:
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+            #hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
     mail:
         baseUrl: http://localhost:8080
 
     thymeleaf:
-        mode: XHTML
         cache: false
 
 logging:
@@ -63,9 +67,9 @@ metrics:
         prefix: publisher
 
 cache:
-    timeToLiveSeconds: 3600
     ehcache:
-        maxBytesLocalHeap: 16M
+        timeToLiveSeconds: 3600
+        maxEntries: 1000
 
 ldap:
     base: dc=esco-centre,dc=fr
@@ -118,9 +122,9 @@ ldap:
 
 cas:
     url:
-        prefix: https://test.reciacas.fr/cas/
-        login: https://test.reciacas.fr/cas/login
-        logout: https://test.reciacas.fr/cas/logout
+        prefix: https://secure.giprecia.net/cas_old/
+        login: https://secure.giprecia.net/cas_old/login
+        logout: https://secure.giprecia.net/cas_old/logout
 
 app:
     service:
@@ -161,8 +165,5 @@ app:
         unremovablePathPattern: "default/welcome.*,test.*"
 
     authorizedServices:
-        ipRange: "192.168.57.0/24"
+        ipRange: "192.168.0.0/16"
 
-ws:
-    esup:
-        url: https://test.cas.ent/portail/services/UportalService

@@ -16,7 +16,7 @@ angular.module('publisherApp')
             },
 
             threadDump: function () {
-                return $http.get('dump').then(function (response) {
+                return $http.get('threaddump').then(function (response) {
                     return response.data;
                 });
             }

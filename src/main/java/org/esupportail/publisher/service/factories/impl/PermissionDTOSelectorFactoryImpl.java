@@ -16,7 +16,6 @@
 package org.esupportail.publisher.service.factories.impl;
 
 import lombok.Getter;
-import org.apache.commons.lang.IllegalClassException;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.repository.PermissionRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
@@ -67,14 +66,14 @@ public class PermissionDTOSelectorFactoryImpl extends AbstractDTOFactoryImpl<Per
         for (APermissionDTOFactory<? extends PermissionDTO, ? extends AbstractPermission> factory : permissionFactories) {
             if (factory.isDTOFactoryImpl(dtoObject)) return factory;
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + dtoObject.getClass().getCanonicalName());
     }
 
     private APermissionDTOFactory<? extends PermissionDTO, ? extends AbstractPermission> getFactory(final AbstractPermission model) {
         for (APermissionDTOFactory<? extends PermissionDTO, ? extends AbstractPermission> factory : permissionFactories) {
             if (factory.isDTOFactoryImpl(model)) return factory;
         }
-        throw new IllegalClassException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
+        throw new IllegalArgumentException("No DTOFactoryImpl found for " + model.getClass().getCanonicalName());
     }
 
 

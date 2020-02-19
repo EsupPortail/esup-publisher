@@ -25,11 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.OrganizationReaderRedactorKey;
@@ -57,7 +57,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -70,13 +70,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 /**
  * Test class for the PublisherResource REST controller.
  *
  * @see PublisherResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class PublisherResourceTest {
 
@@ -140,7 +142,8 @@ public class PublisherResourceTest {
         this.restPublisherMockMvc = MockMvcBuilders.standaloneSetup(
             publisherResource, publisherService).build();
 
-        User userPart = userRepo.findOne(QUser.user.login.like("system"));
+        Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
+        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));

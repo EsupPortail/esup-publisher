@@ -16,6 +16,8 @@
 package org.esupportail.publisher.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.InternalFeed;
 import org.esupportail.publisher.repository.InternalFeedRepository;
 import org.esupportail.publisher.security.SecurityConstants;
@@ -32,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing InternalFeed.
@@ -102,7 +105,8 @@ public class InternalFeedResource {
     @Timed
     public ResponseEntity<InternalFeed> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get InternalFeed : {}", id);
-        InternalFeed internalFeed = internalFeedRepository.findOne(id);
+        Optional<InternalFeed> optionalInternalFeed =  internalFeedRepository.findById(id);
+        InternalFeed internalFeed = optionalInternalFeed == null || !optionalInternalFeed.isPresent()? null : optionalInternalFeed.get();
         if (internalFeed == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -119,6 +123,6 @@ public class InternalFeedResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete InternalFeed : {}", id);
-        internalFeedRepository.delete(id);
+        internalFeedRepository.deleteById(id);
     }
 }

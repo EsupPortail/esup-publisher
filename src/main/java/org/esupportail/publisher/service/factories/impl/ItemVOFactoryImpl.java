@@ -15,12 +15,18 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import lombok.SneakyThrows;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.LinkedFileItem;
@@ -29,12 +35,11 @@ import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
+import org.esupportail.publisher.web.rest.util.ISO8601LocalDateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
 import org.esupportail.publisher.web.rest.vo.Visibility;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -52,6 +57,9 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
     @Inject
     private HighlightedClassificationService highlightedClassificationService;
 
+    private XmlAdapter<String, Instant> ISO8601Adapter = new ISO8601LocalDateTimeXmlAdapter();
+
+    @SneakyThrows
     public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers,
                        final List<LinkedFileItem> linkedFiles, final HttpServletRequest request) {
         if (item != null) {
@@ -69,7 +77,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
                 }
             }
             article.setDescription(item.getSummary());
-            article.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
+            article.setPubDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setGuid(item.getId().hashCode());
             article.setCategories(new ArrayList<String>());
             for (AbstractClassification classif: classifications) {
@@ -81,7 +89,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
                 vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
             }
             article.setCreator(item.getCreatedBy().getDisplayName());
-            article.setDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()));
+            article.setDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setFiles(new ArrayList<LinkedFileVO>());
             for (LinkedFileItem linkedFile: linkedFiles) {
                 if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
@@ -94,10 +102,10 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             }
             vo.setArticle(article);
             vo.setCreator(item.getCreatedBy().getId().getKeyId());
-            vo.setPubDate(item.getStartDate().toDateTime(LocalTime.MIDNIGHT, DateTimeZone.getDefault()).toString());
-            vo.setCreatedDate(item.getCreatedDate().toDateTime(DateTimeZone.getDefault()).toString());
+            vo.setPubDate(ISO8601Adapter.marshal(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime().toInstant()));
+            vo.setCreatedDate(ISO8601Adapter.marshal(item.getCreatedDate()));
             if (item.getLastModifiedDate() != null)
-                vo.setModifiedDate(item.getLastModifiedDate().toDateTime(DateTimeZone.getDefault()).toString());
+                vo.setModifiedDate(ISO8601Adapter.marshal(item.getLastModifiedDate().truncatedTo(ChronoUnit.MILLIS)));
             vo.setUuid(item.getId().toString());
             if (subscribers != null && !subscribers.isEmpty()) {
                 vo.setVisibility(visibilityFactory.from(subscribers));

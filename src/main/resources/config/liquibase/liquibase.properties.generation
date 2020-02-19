@@ -1,10 +1,4 @@
-driver: com.mysql.jdbc.Driver
-url: jdbc:mysql://127.0.0.1:3306/publisher?useUnicode=true&characterEncoding=UTF-8
+url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
 defaultSchema: publisher_dev
 username: root
-password: root
-promptOnNonLocalDatabase: true
-referenceUrl: hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.apereo.portal.utils.hibernate4.dialects.MySQL5InnoDBCompressedDialect
-verbose: true
-dropFirst: false
-logging: debug
+password:

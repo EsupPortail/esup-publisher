@@ -17,13 +17,13 @@ package org.esupportail.publisher.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
-import com.mysema.query.types.Predicate;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.InternalFeed;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -54,6 +54,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.codahale.metrics.annotation.Timed;
+import com.querydsl.core.types.Predicate;
 
 /**
  * REST controller for managing Evaluator.
@@ -133,7 +136,8 @@ public class ItemResource {
     @Timed
     public ResponseEntity<?> update(@RequestBody ActionDTO action) throws URISyntaxException {
         log.debug("REST request to update Item with action : {}", action);
-        AbstractItem item = itemRepository.findOne(action.getObjectId());
+        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(action.getObjectId());
+        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
         switch(action.getAttribute()) {
             case "enclosure" :
                 return contentService.setEnclosureItem(action.getValue(), item);
@@ -184,7 +188,8 @@ public class ItemResource {
     @Timed
     public ResponseEntity<AbstractItem> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Item : {}", id);
-        AbstractItem item = itemRepository.findOne(id);
+        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
+        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
         if (item == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -204,8 +209,9 @@ public class ItemResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Item : {}", id);
-        final AbstractItem item = itemRepository.findOne(id);
+        Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
+        AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
         fileService.deleteInternalResource(item.getEnclosure());
-        itemRepository.delete(id);
+        itemRepository.deleteById(id);
     }
 }

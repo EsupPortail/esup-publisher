@@ -12,6 +12,11 @@ angular.module('publisherApp')
                     var orderBy = $filter('orderBy');
                     return orderBy(properties, 'prefix');
                 });
+            },
+            getEnv: function() {
+                return $http.get('env').then(function (response) {
+                    return response.data;
+                });
             }
         };
     });

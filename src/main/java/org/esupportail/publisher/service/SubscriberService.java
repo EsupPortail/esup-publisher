@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
@@ -62,20 +63,23 @@ public class SubscriberService {
 			List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates
 					.onCtx(contextKey)));
 			if (subscribers.isEmpty()) {
-				Publisher publisher = publisherRepository.findOne(contextKey.getKeyId());
+				Optional<Publisher> optionalPublisher = publisherRepository.findById(contextKey.getKeyId());
+				Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
 				if (publisher != null) {
 					return getDefaultsSubscribersOfContext(publisher.getContext().getOrganization().getContextKey());
 				}
 			}
 			return subscribers;
 		case CATEGORY:
-			Category category = categoryRepository.findOne(contextKey.getKeyId());
+			Optional<Category> optionalCategory = categoryRepository.findById(contextKey.getKeyId());
+			Category category = optionalCategory == null || !optionalCategory.isPresent() ? null : optionalCategory.get();
 			if (category != null) {
 				return getDefaultsSubscribersOfContext(category.getPublisher().getContextKey());
 			}
 			return Lists.newArrayList();
 		case FEED:
-			AbstractFeed feed = feedRepository.findOne(contextKey.getKeyId());
+			Optional<AbstractFeed> optionalFeed = feedRepository.findById(contextKey.getKeyId());
+			AbstractFeed feed = optionalFeed == null || !optionalFeed.isPresent() ? null : optionalFeed.get();
 			if (feed != null) {
 				return getDefaultsSubscribersOfContext(feed.getPublisher().getContextKey());
 			}

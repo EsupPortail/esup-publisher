@@ -15,8 +15,7 @@
  */
 package org.esupportail.publisher.security;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jasig.cas.client.session.HashMapBackedSessionMappingStorage;
 import org.jasig.cas.client.session.SessionMappingStorage;
 import org.jasig.cas.client.util.CommonUtils;
@@ -28,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -262,7 +262,7 @@ public final class CustomSingleSignOutHandler {
      * @return the uncompressed logout message.
      */
     private String uncompressLogoutMessage(final String originalMessage) {
-        final byte[] binaryMessage = Base64.decodeBase64(originalMessage.getBytes());
+        final byte[] binaryMessage = DatatypeConverter.parseBase64Binary(originalMessage);
 
         Inflater decompresser = null;
         try {

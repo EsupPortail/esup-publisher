@@ -18,13 +18,13 @@ package org.esupportail.publisher.config;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.Charsets;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.web.ViewController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class FileUploadConfiguration {
         fuh.setUnremovablePaths(Arrays.asList(env.getProperty(ENV_UNREMOVABLE_PATH, String[].class, new String[]{})));
         final String mimeTypesFilePath = env.getProperty(ENV_UPLOAD_FILE_AUTHORIZED_MIME_TYPE, defaultFileMimeTypes);
         try {
-            List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), Charsets.UTF_8);
+            List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), StandardCharsets.UTF_8);
             fuh.setAuthorizedMimeType(list);
         } catch (IOException e) {
             log.error("No file describing authorized MimeTypes is readable !", e);
@@ -101,7 +101,7 @@ public class FileUploadConfiguration {
         fuh.setUnremovablePaths(Arrays.asList(env.getProperty(ENV_UNREMOVABLE_PATH, String[].class, new String[]{})));
         final String mimeTypesFilePath = env.getProperty(ENV_UPLOAD_FILE_AUTHORIZED_MIME_TYPE, defaultFileMimeTypes);
         try {
-            List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), Charsets.UTF_8);
+            List<String> list = Files.readAllLines(Paths.get(new ClassPathResource(mimeTypesFilePath).getURI()), StandardCharsets.UTF_8);
             fuh.setAuthorizedMimeType(list);
         } catch (IOException e) {
             log.error("No file describing authorized MimeTypes is readable !", e);

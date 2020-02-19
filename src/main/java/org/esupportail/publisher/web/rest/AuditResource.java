@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.service.AuditEventService;
-import org.esupportail.publisher.web.propertyeditors.LocaleDateTimeEditor;
-import org.joda.time.LocalDateTime;
+//import org.esupportail.publisher.web.propertyeditors.LocaleDateTimeEditor;
+import java.time.Instant;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
@@ -43,10 +43,10 @@ public class AuditResource {
 	@Inject
 	private AuditEventService auditEventService;
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(LocalDateTime.class, new LocaleDateTimeEditor("yyyy-MM-dd", false));
-	}
+//	@InitBinder
+//	public void initBinder(WebDataBinder binder) {
+//		binder.registerCustomEditor(Instant.class, new LocaleDateTimeEditor("yyyy-MM-dd", false));
+//	}
 
     @RequestMapping(value = "/audits/all",
             method = RequestMethod.GET,
@@ -60,8 +60,8 @@ public class AuditResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
 	@RolesAllowed(AuthoritiesConstants.ADMIN)
-	public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
-			@RequestParam(value = "toDate") LocalDateTime toDate) {
+	public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") Instant fromDate,
+			@RequestParam(value = "toDate") Instant toDate) {
 		return auditEventService.findByDates(fromDate, toDate);
 	}
 }

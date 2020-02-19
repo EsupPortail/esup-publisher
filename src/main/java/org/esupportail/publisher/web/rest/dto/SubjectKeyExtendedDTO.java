@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,6 @@ import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.validator.constraints.ScriptAssert;
 
 /**

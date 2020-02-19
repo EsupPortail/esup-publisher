@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Subscriber;
@@ -97,8 +99,10 @@ public class GroupService implements IGroupService {
 				}
 			}
 		}
-		log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
-				perms.getSecond());
+		if(perms != null) {
+			log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
+					perms.getSecond());
+		}
 		if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst())
 				&& perms.getSecond() == null) {
 			return Lists.newArrayList();
@@ -110,8 +114,9 @@ public class GroupService implements IGroupService {
 			final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 			Set<String> groupIds = Sets.newHashSet();
 			if (rootCtx != null) {
-				Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.GROUP));
+				Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 				if (filter != null) {
 					List<IExternalGroup> groups = externalGroupDao
 							.getGroupsWithFilter(filter.getPattern(), null, false);
@@ -147,8 +152,9 @@ public class GroupService implements IGroupService {
 					final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 					Set<String> groupIds = Sets.newHashSet();
 					if (rootCtx != null) {
-						final Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
+						Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
 								rootCtx.getKeyId(), FilterType.GROUP));
+						Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
 						if (filter != null) {
 							List<IExternalGroup> groups = externalGroupDao.getGroupsWithFilter(filter.getPattern(),
 									null, false);

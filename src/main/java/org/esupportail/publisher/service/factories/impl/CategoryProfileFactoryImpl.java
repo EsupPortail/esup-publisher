@@ -47,7 +47,7 @@ public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
 
     @Override
     public CategoryProfile from(final Publisher publisher, final List<Subscriber> subscribers, final String urlActualites, final String urlCategory) {
-        Assert.isTrue(urlActualites != null || urlCategory != null);
+        Assert.isTrue(urlActualites != null || urlCategory != null, "Error: a categoryProfile should have a not null urlActualites or urlCategory !");
         if (publisher != null) {
             CategoryProfile cp = new CategoryProfile();
             cp.setName(publisher.getContext().getOrganization().getDisplayName());
@@ -66,7 +66,7 @@ public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
 
     @Override
     public CategoryProfile from(final Publisher publisher, final AbstractClassification classif, final List<Subscriber> subscribers, final String urlFeeds, final boolean withOrganizationName) {
-        Assert.isTrue(urlFeeds != null);
+        Assert.isTrue(urlFeeds != null, "Error: a categoryProfile should have a not null urlFeeds !");
         if (publisher != null && classif != null) {
             CategoryProfile cp = new CategoryProfile();
             if (withOrganizationName) {

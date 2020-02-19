@@ -33,10 +33,10 @@
             },
             "gc": {
                 "title": "Garbage collections",
-                "marksweepcount": "Total de \"Mark Sweep\"",
-                "marksweeptime": "Temps \"Mark Sweep\"",
-                "scavengecount": "Total \"Scavenge\"",
-                "scavengetime": "Temps \"Scavenge\""
+                "oldgenerationcount": "Total Old generation",
+                "oldgenerationtime": "Temps Old generation",
+                "younggenerationcount": "Total Young generation",
+                "younggenerationtime": "Temps Young generation"
             },
             "http": {
                 "title": "Requêtes HTTP requests (évènements par seconde)",
@@ -69,14 +69,20 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statistiques Ehcache",
+        "cache": {
+            "title": "Statistiques de cache",
             "cachename": "Nom du cache",
-            "objects": "Objets",
             "hits": "Données existantes",
             "misses": "Données non existantes",
-            "evictioncount": "Nombre de suppressions",
-            "mean": "Temps de réponse (ms)"
+            "gets": "Lectures",
+            "puts": "Écritures",
+            "removals": "Suppressions",
+            "evictions": "Évictions",
+            "hitPercent": "% données existantes",
+            "missPercent": "% données non existantes",
+            "averageGetTime": "Temps de lecture moyen (µs)",
+            "averagePutTime": "Temps d'écriture moyen (µs)",
+            "averageRemoveTime": "Temps de suppression moyen (µs)"
         },
         "datasource": {
         	"usage": "Usage",

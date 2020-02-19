@@ -24,13 +24,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Organization;
@@ -46,16 +44,21 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 // @Transactional
 @Slf4j
 public class PermissionRepositoryTest {
@@ -150,9 +153,9 @@ public class PermissionRepositoryTest {
 		p1 = repository.save(p1);
 		assertNotNull(p1.getId());
 		log.info("After insert : " + p1.toString());
-
-		PermissionOnContext p2 = (PermissionOnContext) repository.findOne(p1
-				.getId());
+		
+		Optional<AbstractPermission> optionalPerm = repository.findById(p1.getId());
+		PermissionOnContext p2 = optionalPerm == null || !optionalPerm.isPresent()? null : (PermissionOnContext) optionalPerm.get();
 		log.info("After select : " + p2.toString());
 		assertNotNull(p2);
 		assertEquals(p1, p2);
@@ -161,7 +164,7 @@ public class PermissionRepositoryTest {
 		p2.setContext(org2.getContextKey());
 		p2 = repository.save(p2);
 		log.info("After update : " + p2.toString());
-		assertTrue(repository.exists(p2.getId()));
+		assertTrue(repository.existsById(p2.getId()));
 		p2 = (PermissionOnContext) repository.getOne(p2.getId());
 		assertNotNull(p2);
 		log.info("After select : " + p2.toString());
@@ -176,10 +179,10 @@ public class PermissionRepositoryTest {
 		assertThat(result.size(), is(2));
 		assertThat(result, hasItem(p2));
 
-		repository.delete(p2.getId());
+		repository.deleteById(p2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(4));
-		assertFalse(repository.exists(p2.getId()));
+		assertFalse(repository.existsById(p2.getId()));
 	}
 
 	/**
@@ -200,7 +203,7 @@ public class PermissionRepositoryTest {
 	@Test
 	@Transactional
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0).getId()));
+		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
 
 	}
 

@@ -37,6 +37,10 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	public MethodSecurityConfig(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
 	@Bean
 	public RoleHierarchyVoter roleVoter() {
@@ -46,9 +50,9 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 	@Bean
 	public RoleHierarchy roleHierarchy() {
 		RoleHierarchyImpl rhi = new RoleHierarchyImpl();
-		rhi.setHierarchy(AuthoritiesConstants.ADMIN + " > " + AuthoritiesConstants.USER + " "
-				+ AuthoritiesConstants.USER + " > " + AuthoritiesConstants.AUTHENTICATED + " "
-				+ AuthoritiesConstants.AUTHENTICATED + " > " + AuthoritiesConstants.ANONYMOUS);
+		rhi.setHierarchy(AuthoritiesConstants.ADMIN + " > " + AuthoritiesConstants.USER
+				+ " > " + AuthoritiesConstants.AUTHENTICATED
+				+ " > " + AuthoritiesConstants.ANONYMOUS);
 		return rhi;
 	}
 

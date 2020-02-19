@@ -18,9 +18,9 @@ package org.esupportail.publisher.config;
 import java.util.Arrays;
 
 import org.apache.catalina.Context;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 public class TomcatConfig {
 
     @Bean
-    public EmbeddedServletContainerFactory servletContainer() {
-        TomcatEmbeddedServletContainerFactory factory = new TomcatEmbeddedServletContainerFactory();
+    public ServletWebServerFactory servletContainer() {
+    	TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
         factory.setTomcatContextCustomizers(Arrays.asList(new CustomCustomizer()));
         return factory;
     }

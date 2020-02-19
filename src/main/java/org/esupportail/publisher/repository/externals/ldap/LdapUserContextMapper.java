@@ -46,7 +46,7 @@ public class LdapUserContextMapper implements ContextMapper<IExternalUser> {
 
 	@Override
 	public IExternalUser mapFromContext(Object ctx) throws NamingException {
-		Assert.notNull(externalUserHelper);
+		Assert.notNull(externalUserHelper, "The externalUserHelper should not be null !");
 		DirContextAdapter context = (DirContextAdapter) ctx;
 		Map<String, List<String>> attrs = new HashMap<String, List<String>>();
 		ExternalUser person = new ExternalUser();

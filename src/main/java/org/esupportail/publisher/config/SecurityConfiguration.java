@@ -23,7 +23,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
@@ -57,7 +57,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -67,7 +66,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.Assert;
 
 @Configuration
-@EnableWebMvcSecurity
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -83,7 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
     private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
     private static final String APP_USERS_GROUP_NAME = "app.users.groupName";
-    private static final String APP_CONTEXT_PATH = "server.contextPath";
+    private static final String APP_CONTEXT_PATH = "server.servlet.contextPath";
     private static final String APP_PROTOCOL = "app.service.protocol";
 
     private static final String DefaultTargetUrlParameter = "spring-security-redirect";
@@ -130,7 +128,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public IAuthoritiesDefinition mainRolesDefs() {
-        Assert.notNull(env);
+        Assert.notNull(env, "environment must not be null");
         AuthoritiesDefinition defs = new AuthoritiesDefinition();
 
         Set<IEvaluation> set = new HashSet<IEvaluation>();
@@ -225,6 +223,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public CasAuthenticationFilter casAuthenticationFilter() throws Exception {
         CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
+        casAuthenticationFilter.setFilterProcessesUrl("/" + env.getRequiredProperty(CAS_SERVICE_URI));
         casAuthenticationFilter.setAuthenticationManager(authenticationManager());
         casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource(
             serviceUrlHelper(), serviceProperties(), getCasTargetUrlParameter()));
@@ -260,7 +259,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web){
         web.ignoring().antMatchers("/scripts/**/*.{js,html}").antMatchers("/bower_components/**")
             .antMatchers("/i18n/**").antMatchers("/assets/**").antMatchers("/swagger-ui/**")
             .antMatchers("/test/**").antMatchers("/console/**");
@@ -291,6 +290,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .headers()
             .frameOptions()
             .disable()
+            .and()
             .authorizeRequests()
             .antMatchers("/app/**").authenticated()
             .antMatchers("/api/register").denyAll()

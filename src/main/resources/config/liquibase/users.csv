@@ -1,5 +1,5 @@
 user_id;display_name;email;enabled;lang_key;accept_notifications;created_date
-system;System;system@myapp.com;true;fr;false;now()
-anonymousUser;Anonymous;NULL;true;fr;false;now()
-admin;Administrator;NULL;true;fr;false;now()
-user;User;NULL;true;fr;false;now()
+system;System;system@myapp.com;true;fr;false;NOW
+anonymousUser;Anonymous;NULL;true;fr;false;NOW
+admin;Administrator;NULL;true;fr;false;NOW
+user;User;NULL;true;fr;false;NOW

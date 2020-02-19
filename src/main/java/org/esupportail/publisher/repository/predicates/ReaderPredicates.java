@@ -21,8 +21,8 @@ package org.esupportail.publisher.repository.predicates;
 import org.esupportail.publisher.domain.QReader;
 import org.esupportail.publisher.domain.Reader;
 
-import com.mysema.query.types.Predicate;
-import com.mysema.query.types.expr.BooleanExpression;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 29 sept. 2014

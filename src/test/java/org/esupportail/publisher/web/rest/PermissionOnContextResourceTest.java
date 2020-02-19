@@ -15,8 +15,21 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.PermissionOnContext;
@@ -38,7 +51,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,13 +64,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.List;
+import com.google.common.collect.Lists;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Test class for the PermissionOnContextResource REST controller.
@@ -65,7 +74,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see PermissionOnContextResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 public class PermissionOnContextResourceTest {
@@ -117,7 +126,8 @@ public class PermissionOnContextResourceTest {
 		this.restPermissionOnContextMockMvc = MockMvcBuilders.standaloneSetup(
 				permissionOnContextResource).build();
 
-        User userPart = userRepo.findOne(QUser.user.login.like("system"));
+	    Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
+        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));

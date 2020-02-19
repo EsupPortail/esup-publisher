@@ -21,7 +21,7 @@ package org.esupportail.publisher.repository.predicates;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.QSubscriber;
 
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 29 oct. 2014

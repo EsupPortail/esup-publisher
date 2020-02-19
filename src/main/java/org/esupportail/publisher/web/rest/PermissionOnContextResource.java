@@ -18,12 +18,15 @@ package org.esupportail.publisher.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
+
+import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
 import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -151,7 +154,8 @@ public class PermissionOnContextResource {
 	public ResponseEntity<PermissionOnContext> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get PermissionOnContext : {}", id);
-		PermissionOnContext permissionOnContext = permissionOnContextRepository.findOne(id);
+		Optional<PermissionOnContext> optionalPermissionOnContext =  permissionOnContextRepository.findById(id);
+		PermissionOnContext permissionOnContext = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
 		if (permissionOnContext == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -167,7 +171,8 @@ public class PermissionOnContextResource {
 	@Timed
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete PermissionOnContext : {}", id);
-        PermissionOnContext permissionOnContext = permissionOnContextRepository.findOne(id);
+		Optional<PermissionOnContext> optionalPermissionOnContext =  permissionOnContextRepository.findById(id);
+		PermissionOnContext permissionOnContext = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
         if (permissionOnContext == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

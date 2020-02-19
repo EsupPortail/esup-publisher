@@ -17,6 +17,7 @@ package org.esupportail.publisher.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.ExternalFeed;
+import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.ExternalFeedRepository;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing ExternalFeed.
@@ -102,7 +104,8 @@ public class ExternalFeedResource {
     @Timed
     public ResponseEntity<ExternalFeed> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get ExternalFeed : {}", id);
-        ExternalFeed externalFeed = externalFeedRepository.findOne(id);
+        Optional<ExternalFeed> optionalExternalFeed =  externalFeedRepository.findById(id);
+        ExternalFeed externalFeed = optionalExternalFeed == null || !optionalExternalFeed.isPresent()? null : optionalExternalFeed.get();
         if (externalFeed == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -119,6 +122,6 @@ public class ExternalFeedResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete ExternalFeed : {}", id);
-        externalFeedRepository.delete(id);
+        externalFeedRepository.deleteById(id);
     }
 }

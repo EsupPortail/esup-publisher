@@ -15,7 +15,10 @@
  */
 package org.esupportail.publisher.web.rest.vo;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +35,9 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-//@JsonTypeName(value = "regular")
+@EqualsAndHashCode(callSuper = false)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonTypeName(value = "regular")
 @XmlRootElement(name = "regular")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class VisibilityRegular extends VisibilityAbstract implements Serializable {

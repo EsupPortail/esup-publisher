@@ -20,8 +20,9 @@ create database publisher DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_
 
 run mvn command to init the database
 ```shell
-mvn compile liquibase:update
+./mvnw compile liquibase:update
 ```
+under `java 8` provide `-Djadira.usertype.useJdbc42Apis=false` to previous command
 
 or deploy and run directly the app
 

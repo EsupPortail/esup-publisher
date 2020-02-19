@@ -18,9 +18,9 @@ package org.esupportail.publisher.service.evaluators;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;

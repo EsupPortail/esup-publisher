@@ -16,6 +16,7 @@
 package org.esupportail.publisher.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -135,7 +136,7 @@ public class UserService {
 	// */
 	// @Scheduled(cron = "0 0 0 * * ?")
 	// public void removeOldPersistentTokens() {
-	// LocalDate now = new LocalDate();
+	// Instant now = Instant.now();
 	// List<PersistentToken> tokens = persistentTokenRepository
 	// .findByTokenDateBefore(now.minusMonths(1));
 	// for (PersistentToken token : tokens) {
@@ -155,7 +156,7 @@ public class UserService {
 	 */
 	// @Scheduled(cron = "0 0 1 * * ?")
 	// public void removeNotActivatedUsers() {
-	// DateTime now = new DateTime();
+	// Instant now = Instant.now();
 	// List<User> users = userRepository
 	// .findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
 	// for (User user : users) {
@@ -188,8 +189,10 @@ public class UserService {
 				}
 			}
 		}
-		log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
+		if(perms != null) {
+			log.debug("getRootNodes for ctx {}, with permsType {} and permsDTO {}", contextKey, perms.getFirst(),
 				perms.getSecond());
+		}
 		if (perms == null || perms.getFirst() == null || !PermissionType.ADMIN.equals(perms.getFirst())
 				&& perms.getSecond() == null) {
 			return Lists.newArrayList();
@@ -199,8 +202,9 @@ public class UserService {
 		if (PermissionType.ADMIN.getMask() <= perms.getFirst().getMask()) {
 			final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 			if (rootCtx != null) {
-				Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.LDAP));
+				Filter filter = optionalFilter.orElse(null);
 				if (filter != null) {
 					return userDTOFactory.asDTOList(externalUserDao.getUsersWithFilter(filter.getPattern(), search),
 							false);
@@ -242,8 +246,9 @@ public class UserService {
 				} else if (perm instanceof PermOnCtxDTO) {
 					final ContextKey rootCtx = contextService.getOrganizationCtxOfCtx(contextKey);
 					if (rootCtx != null) {
-						final Filter filter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
-								rootCtx.getKeyId(), FilterType.LDAP));
+						Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
+								FilterType.LDAP));
+						Filter filter = optionalFilter.orElse(null);
 						if (filter != null) {
 							return userDTOFactory.asDTOList(
 									externalUserDao.getUsersWithFilter(filter.getPattern(), search), false);

@@ -15,15 +15,19 @@
  */
 package org.esupportail.publisher.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.config.audit.AuditEventConverter;
 import org.esupportail.publisher.domain.PersistentAuditEvent;
 import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
-import org.joda.time.LocalDateTime;
+import java.time.Instant;
 import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -34,6 +38,7 @@ import java.util.List;
  * </p>
  */
 @Service
+@Slf4j
 @Transactional
 public class AuditEventService {
 
@@ -47,10 +52,25 @@ public class AuditEventService {
         return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
     }
 
-    public List<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate) {
+    public List<AuditEvent> findByDates(Instant fromDate, Instant toDate) {
         List<PersistentAuditEvent> persistentAuditEvents =
             persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate);
 
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+    }
+
+    /**
+     * Old audit events should be automatically deleted after 30 days.
+     *
+     * This is scheduled to get fired at 04:00 (am).
+     */
+    @Scheduled(cron = "0 0 4 * * ?")
+    public void removeOldAuditEvents() {
+        persistenceAuditEventRepository
+            .findByAuditEventDateBefore(Instant.now().minus(30, ChronoUnit.DAYS))
+            .forEach(auditEvent -> {
+                log.debug("Deleting audit data {}", auditEvent);
+                persistenceAuditEventRepository.delete(auditEvent);
+            });
     }
 }

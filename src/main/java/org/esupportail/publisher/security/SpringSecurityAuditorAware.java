@@ -15,9 +15,10 @@
  */
 package org.esupportail.publisher.security;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.QUser;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.repository.UserRepository;
@@ -25,6 +26,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of AuditorAware based on Spring Security.
@@ -39,13 +42,13 @@ public class SpringSecurityAuditorAware implements AuditorAware<User>, Applicati
     private UserRepository userRepository;
 
     @Override
-    public User getCurrentAuditor() {
+    public Optional<User> getCurrentAuditor() {
         User auditor = SecurityUtils.getCurrentUser();
         if (auditor == null || auditor.getCreatedDate() == null) {
             auditor = systemUser;
         }
         log.debug("Current auditor is >>> {}", auditor);
-        return auditor;
+        return  Optional.of(auditor);
     }
 
 
@@ -53,7 +56,8 @@ public class SpringSecurityAuditorAware implements AuditorAware<User>, Applicati
     public void onApplicationEvent(final ContextRefreshedEvent event) {
         if (this.systemUser == null) {
             log.debug(" >>> loading system user");
-            systemUser = this.userRepository.findOne(QUser.user.login.like("SYSTEM"));
+            Optional<User> optionalUser = this.userRepository.findOne(QUser.user.login.like("SYSTEM"));
+            systemUser = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         }
     }
 }

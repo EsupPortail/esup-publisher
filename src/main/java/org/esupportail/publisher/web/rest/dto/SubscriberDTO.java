@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +28,6 @@ import lombok.ToString;
 import org.esupportail.publisher.domain.enums.SubscribeType;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author GIP RECIA - Julien Gribonvald

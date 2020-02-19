@@ -15,9 +15,19 @@
  */
 package org.esupportail.publisher.repository;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Organization;
@@ -29,26 +39,24 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.util.List;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 19 août 2014
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class PermOnSubjectsWCLRepositoryTest {
@@ -113,9 +121,8 @@ public class PermOnSubjectsWCLRepositoryTest {
 		repository.save(e);
 		assertNotNull(e.getId());
 		log.info("After insert : " + e.toString());
-
-		PermissionOnSubjectsWithClassificationList e2 = repository.findOne(e
-				.getId());
+		Optional<PermissionOnSubjectsWithClassificationList> optionalPerm = repository.findById(e.getId());
+		PermissionOnSubjectsWithClassificationList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
 		log.info("After select : " + e2.toString());
 		assertNotNull(e2);
 		assertTrue(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
@@ -125,7 +132,8 @@ public class PermOnSubjectsWCLRepositoryTest {
 		e2.getRolesOnSubjects().remove(ObjTest.subjectPerm1);
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
-		e = repository.findOne(e2.getId());
+		Optional<PermissionOnSubjectsWithClassificationList> optionalPermission = repository.findById(e2.getId());
+		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 		assertFalse(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
 
 		e = ObjTest.newPermissionOnSubjectsWCL(PERM_INDICE_4,
@@ -134,7 +142,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 		repository.save(e);
 		log.info("After update : " + e.toString());
 		assertNotNull(e.getId());
-		assertTrue(repository.exists(e.getId()));
+		assertTrue(repository.existsById(e.getId()));
 		e = repository.getOne(e.getId());
 		assertNotNull(e);
 		log.info("After select : " + e.toString());
@@ -156,10 +164,10 @@ public class PermOnSubjectsWCLRepositoryTest {
                 ContextType.ORGANIZATION,
                 PermissionClass.SUBJECT_WITH_CONTEXT, false)));
 
-		repository.delete(e.getId());
+		repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.exists(e.getId()));
+		assertFalse(repository.existsById(e.getId()));
 	}
 
 	/**
@@ -182,7 +190,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 	public void testExists() {
 		List<PermissionOnSubjectsWithClassificationList> result = repository
 				.findAll();
-		assertTrue(repository.exists(result.get(0).getId()));
+		assertTrue(repository.existsById(result.get(0).getId()));
 
 	}
 

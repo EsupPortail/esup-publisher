@@ -16,6 +16,8 @@
 package org.esupportail.publisher.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+
+import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.security.SecurityConstants;
@@ -32,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing Redactor.
@@ -102,7 +105,8 @@ public class RedactorResource {
     @Timed
     public ResponseEntity<Redactor> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Redactor : {}", id);
-        Redactor redactor = redactorRepository.findOne(id);
+        Optional<Redactor> optionalRedactor =  redactorRepository.findById(id);
+        Redactor redactor = optionalRedactor == null || !optionalRedactor.isPresent()? null : optionalRedactor.get();
         if (redactor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -119,6 +123,6 @@ public class RedactorResource {
     @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Redactor : {}", id);
-        redactorRepository.delete(id);
+        redactorRepository.deleteById(id);
     }
 }

@@ -16,7 +16,6 @@
 package org.esupportail.publisher.service;
 
 import org.esupportail.publisher.domain.User;
-import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -26,11 +25,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -53,7 +53,7 @@ public class MailService {
 
     @Inject
     private MessageSource messageSource;
-    
+
     @Inject
     private SpringTemplateEngine templateEngine;
 
@@ -75,7 +75,7 @@ public class MailService {
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.displayName());
             message.setTo(to);
             message.setFrom(from);
             message.setSubject(subject);

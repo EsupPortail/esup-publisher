@@ -17,14 +17,11 @@ package org.esupportail.publisher.service;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Lists;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.Predicate;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Category;
@@ -49,6 +46,12 @@ import org.esupportail.publisher.web.rest.dto.TreeJS;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -97,13 +100,13 @@ public class ContextService {
                 case ORGANIZATION :
                     return ctxKey;
                 case PUBLISHER :
-                    return publisherRepository.findOne(ctxKey.getKeyId()).getContext().getOrganization().getContextKey();
+                    return publisherRepository.findById(ctxKey.getKeyId()).get().getContext().getOrganization().getContextKey();
                 case CATEGORY :
-                    return categoryRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                    return categoryRepository.findById(ctxKey.getKeyId()).get().getPublisher().getContext().getOrganization().getContextKey();
                 case FEED :
-                    return feedRepository.findOne(ctxKey.getKeyId()).getPublisher().getContext().getOrganization().getContextKey();
+                    return feedRepository.findById(ctxKey.getKeyId()).get().getPublisher().getContext().getOrganization().getContextKey();
                 case ITEM :
-                    return itemRepository.findOne(ctxKey.getKeyId()).getOrganization().getContextKey();
+                    return itemRepository.findById(ctxKey.getKeyId()).get().getOrganization().getContextKey();
                 default: throw new IllegalArgumentException("The context Type " + ctxKey.getKeyType() + " is not managed") ;
             }
         }
@@ -114,13 +117,13 @@ public class ContextService {
         switch (fromCtx.getKeyType()) {
             case ORGANIZATION: return true;
             case PUBLISHER:
-                final Publisher pub = publisherRepository.findOne(fromCtx.getKeyId());
+                final Publisher pub = publisherRepository.findById(fromCtx.getKeyId()).get();
                 return pub != null && pub.isHasSubPermsManagement();
             case CATEGORY:
-                final Category cat = categoryRepository.findOne(fromCtx.getKeyId());
+                final Category cat = categoryRepository.findById(fromCtx.getKeyId()).get();
                 return cat != null && cat.getPublisher() != null && cat.getPublisher().isHasSubPermsManagement();
             case FEED:
-                final AbstractFeed feed = feedRepository.findOne(fromCtx.getKeyId());
+                final AbstractFeed feed = feedRepository.findById(fromCtx.getKeyId()).get();
                 return feed != null && feed.getPublisher() != null && feed.getPublisher().isHasSubPermsManagement();
             case ITEM : return false; // we can't know if permission management is done as several publisher can be set to an item
             default:
@@ -145,7 +148,7 @@ public class ContextService {
                 builder.and(filter);
                 return Lists.newArrayList(publisherRepository.findAll(builder, PublisherPredicates.orderByDisplayOrder()));
             case PUBLISHER :
-                displayOrder = publisherRepository.findOne(ctx.getKeyId()).getDefaultDisplayOrder();
+                displayOrder = publisherRepository.findById(ctx.getKeyId()).get().getDefaultDisplayOrder();
                 filter = permissionService.filterAuthorizedChildsOfContext(SecurityContextHolder.getContext().getAuthentication(),
                     ctx, minPerm, ClassificationPredicates.CategoryOfPublisher(ctx.getKeyId()));
                 builder = new BooleanBuilder(filter);
@@ -165,7 +168,8 @@ public class ContextService {
                 }
                 return myList;
             case CATEGORY :
-                Category category = categoryRepository.findOne(ctx.getKeyId());
+            	Optional<Category> optionalCategory = categoryRepository.findById(ctx.getKeyId());
+                Category category = optionalCategory == null || !optionalCategory.isPresent() ? null : optionalCategory.get();
                 displayOrder = category.getDefaultDisplayOrder();
                 if (category.getPublisher().getContext().getRedactor().getNbLevelsOfClassification() > 1) {
                     filter = permissionService.filterAuthorizedChildsOfContext(SecurityContextHolder.getContext().getAuthentication(),

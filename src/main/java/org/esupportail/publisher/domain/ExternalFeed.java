@@ -34,8 +34,6 @@ import lombok.ToString;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.URL;
 
 /**
@@ -48,7 +46,6 @@ import org.hibernate.validator.constraints.URL;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonTypeName("EXTERNALFEED")
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class ExternalFeed extends AbstractFeed implements Serializable {
 
     /** */

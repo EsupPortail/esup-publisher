@@ -21,14 +21,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +41,6 @@ import java.util.Set;
 @JsonTypeName("PERMONSUBJ")
 @Entity
 @DiscriminatorValue("OnContextPerSubjects")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PermissionOnSubjects extends AbstractPermission {
 
 	/** */

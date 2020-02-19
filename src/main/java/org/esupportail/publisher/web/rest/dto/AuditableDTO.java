@@ -15,14 +15,10 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.esupportail.publisher.domain.util.CustomDateTimeDeserializer;
-import org.esupportail.publisher.domain.util.CustomDateTimeSerializer;
-import org.joda.time.DateTime;
+import java.time.Instant;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -31,14 +27,10 @@ import java.util.Date;
 public abstract class AuditableDTO extends AbstractIdDTO<Long> {
 
     @Getter
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    private DateTime creationDate;
+    private Instant creationDate;
 
     @Getter
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    private DateTime lastUpdateDate;
+    private Instant lastUpdateDate;
 
     @Getter
     @Setter
@@ -56,7 +48,7 @@ public abstract class AuditableDTO extends AbstractIdDTO<Long> {
      * @param createdBy
      * @param lastUpdateBy
      */
-    public AuditableDTO(@NotNull final Long modelId, @NotNull final DateTime creationDate, DateTime lastUpdateDate,
+    public AuditableDTO(@NotNull final Long modelId, @NotNull final Instant creationDate, Instant lastUpdateDate,
             @NotNull SubjectDTO createdBy, SubjectDTO lastUpdateBy) {
         super(modelId);
         this.creationDate = creationDate;

@@ -15,31 +15,34 @@
  */
 package org.esupportail.publisher;
 
-import com.google.common.base.Joiner;
-import org.esupportail.publisher.config.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.SimpleCommandLinePropertySource;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
-@Configuration
-@ComponentScan
-@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
-public class Application {
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.esupportail.publisher.config.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.Banner.Mode;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.SimpleCommandLinePropertySource;
+
+import com.google.common.base.Joiner;
+import com.ryantenney.metrics.spring.config.annotation.DelegatingMetricsConfiguration;
+
+@SpringBootApplication
+@EnableConfigurationProperties
+public class Application implements InitializingBean {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -58,7 +61,7 @@ public class Application {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
-            Collection activeProfiles = Arrays.asList(env.getActiveProfiles());
+            final List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
             if (activeProfiles.contains("dev") && activeProfiles.contains("prod")) {
                 log.error("You have misconfigured your application! " +
                     "It should not run with both the 'dev' and 'prod' profiles at the same time.");
@@ -79,7 +82,7 @@ public class Application {
 	 */
 	public static void main(String[] args) throws UnknownHostException {
 		SpringApplication app = new SpringApplication(Application.class);
-		app.setShowBanner(false);
+		app.setBannerMode(Mode.OFF);
 
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
 
@@ -118,5 +121,11 @@ public class Application {
 						"liquibase.sqlgenerator", "liquibase.executor", "liquibase.snapshot", "liquibase.logging",
 						"liquibase.diff", "liquibase.structure", "liquibase.structurecompare", "liquibase.lockservice",
 						"liquibase.ext", "liquibase.changelog"));
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+
 	}
 }

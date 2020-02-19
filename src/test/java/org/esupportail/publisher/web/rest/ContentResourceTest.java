@@ -20,20 +20,18 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -77,12 +75,11 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -94,11 +91,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Created by jgribonvald on 08/06/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 public class ContentResourceTest {
@@ -164,7 +167,8 @@ public class ContentResourceTest {
 
         this.restContentMockMvc = MockMvcBuilders.standaloneSetup(contentResource).build();
 
-        User userPart1 = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
+        Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
+        User userPart1 = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         Map<String, List<String>> userAttrs1 = Maps.newHashMap();
         userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));
         userAttrs1.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
@@ -175,7 +179,8 @@ public class ContentResourceTest {
         userAdminDetails = new CustomUserDetails(userDTOPart1, userPart1, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
 
-        User userPart2 = userRepo.findOne(QUser.user.login.like(USER));
+        Optional<User> optionalUser2 = userRepo.findOne(QUser.user.login.like(USER));
+        User userPart2 = !optionalUser2.isPresent() ? null : optionalUser2.get();
         Map<String, List<String>> userAttrs2 = Maps.newHashMap();
         userAttrs2.put("uid", Lists.newArrayList(USER));
         userAttrs2.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
@@ -186,7 +191,8 @@ public class ContentResourceTest {
         userContributorDetails = new CustomUserDetails(userDTOPart2, userPart2, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.USER)));
         authUserContributor = new TestingAuthenticationToken(userContributorDetails, "password", Lists.newArrayList(userContributorDetails.getAuthorities()));
 
-        User userPart3 = userRepo.findOne(QUser.user.login.like(USER));
+        Optional<User> optionalUser3 = userRepo.findOne(QUser.user.login.like(USER));
+        User userPart3 = !optionalUser3.isPresent() ? null : optionalUser3.get();
         Map<String, List<String>> userAttrs3 = Maps.newHashMap();
         userAttrs3.put("uid", Lists.newArrayList(USER));
         userAttrs3.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));

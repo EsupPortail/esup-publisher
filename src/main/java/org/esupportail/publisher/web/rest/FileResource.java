@@ -16,12 +16,10 @@
 package org.esupportail.publisher.web.rest;
 
 import javax.inject.Inject;
+import javax.xml.bind.DatatypeConverter;
 
 import com.codahale.metrics.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.httpclient.URIException;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.FileService;
 import org.springframework.http.HttpStatus;
@@ -33,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Created by jgribonvald on 22/01/16.
  */
@@ -40,7 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @Slf4j
 public class FileResource {
-    private static final Base64 decoder = new Base64(true);
 
     @Inject
     private FileService fileService;
@@ -51,13 +51,13 @@ public class FileResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#entityId,  '" + SecurityConstants.CTX_ORGANIZATION + "', '" + SecurityConstants.PERM_LOOKOVER + "')")
     @Timed
-    public ResponseEntity<Void> delete(@PathVariable Long entityId, @PathVariable boolean isPublic, @PathVariable("fileUri") String fileUri) throws URIException {
+    public ResponseEntity<Void> delete(@PathVariable Long entityId, @PathVariable boolean isPublic, @PathVariable("fileUri") String fileUri) {
         log.debug("REST request to delete File : {}", fileUri);
         boolean result;
         if (isPublic) {
-            result = fileService.deleteInternalResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
+            result = fileService.deleteInternalResource(new String(DatatypeConverter.parseBase64Binary(fileUri), StandardCharsets.UTF_8));
         } else {
-            result = fileService.deletePrivateResource(StringUtils.newStringUtf8(decoder.decode(fileUri)));
+            result = fileService.deletePrivateResource(new String(DatatypeConverter.parseBase64Binary(fileUri), StandardCharsets.UTF_8));
         }
         if (result)
             return ResponseEntity.ok().build();

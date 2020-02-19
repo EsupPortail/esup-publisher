@@ -26,16 +26,15 @@ import java.io.Serializable;
  * @author GIP RECIA - Julien Gribonvald
  * 15 oct. 2014
  */
-@Data
+@Getter
 @NoArgsConstructor
 @ToString(callSuper=true)
-@EqualsAndHashCode(callSuper=true, exclude={"displayName","foundOnExternalSource"})
+@EqualsAndHashCode(callSuper=true, onlyExplicitlyIncluded = true)
 public class SubjectDTO extends AbstractIdDTO<SubjectKeyDTO> implements IAbstractDTO<SubjectKeyDTO>, Serializable {
 
     private String displayName;
 
     private boolean foundOnExternalSource;
-
 
     public SubjectDTO(@NotNull final SubjectKeyDTO modelId, final String displayName, final boolean foundOnExternalSource) {
         super(modelId);

@@ -20,9 +20,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.QUser;
 import org.esupportail.publisher.domain.User;
@@ -37,10 +38,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -50,6 +52,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.google.common.collect.Lists;
+
 /**
  * Test class for the AccountResource REST controller.
  *
@@ -58,17 +62,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
 @PrepareForTest({SecurityUtils.class})
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
+@PowerMockIgnore({"javax.management.*","com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class AccountResourceTest {
 
 	@Inject
 	private UserRepository userRepository;
-    @Inject
-    private UserDTOFactory userDTOFactory;
-
-//	@Mock
-//	private UserService userService;
 
 	private MockMvc restUserMockMvc;
 
@@ -100,8 +100,9 @@ public class AccountResourceTest {
 
 	@Test
 	public void testGetExistingAccount() throws Exception {
-        User userPart = userRepository.findOne(QUser.user.login.like("admin"));
-		UserDTO userDTOPart = userDTOFactory.from(userPart);
+		Optional<User> optionalUser = userRepository.findOne(QUser.user.login.like("admin"));
+        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+		UserDTO userDTOPart = new UserDTO("admin", "admin", true, true);
 		CustomUserDetails user = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
 
         PowerMockito.mockStatic(SecurityUtils.class);

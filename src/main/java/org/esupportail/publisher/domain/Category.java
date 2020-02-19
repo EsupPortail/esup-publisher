@@ -28,8 +28,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -39,7 +37,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonTypeName("CATEGORY")
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Category extends AbstractClassification implements Serializable {
 
     /** */

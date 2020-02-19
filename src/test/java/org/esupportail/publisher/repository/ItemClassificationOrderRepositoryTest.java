@@ -15,34 +15,53 @@
  */
 package org.esupportail.publisher.repository;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Category;
+import org.esupportail.publisher.domain.InternalFeed;
+import org.esupportail.publisher.domain.ItemClassificationKey;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.Reader;
+import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.Lists;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @Transactional
 @Slf4j
 public class ItemClassificationOrderRepositoryTest {
@@ -139,9 +158,8 @@ public class ItemClassificationOrderRepositoryTest {
 				.getAbstractClassification());
 		assertNotNull(ico3.getItemClassificationId().getAbstractItem());
 		log.info("After insert : " + ico3.toString());
-
-		ItemClassificationOrder ico4 = repository.findOne(ico3
-				.getItemClassificationId());
+		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
+		ItemClassificationOrder ico4 = optionalItemClassif.orElse(null);
 		log.info("After select : " + ico4.toString());
 		assertNotNull(ico4);
 		assertEquals(ico3, ico4);
@@ -155,21 +173,22 @@ public class ItemClassificationOrderRepositoryTest {
 		repository.save(ico4);
 		log.info("After insert : " + ico4.toString());
 		assertNotNull(ico4.getItemClassificationId());
-		assertTrue(repository.exists(ico4.getItemClassificationId()));
+		assertTrue(repository.existsById(ico4.getItemClassificationId()));
 		ico3 = repository.getOne(ico4.getItemClassificationId());
 		assertNotNull(ico3);
 		log.info("After select : " + ico3.toString());
-		assertTrue(repository.count() == 4);
+        assertEquals(4, repository.count());
 
 		List<ItemClassificationOrder> results = repository.findAll();
 		assertThat(results.size(), is(4));
 		assertThat(results, hasItem(ico4));
 
-		repository.delete(ico4.getItemClassificationId());
-		assertTrue(repository.findAll().size() == 3);
-		assertFalse(repository.exists(ico4.getItemClassificationId()));
+		repository.deleteById(ico4.getItemClassificationId());
+        assertEquals(3, repository.findAll().size());
+		assertFalse(repository.existsById(ico4.getItemClassificationId()));
 
-		ico4 = repository.findOne(new ItemClassificationKey());
+		Optional<ItemClassificationOrder> optionalItem = repository.findById(new ItemClassificationKey());
+		ico4 = optionalItem.orElse(null);
 		assertNull(ico4);
 
 	}
@@ -185,24 +204,24 @@ public class ItemClassificationOrderRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.jpa.repository.JpaRepository#save(java.lang.Iterable)}
+	 * {@link org.springframework.data.jpa.repository.JpaRepository#saveAll(java.lang.Iterable)}
 	 * .
 	 */
 	@Test
 	public void testSaveIterableOfS() {
-		repository.save(Arrays.asList(new ItemClassificationOrder(news1, feed2,
+		repository.saveAll(Arrays.asList(new ItemClassificationOrder(news1, feed2,
 				28), new ItemClassificationOrder(news2, feed1, 1)));
 		assertThat(repository.findAll().size(), is(4));
 	}
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.exists(repository.findAll().get(0)
+		assertTrue(repository.existsById(repository.findAll().get(0)
 				.getItemClassificationId()));
 
 	}
@@ -213,7 +232,7 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+        assertEquals(2, repository.count());
 	}
 
 	/**
@@ -224,7 +243,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == 1);
+        assertEquals(1, repository.count());
 	}
 
 	/**
@@ -234,7 +253,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+        assertEquals(0, repository.count());
 	}
 
 	@Test
@@ -310,15 +329,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
-					.getItemClassificationId().getAbstractItem().getTitle(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}",
 					ico.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
 							.getAbstractItem().getLastModifiedDate(),
 					ico.getDisplayOrder(), ico.getItemClassificationId()
 							.getAbstractItem().getStartDate(), ico
 							.getItemClassificationId().getAbstractItem()
-							.getEndDate());
+							.getEndDate(), ico.getItemClassificationId()
+                    .getAbstractItem().getTitle());
 		}
 		ItemClassificationOrder[] tab = { icob, icoa, icod, icoc };
 
@@ -349,15 +368,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico.getDisplayOrder(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
+                    .getItemClassificationId().getAbstractItem()
+                    .getTitle(), ico.getDisplayOrder(),
 					ico.getItemClassificationId().getAbstractItem()
 							.getStartDate(), ico.getItemClassificationId()
 							.getAbstractItem().getEndDate(), ico
 							.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
-							.getAbstractItem().getLastModifiedDate(), ico
-							.getItemClassificationId().getAbstractItem()
-							.getTitle());
+							.getAbstractItem().getLastModifiedDate());
 		}
 		ItemClassificationOrder[] tab = { icoa, icob, icoc, icod };
 
@@ -396,15 +415,15 @@ public class ItemClassificationOrderRepositoryTest {
 								.getDefaultDisplayOrder())));
 		log.info("display Order Type : {}", feed3.getDefaultDisplayOrder());
 		for (ItemClassificationOrder ico : results) {
-			log.info("ICO : {}, {}, {}, {}, {}, {}", ico
-					.getItemClassificationId().getAbstractItem().getTitle(),
+			log.info("ICO : {}, {}, {}, {}, {}, {}",
 					ico.getItemClassificationId().getAbstractItem()
 							.getCreatedDate(), ico.getItemClassificationId()
 							.getAbstractItem().getLastModifiedDate(),
 					ico.getDisplayOrder(), ico.getItemClassificationId()
 							.getAbstractItem().getStartDate(), ico
 							.getItemClassificationId().getAbstractItem()
-							.getEndDate());
+							.getEndDate(),ico
+                    .getItemClassificationId().getAbstractItem().getTitle());
 		}
 		ItemClassificationOrder[] tab = { icod, icoc, icob, icoa };
 
@@ -419,17 +438,17 @@ public class ItemClassificationOrderRepositoryTest {
 		News news3 = ObjTest.newNews(INDICE_3, org1, redactor2);
 		News news4 = ObjTest.newNews(INDICE_4, org1, redactor2);
 
-		news1.setStartDate(ObjTest.d4.toLocalDate());
-		news1.setEndDate(ObjTest.d5.toLocalDate());
+		news1.setStartDate(ObjTest.instantToLocalDate(ObjTest.d4));
+		news1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d5));
 		news1 = itemRepo.saveAndFlush(news1);
-		news2.setStartDate(ObjTest.d2.toLocalDate());
-		news2.setEndDate(ObjTest.d3.toLocalDate());
+		news2.setStartDate(ObjTest.instantToLocalDate(ObjTest.d2));
+		news2.setEndDate(ObjTest.instantToLocalDate(ObjTest.d3));
 		news2 = itemRepo.saveAndFlush(news2);
-		news3.setStartDate(ObjTest.d1.toLocalDate());
-		news3.setEndDate(ObjTest.d2.toLocalDate());
+		news3.setStartDate(ObjTest.instantToLocalDate(ObjTest.d1));
+		news3.setEndDate(ObjTest.instantToLocalDate(ObjTest.d2));
 		news3 = itemRepo.saveAndFlush(news3);
-		news4.setStartDate(ObjTest.d5.toLocalDate());
-		news4.setEndDate(ObjTest.d6.toLocalDate());
+		news4.setStartDate(ObjTest.instantToLocalDate(ObjTest.d5));
+		news4.setEndDate(ObjTest.instantToLocalDate(ObjTest.d6));
 		news4 = itemRepo.saveAndFlush(news4);
 
 		ItemClassificationOrder icoa = repository

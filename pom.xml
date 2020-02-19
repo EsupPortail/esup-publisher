@@ -4,17 +4,24 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.2.8.RELEASE</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath />
     </parent>
 
     <groupId>org.esupportail.publisher</groupId>
     <artifactId>esup-publisher-ui</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>esup-publisher-ui</name>
     <description>Spring Boot - REST apps</description>
+
+    <!--   <repositories>
+    <repository>
+      <id>my-repo1</id>
+      <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+  </repositories> -->
 
     <scm>
         <connection>scm:git:ssh://git@github.com/EsupPortail/esup-publisher.git</connection>
@@ -24,94 +31,76 @@
     </scm>
 
     <properties>
-        <!--<HikariCP.version>2.2.5</HikariCP.version>-->
-        <HikariCP.version>2.4.5</HikariCP.version>
-        <assertj-core.version>1.6.1</assertj-core.version>
-        <awaitility.version>1.4.0</awaitility.version>
-        <commons-io.version>2.4</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
+        <awaitility.version>1.7.0</awaitility.version>
         <gatling-maven-plugin.version>2.1.2</gatling-maven-plugin.version>
         <gatling.version>2.1.4</gatling.version>
-        <hibernate.version>4.3.11.Final</hibernate.version>
-        <java.version>1.7</java.version>
+        <check.java.version>1.8</check.java.version>
         <javax.inject.version>1</javax.inject.version>
-        <joda-time-hibernate.version>1.3</joda-time-hibernate.version>
-        <json-path.version>0.9.1</json-path.version>
-        <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
-        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
-        <!--<jackson.version>2.7.4</jackson.version>-->
-        <!--<liquibase.version>3.3.2</liquibase.version>-->
-        <!--<liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>-->
-        <!--<liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>-->
-        <liquibase.version>3.4.2</liquibase.version>
-        <lombok.version>1.16.2</lombok.version>
+        <liquibase-plugin.version>${liquibase.version}</liquibase-plugin.version>
+        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <problem-spring.version>0.25.2</problem-spring.version>
+        <problem-spring-web.version>${problem-spring.version}</problem-spring-web.version>
+        <eclipse-maven-plugin.version>2.10</eclipse-maven-plugin.version>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
         <maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
-        <metrics-spring.version>3.0.3</metrics-spring.version>
-        <powermock-on-mockito.version>1.6.6</powermock-on-mockito.version>
+        <metrics-spring.version>3.1.3</metrics-spring.version>
+        <powermock-on-mockito.version>2.0.4</powermock-on-mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <querydsl.version>3.6.9</querydsl.version>
         <run.addResources>false</run.addResources>
         <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
-        <spring-ldap.version>2.0.2.RELEASE</spring-ldap.version>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
-        <tomcat.version>8.0.46</tomcat.version>
-        <usertype-core.version>4.0.0.GA</usertype-core.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>axis</groupId>
-            <artifactId>axis</artifactId>
-            <version>1.4</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version>${jackson.version}</version>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
+
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
-            <version>${jackson.version}</version>
+
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-json-org</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.dataformat</groupId>-->
-        <!--<artifactId>jackson-dataformat-xml</artifactId>-->
-        <!--<version>${jackson.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
-            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-spring-web</artifactId>
+            <version>${problem-spring-web.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+<!--            <scope>test</scope>-->
         </dependency>
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>${json-path.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -131,28 +120,24 @@
                     <artifactId>scala-compiler</artifactId>
                     <groupId>org.scala-lang</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>joda-time</artifactId>
+                    <groupId>joda-time</groupId>
+                </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.mattbertolini</groupId>
-            <artifactId>liquibase-slf4j</artifactId>
-            <version>${liquibase-slf4j.version}</version>
         </dependency>
         <!--custom -->
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
+            <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
+            <groupId>com.querydsl</groupId>
             <artifactId>querydsl-core</artifactId>
-            <version>${querydsl.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
+            <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rometools</groupId>
@@ -163,63 +148,30 @@
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
             <version>${metrics-spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>metrics-annotation</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>metrics-core</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>metrics-healthchecks</artifactId>
-                    <groupId>com.codahale.metrics</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>com.zaxxer</groupId>-->
-        <!--<artifactId>HikariCP-java6</artifactId>-->
-        <!--<version>${HikariCP.version}</version>-->
-        <!--<exclusions>-->
-        <!--<exclusion>-->
-        <!--<artifactId>tools</artifactId>-->
-        <!--<groupId>com.sun</groupId>-->
-        <!--</exclusion>-->
-        <!--</exclusions>-->
-        <!--</dependency>-->
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental-->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        <!-- For base64 util use with spring - remove it when using java 8-->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>esup</groupId>
-            <artifactId>esup-uportal-ws-client</artifactId>
-            <version>20100915</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>joda-time</artifactId>
+                    <groupId>joda-time</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -232,7 +184,7 @@
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-ehcache</artifactId>
+            <artifactId>metrics-jcache</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
         <dependency>
@@ -242,6 +194,11 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-healthchecks</artifactId>
+            <version>${dropwizard-metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-jmx</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
         <dependency>
@@ -262,12 +219,7 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>metrics-healthchecks</artifactId>
-                    <groupId>io.dropwizard.metrics</groupId>
-                </exclusion>
-            </exclusions>
+            <version>${dropwizard-metrics.version}</version>
         </dependency>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
@@ -281,22 +233,12 @@
             <version>${javax.inject.version}</version>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time-hibernate</artifactId>
-            <version>${joda-time-hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -305,57 +247,42 @@
             <version>4.4.1</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <!-- <version>${hibernate.version}</version> -->
-            <exclusions>
-                <exclusion>
-                    <artifactId>ehcache-core</artifactId>
-                    <groupId>net.sf.ehcache</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>xml-apis</artifactId>
-                    <groupId>xml-apis</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
+            <artifactId>hibernate-jcache</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <!-- <dependency> -->
-        <!-- <groupId>javax.validation</groupId> -->
-        <!-- <artifactId>validation-api</artifactId> -->
-        <!-- <version>1.1.0.Final</version> -->
-        <!-- </dependency> -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.0.Final</version>
         </dependency>
         <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${usertype-core.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jetty-servlet</artifactId>
-                    <groupId>org.eclipse.jetty</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
+            <artifactId>powermock-api-mockito2</artifactId>
             <version>${powermock-on-mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -368,7 +295,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -377,17 +303,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <!-- <version>${spring-boot.version}</version> -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-            <!-- <version>${spring-boot.version}</version> -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -413,6 +337,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -438,7 +368,6 @@
         <dependency>
             <groupId>org.springframework.ldap</groupId>
             <artifactId>spring-ldap-core</artifactId>
-            <version>${spring-ldap.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -450,8 +379,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-jpamodelgen</artifactId>
-          </dependency> -->
     </dependencies>
 
     <build>
@@ -589,21 +516,13 @@
                         </goals>
                         <configuration>
                             <outputDirectory>target/generated-sources/queries</outputDirectory>
-                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                             <!--<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>-->
                             <!--<processor>org.springframework.ldap.repository.support.LdapAnnotationProcessor</processor>-->
                             <logOnlyOnError>true</logOnlyOnError>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.mysema.querydsl</groupId>
-                        <artifactId>querydsl-apt</artifactId>
-                        <version>${querydsl.version}</version>
-                        <scope>compile</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>io.gatling</groupId>
@@ -623,6 +542,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
+                <version>${eclipse-maven-plugin.version}</version>
                 <configuration>
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>true</downloadJavadocs>
@@ -642,13 +562,18 @@
                 </executions>
                 <configuration>
                     <rules>
+                        <requireProperty>
+                            <property>check.java.version</property>
+                            <message>You must set the property `check.java.version`</message>
+                            <regex>[\d.-_]*</regex>
+                        </requireProperty>
                         <requireMavenVersion>
-                            <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
+                            <message>You are running an older version of Maven. ESUP-publisher requires at least Maven 3.0</message>
                             <version>[3.0.0,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
-                            <version>[${java.version}.0,)</version>
+                            <message>You are running an older version of Java ${java.version}. ESUP-publisher requires at least JDK ${check.java.version}</message>
+                            <version>[${check.java.version}.0,)</version>
                         </requireJavaVersion>
                     </rules>
                 </configuration>
@@ -680,9 +605,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <argLine>-XX:MaxPermSize=256m -Xmx512m</argLine>
+                    <argLine>${argLine} -Xmx4096m</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
             <plugin>
@@ -698,6 +624,36 @@
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <output>file</output>
+                    <append>true</append>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>maven-notice-plugin</artifactId>
                 <version>1.0.4</version>
@@ -711,13 +667,21 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
+                <version>${liquibase-plugin.version}</version>
+                <configuration>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <propertyFile>src/main/resources/config/liquibase/liquibase.properties.generation</propertyFile>
+                    <driver>org.mariadb.jdbc.Driver</driver>
+                    <referenceUrl>hibernate:spring:org.esupportail.publisher.domain,org.esupportail.publisher.domain.evaluators?dialect=org.hibernate.dialect.MariaDB10Dialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl</referenceUrl>
+                    <verbose>true</verbose>
+                    <logging>debug</logging>
+                    <dropFirst>false</dropFirst>
+                    <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
+                    <outputChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</outputChangeLogFile>
+                    <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                    <promptOnNonLocalDatabase>true</promptOnNonLocalDatabase>
+                </configuration>
                 <dependencies>
-                    <dependency>
-                        <groupId>org.jasig.portal</groupId>
-                        <artifactId>uPortal-hibernate4-dialects</artifactId>
-                        <version>5.6.1</version>
-                    </dependency>
                     <dependency>
                         <groupId>org.hibernate</groupId>
                         <artifactId>hibernate-core</artifactId>
@@ -734,30 +698,38 @@
                         <version>${hibernate.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                        <version>3.18.2-GA</version>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>2.0.1.Final</version>
                     </dependency>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate4</artifactId>
-                        <version>${liquibase-hibernate4.version}</version>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>${liquibase-hibernate5.version}</version>
                         <exclusions>
                             <exclusion>
+                                <groupId>org.hibernate</groupId>
                                 <artifactId>hibernate-core</artifactId>
-                                <groupId>org.hibernate</groupId>
                             </exclusion>
                             <exclusion>
+                                <groupId>org.hibernate</groupId>
                                 <artifactId>hibernate-entitymanager</artifactId>
-                                <groupId>org.hibernate</groupId>
                             </exclusion>
                             <exclusion>
+                                <groupId>org.hibernate</groupId>
                                 <artifactId>hibernate-envers</artifactId>
-                                <groupId>org.hibernate</groupId>
                             </exclusion>
                             <exclusion>
-                                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                                <groupId>org.hibernate.javax.persistence</groupId>
+                                <groupId>org.hibernate.common</groupId>
+                                <artifactId>hibernate-common-annotations</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.liquibase</groupId>
+                                <artifactId>liquibase-core</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
                             </exclusion>
                         </exclusions>
                     </dependency>
@@ -772,14 +744,6 @@
                         <version>1.4.01</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <propertyFileWillOverride>true</propertyFileWillOverride>
-                    <propertyFile>src/main/resources/config/liquibase/liquibase.properties.generation</propertyFile>
-                    <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
-                    <outputChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</outputChangeLogFile>
-                    <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                    <promptOnNonLocalDatabase>true</promptOnNonLocalDatabase>
-                </configuration>
             </plugin>
         </plugins>
     </build>

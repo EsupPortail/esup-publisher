@@ -18,11 +18,9 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
+import java.time.LocalDate;
 import java.util.EnumSet;
 
-import com.mysema.query.types.OrderSpecifier;
-import com.mysema.query.types.Predicate;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.Media;
@@ -36,7 +34,11 @@ import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.joda.time.LocalDate;
+
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 24 juil. 2014
@@ -85,20 +87,17 @@ public final class ItemPredicates {
         switch (displayOrder) {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItemClass.itemClassificationId.abstractItem.lastModifiedDate
-                    .coalesce(
-                        qItemClass.itemClassificationId.abstractItem.createdDate)
-                    .desc();
+                    .coalesce(qItemClass.itemClassificationId.abstractItem.createdDate).desc();
             case ONLY_LAST_CREATED_FIRST:
-                return qItemClass.itemClassificationId.abstractItem.createdDate
-                    .desc();
+                return qItemClass.itemClassificationId.abstractItem.createdDate.desc();
             case NAME:
                 return qItemClass.itemClassificationId.abstractItem.title.asc();
-            case START_DATE:
-                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
             case CUSTOM:
                 return qItemClass.displayOrder.desc();
+//            case START_DATE:
+//                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
             default:
-                return qItemClass.itemClassificationId.abstractItem.startDate.asc();
+                return qItemClass.itemClassificationId.abstractItem.startDate.desc();
         }
     }
 
@@ -107,19 +106,15 @@ public final class ItemPredicates {
         switch (displayOrder) {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItemClass.itemClassificationId.abstractClassification.lastModifiedDate
-                    .coalesce(
-                        qItemClass.itemClassificationId.abstractClassification.createdDate)
-                    .desc();
-            case ONLY_LAST_CREATED_FIRST:
-                return qItemClass.itemClassificationId.abstractClassification.createdDate
-                    .desc();
+                    .coalesce(qItemClass.itemClassificationId.abstractClassification.createdDate).desc();
             case NAME:
                 return qItemClass.itemClassificationId.abstractClassification.name.asc();
             case CUSTOM:
                 return qItemClass.displayOrder.desc();
+//            case ONLY_LAST_CREATED_FIRST:
+//                return qItemClass.itemClassificationId.abstractClassification.createdDate.desc();
             default:
-                return qItemClass.itemClassificationId.abstractClassification.createdDate
-                    .desc();
+                return qItemClass.itemClassificationId.abstractClassification.createdDate.desc();
         }
     }
 
@@ -129,14 +124,13 @@ public final class ItemPredicates {
             case LAST_CREATED_MODIFIED_FIRST:
                 return qItem.lastModifiedDate.coalesce(qItem.createdDate).desc();
             case ONLY_LAST_CREATED_FIRST:
-                return qItem.createdDate
-                    .desc();
+                return qItem.createdDate.desc();
             case NAME:
                 return qItem.title.asc();
-            case START_DATE:
-                return qItem.startDate.desc();
             case CUSTOM:
                 return qItem.id.desc();
+//            case START_DATE:
+//                return qItem.startDate.desc();
             default:
                 return qItem.startDate.desc();
         }
@@ -226,7 +220,7 @@ public final class ItemPredicates {
     }
 
     private static Predicate itemsEndDateOlderThanNMonth(final int nmonth) {
-        return qItem.endDate.isNotNull().and(qItem.endDate.before(new LocalDate().minusMonths(nmonth)));
+        return qItem.endDate.isNotNull().and(qItem.endDate.before(LocalDate.now().minusMonths(nmonth)));
     }
 
     public static Predicate itemsOwnedOfOrganizationWithoutClassif(final UserDTO user, final long orgId) {

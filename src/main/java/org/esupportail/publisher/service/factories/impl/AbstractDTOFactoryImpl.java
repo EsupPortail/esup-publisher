@@ -25,8 +25,10 @@ import org.esupportail.publisher.service.factories.DTOFactory;
 import org.esupportail.publisher.web.rest.dto.AbstractIdDTO;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -92,10 +94,8 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
 
     protected DTObject newDTObject() {
         try {
-            return dtObjectClass.newInstance();
-        } catch (InstantiationException e) {
-            log.error("unable to instantiate Data Transfer Object in factory.");
-        } catch (IllegalAccessException e) {
+            return dtObjectClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             log.error("unable to instantiate Data Transfer Object in factory.");
         }
         return null;
@@ -103,13 +103,10 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
 
     protected M newModel() {
         try {
-            return mClass.newInstance();
-        } catch (InstantiationException e) {
-            log.error("unable to instantiate Model object in factory.");
-        } catch (IllegalAccessException e) {
+            return mClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             log.error("unable to instantiate Model object in factory.");
         }
-
         return null;
     }
 
@@ -118,8 +115,8 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
         if (dtObject.getModelId() == null) {
             return newModel();
         }
-        M model;
-        model = getDao().findOne(dtObject.getModelId());
+        Optional<M> optionalM = getDao().findById(dtObject.getModelId());
+        M model = optionalM == null || !optionalM.isPresent() ? null : optionalM.get();
         if (model == null) {
             throw new ObjectNotFoundException(
                     "id provided, but not valid: "
@@ -130,7 +127,8 @@ public abstract class AbstractDTOFactoryImpl<DTObject extends AbstractIdDTO<ID>,
 
     public M from(final ID id) throws ObjectNotFoundException {
         log.debug("find model of {} whith id {}", this.mClass, id);
-        M model = getDao().findOne(id);
+        Optional<M> optionalM = getDao().findById(id);
+        M model = optionalM == null || !optionalM.isPresent() ? null : optionalM.get();
         if (model == null) throw new ObjectNotFoundException(id, this.mClass);
         return model;
     }

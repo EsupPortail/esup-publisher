@@ -31,6 +31,6 @@ public interface ItemRepository<T extends AbstractItem> extends
     Integer archiveExpiredPublished();
 
     @Modifying(clearAutomatically = true)
-    @Query("update #{#entityName} e set e.status = org.esupportail.publisher.domain.enums.ItemStatus.PUBLISHED where e.status = org.esupportail.publisher.domain.enums.ItemStatus.SCHEDULED and e.startDate is not null and e.startDate <= CURRENT_DATE")
+    @Query("update #{#entityName} e set e.status = org.esupportail.publisher.domain.enums.ItemStatus.PUBLISHED, e.lastModifiedDate = CURRENT_TIMESTAMP where e.status = org.esupportail.publisher.domain.enums.ItemStatus.SCHEDULED and e.startDate is not null and e.startDate <= CURRENT_DATE")
     Integer publishScheduled();
 }

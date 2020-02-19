@@ -27,7 +27,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
@@ -47,7 +49,7 @@ public class LoggingAspect {
 
     @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (Arrays.asList(env.getActiveProfiles()).contains(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(), e.getCause(), e);
         } else {

@@ -15,82 +15,94 @@
  */
 package org.esupportail.publisher.config;
 
+import java.time.Duration;
+
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.ehcache.InstrumentedEhcache;
+import com.codahale.metrics.jcache.JCacheGaugeSet;
+import org.ehcache.config.builders.*;
+import org.ehcache.jsr107.Eh107Configuration;
+
+import org.hibernate.cache.jcache.ConfigSettings;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.cache.annotation.EnableCaching;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.util.Assert;
-
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.metamodel.EntityType;
-import java.util.Set;
-import java.util.SortedSet;
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = {MetricsConfiguration.class, DatabaseConfiguration.class})
-@Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Inject
     private Environment env;
 
-    @Inject
+    @Autowired(required = false)
     private MetricRegistry metricRegistry;
 
-    private net.sf.ehcache.CacheManager cacheManager;
+    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
-    @PreDestroy
-    public void destroy() {
-        log.info("Remove Cache Manager metrics");
-        SortedSet<String> names = metricRegistry.getNames();
-        for (String name : names) {
-            metricRegistry.remove(name);
-        }
-        log.info("Closing Cache Manager");
-        cacheManager.shutdown();
+    public CacheConfiguration(Environment env) throws IllegalStateException {
+        Assert.notNull(env, "Environnement is null !");
+        this.env = env;
+        long defaultNbEntries = env.getRequiredProperty("cache.ehcache.maxEntries", long.class);
+        long defaultTTL = env.getRequiredProperty("cache.ehcache.timeToLiveSeconds", long.class);
+        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
+                ResourcePoolsBuilder.heap(defaultNbEntries))
+                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(defaultTTL)))
+                .build());
     }
 
     @Bean
-    public CacheManager cacheManager() {
-        log.debug("Starting Ehcache");
-        cacheManager = net.sf.ehcache.CacheManager.create();
-        cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
-        log.debug("Registering Ehcache Metrics gauges");
-        Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
-        for (EntityType<?> entity : entities) {
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+    }
 
-            String name = entity.getName();
-            if (name == null || entity.getJavaType() != null) {
-                name = entity.getJavaType().getName();
+    @Bean
+    public JCacheManagerCustomizer cacheManagerCustomizer() {
+        return cm -> {
+            createCache(cm, org.esupportail.publisher.domain.User.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.PersistentAuditEvent.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.AbstractClassification.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.AbstractItem.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.AbstractPermission.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.evaluators.OperatorEvaluator.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.evaluators.OperatorEvaluator.class.getName() + ".evaluators");
+            createCache(cm, org.esupportail.publisher.domain.externals.ExternalGroup.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.externals.ExternalUser.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Filter.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.ItemClassificationOrder.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.LinkedFileItem.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Organization.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Organization.class.getName() + ".availablePublisherContexts");
+            createCache(cm, org.esupportail.publisher.domain.Publisher.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Reader.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Reader.class.getName() + ".organizationReaderRedactors");
+            createCache(cm, org.esupportail.publisher.domain.Redactor.class.getName());
+            createCache(cm, org.esupportail.publisher.domain.Redactor.class.getName() + ".organizationReaderRedactors");
+            createCache(cm, org.esupportail.publisher.domain.Subscriber.class.getName());
+            createCache(cm, "feed");
+            //createCache(cm, org.esupportail.publisher.domain.AbstractClassification.class.getName() + ".books");
+            if (!env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
+                this.metricRegistry.register("jcache.statistics", new JCacheGaugeSet());
             }
-            Assert.notNull(name, "entity cannot exist without a identifier");
+        };
+    }
 
-            net.sf.ehcache.Cache cache = cacheManager.getCache(name);
-            if (cache != null) {
-                cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Long.class, 3600L));
-                net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
-                cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
-            }
+    private void createCache(javax.cache.CacheManager cm, String cacheName) {
+        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+        if (cache != null) {
+            cm.destroyCache(cacheName);
         }
-        EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
-        ehCacheManager.setCacheManager(cacheManager);
-        return ehCacheManager;
+        cm.createCache(cacheName, jcacheConfiguration);
     }
 }

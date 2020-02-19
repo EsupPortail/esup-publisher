@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.ToString;
@@ -28,7 +29,6 @@ import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroup;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Created by jgribonvald on 11/06/15.

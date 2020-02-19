@@ -22,8 +22,7 @@ import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -41,18 +40,14 @@ import org.springframework.util.StopWatch;
 @Configuration
 @EnableSwagger
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
-public class SwaggerConfiguration implements EnvironmentAware {
+public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
 
     public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
 
-    private RelaxedPropertyResolver propertyResolver;
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "swagger.");
-    }
+    @Autowired
+    private Environment env;
 
     /**
      * Swagger Spring MVC configuration.
@@ -78,11 +73,11 @@ public class SwaggerConfiguration implements EnvironmentAware {
      */
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                propertyResolver.getProperty("title"),
-                propertyResolver.getProperty("description"),
-                propertyResolver.getProperty("termsOfServiceUrl"),
-                propertyResolver.getProperty("contact"),
-                propertyResolver.getProperty("license"),
-                propertyResolver.getProperty("licenseUrl"));
+        		env.getProperty("swagger.title"),
+        		env.getProperty("swagger.description"),
+        		env.getProperty("swagger.termsOfServiceUrl"),
+        		env.getProperty("swagger.contact"),
+        		env.getProperty("swagger.license"),
+        		env.getProperty("swagger.licenseUrl"));
     }
 }

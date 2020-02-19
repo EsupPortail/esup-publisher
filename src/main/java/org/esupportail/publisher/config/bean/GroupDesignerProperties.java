@@ -17,10 +17,10 @@ package org.esupportail.publisher.config.bean;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Data
 public class GroupDesignerProperties {

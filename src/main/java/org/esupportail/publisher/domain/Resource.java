@@ -33,10 +33,8 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -47,7 +45,6 @@ import org.joda.time.LocalDate;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type", visible = true)
 @JsonTypeName("RESOURCE")
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Resource extends AbstractItem implements Serializable {
 
     /** */
@@ -85,9 +82,9 @@ public class Resource extends AbstractItem implements Serializable {
      */
     public Resource(final String title, final String enclosure,
                     final String ressourceUrl, final LocalDate startDate,
-                    final LocalDate endDate, final DateTime validatedDate,
+                    final LocalDate endDate, final Instant validatedDate,
                     final User validatedBy, final ItemStatus status,
-                    final String summary,  final boolean rssAllowed,
+                    final String summary, final boolean rssAllowed,
                     final boolean highlight, final Organization organization, final Redactor redactor) {
         super(title, enclosure, startDate, endDate, validatedDate, validatedBy,
             status, summary, rssAllowed, highlight, organization, redactor);
