@@ -3,6 +3,6 @@
     "config:base"
   ],
   "enabledManagers": [
-    "maven",
+    "maven"
   ]
 }
