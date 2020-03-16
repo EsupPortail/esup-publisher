@@ -45,18 +45,18 @@
     </appender>
 -->
 
-    <logger name="org.esupportail.publisher" level="DEBUG"/>
+    <logger name="org.esupportail.publisher" level="${logback.loglevel:INFO}"/>
     <logger name="org.esupportail.publisher.web.filter.CrossOriginFilter" level="WARN"/>
     <logger name="org.esupportail.publisher.service.factories" level="WARN"/>
     <logger name="org.esupportail.publisher.repository.externals.ldap" level="WARN"/>
-    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl" level="DEBUG"/>
-    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl" level="DEBUG"/>
-    <logger name="org.esupportail.publisher.security.UserContextLoaderServiceImpl" level="DEBUG"/>
-    <logger name="org.esupportail.publisher.security.PermissionServiceImpl" level="DEBUG"/>
+    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl" level="${logback.loglevel:INFO}"/>
+    <logger name="org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl" level="${logback.loglevel:INFO}"/>
+    <logger name="org.esupportail.publisher.security.UserContextLoaderServiceImpl" level="${logback.loglevel:INFO}"/>
+    <logger name="org.esupportail.publisher.security.PermissionServiceImpl" level="${logback.loglevel:INFO}"/>
 
-    <logger name="org.hibernate.stat" level="DEBUG"/>
+    <logger name="org.hibernate.stat" level="${logback.loglevel:INFO}"/>
 
-    <logger name="com.mysema" level="debug"/>
+    <logger name="com.mysema" level="${logback.loglevel:INFO}"/>
 
 
     <logger name="javax.activation" level="WARN"/>
@@ -90,8 +90,8 @@
     <logger name="liquibase" level="WARN"/>
     <logger name="sun.rmi.transport" level="WARN"/>
 
-    <logger name="javax.xml.bind" level="DEBUG"/>
-    <logger name="com.fasterxml.jackson" level="TRACE"/>
+<!--    <logger name="javax.xml.bind" level="DEBUG"/>-->
+<!--    <logger name="com.fasterxml.jackson" level="TRACE"/>-->
 
     <!-- for REST request debug -->
     <!--<logger name="org.springframework.security.web.util.matcher" level="DEBUG" />-->
@@ -109,9 +109,8 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <logger name="org.esupportail.publisher.security" level="DEBUG">
+    <logger name="org.esupportail.publisher.security" level="${logback.loglevel:INFO}">
         <appender-ref ref="FILE" />
-
     </logger>
 
 </configuration>

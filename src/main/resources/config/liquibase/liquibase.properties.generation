@@ -1,4 +1,4 @@
-url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useLegacyDatetimeCode=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+url: jdbc:mariadb://127.0.0.1:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false
 defaultSchema: publisher_dev
 username: root
-password:
+password: root

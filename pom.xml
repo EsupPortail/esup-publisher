@@ -608,7 +608,7 @@
                     <argLine>${argLine} -Xmx4096m</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <testFailureIgnore>false</testFailureIgnore>
                 </configuration>
             </plugin>
             <plugin>
@@ -760,7 +760,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug
+                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
                             <arguments>
                                 <argument>--spring.profiles.active=dev</argument>
@@ -781,6 +781,35 @@
             </dependencies>
         </profile>
         <profile>
+            <id>travis</id>
+            <!-- Same as dev expect for some properties to have less log, etc... all things required by travis -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
+                                -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
+                            <arguments>
+                                <argument>--spring.profiles.active=dev</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>INFO</logback.loglevel>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>fast</id>
             <build>
                 <plugins>
@@ -788,7 +817,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug
+                            <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
                             <arguments>
                                 <argument>--spring.profiles.active=dev,fast,ldapgrp</argument>
