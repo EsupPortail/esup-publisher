@@ -51,7 +51,7 @@
         <powermock-on-mockito.version>2.0.4</powermock-on-mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
     </properties>
 
