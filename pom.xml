@@ -52,7 +52,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
-        <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
+        <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
 
     <dependencies>
