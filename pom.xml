@@ -37,7 +37,7 @@
         <check.java.version>1.8</check.java.version>
         <javax.inject.version>1</javax.inject.version>
         <liquibase-plugin.version>${liquibase.version}</liquibase-plugin.version>
-        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
         <problem-spring.version>0.25.2</problem-spring.version>
         <problem-spring-web.version>${problem-spring.version}</problem-spring-web.version>
         <eclipse-maven-plugin.version>2.10</eclipse-maven-plugin.version>
