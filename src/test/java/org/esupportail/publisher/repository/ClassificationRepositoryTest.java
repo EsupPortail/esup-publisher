@@ -265,9 +265,11 @@ public class ClassificationRepositoryTest {
     }
 
     @Test
-    public void testOrderLastCreatedFirst() {
+    public void testOrderLastCreatedFirst() throws InterruptedException {
+	    Thread.sleep(1000);
         Category cat = ObjTest.newCategory(INDICE_4, pub1);
         cat = repository.saveAndFlush(cat);
+        Thread.sleep(1000);
         Category cat2 = ObjTest.newCategory("A name", pub1);
         cat2 = repository.saveAndFlush(cat2);
 
