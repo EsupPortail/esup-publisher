@@ -484,6 +484,7 @@
                 <artifactId>maven-license-plugin</artifactId>
                 <version>1.10.b1</version>
                 <configuration>
+                    <strictCheck>true</strictCheck>
                     <header>etc/header.template</header>
                     <includes>
                         <include>**/*.java</include>
@@ -500,6 +501,7 @@
                         <exclude>**/dist/**</exclude>
                         <exclude>**/bower_components/**</exclude>
                         <exclude>.tmp/**</exclude>
+                        <exclude>.mvn/**</exclude>
                         <exclude>src/main/webapp/META-INF/**</exclude>
                     </excludes>
                 </configuration>

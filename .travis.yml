@@ -66,5 +66,6 @@ before_script:
 
 script:
   - ./mvnw test -Ptravis -Dspring.profiles.active=test -Dapp.upload.path=$HOME/tmp -Dapp.upload.protectedPath=$HOME/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-travis.xml -B
+  - ./mvnw license:check
 
 
