@@ -273,7 +273,7 @@ public class ClassificationRepositoryTest {
         Category cat2 = ObjTest.newCategory("A name", pub1);
         cat2 = repository.saveAndFlush(cat2);
 
-        Category[] tab = { cat1, cat, cat2 };
+        Category[] tab = { cat2, cat, cat1 };
 
         List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
             .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.ONLY_LAST_CREATED_FIRST)));
