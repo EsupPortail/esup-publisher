@@ -66,7 +66,12 @@ before_script:
 
 script:
   - ./mvnw test -Ptravis -Dspring.profiles.active=test -Dapp.upload.path=$HOME/tmp -Dapp.upload.protectedPath=$HOME/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-travis.xml -B
-  - ./mvnw notice:check
+  - |
+    if [ "$TRAVIS_JDK_VERSION" = 'openjdk8' ]; then
+      # plugin not available in jdk11
+      ./mvnw notice:check
+    fi
   - ./mvnw license:check
+  - ./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"
 
 
