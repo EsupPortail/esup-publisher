@@ -29,6 +29,7 @@ env:
 cache:
     directories:
         - $HOME/.m2/repository
+        - $HOME/.npm/
 
 sudo: required
 
@@ -63,17 +64,21 @@ before_script:
   - ./mvnw compile liquibase:update -Ptravis -B
   # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
   - mysql --port 3306 -h 127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"
+  # install npm
   - npm install -g bower
+  - npm install -g yo@1.3.2
+  - npm install requirejs@2.1
+  - npm install jasmine-core@2.4.1
   - bower install
 
 script:
-  - ./mvnw test -Ptravis -Dspring.profiles.active=test -Dapp.upload.path=$HOME/tmp -Dapp.upload.protectedPath=$HOME/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-travis.xml -B
   - |
     if [ "$TRAVIS_JDK_VERSION" = 'openjdk8' ]; then
       # plugin not available in jdk11
       ./mvnw notice:check
     fi
   - ./mvnw license:check
+  - ./mvnw test -Ptravis -Dspring.profiles.active=test -Dapp.upload.path=$HOME/tmp -Dapp.upload.protectedPath=$HOME/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-travis.xml -B
   - ./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"
 
 
