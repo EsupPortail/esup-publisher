@@ -15,40 +15,40 @@ spring:
         include: fast,ldapgrp
 
     datasource:
-        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://localhost:3306/publisher-dev?autoreconnect=true
-        databaseName:
-        serverName:
-        username: jgribonvald
-        password: mymdp
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:mariadb://localhost:3306/publisher-dev?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris
+        username: root
+        password: root
+        hikari:
+            poolName: Hikari
+            auto-commit: false
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
 
     jpa:
-        database-platform: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+        database-platform: org.hibernate.dialect.MariaDB10Dialect
         database: MYSQL
-        openInView: false
-        show_sql: true
-        generate-ddl: false
+        show-sql: false
         hibernate:
             ddl-auto: none
             naming:
                 physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         properties:
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
             hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
-            hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+            #hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
     mail:
         baseUrl: http://localhost:8080
 
     thymeleaf:
-        mode: HTML
         cache: false
 
 logging:
@@ -67,9 +67,9 @@ metrics:
         prefix: publisher
 
 cache:
-    timeToLiveSeconds: 3600
     ehcache:
-        maxBytesLocalHeap: 16M
+        timeToLiveSeconds: 3600
+        maxEntries: 1000
 
 ldap:
     base: dc=esco-centre,dc=fr
@@ -161,6 +161,3 @@ app:
     authorizedServices:
         ipRange: "192.168.57.0/24"
 
-ws:
-    esup:
-        url: https://www.univ.fr/portail/services/UportalService
