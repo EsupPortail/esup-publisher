@@ -390,7 +390,7 @@
                     <include>**/*.xml</include>
                     <include>version.properties</include>
                     <include>**/application.yml</include>
-                    <include>**/application-dev.yml</include>
+                    <include>**/application-test.yml</include>
                 </includes>
             </resource>
             <resource>
