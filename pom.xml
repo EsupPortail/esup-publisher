@@ -405,9 +405,8 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>**/*.yml</include>
                     <include>version.properties</include>
-                    <include>**/application.yml</include>
-                    <include>**/application-test.yml</include>
                 </includes>
             </resource>
             <resource>
@@ -415,7 +414,6 @@
                 <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>**/*.xml</exclude>
-                    <exclude>**/*.yml</exclude>
                 </excludes>
             </resource>
         </resources>
@@ -643,7 +641,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+                    <packagingExcludes>WEB-INF/lib/tomcat-*.jar,
+                        WEB-INF/classes/config/application-*.yml,
+                        scripts/**,assets/**,
+                        index.html,
+                        WEB-INF/classes/.h2.server.properties</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
