@@ -68,6 +68,7 @@ __Don't forget to make a dump of your datas before such operation__
 ## to deploy :
 - before you should build the war package : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
 - and deploy the war into your webapps directory `unzip esup-publisher-ui-x.y.z.war -d publisher`
+- into a local nexus `./mvnw deploy:deploy-file -Durl=https://nexus.recia.fr/repository/public/ -DrepositoryId=local-nexus-snapshot -Dfile=target/esup-publisher-ui-2.0.0-SNAPSHOT.war -DpomFile=pom.xml`
 
 ## mvn param to debug xml binding :
 -Djaxb.debug=true

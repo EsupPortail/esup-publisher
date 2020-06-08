@@ -101,7 +101,7 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <root level="${logback.loglevel}">
+    <root level="${logback.loglevel:-WARN}">
         <appender-ref ref="CONSOLE"/>
     </root>
 
