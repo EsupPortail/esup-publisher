@@ -45,7 +45,7 @@
     </appender>
 -->
 
-    <logger name="org.esupportail.publisher" level="DEBUG"/>
+    <logger name="org.esupportail.publisher" level="WARN"/>
     <logger name="org.esupportail.publisher.web.filter.CrossOriginFilter" level="WARN"/>
     <!--<logger name="org.esupportail.publisher.service.factories" level="WARN"/>-->
     <!--<logger name="org.esupportail.publisher.repository.externals.ldap" level="WARN"/>-->
@@ -72,12 +72,12 @@
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <logger name="org.atmosphere" level="WARN"/>
-    <logger name="org.springframework" level="DEBUG"/>
-    <logger name="org.springframework.web" level="DEBUG"/>
-    <logger name="org.springframework.security" level="DEBUG"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
     <!--<logger name="org.springframework.security.web" level="INFO"/>-->
     <!--<logger name="org.springframework.security.web.util.matcher" level="INFO"/>-->
-    <logger name="org.springframework.security.cas" level="INFO"/>
+    <logger name="org.springframework.security.cas" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
@@ -102,7 +102,7 @@
     </contextListener>
 
     <root level="${logback.loglevel:-WARN}">
-        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
     <!--<logger name="org.esupportail.publisher.security" level="DEBUG">-->
