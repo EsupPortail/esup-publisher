@@ -24,7 +24,7 @@ body {
     font-size: 14px;
     background-color: #f3f3f3;
     color: #000;
-    margin:0;
+    margin: 0;
     line-height: 1.42857143;
 }
 
@@ -33,6 +33,7 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 .publisher-view footer,
 .publisher-view .footer {
     padding: 0 1rem;
@@ -64,7 +65,9 @@ body {
     line-height: 1.1;
 }
 
-.publisher-view pre { margin-bottom:15px; }
+.publisher-view pre {
+    margin-bottom: 15px;
+}
 
 .publisher-view a:hover,
 .publisher-view .a:focus,
@@ -73,18 +76,30 @@ body {
     outline: none;
 }
 
-.publisher-view  a {
+.publisher-view a {
     color: #000;
 }
+
 /* Default color */
 .publisher-view a:hover,
-.publisher-view a:hover > div{
+.publisher-view a:hover>div {
     color: #25B2F3;
 }
+
 /* Specific color */
+.publisher-view .clg18 a:hover,
+.publisher-view .clg18 a:hover>div {
+    color: #004899;
+}
+
 .publisher-view .clg37 a:hover,
-.publisher-view .clg37 a:hover > div{
+.publisher-view .clg37 a:hover>div {
     color: #C60440;
+}
+
+.publisher-view .clg41 a:hover,
+.publisher-view .clg41 a:hover>div {
+    color: #009FE3;
 }
 
 .publisher-view p {
@@ -92,38 +107,46 @@ body {
 }
 
 /** BOOTSTRAP interesting parts **/
-.publisher-view > article,
-.publisher-view > footer {
+.publisher-view>article,
+.publisher-view>footer {
     /*padding-right: 15px;*/
     /*padding-left: 15px;*/
     margin-right: auto;
     margin-left: auto;
 }
+
 @media (min-width: 768px) {
-    .publisher-view > article,
-    .publisher-view > footer {
+
+    .publisher-view>article,
+    .publisher-view>footer {
         max-width: 750px;
     }
 }
+
 @media (min-width: 992px) {
-    .publisher-view > article,
-    .publisher-view > footer {
+
+    .publisher-view>article,
+    .publisher-view>footer {
         max-width: 970px;
     }
 }
+
 @media (min-width: 1200px) {
-    .publisher-view > article,
-    .publisher-view > footer {
+
+    .publisher-view>article,
+    .publisher-view>footer {
         max-width: 1170px;
     }
 }
-.publisher-view > article:after,
-.publisher-view > footer:after,
-.publisher-view > article:before,
-.publisher-view > footer:before{
+
+.publisher-view>article:after,
+.publisher-view>footer:after,
+.publisher-view>article:before,
+.publisher-view>footer:before {
     display: table;
     content: " ";
 }
+
 .publisher-view img {
     vertical-align: middle;
     border: 0;
@@ -141,6 +164,7 @@ body {
     vertical-align: baseline;
     border-radius: .25em;
 }
+
 .publisher-view .caret-bottom {
     display: inline-block;
     width: 0;
@@ -151,6 +175,7 @@ body {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
 }
+
 .publisher-view .caret-right {
     display: inline-block;
     width: 0;
@@ -163,36 +188,41 @@ body {
 }
 
 /** ITEM VIEW **/
-.publisher-view  {
+.publisher-view {
     min-width: 280px;
     /*margin-top: 1rem; removed for modal*/
 }
+
 .publisher-view article {
     background-color: #fff;
     border: 1px solid #D0D0D0;
     border-radius: 2px;
     min-height: 260px;
-    box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, .19);
 }
-.publisher-view article > header > div > h1,
-.publisher-view article > header > div.image,
-.publisher-view article > header > div > p,
-.publisher-view article > header > div > div,
-.publisher-view article > section {
+
+.publisher-view article>header>div>h1,
+.publisher-view article>header>div.image,
+.publisher-view article>header>div>p,
+.publisher-view article>header>div>div,
+.publisher-view article>section {
     padding: 0 1rem;
 }
+
 .publisher-view article header {
     /*overflow: hidden;*/
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+
 .publisher-view article header .title h1 {
-    background-color: #f3f3f3 ;
+    background-color: #f3f3f3;
     font-size: 36px;
     margin: 0;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+
 .publisher-view .hyphenate {
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -202,17 +232,20 @@ body {
     -o-hyphens: auto;
     hyphens: auto;
 }
+
 .publisher-view article header .image {
     max-width: 240px;
     float: left;
 }
+
 .publisher-view article header .image img {
     display: block;
     max-width: 100%;
     height: auto;
     margin-bottom: 2px;
-    box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
 }
+
 .publisher-view article header .title,
 .publisher-view article header .details {
     display: flex;
@@ -220,7 +253,7 @@ body {
     min-width: 200px;
 }
 
-@media screen and (max-width: 540px)  {
+@media screen and (max-width: 540px) {
     .publisher-view article header {
         display: flex;
         flex-direction: column;
@@ -230,20 +263,25 @@ body {
         /*text-align: center;*/
         order: 1;
     }
+
     .publisher-view article header .image {
         order: 2;
     }
+
     .publisher-view article header .details {
         order: 3;
     }
 }
+
 .publisher-view.Flash article header {
     display: flex;
     flex-direction: column;
 }
+
 .publisher-view.Flash article header .title {
     order: 1;
 }
+
 .publisher-view.Flash article header .image {
     display: block;
     float: none;
@@ -251,9 +289,11 @@ body {
     order: 2;
     padding: 0;
 }
+
 .publisher-view.Flash article header .details {
     order: 3;
 }
+
 /** Styling title and summary over the image */
 @media screen and (min-width: 768px) {
     .publisher-view.Flash article header {
@@ -261,26 +301,31 @@ body {
         padding: 0;
         margin-bottom: 1rem;
     }
+
     .publisher-view.Flash article header .title {
         position: absolute;
         top: 0;
         width: auto;
     }
-    .publisher-view.Flash article header .title > h1 {
-        background: rgba(255,255,255,0.6);
+
+    .publisher-view.Flash article header .title>h1 {
+        background: rgba(255, 255, 255, 0.6);
     }
+
     .publisher-view.Flash article header .image {
         padding: 0;
     }
-    .publisher-view.Flash article header .image img   {
+
+    .publisher-view.Flash article header .image img {
         width: 100%;
         opacity: 0.6;
     }
+
     .publisher-view.Flash article header .details {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: rgba(255,255,255,0.8);
+        background: rgba(255, 255, 255, 0.8);
     }
 }
 
@@ -295,27 +340,33 @@ body {
     display: block;
     font-weight: bold;
 }
+
 .publisher-view article header .details .summary span {
     cursor: pointer;
 }
+
 .publisher-view article header .details .pubInfo {
     display: none;
 }
-.publisher-view article header .details .pubInfo > p {
+
+.publisher-view article header .details .pubInfo>p {
     margin: 0;
 }
-.publisher-view article header .details .pubInfo > p > .label {
+
+.publisher-view article header .details .pubInfo>p>.label {
     color: #808080;
 }
-.publisher-view article header .details .pubInfo > p > span:not(.label)::after {
+
+.publisher-view article header .details .pubInfo>p>span:not(.label)::after {
     content: ", "
 }
 
-.publisher-view article > section.attachments > div > a > span::before {
+.publisher-view article>section.attachments>div>a>span::before {
     content: "\f214";
     font: normal normal normal 24px/1 "Material Design Icons";
 }
-.publisher-view article > section.attachments > div {
+
+.publisher-view article>section.attachments>div {
     display: inline-block;
     padding: 0.5em;
 }
@@ -324,6 +375,7 @@ body {
     text-align: right;
     padding: 0 1rem;
 }
+
 /** Add to center image on line */
 .publisher-view .mdi.mdi-lg {
     font-size: 1.33333333em;

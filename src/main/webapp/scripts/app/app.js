@@ -12,12 +12,16 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
         function getCssEnv() {
             var sn = $location.host();
             switch (sn) {
-                case 'www.touraine-eschool.fr' : return 'clg37';
-                case 'test.reciaclg.fr' : return 'clg37';
+                case 'www.chercan.fr': return 'clg18';
+                case 'test-clg18.giprecia.net': return 'clg18';
+                case 'www.touraine-eschool.fr': return 'clg37';
+                case 'test-clg37.giprecia.net': return 'clg37';
+                case 'colleges41.fr' : return 'clg41';
+                case 'test-clg41.giprecia.net' : return 'clg41';
                 case 'lycees.netocentre.fr' : return 'lycees';
-                case 'test-lycee.reciaent.fr' : return 'lycees';
+                case 'test-lycee.giprecia.net' : return 'lycees';
                 case 'cfa.netocentre.fr' : return 'cfa';
-                case 'test-cfa.reciaent.fr' : return 'cfa';
+                case 'test-cfa.giprecia.net' : return 'cfa';
                 default : return 'default'
             }
         }

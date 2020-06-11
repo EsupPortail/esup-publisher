@@ -28,7 +28,7 @@ body {
     font-size: 14px;
     background-color: #f3f3f3;
     color: #000;
-    margin:0;
+    margin: 0;
     min-width: 280px;
 }
 
@@ -37,24 +37,26 @@ body {
         padding: 0 15%;
     }
 
-    body.not-in-iframe > div.container-fluid > div.well > div.manager,
-    body.not-in-iframe > div.container-fluid > div.well > div.admin,
-    body.not-in-iframe > div.container-navbar {
+    body.not-in-iframe>div.container-fluid>div.well>div.manager,
+    body.not-in-iframe>div.container-fluid>div.well>div.admin,
+    body.not-in-iframe>div.container-navbar {
         border-left: 1px solid #d0d0d0;
         border-right: 1px solid #d0d0d0;
     }
 
-    body.not-in-iframe > div.container-fluid > div.well > div.manager,
-    body.not-in-iframe > div.container-fluid > div.well > div.admin {
+    body.not-in-iframe>div.container-fluid>div.well>div.manager,
+    body.not-in-iframe>div.container-fluid>div.well>div.admin {
         border-bottom: 1px solid #d0d0d0;
     }
 }
 
-footer, .footer {
+footer,
+.footer {
     padding: 0 15px;
 }
 
-small, .small {
+small,
+.small {
     font-size: 78%;
 }
 
@@ -79,10 +81,12 @@ h6,
 /*font-family: 'Roboto', sans-serif;*/
 /*}*/
 
-pre { margin-bottom:15px; }
+pre {
+    margin-bottom: 15px;
+}
 
 /* for relog button */
-body > .modal.fade.in {
+body>.modal.fade.in {
     background-color: grey;
 }
 
@@ -94,11 +98,11 @@ a:link {
 }
 
 .container-fluid {
-    padding-left :0;
+    padding-left: 0;
     padding-right: 0;
 }
 
-.container-fluid > .well {
+.container-fluid>.well {
     border: none;
     background-color: #f3f3f3;
     padding: 0;
@@ -109,25 +113,46 @@ a:link {
 body a {
     color: #000;
 }
+
 /* Default color */
 a:hover,
 a:focus,
-a:hover > div,
-a:focus > div {
+a:hover>div,
+a:focus>div {
     color: #25B2F3;
 }
+
 /* Specific color */
+.clg18 a:focus,
+.clg18 a:hover,
+.clg18 a:hover>div,
+.clg18 a:focus>div {
+    color: #004899;
+}
+
 .clg37 a:hover,
 .clg37 a:focus,
-.clg37 a:hover > div,
-.clg37 a:focus > div {
+.clg37 a:hover>div,
+.clg37 a:focus>div {
     color: #C60440;
+}
+
+.clg41 a:hover,
+.clg41 a:focus,
+.clg41 a:hover>div,
+.clg41 a:focus>div {
+    color: #009FE3;
 }
 
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 ========================================================================== */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
     display: none !important;
 }
 
@@ -183,13 +208,12 @@ Browser Upgrade Prompt
 }
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2),
-only screen and (   min--moz-device-pixel-ratio: 2),
-only screen and (     -o-min-device-pixel-ratio: 2/1),
-only screen and (        min-device-pixel-ratio: 2),
-only screen and (                min-resolution: 192dpi),
-only screen and (                min-resolution: 2dppx) {
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min--moz-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
     .hipster {
         /*background: url("../images/hipster2x.png") no-repeat center top;*/
         /*background-size: contain;*/
@@ -200,7 +224,8 @@ only screen and (                min-resolution: 2dppx) {
     cursor: pointer;
 }
 
-#threadDump .popover, #healthCheck .popover {
+#threadDump .popover,
+#healthCheck .popover {
     top: inherit;
     display: block;
     font-size: 10px;
@@ -214,20 +239,50 @@ only screen and (                min-resolution: 2dppx) {
 .health-details {
     min-width: 400px;
 }
+
 .alert .popover pre {
     font-size: 10px;
 }
 
-.voffset  { margin-top: 2px; }
-.voffset1 { margin-top: 5px; }
-.voffset2 { margin-top: 10px; }
-.voffset3 { margin-top: 15px; }
-.voffset4 { margin-top: 30px; }
-.voffset5 { margin-top: 40px; }
-.voffset6 { margin-top: 60px; }
-.voffset7 { margin-top: 80px; }
-.voffset8 { margin-top: 100px; }
-.voffset9 { margin-top: 150px; }
+.voffset {
+    margin-top: 2px;
+}
+
+.voffset1 {
+    margin-top: 5px;
+}
+
+.voffset2 {
+    margin-top: 10px;
+}
+
+.voffset3 {
+    margin-top: 15px;
+}
+
+.voffset4 {
+    margin-top: 30px;
+}
+
+.voffset5 {
+    margin-top: 40px;
+}
+
+.voffset6 {
+    margin-top: 60px;
+}
+
+.voffset7 {
+    margin-top: 80px;
+}
+
+.voffset8 {
+    margin-top: 100px;
+}
+
+.voffset9 {
+    margin-top: 150px;
+}
 
 /* ====================================
               globals
@@ -235,24 +290,25 @@ only screen and (                min-resolution: 2dppx) {
 
 /* start Password strength bar style */
 ul#strength {
-    display:inline;
-    list-style:none;
-    margin:0;
-    margin-left:15px;
-    padding:0;
-    vertical-align:2px;
+    display: inline;
+    list-style: none;
+    margin: 0;
+    margin-left: 15px;
+    padding: 0;
+    vertical-align: 2px;
 }
 
 .point:last {
-    margin:0 !important;
+    margin: 0 !important;
 }
+
 .point {
-    background:#DDD;
-    border-radius:2px;
-    display:inline-block;
-    height:5px;
-    margin-right:1px;
-    width:20px;
+    background: #DDD;
+    border-radius: 2px;
+    display: inline-block;
+    height: 5px;
+    margin-right: 1px;
+    width: 20px;
 }
 
 /* end Password strength bar style */
@@ -271,83 +327,142 @@ ul#strength {
 .list-comma::before {
     content: ', ';
 }
+
 .list-comma:first-child::before {
     content: '';
 }
+
 /* end For enumarated values in entities views */
 
 /* start link for pagination */
-.pagination > li > a,
-.pagination > li > span {
+.pagination>li>a,
+.pagination>li>span {
     color: #25B2F3;
 }
-.clg37 .pagination > li > a,
-.clg37 .pagination > li > span {
+
+.clg18 .pagination>li>a,
+.clg18 .pagination>li>span {
+    color: #004899;
+}
+
+.clg37 .pagination>li>a,
+.clg37 .pagination>li>span {
     color: #C60440;
 }
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
+
+.clg41 .pagination>li>a,
+.clg41 .pagination>li>span {
+    color: #009FE3;
+}
+
+.pagination>.active>a,
+.pagination>.active>span,
+.pagination>.active>a:hover,
+.pagination>.active>span:hover,
+.pagination>.active>a:focus,
+.pagination>.active>span:focus {
     color: #fff;
     cursor: default;
     background-color: #25B2F3;
     border-color: #D0D0D0;
 }
-.clg37 .pagination > .active > a,
-.clg37 .pagination > .active > span,
-.clg37 .pagination > .active > a:hover,
-.clg37 .pagination > .active > span:hover,
-.clg37 .pagination > .active > a:focus,
-.clg37 .pagination > .active > span:focus {
-    color: #fff;
-    background-color: #C60440;
-    border-color: #D0D0D0;
+
+.clg18 .pagination>.active>a,
+.clg18 .pagination>.active>span,
+.clg18 .pagination>.active>a:hover,
+.clg18 .pagination>.active>span:hover,
+.clg18 .pagination>.active>a:focus,
+.clg18 .pagination>.active>span:focus {
+    background-color: #004899;
 }
+
+.clg37 .pagination>.active>a,
+.clg37 .pagination>.active>span,
+.clg37 .pagination>.active>a:hover,
+.clg37 .pagination>.active>span:hover,
+.clg37 .pagination>.active>a:focus,
+.clg37 .pagination>.active>span:focus {
+    background-color: #C60440;
+}
+
+.clg41 .pagination>.active>a,
+.clg41 .pagination>.active>span,
+.clg41 .pagination>.active>a:hover,
+.clg41 .pagination>.active>span:hover,
+.clg41 .pagination>.active>a:focus,
+.clg41 .pagination>.active>span:focus {
+    background-color: #009FE3;
+}
+
 /* end link for pagination */
 /* start nav-tabs for tables - for all table containing contents */
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
     color: #fff;
     cursor: default;
     background-color: #25b2f3;
     border-bottom-color: transparent;
 }
-.clg37 .nav-tabs > li.active > a,
-.clg37 .nav-tabs > li.active > a:hover,
-.clg37 .nav-tabs > li.active > a:focus {
-    background-color: #C60440;
-    color: #fff;
+
+.clg18 .nav-tabs>li.active>a,
+.clg18 .nav-tabs>li.active>a:hover,
+.clg18 .nav-tabs>li.active>a:focus {
+    background-color: #004899;
 }
+
+.clg37 .nav-tabs>li.active>a,
+.clg37 .nav-tabs>li.active>a:hover,
+.clg37 .nav-tabs>li.active>a:focus {
+    background-color: #C60440;
+}
+
+.clg41 .nav-tabs>li.active>a,
+.clg41 .nav-tabs>li.active>a:hover,
+.clg41 .nav-tabs>li.active>a:focus {
+    background-color: #009FE3;
+}
+
 /* end nav-tabs for tables - for all table containing contents */
 /* start nav-pills for all sub-nav in contents*/
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus {
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills>li.active>a:focus {
     background-color: #25b2f3;
 }
-.clg37 .nav-pills > li.active > a,
-.clg37 .nav-pills > li.active > a:hover,
-.clg37 .nav-pills > li.active > a:focus {
+
+.clg18 .nav-pills>li.active>a,
+.clg18 .nav-pills>li.active>a:hover,
+.clg18 .nav-pills>li.active>a:focus {
+    background-color: #004899;
+}
+
+.clg37 .nav-pills>li.active>a,
+.clg37 .nav-pills>li.active>a:hover,
+.clg37 .nav-pills>li.active>a:focus {
     background-color: #C60440;
+}
+
+.clg41 .nav-pills>li.active>a,
+.clg41 .nav-pills>li.active>a:hover,
+.clg41 .nav-pills>li.active>a:focus {
+    background-color: #009FE3;
 }
 
 .pastille {
     background: transparent;
     display: inline-block;
-    border-radius:50%;
-    width:20px;
-    height:20px;
-    border:1px solid #f3f3f3;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f3f3f3;
     vertical-align: text-bottom;
 }
 
 .publish-form-container .btn-primary:hover {
     opacity: 0.75;
 }
+
 .publish-form-container .btn-primary,
 .btn-nav:not([disabled]):hover,
 .btn-nav:not([disabled]):focus {
@@ -355,11 +470,23 @@ ul#strength {
     background-color: #25B2F3;
     border-color: #D0D0D0;
 }
+
+.clg18 .publish-form-container .btn-primary,
+.clg18 .btn-nav:not([disabled]):hover,
+.clg18 .btn-nav:not([disabled]):focus {
+    background-color: #004899;
+}
+
 .clg37 .publish-form-container .btn-primary,
 .clg37 .btn-nav:not([disabled]):hover,
 .clg37 .btn-nav:not([disabled]):focus {
-    color: #fff;
     background-color: #C60440;
+}
+
+.clg41 .publish-form-container .btn-primary,
+.clg41 .btn-nav:not([disabled]):hover,
+.clg41 .btn-nav:not([disabled]):focus {
+    background-color: #009FE3;
 }
 
 .btn {
@@ -368,75 +495,86 @@ ul#strength {
 
 /*.btn-link,*/
 /*.btn-group .btn-nav {*/
-    /*color: #25B2F3;*/
+/*color: #25B2F3;*/
 /*}*/
 /*.clg37 .btn-link,*/
 /*.clg37 .btn-group .btn-nav {*/
-    /*color: #C60440;*/
+/*color: #C60440;*/
 /*}*/
 
 dl {
     margin: 20px auto;
 }
-.dl-horizontal.entity-details > dd {
+
+.dl-horizontal.entity-details>dd {
     margin-bottom: 15px;
 }
+
 @media screen and (min-width: 768px) {
-    .dl-horizontal.entity-details > dt {
+    .dl-horizontal.entity-details>dt {
         margin-bottom: 15px;
         text-align: left;
         white-space: normal;
         width: 200px
     }
-    .dl-horizontal.entity-details > dd {
+
+    .dl-horizontal.entity-details>dd {
         border-bottom: 1px solid #eee;
         padding-left: 220px;
         margin-left: 0;
     }
 }
-.dl-horizontal.entity-details > dd > .classification-color {
+
+.dl-horizontal.entity-details>dd>.classification-color {
     height: 24px;
     width: 24px;
     border-radius: 50%;
-    border: 2px solid rgba(0,0,0,0.4);
+    border: 2px solid rgba(0, 0, 0, 0.4);
 }
 
-.panel-heading, .panel-footer {
+.panel-heading,
+.panel-footer {
     color: #000;
     background-color: #f3f3f3;
     border-color: #d0d0d0;
 }
 
-.form-control, output{
+.form-control,
+output {
     color: #000;
 }
 
-button, input, optgroup, select, textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
     font-family: "Roboto Slab", sans-serif;
 }
 
 /** css for all input[type="checkbox"] inside a label - not bootstrap */
-label > span + input[type="checkbox"] {
+label>span+input[type="checkbox"] {
     margin-left: 15px;
 }
 
 .highlight,
-.table > tbody > tr.highlight,
-.table-striped > tbody > tr.highlight {
+.table>tbody>tr.highlight,
+.table-striped>tbody>tr.highlight {
     background-color: rgba(244, 67, 54, 0.1);
 }
 
-.modal-dialog{
+.modal-dialog {
     max-height: calc(100vh - 100px);
     overflow-y: initial !important;
 }
+
 /* ====================================
      All pages title on where user is
 ====================================== */
-body > div.container-fluid > div.well > div.admin > div h1,
-body > div.container-fluid > div.well > div > div > div > h2,
-body > div.container-fluid > div.well > div > div > div > div.publish-header,
-body > div.container-fluid > div.well > div > div > div > div.header {
+body>div.container-fluid>div.well>div.admin>div h1,
+body>div.container-fluid>div.well>div>div>div>h2,
+body>div.container-fluid>div.well>div>div>div>div.publish-header,
+body>div.container-fluid>div.well>div>div>div>div.header {
     background-color: #f3f3f3;
     padding: 20px 40px 10px 40px;
     margin: 0;
@@ -447,12 +585,13 @@ body > div.container-fluid > div.well > div > div > div > div.header {
 }
 
 /* start case on admin view when managing entities */
-body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header),
-body > div.container-fluid > div.well.entity > div > div > div:not(.modal) {
+body>div.container-fluid>div.well>div>div>div>div:not(.modal):not(.publish-header):not(.header),
+body>div.container-fluid>div.well.entity>div>div>div:not(.modal) {
     background-color: #fff;
 }
-body > div.container-fluid > div.well > div > div > div > div:not(.modal):not(.publish-header):not(.header),
-body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > button {
+
+body>div.container-fluid>div.well>div>div>div>div:not(.modal):not(.publish-header):not(.header),
+body>div.container-fluid>div.well.entity>div>div>div:not(.modal)>button {
     padding: 10px 2%;
 }
 
@@ -461,34 +600,38 @@ body > div.container-fluid > div.well.entity > div > div > div:not(.modal) > but
               Navbar
 ====================================== */
 
-body > div.container-navbar {
+body>div.container-navbar {
     background-color: #fff;
     -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 /* Suppression nav-header project name*/
-nav > div > div.navbar-header > a {
+nav>div>div.navbar-header>a {
     display: none;
 }
+
 /* New style of navbar */
 nav.navbar-default .navbar-header .navbar-toggle.other-style {
     width: 100%;
     border: none;
     text-align: center;
     background-color: inherit;
-    float:none;
+    float: none;
     margin-left: 0;
     margin-right: 0;
 }
-nav.navbar-default .navbar-header .navbar-toggle.other-style  span.fa {
+
+nav.navbar-default .navbar-header .navbar-toggle.other-style span.fa {
     display: none;
 }
-.container > .navbar-header {
-    margin:0;
+
+.container>.navbar-header {
+    margin: 0;
 }
 
-nav, .navbar,
+nav,
+.navbar,
 .navbar-default {
     border: none;
     margin: 0;
@@ -496,63 +639,124 @@ nav, .navbar,
     background-color: inherit;
 }
 
-.dropdown-menu > .active > a,
-.dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus {
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
     background-color: #25B2F3;
     color: #fff;
 }
-.clg37 .dropdown-menu > .active > a,
-.clg37 .dropdown-menu > .active > a:hover,
-.clg37 .dropdown-menu > .active > a:focus {
+
+.clg18 .dropdown-menu>.active>a,
+.clg18 .dropdown-menu>.active>a:hover,
+.clg18 .dropdown-menu>.active>a:focus {
+    background-color: #004899;
+}
+
+.clg37 .dropdown-menu>.active>a,
+.clg37 .dropdown-menu>.active>a:hover,
+.clg37 .dropdown-menu>.active>a:focus {
     background-color: #C60440;
 }
-.navbar-default .navbar-nav > .active > a,
-.navbar-default .navbar-nav > .active > a:hover,
-.navbar-default .navbar-nav > .active > a:focus,
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:hover,
-.navbar-default .navbar-nav > .open > a:focus {
+
+.clg41 .dropdown-menu>.active>a,
+.clg41 .dropdown-menu>.active>a:hover,
+.clg41 .dropdown-menu>.active>a:focus {
+    background-color: #009FE3;
+}
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
     background-color: transparent;
 }
-.clg37 .navbar-default .navbar-nav > .active > a,
-.clg37 .navbar-default .navbar-nav > .active > a:hover,
-.clg37 .navbar-default .navbar-nav > .active > a:focus,
-.clg37 .navbar-default .navbar-nav > .open > a,
-.clg37 .navbar-default .navbar-nav > .open > a:hover,
-.clg37 .navbar-default .navbar-nav > .open > a:focus{
+
+.clg18 .navbar-default .navbar-nav>.active>a,
+.clg18 .navbar-default .navbar-nav>.active>a:hover,
+.clg18 .navbar-default .navbar-nav>.active>a:focus,
+.clg18 .navbar-default .navbar-nav>.open>a,
+.clg18 .navbar-default .navbar-nav>.open>a:hover,
+.clg18 .navbar-default .navbar-nav>.open>a:focus {
     background-color: transparent;
 }
+
+.clg37 .navbar-default .navbar-nav>.active>a,
+.clg37 .navbar-default .navbar-nav>.active>a:hover,
+.clg37 .navbar-default .navbar-nav>.active>a:focus,
+.clg37 .navbar-default .navbar-nav>.open>a,
+.clg37 .navbar-default .navbar-nav>.open>a:hover,
+.clg37 .navbar-default .navbar-nav>.open>a:focus {
+    background-color: transparent;
+}
+
+.clg41 .navbar-default .navbar-nav>.active>a,
+.clg41 .navbar-default .navbar-nav>.active>a:hover,
+.clg41 .navbar-default .navbar-nav>.active>a:focus,
+.clg41 .navbar-default .navbar-nav>.open>a,
+.clg41 .navbar-default .navbar-nav>.open>a:hover,
+.clg41 .navbar-default .navbar-nav>.open>a:focus {
+    background-color: transparent;
+}
+
 @media screen and (max-width: 767px) {
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-    .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #25B2F3;
         color: #fff;
     }
-    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-    .clg37 .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #004899;
+    }
+
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #C60440;
     }
+
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #009FE3;
+    }
 }
-.dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus {
+
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
     opacity: 0.75;
 }
-.dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus {
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
     color: #25B2F3;
     background-color: #f3f3f3;
 }
-.clg37 .dropdown-menu > li > a:hover,
-.clg37 .dropdown-menu > li > a:focus {
+
+.clg18 .dropdown-menu>li>a:hover,
+.clg18 .dropdown-menu>li>a:focus {
+    color: #004899;
+}
+
+.clg37 .dropdown-menu>li>a:hover,
+.clg37 .dropdown-menu>li>a:focus {
     color: #C60440;
+}
+
+.clg41 .dropdown-menu>li>a:hover,
+.clg41 .dropdown-menu>li>a:focus {
+    color: #009FE3;
 }
 
 /* SIZE ET CENTRAGE SOUS MENU */
 
-#navbar-collapse > ul,
+#navbar-collapse>ul,
 #navbar-collapse {
     width: 100%;
     padding: 0;
@@ -560,54 +764,69 @@ nav, .navbar,
     margin: 0;
 }
 
-#navbar-collapse > ul > li:focus,
-#navbar-collapse > ul > li:hover,
-#navbar-collapse > ul > li.active {
+#navbar-collapse>ul>li:focus,
+#navbar-collapse>ul>li:hover,
+#navbar-collapse>ul>li.active {
     border-bottom: solid 3px #25B2F3;
 }
-.clg37 #navbar-collapse > ul > li:focus,
-.clg37 #navbar-collapse > ul > li:hover,
-.clg37 #navbar-collapse > ul > li.active {
+
+.clg18 #navbar-collapse>ul>li:focus,
+.clg18 #navbar-collapse>ul>li:hover,
+.clg18 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #004899;
+}
+
+.clg37 #navbar-collapse>ul>li:focus,
+.clg37 #navbar-collapse>ul>li:hover,
+.clg37 #navbar-collapse>ul>li.active {
     border-bottom: solid 3px #C60440;
 }
 
-#navbar-collapse > ul > li {
+.clg41 #navbar-collapse>ul>li:focus,
+.clg41 #navbar-collapse>ul>li:hover,
+.clg41 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #009FE3;
+}
+
+#navbar-collapse>ul>li {
     /*width: 30%;*/
     border-bottom: solid 3px #D0D0D0;
     margin-left: 10px;
     float: none;
     vertical-align: top;
 }
+
 @media screen and (min-width:768px) {
-    #navbar-collapse > ul > li {
+    #navbar-collapse>ul>li {
         display: inline-block;
     }
 }
 
-body > div.container-navbar > nav {
+body>div.container-navbar>nav {
     background-color: #ffffff;
 }
 
-body > div.container-navbar > nav .navbar-default .navbar-collapse,
-body > div.container-navbar > nav .navbar-default .navbar-form {
+body>div.container-navbar>nav .navbar-default .navbar-collapse,
+body>div.container-navbar>nav .navbar-default .navbar-form {
     border: none;
 }
 
-body > div.container-navbar > nav > div.container {
+body>div.container-navbar>nav>div.container {
     width: 100%;
     padding: 0px;
     margin-left: 0px;
     margin-right: 0px;
 }
 
-body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.glyphicon,
-body > div.container-navbar > nav > div.container > div.navbar-collapse > ul > li > a span.fa {
+body>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.glyphicon,
+body>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.fa {
     display: none;
 }
+
 /* ====================================
     Footer
 ======================================*/
-body > div.container-fluid > div.footer {
+body>div.container-fluid>div.footer {
     display: flex;
     justify-content: space-between;
 }
@@ -632,6 +851,7 @@ a.list-group-item div.bouton-action .div-text {
     a.list-group-item div.bouton-action .div-icon {
         display: none;
     }
+
     a.list-group-item div.bouton-action .div-text {
         text-align: center;
     }
@@ -643,6 +863,7 @@ a.list-group-item div.bouton-action .div-text {
     text-overflow: ellipsis;
     max-lines: 2;
 }
+
 .subject-key {
     word-wrap: break-word;
 }
@@ -652,14 +873,17 @@ a.list-group-item div.bouton-action .div-text {
 ======================================*/
 
 @media screen and (min-width: 768px) {
-    body:not(.not-in-iframe) > div.container-fluid > div.well.site,
-    body:not(.not-in-iframe) > div.container-fluid > div.well.site + div.footer {
+
+    body:not(.not-in-iframe)>div.container-fluid>div.well.site,
+    body:not(.not-in-iframe)>div.container-fluid>div.well.site+div.footer {
         padding: 0 15%;
     }
-    body:not(.not-in-iframe) > div.container-fluid > div.well.site {
+
+    body:not(.not-in-iframe)>div.container-fluid>div.well.site {
         box-shadow: none;
     }
-    body:not(.not-in-iframe) > div.container-fluid > div.well.site > div > div.content {
+
+    body:not(.not-in-iframe)>div.container-fluid>div.well.site>div>div.content {
         box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 }
@@ -667,39 +891,44 @@ a.list-group-item div.bouton-action .div-text {
 /* ====================================
              manager
 ======================================*/
-.container-fluid > .well > .manager > .content {
+.container-fluid>.well>.manager>.content {
     background-color: #fff;
 }
 
-.container-fluid > .well > .manager > .content #tabs > h4 {
+.container-fluid>.well>.manager>.content #tabs>h4 {
     font-style: italic;
 }
 
-.container-fluid > .well > .manager > .content > div > #tabs > ul.nav,
-.container-fluid > .well > .manager > .content > div > div.table-responsive {
+.container-fluid>.well>.manager>.content>div>#tabs>ul.nav,
+.container-fluid>.well>.manager>.content>div>div.table-responsive {
     padding-top: 15px;
 }
 
 /* ====================================
     manager contents (table of published contents)
 ======================================*/
-.container-fluid > .well > .manager.contents > .content .table-responsive .table td {
+.container-fluid>.well>.manager.contents>.content .table-responsive .table td {
     font-size: 13px;
 }
-.container-fluid > .well > .manager.contents > .content .table-responsive .table td > span {
+
+.container-fluid>.well>.manager.contents>.content .table-responsive .table td>span {
     display: block;
 }
-.container-fluid > .well > .manager.contents > .content .table-responsive .table td > span:before {
+
+.container-fluid>.well>.manager.contents>.content .table-responsive .table td>span:before {
     content: attr(data-label) "";
 }
-.container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos::before {
+
+.container-fluid>.well>.manager.contents>.content .table-responsive .table td .fa.subject-infos::before {
     display: none;
 }
-.container-fluid > .well > .manager.contents > .content .table-responsive .table td .fa.subject-infos {
+
+.container-fluid>.well>.manager.contents>.content .table-responsive .table td .fa.subject-infos {
     font: inherit;
 }
+
 @media screen and (min-width:992px) {
-    .container-fluid > .well > .manager.contents > .content .table-responsive .table .longtext {
+    .container-fluid>.well>.manager.contents>.content .table-responsive .table .longtext {
         overflow: hidden;
         max-width: 50ch;
         word-wrap: break-word;
@@ -707,7 +936,7 @@ a.list-group-item div.bouton-action .div-text {
         max-lines: 2;
     }
 
-    .container-fluid > .well > .manager.contents > .content .table-responsive .table .verylongtext {
+    .container-fluid>.well>.manager.contents>.content .table-responsive .table .verylongtext {
         overflow: hidden;
         max-width: 50ch;
         white-space: nowrap;
@@ -720,10 +949,10 @@ a.list-group-item div.bouton-action .div-text {
     }
 }
 
-.table td > input[type="radio"],
-.table td > input[type="checkbox"],
-dl > dd > input[type="radio"],
-dl > dd > input[type="checkbox"] {
+.table td>input[type="radio"],
+.table td>input[type="checkbox"],
+dl>dd>input[type="radio"],
+dl>dd>input[type="checkbox"] {
     margin: 0;
     height: auto;
 }
@@ -736,17 +965,20 @@ dl > dd > input[type="checkbox"] {
     border: 1px dashed #D0D0D0;
     padding: 5px 10px;
 }
-.manager.contents .legend > h5 {
-    display:none;
+
+.manager.contents .legend>h5 {
+    display: none;
     text-decoration: underline;
 }
-.manager.contents .legend > span:before {
+
+.manager.contents .legend>span:before {
     content: "\F6C3";
     font: normal normal bold 12px/1 "Material Design Icons";
     /*color: #F44336;*/
     margin-right: 5px;
 }
-.manager.contents.owned .legend > span {
+
+.manager.contents.owned .legend>span {
     height: 24px;
     display: inline-block;
     padding: 0 10px;
@@ -757,17 +989,18 @@ dl > dd > input[type="checkbox"] {
     .table-responsive.table-responsive-to-cards {
         overflow-x: hidden;
     }
+
     .table-responsive-to-cards thead {
         display: none;
     }
 
     .table-responsive-to-cards,
-    .table-responsive-to-cards table > thead > tr > th,
-    .table-responsive-to-cards table > tbody > tr > th,
-    .table-responsive-to-cards table > tfoot > tr > th,
-    .table-responsive-to-cards table > thead > tr > td,
-    .table-responsive-to-cards table > tbody > tr > td,
-    .table-responsive-to-cards table > tfoot > tr > td {
+    .table-responsive-to-cards table>thead>tr>th,
+    .table-responsive-to-cards table>tbody>tr>th,
+    .table-responsive-to-cards table>tfoot>tr>th,
+    .table-responsive-to-cards table>thead>tr>td,
+    .table-responsive-to-cards table>tbody>tr>td,
+    .table-responsive-to-cards table>tfoot>tr>td {
         border: none;
         white-space: initial !important;
     }
@@ -796,7 +1029,7 @@ dl > dd > input[type="checkbox"] {
     }
 
     .manager.contents .table-responsive-to-cards td,
-    .container-fluid > .well > .manager.contents > .content .table-responsive.table-responsive-to-cards .table td > span {
+    .container-fluid>.well>.manager.contents>.content .table-responsive.table-responsive-to-cards .table td>span {
         display: inline-block;
     }
 
@@ -837,6 +1070,7 @@ dl > dd > input[type="checkbox"] {
         background: transparent;
     }
 }
+
 /* end Transform table into cards ! */
 /* start Transform table into flexbox ! */
 .table-responsive-to-flexbox tr {
@@ -845,26 +1079,31 @@ dl > dd > input[type="checkbox"] {
     justify-content: space-between;
     border-bottom: 1px solid #D0D0D0;
 }
+
 .table-responsive-to-flexbox td {
     white-space: normal;
 }
+
 .table-responsive-to-flexbox,
-.table-responsive-to-flexbox > .table,
-.table-responsive-to-flexbox > .table > thead,
-.table-responsive-to-flexbox > .table > thead > tr,
-.table-responsive-to-flexbox > .table > thead > tr > th,
-.table-responsive-to-flexbox > .table > tbody > tr > td {
+.table-responsive-to-flexbox>.table,
+.table-responsive-to-flexbox>.table>thead,
+.table-responsive-to-flexbox>.table>thead>tr,
+.table-responsive-to-flexbox>.table>thead>tr>th,
+.table-responsive-to-flexbox>.table>tbody>tr>td {
     border: none;
 }
+
 /* end Transform table into flexbox ! */
 /* start manager details */
-.manager.contents.details .content .tab-content > #publishers ul > li > figure {
+.manager.contents.details .content .tab-content>#publishers ul>li>figure {
     margin: 0;
 }
-.manager.contents.details .content .tab-content > #publishers ul > li > figure > img {
+
+.manager.contents.details .content .tab-content>#publishers ul>li>figure>img {
     max-width: 48px;
 }
-.manager.contents.details .content .tab-content > #targets ul > li {
+
+.manager.contents.details .content .tab-content>#targets ul>li {
     border: none;
 }
 
@@ -875,31 +1114,35 @@ dl > dd > input[type="checkbox"] {
 .manager.treeview {
     width: 100%;
 }
-.manager.treeview > .content > .treeview {
+
+.manager.treeview>.content>.treeview {
     overflow: auto;
 }
-.manager.treeview > .content > .treeview > div {
+
+.manager.treeview>.content>.treeview>div {
     margin: 0;
     display: block;
-    float:left;
+    float: left;
     min-width: 25%;
-    box-sizing:border-box;
+    box-sizing: border-box;
     padding: 15px;
 }
-.manager.treeview > .content > .treeview > div:last-child {
+
+.manager.treeview>.content>.treeview>div:last-child {
     /*float: none;*/
-    overflow:hidden;
+    overflow: hidden;
     min-width: 60%;
     max-width: 1024px;
 }
+
 @media screen and (min-width:991px) {
-    .manager.treeview > .content > .treeview > div:last-child {
+    .manager.treeview>.content>.treeview>div:last-child {
         float: none;
         max-width: 100%;
     }
 }
 
-.manager.treeview > .content > .treeview .context-viewer .form-group input[type=checkbox].form-control {
+.manager.treeview>.content>.treeview .context-viewer .form-group input[type=checkbox].form-control {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -918,17 +1161,21 @@ dl > dd > input[type="checkbox"] {
 .article-preview .details .summary {
     display: block;
 }
+
 .article-preview .details .pubInfo p {
     margin: 0;
 }
+
 .article-preview .details .label {
     color: #808080;
 }
+
 .article-preview {
     border: 1px solid #D0D0D0;
     padding: 10px;
     border-radius: 4px;
 }
+
 .article-preview legend {
     width: auto;
     margin: 0 20px;
@@ -945,6 +1192,7 @@ dl > dd > input[type="checkbox"] {
     overflow: hidden;
     white-space: initial;
 }
+
 .publish-content .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -964,19 +1212,21 @@ dl > dd > input[type="checkbox"] {
 #cropImageModale .cropArea {
     background: #E4E4E4;
     overflow: hidden;
-    width:100%;
-    height:350px;
+    width: 100%;
+    height: 350px;
 }
+
 #cropImageModale .previewCropArea img {
     display: block;
     margin: 10px 0;
 }
+
 #cropImageModale div.inputArea h3 {
     display: inline-block;
 }
 
 /*#cropImageModale .progress {*/
-    /*width : 80%;*/
+/*width : 80%;*/
 /*}*/
 
 /* ====================================
@@ -988,48 +1238,57 @@ dl > dd > input[type="checkbox"] {
 }
 
 /* Start The header */
-body > div.container-fluid > div.well > div > div > div > div.publish-header {
+body>div.container-fluid>div.well>div>div>div>div.publish-header {
     padding: 0 40px;
     /*vertical-align: middle;*/
 }
-.manager .publish-form-container > .publish-header > h2 {
+
+.manager .publish-form-container>.publish-header>h2 {
     padding-top: 20px;
 }
-.manager .publish-form-container > .publish-header > div.status-buttons {
+
+.manager .publish-form-container>.publish-header>div.status-buttons {
     padding-top: 15px;
 }
-.manager .publish-form-container > .publish-header {
+
+.manager .publish-form-container>.publish-header {
     display: block;
     overflow: auto;
     clear: both;
 }
-.manager .publish-form-container > .publish-header > h2,
-.manager .publish-form-container > .publish-header > div.status-buttons {
+
+.manager .publish-form-container>.publish-header>h2,
+.manager .publish-form-container>.publish-header>div.status-buttons {
     display: inline-block;
     margin: 0;
 }
-.manager .publish-form-container > .publish-header > div.status-buttons {
+
+.manager .publish-form-container>.publish-header>div.status-buttons {
     float: right;
     /*line-height: 100%;*/
     text-align: center;
     /*height: 100%;*/
     overflow: hidden;
 }
-.manager .publish-form-container > .publish-header > div.status-buttons > div.publish-form-views-steps {
+
+.manager .publish-form-container>.publish-header>div.status-buttons>div.publish-form-views-steps {
     height: 100%;
     vertical-align: middle;
 }
-.manager .publish-form-container > .publish-header > div.status-buttons > div.publish-form-views-steps > a {
+
+.manager .publish-form-container>.publish-header>div.status-buttons>div.publish-form-views-steps>a {
     display: inline-block;
     margin: 0 10px;
     height: 100%;
 }
+
 /*numbered buttons */
-.manager .publish-form-container > .publish-header > .status-buttons a:hover {
-    text-decoration:none;
+.manager .publish-form-container>.publish-header>.status-buttons a:hover {
+    text-decoration: none;
 }
-.manager .publish-form-container > .publish-header > .status-buttons span.step-number {
-    display:inline-block;
+
+.manager .publish-form-container>.publish-header>.status-buttons span.step-number {
+    display: inline-block;
     font-size: 120%;
     font-weight: bold;
     line-height: 180%;
@@ -1039,57 +1298,82 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     white-space: nowrap;
     color: #ffffff;
     background: #888;
-    text-align:center;
+    text-align: center;
 }
-.manager .publish-form-container > .publish-header > .status-buttons span.step-label {
-    color:#888;
-    display:block;
-    font-size:12px;
+
+.manager .publish-form-container>.publish-header>.status-buttons span.step-label {
+    color: #888;
+    display: block;
+    font-size: 12px;
     font-weight: bold;
     margin-top: 5px;
     /*text-align:center;*/
-    text-transform:uppercase;
+    text-transform: uppercase;
     /*vertical-align: middle;*/
 }
+
 /* active buttons */
-.manager .publish-form-container > .publish-header > .status-buttons a.active span.step-number {
+.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
     background: #25B2F3;
 }
-.clg37 .manager .publish-form-container > .publish-header > .status-buttons a.active span.step-number {
+
+.clg18 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #004899;
+}
+
+.clg37 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
     background: #C60440;
 }
-.manager .publish-form-container > .publish-header > .status-buttons a.active span.step-label {
+
+.clg41 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #009FE3;
+}
+
+.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-label {
     color: #000;
 }
+
 /* end The header */
 
 /* start The body */
-.manager .publish-form-container > .publish-body {
+.manager .publish-form-container>.publish-body {
     padding: 0 10%;
 }
 
-.manager .publish-form-container > .publish-body > div > h3 {
+.manager .publish-form-container>.publish-body>div>h3 {
     text-align: center;
     padding-bottom: 15px;
     color: #25B2F3;
 }
-.clg37 .manager .publish-form-container > .publish-body > div > h3 {
+
+.clg18 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #004899;
+}
+
+.clg37 .manager .publish-form-container>.publish-body>div>h3 {
     color: #C60440;
+}
+
+.clg41 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #009FE3;
 }
 
 /** start specific publish.classification */
 .manager.publish .publish-form-container .publish-classification .inline-form .checkbox-inline:first-child {
     margin-left: 10px;
 }
-.manager.publish .publish-form-container .publish-classification input[type=checkbox] + label {
+
+.manager.publish .publish-form-container .publish-classification input[type=checkbox]+label {
     cursor: pointer;
     font-weight: normal;
     text-align: center;
 }
+
 /* Hide checkbox when iconurl is shown */
 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl {
     display: none;
 }
+
 /*
 - Style each label that is directly after the input
 - position: relative; will ensure that any position: absolute children will position themselves in relation to it
@@ -1106,21 +1390,35 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     border: solid 3px #FFF;
     text-align: center;
 }
+
 /* Provide a border when hovered and when the checkbox before it is checked */
 .manager.publish .publish-form-container .publish-classification .checkbox-inline span.iconurl:hover,
-.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label> span.iconurl {
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
     border: solid 3px #25B2F3;
 }
-.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl + label > span.iconurl:hover,
-.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label> span.iconurl {
+
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #004899;
+}
+
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
     border: solid 3px #C60440;
 }
+
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #009FE3;
+}
+
 /*
 - Create a pseudo element :after when checked and provide a tick
 - Center the content
 */
-.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label > span.iconurl:after {
-    content: '\2714'; /*content is required, though it can be empty - content: '';*/
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    content: '\2714';
+    /*content is required, though it can be empty - content: '';*/
     display: block;
     /*height: 1em;*/
     /*width: 1em;*/
@@ -1132,42 +1430,61 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     margin: auto;
     color: #25B2F3;
 }
-.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked + label > span.iconurl:after {
+
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #004899;
+}
+
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
     color: #C60440;
 }
+
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #009FE3;
+}
+
 /** end specific publish.classification */
 
 /** start specific publish.content */
 .manager.publish .publish-form-container .publish-content .form-inline img#enclosure.img-responsive {
     display: inline;
 }
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify > .form-group {
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify>.form-group {
     vertical-align: top;
 }
+
 /* tip to justify all .form-group divs into .form-inline*/
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify::after {
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify::after {
     content: ' ';
     width: 100%;
     display: inline-block;
 }
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify {
-    margin-bottom: -15px; /* previous tip add a new line and with the margin-bottom of 15px it's getting a useless line */
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify {
+    margin-bottom: -15px;
+    /* previous tip add a new line and with the margin-bottom of 15px it's getting a useless line */
 }
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline.text-justify > .form-group > label {
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify>.form-group>label {
     display: block;
 }
+
 .manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-control {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
     width: 100%;
 }
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline > .linkedFiles {
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles {
     display: inline;
 }
-.manager.publish .publish-form-container .publish-content .form-group > .form-inline > .linkedFiles > span {
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles>span {
     white-space: nowrap;
 }
+
 /** end specific publish.content */
 /** start specific publish.targets */
 .manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item,
@@ -1175,6 +1492,7 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     border: none;
     position: inherit;
 }
+
 /** end specific publish.targets */
 /* end The body */
 /* The footer */
@@ -1185,7 +1503,8 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     Overlay, for spinner, etc...
 ===========================================*/
 .overlay {
-    background-color: rgba(0,0,0,0.8); /*or semitransparent image*/
+    background-color: rgba(0, 0, 0, 0.8);
+    /*or semitransparent image*/
     height: 100%;
     width: 100%;
     position: fixed;
@@ -1218,17 +1537,21 @@ body > div.container-fluid > div.well > div > div > div > div.publish-header {
     display: inline;
     white-space: normal;
 }
+
 .subject-search {
     display: inline;
 }
+
 .fa-users .tooltip-inner {
     word-break: break-all;
 }
+
 .evaluator {
     list-style: none;
 }
-div > div > edit-evaluator > ul,
-td > evaluator > ul {
+
+div>div>edit-evaluator>ul,
+td>evaluator>ul {
     padding: 0;
 }
 
@@ -1246,37 +1569,67 @@ td > evaluator > ul {
 js-tree {
     display: inline-block;
 }
-.jstree-default .jstree-anchor{
+
+.jstree-default .jstree-anchor {
     color: #000;
 }
-.jstree-default > .jstree-container-ul > .jstree-node {
+
+.jstree-default>.jstree-container-ul>.jstree-node {
     margin-left: 0;
     margin-right: 20px;
 }
+
 .jstree-default .jstree-wholerow-clicked,
 .jstree-default .jstree-anchor.jstree-clicked,
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     background: #25B2F3;
 }
+
+.clg18 .jstree-default .jstree-wholerow-clicked,
+.clg18 .jstree-default .jstree-anchor.jstree-clicked,
+.clg18 .jstree-default .jstree-clicked.jstree-hovered,
+.clg18 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #004899;
+}
+
 .clg37 .jstree-default .jstree-wholerow-clicked,
 .clg37 .jstree-default .jstree-anchor.jstree-clicked,
 .clg37 .jstree-default .jstree-clicked.jstree-hovered,
 .clg37 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     background: #C60440;
 }
+
+.clg41 .jstree-default .jstree-wholerow-clicked,
+.clg41 .jstree-default .jstree-anchor.jstree-clicked,
+.clg41 .jstree-default .jstree-clicked.jstree-hovered,
+.clg41 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #009FE3;
+}
+
 .jstree-default .jstree-anchor.jstree-clicked {
     color: #fff;
 }
+
 .jstree-default .jstree-wholerow-hovered:not(.jstree-wholerow-clicked),
-.jstree-default .jstree-hovered:not(.jstree-clicked){
+.jstree-default .jstree-hovered:not(.jstree-clicked) {
     background: #f3f3f3;
 }
+
 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #25B2F3;
 }
+
+.clg18 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #004899;
+}
+
 .clg37 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #C60440;
+}
+
+.clg41 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #009FE3;
 }
 
 /* ========================================
@@ -1284,17 +1637,21 @@ js-tree {
 ===========================================*/
 .tadropdown {
     padding: 0px;
-    border:none;
+    border: none;
 }
+
 /* see custom taDropdown, and copy style of .btn-default.active*/
-.tadropdown.active > button, .btn-default.active {
+.tadropdown.active>button,
+.btn-default.active {
     color: #000;
     background-color: #D0D0D0;
     border-color: #D0D0D0;
 }
+
 .ta-scroll-window.form-control {
     overflow: visible;
 }
+
 /* ========================================
     For ui-datepicker
 ===========================================*/
@@ -1307,25 +1664,28 @@ js-tree {
     For Fixed alert to be visible on top of screen everywhere
 ==========================================*/
 .alert-fixed {
-    position:fixed;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
-    z-index:9999;
-    border-radius:0px;
+    z-index: 9999;
+    border-radius: 0px;
     text-align: center;
 }
+
 /* ========================================
     For toaster - used for request messages
 ===========================================*/
 
-#toast-container > div {
+#toast-container>div {
     min-width: 40%;
     text-align: center;
 }
+
 .toast-top-center {
     left: 0;
 }
+
 /* ========================================
     For ng-animates with ui-router, some transition give problems
 ===========================================*/
