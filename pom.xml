@@ -622,7 +622,7 @@
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <localCheckout>true</localCheckout>
-                    <tagNameFormat>${project.artifactId}-@{project.version}</tagNameFormat>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
                     <pushChanges>true</pushChanges>
                 </configuration>
             </plugin>
