@@ -109,9 +109,14 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 				((CustomUserDetails) authentication.getPrincipal()).getAuthorities());
 	}
 
+	public void doExpireForReload() {
+	    userSessionTree.setExpiringInstant(null);
+    }
+
 	public synchronized void loadUserTree(final UserDTO user, final Collection<? extends GrantedAuthority> authorities) {
 		// init userTree
         if (!userSessionTree.loadingCanBeDone()) {
+            log.debug("loadUserTree can't be done !");
             return;
         }
         if (userSessionTree.isTreeLoadInProgress()) {

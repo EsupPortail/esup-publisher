@@ -25,6 +25,8 @@ public interface UserContextLoaderService {
 
 	void loadUserTree(Authentication authentication);
 
+	void doExpireForReload();
+
 	void loadUserTree(final UserDTO user,
 			final Collection<? extends GrantedAuthority> authorities);
 

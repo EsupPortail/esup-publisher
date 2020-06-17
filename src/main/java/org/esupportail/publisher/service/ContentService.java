@@ -171,6 +171,7 @@ public class ContentService {
 				if (isUpdate)
 					return ResponseEntity.ok(new ValueResource(item.getStatus()));
 				//else
+                userSessionTreeLoader.doExpireForReload();
 				userSessionTreeLoader.loadUserTree(authentication);
 				return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(
 						new ValueResource(item.getStatus()));
@@ -289,6 +290,7 @@ public class ContentService {
 				if (isUpdate)
 					return ResponseEntity.ok(new ValueResource(item.getStatus()));
 				//else
+                userSessionTreeLoader.doExpireForReload();
 				userSessionTreeLoader.loadUserTree(authentication);
 				return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(
 						new ValueResource(item.getStatus()));
@@ -400,6 +402,7 @@ public class ContentService {
 		if (isUpdate)
 			return ResponseEntity.ok(new ValueResource(item.getStatus()));
 		//else
+        userSessionTreeLoader.doExpireForReload();
 		userSessionTreeLoader.loadUserTree(authentication);
 		return ResponseEntity.created(new URI("/api/contents/" + item.getId())).body(
 				new ValueResource(item.getStatus()));

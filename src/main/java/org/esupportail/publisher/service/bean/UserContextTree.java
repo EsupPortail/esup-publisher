@@ -75,10 +75,11 @@ public class UserContextTree {
     /**
      * Estimated duration before a reload can be done, here 10 seconds.
      * It's important for performance to avoid too much useless reload.
-     * More several reload are made when the user connect to to several async call
+     * More several reload are made when the user connect to several async call
      * requesting user permissions and contexts
      * */
     private Duration duration = Duration.ofSeconds(10000);
+    @Setter
     private volatile Instant expiringInstant;
     private volatile boolean loadingInProgress = false;
 
