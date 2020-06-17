@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+   <changeSet author="jgribonvald (generated)" id="1592426380237-1">
+      <createTable tableName="SHEDLOCK">
+         <column name="name" type="VARCHAR(64)">
+            <constraints nullable="false" primaryKey="true" primaryKeyName="SHEDLOCKPK"/>
+         </column>
+         <column name="lock_until" type="datetime(6)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="locked_at" type="datetime(6)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="locked_by" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </createTable>
+   </changeSet>
+</databaseChangeLog>

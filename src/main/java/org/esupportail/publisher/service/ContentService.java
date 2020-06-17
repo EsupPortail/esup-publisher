@@ -29,6 +29,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.extern.slf4j.Slf4j;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -653,13 +654,17 @@ public class ContentService {
 
 	@Scheduled(cron = "1 0 0 * * ?")
 	//@Scheduled(cron = "1 0/2 * * * ?")
+    @SchedulerLock(name = "ContentService_archivePublishedContents",
+        lockAtLeastFor = "PT1M", lockAtMostFor = "PT5M")
 	public void archivePublishedContents() {
 		log.warn("################### Launch scheduled task archivePublishedContents to change state of items !");
 		Integer nbUpdates = itemRepository.archiveExpiredPublished();
 		log.info("scheduled task changed state to ARCHIVED of {} items !", nbUpdates);
 	}
 
-	@Scheduled(cron = "1 0 0 * * ?")
+	@Scheduled(cron = "1 10 0 * * ?")
+    @SchedulerLock(name = "ContentService_publishScheduledContents",
+        lockAtLeastFor = "PT1M", lockAtMostFor = "PT5M")
 	public void publishScheduledContents() {
 		log.warn("################### Launch scheduled task publishScheduledContents to change state of items !");
 		Integer nbUpdates = itemRepository.publishScheduled();
@@ -669,7 +674,9 @@ public class ContentService {
 	/**
 	 * Once time per week we purge useless items
 	 */
-	@Scheduled(cron = "1 0 0 1 * ?")
+	@Scheduled(cron = "1 20 0 1 * ?")
+    @SchedulerLock(name = "ContentService_publishScheduledContents",
+        lockAtLeastFor = "PT1M", lockAtMostFor = "PT5M")
 	public void removeOldContents() {
 		log.warn("################### Launch scheduled task removeOldContents to remove items !");
 		List<AbstractItem> items = Lists.newArrayList(itemRepository.findAll(ItemPredicates.ItemsToRemove()));

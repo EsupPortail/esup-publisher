@@ -55,6 +55,7 @@
         <problem-spring.version>0.25.2</problem-spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
+        <shedlock.version>4.12.0</shedlock.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
@@ -382,6 +383,17 @@
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-web</artifactId>
             <version>${problem-spring-web.version}</version>
+        </dependency>
+        <!-- for cron dependencies of cluster nodes -->
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>${shedlock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-jdbc-template</artifactId>
+            <version>${shedlock.version}</version>
         </dependency>
     </dependencies>
 

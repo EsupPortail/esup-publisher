@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.config;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.esupportail.publisher.async.ExceptionHandlingAsyncTaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +35,12 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 //@Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class AsyncConfiguration implements AsyncConfigurer {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
-    
+
     @Autowired
     private Environment env;
 
