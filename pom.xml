@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.7.RELEASE</version>
+        <version>2.3.1.RELEASE</version>
         <relativePath />
     </parent>
 
@@ -57,6 +57,7 @@
         <run.addResources>false</run.addResources>
         <shedlock.version>4.12.0</shedlock.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+        <spring-cloud-connector.version>2.0.7.RELEASE</spring-cloud-connector.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
 
@@ -367,14 +368,17 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
+            <version>${spring-cloud-connector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-localconfig-connector</artifactId>
+            <version>${spring-cloud-connector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-spring-service-connector</artifactId>
+            <version>${spring-cloud-connector.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ldap</groupId>
