@@ -1,10 +1,10 @@
 # migration help
- 
+
 ## migrating from utf8 to utf8mb4
 - old liquibase migration files where removed and a new init schema was generated
 - to migrate :
 __Don't forget to make a dump of your datas before such operation__
-1. dump datas with 
+1. dump datas with
 ```sql
   mysqldump -h hostname -u user -p --no-create-info --complete-insert --extended-insert --ignore-table="publisher.databasechangeloglock" --ignore-table="publisher.databasechangelog" --ignore-table="publisher.t_persistent_audit_event" --ignore-table="publisher.t_persistent_audit_event_data" "publisher" > "publisher.sql"
 ```
@@ -60,6 +60,22 @@ __Don't forget to make a dump of your datas before such operation__
 
 ## to run in dev :
 - `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
+
+## Release process :
+- put away local change `git stash`
+- several steps to tag the new version (need to develop a custom plugin to apply custom command to avoid all these steps) :
+    - `./mvnw clean generate-sources release:prepare -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+    - delete the previous tag, as example `git tag -d 2.1.0`
+    - rebase to add the new UI versiion constant `git rebase -i HEAD~2` and edit the commit with text '[maven-release-plugin] prepare release 2.1.0'
+    - update the UI constant `grunt ngconstant` + `git add src/main/webapp/scripts/app/app.constants.js` + `git commit --amend` + `git tag 2.1.0`
+    - `git rebase --continue`
+- update the UI constant for next version `grunt ngconstant` + `git add src/main/webapp/scripts/app/app.constants.js` + `git commit --amend`
+- publish and deploy the new release :
+    - `git checkout 2.1.0`
+    - `./mvnw release:perform -P prod -Dmaven.test.skip=true -Darguments="-DskipTests"`
+- come back to the normal workflow:
+  - `git checkout master && git push -f origin master`
+  - `git stash apply`
 
 ## ./mvnw remember :
 - `./mvnw release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
