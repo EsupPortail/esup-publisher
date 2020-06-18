@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -245,11 +246,11 @@ public class SubscriberResource {
 			@PathVariable("subject_type") int subjectType, @PathVariable("subject_attribute") String subjectAttr,
 			@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
 			HttpServletResponse response) {
-		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(DatatypeConverter.parseBase64Binary(subjectId)), subjectAttr,
+		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(Base64.getDecoder().decode(subjectId)), subjectAttr,
             SubjectType.valueOf(subjectType)), new ContextKey(ctxId, ctxType));
 		log.debug("REST request to get SubjectContextKey : {}", id);
 		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(id);
-		Subscriber subscriber = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
+		Subscriber subscriber = optionalSubscriber.orElse(null);
 		if (subscriber == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -268,7 +269,7 @@ public class SubscriberResource {
 	public void delete(@PathVariable("subject_id") String subjectId, @PathVariable("subject_type") int subjectType,
 			@PathVariable("subject_attribute") String subjectAttr, @PathVariable("ctx_id") Long ctxId,
 			@PathVariable("ctx_type") ContextType ctxType) {
-		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(DatatypeConverter.parseBase64Binary(subjectId)), subjectAttr,
+		final SubjectContextKey id = new SubjectContextKey(new SubjectKeyExtended(new String(Base64.getDecoder().decode(subjectId)), subjectAttr,
             SubjectType.valueOf(subjectType)), new ContextKey(ctxId, ctxType));
 		log.debug("REST request to delete Subscriber : {}", id);
 		subscriberRepository.deleteById(id);
