@@ -94,12 +94,12 @@ ldap:
     escoGroupRegexp:
         properties:
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)|(ef2s)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(clg18)|(clg41)|(agri)|(ef2s)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
                 groupNameRegex: "[^:]+:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:(groupes_locaux):Publication_contenus"
                 groupNameIndex: "1"
                 groupRecomposerSeparator: ":"
             -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Profs Principaux"
+                groupMatcher: "((esco)|(cfa)|(clg37)|(clg18)|(clg41)|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Profs Principaux"
                 groupNameRegex: "[^:]+:Etablissements:[^:]+:([^:]+):(Profs Principaux)"
                 groupNameIndex: "2,1"
                 groupRecomposerSeparator: " - "
@@ -112,7 +112,7 @@ ldap:
     escoGroupDesigner:
         properties:
             -
-                groupRootPattern: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*"
+                groupRootPattern: "((esco)|(cfa)|(clg37)|(clg18)|(clg41)|(agri)):Etablissements:[^:]*"
                 groupAttachEndMatch: ":Profs"
                 groupToAttachEndPattern: ":*:Profs_*,:*:Profs Principaux"
             -
@@ -148,7 +148,7 @@ app:
         groupName: "esco:admin:central"
 
     users:
-        groupName: "((esco)|(cfa)|(clg37)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*"
+        groupName: "((esco)|(cfa)|(clg37)|(clg18)|(clg41)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*"
 
     cors:
         allowed:
