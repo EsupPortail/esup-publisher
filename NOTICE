@@ -127,6 +127,7 @@ This project includes:
   Jodd Lagarto under The BSD 2-Clause License
   Jodd Log under The BSD 2-Clause License
   JSON in Java under The JSON License
+  JSON library from Android SDK under Apache License 2.0
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
   json4s-ast under Apache-2.0
   json4s-core under Apache-2.0
@@ -240,7 +241,9 @@ This project includes:
   spring-boot-actuator under Apache License, Version 2.0
   spring-boot-actuator-autoconfigure under Apache License, Version 2.0
   spring-boot-autoconfigure under Apache License, Version 2.0
+  spring-boot-configuration-metadata under Apache License, Version 2.0
   spring-boot-loader-tools under Apache License, Version 2.0
+  spring-boot-properties-migrator under Apache License, Version 2.0
   spring-boot-starter under Apache License, Version 2.0
   spring-boot-starter-actuator under Apache License, Version 2.0
   spring-boot-starter-aop under Apache License, Version 2.0
