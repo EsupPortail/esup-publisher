@@ -51,7 +51,7 @@ public class CsrfCookieGeneratorFilter extends OncePerRequestFilter {
                 applicationPath = "/";
             }
             if (!applicationPath.endsWith("/")) {
-                log.warn("Warning overriding Csrf Cookie Context Path from {} to {}/",applicationPath,applicationPath);
+                log.info("Warning overriding Csrf Cookie Context Path from {} to {}/",applicationPath,applicationPath);
                 applicationPath += "/";
             }
             cookie.setPath(applicationPath);
