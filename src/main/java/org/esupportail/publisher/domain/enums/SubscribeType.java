@@ -15,16 +15,19 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 20 juin 2012
  */
 // We should persist these entries in a specific table.
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = SubscribeTypeDeserializer.class)
 public enum SubscribeType {
 	/** Subcription Obliged. */
 	FORCED(0, "FORCED", "enum.subscribe.forced.title"),
@@ -33,23 +36,13 @@ public enum SubscribeType {
 	/** Subscription FREE but Pre-registered. */
 	PRE(2, "PRE", "enum.subscribe.pre.title");
 
-    @Getter
-    @Setter
+
 	private int id;
-    @Getter
-    @Setter
+
     private String name;
-    @Getter
-    @Setter
+
     private String label;
 
-    private SubscribeType(int id, String name, String label) {
-        this.id = id;
-        this.name = name;
-        this.label = label;
-    }
-
-    @JsonCreator
     public static SubscribeType fromName(final String name) {
         if (name != null) {
             for (SubscribeType val : SubscribeType.values()) {

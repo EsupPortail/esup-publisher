@@ -15,9 +15,10 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * @author GIP RECIA - Julien Gribonvald 1 juil. 2014
  */
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @JsonPropertyOrder({ "id", "name", "label" })
 @XmlType
@@ -46,25 +49,12 @@ public enum AccessType {
 	AUTHORIZED(3, "AUTHORIZED", "enum.access.authorized.title");
 
     /** Identifier. */
-    @Getter
-    @Setter
     private int id;
     /** Name of Status. */
-    @Getter
-    @Setter
     private String name;
     /** Label for I18N. */
-    @Getter
-    @Setter
     private String label;
 
-    private AccessType(final int id, final String name, final String label) {
-        this.id = id;
-        this.name = name;
-        this.label = label;
-    }
-
-    @JsonCreator
     public static AccessType fromName(final String name) {
         if (name != null) {
             for (AccessType type : AccessType.values()) {

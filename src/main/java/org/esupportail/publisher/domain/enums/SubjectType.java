@@ -18,16 +18,19 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 14 juin 2014
  */
 // We should persist these entries in a specific table.
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = SubjectTypeDeserializer.class)
 public enum SubjectType {
 
 	/** Type of userid. */
@@ -40,32 +43,13 @@ public enum SubjectType {
     PERSON_ATTR_REGEX(3, "PERSON_ATTR_REGEX", "enum.subject.person_attr_regex.title");
 
 	/** Identifier. */
-    @Getter
-    @Setter
 	private int id;
 	/** The code. */
-    @Getter
-    @Setter
 	private String code;
 	/** The I18N key. */
-    @Getter
-    @Setter
 	private String descKey;
 
-	/**
-	 * Contructor of the object SubjectType.java.
-	 *
-	 * @param id
-	 * @param code
-	 * @param descKey
-	 */
-	private SubjectType(final int id, final String code, final String descKey) {
-		this.id = id;
-		this.code = code;
-		this.descKey = descKey;
-	}
 
-    @JsonCreator
     public static SubjectType fromName(final String name) {
         if (name != null) {
             for (SubjectType val : SubjectType.values()) {

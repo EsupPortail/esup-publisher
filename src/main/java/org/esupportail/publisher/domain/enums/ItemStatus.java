@@ -16,16 +16,19 @@
 package org.esupportail.publisher.domain.enums;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
  * 26 juin 2012
  */
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = ItemStatusDeserializer.class)
 public enum ItemStatus {
     /** Status of Item is Pending. */
     PENDING(0, "PENDING", "enum.itemStatus.pending.title"),
@@ -39,31 +42,12 @@ public enum ItemStatus {
     DRAFT(4,"DRAFT", "enum.itemStatus.draft.title");
 
     /** Identifier. */
-    @Getter
-    @Setter
     private int id;
     /** Name of Status. */
-    @Getter
-    @Setter
     private String name;
     /** Label for I18N. */
-    @Getter
-    @Setter
     private String label;
 
-    /**
-     * Contructor of the object ItemStatus.java.
-     * @param id
-     * @param name
-     * @param label
-     */
-    private ItemStatus(final int id, final String name, final String label) {
-        this.id = id;
-        this.name = name;
-        this.label = label;
-    }
-
-    @JsonCreator
     public static ItemStatus fromName(final String name) {
         if (name != null) {
             for (ItemStatus type : ItemStatus.values()) {

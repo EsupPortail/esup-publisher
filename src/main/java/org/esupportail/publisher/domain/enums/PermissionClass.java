@@ -18,17 +18,24 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.AbstractPermission;
+import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
+import org.esupportail.publisher.domain.PermissionOnContext;
+import org.esupportail.publisher.domain.PermissionOnSubjects;
+import org.esupportail.publisher.domain.PermissionOnSubjectsWithClassificationList;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 14 juin 2012
  */
 // We should persist these entries in a specific table.
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = PermissionClassDeserializer.class)
 public enum PermissionClass {
 
 	CONTEXT(1, "CONTEXT", PermissionOnContext.class, "enum.permissionclass.context.title"),
@@ -37,30 +44,14 @@ public enum PermissionClass {
 	SUBJECT_WITH_CONTEXT(4, "SUBJECT_WITH_CONTEXT", PermissionOnSubjectsWithClassificationList.class, "enum.permissionclass.subjectwithclassif.title");
 
 	/** Identifier. */
-	@Getter
-	@Setter
 	private int id;
     /** Name. */
-    @Getter
-    @Setter
     private String name;
 	/** class. */
-	@Getter
-	@Setter
 	private Class<? extends AbstractPermission> type;
 	/** The I18N key. */
-	@Getter
-	@Setter
 	private String label;
 
-    private PermissionClass(final int id, final String name, final Class<? extends AbstractPermission> type, final String label) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.label = label;
-    }
-
-    @JsonCreator
     public static PermissionClass fromName(final String name) {
         if (name != null) {
             for (PermissionClass val : PermissionClass.values()) {

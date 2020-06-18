@@ -15,16 +15,21 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+
+
 
 /**
  * @author GIP RECIA - Julien Gribonvald
  * 30 juin 2014
  */
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = DisplayOrderTypeDeserializer.class)
 public enum DisplayOrderType {
     LAST_CREATED_MODIFIED_FIRST(0, "LAST_CREATED_MODIFIED_FIRST", "enum.displayOrder.lastCreatedModifiedFirst.title"),
     ONLY_LAST_CREATED_FIRST(1, "ONLY_LAST_CREATED_FIRST", "enum.displayOrder.onlyLastCreatedFirst.title"),
@@ -33,23 +38,12 @@ public enum DisplayOrderType {
     /** using int weigth. Hight number will place it first */
     CUSTOM(4, "CUSTOM", "enum.displayOrder.custom.title");
 
-    @Getter
-    @Setter
     private int id;
-    @Getter
-    @Setter
+
     private String name;
-    @Getter
-    @Setter
+
     private String label;
 
-    private DisplayOrderType(final int id, final String name, final String label) {
-        this.id = id;
-        this.label =label;
-        this.name = name;
-    }
-
-    @JsonCreator
     public static DisplayOrderType fromName(final String name) {
         if (name != null) {
             for (DisplayOrderType type : DisplayOrderType.values()) {

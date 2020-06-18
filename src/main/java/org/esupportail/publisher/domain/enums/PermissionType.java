@@ -18,16 +18,19 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 14 juin 2012
  */
 // We should persist these entries in a specific table.
+@Getter
+@AllArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@JsonDeserialize(using = PermissionTypeDeserializer.class)
 public enum PermissionType {
 
 	// Warning the order should be greater rights to lessers
@@ -50,37 +53,14 @@ public enum PermissionType {
 	// ANONYMOUS(0, 0, "permission.anonymous.desc");
 
 	/** Identifier. */
-    @Getter
-    @Setter
 	private int id;
-    @Getter
-    @Setter
+	/** Name */
     private String name;
 	/** Mask. */
-    @Getter
-    @Setter
 	private int mask;
 	/** The I18N key. */
-    @Getter
-    @Setter
 	private String label;
 
-	/**
-	 * Contructor of the object Role.java.
-	 *
-	 * @param id
-     * @param name
-	 * @param mask
-	 * @param label
-	 */
-	private PermissionType(final int id, final String name, final int mask, final String label) {
-		this.id = id;
-        this.name = name;
-		this.mask = mask;
-		this.label = label;
-	}
-
-    @JsonCreator
     public static PermissionType fromName(final String name) {
         if (name != null) {
             for (PermissionType val : PermissionType.values()) {
