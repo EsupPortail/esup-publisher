@@ -5,10 +5,6 @@ server:
     servlet:
         contextPath: /publisher
 
-multipart:
-    maxFileSize: 10MB
-    maxRequestSize: 10MB
-
 spring:
     profiles:
         active: dev
@@ -47,6 +43,11 @@ spring:
 
     mail:
         baseUrl: http://localhost:8080
+
+    servlet:
+        multipart:
+            maxFileSize: 10MB
+            maxRequestSize: 10MB
 
     thymeleaf:
         cache: false
@@ -160,7 +161,7 @@ app:
         imageMaxSize: 131072
         protectedPath: "/home/jgribonvald/tmp/"
         filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
-        # 10MB max should be equals or lower than multipart.maxFileSize
+        # 10MB max should be equals or lower than spring.servlet.multipart.maxFileSize
         maxFileSize: 10485760
         unremovablePathPattern: "default/welcome.*,test.*"
 

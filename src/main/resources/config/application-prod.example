@@ -3,10 +3,6 @@ server:
     servlet:
         contextPath: /publisher
 
-multipart:
-    maxFileSize: 10MB
-    maxRequestSize: 10MB
-
 spring:
     profiles:
         active: prod
@@ -45,6 +41,11 @@ spring:
 
     mail:
         baseUrl: http://localhost:8080
+
+    servlet:
+        multipart:
+            maxFileSize: 10MB
+            maxRequestSize: 10MB
 
     thymeleaf:
         cache: true
@@ -151,7 +152,7 @@ app:
         imageMaxSize: 262144
         protectedPath: "/home/esco/privates/"
         filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
-        # 10MB max should be equals or lower than multipart.maxFileSize
+        # 10MB max should be equals or lower than spring.servlet.multipart.maxFileSize
         maxFileSize: 10485760
 
     authorizedServices:
