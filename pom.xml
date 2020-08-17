@@ -811,7 +811,6 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${project.parent.version}</version>
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
@@ -838,7 +837,6 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${project.parent.version}</version>
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
@@ -864,7 +862,6 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${project.parent.version}</version>
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
