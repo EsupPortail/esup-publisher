@@ -32,8 +32,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
-import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;
-import org.esupportail.publisher.web.filter.CrossOriginFilter;
+import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;;
 import org.esupportail.publisher.web.filter.StaticResourcesProductionFilter;
 import org.esupportail.publisher.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
@@ -85,7 +84,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 		if (env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_DEVELOPMENT))) {
             initH2Console(servletContext);
         }
-		initCrossOriginFilter(servletContext, disps);
 		log.info("Web application fully configured");
 	}
 
@@ -159,17 +157,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 		cachingHttpHeadersFilter.setAsyncSupported(true);
 	}
 
-	/**
-	 * Initializes the CORS HTTP Headers Filter.
-	 */
-	private void initCrossOriginFilter(ServletContext servletContext,
-			EnumSet<DispatcherType> disps) throws ServletException {
-		log.debug("Registering CORS HTTP Headers Filter");
-		FilterRegistration.Dynamic corsHttpHeadersFilter = servletContext
-				.addFilter("crossOriginFilter", new CrossOriginFilter(env));
-		corsHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/*");
-		corsHttpHeadersFilter.setAsyncSupported(true);
-	}
 
 	/**
 	 * Initializes Metrics.

@@ -16,9 +16,11 @@
 package org.esupportail.publisher.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -49,6 +51,7 @@ import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -64,6 +67,9 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.util.Assert;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -83,6 +89,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final String APP_USERS_GROUP_NAME = "app.users.groupName";
     private static final String APP_CONTEXT_PATH = "server.servlet.contextPath";
     private static final String APP_PROTOCOL = "app.service.protocol";
+    private static final String APP_CORS_ALLOWED_ORIGINS = "app.cors.allowed.origins";
+
+    // preflight cache duration in the browser
+    private static final Long maxAge = 600L; // 600 seconds = 10 minutes
+    private static final String[] allowedMethods = {"GET","POST","PUT","DELETE","OPTIONS"};
+    private static final String[] allowedHeaders = {"X-CSRF-TOKEN","Content-Type","Accept","Origin"};
 
     private static final String DefaultTargetUrlParameter = "spring-security-redirect";
 
@@ -257,6 +269,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(casAuthenticationProvider());
     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource()
+    {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(Arrays.asList(
+            env.getRequiredProperty(APP_CORS_ALLOWED_ORIGINS, String.class).replaceAll("\\s", "").split(",")));
+        corsConfiguration.setAllowedMethods(Arrays.asList(allowedMethods));
+        corsConfiguration.setAllowedHeaders(Arrays.asList(allowedHeaders));
+        corsConfiguration.setMaxAge(maxAge);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
 
     @Override
     public void configure(WebSecurity web){
@@ -267,7 +293,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
+        http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
             .authenticationEntryPoint(casAuthenticationEntryPoint()).and()
             .addFilterBefore(casAuthenticationFilter(), BasicAuthenticationFilter.class)
             .addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class);
