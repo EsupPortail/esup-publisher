@@ -14,10 +14,14 @@ angular.module('publisherApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'ngRe
             switch (sn) {
                 case 'www.chercan.fr': return 'clg18';
                 case 'test-clg18.giprecia.net': return 'clg18';
+                case 'e-college.indre.fr': return 'clg36';
+                case 'test-clg36.giprecia.net': return 'clg36';
                 case 'www.touraine-eschool.fr': return 'clg37';
                 case 'test-clg37.giprecia.net': return 'clg37';
                 case 'colleges41.fr' : return 'clg41';
                 case 'test-clg41.giprecia.net' : return 'clg41';
+                case 'mon-e-college.loiret.fr': return 'clg45';
+                case 'test-clg45.giprecia.net': return 'clg45';
                 case 'lycees.netocentre.fr' : return 'lycees';
                 case 'test-lycee.giprecia.net' : return 'lycees';
                 case 'cfa.netocentre.fr' : return 'cfa';

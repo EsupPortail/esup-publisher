@@ -92,6 +92,11 @@ body {
     color: #004899;
 }
 
+.publisher-view .clg36 a:hover,
+.publisher-view .clg36 a:hover>div {
+    color: #0069B3;
+}
+
 .publisher-view .clg37 a:hover,
 .publisher-view .clg37 a:hover>div {
     color: #C60440;
@@ -100,6 +105,11 @@ body {
 .publisher-view .clg41 a:hover,
 .publisher-view .clg41 a:hover>div {
     color: #009FE3;
+}
+
+.publisher-view .clg45 a:hover,
+.publisher-view .clg45 a:hover>div {
+    color: #26448A;
 }
 
 .publisher-view p {
