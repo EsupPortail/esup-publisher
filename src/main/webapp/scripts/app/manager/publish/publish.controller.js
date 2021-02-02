@@ -75,18 +75,23 @@ angular.module('publisherApp')
                 targets: targets,
                 linkedFiles: $scope.linkedFilesToContent
             };
-            //console.log("publishing : ", content);
-            $('#saveDraftConfirmation').modal('hide');
+            console.log("publishing : ", content);
             if (content.item.id != null) {
                 ContentDTO.update(content,
                     function (response) {
                         // TODO toaster Success ?
+                        $('#saveDraftConfirmation').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
                         $state.go("owned", {itemState: response.value.name});
                     });
             } else {
                 ContentDTO.save(content,
                     function (response) {
                         // TODO toaster Success ?
+                        $('#saveDraftConfirmation').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
                         $state.go("owned", {itemState: response.value.name});
                     });
             }
