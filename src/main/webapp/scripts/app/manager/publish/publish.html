@@ -27,10 +27,35 @@
     <!-- our nested state views will be injected here -->
     <div class="publish-body" id="publish-form-views" ui-view></div>
 
+    <div class="modal fade" id="saveDraftConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="saveDraftForm" ng-submit="publishItem('DRAFT')">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="publisherApp.item.action.confirmsave.title">Confirm save operation as draft</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="publisherApp.item.action.confirmsave.question">Are you sure you want to save only as draft this content? It will remove it form published state if it's already published</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<span translate="entity.action.validate">Validate</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <div class="publish-footer text-right" ng-show="canSave()">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-primary" ng-click="publishItem('DRAFT')">
+            <button type="button" class="btn btn-primary" ng-click="confirmSave()">
                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="publisherApp.item.action.save">Save</span>
             </button>
             <button type="button" class="btn btn-primary" ng-if="canSubmit()" ng-click="publishItem('PUBLISH')">

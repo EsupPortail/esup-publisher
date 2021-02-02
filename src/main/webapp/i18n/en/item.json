@@ -41,6 +41,10 @@
             "organization": "organization",
             "redactor": "redactor",
             "action": {
+                "confirmsave": {
+                    "title": "Confirma save as draft operation",
+                    "question": "Are you sure to save as draft this content and come back later to publish it ?<br/> <strong>Warning:</strong> a published content will be unpublished !"
+                },
                 "publish": "Save and Publish",
                 "save": "Save"
             },

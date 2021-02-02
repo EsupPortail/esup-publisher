@@ -29,6 +29,9 @@ angular.module('publisherApp')
             return $scope.classifications.length > 0;
         };
 
+        $scope.confirmSave = function() {
+            $('#saveDraftConfirmation').modal('show');
+        }
 
         $scope.canSubmit = function() {
             //console.log("canSubmit ?",$scope.itemValidated, $scope.classifications, $scope.publisher.context.redactor.writingMode, $scope.targets);
@@ -73,6 +76,7 @@ angular.module('publisherApp')
                 linkedFiles: $scope.linkedFilesToContent
             };
             //console.log("publishing : ", content);
+            $('#saveDraftConfirmation').modal('hide');
             if (content.item.id != null) {
                 ContentDTO.update(content,
                     function (response) {
