@@ -23,13 +23,13 @@
                 </div>
                 <div th:if="${item.getClass().getSimpleName() != 'Flash'}" class="pubInfo">
                     <p><span class="label" th:text="#{item.createdBy}">Created by</span><span th:text="${item.createdBy.displayName}"></span><span
-                        class="label" th:text="#{item.when}">on</span><time th:datetime="${item.createdDate}" th:text="${#temporals.format(item.createdDate)}"></time>
+                        class="label" th:text="#{item.when}">on</span><time th:datetime="${item.createdDate}" th:text="${#temporals.format(item.createdDate, 'dd-MM-yyyy HH:mm:ss')}"></time>
                     </p><p th:if="${item.lastModifiedDate != null}">
                     <span class="label" th:text="#{item.lastModifiedBy}">Last modification by</span><span th:text="${item.lastModifiedBy.displayName}"></span><span
-                    class="label" th:text="#{item.when}">on</span><time th:datetime="${item.lastModifiedDate}" th:text="${#temporals.format(item.lastModifiedDate)}"></time>
+                    class="label" th:text="#{item.when}">on</span><time th:datetime="${item.lastModifiedDate}" th:text="${#temporals.format(item.lastModifiedDate, 'dd-MM-yyyy HH:mm:ss')}"></time>
                 </p><p th:if="${item.validatedBy != null}">
                     <span class="label" th:text="#{item.validatedBy}">Validated by</span><span th:text="${item.validatedBy.displayName}"></span><span
-                    class="label" th:text="#{item.when}">on</span><time th:datetime="${item.validatedDate}" th:text="${#temporals.format(item.validatedDate)}"></time>
+                    class="label" th:text="#{item.when}">on</span><time th:datetime="${item.validatedDate}" th:text="${#temporals.format(item.validatedDate, 'dd-MM-yyyy HH:mm:ss')}"></time>
                 </p>
                 </div>
             </div>
