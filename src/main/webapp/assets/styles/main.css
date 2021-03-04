@@ -130,6 +130,14 @@ a:focus>div {
     color: #004899;
 }
 
+.clg28 a:focus,
+.clg28 a:hover,
+.clg28 a:hover>div,
+.clg28 a:focus>div {
+    color: #fc0;
+    background: #303030;
+}
+
 .clg36 a:focus,
 .clg36 a:hover,
 .clg36 a:hover>div,
@@ -359,6 +367,11 @@ ul#strength {
     color: #004899;
 }
 
+.clg28 .pagination>li>a,
+.clg28 .pagination>li>span {
+    color: #303030;
+}
+
 .clg36 .pagination>li>a,
 .clg36 .pagination>li>span {
     color: #0069B3;
@@ -399,6 +412,17 @@ ul#strength {
 .clg18 .pagination>.active>span:focus {
     color: #fff;
     background-color: #004899;
+    border-color: #D0D0D0;
+}
+
+.clg28 .pagination>.active>a,
+.clg28 .pagination>.active>span,
+.clg28 .pagination>.active>a:hover,
+.clg28 .pagination>.active>span:hover,
+.clg28 .pagination>.active>a:focus,
+.clg28 .pagination>.active>span:focus {
+    color: #000;
+    background-color: #FC0;
     border-color: #D0D0D0;
 }
 
@@ -464,6 +488,13 @@ ul#strength {
     background-color: #004899;
 }
 
+.clg28 .nav-tabs>li.active>a,
+.clg28 .nav-tabs>li.active>a:hover,
+.clg28 .nav-tabs>li.active>a:focus {
+    color: #000;
+    background-color: #FC0;
+}
+
 .clg36 .nav-tabs>li.active>a,
 .clg36 .nav-tabs>li.active>a:hover,
 .clg36 .nav-tabs>li.active>a:focus {
@@ -504,6 +535,13 @@ ul#strength {
 .clg18 .nav-pills>li.active>a:hover,
 .clg18 .nav-pills>li.active>a:focus {
     background-color: #004899;
+}
+
+.clg28 .nav-pills>li.active>a,
+.clg28 .nav-pills>li.active>a:hover,
+.clg28 .nav-pills>li.active>a:focus {
+    color: #000;
+    background-color: #FC0;
 }
 
 .clg36 .nav-pills>li.active>a,
@@ -557,6 +595,13 @@ ul#strength {
 .clg18 .btn-nav:not([disabled]):focus {
     color: #fff;
     background-color: #004899;
+}
+
+.clg28 .publish-form-container .btn-primary,
+.clg28 .btn-nav:not([disabled]):hover,
+.clg28 .btn-nav:not([disabled]):focus {
+    color: #000;
+    background-color: #FC0;
 }
 
 .clg36 .publish-form-container .btn-primary,
@@ -640,6 +685,18 @@ dl {
 .form-control,
 output {
     color: #000;
+}
+
+.form-control:focus,
+.ta-root.focussed>.ta-scroll-window.form-control {
+    border-color: #000;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 0, 0, .6);
+}
+
+.modal input[type=checkbox].form-control {
+    height: inherit;
+    transform: scale(2);
+    margin-top: 10px;
 }
 
 button,
@@ -751,6 +808,13 @@ nav,
     color: #fff;
 }
 
+.clg28 .dropdown-menu>.active>a,
+.clg28 .dropdown-menu>.active>a:hover,
+.clg28 .dropdown-menu>.active>a:focus {
+    color: #000;
+    background-color: #FC0;
+}
+
 
 .clg36 .dropdown-menu>.active>a,
 .clg36 .dropdown-menu>.active>a:hover,
@@ -792,6 +856,12 @@ nav,
 .clg18 .navbar-default .navbar-nav>.open>a,
 .clg18 .navbar-default .navbar-nav>.open>a:hover,
 .clg18 .navbar-default .navbar-nav>.open>a:focus,
+.clg28 .navbar-default .navbar-nav>.active>a,
+.clg28 .navbar-default .navbar-nav>.active>a:hover,
+.clg28 .navbar-default .navbar-nav>.active>a:focus,
+.clg28 .navbar-default .navbar-nav>.open>a,
+.clg28 .navbar-default .navbar-nav>.open>a:hover,
+.clg28 .navbar-default .navbar-nav>.open>a:focus,
 .clg36 .navbar-default .navbar-nav>.active>a,
 .clg36 .navbar-default .navbar-nav>.active>a:hover,
 .clg36 .navbar-default .navbar-nav>.active>a:focus,
@@ -833,6 +903,13 @@ nav,
     .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #004899;
         color: #fff;
+    }
+
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        color: #000;
+        background-color: #FC0;
     }
 
     .clg36 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
@@ -880,6 +957,12 @@ nav,
     color: #004899;
 }
 
+.clg28 .dropdown-menu>li>a:hover,
+.clg28 .dropdown-menu>li>a:focus {
+    color: #fc0;
+    background: #303030;
+}
+
 .clg36 .dropdown-menu>li>a:hover,
 .clg36 .dropdown-menu>li>a:focus {
     color: #0069B3;
@@ -920,6 +1003,12 @@ nav,
 .clg18 #navbar-collapse>ul>li:hover,
 .clg18 #navbar-collapse>ul>li.active {
     border-bottom: solid 3px #004899;
+}
+
+.clg28 #navbar-collapse>ul>li:focus,
+.clg28 #navbar-collapse>ul>li:hover,
+.clg28 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #FC0;
 }
 
 .clg36 #navbar-collapse>ul>li:focus,
@@ -982,7 +1071,7 @@ body>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.fa 
 }
 
 /* ====================================
-    Footer
+Footer
 ======================================*/
 body>div.container-fluid>div.footer {
     display: flex;
@@ -990,7 +1079,7 @@ body>div.container-fluid>div.footer {
 }
 
 /* ====================================
-    Main (common part of all pages)
+Main (common part of all pages)
 ======================================*/
 
 a.list-group-item div.bouton-action {
@@ -1027,7 +1116,7 @@ a.list-group-item div.bouton-action .div-text {
 }
 
 /* ====================================
-             site.home
+            site.home
 ======================================*/
 
 @media screen and (min-width: 768px) {
@@ -1047,7 +1136,7 @@ a.list-group-item div.bouton-action .div-text {
 }
 
 /* ====================================
-             manager
+            manager
 ======================================*/
 .container-fluid>.well>.manager>.content {
     background-color: #fff;
@@ -1063,7 +1152,7 @@ a.list-group-item div.bouton-action .div-text {
 }
 
 /* ====================================
-    manager contents (table of published contents)
+manager contents (table of published contents)
 ======================================*/
 .container-fluid>.well>.manager.contents>.content .table-responsive .table td {
     font-size: 13px;
@@ -1267,7 +1356,7 @@ dl>dd>input[type="checkbox"] {
 
 /* end manager details */
 /* ==========================================
-    manager Treeview
+manager Treeview
 ============================================*/
 .manager.treeview {
     width: 100%;
@@ -1307,7 +1396,7 @@ dl>dd>input[type="checkbox"] {
 }
 
 /* ====================================
-   preview of contents
+preview of contents
 ======================================*/
 .article-preview .details {
     background: #f3f3f3 none repeat scroll 0 0;
@@ -1342,7 +1431,7 @@ dl>dd>input[type="checkbox"] {
 }
 
 /* ====================================
- modals for cropper with input file
+modals for cropper with input file
 ======================================*/
 
 .publish-content .btn-file {
@@ -1388,7 +1477,7 @@ dl>dd>input[type="checkbox"] {
 /*}*/
 
 /* ====================================
-    publish.publisher form
+publish.publisher form
 ======================================*/
 
 .manager .publish-form-container {
@@ -1479,6 +1568,11 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
     background: #004899;
 }
 
+.clg28 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #FC0;
+    color: #000
+}
+
 .clg36 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
     background: #0069B3;
 }
@@ -1514,6 +1608,10 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
 
 .clg18 .manager .publish-form-container>.publish-body>div>h3 {
     color: #004899;
+}
+
+.clg28 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #303030;
 }
 
 .clg36 .manager .publish-form-container>.publish-body>div>h3 {
@@ -1576,6 +1674,11 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
     border: solid 3px #004899;
 }
 
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #FC0;
+}
+
 .clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
 .clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
     border: solid 3px #0069B3;
@@ -1617,6 +1720,10 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
 
 .clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
     color: #004899;
+}
+
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #FC0;
 }
 
 .clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
@@ -1667,6 +1774,9 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
     -moz-box-shadow: none;
     box-shadow: none;
     width: 100%;
+    height: inherit;
+    transform: scale(2);
+    margin-top: 10px;
 }
 
 .manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles {
@@ -1692,7 +1802,7 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
 
 
 /* ========================================
-    Overlay, for spinner, etc...
+Overlay, for spinner, etc...
 ===========================================*/
 .overlay {
     background-color: rgba(0, 0, 0, 0.8);
@@ -1707,8 +1817,8 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
 }
 
 /* ========================================
-    Modal fullscreen
-    =======================================*/
+Modal fullscreen
+=======================================*/
 .modal-full-screen .modal-dialog {
     width: 100%;
     height: 100%;
@@ -1723,7 +1833,7 @@ body>div.container-fluid>div.well>div>div>div>div.publish-header {
 }
 
 /* ========================================
-    For directives
+For directives
 ===========================================*/
 .subject-infos {
     display: inline;
@@ -1756,7 +1866,7 @@ td>evaluator>ul {
 }
 
 /* ========================================
-    For jstree
+For jstree
 ===========================================*/
 js-tree {
     display: inline-block;
@@ -1790,6 +1900,14 @@ js-tree {
 .clg36 .jstree-default .jstree-clicked.jstree-hovered,
 .clg36 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     background: #0069B3;
+}
+
+.clg28 .jstree-default .jstree-wholerow-clicked,
+.clg28 .jstree-default .jstree-anchor.jstree-clicked,
+.clg28 .jstree-default .jstree-clicked.jstree-hovered,
+.clg28 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #000;
+    color: #FC0;
 }
 
 .clg37 .jstree-default .jstree-wholerow-clicked,
@@ -1830,6 +1948,10 @@ js-tree {
     color: #004899;
 }
 
+.clg28 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #303030;
+}
+
 .clg36 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #0069B3;
 }
@@ -1847,7 +1969,7 @@ js-tree {
 }
 
 /* ========================================
-    For TextAngular et specific buttons
+For TextAngular et specific buttons
 ===========================================*/
 .tadropdown {
     padding: 0px;
@@ -1867,7 +1989,7 @@ js-tree {
 }
 
 /* ========================================
-    For ui-datepicker
+For ui-datepicker
 ===========================================*/
 /* z-index problem with TextAngular active buttons due to bootstrap .btn.active class */
 .ui-datepicker {
@@ -1875,7 +1997,7 @@ js-tree {
 }
 
 /* =======================================
-    For Fixed alert to be visible on top of screen everywhere
+For Fixed alert to be visible on top of screen everywhere
 ==========================================*/
 .alert-fixed {
     position: fixed;
@@ -1888,7 +2010,7 @@ js-tree {
 }
 
 /* ========================================
-    For toaster - used for request messages
+For toaster - used for request messages
 ===========================================*/
 
 #toast-container>div {
@@ -1901,15 +2023,15 @@ js-tree {
 }
 
 /* ========================================
-    For ng-animates with ui-router, some transition give problems
+For ng-animates with ui-router, some transition give problems
 ===========================================*/
 /*.content.ng-enter {
-    transition: 0.25s;
-    opacity: 0; }
+transition: 0.25s;
+opacity: 0; }
 .content.ng-enter-active {
-    opacity: 1; }
+opacity: 1; }
 .content.ng-leave {
-    transition: 0.25s;
-    opacity: 1; }
+transition: 0.25s;
+opacity: 1; }
 .content.ng-leave-active {
-    opacity: 0; }*/
+opacity: 0; }*/
