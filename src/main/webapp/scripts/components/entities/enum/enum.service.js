@@ -1,96 +1,37 @@
 'use strict';
 
 angular.module('publisherApp')
-    .factory('AccessType', function ($resource) {
-        return $resource('api/enums/accesstype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('ClassificationDecorType', function ($resource) {
-        return $resource('api/enums/classifdecorationtype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('ContextType', function ($resource) {
-        return $resource('api/enums/contexttype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('DisplayOrderType', function ($resource) {
-        return $resource('api/enums/displayordertype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('FilterType', function ($resource) {
-        return $resource('api/enums/filtertype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('ItemStatus', function ($resource) {
-        return $resource('api/enums/itemstatus/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('ItemType', function ($resource) {
-        return $resource('api/enums/itemtype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('OperatorType', function ($resource) {
-        return $resource('api/enums/operatortype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('PermissionClass', function ($resource) {
-        return $resource('api/enums/permissionclass/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('PermissionType', function ($resource) {
-        return $resource('api/enums/permissiontype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('StringEvaluationMode', function ($resource) {
-        return $resource('api/enums/stringevaluationmode/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('SubjectType', function ($resource) {
-        return $resource('api/enums/subjecttype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('SubscribeType', function ($resource) {
-        return $resource('api/enums/subscribetype/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('WritingMode', function ($resource) {
-        return $resource('api/enums/writingmode/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('WritingFormat', function ($resource) {
-        return $resource('api/enums/writingformat/', {}, {
-            'query': { method: 'GET', isArray: true}
-        });
-    }).factory('EnumDatas', function($q, $state, AccessType, ClassificationDecorType, ContextType, DisplayOrderType, FilterType,
-                                     ItemStatus, ItemType, OperatorType, PermissionClass, PermissionType, StringEvaluationMode, SubjectType,
-                                     SubscribeType, WritingMode, WritingFormat) {
+  .factory('AllEnums', function ($resource) {
+      return $resource('api/enums/all/', {}, {
+          'query': { method: 'GET', isArray: false}
+      });
+  }).factory('EnumDatas', function($q, $state, AllEnums) {
         var AccessTypeList,ClassificationDecorTypeList,ContextTypeList,DisplayOrderTypeList,FilterTypeList,ItemStatusList,ItemTypeList,OperatorTypeList,PermissionClassList,
             PermissionTypeList, StringEvaluationModeList, SubjectTypeList, SubscribeTypeList, WritingModeList, WritingFormatList;
         return {
             init : function () {
-                return $q.all([AccessType.query().$promise, ContextType.query().$promise, DisplayOrderType.query().$promise,
-                    FilterType.query().$promise, ItemStatus.query().$promise, ItemType.query().$promise, OperatorType.query().$promise,
-                    PermissionClass.query().$promise, PermissionType.query().$promise, StringEvaluationMode.query().$promise,
-                    SubjectType.query().$promise, SubscribeType.query().$promise, WritingMode.query().$promise, WritingFormat.query().$promise,
-                    ClassificationDecorType.query().$promise])
+                return $q.all([AllEnums.query().$promise])
                     .then(function (results) {
-                        AccessTypeList = results[0];
-                        ContextTypeList = results[1];
-                        DisplayOrderTypeList = results[2];
-                        FilterTypeList = results[3];
-                        ItemStatusList = results[4];
-                        ItemTypeList = results[5];
-                        OperatorTypeList = results[6];
-                        PermissionClassList = results[7];
-                        PermissionTypeList = results[8];
-                        StringEvaluationModeList = results[9];
-                        SubjectTypeList = results[10];
-                        SubscribeTypeList = results[11];
-                        WritingModeList = results[12];
-                        WritingFormatList = results[13];
-                        ClassificationDecorTypeList = results[14];
+                        if (results) {
+                            results = angular.fromJson(results[0]);
+                            AccessTypeList = results.AccessType;
+                            ContextTypeList = results.ContextType;
+                            DisplayOrderTypeList = results.DisplayOrderType;
+                            FilterTypeList = results.FilterType;
+                            ItemStatusList = results.ItemStatus;
+                            ItemTypeList = results.ItemType;
+                            OperatorTypeList = results.OperatorType;
+                            PermissionClassList = results.PermissionClass;
+                            PermissionTypeList = results.PermissionType;
+                            StringEvaluationModeList = results.StringEvaluationMode;
+                            SubjectTypeList = results.SubjectType;
+                            SubscribeTypeList = results.SubscribeType;
+                            WritingModeList = results.WritingMode;
+                            WritingFormatList = results.WritingFormat;
+                            ClassificationDecorTypeList = results.ClassificationDecorType;
+                        }
                     }).catch(function (error) {
-                        //console.log(JSON.stringify(error));
+                        console.log(JSON.stringify(error));
                         $state.go("error");
                     });
             },
