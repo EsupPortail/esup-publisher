@@ -1,0 +1,107 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  LANG: "fr_FR.UTF-8"
+  LC_ALL: "fr_FR.UTF-8"
+  LANGUAGE: "fr_FR.UTF-8"
+  LC_CTYPE: "fr_FR.UTF-8"
+  TZ: "Europe/Paris"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: giprecia/mariadb:latest
+        env:
+          MYSQL_USER: root
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: publisher_test
+          MYSQL_CHARACTER_SET_SERVER: utf8mb4
+          MYSQL_COLLATION_SERVER: utf8mb4_unicode_520_ci
+          MYSQL_LOWER_CASE_TABLE_NAME: 1
+        ports:
+          - 3306:3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+
+    strategy:
+      matrix:
+        java: ['8', '11']
+        node: ['12', '14']
+
+    env:
+      secrets.RootPassword: 'root'
+    name: Run java ${{ matrix.java }} version and node ${{ matrix.node }} version
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up ENV
+      run: |
+        sudo locale-gen $LANG
+        sudo update-locale LANG=$LANG
+        sudo apt install net-tools
+    - name: Check locales
+      run: locale -a
+    - name: Check date
+      run: date
+    - name: Clone Openldap container
+      uses: actions/checkout@v2
+      with:
+        repository: 'GIP-RECIA/docker-openldap-test'
+        path: '.docker-openldap-test'
+    - name: Start Openldap Container
+      run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" up -d --build
+    - name: Set up JDK ${{ matrix.java }} version
+      uses: actions/setup-java@v2
+      with:
+        java-version: "${{ matrix.java }}"
+        distribution: 'adopt'
+        cache: 'maven'
+    - name: Set up Node ${{ matrix.node }} version
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+        cache: 'npm'
+    - name: DB connection test and conf checks
+      run: |
+        netstat -pnltu
+        mysql -h127.0.0.1 -uroot -proot -e "SHOW DATABASES;"
+        mysql -h127.0.0.1 -uroot -proot -e "show variables like 'char%';"
+        mysql -h127.0.0.1 -uroot -proot -e "USE publisher_test;SHOW TABLES;"
+    - name: Project requirements
+      run: |
+        ./mvnw --version
+        ./mvnw clean generate-sources -Pci -B
+        ./mvnw compile liquibase:update -Pci -B
+        mkdir -p ${{ github.workspace }}/tmp
+        # install npm
+        npm install -g bower
+        npm install -g yo@1.3.2
+        npm install requirejs@2.1
+        npm install jasmine-core@2.4.1
+        bower install
+    - name: DB final conf
+      run: |
+        # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
+        mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"
+    - name: Maven notice:check
+      if: startsWith(matrix.java, '8')
+      run: ./mvnw notice:check -B
+    - name: Maven license:check
+      run: ./mvnw license:check -B
+    - name: Maven running API test
+      run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B
+    - name: Build with Maven
+      run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B
+    - name: Stop containers
+      run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down

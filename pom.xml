@@ -689,7 +689,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -846,7 +846,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>travis</id>
+            <id>ci</id>
             <!-- Same as dev expect for some properties to have less log, etc... all things required by travis -->
             <build>
                 <plugins>
