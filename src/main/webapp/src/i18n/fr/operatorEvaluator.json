@@ -1,0 +1,20 @@
+{
+    "publisherApp": {
+        "operatorEvaluator" : {
+            "home": {
+                "title": "Opérateur d'évaluation",
+                "createLabel": "Créer un nouvel opérateur d'évaluation",
+                "createOrEditLabel": "Créer ou éditer un opérateur d'évaluation"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer l'opérateur d'évaluation {{ id }} ?"
+            },
+            "detail": {
+                "title": "opérateur d'évaluation"
+            },
+            "type": "Type",
+            "evaluators": "Évaluateurs"
+        }
+    }
+}
+

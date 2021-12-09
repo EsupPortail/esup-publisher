@@ -1,0 +1,2060 @@
+/**
+ * Copyright (C) 2014 Esup Portail http://www.esup-portail.org
+ * @Author (C) 2012 Julien Gribonvald <julien.gribonvald@recia.fr>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *                 http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/* We need to see if it's needed, but with Angular and his modules maybe...
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 100%
+}
+*/
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 14px;
+    background-color: #f3f3f3;
+    color: #000;
+    margin: 0;
+    min-width: 280px;
+}
+
+@media screen and (min-width: 768px) {
+    div.not-in-iframe {
+        padding: 0 15%;
+    }
+
+    div.not-in-iframe>div.container-fluid>div.card>div.manager,
+    div.not-in-iframe>div.container-fluid>div.card>div.admin,
+    div.not-in-iframe>div.container-navbar {
+        border-left: 1px solid #d0d0d0;
+        border-right: 1px solid #d0d0d0;
+    }
+
+    div.not-in-iframe>div.container-fluid>div.card>div.manager,
+    div.not-in-iframe>div.container-fluid>div.card>div.admin {
+        border-bottom: 1px solid #d0d0d0;
+    }
+}
+
+.card{
+    margin-bottom: 20px;
+}
+
+footer,
+.footer {
+    padding: 0 15px;
+}
+
+small,
+.small {
+    font-size: 78%;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    font-family: 'Roboto Slab', sans-serif;
+}
+
+/*button,*/
+/*.card,*/
+/*a {*/
+/*font-family: 'Roboto', sans-serif;*/
+/*}*/
+
+pre {
+    margin-bottom: 15px;
+}
+
+/* for relog button */
+div>.modal.fade.in {
+    background-color: grey;
+}
+
+a:hover,
+a:focus,
+a:link {
+    text-decoration: none;
+    outline: none;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.container-fluid>.card {
+    border: none;
+    background-color: #f3f3f3;
+    padding: 0;
+    -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+body a {
+    color: #000;
+}
+
+/* Default color */
+a:hover,
+a:focus,
+a:hover>div,
+a:focus>div {
+    color: #25B2F3;
+}
+
+/* Specific color */
+.clg18 a:focus,
+.clg18 a:hover,
+.clg18 a:hover>div,
+.clg18 a:focus>div {
+    color: #004899;
+}
+
+.clg28 a:focus,
+.clg28 a:hover,
+.clg28 a:hover>div,
+.clg28 a:focus>div {
+    color: #fc0;
+    background: #303030;
+}
+
+.clg36 a:focus,
+.clg36 a:hover,
+.clg36 a:hover>div,
+.clg36 a:focus>div {
+    color: #0069B3;
+}
+
+.clg37 a:hover,
+.clg37 a:focus,
+.clg37 a:hover>div,
+.clg37 a:focus>div {
+    color: #C60440;
+}
+
+.clg41 a:hover,
+.clg41 a:focus,
+.clg41 a:hover>div,
+.clg41 a:focus>div {
+    color: #009FE3;
+}
+
+.clg45 a:focus,
+.clg45 a:hover,
+.clg45 a:hover>div,
+.clg45 a:focus>div {
+    color: #26448A;
+}
+
+/* ==========================================================================
+Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
+========================================================================== */
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+
+/* ==========================================================================
+Developement Ribbon
+========================================================================== */
+.development {
+    position: absolute;
+    width: 149px;
+    height: 149px;
+    top: 0;
+    left: 0;
+    border: 0;
+    z-index: 1000;
+    background-image: url("../images/development_ribbon.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: block;
+    line-height: 3em;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* ==========================================================================
+Version number in navbar
+========================================================================== */
+.navbar-version {
+    font-size: 10px;
+    color: #888;
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+.error {
+    color: white;
+    background-color: red;
+}
+
+.hipster {
+    display: inline-block;
+    width: 347px;
+    height: 497px;
+    /*background: url("../images/hipster.png") no-repeat center top;*/
+    /*background-size: contain;*/
+}
+
+/* wait autoprefixer update to allow simple generation of high pixel density media query */
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min--moz-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
+    .hipster {
+        /*background: url("../images/hipster2x.png") no-repeat center top;*/
+        /*background-size: contain;*/
+    }
+}
+
+.hand {
+    cursor: pointer;
+}
+
+#threadDump .popover,
+#healthCheck .popover {
+    top: inherit;
+    display: block;
+    font-size: 10px;
+    max-width: 1024px;
+}
+
+#healthCheck .popover {
+    margin-left: -50px;
+}
+
+.health-details {
+    min-width: 400px;
+}
+
+.alert .popover pre {
+    font-size: 10px;
+}
+
+.voffset {
+    margin-top: 2px;
+}
+
+.voffset1 {
+    margin-top: 5px;
+}
+
+.voffset2 {
+    margin-top: 10px;
+}
+
+.voffset3 {
+    margin-top: 15px;
+}
+
+.voffset4 {
+    margin-top: 30px;
+}
+
+.voffset5 {
+    margin-top: 40px;
+}
+
+.voffset6 {
+    margin-top: 60px;
+}
+
+.voffset7 {
+    margin-top: 80px;
+}
+
+.voffset8 {
+    margin-top: 100px;
+}
+
+.voffset9 {
+    margin-top: 150px;
+}
+
+/* ====================================
+              globals
+======================================*/
+
+/* start Password strength bar style */
+ul#strength {
+    display: inline;
+    list-style: none;
+    margin: 0;
+    margin-left: 15px;
+    padding: 0;
+    vertical-align: 2px;
+}
+
+.point:last {
+    margin: 0 !important;
+}
+
+.point {
+    background: #DDD;
+    border-radius: 2px;
+    display: inline-block;
+    height: 5px;
+    margin-right: 1px;
+    width: 20px;
+}
+
+/* end Password strength bar style */
+
+.disabled {
+    box-shadow: none;
+    opacity: 0.65;
+}
+
+/** as tooltip on hover aren't possible on mobiles we set a text with .tooltip-touch class in replacement and we hidde it on no-touch compatibility.*/
+.no-touch .tooltip-touch {
+    display: none;
+}
+
+/* start For enumarated values in entities views */
+.list-comma::before {
+    content: ', ';
+}
+
+.list-comma:first-child::before {
+    content: '';
+}
+
+/* end For enumarated values in entities views */
+
+/* start link for pagination */
+.pagination>li>a,
+.pagination>li>span {
+    color: #25B2F3;
+}
+
+.clg18 .pagination>li>a,
+.clg18 .pagination>li>span {
+    color: #004899;
+}
+
+.clg28 .pagination>li>a,
+.clg28 .pagination>li>span {
+    color: #303030;
+}
+
+.clg36 .pagination>li>a,
+.clg36 .pagination>li>span {
+    color: #0069B3;
+}
+
+.clg37 .pagination>li>a,
+.clg37 .pagination>li>span {
+    color: #C60440;
+}
+
+.clg41 .pagination>li>a,
+.clg41 .pagination>li>span {
+    color: #009FE3;
+}
+
+.clg45 .pagination>li>a,
+.clg45 .pagination>li>span {
+    color: #26448A;
+}
+
+.pagination>.active>a,
+.pagination>.active>span,
+.pagination>.active>a:hover,
+.pagination>.active>span:hover,
+.pagination>.active>a:focus,
+.pagination>.active>span:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #25B2F3;
+    border-color: #D0D0D0;
+}
+
+.clg18 .pagination>.active>a,
+.clg18 .pagination>.active>span,
+.clg18 .pagination>.active>a:hover,
+.clg18 .pagination>.active>span:hover,
+.clg18 .pagination>.active>a:focus,
+.clg18 .pagination>.active>span:focus {
+    color: #fff;
+    background-color: #004899;
+    border-color: #D0D0D0;
+}
+
+.clg28 .pagination>.active>a,
+.clg28 .pagination>.active>span,
+.clg28 .pagination>.active>a:hover,
+.clg28 .pagination>.active>span:hover,
+.clg28 .pagination>.active>a:focus,
+.clg28 .pagination>.active>span:focus {
+    color: #000;
+    background-color: #FC0;
+    border-color: #D0D0D0;
+}
+
+.clg36 .pagination>.active>a,
+.clg36 .pagination>.active>span,
+.clg36 .pagination>.active>a:hover,
+.clg36 .pagination>.active>span:hover,
+.clg36 .pagination>.active>a:focus,
+.clg36 .pagination>.active>span:focus {
+    color: #fff;
+    background-color: #0069B3;
+    border-color: #D0D0D0;
+}
+
+.clg37 .pagination>.active>a,
+.clg37 .pagination>.active>span,
+.clg37 .pagination>.active>a:hover,
+.clg37 .pagination>.active>span:hover,
+.clg37 .pagination>.active>a:focus,
+.clg37 .pagination>.active>span:focus {
+    color: #fff;
+    background-color: #C60440;
+    border-color: #D0D0D0;
+}
+
+.clg41 .pagination>.active>a,
+.clg41 .pagination>.active>span,
+.clg41 .pagination>.active>a:hover,
+.clg41 .pagination>.active>span:hover,
+.clg41 .pagination>.active>a:focus,
+.clg41 .pagination>.active>span:focus {
+    color: #fff;
+    background-color: #009FE3;
+    border-color: #D0D0D0;
+}
+
+.clg45 .pagination>.active>a,
+.clg45 .pagination>.active>span,
+.clg45 .pagination>.active>a:hover,
+.clg45 .pagination>.active>span:hover,
+.clg45 .pagination>.active>a:focus,
+.clg45 .pagination>.active>span:focus {
+    color: #fff;
+    background-color: #26448A;
+    border-color: #D0D0D0;
+}
+
+/* end link for pagination */
+/* start nav-tabs for tables - for all table containing contents */
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    color: #fff;
+    cursor: default;
+    background-color: #25b2f3;
+    border-bottom-color: transparent;
+}
+
+.clg18 .nav-tabs>li.active>a,
+.clg18 .nav-tabs>li.active>a:hover,
+.clg18 .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #004899;
+}
+
+.clg28 .nav-tabs>li.active>a,
+.clg28 .nav-tabs>li.active>a:hover,
+.clg28 .nav-tabs>li.active>a:focus {
+    color: #000;
+    background-color: #FC0;
+}
+
+.clg36 .nav-tabs>li.active>a,
+.clg36 .nav-tabs>li.active>a:hover,
+.clg36 .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #0069B3;
+}
+
+.clg37 .nav-tabs>li.active>a,
+.clg37 .nav-tabs>li.active>a:hover,
+.clg37 .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #C60440;
+}
+
+.clg41 .nav-tabs>li.active>a,
+.clg41 .nav-tabs>li.active>a:hover,
+.clg41 .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #009FE3;
+}
+
+.clg45 .nav-tabs>li.active>a,
+.clg45 .nav-tabs>li.active>a:hover,
+.clg45 .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #26448A;
+}
+
+/* end nav-tabs for tables - for all table containing contents */
+/* start nav-pills for all sub-nav in contents*/
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills>li.active>a:focus {
+    background-color: #25b2f3;
+}
+
+.clg18 .nav-pills>li.active>a,
+.clg18 .nav-pills>li.active>a:hover,
+.clg18 .nav-pills>li.active>a:focus {
+    background-color: #004899;
+}
+
+.clg28 .nav-pills>li.active>a,
+.clg28 .nav-pills>li.active>a:hover,
+.clg28 .nav-pills>li.active>a:focus {
+    color: #000;
+    background-color: #FC0;
+}
+
+.clg36 .nav-pills>li.active>a,
+.clg36 .nav-pills>li.active>a:hover,
+.clg36 .nav-pills>li.active>a:focus {
+    background-color: #0069B3;
+}
+
+.clg37 .nav-pills>li.active>a,
+.clg37 .nav-pills>li.active>a:hover,
+.clg37 .nav-pills>li.active>a:focus {
+    background-color: #C60440;
+}
+
+.clg41 .nav-pills>li.active>a,
+.clg41 .nav-pills>li.active>a:hover,
+.clg41 .nav-pills>li.active>a:focus {
+    background-color: #009FE3;
+}
+
+.clg45 .nav-pills>li.active>a,
+.clg45 .nav-pills>li.active>a:hover,
+.clg45 .nav-pills>li.active>a:focus {
+    background-color: #26448A;
+}
+
+.pastille {
+    background: transparent;
+    display: inline-block;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f3f3f3;
+    vertical-align: text-bottom;
+}
+
+.publish-form-container .btn-primary:hover {
+    opacity: 0.75;
+}
+
+.publish-form-container .btn-primary,
+.btn-nav:not([disabled]):hover,
+.btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #25B2F3;
+    border-color: #D0D0D0;
+}
+
+.clg18 .publish-form-container .btn-primary,
+.clg18 .btn-nav:not([disabled]):hover,
+.clg18 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #004899;
+}
+
+.clg28 .publish-form-container .btn-primary,
+.clg28 .btn-nav:not([disabled]):hover,
+.clg28 .btn-nav:not([disabled]):focus {
+    color: #000;
+    background-color: #FC0;
+}
+
+.clg36 .publish-form-container .btn-primary,
+.clg36 .btn-nav:not([disabled]):hover,
+.clg36 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #0069B3;
+}
+
+.clg37 .publish-form-container .btn-primary,
+.clg37 .btn-nav:not([disabled]):hover,
+.clg37 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #C60440;
+}
+
+.clg41 .publish-form-container .btn-primary,
+.clg41 .btn-nav:not([disabled]):hover,
+.clg41 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #009FE3;
+}
+
+.clg45 .publish-form-container .btn-primary,
+.clg45 .btn-nav:not([disabled]):hover,
+.clg45 .btn-nav:not([disabled]):focus {
+    color: #fff;
+    background-color: #26448A;
+}
+
+.btn {
+    white-space: normal;
+}
+
+/*.btn-link,*/
+/*.btn-group .btn-nav {*/
+/*color: #25B2F3;*/
+/*}*/
+/*.clg37 .btn-link,*/
+/*.clg37 .btn-group .btn-nav {*/
+/*color: #C60440;*/
+/*}*/
+
+dl {
+    margin: 20px auto;
+}
+
+.dl-horizontal.entity-details>dd {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+    .dl-horizontal.entity-details>dt {
+        margin-bottom: 15px;
+        text-align: left;
+        white-space: normal;
+        width: 200px
+    }
+
+    .dl-horizontal.entity-details>dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 220px;
+        margin-left: 0;
+    }
+}
+
+.dl-horizontal.entity-details>dd>.classification-color {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+}
+
+.panel-heading,
+.panel-footer {
+    color: #000;
+    background-color: #f3f3f3;
+    border-color: #d0d0d0;
+}
+
+.form-control,
+output {
+    color: #000;
+}
+
+.form-control:focus,
+.ta-root.focussed>.ta-scroll-window.form-control {
+    border-color: #000;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 0, 0, .6);
+}
+
+.modal input[type=checkbox].form-control {
+    height: inherit;
+    transform: scale(2);
+    margin-top: 10px;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: "Roboto Slab", sans-serif;
+}
+
+/** css for all input[type="checkbox"] inside a label - not bootstrap */
+label>span+input[type="checkbox"] {
+    margin-left: 15px;
+}
+
+.highlight,
+.table>tbody>tr.highlight,
+.table-striped>tbody>tr.highlight {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.modal-dialog {
+    max-height: calc(100vh - 100px);
+    overflow-y: initial !important;
+}
+
+/* ====================================
+     All pages title on where user is
+====================================== */
+div>div.container-fluid>div.card>div.admin>div h1,
+div>div.container-fluid>div.card>div>div>div>h2,
+div>div.container-fluid>div.card>div>div>div>div.publish-header,
+div>div.container-fluid>div.card>div>div>div>div.header {
+    background-color: #f3f3f3;
+    padding: 20px 40px 10px 40px;
+    margin: 0;
+    /*line-height: 80px;*/
+    min-height: 80px;
+    border-bottom: 1px solid #d0d0d0;
+    /*border-top: 1px solid #d0d0d0;*/
+}
+
+/* start case on admin view when managing entities */
+div>div.container-fluid>div.card>div>div:not(.modal)>div:not(.modal):not(.publish-header):not(.header),
+div>div.container-fluid>div.card.entity>div>div>div:not(.modal) {
+    background-color: #fff;
+}
+
+div>div.container-fluid>div.card>div>div:not(.modal)>div>div:not(.modal):not(.publish-header):not(.header),
+div>div.container-fluid>div.card.entity>div>div>div:not(.modal)>button {
+    padding: 10px 2%;
+}
+
+/* end case on admin view when managing entities */
+/* ====================================
+              Navbar
+====================================== */
+
+div>div.container-navbar {
+    background-color: #fff;
+    -webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* Suppression nav-header project name*/
+nav>div>div.navbar-header>a {
+    display: none;
+}
+
+/* New style of navbar */
+nav.navbar-default .navbar-header .navbar-toggle.other-style {
+    width: 100%;
+    border: none;
+    text-align: center;
+    background-color: inherit;
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+nav.navbar-default .navbar-header .navbar-toggle.other-style span.fa {
+    display: none;
+}
+
+.container>.navbar-header {
+    margin: 0;
+}
+
+nav,
+.navbar,
+.navbar-default {
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: inherit;
+}
+
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
+    background-color: #25B2F3;
+    color: #fff;
+}
+
+.clg18 .dropdown-menu>.active>a,
+.clg18 .dropdown-menu>.active>a:hover,
+.clg18 .dropdown-menu>.active>a:focus {
+    background-color: #004899;
+    color: #fff;
+}
+
+.clg28 .dropdown-menu>.active>a,
+.clg28 .dropdown-menu>.active>a:hover,
+.clg28 .dropdown-menu>.active>a:focus {
+    color: #000;
+    background-color: #FC0;
+}
+
+
+.clg36 .dropdown-menu>.active>a,
+.clg36 .dropdown-menu>.active>a:hover,
+.clg36 .dropdown-menu>.active>a:focus {
+    background-color: #0069B3;
+    color: #fff;
+}
+
+.clg37 .dropdown-menu>.active>a,
+.clg37 .dropdown-menu>.active>a:hover,
+.clg37 .dropdown-menu>.active>a:focus {
+    background-color: #C60440;
+    color: #fff;
+}
+
+.clg41 .dropdown-menu>.active>a,
+.clg41 .dropdown-menu>.active>a:hover,
+.clg41 .dropdown-menu>.active>a:focus {
+    background-color: #009FE3;
+    color: #fff;
+}
+
+.clg45 .dropdown-menu>.active>a,
+.clg45 .dropdown-menu>.active>a:hover,
+.clg45 .dropdown-menu>.active>a:focus {
+    background-color: #26448A;
+    color: #fff;
+}
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus,
+.clg18 .navbar-default .navbar-nav>.active>a,
+.clg18 .navbar-default .navbar-nav>.active>a:hover,
+.clg18 .navbar-default .navbar-nav>.active>a:focus,
+.clg18 .navbar-default .navbar-nav>.open>a,
+.clg18 .navbar-default .navbar-nav>.open>a:hover,
+.clg18 .navbar-default .navbar-nav>.open>a:focus,
+.clg28 .navbar-default .navbar-nav>.active>a,
+.clg28 .navbar-default .navbar-nav>.active>a:hover,
+.clg28 .navbar-default .navbar-nav>.active>a:focus,
+.clg28 .navbar-default .navbar-nav>.open>a,
+.clg28 .navbar-default .navbar-nav>.open>a:hover,
+.clg28 .navbar-default .navbar-nav>.open>a:focus,
+.clg36 .navbar-default .navbar-nav>.active>a,
+.clg36 .navbar-default .navbar-nav>.active>a:hover,
+.clg36 .navbar-default .navbar-nav>.active>a:focus,
+.clg36 .navbar-default .navbar-nav>.open>a,
+.clg36 .navbar-default .navbar-nav>.open>a:hover,
+.clg36 .navbar-default .navbar-nav>.open>a:focus,
+.clg37 .navbar-default .navbar-nav>.active>a,
+.clg37 .navbar-default .navbar-nav>.active>a:hover,
+.clg37 .navbar-default .navbar-nav>.active>a:focus,
+.clg37 .navbar-default .navbar-nav>.open>a,
+.clg37 .navbar-default .navbar-nav>.open>a:hover,
+.clg37 .navbar-default .navbar-nav>.open>a:focus,
+.clg41 .navbar-default .navbar-nav>.active>a,
+.clg41 .navbar-default .navbar-nav>.active>a:hover,
+.clg41 .navbar-default .navbar-nav>.active>a:focus,
+.clg41 .navbar-default .navbar-nav>.open>a,
+.clg41 .navbar-default .navbar-nav>.open>a:hover,
+.clg41 .navbar-default .navbar-nav>.open>a:focus,
+.clg45 .navbar-default .navbar-nav>.active>a,
+.clg45 .navbar-default .navbar-nav>.active>a:hover,
+.clg45 .navbar-default .navbar-nav>.active>a:focus,
+.clg45 .navbar-default .navbar-nav>.open>a,
+.clg45 .navbar-default .navbar-nav>.open>a:hover,
+.clg45 .navbar-default .navbar-nav>.open>a:focus {
+    background-color: transparent;
+}
+
+@media screen and (max-width: 767px) {
+
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #25B2F3;
+        color: #fff;
+    }
+
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg18 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #004899;
+        color: #fff;
+    }
+
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg28 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        color: #000;
+        background-color: #FC0;
+    }
+
+    .clg36 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg36 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg36 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #0069B3;
+        color: #fff;
+    }
+
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg37 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #C60440;
+        color: #fff;
+    }
+
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg41 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #009FE3;
+        color: #fff;
+    }
+
+    .clg45 .navbar-default .navbar-nav .open .dropdown-menu>.active>a,
+    .clg45 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg45 .navbar-default .navbar-nav .open .dropdown-menu>.active>a:focus {
+        background-color: #26448A;
+        color: #fff;
+    }
+}
+
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
+    opacity: 0.75;
+}
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+    color: #25B2F3;
+    background-color: #f3f3f3;
+}
+
+.clg18 .dropdown-menu>li>a:hover,
+.clg18 .dropdown-menu>li>a:focus {
+    color: #004899;
+}
+
+.clg28 .dropdown-menu>li>a:hover,
+.clg28 .dropdown-menu>li>a:focus {
+    color: #fc0;
+    background: #303030;
+}
+
+.clg36 .dropdown-menu>li>a:hover,
+.clg36 .dropdown-menu>li>a:focus {
+    color: #0069B3;
+}
+
+.clg37 .dropdown-menu>li>a:hover,
+.clg37 .dropdown-menu>li>a:focus {
+    color: #C60440;
+}
+
+.clg41 .dropdown-menu>li>a:hover,
+.clg41 .dropdown-menu>li>a:focus {
+    color: #009FE3;
+}
+
+.clg45 .dropdown-menu>li>a:hover,
+.clg45 .dropdown-menu>li>a:focus {
+    color: #26448A;
+}
+
+/* SIZE ET CENTRAGE SOUS MENU */
+
+#navbar-collapse>ul,
+#navbar-collapse {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+}
+
+#navbar-collapse>ul>li:focus,
+#navbar-collapse>ul>li:hover,
+#navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #25B2F3;
+}
+
+.clg18 #navbar-collapse>ul>li:focus,
+.clg18 #navbar-collapse>ul>li:hover,
+.clg18 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #004899;
+}
+
+.clg28 #navbar-collapse>ul>li:focus,
+.clg28 #navbar-collapse>ul>li:hover,
+.clg28 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #FC0;
+}
+
+.clg36 #navbar-collapse>ul>li:focus,
+.clg36 #navbar-collapse>ul>li:hover,
+.clg36 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #0069B3;
+}
+
+.clg37 #navbar-collapse>ul>li:focus,
+.clg37 #navbar-collapse>ul>li:hover,
+.clg37 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #C60440;
+}
+
+.clg41 #navbar-collapse>ul>li:focus,
+.clg41 #navbar-collapse>ul>li:hover,
+.clg41 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #009FE3;
+}
+
+.clg45 #navbar-collapse>ul>li:focus,
+.clg45 #navbar-collapse>ul>li:hover,
+.clg45 #navbar-collapse>ul>li.active {
+    border-bottom: solid 3px #26448A;
+}
+
+#navbar-collapse>ul>li {
+    /*width: 30%;*/
+    border-bottom: solid 3px #D0D0D0;
+    margin-left: 10px;
+    float: none;
+    vertical-align: top;
+}
+
+@media screen and (min-width:768px) {
+    #navbar-collapse>ul>li {
+        display: inline-block;
+    }
+}
+
+div>div.container-navbar>nav {
+    background-color: #ffffff;
+}
+
+div>div.container-navbar>nav .navbar-default .navbar-collapse,
+div>div.container-navbar>nav .navbar-default .navbar-form {
+    border: none;
+}
+
+div>div.container-navbar>nav>div.container {
+    width: 100%;
+    padding: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+div>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.glyphicon,
+div>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.fa {
+    display: none;
+}
+
+/* ====================================
+Footer
+======================================*/
+div>div.container-fluid>div.footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ====================================
+Main (common part of all pages)
+======================================*/
+
+a.list-group-item div.bouton-action {
+    width: 100%;
+    text-align: center;
+}
+
+a.list-group-item div.bouton-action .div-icon,
+a.list-group-item div.bouton-action .div-text {
+    display: inline-block;
+    min-width: 33%;
+    padding: 10px 15px;
+}
+
+@media screen and (max-width:427px) {
+    a.list-group-item div.bouton-action .div-icon {
+        display: none;
+    }
+
+    a.list-group-item div.bouton-action .div-text {
+        text-align: center;
+    }
+}
+
+.longtext {
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    max-lines: 2;
+}
+
+.subject-key {
+    word-wrap: break-word;
+}
+
+/* ====================================
+            site.home
+======================================*/
+
+@media screen and (min-width: 768px) {
+
+    div:not(.not-in-iframe)>div.container-fluid>div.card.site,
+    div:not(.not-in-iframe)>div.container-fluid>div.card.site+div.footer {
+        padding: 0 15%;
+    }
+
+    div:not(.not-in-iframe)>div.container-fluid>div.card.site {
+        box-shadow: none;
+    }
+
+    div:not(.not-in-iframe)>div.container-fluid>div.card.site>div>div.content {
+        box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+}
+
+/* ====================================
+            manager
+======================================*/
+.container-fluid>.card>.manager>.content {
+    background-color: #fff;
+}
+
+.container-fluid>.card>.manager>.content #tabs>h4 {
+    font-style: italic;
+}
+
+.container-fluid>.card>.manager>.content>div>#tabs>ul.nav,
+.container-fluid>.card>.manager>.content>div>div.table-responsive {
+    padding-top: 15px;
+}
+
+/* ====================================
+manager contents (table of published contents)
+======================================*/
+.container-fluid>.card>.manager.contents>.content .table-responsive .table td {
+    font-size: 13px;
+}
+
+.container-fluid>.card>.manager.contents>.content .table-responsive .table td>span {
+    display: block;
+}
+
+.container-fluid>.card>.manager.contents>.content .table-responsive .table td>span:before {
+    content: attr(data-label) "";
+}
+
+.container-fluid>.card>.manager.contents>.content .table-responsive .table td .fa.subject-infos::before {
+    display: none;
+}
+
+.container-fluid>.card>.manager.contents>.content .table-responsive .table td .fa.subject-infos {
+    font: inherit;
+}
+
+@media screen and (min-width:992px) {
+    .container-fluid>.card>.manager.contents>.content .table-responsive .table .longtext {
+        overflow: hidden;
+        max-width: 50ch;
+        word-wrap: break-word;
+        text-overflow: ellipsis;
+        max-lines: 2;
+    }
+
+    .container-fluid>.card>.manager.contents>.content .table-responsive .table .verylongtext {
+        overflow: hidden;
+        max-width: 50ch;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .table-responsive .table td.fixed-date-width,
+    .table-responsive .table th.fixed-date-width {
+        max-width: 90px;
+    }
+}
+
+.table td>input[type="radio"],
+.table td>input[type="checkbox"],
+dl>dd>input[type="radio"],
+dl>dd>input[type="checkbox"] {
+    margin: 0;
+    height: auto;
+}
+
+.table td.action {
+    vertical-align: middle;
+}
+
+.manager.contents .legend {
+    border: 1px dashed #D0D0D0;
+    padding: 5px 10px;
+}
+
+.manager.contents .legend>h5 {
+    display: none;
+    text-decoration: underline;
+}
+
+.manager.contents .legend>span:before {
+    content: "\F6C3";
+    font: normal normal bold 12px/1 "Material Design Icons";
+    /*color: #F44336;*/
+    margin-right: 5px;
+}
+
+.manager.contents.owned .legend>span {
+    height: 24px;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+/* start Transform table into cards ! */
+@media screen and (max-width:991px) {
+    .table-responsive.table-responsive-to-cards {
+        overflow-x: hidden;
+    }
+
+    .table-responsive-to-cards thead {
+        display: none;
+    }
+
+    .table-responsive-to-cards,
+    .table-responsive-to-cards table>thead>tr>th,
+    .table-responsive-to-cards table>tbody>tr>th,
+    .table-responsive-to-cards table>tfoot>tr>th,
+    .table-responsive-to-cards table>thead>tr>td,
+    .table-responsive-to-cards table>tbody>tr>td,
+    .table-responsive-to-cards table>tfoot>tr>td {
+        border: none;
+        white-space: initial !important;
+    }
+
+    .table-responsive-to-cards tr {
+        /*display: block;*/
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        margin: 1.5rem 1rem 1rem 1rem;
+        padding: 1rem 0.5rem 0.5rem 1rem;
+        background-color: rgba(255, 255, 255, 0.85);
+        box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.2), 0px 8px 20px 0 rgba(0, 0, 0, 0.19);
+        border: 1px solid rgba(136, 136, 136, 0.2);
+    }
+
+    .table-responsive-to-cards td {
+        /* display block to show all td per line, else display inline-block*/
+        /*display: block;*/
+        margin: 0 0.5rem 0.5rem 0;
+        padding: 0.5rem;
+        text-align: left;
+        background-color: #f3f3f3;
+        /*border: 1px solid rgba(208, 208, 208, 0.5);*/
+
+    }
+
+    .manager.contents .table-responsive-to-cards td,
+    .container-fluid>.card>.manager.contents>.content .table-responsive.table-responsive-to-cards .table td>span {
+        display: inline-block;
+    }
+
+    .table-responsive-to-cards td:not(.action):before {
+        content: attr(data-label) ": ";
+        float: left;
+        margin: 0 0.5rem 0 0;
+        /* effet ne plaisant pas */
+        /*margin: -0.5rem 0.5rem -0.5rem -0.5rem;*/
+        /*padding: 0.625rem 0.5rem 0.625rem;*/
+        /*font-size: 0.75em;*/
+        font-weight: bold;
+        background: rgba(208, 208, 208, 0.4);
+    }
+
+    .manager.contents .table-responsive-to-cards td.verylongtext,
+    .table-responsive-to-cards td.verylongtext,
+    .table-responsive-to-cards td.action {
+        /*display: block !important;*/
+        float: none;
+        flex-basis: 100%;
+    }
+
+    .table-responsive-to-cards td.verylongtext:before {
+        display: block;
+        margin-right: -0.5rem;
+        margin-bottom: 0.5rem;
+        float: none;
+    }
+
+    .table-responsive-to-cards td:empty {
+        display: none;
+    }
+
+    .table-responsive-to-cards td.action {
+        width: 100%;
+        text-align: center;
+        background: transparent;
+    }
+}
+
+/* end Transform table into cards ! */
+/* start Transform table into flexbox ! */
+.table-responsive-to-flexbox tr {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #D0D0D0;
+}
+
+.table-responsive-to-flexbox td {
+    white-space: normal;
+}
+
+.table-responsive-to-flexbox,
+.table-responsive-to-flexbox>.table,
+.table-responsive-to-flexbox>.table>thead,
+.table-responsive-to-flexbox>.table>thead>tr,
+.table-responsive-to-flexbox>.table>thead>tr>th,
+.table-responsive-to-flexbox>.table>tbody>tr>td {
+    border: none;
+}
+
+/* end Transform table into flexbox ! */
+/* start manager details */
+.manager.contents.details .content .tab-content>#publishers ul>li>figure {
+    margin: 0;
+}
+
+.manager.contents.details .content .tab-content>#publishers ul>li>figure>img {
+    max-width: 48px;
+}
+
+.manager.contents.details .content .tab-content>#targets ul>li {
+    border: none;
+}
+
+/* end manager details */
+/* ==========================================
+manager Treeview
+============================================*/
+.manager.treeview {
+    width: 100%;
+}
+
+.manager.treeview>.content>.treeview {
+    overflow: auto;
+}
+
+.manager.treeview>.content>.treeview>div {
+    margin: 0;
+    display: block;
+    float: left;
+    min-width: 25%;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.manager.treeview>.content>.treeview>div:last-child {
+    /*float: none;*/
+    overflow: hidden;
+    min-width: 60%;
+    max-width: 1024px;
+}
+
+@media screen and (min-width:991px) {
+    .manager.treeview>.content>.treeview>div:last-child {
+        float: none;
+        max-width: 100%;
+    }
+}
+
+.manager.treeview>.content>.treeview .context-viewer .form-group input[type=checkbox].form-control {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+/* ====================================
+preview of contents
+======================================*/
+.article-preview .details {
+    background: #f3f3f3 none repeat scroll 0 0;
+    border: 1px dashed #D0D0D0;
+    font-size: 1em;
+    margin: 0 0 20px;
+}
+
+.article-preview .details .summary {
+    display: block;
+}
+
+.article-preview .details .pubInfo p {
+    margin: 0;
+}
+
+.article-preview .details .label {
+    color: #808080;
+}
+
+.article-preview {
+    border: 1px solid #D0D0D0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.article-preview legend {
+    width: auto;
+    margin: 0 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+/* ====================================
+modals for cropper with input file
+======================================*/
+
+.publish-content .btn-file {
+    position: relative;
+    overflow: hidden;
+    white-space: initial;
+}
+
+.publish-content .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#cropImageModale .cropArea {
+    background: #E4E4E4;
+    overflow: hidden;
+    width: 100%;
+    height: 350px;
+}
+
+#cropImageModale .previewCropArea img {
+    display: block;
+    margin: 10px 0;
+}
+
+#cropImageModale div.inputArea h3 {
+    display: inline-block;
+}
+
+/*#cropImageModale .progress {*/
+/*width : 80%;*/
+/*}*/
+
+/* ====================================
+publish.publisher form
+======================================*/
+
+.manager .publish-form-container {
+    padding: 0 0 15px 0;
+}
+
+/* Start The header */
+div>div.container-fluid>div.card>div>div>div>div.publish-header {
+    padding: 0 40px;
+    /*vertical-align: middle;*/
+}
+
+.manager .publish-form-container>.publish-header>h2 {
+    padding-top: 20px;
+}
+
+.manager .publish-form-container>.publish-header>div.status-buttons {
+    padding-top: 15px;
+}
+
+.manager .publish-form-container>.publish-header {
+    display: block;
+    overflow: auto;
+    clear: both;
+}
+
+.manager .publish-form-container>.publish-header>h2,
+.manager .publish-form-container>.publish-header>div.status-buttons {
+    display: inline-block;
+    margin: 0;
+}
+
+.manager .publish-form-container>.publish-header>div.status-buttons {
+    float: right;
+    /*line-height: 100%;*/
+    text-align: center;
+    /*height: 100%;*/
+    overflow: hidden;
+}
+
+.manager .publish-form-container>.publish-header>div.status-buttons>div.publish-form-views-steps {
+    height: 100%;
+    vertical-align: middle;
+}
+
+.manager .publish-form-container>.publish-header>div.status-buttons>div.publish-form-views-steps>a {
+    display: inline-block;
+    margin: 0 10px;
+    height: 100%;
+}
+
+/*numbered buttons */
+.manager .publish-form-container>.publish-header>.status-buttons a:hover {
+    text-decoration: none;
+}
+
+.manager .publish-form-container>.publish-header>.status-buttons span.step-number {
+    display: inline-block;
+    font-size: 120%;
+    font-weight: bold;
+    line-height: 180%;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    white-space: nowrap;
+    color: #ffffff;
+    background: #888;
+    text-align: center;
+}
+
+.manager .publish-form-container>.publish-header>.status-buttons span.step-label {
+    color: #888;
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+    /*text-align:center;*/
+    text-transform: uppercase;
+    /*vertical-align: middle;*/
+}
+
+/* active buttons */
+.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #25B2F3;
+}
+
+.clg18 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #004899;
+}
+
+.clg28 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #FC0;
+    color: #000
+}
+
+.clg36 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #0069B3;
+}
+
+.clg37 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #C60440;
+}
+
+.clg41 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #009FE3;
+}
+
+.clg45 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+    background: #26448A;
+}
+
+.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-label {
+    color: #000;
+}
+
+/* end The header */
+
+/* start The body */
+.manager .publish-form-container>.publish-body {
+    padding: 0 10%;
+}
+
+.manager .publish-form-container>.publish-body>div>h3 {
+    text-align: center;
+    padding-bottom: 15px;
+    color: #25B2F3;
+}
+
+.clg18 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #004899;
+}
+
+.clg28 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #303030;
+}
+
+.clg36 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #0069B3;
+}
+
+.clg37 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #C60440;
+}
+
+.clg41 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #009FE3;
+}
+
+.clg45 .manager .publish-form-container>.publish-body>div>h3 {
+    color: #26448A;
+}
+
+/** start specific publish.classification */
+.manager.publish .publish-form-container .publish-classification .inline-form .checkbox-inline:first-child {
+    margin-left: 10px;
+}
+
+.manager.publish .publish-form-container .publish-classification input[type=checkbox]+label {
+    cursor: pointer;
+    font-weight: normal;
+    text-align: center;
+}
+
+/* Hide checkbox when iconurl is shown */
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl {
+    display: none;
+}
+
+/*
+- Style each label that is directly after the input
+- position: relative; will ensure that any position: absolute children will position themselves in relation to it
+*/
+.manager.publish .publish-form-container .publish-classification .checkbox-inline span.iconurl {
+    height: 10vh;
+    width: 10vh;
+    background-color: #f3f3f3;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 10vh 10vh;
+    display: block;
+    border-radius: 50%;
+    border: solid 3px #FFF;
+    text-align: center;
+}
+
+/* Provide a border when hovered and when the checkbox before it is checked */
+.manager.publish .publish-form-container .publish-classification .checkbox-inline span.iconurl:hover,
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #25B2F3;
+}
+
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #004899;
+}
+
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #FC0;
+}
+
+.clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #0069B3;
+}
+
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #C60440;
+}
+
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #009FE3;
+}
+
+.clg45 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl+label>span.iconurl:hover,
+.clg45 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl {
+    border: solid 3px #26448A;
+}
+
+/*
+- Create a pseudo element :after when checked and provide a tick
+- Center the content
+*/
+.manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    content: '\2714';
+    /*content is required, though it can be empty - content: '';*/
+    display: block;
+    /*height: 1em;*/
+    /*width: 1em;*/
+    font-size: 300%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    color: #25B2F3;
+}
+
+.clg18 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #004899;
+}
+
+.clg28 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #FC0;
+}
+
+.clg36 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #0069B3;
+}
+
+.clg37 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #C60440;
+}
+
+.clg41 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #009FE3;
+}
+
+.clg45 .manager.publish .publish-form-container .publish-classification input[type=checkbox].iconurl:checked+label>span.iconurl:after {
+    color: #26448A;
+}
+
+/** end specific publish.classification */
+
+/** start specific publish.content */
+.manager.publish .publish-form-container .publish-content .form-inline img#enclosure.img-responsive {
+    display: inline;
+}
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify>.form-group {
+    vertical-align: top;
+}
+
+/* tip to justify all .form-group divs into .form-inline*/
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify::after {
+    content: ' ';
+    width: 100%;
+    display: inline-block;
+}
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify {
+    margin-bottom: -15px;
+    /* previous tip add a new line and with the margin-bottom of 15px it's getting a useless line */
+}
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline.text-justify>.form-group>label {
+    display: block;
+}
+
+.manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-control {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    width: 100%;
+    height: inherit;
+    transform: scale(2);
+    margin-top: 10px;
+}
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles {
+    display: inline;
+}
+
+.manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles>span {
+    white-space: nowrap;
+}
+
+/** end specific publish.content */
+/** start specific publish.targets */
+.manager.publish .publish-form-container .publish-target .list-group.list-unstyled .list-group-item,
+.manager.treeview .list-group.list-unstyled .list-group-item {
+    border: none;
+    position: inherit;
+}
+
+/** end specific publish.targets */
+/* end The body */
+/* The footer */
+
+
+
+/* ========================================
+Overlay, for spinner, etc...
+===========================================*/
+.overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+    /*or semitransparent image*/
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    opacity: 0.5;
+}
+
+/* ========================================
+Modal fullscreen
+=======================================*/
+.modal-full-screen .modal-dialog {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-full-screen .modal-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+}
+
+/* ========================================
+For directives
+===========================================*/
+.subject-infos {
+    display: inline;
+    white-space: normal;
+}
+
+.subject-search {
+    display: inline;
+}
+
+.fa-users .tooltip-inner {
+    word-break: break-all;
+}
+
+.evaluator {
+    list-style: none;
+}
+
+div>div>edit-evaluator>ul,
+td>evaluator>ul {
+    padding: 0;
+}
+
+.form-control.custom-color-picker {
+    border: none;
+    box-shadow: none;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}
+
+/* ========================================
+For jstree
+===========================================*/
+js-tree {
+    display: inline-block;
+}
+
+.jstree-default .jstree-anchor {
+    color: #000;
+}
+
+.jstree-default>.jstree-container-ul>.jstree-node {
+    margin-left: 0;
+    margin-right: 20px;
+}
+
+.jstree-default .jstree-wholerow-clicked,
+.jstree-default .jstree-anchor.jstree-clicked,
+.jstree-default .jstree-clicked.jstree-hovered,
+.jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #25B2F3;
+}
+
+.clg18 .jstree-default .jstree-wholerow-clicked,
+.clg18 .jstree-default .jstree-anchor.jstree-clicked,
+.clg18 .jstree-default .jstree-clicked.jstree-hovered,
+.clg18 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #004899;
+}
+
+.clg36 .jstree-default .jstree-wholerow-clicked,
+.clg36 .jstree-default .jstree-anchor.jstree-clicked,
+.clg36 .jstree-default .jstree-clicked.jstree-hovered,
+.clg36 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #0069B3;
+}
+
+.clg28 .jstree-default .jstree-wholerow-clicked,
+.clg28 .jstree-default .jstree-anchor.jstree-clicked,
+.clg28 .jstree-default .jstree-clicked.jstree-hovered,
+.clg28 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #000;
+    color: #FC0;
+}
+
+.clg37 .jstree-default .jstree-wholerow-clicked,
+.clg37 .jstree-default .jstree-anchor.jstree-clicked,
+.clg37 .jstree-default .jstree-clicked.jstree-hovered,
+.clg37 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #C60440;
+}
+
+.clg41 .jstree-default .jstree-wholerow-clicked,
+.clg41 .jstree-default .jstree-anchor.jstree-clicked,
+.clg41 .jstree-default .jstree-clicked.jstree-hovered,
+.clg41 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #009FE3;
+}
+
+.clg45 .jstree-default .jstree-wholerow-clicked,
+.clg45 .jstree-default .jstree-anchor.jstree-clicked,
+.clg45 .jstree-default .jstree-clicked.jstree-hovered,
+.clg45 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
+    background: #26448A;
+}
+
+.jstree-default .jstree-anchor.jstree-clicked {
+    color: #fff;
+}
+
+.jstree-default .jstree-wholerow-hovered:not(.jstree-wholerow-clicked),
+.jstree-default .jstree-hovered:not(.jstree-clicked) {
+    background: #f3f3f3;
+}
+
+.jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #25B2F3;
+}
+
+.clg18 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #004899;
+}
+
+.clg28 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #303030;
+}
+
+.clg36 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #0069B3;
+}
+
+.clg37 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #C60440;
+}
+
+.clg41 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #009FE3;
+}
+
+.clg45 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
+    color: #26448A;
+}
+
+/* ========================================
+For TextAngular et specific buttons
+===========================================*/
+.tadropdown {
+    padding: 0px;
+    border: none;
+}
+
+/* see custom taDropdown, and copy style of .btn-default.active*/
+.tadropdown.active>button,
+.btn-default.active {
+    color: #000;
+    background-color: #D0D0D0;
+    border-color: #D0D0D0;
+}
+
+.ta-scroll-window.form-control {
+    overflow: visible;
+}
+
+/* ========================================
+For ui-datepicker
+===========================================*/
+/* z-index problem with TextAngular active buttons due to bootstrap .btn.active class */
+.ui-datepicker {
+    z-index: 3 !important;
+}
+
+/* =======================================
+For Fixed alert to be visible on top of screen everywhere
+==========================================*/
+.alert-fixed {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 9999;
+    border-radius: 0px;
+    text-align: center;
+}
+
+/* ========================================
+For toaster - used for request messages
+===========================================*/
+
+#toast-container>div {
+    min-width: 40%;
+    text-align: center;
+}
+
+.toast-top-center {
+    left: 0;
+}
+
+/* ========================================
+For ng-animates with ui-router, some transition give problems
+===========================================*/
+/*.content.ng-enter {
+transition: 0.25s;
+opacity: 0; }
+.content.ng-enter-active {
+opacity: 1; }
+.content.ng-leave {
+transition: 0.25s;
+opacity: 1; }
+.content.ng-leave-active {
+opacity: 0; }*/
+
+h4 {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.list-group-item{
+    color: #555;
+}
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid padding-box; 
+    border-radius: 6px;
+    box-shadow:  0 5px 15px rgb(0 0 0 / 50%);
+    background-clip: padding-box;
+    outline: 0;
+  }

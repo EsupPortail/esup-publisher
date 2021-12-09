@@ -1,0 +1,56 @@
+{
+    "publisherApp": {
+        "item" : {
+            "home": {
+                "title": "Publications",
+                "createLabel": "Créer une nouvelle publication",
+                "createOrEditLabel": "Créer ou éditer une publication"
+            },
+            "type": "Type",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la publication {{ id }} ?",
+                "enclosure": "Etes-vous certain de vouloir supprimer cette illustration (pas de retour arrière possible) ?"
+            },
+            "validate.question" : "Etes-vous certain de vouloir valider cette publication {{ id }} ?",
+            "unvalidate.question" : "Etes-vous certain de vouloir invalider cette publication {{ id }} ?",
+            "detail": {
+                "title": "Publication",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
+            },
+            "title": "Titre",
+            "author": "Auteur",
+            "publishDate": "Publié le",
+            "when": "le",
+            "preview": "Prévisualisation",
+            "enclosure": "Illustration",
+            "startDate": "Début de publication",
+            "endDate": "Fin de publication",
+            "validated": "Validation",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Résumé",
+            "body": "Texte",
+            "rssAllowed": "Accès RSS",
+            "created": "Création",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModified": "Dernière modification",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "action": {
+                "confirmsave": {
+                    "title": "Confirmation de sauvegarde du brouillon",
+                    "question": "Souhaitez vous sauvegarder en tant que brouillon le contenu et reprendre plus tard la publication ?<br/><br/> <div class=\"alert alert-warning\">Un contenu déjà publié sera dépublié !</div>"
+                },
+                "publish": "Publier",
+                "save": "Sauvegarder"
+            },
+            "beforeDate": "le ",
+            "beforeName": " par "
+        }
+    }
+}
+

@@ -1,0 +1,18 @@
+{
+    "publisherApp": {
+        "userGroupEvaluator" : {
+            "home": {
+                "title": "UserGroupEvaluators",
+                "createLabel": "Create a new UserGroupEvaluator",
+                "createOrEditLabel": "Create or edit a UserGroupEvaluator"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete UserGroupEvaluator {{ id }}?"
+            },
+            "detail": {
+                "title": "UserGroupEvaluator"
+            },
+            "group": "Group"
+        }
+    }
+}

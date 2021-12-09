@@ -1,0 +1,19 @@
+{
+    "publisherApp": {
+        "operatorEvaluator" : {
+            "home": {
+                "title": "OperatorEvaluators",
+                "createLabel": "Create a new OperatorEvaluator",
+                "createOrEditLabel": "Create or edit a OperatorEvaluator"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete OperatorEvaluator {{ id }}?"
+            },
+            "detail": {
+                "title": "OperatorEvaluator"
+            },
+            "type": "Type",
+            "evaluators": "evaluators"
+        }
+    }
+}

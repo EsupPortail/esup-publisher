@@ -1,0 +1,20 @@
+{
+    "publisherApp": {
+        "userMultivaluedAttributesEvaluator" : {
+            "home": {
+                "title": "UserMultivaluedAttributesEvaluators",
+                "createLabel": "Create a new UserMultivaluedAttributesEvaluator",
+                "createOrEditLabel": "Create or edit a UserMultivaluedAttributesEvaluator"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete UserMultivaluedAttributesEvaluator {{ id }}?"
+            },
+            "detail": {
+                "title": "UserMultivaluedAttributesEvaluator"
+            },
+            "mode": "Mode",
+            "attribute": "Attribute",
+            "value": "Value"
+        }
+    }
+}

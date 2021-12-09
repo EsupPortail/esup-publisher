@@ -1,0 +1,21 @@
+{
+    "publisherApp": {
+        "filter" : {
+            "home": {
+                "title": "Filters",
+                "createLabel": "Create a new Filter",
+                "createOrEditLabel": "Create or edit a Filter"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete Filter {{ id }}?"
+            },
+            "detail": {
+                "title": "Filter"
+            },
+            "pattern": "Pattern",
+            "description": "Description",
+			"type": "Type",
+            "organization": "organization"
+        }
+    }
+}

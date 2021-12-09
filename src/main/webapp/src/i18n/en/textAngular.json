@@ -1,0 +1,127 @@
+{
+    "textangular":{
+        "html":{
+            "tooltip":"Toggle html / Rich Text"
+        },
+        "heading":{
+            "tooltip":"Heading "
+        },
+        "h1":{
+            "tooltip":"Title 1"
+        },
+        "h2":{
+            "tooltip":"Title 2"
+        },
+        "h3":{
+            "tooltip":"Title 3"
+        },
+        "h4":{
+            "tooltip":"Title 4"
+        },
+        "h5":{
+            "tooltip":"Title 5"
+        },
+        "p":{
+            "tooltip":"Paragraph"
+        },
+        "pre":{
+            "tooltip":"Preformatted text"
+        },
+        "ul":{
+            "tooltip":"Unordered List"
+        },
+        "ol":{
+            "tooltip":"Ordered List"
+        },
+        "quote":{
+            "tooltip":"Quote/unquote selection or paragraph"
+        },
+        "undo":{
+            "tooltip":"Undo"
+        },
+        "redo":{
+            "tooltip":"Redo"
+        },
+        "bold":{
+            "tooltip":"Bold"
+        },
+        "italic":{
+            "tooltip":"Italic"
+        },
+        "underline":{
+            "tooltip":"Underline"
+        },
+        "strikeThrough":{
+            "tooltip":"Strikethrough"
+        },
+        "justifyLeft":{
+            "tooltip":"Aligner le texte à gauche"
+        },
+        "justifyRight":{
+            "tooltip":"Align text right"
+        },
+        "justifyFull":{
+            "tooltip":"Justify text"
+        },
+        "justifyCenter":{
+            "tooltip":"Center"
+        },
+        "indent":{
+            "tooltip":"Increase indent"
+        },
+        "outdent":{
+            "tooltip":"Decrease indent"
+        },
+        "clear":{
+            "tooltip":"Clear formatting"
+        },
+        "insertImage":{
+            "dialogPrompt":"Please enter an image URL to insert \nNB : you can insert a picture by drag and drop in the text",
+            "tooltip":"Insert image",
+            "hotkey":"the - possibly language dependent hotkey ... for some future implementation"
+        },
+        "insertVideo":{
+            "tooltip":"Insert video",
+            "dialogPrompt":"Please enter a youtube URL to embed \nNB : you can insert a video by drag and drop in the text"
+        },
+        "insertLink":{
+            "tooltip":"Insert / edit link",
+            "dialogPrompt":"Please enter a URL to insert \nNB : you can insert a file by drag and drop in the text"
+        },
+        "editLink":{
+            "reLinkButton":{
+                "tooltip":"Relink"
+            },
+            "nameLinkButton": {
+                "tooltip": "Text of the link",
+                "dialogPromp": "Please enter a text from the URL"
+            },
+            "unLinkButton":{
+                "tooltip":"Unlink"
+            },
+            "targetToggle":{
+                "buttontext":"Open in New Window"
+            }
+        },
+        "wordcount":{
+            "tooltip":"Display words Count"
+        },
+        "charcount":{
+            "tooltip":"Display characters Count"
+        },
+        "textTypeDropdown":{
+            "tooltip":"Text format"
+        },
+        "fontColor":{
+            "tooltip":"Font color"
+        },
+        "backgroundColor": {
+            "tooltip":"Background color"
+        }
+    },
+    "taDropHandler.error": {
+        "server" : "An error occured during dosnload ! {{ error }}",
+        "filesize": "The file is too large ! The size limit is {{ error }}.",
+        "filetype": "The file type isn't autorized, insert only an image !"
+    }
+}

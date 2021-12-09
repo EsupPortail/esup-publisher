@@ -1,0 +1,28 @@
+{
+    "publisherApp": {
+        "permissionOnSubjectsWithClassificationList" : {
+            "home": {
+                "title": "PermissionOnSubjectsWithClassificationLists",
+                "createLabel": "Créer un nouveau PermissionOnSubjectsWithClassificationList",
+                "createOrEditLabel": "Créer ou éditer un PermissionOnSubjectsWithClassificationList"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le PermissionOnSubjectsWithClassificationList {{ id }} ?"
+            },
+            "detail": {
+                "title": "PermissionOnSubjectsWithClassificationList"
+            },
+            "ctxId": "CtxId",
+            "ctxType": "CtxType",
+            "role": "Role",
+            "createdBy": "CreatedBy",
+            "createdDate": "CreatedDate",
+            "lastModifiedBy": "LastModifiedBy",
+            "lastModifiedDate": "LastModifiedDate",
+            "evaluator": "evaluator",
+            "rolesOnSubjects": "rolesOnSubjects",
+            "authorizedContexts": "authorizedContexts"
+        }
+    }
+}
+

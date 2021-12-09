@@ -1,0 +1,49 @@
+{
+    "publisherApp": {
+        "attachment" : {
+            "home": {
+                "title": "Documents",
+                "createLabel": "Nouveau document",
+                "createOrEditLabel": "Ajouter ou éditer un document"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le document {{ id }} ?",
+                "enclosure": "Etes-vous certain de vouloir supprimer ce document (pas de retour arrière possible) ?"
+            },
+            "detail": {
+                "title": "Document",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
+            },
+            "title": "Titre",
+            "enclosure": "Illustration",
+            "enclosure.button": "Sélectionner un document",
+            "startDate": "Début de publication",
+            "endDate": "Fin de publication",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Description",
+            "rssAllowed": "Accès public via les flux RSS",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "linkedFiles": "Document(s)",
+            "action": {
+                "publish": "Enregistrer et Publier",
+                "save": "Enregistrer"
+            },
+            "inputfile": {
+                "title": "Sélection d'un document",
+                "url.label": "Depuis un lien web",
+                "upload.label": "Depuis un fichier",
+                "upload.button": "Chercher un document...",
+                "file": "Fichier"
+            }
+
+        }
+    }
+}
+

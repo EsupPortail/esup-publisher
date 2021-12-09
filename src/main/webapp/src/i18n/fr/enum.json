@@ -1,0 +1,119 @@
+{
+    "enum": {
+        "classificationDecorType": {
+            "ENCLOSURE": "Illustration",
+            "COLOR": "Coloration"
+        },
+        "itemStatus": {
+            "pending": {
+                "title": "En validation"
+            },
+            "scheduled": {
+                "title": "À venir"
+            },
+            "published": {
+                "title": "Publiées"
+            },
+            "archived": {
+                "title": "Expirées"
+            },
+            "draft": {
+                "title": "Brouillons"
+            }
+        },
+        "itemType": {
+            "NEWS": "Actualité",
+            "MEDIA": "Média",
+            "RESOURCE": "Ressource",
+            "EVENT": "Évènement",
+            "FLASH": "Flash d'Information",
+            "ATTACHMENT": "Document"
+        },
+        "displayOrder": {
+            "lastCreatedModifiedFirst": {
+                "title":"Dernier créé ou modifié en premier"
+            },
+            "onlyLastCreatedFirst": {
+                "title":"Dernier créé en premier"
+            },
+            "byName": {
+                "title": "Alphabétique (sur le nom/titre)"
+            },
+            "byStartDate": {
+                "title": "Par date de début de publication"
+            },
+            "custom": {
+                "title": "Classement manuel"
+            }
+        },
+        "permission": {
+            "superAdm": {
+                "title": "Super administrateur"
+            },
+            "manager": {
+                "title": "Gestionnaire"
+            },
+            "editor": {
+                "title": "Éditeur"
+            },
+            "contributor": {
+                "title": "Contributeur"
+            },
+            "lookover": {
+                "title": "Visiteur"
+            }
+        },
+        "permissionclass": {
+            "context": {
+                "title": "Simple attribution de rôles"
+            },
+            "contextwithsubjects": {
+                "title": "Attribution de rôles sur populations cibles"
+            },
+            "subject": {
+                "title": "Permissions sur des personnes"
+            },
+            "subjectwithclassif": {
+                "title": "Permissions sur des personnes avec des contextes filtrés"
+            }
+        },
+        "subscribe": {
+            "forced": {
+                "title": "Abonnement forcé"
+            },
+            "free": {
+                "title": "Abonnement libre"
+            },
+            "pre": {
+                "title": "Pré-abonnement"
+            }
+        },
+        "subject": {
+            "person": {
+                "title": "Personne"
+            },
+            "group": {
+                "title": "Groupe"
+            }
+        },
+        "access": {
+            "public": {
+                "title": "Public"
+            },
+            "authenticated": {
+                "title": "Utilisateurs authentifiés"
+            },
+            "authorized": {
+                "title": "Utilisateurs autorisés"
+            }
+        },
+        "writingMode": {
+            "static": {
+                "title": "Cibles pré-définies via les classifications"
+            },
+            "targetsOnItem": {
+                "title": "Cibles définies lors de la publication."
+            }
+        }
+    }
+}

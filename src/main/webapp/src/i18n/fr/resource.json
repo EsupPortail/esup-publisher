@@ -1,0 +1,40 @@
+{
+    "publisherApp": {
+        "resource" : {
+            "home": {
+                "title": "Resources",
+                "createLabel": "Nouvelle ressource",
+                "createOrEditLabel": "Créer ou éditer une ressource"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la ressource {{ id }} ?"
+            },
+            "detail": {
+                "title": "Ressource",
+                "unlimitedEndDate": "N'indiquez pas de date pour définir une durée indéterminée."
+            },
+            "title": "Titre",
+            "enclosure": "Illustration",
+            "endDate": "Fin de publication",
+            "startDate": "Début de publication",
+            "validatedBy": "Validé par",
+            "validatedDate": "Date de validation",
+            "status": "État",
+            "summary": "Résumé",
+            "ressourceUrl": "Lien de la ressource",
+            "rssAllowed": "Accès public via les flux RSS",
+            "createdBy": "Créé par",
+            "createdDate": "Date de création",
+            "lastModifiedBy": "Dernière modification par",
+            "lastModifiedDate": "Date de dernière modification",
+            "organization": "Structure",
+            "redactor": "Rédacteur",
+            "action": {
+                "publish": "Enregistrer et Publier",
+                "save": "Enregistrer",
+                "goto.ressourceUrl": "Aller à la ressource"
+            }
+        }
+    }
+}
+
