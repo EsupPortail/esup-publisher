@@ -286,8 +286,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web){
-        web.ignoring().antMatchers("/scripts/**/*.{js,html}").antMatchers("/bower_components/**")
-            .antMatchers("/i18n/**").antMatchers("/assets/**").antMatchers("/swagger-ui/**")
+        web.ignoring().antMatchers("/ui/**")
             .antMatchers("/test/**").antMatchers("/console/**");
     }
 

@@ -50,10 +50,10 @@ public class StaticResourcesProductionFilter implements Filter {
         String contextPath = ((HttpServletRequest) request).getContextPath();
         String requestURI = httpRequest.getRequestURI();
         requestURI = StringUtils.substringAfter(requestURI, contextPath);
-        if (StringUtils.equals("/", requestURI)) {
-            requestURI = "/index.html";
+        if (StringUtils.equals("/", requestURI) || StringUtils.equals("/ui/", requestURI) || !requestURI.contains(".")) {
+            requestURI = "/ui/index.html";
         }
-        String newURI = "/dist" + requestURI;
+        String newURI = requestURI.replace("/ui/", "/dist/");
         log.debug("RequestDispatcher - setting newURI to {}", newURI);
         request.getRequestDispatcher(newURI).forward(request, response);
     }

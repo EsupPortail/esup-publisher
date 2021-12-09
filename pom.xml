@@ -689,7 +689,33 @@
                         WEB-INF/classes/config/application-*.yml,
                         scripts/**,assets/**,
                         index.html,
-                        WEB-INF/classes/.h2.server.properties</packagingExcludes>
+                        WEB-INF/classes/.h2.server.properties
+                    </packagingExcludes>
+                    <warSourceExcludes>
+                        node/,
+                        node_modules/,
+                        src/,
+                        .jshintrc,
+                        babel.config.js,
+                        package.json,
+                        package-lock.json,
+                        vue.config.js,
+                        .env,
+                        .env.*,
+                        public/,
+                        .browserslistrc,
+                        .eslintrc.js,
+                        jest.config.js,
+                        tests/
+                    </warSourceExcludes>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp/public</directory>
+                            <includes>
+                                <include>favicon.ico</include>
+                            </includes>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
             <plugin>
@@ -906,26 +932,42 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.github.trecloux</groupId>
-                        <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.5</version>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.12.0</version>
+                        <configuration>
+                            <workingDirectory>src/main/webapp</workingDirectory>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>run-frontend-build</id>
-                                <phase>generate-resources</phase>
+                                <id>install node and npm</id>
                                 <goals>
-                                    <goal>build</goal>
+                                    <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <buildTool>grunt</buildTool>
-                                    <buildArgs>build --force --no-color</buildArgs>
+                                    <nodeVersion>v16.13.0</nodeVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
                                 </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
-                            <skipTests>true</skipTests>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
@@ -940,6 +982,9 @@
                                 </fileset>
                                 <fileset>
                                     <directory>node_modules</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>node</directory>
                                 </fileset>
                             </filesets>
                         </configuration>

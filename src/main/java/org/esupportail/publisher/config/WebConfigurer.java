@@ -134,9 +134,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 						new StaticResourcesProductionFilter());
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/ui/*");
 		staticResourcesProductionFilter.setAsyncSupported(true);
 	}
 
@@ -150,8 +148,10 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
                 servletContext.addFilter("cachingHttpHeadersFilter",
 						new CachingHttpHeadersFilter());
 
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/ui/css/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/ui/img/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/ui/js/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/ui/fonts/*");
         if (!publicFileUploadHelper.isUseDefaultPath())
             cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/" + publicFileUploadHelper.getUrlResourceMapping() + "*");
 		cachingHttpHeadersFilter.setAsyncSupported(true);
