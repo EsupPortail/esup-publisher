@@ -21,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -50,11 +52,28 @@ public class StaticResourcesProductionFilter implements Filter {
         String contextPath = ((HttpServletRequest) request).getContextPath();
         String requestURI = httpRequest.getRequestURI();
         requestURI = StringUtils.substringAfter(requestURI, contextPath);
-        if (StringUtils.equals("/", requestURI) || StringUtils.equals("/ui/", requestURI) || !requestURI.contains(".")) {
+        if (StringUtils.equals("/", requestURI) || StringUtils.equals("/ui/", requestURI)) {
             requestURI = "/ui/index.html";
         }
         String newURI = requestURI.replace("/ui/", "/dist/");
+
+        // Si l'URI ne pointe pas vers une ressource existante, on retourne la page index.html
+        if (!existsStaticResource(httpRequest.getServletContext(), newURI)) {
+            newURI = "/dist/index.html";
+        }
+
         log.debug("RequestDispatcher - setting newURI to {}", newURI);
         request.getRequestDispatcher(newURI).forward(request, response);
+    }
+
+    /**
+     * Test si une URI pointe vers une ressource statique existante.
+     * @param context Servlet contexte
+     * @param requestURI URI à tester
+     * @return {@code True} si l'URI pointe vers une ressource statique existante, {@code False} sinon
+     */
+    private boolean existsStaticResource(ServletContext context, String requestURI) {
+        String path = context.getRealPath(requestURI);
+        return new File(path).isFile();
     }
 }
