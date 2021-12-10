@@ -633,11 +633,11 @@
         <loadData encoding="utf-8"
                   file="config/liquibase/users.csv"
                   separator=";"
-                  tableName="T_USER">
+                  tableName="t_user">
             <column name="enabled" type="boolean"/>
             <column name="accept_notifications" type="boolean"/>
             <column name="created_date" type="timestamp" />
         </loadData>
-        <modifyDataType tableName="T_USER" columnName="created_date" newDataType="datetime"/>
+        <modifyDataType tableName="t_user" columnName="created_date" newDataType="datetime"/>
     </changeSet>
 </databaseChangeLog>
