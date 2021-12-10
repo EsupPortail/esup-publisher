@@ -52,8 +52,8 @@
                 &#xA0;<span >{{ $t("global.menu.admin.audits") }}</span></a></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('logs')}"><a ui-sref="logs"><span class="fas fa-tasks"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.logs") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('docs')}"><a ui-sref="docs"><span class="fas fa-book"></span>
-                &#xA0;<span >{{ $t("global.menu.admin.apidocs") }}</span></a></li>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('docs')}"><router-link to="/docs"><span class="fas fa-book"></span>
+                &#xA0;<span >{{ $t("global.menu.admin.apidocs") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('console')}" v-if="environment === 'development'"><a target="_tab"><span class="fas fa-hdd"></span>
                 &#xA0;<span translate="global.menu.admin.database">{{ $t("global.menu.admin.database") }}</span></a></li>
         </ul>

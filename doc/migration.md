@@ -14,7 +14,7 @@ Les commandes liées au back-end restent inchangées :
 - Lancement en local : `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev`
 - Construction du livrable : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` (le front-end est construit par Maven via le plugin frontend-maven-plugin, cf. pom.xml).
 
-# Correspondances AngularJS - Vue
+## Correspondances AngularJS - Vue
 
 | Brique | AngularJS | Vue |
 | ------ | ------ | ------ |
@@ -26,3 +26,12 @@ Les commandes liées au back-end restent inchangées :
 | Page Home | src\main\webapp\scripts\app\main\main.js | src\main\webapp\src\views\Home.vue |
 | Page Login | src\main\webapp\scripts\app\account\login\login.js | src\main\webapp\src\views\account\login\Login.vue |
 | Page Accès refusé | src\main\webapp\scripts\app\error\error.js | src\main\webapp\src\views\error\AccessDenied.vue |
+| Page API | src\main\webapp\scripts\app\admin\docs\docs.js | src\main\webapp\src\views\admin\docs\AdminDocs.vue |
+
+
+## Remarques
+
+### Swagger-ui
+
+Conservation de la version 2.0.24 de Swagger UI lors de la migration vers Vue.
+Un passage vers à la dernière version de Swagger UI (4.0.0) nécessite une mise à jour de l'Api fournie par le back-end (cf. https://github.com/swagger-api/swagger-ui#compatibility)
