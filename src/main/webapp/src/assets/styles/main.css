@@ -744,7 +744,7 @@ div>div.container-fluid>div.card>div>div>div>div.header {
 }
 
 /* start case on admin view when managing entities */
-div>div.container-fluid>div.card>div>div:not(.modal)>div:not(.modal):not(.publish-header):not(.header),
+div>div.container-fluid>div.card>div>div>div>div:not(.modal):not(.publish-header):not(.header),
 div>div.container-fluid>div.card.entity>div>div>div:not(.modal) {
     background-color: #fff;
 }

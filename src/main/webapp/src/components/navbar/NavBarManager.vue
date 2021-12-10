@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     // Méthode permettant de surligner l'onglet sur
-    // laquelle l'utilisateur est positionné
+    // lequel l'utilisateur est positionné
     isPageNameIncludes (value) {
       const pageNameUC = this.pageName.toUpperCase()
       const valueUC = value.toUpperCase()

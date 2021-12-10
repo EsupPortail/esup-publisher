@@ -62,6 +62,14 @@ const routes = [
         meta: {
           titleKey: 'global.menu.admin.apidocs'
         }
+      },
+      {
+        path: '/logs',
+        name: 'AdminLogs',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/admin/logs/AdminLogs.vue'),
+        meta: {
+          titleKey: 'logs.title'
+        }
       }
     ]
   },

@@ -27,7 +27,8 @@ Les commandes liées au back-end restent inchangées :
 | Page Login | src\main\webapp\scripts\app\account\login\login.js | src\main\webapp\src\views\account\login\Login.vue |
 | Page Accès refusé | src\main\webapp\scripts\app\error\error.js | src\main\webapp\src\views\error\AccessDenied.vue |
 | Page API | src\main\webapp\scripts\app\admin\docs\docs.js | src\main\webapp\src\views\admin\docs\AdminDocs.vue |
-
+| Page Logs | src\main\webapp\scripts\app\admin\logs\logs.js | src\main\webapp\src\views\admin\logs\AdminLogs.vue |
+| Méthode Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
 
 ## Remarques
 
