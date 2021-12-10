@@ -37,6 +37,26 @@ const routes = [
       requireLogin: true
     }
   },
+  {
+    path: '/administration',
+    name: 'Administration',
+    component: () => import(/* webpackChunkName: "administration" */ '../views/admin/Admin.vue'),
+    meta: {
+      requireLogin: true,
+      roles: ['ROLE_ADMIN'],
+      navBarView: 'navBarDefault'
+    },
+    children: [
+      {
+        path: '',
+        name: 'AdminMain',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/admin/main/AdminMain.vue'),
+        meta: {
+          titleKey: 'admin.title'
+        }
+      }
+    ]
+  },
   // Sinon redirection vers Home
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ]

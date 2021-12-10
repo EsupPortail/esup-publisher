@@ -3,7 +3,7 @@ import App from '@/App.vue'
 
 // Tests unitaires sur la page App
 describe('App.vue tests', () => {
-  it('test 2 App footer - Affichage de la version de l\'application', () => {
+  it('test 1 App footer - Affichage de la version de l\'application', () => {
     process.env = Object.assign(process.env, { NODE_ENV: 'development', BACK_VERSION: '0.5.14' })
     const $t = (param) => param
     const wrapper = shallowMount(App, {

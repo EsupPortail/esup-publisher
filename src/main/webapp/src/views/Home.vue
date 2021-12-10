@@ -52,7 +52,7 @@
           </div>
       </a>
 
-      <a ui-sref="administration" class="list-group-item list-group-item-action" has-role="ROLE_ADMIN">
+      <router-link to="/administration" class="list-group-item list-group-item-action" has-role="ROLE_ADMIN">
           <div id="administration-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-cogs fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -63,7 +63,7 @@
                   <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.admin.name") }}</span>
               </div>
           </div>
-      </a>
+      </router-link>
 </div>
 </template>
 

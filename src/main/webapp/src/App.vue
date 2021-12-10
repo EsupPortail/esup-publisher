@@ -1,6 +1,9 @@
 <template>
   <div :class="getMainClass">
     <div v-if="environment === 'development'" class="development"></div>
+    <div class="container-navbar">
+      <NavBar></NavBar>
+    </div>
     <div class="container-fluid">
       <div class="card">
         <router-view />
@@ -23,9 +26,12 @@
 </template>
 
 <script>
+import NavBar from './components/navbar/NavBar'
 export default {
   name: 'App',
-  components: {},
+  components: {
+    NavBar
+  },
   data () {
     return {
       // Variable indiquant le mode sur lequel l'application est lancée
