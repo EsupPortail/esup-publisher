@@ -66,11 +66,8 @@
           </span>
         </a>
         <ul class="dropdown-menu">
-          <li class="dropdown-item">
-            <a @change="switchLocale($event)">{{ $t("global.menu.language") }}</a>
-          </li>
-          <li class="dropdown-item">
-            <a @change="switchLocale($event)">{{ $t("global.menu.language") }}</a>
+          <li v-active-menu="language" class="dropdown-item" v-for="language in languages" :key="language"  @click.prevent="switchLanguage(language)">
+            <a href="">{{ $t('language.' + language) }}</a>
           </li>
         </ul>
       </li>
@@ -87,7 +84,8 @@ export default {
   data () {
     return {
       backVersion: process.env.BACK_VERSION,
-      environment: process.env.NODE_ENV
+      environment: process.env.NODE_ENV,
+      languages: process.env.VUE_APP_I18N_SUPPORTED_LOCALE.split(',')
     }
   },
   computed: {
@@ -99,6 +97,12 @@ export default {
       const pageNameUC = this.pageName.toUpperCase()
       const valueUC = value.toUpperCase()
       return pageNameUC.includes(valueUC)
+    },
+    switchLanguage (language) {
+      if (this.$i18n.locale !== language) {
+        this.$i18n.locale = language
+        this.$store.commit('setLang', language)
+      }
     }
   }
 }
