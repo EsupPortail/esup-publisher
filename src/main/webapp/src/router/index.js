@@ -16,7 +16,8 @@ const routes = [
     meta: {
       titleKey: DEFAULT_TITLE,
       requireLogin: true,
-      roles: ['ROLE_USER']
+      roles: ['ROLE_USER'],
+      cssClass: 'site'
     }
   },
   {
@@ -44,7 +45,8 @@ const routes = [
     meta: {
       requireLogin: true,
       roles: ['ROLE_ADMIN'],
-      navBarView: 'navBarDefault'
+      navBarView: 'navBarDefault',
+      cssClass: 'admin'
     },
     children: [
       {
@@ -110,6 +112,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to) => {
   nextTick(() => {
+    store.commit('setCssClass', to.meta.cssClass)
     document.title = t(to.meta.titleKey || DEFAULT_TITLE)
   })
 })

@@ -5,7 +5,7 @@
       <NavBar></NavBar>
     </div>
     <div class="container-fluid">
-      <div class="card">
+      <div class="card" :class="cssClass">
         <router-view />
       </div>
       <div class="footer">
@@ -49,6 +49,9 @@ export default {
         !this.isIframe() ? 'not-in-iframe' : ''
       ]
       return classe
+    },
+    cssClass () {
+      return this.$store.getters.getCssClass
     }
   },
   methods: {

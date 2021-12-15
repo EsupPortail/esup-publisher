@@ -6,9 +6,15 @@ describe('App.vue tests', () => {
   it('test 1 App footer - Affichage de la version de l\'application', () => {
     process.env = Object.assign(process.env, { NODE_ENV: 'development', BACK_VERSION: '0.5.14' })
     const $t = (param) => param
+    const $store = {
+      getters: {
+        getCssClass: 'site'
+      }
+    }
     const wrapper = shallowMount(App, {
       global: {
         mocks: {
+          $store,
           $t
         }
       }

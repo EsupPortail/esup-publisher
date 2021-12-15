@@ -8,7 +8,8 @@ const store = createStore({
     loginModalOpened: null,
     modalOpened: null,
     nextRoute: null,
-    returnRoute: null
+    returnRoute: null,
+    cssClass: null
   },
   mutations: {
     setModalOpened (state, modalOpened) {
@@ -22,6 +23,9 @@ const store = createStore({
     },
     setReturnRoute (state, returnRoute) {
       state.returnRoute = returnRoute
+    },
+    setCssClass (state, cssClass) {
+      state.cssClass = cssClass
     }
   },
   getters: {
@@ -36,6 +40,9 @@ const store = createStore({
     },
     getReturnRoute: (state) => {
       return state.returnRoute
+    },
+    getCssClass: (state) => {
+      return state.cssClass
     }
   },
   actions: {
