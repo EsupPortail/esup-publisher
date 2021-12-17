@@ -46,15 +46,15 @@
                 &#xA0;<span >{{ $t("global.menu.admin.metrics") }}</span></a></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('health')}"><a ui-sref="health"><span class="fas fa-heart"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><a ui-sref="configuration"><span class="fas fa-list-alt"></span>
-                &#xA0;<span >{{ $t("global.menu.admin.configuration") }}</span></a></li>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration"><span class="fas fa-list-alt"></span>
+                &#xA0;<span >{{ $t("global.menu.admin.configuration") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('audits')}"><a ui-sref="audits"><span class="fas fa-bell"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.audits") }}</span></a></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('logs')}"><router-link to="/logs"><span class="fas fa-tasks"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.logs") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('docs')}"><router-link to="/docs"><span class="fas fa-book"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.apidocs") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('console')}" v-if="environment === 'development'"><a target="_tab"><span class="fas fa-hdd"></span>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('console')}" v-if="environment === 'development'"><a target="_blank" :href="`${dbConsoleUrl}`"><span class="fas fa-hdd"></span>
                 &#xA0;<span translate="global.menu.admin.database">{{ $t("global.menu.admin.database") }}</span></a></li>
         </ul>
       </li>
@@ -85,7 +85,8 @@ export default {
     return {
       backVersion: process.env.BACK_VERSION,
       environment: process.env.NODE_ENV,
-      languages: process.env.VUE_APP_I18N_SUPPORTED_LOCALE.split(',')
+      languages: process.env.VUE_APP_I18N_SUPPORTED_LOCALE.split(','),
+      dbConsoleUrl: process.env.VUE_APP_DB_CONSOLE_URL
     }
   },
   computed: {

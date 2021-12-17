@@ -100,9 +100,10 @@ table {
         color: #333;
         background-color: #fff;
         border-color: #ccc;
-      }
-      &:not(.btn-default) {
-        color: #fff;
+        &:hover, &:active, &:focus {
+          background-color: #e6e6e6;
+          border-color: #adadad;
+        }
       }
     }
   }

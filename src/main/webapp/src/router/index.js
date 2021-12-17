@@ -74,6 +74,14 @@ const routes = [
         }
       },
       {
+        path: '/configuration',
+        name: 'AdminConfiguration',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/admin/configuration/AdminConfiguration.vue'),
+        meta: {
+          titleKey: 'configuration.title'
+        }
+      },
+      {
         path: '/organization',
         name: 'AdminEntityOrganization',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/Organization.vue'),
