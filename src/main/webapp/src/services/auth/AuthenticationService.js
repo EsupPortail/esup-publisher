@@ -8,8 +8,8 @@ class AuthenticationService {
     return new Promise((resolve, reject) => {
       FetchWrapper.getJsonP('app/login').then(data => {
         PrincipalService.identify(true).then(account => {
-          if (account !== undefined && account.langKey !== undefined) {
-            store.commit('setLang', account.langKey)
+          if (account !== undefined && account.user.langKey !== undefined && account.user.langKey !== null) {
+            store.commit('setLang', account.user.langKey)
           }
           resolve(account)
         }).catch(err => {

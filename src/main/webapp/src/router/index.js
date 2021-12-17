@@ -72,6 +72,24 @@ const routes = [
         meta: {
           titleKey: 'logs.title'
         }
+      },
+      {
+        path: '/organization',
+        name: 'AdminEntityOrganization',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/Organization.vue'),
+        meta: {
+          titleKey: 'organization.home.title',
+          cssClass: 'entity'
+        }
+      },
+      {
+        path: '/organization/:id',
+        name: 'AdminEntityOrganizationDetails',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/OrganizationDetail.vue'),
+        meta: {
+          titleKey: 'organization.detail.title',
+          cssClass: 'entity'
+        }
       }
     ]
   },

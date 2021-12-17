@@ -1,30 +1,28 @@
 {
-    "publisherApp": {
-        "organization" : {
-            "home": {
-                "title": "Organizations",
-                "createLabel": "Create a new Organization",
-                "createOrEditLabel": "Create or edit an Organization",
-                "editLabel": "Edit an Organization"
-            },
-            "delete": {
-                "question": "Are you sure you want to delete Organization {{ id }}?"
-            },
-            "detail": {
-                "title": "Organization"
-            },
-            "name": "Name",
-            "displayName": "Display Name",
-            "description": "Description",
-            "identifiers": "Identity key(s)",
-            "identifiers.help": "Use comma as separator of several values",
-            "displayOrder": "Position",
-            "allowNotifications": "Allow Notifications",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "availablePublisherContexts": "available Publisher Contexts"
-        }
+    "organization" : {
+        "home": {
+            "title": "Organizations",
+            "createLabel": "Create a new Organization",
+            "createOrEditLabel": "Create or edit an Organization",
+            "editLabel": "Edit an Organization"
+        },
+        "delete": {
+            "question": "Are you sure you want to delete Organization {id} ?"
+        },
+        "detail": {
+            "title": "Organization"
+        },
+        "name": "Name",
+        "displayName": "Display Name",
+        "description": "Description",
+        "identifiers": "Identity key(s)",
+        "identifiers-help": "Use comma as separator of several values",
+        "displayOrder": "Position",
+        "allowNotifications": "Allow Notifications",
+        "createdBy": "Created By",
+        "createdDate": "Created Date",
+        "lastModifiedBy": "Last Modified By",
+        "lastModifiedDate": "Last Modified Date",
+        "availablePublisherContexts": "available Publisher Contexts"
     }
 }

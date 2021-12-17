@@ -59,6 +59,25 @@ class FetchWrapper {
         })
     })
   }
+
+  deleteJson (url) {
+    return new Promise((resolve, reject) => {
+      fetch(process.env.VUE_APP_BACK_BASE_URL + url, { method: 'DELETE', headers: getHeader() })
+        .then(response => {
+          if (!response.ok) {
+            reject(response)
+          } else {
+            response.text().then(text => {
+              resolve(text ? JSON.parse(text) : null)
+            }).catch(error => {
+              reject(error)
+            })
+          }
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
 }
 
 function getHeader () {

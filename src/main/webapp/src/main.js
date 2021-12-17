@@ -11,6 +11,8 @@ import './assets/styles/mdioverbootstrap.css'
 import './assets/styles/normalize.css'
 import '@fortawesome/fontawesome-free/css/solid.css'
 import '@fortawesome/fontawesome-free/js/solid.js'
+import '@fortawesome/fontawesome-free/css/regular.css'
+import '@fortawesome/fontawesome-free/js/regular.js'
 import '@fortawesome/fontawesome-free/css/fontawesome.css'
 import '@fortawesome/fontawesome-free/js/fontawesome.js'
 

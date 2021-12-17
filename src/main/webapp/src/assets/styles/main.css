@@ -638,6 +638,7 @@ ul#strength {
 
 .btn {
     white-space: normal;
+    font-size: 14px;
 }
 
 /*.btn-link,*/
@@ -2082,4 +2083,22 @@ nav.navbar-expand-md .navbar-brand .navbar-toggler.other-style.h1 {
 
 .navbar-toggler:focus{
     box-shadow: none;
+}
+
+.btn-info, .btn-info:hover, .btn-info:active, .btn-info:focus {
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.help-block {
+    color: #a94442;
 }
