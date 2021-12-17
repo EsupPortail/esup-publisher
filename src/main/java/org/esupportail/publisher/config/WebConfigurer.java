@@ -117,6 +117,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 		compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.svg");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.ttf");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.woff2");
 		compressingFilter.addMappingForUrlPatterns(disps, true, "/api/*");
 		compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
 		compressingFilter.setAsyncSupported(true);

@@ -113,17 +113,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-/* Instanciation des polices utilisées sur l'application */
-@font-face {
-  font-family: "Roboto Slab";
-  src: local("Roboto Slab"),
-    url(./assets/fonts/RobotoSlab-Regular.ttf) format("truetype");
-}
-@font-face {
-  font-family: "Roboto Condensed";
-  src: local("Roboto Condensed"),
-    url(./assets/fonts/RobotoCondensed-Regular.ttf) format("truetype");
-}
-</style>
