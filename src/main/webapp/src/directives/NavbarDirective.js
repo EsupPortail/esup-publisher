@@ -14,8 +14,8 @@ const NavbarDirective = {
   updated (el, { dir, value }) {
     dir.updateClass(el, value)
   },
-  mounted (el, { dir, value }) {
-    el.addEventListener('click', dir.updateClass(el, value))
+  beforeMount (el, { dir, value }) {
+    dir.updateClass(el, value)
   }
 }
 

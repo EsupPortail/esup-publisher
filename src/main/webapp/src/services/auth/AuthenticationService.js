@@ -15,7 +15,6 @@ class AuthenticationService {
         }).catch(err => {
           reject(err)
         })
-        resolve(data)
       }).catch(err => {
         this.logout()
         PrincipalService.authenticate(null)

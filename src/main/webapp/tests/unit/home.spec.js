@@ -5,10 +5,22 @@ import Home from '@/views/Home.vue'
 describe('Home.vue tests', () => {
   it('test 1 Home - Affichage des éléments du menu', () => {
     const $t = (param) => param
+    const $store = {
+      getters: {
+        getIdentity: {
+          roles: ['ROLE_ADMIN']
+        }
+      }
+    }
     const wrapper = shallowMount(Home, {
       global: {
         mocks: {
-          $t
+          $t,
+          $store
+        },
+        directives: {
+          'can-moderate': {},
+          'has-role': {}
         }
       }
     })

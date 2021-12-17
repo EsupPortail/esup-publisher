@@ -4,6 +4,8 @@ import router from './router'
 import i18n from './i18n'
 import store from './store'
 import NavbarDirective from './directives/NavbarDirective.js'
+import CanModerateDirective from './directives/CanModerateDirective.js'
+import HasRoleDirective from './directives/HasRoleDirective.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import './assets/styles/main.css'
@@ -19,4 +21,6 @@ import '@fortawesome/fontawesome-free/js/fontawesome.js'
 
 createApp(App)
   .directive('active-menu', NavbarDirective)
+  .directive('can-moderate', CanModerateDirective)
+  .directive('has-role', HasRoleDirective)
   .use(store).use(router).use(i18n).mount('#app')

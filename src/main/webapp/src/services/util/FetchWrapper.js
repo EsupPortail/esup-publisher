@@ -110,7 +110,7 @@ function jsonp (url, callbackName, timeout) {
     let timeoutTimer = null
     if (timeout > -1) {
       timeoutTimer = setTimeout(() => {
-        console.log('Timeout JSONP')
+        console.warn('Timeout JSONP')
         removeErrorListener()
         removeScript()
         reject(new Error({
@@ -121,7 +121,7 @@ function jsonp (url, callbackName, timeout) {
     }
 
     const onError = (err) => {
-      console.log('Error JSONP', err)
+      console.error('Error JSONP', err)
       if (timeoutTimer) {
         clearTimeout(timeoutTimer)
       }

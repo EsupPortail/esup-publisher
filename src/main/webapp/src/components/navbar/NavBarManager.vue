@@ -51,14 +51,14 @@
                         &#xA0;<span>{{ $t("global.menu.manager.contents.managed") }}</span></a></li>
                 </ul>
             </li>
-            <li v-if="canModerate" :class="{active: isPageNameIncludes('pending')}">
+            <li :class="{active: isPageNameIncludes('pending')}" v-can-moderate>
                 <a class="nav-link">
                     <span class="fas fa-gavel fa-2x"></span>
                     <span>{{ $t("global.menu.manager.contents.moderate") }}</span>
                 </a>
             </li>
 
-            <li :class="{active: isPageNameIncludes('treeview')}" can-moderate>
+            <li :class="{active: isPageNameIncludes('treeview')}" v-can-moderate>
                 <a class="nav-link">
                     <span class="fas fa-wrench fa-2x"></span>
                     <span >{{ $t("global.menu.manager.contexts.main") }}</span>

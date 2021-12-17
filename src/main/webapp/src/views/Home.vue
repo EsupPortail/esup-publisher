@@ -26,7 +26,7 @@
           </div>
       </a>
 
-      <a ui-sref="pending" class="list-group-item list-group-item-action" can-moderate>
+      <a ui-sref="pending" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="pending-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-gavel fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -39,7 +39,7 @@
           </div>
       </a>
 
-      <a ui-sref="treeview" class="list-group-item list-group-item-action" can-moderate>
+      <a ui-sref="treeview" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="treeview-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-wrench fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -52,7 +52,7 @@
           </div>
       </a>
 
-      <router-link to="/administration" class="list-group-item list-group-item-action" has-role="ROLE_ADMIN">
+      <router-link to="/administration" class="list-group-item list-group-item-action" v-has-role="role">
           <div id="administration-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-cogs fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -70,6 +70,11 @@
 <script>
 
 export default {
-  name: 'Home'
+  name: 'Home',
+  data () {
+    return {
+      role: 'ROLE_ADMIN'
+    }
+  }
 }
 </script>

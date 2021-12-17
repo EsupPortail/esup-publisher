@@ -107,15 +107,16 @@ export default {
       }
 
       this.windowOpenCleanup(relogState, true)
-      PrincipalService.identify(true).then()
-      if (!this.$store.getters.getReturnRoute) {
-        this.$router.push({ name: 'Home' })
-      } else {
-        this.$router.push({
-          name: this.$store.getters.getReturnRoute.name,
-          params: this.$store.getters.getReturnRoute.params
-        })
-      }
+      PrincipalService.identify(true).then(() => {
+        if (!this.$store.getters.getReturnRoute) {
+          this.$router.push({ name: 'Home' })
+        } else {
+          this.$router.push({
+            name: this.$store.getters.getReturnRoute.name,
+            params: this.$store.getters.getReturnRoute.params
+          })
+        }
+      })
     }
   }
 }
