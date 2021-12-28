@@ -82,6 +82,14 @@ const routes = [
         }
       },
       {
+        path: '/health',
+        name: 'AdminHealth',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/admin/health/AdminHealth.vue'),
+        meta: {
+          titleKey: 'health.title'
+        }
+      },
+      {
         path: '/organization',
         name: 'AdminEntityOrganization',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/Organization.vue'),

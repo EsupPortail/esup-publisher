@@ -15,7 +15,7 @@
         </router-link>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
             <span class="glyphicon glyphicon-th-list"></span>
             <span translate="global.menu.entities.main">{{ $t("global.menu.entities.main") }}</span>
@@ -35,7 +35,7 @@
         </ul>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" >
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
             <span class="glyphicon glyphicon-tower"></span>
             <span class="hidden-tablet" translate="global.menu.admin.main">{{ $t("global.menu.admin.main") }}</span>
@@ -44,8 +44,8 @@
         <ul class="dropdown-menu">
             <li class="dropdown-item" :class="{active: isPageNameIncludes('metrics')}"><a ui-sref="metrics"><span class="fas fa-tachometer-alt"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.metrics") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('health')}"><a ui-sref="health"><span class="fas fa-heart"></span>
-                &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></a></li>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('health')}"><router-link to="/health"><span class="fas fa-heart"></span>
+                &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration"><span class="fas fa-list-alt"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.configuration") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('audits')}"><a ui-sref="audits"><span class="fas fa-bell"></span>
@@ -59,7 +59,7 @@
         </ul>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" >
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
             <span class="glyphicon glyphicon-flag"></span>
             <span class="hidden-tablet">{{ $t("global.menu.language") }}</span>

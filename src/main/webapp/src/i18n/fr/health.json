@@ -1,7 +1,7 @@
 {
     "health": {
         "title": "Diagnostics",
-        "refresh.button": "Rafraichir",
+        "refresh-button": "Rafraichir",
         "stacktrace": "Stacktrace",
         "details": {
             "details": "Details",
