@@ -1,7 +1,7 @@
 {
     "metrics": {
         "title": "Application Metrics",
-        "refresh.button": "Refresh",
+        "refresh-button": "Refresh",
         "updating": "Updating...",
         "jvm": {
             "title": "JVM Metrics",

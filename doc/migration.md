@@ -28,6 +28,7 @@ Les commandes liées au back-end restent inchangées :
 | Page Accès refusé | src\main\webapp\scripts\app\error\error.js | src\main\webapp\src\views\error\AccessDenied.vue |
 | Page API | src\main\webapp\scripts\app\admin\docs\docs.js | src\main\webapp\src\views\admin\docs\AdminDocs.vue |
 | Page Logs | src\main\webapp\scripts\app\admin\logs\logs.js | src\main\webapp\src\views\admin\logs\AdminLogs.vue |
+| Page Metrics | src\main\webapp\scripts\app\admin\metrics\metrics.js | src\main\webapp\src\views\admin\metrics\AdminMetrics.vue |
 | Page Configuration | src\main\webapp\scripts\app\admin\configuration\configuration.js | src\main\webapp\src\views\admin\configuration\AdminConfiguration.vue |
 | Page Diagnostics | src\main\webapp\scripts\app\admin\health\health.js | src\main\webapp\src\views\admin\heath\AdminHealth.vue |
 | Méthode Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |

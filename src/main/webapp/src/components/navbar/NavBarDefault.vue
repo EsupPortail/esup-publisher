@@ -42,8 +42,8 @@
           </span>
         </a>
         <ul class="dropdown-menu">
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('metrics')}"><a ui-sref="metrics"><span class="fas fa-tachometer-alt"></span>
-                &#xA0;<span >{{ $t("global.menu.admin.metrics") }}</span></a></li>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('metrics')}"><router-link to="/metrics"><span class="fas fa-tachometer-alt"></span>
+                &#xA0;<span >{{ $t("global.menu.admin.metrics") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('health')}"><router-link to="/health"><span class="fas fa-heart"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration"><span class="fas fa-list-alt"></span>

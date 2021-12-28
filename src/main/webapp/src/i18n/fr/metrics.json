@@ -1,7 +1,7 @@
 {
     "metrics": {
         "title": "Métriques de l'application",
-        "refresh.button": "Rafraichir",
+        "refresh-button": "Rafraichir",
         "updating": "Mise à jour...",
         "jvm": {
             "title": "Métriques de la JVM",
