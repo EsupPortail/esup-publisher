@@ -21,7 +21,7 @@ class DateUtils {
     if (date) {
       var parseDate = new Date(date)
       var day = parseDate.getDate().toString().length === 1 ? '0' + parseDate.getDate() : parseDate.getDate()
-      var month = parseDate.getMonth().toString().length === 1 ? '0' + parseDate.getMonth() + 1 : parseDate.getMonth() + 1
+      var month = parseDate.getMonth().toString().length === 1 ? '0' + (parseDate.getMonth() + 1) : (parseDate.getMonth() + 1)
       return parseDate.getFullYear() + '-' + month + '-' + day
     } else {
       return null

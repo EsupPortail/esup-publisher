@@ -98,6 +98,14 @@ const routes = [
         }
       },
       {
+        path: '/audits',
+        name: 'AdminAudits',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/admin/audits/AdminAudits.vue'),
+        meta: {
+          titleKey: 'audits.title'
+        }
+      },
+      {
         path: '/organization',
         name: 'AdminEntityOrganization',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/Organization.vue'),

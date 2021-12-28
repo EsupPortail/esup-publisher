@@ -48,8 +48,8 @@
                 &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration"><span class="fas fa-list-alt"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.configuration") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('audits')}"><a ui-sref="audits"><span class="fas fa-bell"></span>
-                &#xA0;<span >{{ $t("global.menu.admin.audits") }}</span></a></li>
+            <li class="dropdown-item" :class="{active: isPageNameIncludes('audits')}"><router-link to="/audits"><span class="fas fa-bell"></span>
+                &#xA0;<span >{{ $t("global.menu.admin.audits") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('logs')}"><router-link to="/logs"><span class="fas fa-tasks"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.logs") }}</span></router-link></li>
             <li class="dropdown-item" :class="{active: isPageNameIncludes('docs')}"><router-link to="/docs"><span class="fas fa-book"></span>

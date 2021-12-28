@@ -31,6 +31,7 @@ Les commandes liées au back-end restent inchangées :
 | Page Metrics | src\main\webapp\scripts\app\admin\metrics\metrics.js | src\main\webapp\src\views\admin\metrics\AdminMetrics.vue |
 | Page Configuration | src\main\webapp\scripts\app\admin\configuration\configuration.js | src\main\webapp\src\views\admin\configuration\AdminConfiguration.vue |
 | Page Diagnostics | src\main\webapp\scripts\app\admin\health\health.js | src\main\webapp\src\views\admin\heath\AdminHealth.vue |
+| Page Audits | src\main\webapp\scripts\app\admin\audits\audits.js | src\main\webapp\src\views\admin\audits\AdminAudits.vue |
 | Méthode Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
 | Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
 | Page Structure | src\main\webapp\scripts\app\entities\organization\organization.js | src\main\webapp\src\views\entities\Organization.vue |
