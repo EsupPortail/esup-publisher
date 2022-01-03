@@ -5,6 +5,7 @@
       <NavBar></NavBar>
     </div>
     <div class="container-fluid">
+      <Spinner></Spinner>
       <div class="card" :class="cssClass">
         <router-view />
       </div>
@@ -27,10 +28,13 @@
 
 <script>
 import NavBar from './components/navbar/NavBar'
+import Spinner from './components/spinner/Spinner'
+
 export default {
   name: 'App',
   components: {
-    NavBar
+    NavBar,
+    Spinner
   },
   data () {
     return {

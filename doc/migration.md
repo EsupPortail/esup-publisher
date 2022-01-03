@@ -23,6 +23,7 @@ Les commandes liées au back-end restent inchangées :
 | Router | src\main\webapp\scripts\app\app.js | src\main\webapp\src\router\index.js |
 | Internationalisation | src\main\webapp\scripts\app\app.js | src\main\webapp\src\i18n\index.js |
 | Navbar | src\main\webapp\scripts\components\navbar\navbar.controller.js | src\main\webapp\src\components\navbar\NavBar.vue |
+| Spinner | src\main\webapp\scripts\components\interceptors\loadingSpinner.js | src\main\webapp\src\components\spinner\Spinner.vue |
 | Page Home | src\main\webapp\scripts\app\main\main.js | src\main\webapp\src\views\Home.vue |
 | Page Login | src\main\webapp\scripts\app\account\login\login.js | src\main\webapp\src\views\account\login\Login.vue |
 | Page Accès refusé | src\main\webapp\scripts\app\error\error.js | src\main\webapp\src\views\error\AccessDenied.vue |
