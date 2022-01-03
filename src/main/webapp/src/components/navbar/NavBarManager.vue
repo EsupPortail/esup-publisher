@@ -45,9 +45,9 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-item" :class="{active: isPageNameIncludes('owned')}"><a ui-sref="owned"><span class="fas fa-asterisk"></span>
+                    <li :class="{active: isPageNameIncludes('owned')}"><a ui-sref="owned" class="dropdown-item"><span class="fas fa-asterisk"></span>
                         &#xA0;<span>{{ $t("global.menu.manager.contents.owned") }}</span></a></li>
-                    <li class="dropdown-item" :class="{active: isPageNameIncludes('managed')}"><a ui-sref="managed"><span class="fas fa-asterisk"></span>
+                    <li :class="{active: isPageNameIncludes('managed')}"><a ui-sref="managed" class="dropdown-item"><span class="fas fa-asterisk"></span>
                         &#xA0;<span>{{ $t("global.menu.manager.contents.managed") }}</span></a></li>
                 </ul>
             </li>

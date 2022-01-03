@@ -11,7 +11,7 @@
                 <form name="editForm" role="form" novalidate show-validation>
                     <div class="modal-header">
                         <h4 class="modal-title" id="myOrganizationLabel">{{$t('organization.home.createOrEditLabel')}}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
                                 @click="clear"></button>
                     </div>
                     <div class="modal-body">
@@ -118,7 +118,7 @@
                 <form name="deleteForm" @submit="confirmDelete(organization.id)">
                     <div class="modal-header">
                         <h4 class="modal-title">{{$t('entity.delete.title')}}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
                                 @click="clear"></button>
                     </div>
                     <div class="modal-body">

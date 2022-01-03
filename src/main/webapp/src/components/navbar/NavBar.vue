@@ -40,15 +40,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.navbar {
-  .dropdown-item {
-    padding: 0;
-    > a {
-      padding: 0.25rem 1rem;
-      width: 100%;
-      display: inline-block;
-    }
-  }
-}
-</style>

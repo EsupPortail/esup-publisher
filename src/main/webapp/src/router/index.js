@@ -146,6 +146,7 @@ router.beforeEach((to, from, next) => {
         next()
       }).catch(() => {
         store.commit('setLoginModalOpened', true)
+        store.commit('setReturnRoute', store.getters.getNextRoute)
         next({
           path: '/login'
         })

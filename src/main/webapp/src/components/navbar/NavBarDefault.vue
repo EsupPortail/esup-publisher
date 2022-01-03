@@ -22,15 +22,15 @@
           </span>
         </a>
         <ul class="dropdown-menu">
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('organization')}"><router-link to="/organization"><span class="fas fa-asterisk"></span>
+            <li :class="{active: isPageNameIncludes('organization')}"><router-link to="/organization" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.organization") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('filter')}"><a ui-sref="filter"><span class="fas fa-asterisk"></span>
+            <li :class="{active: isPageNameIncludes('filter')}"><a ui-sref="filter" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.filter") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('reader')}"><a ui-sref="reader"><span class="fas fa-asterisk"></span>
+            <li :class="{active: isPageNameIncludes('reader')}"><a ui-sref="reader" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.reader") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('redactor')}"><a ui-sref="redactor"><span class="fas fa-asterisk"></span>
+            <li :class="{active: isPageNameIncludes('redactor')}"><a ui-sref="redactor" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.redactor") }}</span></a></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('publisher')}"><a ui-sref="publisher"><span class="fas fa-asterisk"></span>
+            <li :class="{active: isPageNameIncludes('publisher')}"><a ui-sref="publisher" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.publisher") }}</span></a></li>
         </ul>
       </li>
@@ -42,19 +42,19 @@
           </span>
         </a>
         <ul class="dropdown-menu">
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('metrics')}"><router-link to="/metrics"><span class="fas fa-tachometer-alt"></span>
+            <li :class="{active: isPageNameIncludes('metrics')}"><router-link to="/metrics" class="dropdown-item"><span class="fas fa-tachometer-alt"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.metrics") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('health')}"><router-link to="/health"><span class="fas fa-heart"></span>
+            <li :class="{active: isPageNameIncludes('health')}"><router-link to="/health" class="dropdown-item"><span class="fas fa-heart"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.health") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration"><span class="fas fa-list-alt"></span>
+            <li :class="{active: isPageNameIncludes('configuration')}"><router-link to="/configuration" class="dropdown-item"><span class="fas fa-list-alt"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.configuration") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('audits')}"><router-link to="/audits"><span class="fas fa-bell"></span>
+            <li :class="{active: isPageNameIncludes('audits')}"><router-link to="/audits" class="dropdown-item"><span class="fas fa-bell"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.audits") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('logs')}"><router-link to="/logs"><span class="fas fa-tasks"></span>
+            <li :class="{active: isPageNameIncludes('logs')}"><router-link to="/logs" class="dropdown-item"><span class="fas fa-tasks"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.logs") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('docs')}"><router-link to="/docs"><span class="fas fa-book"></span>
+            <li :class="{active: isPageNameIncludes('docs')}"><router-link to="/docs" class="dropdown-item"><span class="fas fa-book"></span>
                 &#xA0;<span >{{ $t("global.menu.admin.apidocs") }}</span></router-link></li>
-            <li class="dropdown-item" :class="{active: isPageNameIncludes('console')}" v-if="environment === 'development'"><a target="_blank" :href="`${dbConsoleUrl}`"><span class="fas fa-hdd"></span>
+            <li :class="{active: isPageNameIncludes('console')}" v-if="environment === 'development'"><a target="_blank" :href="`${dbConsoleUrl}`" class="dropdown-item"><span class="fas fa-hdd"></span>
                 &#xA0;<span translate="global.menu.admin.database">{{ $t("global.menu.admin.database") }}</span></a></li>
         </ul>
       </li>
@@ -66,8 +66,8 @@
           </span>
         </a>
         <ul class="dropdown-menu">
-          <li v-active-menu="language" class="dropdown-item" v-for="language in languages" :key="language"  @click.prevent="switchLanguage(language)">
-            <a href="">{{ $t('language.' + language) }}</a>
+          <li v-active-menu="language" v-for="language in languages" :key="language"  @click.prevent="switchLanguage(language)">
+            <a href="" class="dropdown-item">{{ $t('language.' + language) }}</a>
           </li>
         </ul>
       </li>

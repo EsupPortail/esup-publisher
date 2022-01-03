@@ -799,59 +799,52 @@ nav,
     background-color: inherit;
 }
 
-.dropdown-item.active, 
-.dropdown-item.active>a,
-.dropdown-item.active>a:hover,
-.dropdown-item.active>a:focus {
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
     background-color: #25B2F3;
     color: #fff;
 }
 
-.clg18 .dropdown-item.active, 
-.clg18 .dropdown-item.active>a,
-.clg18 .dropdown-item.active>a:hover,
-.clg18 .dropdown-item.active>a:focus {
+.clg18 .dropdown-menu>.active>a,
+.clg18 .dropdown-menu>.active>a:hover,
+.clg18 .dropdown-menu>.active>a:focus {
     background-color: #004899;
     color: #fff;
 }
 
-.clg28 .dropdown-item.active, 
-.clg28 .dropdown-item.active>a,
-.clg28 .dropdown-item.active>a:hover,
-.clg28 .dropdown-item.active>a:focus {
+.clg28 .dropdown-menu>.active>a,
+.clg28 .dropdown-menu>.active>a:hover,
+.clg28 .dropdown-menu>.active>a:focus {
     color: #000;
     background-color: #FC0;
 }
 
 
-.clg36 .dropdown-item.active, 
-.clg36 .dropdown-item.active>a,
-.clg36 .dropdown-item.active>a:hover,
-.clg36 .dropdown-item.active>a:focus {
+.clg36 .dropdown-menu>.active>a,
+.clg36 .dropdown-menu>.active>a:hover,
+.clg36 .dropdown-menu>.active>a:focus {
     background-color: #0069B3;
     color: #fff;
 }
 
-.clg37 .dropdown-item.active, 
-.clg37 .dropdown-item.active>a,
-.clg37 .dropdown-item.active>a:hover,
-.clg37 .dropdown-item.active>a:focus {
+.clg37 .dropdown-menu>.active>a,
+.clg37 .dropdown-menu>.active>a:hover,
+.clg37 .dropdown-menu>.active>a:focus {
     background-color: #C60440;
     color: #fff;
 }
 
-.clg41 .dropdown-item.active, 
-.clg41 .dropdown-item.active>a,
-.clg41 .dropdown-item.active>a:hover,
-.clg41 .dropdown-item.active>a:focus {
+.clg41 .dropdown-menu>.active>a,
+.clg41 .dropdown-menu>.active>a:hover,
+.clg41 .dropdown-menu>.active>a:focus {
     background-color: #009FE3;
     color: #fff;
 }
 
-.clg45 .dropdown-item.active, 
-.clg45 .dropdown-item.active>a,
-.clg45 .dropdown-item.active>a:hover,
-.clg45 .dropdown-item.active>a:focus {
+.clg45 .dropdown-menu>.active>a,
+.clg45 .dropdown-menu>.active>a:hover,
+.clg45 .dropdown-menu>.active>a:focus {
     background-color: #26448A;
     color: #fff;
 }
@@ -905,94 +898,94 @@ nav,
     .dropdown-menu {
         border: 0;
     }
-    .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #25B2F3;
         color: #fff;
     }
 
-    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg18 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #004899;
         color: #fff;
     }
 
-    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg28 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         color: #000;
         background-color: #FC0;
     }
 
-    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg36 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #0069B3;
         color: #fff;
     }
 
-    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg37 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #C60440;
         color: #fff;
     }
 
-    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg41 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #009FE3;
         color: #fff;
     }
 
-    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a,
-    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:hover,
-    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-item.active>a:focus {
+    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a,
+    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:hover,
+    .clg45 .navbar-expand-md .navbar-nav .open .dropdown-menu>.active>a:focus {
         background-color: #26448A;
         color: #fff;
     }
 }
 
-.dropdown-item.active>a:hover,
-.dropdown-item.active>a:focus {
+.dropdown-menu>.active>a:hover,
+.dropdown-menu>.active>a:focus {
     opacity: 0.75;
 }
 
-.dropdown-item>a:hover,
-.dropdown-item>a:focus {
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
     color: #25B2F3;
 }
 
-.clg18 .dropdown-item>a:hover,
-.clg18 .dropdown-item>a:focus {
+.clg18 .dropdown-menu>li>a:hover,
+.clg18 .dropdown-menu>li>a:focus {
     color: #004899;
 }
 
-.clg28 .dropdown-item>li>a:hover,
-.clg28 .dropdown-item>li>a:focus {
+.clg28 .dropdown-menu>li>a:hover,
+.clg28 .dropdown-menu>li>a:focus {
     color: #fc0;
     background: #303030;
 }
 
-.clg36 .dropdown-item>li>a:hover,
-.clg36 .dropdown-item>li>a:focus {
+.clg36 .dropdown-menu>li>a:hover,
+.clg36 .dropdown-menu>li>a:focus {
     color: #0069B3;
 }
 
-.clg37 .dropdown-item>li>a:hover,
-.clg37 .dropdown-item>li>a:focus {
+.clg37 .dropdown-menu>li>a:hover,
+.clg37 .dropdown-menu>li>a:focus {
     color: #C60440;
 }
 
-.clg41 .dropdown-item>li>a:hover,
-.clg41 .dropdown-item>li>a:focus {
+.clg41 .dropdown-menu>li>a:hover,
+.clg41 .dropdown-menu>li>a:focus {
     color: #009FE3;
 }
 
-.clg45 .dropdown-item>li>a:hover,
-.clg45 .dropdown-item>li>a:focus {
+.clg45 .dropdown-menu>li>a:hover,
+.clg45 .dropdown-menu>li>a:focus {
     color: #26448A;
 }
 
@@ -2083,6 +2076,11 @@ nav.navbar-expand-md .navbar-brand .navbar-toggler.other-style.h1 {
 
 .navbar-toggler:focus{
     box-shadow: none;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:hover {
+    background-color: #ddd;
 }
 
 .btn-info, .btn-info:hover, .btn-info:active, .btn-info:focus {
