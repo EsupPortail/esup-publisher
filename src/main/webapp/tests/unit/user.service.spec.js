@@ -9,7 +9,7 @@ describe('UserService.js tests', () => {
     jest.clearAllMocks()
   })
 
-  it('test 1 UserService - details function OK', () => {
+  it('test 1 UserService - details function OK', (done) => {
     const response = {
       msg: '200 OK'
     }
@@ -20,10 +20,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/extended/login')
       expect(result.msg).toStrictEqual('200 OK')
+      done()
     })
   })
 
-  it('test 2 UserService - details function KO', () => {
+  it('test 2 UserService - details function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -33,10 +34,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/extended/login')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 3 UserService - attributes function OK', () => {
+  it('test 3 UserService - attributes function OK', (done) => {
     const response = {
       data: ['mail', 'ENTPersonProfils', 'ESCOUAI']
     }
@@ -46,10 +48,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/attributes')
       expect(result.data.length).toStrictEqual(3)
+      done()
     })
   })
 
-  it('test 4 UserService - attributes function KO', () => {
+  it('test 4 UserService - attributes function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -59,10 +62,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/attributes')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 5 UserService - funtionalAttributes function OK', () => {
+  it('test 5 UserService - funtionalAttributes function OK', (done) => {
     const response = {
       data: ['ESCOSIRENCourant', 'uid', 'ENTPersonJointure']
     }
@@ -72,10 +76,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/fnattributes')
       expect(result.data.length).toStrictEqual(3)
+      done()
     })
   })
 
-  it('test 6 UserService - funtionalAttributes function KO', () => {
+  it('test 6 UserService - funtionalAttributes function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -85,9 +90,10 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/fnattributes')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
-  it('test 7 UserService - canCreateInCtx function OK', () => {
+  it('test 7 UserService - canCreateInCtx function OK', (done) => {
     const response = {
       data: true
     }
@@ -97,10 +103,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 8 UserService - canCreateInCtx function KO', () => {
+  it('test 8 UserService - canCreateInCtx function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -110,10 +117,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 9 UserService - canEditCtx function OK', () => {
+  it('test 9 UserService - canEditCtx function OK', (done) => {
     const response = {
       data: true
     }
@@ -123,10 +131,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 10 UserService - canEditCtx function KO', () => {
+  it('test 10 UserService - canEditCtx function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -136,10 +145,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 11 UserService - canDeleteCtx function OK', () => {
+  it('test 11 UserService - canDeleteCtx function OK', (done) => {
     const response = {
       data: true
     }
@@ -149,10 +159,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 12 UserService - canDeleteCtx function KO', () => {
+  it('test 12 UserService - canDeleteCtx function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -162,10 +173,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 13 UserService - canEditCtxPerms function OK', () => {
+  it('test 13 UserService - canEditCtxPerms function OK', (done) => {
     const response = {
       data: true
     }
@@ -175,10 +187,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 14 UserService - canEditCtxPerms function KO', () => {
+  it('test 14 UserService - canEditCtxPerms function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -188,10 +201,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 15 UserService - canEditCtxTargets function OK', () => {
+  it('test 15 UserService - canEditCtxTargets function OK', (done) => {
     const response = {
       data: true
     }
@@ -201,10 +215,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 16 UserService - canEditCtxTargets function KO', () => {
+  it('test 16 UserService - canEditCtxTargets function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -214,10 +229,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 17 UserService - canModerateAnyThing function OK', () => {
+  it('test 17 UserService - canModerateAnyThing function OK', (done) => {
     const response = {
       data: true
     }
@@ -227,10 +243,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/moderate')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 18 UserService - canModerateAnyThing function KO', () => {
+  it('test 18 UserService - canModerateAnyThing function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -240,10 +257,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/moderate')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 19 UserService - canHighlight function OK', () => {
+  it('test 19 UserService - canHighlight function OK', (done) => {
     const response = {
       data: true
     }
@@ -253,10 +271,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight')
       expect(result.data).toStrictEqual(true)
+      done()
     })
   })
 
-  it('test 20 UserService - canHighlight function KO', () => {
+  it('test 20 UserService - canHighlight function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -266,10 +285,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight')
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 
-  it('test 21 UserService - search function OK', () => {
+  it('test 21 UserService - search function OK', (done) => {
     const response = {
       status: '200 OK',
       data: 'Resultat de la recherche'
@@ -285,10 +305,11 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.postJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.postJson).toHaveBeenCalledWith('api/users/search', sendingData)
       expect(result.status).toStrictEqual('200 OK')
+      done()
     })
   })
 
-  it('test 22 UserService - search function KO', () => {
+  it('test 22 UserService - search function KO', (done) => {
     const response = {
       msg: '401 Unauthorized'
     }
@@ -304,6 +325,7 @@ describe('UserService.js tests', () => {
       expect(FetchWrapper.postJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.postJson).toHaveBeenCalledWith('api/users/search', sendingData)
       expect(error.msg).toStrictEqual('401 Unauthorized')
+      done()
     })
   })
 })
