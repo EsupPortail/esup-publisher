@@ -27,15 +27,19 @@ Les commandes liées au back-end restent inchangées :
 | Page Home | src\main\webapp\scripts\app\main\main.js | src\main\webapp\src\views\Home.vue |
 | Page Login | src\main\webapp\scripts\app\account\login\login.js | src\main\webapp\src\views\account\login\Login.vue |
 | Page Accès refusé | src\main\webapp\scripts\app\error\error.js | src\main\webapp\src\views\error\AccessDenied.vue |
+| Page Publier | src\main\webapp\scripts\app\manager\publish\publish.js | src\main\webapp\src\views\manager\publish\Publish.vue |
 | Page API | src\main\webapp\scripts\app\admin\docs\docs.js | src\main\webapp\src\views\admin\docs\AdminDocs.vue |
 | Page Logs | src\main\webapp\scripts\app\admin\logs\logs.js | src\main\webapp\src\views\admin\logs\AdminLogs.vue |
 | Page Metrics | src\main\webapp\scripts\app\admin\metrics\metrics.js | src\main\webapp\src\views\admin\metrics\AdminMetrics.vue |
 | Page Configuration | src\main\webapp\scripts\app\admin\configuration\configuration.js | src\main\webapp\src\views\admin\configuration\AdminConfiguration.vue |
 | Page Diagnostics | src\main\webapp\scripts\app\admin\health\health.js | src\main\webapp\src\views\admin\heath\AdminHealth.vue |
 | Page Audits | src\main\webapp\scripts\app\admin\audits\audits.js | src\main\webapp\src\views\admin\audits\AdminAudits.vue |
-| Méthode Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
-| Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
 | Page Structure | src\main\webapp\scripts\app\entities\organization\organization.js | src\main\webapp\src\views\entities\Organization.vue |
+| Filtre Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
+| Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
+| Directive has-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasRoleDirective.js |
+| Directive can-moderate | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanModerateDirective.js |
+| Directive disable-click | src\main\webapp\scripts\components\form\disableClick.directive.js | src\main\webapp\src\directives\DisableClickDirective.js |
 
 ## Remarques
 
