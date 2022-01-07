@@ -312,7 +312,7 @@
           <div class="modal-content">
               <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">{{ $t("metrics.jvm.threads.dump.title") }}</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
               </div>
               <div class="modal-body">
                   <span class="badge bg-primary" @click="threadStateFilter = null">{{ $t("metrics.jvm.threads.all") }}&nbsp;<span class="badge rounded-pill bg-secondary">{{countThreadDumpRunnable + countThreadDumpWaiting + countThreadDumpTimedWaiting + countThreadDumpBlocked}}</span></span>&nbsp;
@@ -348,7 +348,7 @@
                                     </a>
                                     <div class="popover" v-if="threadDump.showPopover">
                                         <div class="popover-header">
-                                          <h4>{{ $t("metrics.jvm.threads.dump.stacktrace") }}<button type="button" class="btn-close float-end" @click="threadDump.showPopover = !threadDump.showPopover">&times;</button></h4>
+                                          <h4>{{ $t("metrics.jvm.threads.dump.stacktrace") }}<button type="button" class="btn-close float-end" @click="threadDump.showPopover = !threadDump.showPopover"></button></h4>
                                         </div>
                                         <div class="popover-body">
                                             <div v-for="st in threadDump.stackTrace" :key="st.className + '.' + st.methodName + '.' + st.fileName + '.' + st.lineNumber">

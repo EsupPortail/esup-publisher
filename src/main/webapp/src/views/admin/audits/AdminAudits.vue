@@ -119,14 +119,14 @@ export default {
       })
     },
     formatDate (date) {
-      return Intl.DateTimeFormat(store.getters.getLanguage, {
+      return DateUtils.convertToIntString(DateUtils.convertDateTimeFromServer(date), {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
         second: 'numeric'
-      }).format(DateUtils.convertDateTimeFromServer(date))
+      }, store.getters.getLanguage)
     }
   },
   created () {

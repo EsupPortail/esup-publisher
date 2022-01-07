@@ -14,7 +14,7 @@
                         {{subSystemName(currentHealth.name)}}
                       </h4>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                        @click="clear()">&times;</button>
+                        @click="clear()"></button>
                     </div>
                     <div class="modal-body">
                         <div v-if="currentHealth.details">
