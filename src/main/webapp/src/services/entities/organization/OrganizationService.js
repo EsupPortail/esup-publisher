@@ -1,12 +1,19 @@
 import FetchWrapper from '../../util/FetchWrapper'
+import DateUtils from '../../util/DateUtils'
 
 class OrganizationService {
-  get () {
+  query () {
     return FetchWrapper.getJson('api/organizations')
   }
 
-  getById (id) {
-    return FetchWrapper.getJson('api/organizations/' + id)
+  get (id) {
+    return FetchWrapper.getJson('api/organizations/' + id).then(data => {
+      if (data) {
+        data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate)
+        data.lastModifiedDate = DateUtils.convertDateTimeFromServer(data.lastModifiedDate)
+      }
+      return data
+    })
   }
 
   update (organization) {

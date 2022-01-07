@@ -95,7 +95,10 @@
 </template>
 
 <script>
+import store from '@/store/index.js'
 import OrganizationService from '@/services/entities/organization/OrganizationService'
+import DateUtils from '@/services/util/DateUtils'
+
 export default {
   name: 'OrganizationDetail',
   components: {
@@ -113,7 +116,7 @@ export default {
   methods: {
     // Méthode de récupération de l'objet grâce à l'id passé en paramètre
     initData () {
-      OrganizationService.getById(this.$route.params.id).then(result => {
+      OrganizationService.get(this.$route.params.id).then(result => {
         this.organization = result
       }).catch(error => {
         console.error(error)
@@ -121,9 +124,14 @@ export default {
     },
     // Fonction de formatage de date
     formatDate (date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }
-      var tmp = new Date(date).toLocaleDateString('fr-FR', options)
-      return tmp
+      return DateUtils.convertToIntString(date, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }, store.getters.getLanguage)
     },
     // Méthode de redirection sur la page listant les structures
     organizationPage () {

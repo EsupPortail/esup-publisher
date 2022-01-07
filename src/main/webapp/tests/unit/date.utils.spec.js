@@ -60,4 +60,16 @@ describe('DateUtils.js tests', () => {
     var result = DateUtils.addDaysToLocalDate('2021-12-09', 1)
     expect(result).toStrictEqual(null)
   })
+
+  it('test 12 DateUtils - convertToIntString function OK', () => {
+    var result = DateUtils.convertToIntString(new Date(2021, 11, 9, 10, 55, 40), {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }, 'en')
+    expect(result).toStrictEqual('December 9, 2021, 10:55:40 AM')
+  })
 })

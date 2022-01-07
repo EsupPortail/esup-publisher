@@ -39,5 +39,9 @@ class DateUtils {
   dateformat () {
     return 'yyyy-MM-dd'
   }
+
+  convertToIntString (date, format, lang) {
+    return Intl.DateTimeFormat(lang, format).format(date)
+  }
 }
 export default new DateUtils()

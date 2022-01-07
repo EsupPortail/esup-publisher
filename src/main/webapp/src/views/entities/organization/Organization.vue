@@ -115,7 +115,7 @@
     <div class="modal fade" ref="deleteOrganizationConfirmation">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="deleteForm" @submit="confirmDelete(organization.id)">
+                <form name="deleteForm">
                     <div class="modal-header">
                         <h4 class="modal-title">{{$t('entity.delete.title')}}</h4>
                         <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
@@ -128,7 +128,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="submit" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger" @click="confirmDelete(organization.id)">
                             <span class="far fa-times-circle"></span>&nbsp;<span>{{$t('entity.action.delete')}}</span>
                         </button>
                     </div>
@@ -184,7 +184,6 @@
 
 <script>
 import OrganizationService from '@/services/entities/organization/OrganizationService'
-import DateUtils from '@/services/util/DateUtils'
 import { Modal } from 'bootstrap'
 export default {
   name: 'Organization',
@@ -258,14 +257,8 @@ export default {
   methods: {
     // Méthode permettant de récupérer la liste des objets structures
     loadAll () {
-      OrganizationService.get().then(response => {
-        if (response) {
-          for (var i = 0; i < response.length; i++) {
-            response[i].createdDate = DateUtils.convertDateTimeFromServer(response[i].createdDate)
-            response[i].lastModifiedDate = DateUtils.convertDateTimeFromServer(response[i].lastModifiedDate)
-            this.organizations.push(response[i])
-          }
-        }
+      OrganizationService.query().then(response => {
+        this.organizations = response
       }).catch(error => {
         console.error(error)
       })
@@ -297,8 +290,8 @@ export default {
         }
       }
       OrganizationService.update(this.organization).then(() => {
-        this.reset()
         this.updateModal.hide()
+        this.reset()
         this.clear()
       }).catch(error => {
         console.error(error)
@@ -306,7 +299,7 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de structure
     update (id) {
-      OrganizationService.getById(id).then(result => {
+      OrganizationService.get(id).then(result => {
         this.organization = result
         this.updateModal.show()
       }).catch(error => {
@@ -315,7 +308,7 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de structure
     deleteOrganization (id) {
-      OrganizationService.getById(id).then(result => {
+      OrganizationService.get(id).then(result => {
         this.organization = result
         this.deleteModal.show()
       }).catch(error => {
@@ -325,9 +318,9 @@ export default {
     // Méthode en charge de supprimer une structure
     confirmDelete (id) {
       OrganizationService.delete(id).then(() => {
+        this.deleteModal.hide()
         this.reset()
         this.clear()
-        this.deleteModal.hide()
       }).catch(error => {
         console.error(error)
       })
@@ -374,9 +367,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.btn, .control-label{
-  margin-right: 2%;
-}
-</style>
