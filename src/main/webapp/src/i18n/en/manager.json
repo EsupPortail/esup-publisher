@@ -50,7 +50,7 @@
                 "title": "Classification",
                 "choice": "Classification to associate of the publication :",
                 "emptyList": "You don't have rights defined on classifications of the selected publishing context or no one is defined !",
-                "highlight": "Highlight the publication ({{ name }}) :"
+                "highlight": "Highlight the publication ({ name }) :"
             },
             "targets": {
                 "step": "Targets",

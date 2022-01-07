@@ -1,6 +1,6 @@
 <template>
   <div class="content list-group">
-    <a ui-sref="publish.publisher" class="list-group-item">
+    <router-link to="/publish/publisher" class="list-group-item">
           <div id="publish-publisher-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-pencil-alt fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -11,7 +11,7 @@
                   <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.write.desc") }}</span>
               </div>
           </div>
-      </a>
+      </router-link>
 
       <a ui-sref="owned" class="list-group-item list-group-item-action">
           <div id="owned-item" class="bouton-action">
@@ -39,7 +39,7 @@
           </div>
       </a>
 
-      <a ui-sref="treeview" class="list-group-item list-group-item-action" v-can-moderate>
+      <router-link to="/treeview" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="treeview-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-wrench fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -50,7 +50,7 @@
                   <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.manage.desc") }}</span>
               </div>
           </div>
-      </a>
+      </router-link>
 
       <router-link to="/administration" class="list-group-item list-group-item-action" v-has-role="role">
           <div id="administration-item" class="bouton-action">
@@ -60,7 +60,7 @@
               </div>
               <div class="div-text text-start">
                   <h4 class="item-heading" >{{ $t("main.link.admin.name") }}</h4>
-                  <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.admin.name") }}</span>
+                  <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.admin.desc") }}</span>
               </div>
           </div>
       </router-link>

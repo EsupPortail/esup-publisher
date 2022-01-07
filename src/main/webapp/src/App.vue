@@ -6,7 +6,7 @@
     </div>
     <div class="container-fluid">
       <Spinner></Spinner>
-      <div class="card" :class="cssClass">
+      <div class="card" :class="cssClass" v-if="initData">
         <router-view />
       </div>
       <div class="footer">
@@ -29,6 +29,7 @@
 <script>
 import NavBar from './components/navbar/NavBar'
 import Spinner from './components/spinner/Spinner'
+import EnumDatasService from '@/services/entities/enum/EnumDatasService'
 
 export default {
   name: 'App',
@@ -41,7 +42,9 @@ export default {
       // Variable indiquant le mode sur lequel l'application est lancée
       environment: process.env.NODE_ENV,
       // Variable indiquant la version de l'application indiquée dans le pom.xml
-      backVersion: process.env.BACK_VERSION
+      backVersion: process.env.BACK_VERSION,
+      // Variable indiquant si les données d'initalisation ont été chargées
+      initData: false
     }
   },
   computed: {
@@ -55,7 +58,7 @@ export default {
       return classe
     },
     cssClass () {
-      return this.$store.getters.getCssClass
+      return this.$router.currentRoute.value.meta.cssClass
     }
   },
   methods: {
@@ -114,6 +117,11 @@ export default {
         return true
       }
     }
+  },
+  created () {
+    EnumDatasService.init().finally(() => {
+      this.initData = true
+    })
   }
 }
 </script>

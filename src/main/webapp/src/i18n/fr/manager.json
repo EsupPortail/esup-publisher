@@ -50,7 +50,7 @@
                 "title": "Choix de la rubrique",
                 "choice": "Classer la publication dans une ou plusieurs rubriques :",
                 "emptyList": "Vous n'avez pas de droit sur les rubriques du context sélectionné ou il n'y a aucune rubrique de définie !",
-                "highlight": "Placer la publication \"{{ name }}\" :"
+                "highlight": "Placer la publication \"{ name }\" :"
             },
             "targets": {
                 "step": "Cibles",

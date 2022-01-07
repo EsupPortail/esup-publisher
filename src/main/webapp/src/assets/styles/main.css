@@ -1566,36 +1566,36 @@ div>div.container-fluid>div.card>div>div>div>div.publish-header {
 }
 
 /* active buttons */
-.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #25B2F3;
 }
 
-.clg18 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg18 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #004899;
 }
 
-.clg28 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg28 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #FC0;
     color: #000
 }
 
-.clg36 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg36 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #0069B3;
 }
 
-.clg37 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg37 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #C60440;
 }
 
-.clg41 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg41 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #009FE3;
 }
 
-.clg45 .manager .publish-form-container>.publish-header>.status-buttons a.active span.step-number {
+.clg45 .manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-number {
     background: #26448A;
 }
 
-.manager .publish-form-container>.publish-header>.status-buttons a.active span.step-label {
+.manager .publish-form-container>.publish-header>.status-buttons a.router-link-active span.step-label {
     color: #000;
 }
 
@@ -2099,4 +2099,9 @@ label {
 
 .help-block {
     color: #a94442;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    pointer-events: all !important;
 }

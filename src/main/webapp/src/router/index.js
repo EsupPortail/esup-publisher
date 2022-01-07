@@ -30,13 +30,93 @@ const routes = [
     }
   },
   {
+    path: '/error',
+    name: 'Error',
+    component: () => import(/* webpackChunkName: "error" */ '../views/error/Error.vue'),
+    meta: {
+      titleKey: 'errors.title',
+      requireLogin: true,
+      cssClass: 'site'
+    }
+  },
+  {
     path: '/accessdenied',
     name: 'AccessDenied',
     component: () => import(/* webpackChunkName: "error" */ '../views/error/AccessDenied.vue'),
     meta: {
       titleKey: 'errors.title',
-      requireLogin: true
+      requireLogin: true,
+      cssClass: 'site'
     }
+  },
+  {
+    path: '/manager',
+    name: 'Manager',
+    component: () => import(/* webpackChunkName: "manager" */ '../views/manager/Manager.vue'),
+    redirect: { name: 'Home' },
+    meta: {
+      requireLogin: true,
+      roles: ['ROLE_USER'],
+      navBarView: 'navBarManager',
+      cssClass: 'site'
+    },
+    children: [
+      {
+        path: '/treeview',
+        name: 'Treeview',
+        component: () => import(/* webpackChunkName: "manager" */ '../views/manager/treeview/Treeview.vue'),
+        meta: {
+          titleKey: 'manager.treeview.title',
+          roles: ['ROLE_USER'],
+          cssClass: 'manager',
+          managerCssClass: 'treeview'
+        }
+      },
+      {
+        path: '/publish/:id?',
+        name: 'Publish',
+        component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/Publish.vue'),
+        meta: {
+          titleKey: 'manager.publish.title',
+          navBarView: 'navBarPublish',
+          cssClass: 'publish'
+        },
+        children: [
+          {
+            path: 'publisher',
+            name: 'PublishPublisher',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/publisher/Publisher.vue'),
+            meta: {
+              managerCssClass: 'publish.publisher'
+            }
+          },
+          {
+            path: 'classification',
+            name: 'PublishClassification',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/classification/Classification.vue'),
+            meta: {
+              managerCssClass: 'publish publish.classification'
+            }
+          },
+          {
+            path: 'content',
+            name: 'PublishContent',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/content/Content.vue'),
+            meta: {
+              managerCssClass: 'publish publish.content'
+            }
+          },
+          {
+            path: 'targets',
+            name: 'PublishTargets',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/targets/Targets.vue'),
+            meta: {
+              managerCssClass: 'publish publish.targets'
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     path: '/administration',
@@ -141,7 +221,7 @@ router.beforeEach((to, from, next) => {
     meta: to.meta
   })
   if (to.matched.some(record => record.meta.requireLogin)) {
-    if (!PrincipalService.isAuthenticated() && !store.getters.getModalOpened) {
+    if (!PrincipalService.isAuthenticated() && !store.getters.getLoginModalOpened) {
       AuthenticationService.login().then(() => {
         next()
       }).catch(() => {
@@ -163,7 +243,6 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to) => {
   nextTick(() => {
-    store.commit('setCssClass', to.meta.cssClass)
     document.title = t(to.meta.titleKey || DEFAULT_TITLE)
   })
 })

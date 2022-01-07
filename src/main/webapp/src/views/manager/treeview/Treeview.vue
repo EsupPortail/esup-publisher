@@ -1,0 +1,16 @@
+<template>
+<div class="treeview">
+    <h2>{{ $t("manager.treeview.title") }}</h2>
+    <!--<div class="tree-browser">
+      <js-tree tree-data="scope" tree-plugins="types" tree-types="typesConfig" tree-model="treeModel" tree-core="treeCore" tree-events="select_node:nodeOpened"></js-tree>
+      <js-tree  tree-ajax="api/contexts/" tree-plugins="types,wholerow" tree-types="typesConfig" tree-model="treeModel" tree-events="select_node:nodeSelected"></js-tree>
+     </div>-->
+  <div class="context-viewer" ui-view="contextDetails"></div>
+</div>
+</template>
+
+<script>
+export default {
+  name: 'Treeview'
+}
+</script>
