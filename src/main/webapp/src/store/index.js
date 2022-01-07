@@ -2,19 +2,15 @@ import { createStore } from 'vuex'
 import language from './modules/language'
 import principal from './modules/principal'
 import createPersistedState from 'vuex-persistedstate'
+import CookieUtils from '@/services/util/CookieUtils'
 
 const store = createStore({
   state: {
     loginModalOpened: null,
-    modalOpened: null,
     nextRoute: null,
-    returnRoute: null,
-    cssClass: null
+    returnRoute: null
   },
   mutations: {
-    setModalOpened (state, modalOpened) {
-      state.modalOpened = modalOpened
-    },
     setLoginModalOpened (state, loginModalOpened) {
       state.loginModalOpened = loginModalOpened
     },
@@ -23,15 +19,9 @@ const store = createStore({
     },
     setReturnRoute (state, returnRoute) {
       state.returnRoute = returnRoute
-    },
-    setCssClass (state, cssClass) {
-      state.cssClass = cssClass
     }
   },
   getters: {
-    getModalOpened: (state) => {
-      return state.modalOpened
-    },
     getLoginModalOpened: (state) => {
       return state.loginModalOpened
     },
@@ -40,9 +30,6 @@ const store = createStore({
     },
     getReturnRoute: (state) => {
       return state.returnRoute
-    },
-    getCssClass: (state) => {
-      return state.cssClass
     }
   },
   actions: {
@@ -51,7 +38,59 @@ const store = createStore({
     language,
     principal
   },
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState({
+    storage: {
+      getItem: (key) => {
+        // Récupération de la langue depuis les cookies
+        if (key === 'vuex') {
+          var lang = CookieUtils.getCookie('NG_TRANSLATE_LANG_KEY')
+          if (lang !== null && lang !== undefined) {
+            lang = lang.replaceAll('"', '')
+          }
+          const item = window.localStorage.getItem(key)
+          if (item !== null && item !== undefined) {
+            const json = JSON.parse(item)
+            if (!json.language) {
+              json.language = {}
+            }
+            json.language.lang = lang || 'fr'
+            return JSON.stringify(json)
+          } else {
+            return item
+          }
+        } else {
+          return window.localStorage.getItem(key)
+        }
+      },
+      setItem: (key, value) => {
+        // Mise à jour de la langue dans les cookies
+        if (key === 'vuex') {
+          var lang = null
+          if (value !== null && value !== undefined) {
+            const json = JSON.parse(value)
+            if (json.language !== null && json.language !== undefined) {
+              lang = json.language.lang
+            }
+          }
+          if (lang !== null && lang !== undefined) {
+            lang = '"' + lang + '"'
+          }
+          CookieUtils.setCookie('NG_TRANSLATE_LANG_KEY', lang || 'fr')
+        }
+        window.localStorage.setItem(key, value)
+      },
+      removeItem: (key) => {
+        window.localStorage.removeItem(key)
+      }
+    },
+    reducer: (state) => {
+      // Suppression des propriétés à ne pas persister
+      const reducer = Object.assign({}, state)
+      delete reducer.loginModalOpened
+
+      return (reducer)
+    }
+  })]
 })
 
 export default store

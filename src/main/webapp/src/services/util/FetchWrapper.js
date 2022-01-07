@@ -1,8 +1,7 @@
-import AuthenticationService from '../auth/AuthenticationService'
-import PrincipalService from '../auth/PrincipalService'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
 import { ref } from 'vue'
+import CookieUtils from './CookieUtils'
 
 class FetchWrapper {
   countPendingRequests () {
@@ -47,26 +46,19 @@ function fetchWithRetry (resolve, reject, url, params) {
   fetch(url, params)
     .then(response => {
       if (!response.ok) {
-        if (response.status !== 401 || url === '/api/account' || store.getters.getModalOpened) {
+        if (response.status !== 401 || url === (process.env.VUE_APP_BACK_BASE_URL + 'api/account') || store.getters.getLoginModalOpened) {
           reject(response)
         } else {
-          // Si erreur 403, on relog l'utilisateur
-          PrincipalService.authenticate(null)
-          AuthenticationService.login().then(() => {
-            // On rejoue la requête
-            fetchWithRetry(resolve, reject, url, params)
-          }).catch(() => {
-            // Redirection vers la page de login en cas d'erreur
-            store.commit('setLoginModalOpened', true)
-            if (router.currentRoute.value.name !== 'Login') {
-              store.commit('setReturnRoute', {
-                name: router.currentRoute.value.name,
-                params: router.currentRoute.value.params,
-                meta: router.currentRoute.value.meta
-              })
-            }
-            router.push({ name: 'Login' })
-          })
+          // Si erreur 401, redirection vers la page de login
+          store.commit('setLoginModalOpened', true)
+          if (router.currentRoute.value.name !== 'Login') {
+            store.commit('setReturnRoute', {
+              name: router.currentRoute.value.name,
+              params: router.currentRoute.value.params,
+              meta: router.currentRoute.value.meta
+            })
+          }
+          router.push({ name: 'Login' })
         }
       } else {
         response.text().then(text => {
@@ -86,24 +78,8 @@ function fetchWithRetry (resolve, reject, url, params) {
 function getHeader () {
   return new Headers({
     'Content-Type': 'application/json;charset=UTF-8',
-    'X-CSRF-TOKEN': getCookie('CSRF-TOKEN')
+    'X-CSRF-TOKEN': CookieUtils.getCookie('CSRF-TOKEN')
   })
-}
-
-// Fonction retounant la valeur d'une propriété contenue dans les cookies
-function getCookie (name) {
-  if (!document.cookie) {
-    return null
-  }
-
-  const xsrfCookies = document.cookie.split(';')
-    .map(c => c.trim())
-    .filter(c => c.startsWith(name + '='))
-
-  if (xsrfCookies.length === 0) {
-    return null
-  }
-  return decodeURIComponent(xsrfCookies[0].split('=')[1])
 }
 
 // Fonction permettant d'exécutant une requête de type JSONP
