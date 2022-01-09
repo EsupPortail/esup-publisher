@@ -1,7 +1,7 @@
 <template>
 <div class='organization'>
     <h2 >{{$t('organization.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveOrganizationModal" @click="clear" has-any-role="ROLE_ADMIN">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveOrganizationModal" @click="clear">
         <span class="fas fa-bolt"></span> <span >{{$t('organization.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="saveOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="myOrganizationLabel"

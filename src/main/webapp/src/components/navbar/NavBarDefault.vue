@@ -24,8 +24,8 @@
         <ul class="dropdown-menu">
             <li :class="{active: isPageNameIncludes('organization')}"><router-link to="/organization" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.organization") }}</span></router-link></li>
-            <li :class="{active: isPageNameIncludes('filter')}"><a ui-sref="filter" class="dropdown-item"><span class="fas fa-asterisk"></span>
-            &#xA0;<span>{{ $t("global.menu.entities.filter") }}</span></a></li>
+            <li :class="{active: isPageNameIncludes('filter')}"><router-link to="/filter" class="dropdown-item"><span class="fas fa-asterisk"></span>
+            &#xA0;<span>{{ $t("global.menu.entities.filter") }}</span></router-link></li>
             <li :class="{active: isPageNameIncludes('reader')}"><router-link to="/reader" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.reader") }}</span></router-link></li>
             <li :class="{active: isPageNameIncludes('redactor')}"><a ui-sref="redactor" class="dropdown-item"><span class="fas fa-asterisk"></span>

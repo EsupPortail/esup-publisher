@@ -204,6 +204,24 @@ const routes = [
         }
       },
       {
+        path: '/filter',
+        name: 'AdminEntityFilter',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/filter/Filter.vue'),
+        meta: {
+          titleKey: 'filter.home.title',
+          cssClass: 'entity'
+        }
+      },
+      {
+        path: '/filter/:id',
+        name: 'AdminEntityFilterDetails',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/filter/FilterDetail.vue'),
+        meta: {
+          titleKey: 'filter.detail.title',
+          cssClass: 'entity'
+        }
+      },
+      {
         path: '/reader',
         name: 'AdminEntityReader',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/reader/Reader.vue'),
