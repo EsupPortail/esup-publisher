@@ -202,6 +202,24 @@ const routes = [
           titleKey: 'organization.detail.title',
           cssClass: 'entity'
         }
+      },
+      {
+        path: '/reader',
+        name: 'AdminEntityReader',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/reader/Reader.vue'),
+        meta: {
+          titleKey: 'reader.home.title',
+          cssClass: 'entity'
+        }
+      },
+      {
+        path: '/reader/:id',
+        name: 'AdminEntityReaderDetails',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/reader/ReaderDetail.vue'),
+        meta: {
+          titleKey: 'reader.detail.title',
+          cssClass: 'entity'
+        }
       }
     ]
   },

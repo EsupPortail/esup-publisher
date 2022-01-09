@@ -161,15 +161,15 @@
                     <td>
                         <button type="submit"
                                 @click="organizationDetail(organization.id)"
-                                class="btn btn-info btn-sm">
+                                class="btn btn-info btn-sm me-1">
                             <span class="far fa-eye"></span>&nbsp;<span>{{$t("entity.action.view")}}</span>
                         </button>
-                        <button type="submit" has-any-role="ROLE_ADMIN"
+                        <button type="submit"
                                 @click="update(organization.id)"
-                                class="btn btn-primary btn-sm">
+                                class="btn btn-primary btn-sm me-1">
                             <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
                         </button>
-                        <button type="submit" has-any-role="ROLE_ADMIN"
+                        <button type="submit"
                                 @click="deleteOrganization(organization.id)"
                                 class="btn btn-danger btn-sm">
                             <span class="far fa-times-circle"></span>&nbsp;<span>{{$t("entity.action.delete")}}</span>

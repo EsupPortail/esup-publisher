@@ -101,8 +101,6 @@ import DateUtils from '@/services/util/DateUtils'
 
 export default {
   name: 'OrganizationDetail',
-  components: {
-  },
   data () {
     return {
       organization: { name: null, displayName: null, description: null, lastModifiedBy: { displayName: null }, createdBy: { displayName: null }, displayOrder: null, allowNotifications: false, identifiers: [], id: null }

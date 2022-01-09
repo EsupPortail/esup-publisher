@@ -34,7 +34,8 @@ Les commandes liées au back-end restent inchangées :
 | Page Configuration | src\main\webapp\scripts\app\admin\configuration\configuration.js | src\main\webapp\src\views\admin\configuration\AdminConfiguration.vue |
 | Page Diagnostics | src\main\webapp\scripts\app\admin\health\health.js | src\main\webapp\src\views\admin\heath\AdminHealth.vue |
 | Page Audits | src\main\webapp\scripts\app\admin\audits\audits.js | src\main\webapp\src\views\admin\audits\AdminAudits.vue |
-| Page Structure | src\main\webapp\scripts\app\entities\organization\organization.js | src\main\webapp\src\views\entities\Organization.vue |
+| Page Structure | src\main\webapp\scripts\app\entities\organization\organization.js | src\main\webapp\src\views\entities\organization\Organization.vue |
+| Page Lecteur | src\main\webapp\scripts\app\entities\reader\reader.js | src\main\webapp\src\views\entities\reader\Reader.vue |
 | Filtre Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
 | Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
 | Directive has-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasRoleDirective.js |
