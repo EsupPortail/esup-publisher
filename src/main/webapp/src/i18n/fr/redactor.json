@@ -1,27 +1,24 @@
 {
-    "publisherApp": {
-        "redactor" : {
-            "home": {
-                "title": "Rédacteurs",
-                "createLabel": "Créer un nouveau Rédacteur",
-                "createOrEditLabel": "Créer ou éditer un Rédacteur"
-            },
-            "delete": {
-                "question": "Êtes-vous certain de vouloir supprimer le Rédacteur {{ id }} ?"
-            },
-            "detail": {
-                "title": "Rédacteur"
-            },
-            "name": "Nom",
-            "displayName": "Nom d'affichage",
-            "description": "Description",
-            "format": "Format du rédacteur",
-            "writingMode": "Mode de saisie",
-            "nbLevelsOfClassification": "Niveau(x) d'arborescence",
-            "optionalPublishTime": "Fin de publication optionnelle",
-            "nbDaysMaxDuration": "Durée maximum de publication en jours",
-            "organizationReaderRedactors": "Liste des contextes associés"
-        }
+    "redactor" : {
+        "home": {
+            "title": "Rédacteurs",
+            "createLabel": "Créer un nouveau Rédacteur",
+            "createOrEditLabel": "Créer ou éditer un Rédacteur"
+        },
+        "delete": {
+            "question": "Êtes-vous certain de vouloir supprimer le Rédacteur { id } ?"
+        },
+        "detail": {
+            "title": "Rédacteur"
+        },
+        "name": "Nom",
+        "displayName": "Nom d'affichage",
+        "description": "Description",
+        "format": "Format du rédacteur",
+        "writingMode": "Mode de saisie",
+        "nbLevelsOfClassification": "Niveau(x) d'arborescence",
+        "optionalPublishTime": "Fin de publication optionnelle",
+        "nbDaysMaxDuration": "Durée maximum de publication en jours",
+        "organizationReaderRedactors": "Liste des contextes associés"
     }
 }
-

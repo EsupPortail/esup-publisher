@@ -187,8 +187,6 @@ import OrganizationService from '@/services/entities/organization/OrganizationSe
 import { Modal } from 'bootstrap'
 export default {
   name: 'Organization',
-  components: {
-  },
   data () {
     return {
       organizations: [],
