@@ -81,11 +81,11 @@
                             <div>
                                 <p class="help-block"
                                    v-if="displayOrderMinLength">
-                                    {{$t('entity.validation.minlength', {min:'0'})}}
+                                    {{$t('entity.validation.min', {min:'0'})}}
                                 </p>
                                 <p class="help-block"
                                    v-if="displayOrderMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'999'})}}
+                                    {{$t('entity.validation.max', {max:'999'})}}
                                 </p>
                                 <p class="help-block"
                                    v-if="isNumberValue">

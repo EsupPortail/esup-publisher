@@ -38,6 +38,7 @@ Les commandes liées au back-end restent inchangées :
 | Page Filtre | src\main\webapp\scripts\app\entities\filter\filter.js | src\main\webapp\src\views\entities\filter\Filter.vue |
 | Page Lecteur | src\main\webapp\scripts\app\entities\reader\reader.js | src\main\webapp\src\views\entities\reader\Reader.vue |
 | Page Redacteur | src\main\webapp\scripts\app\entities\redactor\redactor.js | src\main\webapp\src\views\entities\redactor\Redactor.vue |
+| Page Contexte de publication | src\main\webapp\scripts\app\entities\publisher\publisher.js | src\main\webapp\src\views\entities\publisher\Publisher.vue |
 | Filtre Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
 | Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
 | Directive has-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasRoleDirective.js |

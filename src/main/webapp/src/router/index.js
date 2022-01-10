@@ -256,6 +256,24 @@ const routes = [
           titleKey: 'redactor.detail.title',
           cssClass: 'entity'
         }
+      },
+      {
+        path: '/publisher',
+        name: 'AdminEntityPublisher',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/publisher/Publisher.vue'),
+        meta: {
+          titleKey: 'publisher.home.title',
+          cssClass: 'entity'
+        }
+      },
+      {
+        path: '/publisher/:id',
+        name: 'AdminEntityPublisherDetails',
+        component: () => import(/* webpackChunkName: "administration" */ '../views/entities/publisher/PublisherDetail.vue'),
+        meta: {
+          titleKey: 'publisher.detail.title',
+          cssClass: 'entity'
+        }
       }
     ]
   },

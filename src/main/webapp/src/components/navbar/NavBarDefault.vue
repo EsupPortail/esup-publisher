@@ -30,8 +30,8 @@
             &#xA0;<span>{{ $t("global.menu.entities.reader") }}</span></router-link></li>
             <li :class="{active: isPageNameIncludes('redactor')}"><router-link to="/redactor" class="dropdown-item"><span class="fas fa-asterisk"></span>
             &#xA0;<span>{{ $t("global.menu.entities.redactor") }}</span></router-link></li>
-            <li :class="{active: isPageNameIncludes('publisher')}"><a ui-sref="publisher" class="dropdown-item"><span class="fas fa-asterisk"></span>
-            &#xA0;<span>{{ $t("global.menu.entities.publisher") }}</span></a></li>
+            <li :class="{active: isPageNameIncludes('publisher')}"><router-link to="/publisher" class="dropdown-item"><span class="fas fa-asterisk"></span>
+            &#xA0;<span>{{ $t("global.menu.entities.publisher") }}</span></router-link></li>
         </ul>
       </li>
       <li class="nav-item dropdown">
