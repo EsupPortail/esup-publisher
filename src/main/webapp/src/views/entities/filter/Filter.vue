@@ -1,7 +1,7 @@
 <template>
 <div class='filter'>
     <h2 >{{$t('filter.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveFilterModal" @click="clear">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveFilterModal" @click="clear" v-has-any-role="'ROLE_ADMIN'">
         <span class="fas fa-bolt"></span> <span >{{$t('filter.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="saveFilterModal" tabindex="-1" role="dialog" aria-labelledby="myFilterLabel"
@@ -121,12 +121,12 @@
                         </button>
                         <button type="submit"
                                 @click="update(filter.id)"
-                                class="btn btn-primary btn-sm">
+                                class="btn btn-primary btn-sm me-1" v-has-any-role="'ROLE_ADMIN'">
                             <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
                         </button>
                         <button type="submit"
                                 @click="deleteFilter(filter.id)"
-                                class="btn btn-danger btn-sm me-1">
+                                class="btn btn-danger btn-sm" v-has-any-role="'ROLE_ADMIN'">
                             <span class="far fa-times-circle"></span>&nbsp;<span>{{$t("entity.action.delete")}}</span>
                         </button>
                     </td>

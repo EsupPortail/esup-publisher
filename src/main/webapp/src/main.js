@@ -5,6 +5,7 @@ import i18n from './i18n'
 import store from './store'
 import NavbarDirective from './directives/NavbarDirective.js'
 import CanModerateDirective from './directives/CanModerateDirective.js'
+import HasAnyRoleDirective from './directives/HasAnyRoleDirective.js'
 import HasRoleDirective from './directives/HasRoleDirective.js'
 import DisableClickDirective from './directives/DisableClickDirective.js'
 import TooltipDirective from './directives/TooltipDirective.js'
@@ -25,6 +26,7 @@ const app = createApp(App)
 
 app.directive('active-menu', NavbarDirective)
   .directive('can-moderate', CanModerateDirective)
+  .directive('has-any-role', HasAnyRoleDirective)
   .directive('has-role', HasRoleDirective)
   .directive('disable-click', DisableClickDirective)
   .directive('tooltip', TooltipDirective)

@@ -41,6 +41,7 @@ Les commandes liées au back-end restent inchangées :
 | Page Contexte de publication | src\main\webapp\scripts\app\entities\publisher\publisher.js | src\main\webapp\src\views\entities\publisher\Publisher.vue |
 | Filtre Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
 | Directive active-menu | src\main\webapp\scripts\components\navbar\navbar.directive.js | src\main\webapp\src\directives\NavbarDirective.js |
+| Directive has-any-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasAnyRoleDirective.js |
 | Directive has-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasRoleDirective.js |
 | Directive can-moderate | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanModerateDirective.js |
 | Directive disable-click | src\main\webapp\scripts\components\form\disableClick.directive.js | src\main\webapp\src\directives\DisableClickDirective.js |

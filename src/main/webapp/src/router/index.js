@@ -190,6 +190,7 @@ const routes = [
         name: 'AdminEntityOrganization',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/Organization.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'organization.home.title',
           cssClass: 'entity'
         }
@@ -199,6 +200,7 @@ const routes = [
         name: 'AdminEntityOrganizationDetails',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/organization/OrganizationDetail.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'organization.detail.title',
           cssClass: 'entity'
         }
@@ -208,6 +210,7 @@ const routes = [
         name: 'AdminEntityFilter',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/filter/Filter.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'filter.home.title',
           cssClass: 'entity'
         }
@@ -217,6 +220,7 @@ const routes = [
         name: 'AdminEntityFilterDetails',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/filter/FilterDetail.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'filter.detail.title',
           cssClass: 'entity'
         }
@@ -226,6 +230,7 @@ const routes = [
         name: 'AdminEntityReader',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/reader/Reader.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'reader.home.title',
           cssClass: 'entity'
         }
@@ -235,6 +240,7 @@ const routes = [
         name: 'AdminEntityReaderDetails',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/reader/ReaderDetail.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'reader.detail.title',
           cssClass: 'entity'
         }
@@ -244,6 +250,7 @@ const routes = [
         name: 'AdminEntityRedactor',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/redactor/Redactor.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'redactor.home.title',
           cssClass: 'entity'
         }
@@ -253,6 +260,7 @@ const routes = [
         name: 'AdminEntityRedactorDetails',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/redactor/RedactorDetail.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'redactor.detail.title',
           cssClass: 'entity'
         }
@@ -262,6 +270,7 @@ const routes = [
         name: 'AdminEntityPublisher',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/publisher/Publisher.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'publisher.home.title',
           cssClass: 'entity'
         }
@@ -271,6 +280,7 @@ const routes = [
         name: 'AdminEntityPublisherDetails',
         component: () => import(/* webpackChunkName: "administration" */ '../views/entities/publisher/PublisherDetail.vue'),
         meta: {
+          roles: ['ROLE_USER'],
           titleKey: 'publisher.detail.title',
           cssClass: 'entity'
         }
