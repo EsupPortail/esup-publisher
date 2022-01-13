@@ -75,7 +75,7 @@ export default {
       relogState.listener = this.onmessage
       window.addEventListener('message', this.onmessage)
 
-      relogState.window = window.open(process.env.VUE_APP_CAS_LOGIN_URL)
+      relogState.window = window.open(process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BACK_BASE_URL + process.env.VUE_APP_CAS_LOGIN_URL : process.env.VUE_APP_CAS_LOGIN_URL)
     },
 
     // Méthode de nettoyage de la page de login

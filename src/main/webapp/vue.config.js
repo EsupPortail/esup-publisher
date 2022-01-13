@@ -21,7 +21,7 @@ module.exports = {
     port: 3000,
     proxy: 'http://localhost:8080'
   },
-  publicPath: '/publisher/ui/',
+  publicPath: process.env.VUE_APP_BACK_BASE_URL + 'ui/',
   productionSourceMap: false,
   pluginOptions: {
     i18n: {
