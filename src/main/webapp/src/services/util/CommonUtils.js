@@ -1,6 +1,10 @@
 // Classe contenant des méthodes utilitaires provenant majoritairement d'AngularJS
 // (https://github.com/angular/angular.js/blob/master/src/Angular.js)
 class CommonUtils {
+  isString (value) {
+    return typeof value === 'string'
+  }
+
   isArray (arr) {
     return Array.isArray(arr) || arr instanceof Array
   }

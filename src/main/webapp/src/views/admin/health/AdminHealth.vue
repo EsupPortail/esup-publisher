@@ -129,7 +129,9 @@ export default {
     // Formattage des diagnostics
     transformHealthData (data) {
       var response = []
-      this.flattenHealthData(response, null, data)
+      if (data !== null && data !== undefined) {
+        this.flattenHealthData(response, null, data)
+      }
       return response
     },
     // Mise à plat de la liste des diagnostics

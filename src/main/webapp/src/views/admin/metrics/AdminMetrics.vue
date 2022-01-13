@@ -7,8 +7,8 @@
 
   <div class="card" v-if="updatingMetrics">{{ $t("metrics.updating") }}</div>
 
-  <h3 v-if="!updatingMetrics">{{  $t("metrics.jvm.title") }}</h3>
-  <div class="row" v-if="!updatingMetrics">
+  <h3 v-if="!updatingMetrics && metrics !== null">{{  $t("metrics.jvm.title") }}</h3>
+  <div class="row" v-if="!updatingMetrics && metrics !== null">
       <div class="col-lg-4">
           <b>{{  $t("metrics.jvm.memory.title") }}</b>
           <p>{{ $t("metrics.jvm.memory.total") }} ({{formatNumber(metrics.gauges['jvm.memory.total.used'].value / 1000000)}}M / {{formatNumber(metrics.gauges['jvm.memory.total.max'].value / 1000000)}}M)</p>
@@ -106,9 +106,9 @@
       </div>
   </div>
 
-  <h3 v-if="!updatingMetrics" class="mt-3">{{ $t("metrics.jvm.http.title") }}</h3>
-  <p v-if="!updatingMetrics">{{ $t("metrics.jvm.http.active") }} <b>{{formatNumber(metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count)}}</b> - {{ $t("metrics.jvm.http.total") }} <b>{{formatNumber(metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count)}}</b></p>
-  <div v-if="!updatingMetrics" class="table-responsive">
+  <h3 v-if="!updatingMetrics && metrics !== null" class="mt-3">{{ $t("metrics.jvm.http.title") }}</h3>
+  <p v-if="!updatingMetrics && metrics !== null">{{ $t("metrics.jvm.http.active") }} <b>{{formatNumber(metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count)}}</b> - {{ $t("metrics.jvm.http.total") }} <b>{{formatNumber(metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count)}}</b></p>
+  <div v-if="!updatingMetrics && metrics !== null" class="table-responsive">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -201,8 +201,8 @@
     </table>
   </div>
 
-  <h3 v-if="!updatingMetrics" class="mt-3">{{ $t("metrics.servicesstats.title") }}</h3>
-  <div v-if="!updatingMetrics" class="table-responsive">
+  <h3 v-if="!updatingMetrics && metrics !== null" class="mt-3">{{ $t("metrics.servicesstats.title") }}</h3>
+  <div v-if="!updatingMetrics && metrics !== null" class="table-responsive">
     <table class="table table-striped">
         <thead>
           <tr>
@@ -233,8 +233,8 @@
     </table>
   </div>
 
-  <h3 v-if="!updatingMetrics" class="mt-3">{{ $t("metrics.cache.title") }}</h3>
-  <div v-if="!updatingMetrics" class="table-responsive">
+  <h3 v-if="!updatingMetrics && metrics !== null" class="mt-3">{{ $t("metrics.cache.title") }}</h3>
+  <div v-if="!updatingMetrics && metrics !== null" class="table-responsive">
     <table class="table table-striped">
         <thead>
           <tr>
@@ -265,8 +265,8 @@
     </table>
   </div>
 
-  <h3 v-if="!updatingMetrics && (metrics.gauges['HikariPool-0.pool.TotalConnections'] || {}).value > 0" class="mt-3">{{ $t("metrics.datasource.title") }}</h3>
-  <div v-if="!updatingMetrics && (metrics.gauges['HikariPool-0.pool.TotalConnections'] || {}).value > 0" class="table-responsive">
+  <h3 v-if="!updatingMetrics && metrics !== null && (metrics.gauges['HikariPool-0.pool.TotalConnections'] || {}).value > 0" class="mt-3">{{ $t("metrics.datasource.title") }}</h3>
+  <div v-if="!updatingMetrics && metrics !== null && (metrics.gauges['HikariPool-0.pool.TotalConnections'] || {}).value > 0" class="table-responsive">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -382,7 +382,7 @@ export default {
   data () {
     return {
       // Métriques
-      metrics: {},
+      metrics: null,
       // Indique si les métriques sont en cours de chargement
       updatingMetrics: true,
       // Statistiques des services
