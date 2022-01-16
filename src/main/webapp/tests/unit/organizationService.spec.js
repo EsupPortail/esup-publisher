@@ -11,39 +11,53 @@ describe('OrganizationService.js tests', () => {
   })
 
   it('test 1 OrganizationService - query', (done) => {
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve([]))
+    const response = {
+      data: [],
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     OrganizationService.query().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/organizations')
-      expect(value).toStrictEqual([])
+      expect(value).toStrictEqual(response)
       done()
     })
   })
 
   it('test 2 OrganizationService - get', (done) => {
-    const res = {
-      id: 1,
-      createdDate: '2022-01-20T10:30:44Z',
-      lastModifiedDate: '2022-04-12T11:58:02Z'
+    const response = {
+      data: {
+        id: 1,
+        createdDate: '2022-01-20T10:30:44Z',
+        lastModifiedDate: '2022-04-12T11:58:02Z'
+      },
+      headers: []
     }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(res))
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const id = 1
     OrganizationService.get(id).then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/organizations/' + id)
       expect(value).toStrictEqual({
-        id: res.id,
-        createdDate: DateUtils.convertDateTimeFromServer(res.createdDate),
-        lastModifiedDate: DateUtils.convertDateTimeFromServer(res.lastModifiedDate)
+        data: {
+          id: response.data.id,
+          createdDate: DateUtils.convertDateTimeFromServer(response.data.createdDate),
+          lastModifiedDate: DateUtils.convertDateTimeFromServer(response.data.lastModifiedDate)
+        },
+        headers: []
       })
       done()
     })
   })
 
   it('test 3 OrganizationService - update', (done) => {
-    FetchWrapper.putJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.putJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const data = {
       id: 1
@@ -51,19 +65,23 @@ describe('OrganizationService.js tests', () => {
     OrganizationService.update(data).then(value => {
       expect(FetchWrapper.putJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.putJson).toHaveBeenCalledWith('api/organizations', data)
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })
 
   it('test 4 OrganizationService - delete', (done) => {
-    FetchWrapper.deleteJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.deleteJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const id = 1
     OrganizationService.delete(id).then(value => {
       expect(FetchWrapper.deleteJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.deleteJson).toHaveBeenCalledWith('api/organizations/' + id)
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })

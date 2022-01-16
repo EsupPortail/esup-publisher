@@ -66,8 +66,8 @@ export default {
   methods: {
     // Méthode de récupération de l'objet grâce à l'id passé en paramètre
     initData () {
-      FilterService.get(this.$route.params.id).then(result => {
-        this.filter = result
+      FilterService.get(this.$route.params.id).then(response => {
+        this.filter = response.data
       }).catch(error => {
         console.error(error)
       })

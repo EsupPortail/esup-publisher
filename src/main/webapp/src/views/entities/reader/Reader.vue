@@ -310,7 +310,7 @@ export default {
     // Méthode permettant de récupérer la liste des objets lecteurs
     loadAll () {
       ReaderService.query().then(response => {
-        this.readers = response
+        this.readers = response.data
       }).catch(error => {
         console.error(error)
       })
@@ -338,8 +338,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de lecteur
     update (id) {
-      ReaderService.get(id).then(result => {
-        this.reader = result
+      ReaderService.get(id).then(response => {
+        this.reader = response.data
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -347,8 +347,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de lecteur
     deleteReader (id) {
-      ReaderService.get(id).then(result => {
-        this.reader = result
+      ReaderService.get(id).then(response => {
+        this.reader = response.data
         this.deleteModal.show()
       }).catch(error => {
         console.error(error)

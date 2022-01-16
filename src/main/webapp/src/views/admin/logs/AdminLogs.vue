@@ -74,15 +74,15 @@ export default {
     },
     changeLevel (name, level) {
       LogsService.changeLevel(name, level).then(() => {
-        LogsService.findAll().then(res => {
-          this.loggers = res
+        LogsService.findAll().then(response => {
+          this.loggers = response.data
         })
       })
     }
   },
   created () {
-    LogsService.findAll().then(res => {
-      this.loggers = res
+    LogsService.findAll().then(response => {
+      this.loggers = response.data
     })
   }
 }

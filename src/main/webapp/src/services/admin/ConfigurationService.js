@@ -4,7 +4,7 @@ class ConfigurationService {
   get () {
     return FetchWrapper.getJson('configprops').then(response => {
       var properties = []
-      Object.values(response).forEach(data => {
+      Object.values(response.data).forEach(data => {
         properties.push(data)
       })
       return properties

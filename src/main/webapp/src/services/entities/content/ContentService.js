@@ -7,15 +7,15 @@ class ContentService {
   }
 
   get (id) {
-    return FetchWrapper.getJson('api/contents/' + id).then(data => {
-      if (data) {
-        data.item.endDate = DateUtils.convertLocalDateFromServer(data.item.endDate)
-        data.item.startDate = DateUtils.convertLocalDateFromServer(data.item.startDate)
-        data.item.validatedDate = DateUtils.convertDateTimeFromServer(data.item.validatedDate)
-        data.item.createdDate = DateUtils.convertDateTimeFromServer(data.item.createdDate)
-        data.item.lastModifiedDate = DateUtils.convertDateTimeFromServer(data.item.lastModifiedDate)
+    return FetchWrapper.getJson('api/contents/' + id).then(response => {
+      if (response.data) {
+        response.data.item.endDate = DateUtils.convertLocalDateFromServer(response.data.item.endDate)
+        response.data.item.startDate = DateUtils.convertLocalDateFromServer(response.data.item.startDate)
+        response.data.item.validatedDate = DateUtils.convertDateTimeFromServer(response.data.item.validatedDate)
+        response.data.item.createdDate = DateUtils.convertDateTimeFromServer(response.data.item.createdDate)
+        response.data.item.lastModifiedDate = DateUtils.convertDateTimeFromServer(response.data.item.lastModifiedDate)
       }
-      return data
+      return response
     })
   }
 

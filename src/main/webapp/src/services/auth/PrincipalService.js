@@ -16,8 +16,8 @@ class PrincipalService {
         resolve(identity)
       } else {
         // retrieve the identity data from the server, update the identity object, and then resolve.
-        AccountService.account().then(account => {
-          store.commit('setIdentity', account)
+        AccountService.account().then(response => {
+          store.commit('setIdentity', response.data)
           store.commit('setAuthenticated', true)
           resolve(identity)
         }).catch(() => {

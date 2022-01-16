@@ -10,30 +10,42 @@ describe('RedactorService.js tests', () => {
   })
 
   it('test 1 RedactorService - query', (done) => {
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve([]))
+    const response = {
+      data: [],
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     RedactorService.query().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/redactors')
-      expect(value).toStrictEqual([])
+      expect(value).toStrictEqual(response)
       done()
     })
   })
 
   it('test 2 RedactorService - get', (done) => {
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const id = 1
     RedactorService.get(id).then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/redactors/' + id)
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })
 
   it('test 3 RedactorService - update', (done) => {
-    FetchWrapper.putJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.putJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const data = {
       id: 1
@@ -41,19 +53,23 @@ describe('RedactorService.js tests', () => {
     RedactorService.update(data).then(value => {
       expect(FetchWrapper.putJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.putJson).toHaveBeenCalledWith('api/redactors', data)
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })
 
   it('test 4 RedactorService - delete', (done) => {
-    FetchWrapper.deleteJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.deleteJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     const id = 1
     RedactorService.delete(id).then(value => {
       expect(FetchWrapper.deleteJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.deleteJson).toHaveBeenCalledWith('api/redactors/' + id)
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })

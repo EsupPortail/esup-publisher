@@ -365,7 +365,7 @@ export default {
     // Méthode permettant de récupérer la liste des objets redacteurs
     loadAll () {
       RedactorService.query().then(response => {
-        this.redactors = response
+        this.redactors = response.data
       }).catch(error => {
         console.error(error)
       })
@@ -397,8 +397,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de redacteur
     update (id) {
-      RedactorService.get(id).then(result => {
-        this.redactor = result
+      RedactorService.get(id).then(response => {
+        this.redactor = response.data
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -406,8 +406,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de redacteur
     deleteRedactor (id) {
-      RedactorService.get(id).then(result => {
-        this.redactor = result
+      RedactorService.get(id).then(response => {
+        this.redactor = response.data
         this.deleteModal.show()
       }).catch(error => {
         console.error(error)

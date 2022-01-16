@@ -76,8 +76,8 @@ export default {
   },
   methods: {
     loadAll () {
-      ClassificationService.query(this.publisher.id, true).then(result => {
-        result.forEach(obj => {
+      ClassificationService.query(this.publisher.id, true).then(response => {
+        response.data.forEach(obj => {
           this.classificationsList.push({
             contextKey: obj.contextKey,
             icon: obj.iconUrl,
@@ -110,8 +110,8 @@ export default {
         this.showCats = true
       })
 
-      ClassificationService.highlighted().then(result => {
-        this.classificationHighlighted = result
+      ClassificationService.highlighted().then(response => {
+        this.classificationHighlighted = response.data
       })
     },
     autoValidateClassif () {

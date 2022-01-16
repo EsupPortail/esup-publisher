@@ -6,7 +6,7 @@ import FetchWrapper from '../util/FetchWrapper'
 class AuthenticationService {
   login () {
     return new Promise((resolve, reject) => {
-      FetchWrapper.getJsonP('app/login').then(data => {
+      FetchWrapper.getJsonP('app/login').then(() => {
         PrincipalService.identify(true).then(account => {
           if (account !== undefined && account.user.langKey !== undefined && account.user.langKey !== null) {
             store.commit('setLang', account.user.langKey)

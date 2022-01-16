@@ -75,8 +75,8 @@ export default {
   methods: {
     // Méthode de récupération de l'objet grâce à l'id passé en paramètre
     initData () {
-      ReaderService.get(this.$route.params.id).then(result => {
-        this.reader = result
+      ReaderService.get(this.$route.params.id).then(response => {
+        this.reader = response.data
       }).catch(error => {
         console.error(error)
       })

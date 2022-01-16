@@ -106,8 +106,8 @@ export default {
   methods: {
     // Méthode de récupération de l'objet grâce à l'id passé en paramètre
     initData () {
-      RedactorService.get(this.$route.params.id).then(result => {
-        this.redactor = result
+      RedactorService.get(this.$route.params.id).then(response => {
+        this.redactor = response.data
       }).catch(error => {
         console.error(error)
       })

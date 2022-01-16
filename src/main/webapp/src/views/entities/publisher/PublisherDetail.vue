@@ -144,8 +144,8 @@ export default {
   methods: {
     // Méthode de récupération de l'objet grâce à l'id passé en paramètre
     initData () {
-      PublisherService.get(this.$route.params.id).then(result => {
-        this.publisher = result
+      PublisherService.get(this.$route.params.id).then(response => {
+        this.publisher = response.data
       }).catch(error => {
         console.error(error)
       })

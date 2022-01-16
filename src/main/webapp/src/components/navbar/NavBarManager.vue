@@ -92,8 +92,8 @@ export default {
     }
   },
   created () {
-    UserService.canModerateAnyThing().then(data => {
-      this.canModerate = data.value
+    UserService.canModerateAnyThing().then(response => {
+      this.canModerate = response.data.value
     })
   }
 }

@@ -186,7 +186,7 @@ export default {
     // Méthode permettant de récupérer la liste des objets filtres
     loadAll () {
       FilterService.query().then(response => {
-        this.filters = response
+        this.filters = response.data
       }).catch(error => {
         console.error(error)
       })
@@ -212,8 +212,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de filtre
     update (id) {
-      FilterService.get(id).then(result => {
-        this.filter = result
+      FilterService.get(id).then(response => {
+        this.filter = response.data
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -221,8 +221,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de filtre
     deleteFilter (id) {
-      FilterService.get(id).then(result => {
-        this.filter = result
+      FilterService.get(id).then(response => {
+        this.filter = response.data
         this.deleteModal.show()
       }).catch(error => {
         console.error(error)
@@ -262,7 +262,7 @@ export default {
   },
   created () {
     OrganizationService.query().then(response => {
-      this.organizations = response
+      this.organizations = response.data
     }).catch(error => {
       console.error(error)
     })

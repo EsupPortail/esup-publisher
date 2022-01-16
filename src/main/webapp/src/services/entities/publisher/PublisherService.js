@@ -7,12 +7,12 @@ class PublisherService {
   }
 
   get (id) {
-    return FetchWrapper.getJson('api/publishers/' + id).then(data => {
-      if (data) {
-        data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate)
-        data.lastModifiedDate = DateUtils.convertDateTimeFromServer(data.lastModifiedDate)
+    return FetchWrapper.getJson('api/publishers/' + id).then(response => {
+      if (response.data) {
+        response.data.createdDate = DateUtils.convertDateTimeFromServer(response.data.createdDate)
+        response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(response.data.lastModifiedDate)
       }
-      return data
+      return response
     })
   }
 

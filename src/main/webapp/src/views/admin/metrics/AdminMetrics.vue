@@ -426,8 +426,8 @@ export default {
     },
     refresh () {
       this.updatingMetrics = true
-      MonitoringService.getMetrics().then(res => {
-        this.metrics = res
+      MonitoringService.getMetrics().then(response => {
+        this.metrics = response.data
         this.loadStats()
         this.updatingMetrics = false
       }).catch(error => {
@@ -441,8 +441,8 @@ export default {
       })
     },
     refreshThreadDumpData () {
-      MonitoringService.threadDump().then(res => {
-        this.threadDumps = res.threads
+      MonitoringService.threadDump().then(response => {
+        this.threadDumps = response.data.threads
 
         this.countThreadDumpRunnable = 0
         this.countThreadDumpWaiting = 0

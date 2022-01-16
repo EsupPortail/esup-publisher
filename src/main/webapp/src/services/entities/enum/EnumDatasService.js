@@ -19,23 +19,23 @@ class EnumDatasService {
   WritingFormatList
 
   init () {
-    return AllEnumsService.query().then(data => {
-      if (data) {
-        this.AccessTypeList = data.AccessType
-        this.ContextTypeList = data.ContextType
-        this.DisplayOrderTypeList = data.DisplayOrderType
-        this.FilterTypeList = data.FilterType
-        this.ItemStatusList = data.ItemStatus
-        this.ItemTypeList = data.ItemType
-        this.OperatorTypeList = data.OperatorType
-        this.PermissionClassList = data.PermissionClass
-        this.PermissionTypeList = data.PermissionType
-        this.StringEvaluationModeList = data.StringEvaluationMode
-        this.SubjectTypeList = data.SubjectType
-        this.SubscribeTypeList = data.SubscribeType
-        this.WritingModeList = data.WritingMode
-        this.WritingFormatList = data.WritingFormat
-        this.ClassificationDecorTypeList = data.ClassificationDecorType
+    return AllEnumsService.query().then(response => {
+      if (response.data) {
+        this.AccessTypeList = response.data.AccessType
+        this.ContextTypeList = response.data.ContextType
+        this.DisplayOrderTypeList = response.data.DisplayOrderType
+        this.FilterTypeList = response.data.FilterType
+        this.ItemStatusList = response.data.ItemStatus
+        this.ItemTypeList = response.data.ItemType
+        this.OperatorTypeList = response.data.OperatorType
+        this.PermissionClassList = response.data.PermissionClass
+        this.PermissionTypeList = response.data.PermissionType
+        this.StringEvaluationModeList = response.data.StringEvaluationMode
+        this.SubjectTypeList = response.data.SubjectType
+        this.SubscribeTypeList = response.data.SubscribeType
+        this.WritingModeList = response.data.WritingMode
+        this.WritingFormatList = response.data.WritingFormat
+        this.ClassificationDecorTypeList = response.data.ClassificationDecorType
       }
     }).catch(error => {
       console.error(error)

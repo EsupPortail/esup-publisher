@@ -5,7 +5,7 @@ import UserService from '@/services/user/UserService'
 const CanModerateDirective = {
   canModerate (el) {
     UserService.canModerateAnyThing().then(response => {
-      if (!response.value) {
+      if (!response.data.value) {
         el.style.display = 'none'
       } else {
         el.style.display = 'inline-block'

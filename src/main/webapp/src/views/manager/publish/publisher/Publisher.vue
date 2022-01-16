@@ -78,7 +78,7 @@ export default {
     loadAll () {
       // TODO PublisherService.query(true).then(result => {
       FetchWrapper.getJson('api/publishers?' + new URLSearchParams({ used: true })).then(result => {
-        this.publishers = result
+        this.publishers = result.data
 
         this.readers = []
         this.redactors = []
@@ -237,9 +237,9 @@ export default {
   created () {
     if (this.publisher === null || this.publisher === undefined || CommonUtils.equals({}, this.publisher)) {
       if (this.contentData && this.contentData.classifications && this.contentData.classifications.length > 0) {
-        ClassificationService.get(this.contentData.classifications[0].keyId).then(classification => {
-          if (classification) {
-            this.setPublisher(classification.publisher)
+        ClassificationService.get(this.contentData.classifications[0].keyId).then(response => {
+          if (response.data) {
+            this.setPublisher(response.data.publisher)
             this.selectedPublisher = {
               context: {
                 reader: this.publisher.context.reader,

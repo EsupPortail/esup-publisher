@@ -11,15 +11,15 @@ class ItemService {
   }
 
   get (id) {
-    return FetchWrapper.getJson('api/items/' + id).then(data => {
-      if (data) {
-        data.endDate = DateUtils.convertLocalDateFromServer(data.endDate)
-        data.startDate = DateUtils.convertLocalDateFromServer(data.startDate)
-        data.validatedDate = DateUtils.convertDateTimeFromServer(data.validatedDate)
-        data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate)
-        data.lastModifiedDate = DateUtils.convertDateTimeFromServer(data.lastModifiedDate)
+    return FetchWrapper.getJson('api/items/' + id).then(response => {
+      if (response.data) {
+        response.data.endDate = DateUtils.convertLocalDateFromServer(response.data.endDate)
+        response.data.startDate = DateUtils.convertLocalDateFromServer(response.data.startDate)
+        response.data.validatedDate = DateUtils.convertDateTimeFromServer(response.data.validatedDate)
+        response.data.createdDate = DateUtils.convertDateTimeFromServer(response.data.createdDate)
+        response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(response.data.lastModifiedDate)
       }
-      return data
+      return response
     })
   }
 

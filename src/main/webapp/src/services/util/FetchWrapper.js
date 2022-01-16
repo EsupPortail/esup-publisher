@@ -62,7 +62,10 @@ function fetchWithRetry (resolve, reject, url, params) {
         }
       } else {
         response.text().then(text => {
-          resolve(text ? JSON.parse(text) : null)
+          resolve({
+            data: text ? JSON.parse(text) : null,
+            headers: response.headers
+          })
         }).catch(error => {
           reject(error)
         })

@@ -181,8 +181,8 @@ export default {
       this.$router.push({ name: 'Home' })
     } else {
       if (this.$route.params.id) {
-        ContentService.get(this.$route.params.id).then(content => {
-          this.contentData = content
+        ContentService.get(this.$route.params.id).then(response => {
+          this.contentData = response.data
           this.dataLoaded = true
         })
       } else {

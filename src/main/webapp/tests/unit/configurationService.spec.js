@@ -10,10 +10,14 @@ describe('ConfigurationService.js tests', () => {
   })
 
   it('test 1 ConfigurationService - get', (done) => {
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve({
-      key1: 'val1',
-      key2: 'val2'
-    }))
+    const response = {
+      data: {
+        key1: 'val1',
+        key2: 'val2'
+      },
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     ConfigurationService.get().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
@@ -24,12 +28,16 @@ describe('ConfigurationService.js tests', () => {
   })
 
   it('test 2 ConfigurationService - getEnv', (done) => {
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve({}))
+    const response = {
+      data: {},
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
     ConfigurationService.getEnv().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
       expect(FetchWrapper.getJson).toHaveBeenCalledWith('env')
-      expect(value).toStrictEqual({})
+      expect(value).toStrictEqual(response)
       done()
     })
   })

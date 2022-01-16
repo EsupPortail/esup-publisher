@@ -80,9 +80,9 @@ export default {
       })
       this.configuration = this.configuration.concat(properties)
     })
-    ConfigurationService.getEnv().then(configuration => {
+    ConfigurationService.getEnv().then(response => {
       var properties = []
-      var propertiesObject = configuration.propertySources
+      var propertiesObject = response.data.propertySources
       propertiesObject.forEach(obj => {
         var name = obj.name
         var detailProperties = obj.properties

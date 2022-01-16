@@ -256,7 +256,7 @@ export default {
     // Méthode permettant de récupérer la liste des objets structures
     loadAll () {
       OrganizationService.query().then(response => {
-        this.organizations = response
+        this.organizations = response.data
       }).catch(error => {
         console.error(error)
       })
@@ -297,8 +297,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de structure
     update (id) {
-      OrganizationService.get(id).then(result => {
-        this.organization = result
+      OrganizationService.get(id).then(response => {
+        this.organization = response.data
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -306,8 +306,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de structure
     deleteOrganization (id) {
-      OrganizationService.get(id).then(result => {
-        this.organization = result
+      OrganizationService.get(id).then(response => {
+        this.organization = response.data
         this.deleteModal.show()
       }).catch(error => {
         console.error(error)

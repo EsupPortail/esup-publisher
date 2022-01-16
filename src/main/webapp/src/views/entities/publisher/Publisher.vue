@@ -307,7 +307,7 @@ export default {
     // Méthode permettant de récupérer la liste des objets contexte de publication
     loadAll () {
       PublisherService.query().then(response => {
-        this.publishers = response
+        this.publishers = response.data
       }).catch(error => {
         console.error(error)
       })
@@ -338,8 +338,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de mise à jour de contexte de publication
     update (id) {
-      PublisherService.get(id).then(result => {
-        this.publisher = result
+      PublisherService.get(id).then(response => {
+        this.publisher = response.data
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -347,8 +347,8 @@ export default {
     },
     // Méthode en charge d'ouvrir la modale de suppression de contexte de publication
     deletePublisher (id) {
-      PublisherService.get(id).then(result => {
-        this.publisher = result
+      PublisherService.get(id).then(response => {
+        this.publisher = response.data
         this.deleteModal.show()
       }).catch(error => {
         console.error(error)
@@ -419,19 +419,19 @@ export default {
   },
   created () {
     RedactorService.query().then(response => {
-      this.redactors = response
+      this.redactors = response.data
       this.publisher.context.redactor = this.redactors[0]
     }).catch(error => {
       console.error(error)
     })
     OrganizationService.query().then(response => {
-      this.organizations = response
+      this.organizations = response.data
       this.publisher.context.organization = this.organizations[0]
     }).catch(error => {
       console.error(error)
     })
     ReaderService.query().then(response => {
-      this.readers = response
+      this.readers = response.data
       this.publisher.context.reader = this.readers[0]
     }).catch(error => {
       console.error(error)

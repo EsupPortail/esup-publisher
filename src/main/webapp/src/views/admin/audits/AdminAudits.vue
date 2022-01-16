@@ -114,8 +114,8 @@ export default {
       this.fromDate = fromDate
     },
     onChangeDate () {
-      AuditsService.findByDates(this.fromDate, this.toDate).then(data => {
-        this.audits = data
+      AuditsService.findByDates(this.fromDate, this.toDate).then(response => {
+        this.audits = response.data
       })
     },
     formatDate (date) {

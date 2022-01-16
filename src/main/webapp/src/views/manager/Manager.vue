@@ -37,11 +37,11 @@ export default {
   },
   methods: {
     init () {
-      OrganizationService.query().then(data => {
-        this.organizations = data
+      OrganizationService.query().then(response => {
+        this.organizations = response.data
       })
-      RedactorService.query().then(data => {
-        this.redactors = data
+      RedactorService.query().then(response => {
+        this.redactors = response.data
       })
     }
   },
