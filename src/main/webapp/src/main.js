@@ -9,6 +9,7 @@ import HasAnyRoleDirective from './directives/HasAnyRoleDirective.js'
 import HasRoleDirective from './directives/HasRoleDirective.js'
 import DisableClickDirective from './directives/DisableClickDirective.js'
 import TooltipDirective from './directives/TooltipDirective.js'
+import ToastPlugin from './components/toaster'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import './assets/styles/main.css'
@@ -30,7 +31,7 @@ app.directive('active-menu', NavbarDirective)
   .directive('has-role', HasRoleDirective)
   .directive('disable-click', DisableClickDirective)
   .directive('tooltip', TooltipDirective)
-  .use(store).use(router).use(i18n).mount('#app')
+  .use(store).use(router).use(i18n).use(ToastPlugin).mount('#app')
 
 // Plus nécessaire à partir de Vue 3.3
 app.config.unwrapInjectedRef = true
