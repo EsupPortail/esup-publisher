@@ -1,14 +1,14 @@
 <template>
 <div class='redactor'>
     <h2 >{{$t('redactor.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveRedactorModal" @click="clear">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveRedactorModal" @click="clear();initFormValidator()">
         <span class="fas fa-bolt"></span> <span >{{$t('redactor.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="saveRedactorModal" tabindex="-1" role="dialog" aria-labelledby="myRedactorLabel"
          aria-hidden="true" ref="saveRedactorModal">
         <div class="modal-dialog modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate show-validation>
+                <form name="editForm" role="form" class="was-validated" novalidate show-validation>
                     <div class="modal-header">
                         <h4 class="modal-title" id="myRedactorLabel">{{$t('redactor.home.createOrEditLabel')}}</h4>
                         <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
@@ -23,62 +23,53 @@
 
                         <div class="form-group">
                             <label for ="name" class="control-label">{{$t('redactor.name')}}</label>
-                            <input type="text" class="form-control" :class="(nameMinLength || nameMaxLength) ? 'is-invalid' : 'valid'" name="name" id="name"
-                                   v-model="redactor.name">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="nameFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nameMinLength">
-                                    {{$t('entity.validation.minlength', {min:'3'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nameMaxLength" >
-                                    {{$t('entity.validation.maxlength', {max:'20'})}}
-                                </p>
+                            <input type="text" class="form-control" name="name" id="name"
+                                   v-model="redactor.name" required minlength="3" maxlength="20">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'3'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'20'})}}
                             </div>
                         </div>
                          <div class="form-group">
                             <label for="displayName" class="control-label">{{$t('redactor.displayName')}}</label>
-                            <input type="text" class="form-control" :class="(displayNameMinLength || displayNameMaxLength) ? 'is-invalid' : 'valid'" name="displayName" id="displayName"
-                                   v-model="redactor.displayName" required>
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="displayNameFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayNameMinLength">
-                                    {{$t('entity.validation.minlength', {min:'3'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayNameMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'50'})}}
-                                </p>
+                            <input type="text" class="form-control" name="displayName" id="displayName"
+                                   v-model="redactor.displayName" required minlength="3" maxlength="50">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'3'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'50'})}}
                             </div>
                         </div>
                          <div class="form-group">
                             <label for="description" class="control-label">{{$t('redactor.description')}}</label>
-                            <input type="text" class="form-control" :class="(descriptionMinLength || descriptionMaxLength) ? 'is-invalid' : 'valid'" name="description" id="description"
-                                   v-model="redactor.description" required>
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="descriptionFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="descriptionMinLength">
-                                    {{$t('entity.validation.minlength', {min:'5'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="descriptionMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'512'})}}
-                                </p>
+                            <input type="text" class="form-control" name="description" id="description"
+                                   v-model="redactor.description" required minlength="5" maxlength="512">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'5'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'512'})}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -86,11 +77,9 @@
                           <select class="form-select"  id="format" v-model="redactor.format" required>
                             <option v-for="format in writingFormatList" :key="format.id" :value="format">{{format}}</option>
                           </select>
-                          <div>
-                              <p class="help-block"
-                                  v-if="formatFieldRequired">
-                                  {{$t('entity.validation.required')}}
-                              </p>
+                          <div class="invalid-feedback"
+                              v-if="formValidator.hasError('format', formErrors.REQUIRED)">
+                              {{$t('entity.validation.required')}}
                           </div>
                         </div>
                         <div class="form-group">
@@ -98,63 +87,55 @@
                           <select class="form-select"  id="writingMode" v-model="redactor.writingMode" required>
                             <option v-for="writingMode in this.writingModeList" :key="writingMode.id" :value="writingMode.name">{{$t(this.getWritingModeLabel(writingMode.name))}}</option>
                           </select>
-                           <div>
-                              <p class="help-block"
-                                  v-if="writingModeFieldRequired">
-                                  {{$t('entity.validation.required')}}
-                              </p>
+                          <div class="invalid-feedback"
+                            v-if="formValidator.hasError('writingMode', formErrors.REQUIRED)">
+                            {{$t('entity.validation.required')}}
                           </div>
                         </div>
                         <div class="form-group">
                             <label for="nbLevelsOfClassification" class="control-label">{{$t('redactor.nbLevelsOfClassification')}}</label>
-                            <input type="number" class="form-control" :class="(nbLevelsOfClassificationMinLength || nbLevelsOfClassificationMaxLength) ? 'is-invalid' : 'valid'" name="nbLevelsOfClassification" id="nbLevelsOfClassification"
+                            <input type="number" class="form-control" name="nbLevelsOfClassification" id="nbLevelsOfClassification"
                                    v-model="redactor.nbLevelsOfClassification" required min="1" max="2">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="nbLevelsOfClassificationMinLength">
-                                    {{$t('entity.validation.minlength', {min:'1'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nbLevelsOfClassificationMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'2'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nbLevelsOfClassificationIsNumberValue">
-                                    {{$t('entity.validation.number')}}
-                                </p>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbLevelsOfClassification', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbLevelsOfClassification', formErrors.MIN_VALUE)">
+                                {{$t('entity.validation.min', {min:'1'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbLevelsOfClassification', formErrors.MAX_VALUE)">
+                                {{$t('entity.validation.max', {max:'2'})}}
                             </div>
                         </div>
                         <div class="form-group">
-                          <label for ="optionalPublishTime" class="control-label">{{$t('redactor.optionalPublishTime')}}</label>
+                          <label for ="optionalPublishTime" class="control-label me-2">{{$t('redactor.optionalPublishTime')}}</label>
                           <input type="checkbox" class="form-check-input " name="optionalPublishTime" id="optionalPublishTime"
                                    v-model="redactor.optionalPublishTime" value="false">
                         </div>
                         <div class="form-group">
                             <label for="nbDaysMaxDuration" class="control-label">{{$t('redactor.nbDaysMaxDuration')}}</label>
-                            <input type="number" class="form-control" :class="(nbDaysMaxDurationMinLength || nbDaysMaxDurationMaxLength) ? 'is-invalid' : 'valid'" name="nbDaysMaxDuration" id="nbDaysMaxDuration"
+                            <input type="number" class="form-control" name="nbDaysMaxDuration" id="nbDaysMaxDuration"
                                    v-model="redactor.nbDaysMaxDuration" required min="1" max="999">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="nbDaysMaxDurationMinLength">
-                                    {{$t('entity.validation.minlength', {min:'1'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nbDaysMaxDurationMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'999'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nbDaysMaxDurationIsNumberValue">
-                                    {{$t('entity.validation.number')}}
-                                </p>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbDaysMaxDuration', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbDaysMaxDuration', formErrors.MIN_VALUE)">
+                                {{$t('entity.validation.min', {min:'1'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('nbDaysMaxDuration', formErrors.MAX_VALUE)">
+                                {{$t('entity.validation.max', {max:'999'})}}
                             </div>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="isAnyFieldError" @click="createRedactor" >
+                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createRedactor" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                         </div>
@@ -242,6 +223,7 @@
 <script>
 import RedactorService from '@/services/entities/redactor/RedactorService'
 import EnumDatasService from '@/services/entities/enum/EnumDatasService'
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils'
 import { Modal } from 'bootstrap'
 
 export default {
@@ -252,7 +234,8 @@ export default {
       redactor: { name: null, displayName: null, description: null, format: null, writingMode: null, nbLevelsOfClassification: 1, optionalPublishTime: false, nbDaysMaxDuration: 168, id: null },
       deleteModal: null,
       updateModal: null,
-      errors: new Map()
+      formValidator: new FormValidationUtils(),
+      formErrors: FormErrorType
     }
   },
   computed: {
@@ -261,104 +244,6 @@ export default {
     },
     writingModeList () {
       return EnumDatasService.getWritingModeList()
-    },
-    // Méthodes en charge du lancement des messages d'erreurs
-    // sur les champs du formulaire de création et de mise à jour
-    nameFieldRequired () {
-      if (this.redactor.name === null || this.redactor.name.trim().length === 0 || this.redactor.name === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    nameMinLength () {
-      return this.errors.get('name') === 'minlength'
-    },
-    nameMaxLength () {
-      return this.errors.get('name') === 'maxlength'
-    },
-    displayNameFieldRequired () {
-      if (this.redactor.displayName === null || this.redactor.displayName.trim().length === 0 || this.redactor.displayName === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    displayNameMinLength () {
-      return this.errors.get('displayName') === 'minlength'
-    },
-    displayNameMaxLength () {
-      return this.errors.get('displayName') === 'maxlength'
-    },
-    descriptionFieldRequired () {
-      if (this.redactor.description === null || this.redactor.description.trim().length === 0 || this.redactor.description === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    descriptionMinLength () {
-      return this.errors.get('description') === 'minlength'
-    },
-    descriptionMaxLength () {
-      return this.errors.get('description') === 'maxlength'
-    },
-    formatFieldRequired () {
-      if (this.redactor.format === null || this.redactor.format.trim().length === 0 || this.redactor.format === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    writingModeFieldRequired () {
-      if (this.redactor.writingMode === null || this.redactor.writingMode.trim().length === 0 || this.redactor.writingMode === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    nbLevelsOfClassificationFieldRequired () {
-      if (this.redactor.nbLevelsOfClassification === null || this.redactor.nbLevelsOfClassification === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    nbLevelsOfClassificationMinLength () {
-      return this.errors.get('nbLevelsOfClassification') === 'minlength'
-    },
-    nbLevelsOfClassificationMaxLength () {
-      return this.errors.get('nbLevelsOfClassification') === 'maxlength'
-    },
-    nbDaysMaxDurationFieldRequired () {
-      if (this.redactor.nbDaysMaxDuration === null || this.redactor.nbDaysMaxDuration === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    nbDaysMaxDurationMinLength () {
-      return this.errors.get('nbDaysMaxDuration') === 'minlength'
-    },
-    nbDaysMaxDurationMaxLength () {
-      return this.errors.get('nbDaysMaxDuration') === 'maxlength'
-    },
-    nbLevelsOfClassificationIsNumberValue () {
-      return typeof this.redactor.nbLevelsOfClassification === 'string'
-    },
-    nbDaysMaxDurationIsNumberValue () {
-      return typeof this.redactor.nbDaysMaxDuration === 'string'
-    },
-    // Méthode en charge d'activer ou non le boutton
-    // de sauvegarde du formulaire de saisie
-    isAnyFieldError () {
-      if (this.nameFieldRequired || this.nameMinLength || this.nameMaxLength || this.nameFieldRequired || this.descriptionMinLength ||
-      this.descriptionMaxLength || this.displayNameFieldRequired || this.displayNameMinLength || this.displayNameMaxLength || this.formatFieldRequired ||
-      this.writingModeFieldRequired || this.nbLevelsOfClassificationFieldRequired || this.nbLevelsOfClassificationMinLength || this.nbLevelsOfClassificationMaxLength ||
-      this.nbDaysMaxDurationFieldRequired || this.nbDaysMaxDurationMinLength || this.nbDaysMaxDurationMaxLength) {
-        return 'disabled'
-      }
-      return null
     }
   },
   methods: {
@@ -370,16 +255,16 @@ export default {
         console.error(error)
       })
     },
-    // Méthode permettant d'initialiser la map contenant
-    // les types d'erreurs pour chaque champs de formulaire
-    initMapError () {
-      this.errors.set('name', null)
-      this.errors.set('displayName', null)
-      this.errors.set('description', null)
-      this.errors.set('format', null)
-      this.errors.set('writingMode', null)
-      this.errors.set('nbLevelsOfClassification', null)
-      this.errors.set('nbDaysMaxDuration', null)
+    // Méthode permettant d'initialiser le FormValidator
+    initFormValidator () {
+      this.formValidator.clear()
+      this.formValidator.checkTextFieldValidity('name', this.redactor.name, 3, 20, true)
+      this.formValidator.checkTextFieldValidity('displayName', this.redactor.displayName, 3, 50, true)
+      this.formValidator.checkTextFieldValidity('description', this.redactor.description, 5, 512, true)
+      this.formValidator.checkTextFieldValidity('format', this.redactor.format, null, null, true)
+      this.formValidator.checkTextFieldValidity('writingMode', this.redactor.writingMode, null, null, true)
+      this.formValidator.checkNumberFieldValidity('nbLevelsOfClassification', this.redactor.nbLevelsOfClassification, 1, 2, true)
+      this.formValidator.checkNumberFieldValidity('nbDaysMaxDuration', this.redactor.nbDaysMaxDuration, 1, 999, true)
     },
     reset () {
       this.redactors = []
@@ -399,6 +284,7 @@ export default {
     update (id) {
       RedactorService.get(id).then(response => {
         this.redactor = response.data
+        this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -429,15 +315,6 @@ export default {
     redactorDetail (redactorId) {
       this.$router.push({ name: 'AdminEntityRedactorDetails', params: { id: redactorId } })
     },
-    setError (fieldName, val, min, max) {
-      if (val != null && val.length < min) {
-        this.errors.set(fieldName, 'minlength')
-      } else if (val != null && val.length > max) {
-        this.errors.set(fieldName, 'maxlength')
-      } else {
-        this.errors.set(fieldName, null)
-      }
-    },
     getWritingModeLabel (name) {
       if (name) {
         return this.writingModeList.filter(function (val) { return val.name === name })[0].label
@@ -450,36 +327,29 @@ export default {
     this.deleteModal = new Modal(this.$refs.deleteRedactorConfirmation)
     this.updateModal = new Modal(this.$refs.saveRedactorModal)
     this.loadAll()
-    this.initMapError()
   },
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
     'redactor.name' (newVal) {
-      this.setError('name', newVal, 3, 20)
+      this.formValidator.checkTextFieldValidity('name', newVal, 3, 20, true)
     },
     'redactor.displayName' (newVal) {
-      this.setError('displayName', newVal, 3, 50)
+      this.formValidator.checkTextFieldValidity('displayName', newVal, 3, 50, true)
     },
     'redactor.description' (newVal) {
-      this.setError('description', newVal, 5, 512)
+      this.formValidator.checkTextFieldValidity('description', newVal, 5, 512, true)
+    },
+    'redactor.format' (newVal) {
+      this.formValidator.checkTextFieldValidity('format', newVal, null, null, true)
+    },
+    'redactor.writingMode' (newVal) {
+      this.formValidator.checkTextFieldValidity('writingMode', newVal, null, null, true)
     },
     'redactor.nbLevelsOfClassification' (newVal) {
-      if (newVal != null && newVal < 1) {
-        this.errors.set('nbLevelsOfClassification', 'minlength')
-      } else if (newVal != null && newVal > 2) {
-        this.errors.set('nbLevelsOfClassification', 'maxlength')
-      } else {
-        this.errors.set('nbLevelsOfClassification', null)
-      }
+      this.formValidator.checkNumberFieldValidity('nbLevelsOfClassification', newVal, 1, 2, true)
     },
     'redactor.nbDaysMaxDuration' (newVal) {
-      if (newVal != null && newVal < 1) {
-        this.errors.set('nbDaysMaxDuration', 'minlength')
-      } else if (newVal != null && newVal > 999) {
-        this.errors.set('nbDaysMaxDuration', 'maxlength')
-      } else {
-        this.errors.set('nbDaysMaxDuration', null)
-      }
+      this.formValidator.checkNumberFieldValidity('nbDaysMaxDuration', newVal, 1, 999, true)
     }
   }
 }

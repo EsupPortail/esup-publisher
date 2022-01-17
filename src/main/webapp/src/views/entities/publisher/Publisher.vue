@@ -1,14 +1,14 @@
 <template>
 <div class='publisher'>
     <h2 >{{$t('publisher.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#savePublisherModal" @click="clearCreate">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#savePublisherModal" @click="clearCreate();initFormValidator()">
         <span class="fas fa-bolt"></span> <span >{{$t('publisher.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="savePublisherModal" tabindex="-1" role="dialog" aria-labelledby="myPublisherLabel"
          aria-hidden="true" ref="savePublisherModal">
         <div class="modal-dialog modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate show-validation>
+                <form name="editForm" role="form" class="was-validated" novalidate show-validation>
                     <div class="modal-header">
                         <h4 class="modal-title" id="myPublisherLabel">{{$t('publisher.home.createOrEditLabel')}}</h4>
                         <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
@@ -23,105 +23,119 @@
 
                         <div class="form-group">
                             <label class="control-label" for="organization" >{{$t('publisher.context.organization')}}</label>
-                            <select class="form-control" id="organization" name="organization" v-model="publisher.context.organization" required>
+                            <select class="form-select" id="organization" name="organization" v-model="publisher.context.organization" required>
                                 <option v-for="organization in organizations" v-bind:key="organization.id" :value="organization" >
                                     {{ organization.name }}
                                 </option>
                             </select>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('organization', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="reader" >{{$t('publisher.context.reader')}}</label>
-                            <select class="form-control" id="reader" name="reader" v-model="publisher.context.reader" required>
+                            <select class="form-select" id="reader" name="reader" v-model="publisher.context.reader" required>
                                 <option v-for="reader in readers" v-bind:key="reader.id" :value="reader">
                                     {{ reader.name }}
                                 </option>
                             </select>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('reader', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="redactor" >{{$t('publisher.context.redactor')}}</label>
-                            <select class="form-control" id="redactor" name="redactor" v-model="publisher.context.redactor" required>
+                            <select class="form-select" id="redactor" name="redactor" v-model="publisher.context.redactor" required>
                                 <option v-for="redactor in redactors" v-bind:key="redactor.id" :value="redactor">
                                     {{ redactor.displayName }}
                                 </option>
                             </select>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('redactor', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for ="displayName" class="control-label">{{$t('publisher.displayName')}}</label>
-                            <input type="text" class="form-control" :class="(displayNameMinLength || displayNameMaxLength) ? 'is-invalid' : 'valid'" name="displayName" id="displayName"
-                                   v-model="publisher.displayName">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="displayNameFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayNameMinLength">
-                                    {{$t('entity.validation.minlength', {min:'3'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayNameMaxLength" >
-                                    {{$t('entity.validation.maxlength', {max:'50'})}}
-                                </p>
+                            <input type="text" class="form-control" name="displayName" id="displayName"
+                                   v-model="publisher.displayName" required minlength="3" maxlength="50">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'3'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayName', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'50'})}}
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="permissionType" >{{$t('publisher.permissionType')}}</label>
-                            <select class="form-control" id="permissionType" name="permissionType" v-model="publisher.permissionType" required>
+                            <select class="form-select" id="permissionType" name="permissionType" v-model="publisher.permissionType" required>
                                 <option v-for="permissionClass in permissionClasses" v-bind:key="permissionClass.id" :value="permissionClass.name">
                                     {{$t(permissionClass.label)}}
                                 </option>
                             </select>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('permissionType', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
-                            <select class="form-control" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required>
+                            <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required>
                                 <option v-for="defaultDisplayOrderType in displayOrderTypeList" v-bind:key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
                                     {{$t(defaultDisplayOrderType.label)}}
                                 </option>
                             </select>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('defaultDisplayOrder', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="used" class="control-label">{{$t('publisher.used')}}</label>
+                            <label for="used" class="control-label me-2">{{$t('publisher.used')}}</label>
                             <input type="checkbox" class="form-check-input " name="used" id="used"
                                    v-model="publisher.used" value="true">
                         </div>
 
                         <div class="form-group">
                             <label for="displayOrder" class="control-label">{{$t('publisher.displayOrder')}}</label>
-                            <input type="number" class="form-control" :class="(displayOrderMinLength || displayOrderMaxLength) ? 'is-invalid' : 'valid'" name="displayOrder" id="displayOrder"
+                            <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                    v-model="publisher.displayOrder" required min="0" max="9">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="displayOrderMinLength">
-                                    {{$t('entity.validation.min', {min:'0'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayOrderMaxLength">
-                                    {{$t('entity.validation.max', {max:'9'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="isNumberValue">
-                                    {{$t('entity.validation.number')}}
-                                </p>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.MIN_VALUE)">
+                                {{$t('entity.validation.min', {min:'0'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.MAX_VALUE)">
+                                {{$t('entity.validation.max', {max:'9'})}}
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="hasSubPermsManagement" class="control-label">{{$t('publisher.hasSubPermsManagement')}}</label>
+                            <label for="hasSubPermsManagement" class="control-label me-2">{{$t('publisher.hasSubPermsManagement')}}</label>
                             <input type="checkbox" class="form-check-input " name="hasSubPermsManagement" id="hasSubPermsManagement"
                                    v-model="publisher.hasSubPermsManagement" value="true">
                         </div>
 
                         <div class="form-group">
-                            <label for="doHighlight" class="control-label">{{$t('publisher.doHighlight')}}</label>
+                            <label for="doHighlight" class="control-label me-2">{{$t('publisher.doHighlight')}}</label>
                             <input type="checkbox" class="form-check-input " name="doHighlight" id="doHighlight"
                                    v-model="publisher.doHighlight" value="true">
                         </div>
@@ -132,7 +146,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="isAnyFieldError" @click="createPublisher" >
+                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createPublisher" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                     </div>
@@ -223,6 +237,7 @@ import RedactorService from '@/services/entities/redactor/RedactorService'
 import OrganizationService from '@/services/entities/organization/OrganizationService'
 import ReaderService from '@/services/entities/reader/ReaderService'
 import EnumDatasService from '@/services/entities/enum/EnumDatasService'
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils'
 import { Modal } from 'bootstrap'
 
 export default {
@@ -236,7 +251,8 @@ export default {
       publisher: { context: { organization: {}, redactor: {}, reader: {} }, displayName: null, defaultDisplayOrder: null, permissionType: null, used: false, displayOrder: 0, hasSubPermsManagement: false, doHighlight: false, id: null },
       deleteModal: null,
       updateModal: null,
-      errors: new Map()
+      formValidator: new FormValidationUtils(),
+      formErrors: FormErrorType
     }
   },
   computed: {
@@ -247,60 +263,6 @@ export default {
     // Liste des types de Display Order
     displayOrderTypeList () {
       return EnumDatasService.getDisplayOrderTypeList()
-    },
-    // Pour les erreurs etc...
-    organizationFieldRequired () {
-      if (this.publisher.context.organization === null || this.publisher.context.organization.id === null || this.publisher.context.organization.id === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    readerFieldRequired () {
-      if (this.publisher.context.reader === null || this.publisher.context.reader.id === null || this.publisher.context.reader.id === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    redactorFieldRequired () {
-      if (this.publisher.context.redactor === null || this.publisher.context.redactor.id === null || this.publisher.context.redactor.id === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    displayNameFieldRequired () {
-      if (this.publisher.displayName === null || this.publisher.displayName.trim().length === 0 || this.publisher.displayName === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    displayNameMinLength () {
-      return this.errors.get('displayName') === 'minlength'
-    },
-    displayNameMaxLength () {
-      return this.errors.get('displayName') === 'maxlength'
-    },
-    displayOrderMinLength () {
-      return this.errors.get('displayOrder') === 'minlength'
-    },
-    displayOrderMaxLength () {
-      return this.errors.get('displayOrder') === 'maxlength'
-    },
-    isNumberValue () {
-      return typeof this.publisher.displayOrder === 'string'
-    },
-    // Méthode en charge d'activer ou non le boutton
-    // de sauvegarde du formulaire de saisie
-    isAnyFieldError () {
-      if (this.organizationFieldRequired || this.readerFieldRequired || this.redactorFieldRequired ||
-      this.displayOrderMinLength || this.displayOrderMaxLength ||
-      this.displayNameFieldRequired || this.displayNameMinLength || this.displayNameMaxLength) {
-        return 'disabled'
-      }
-      return null
     }
   },
   methods: {
@@ -312,15 +274,16 @@ export default {
         console.error(error)
       })
     },
-    // Méthode permettant d'initialiser la map contenant
-    // les types d'erreurs pour chaque champs de formulaire
-    initMapError () {
-      this.errors.set('organization', null)
-      this.errors.set('reader', null)
-      this.errors.set('redactor', null)
-      this.errors.set('displayOrder', null)
-      this.errors.set('displayName', null)
-      this.errors.set('used', null)
+    // Méthode permettant d'initialiser le FormValidator
+    initFormValidator () {
+      this.formValidator.clear()
+      this.formValidator.checkTextFieldValidity('organization', this.publisher.context.organization, null, null, true)
+      this.formValidator.checkTextFieldValidity('reader', this.publisher.context.reader, null, null, true)
+      this.formValidator.checkTextFieldValidity('redactor', this.publisher.context.redactor, null, null, true)
+      this.formValidator.checkTextFieldValidity('displayName', this.publisher.displayName, 3, 50, true)
+      this.formValidator.checkTextFieldValidity('permissionType', this.publisher.permissionType, null, null, true)
+      this.formValidator.checkTextFieldValidity('defaultDisplayOrder', this.publisher.defaultDisplayOrder, null, null, true)
+      this.formValidator.checkNumberFieldValidity('displayOrder', this.publisher.displayOrder, 0, 9, true)
     },
     reset () {
       this.publishers = []
@@ -340,6 +303,7 @@ export default {
     update (id) {
       PublisherService.get(id).then(response => {
         this.publisher = response.data
+        this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -379,15 +343,6 @@ export default {
     publisherDetail (publisherId) {
       this.$router.push({ name: 'AdminEntityPublisherDetails', params: { id: publisherId } })
     },
-    setError (fieldName, val, min, max) {
-      if (val != null && val.length < min) {
-        this.errors.set(fieldName, 'minlength')
-      } else if (val != null && val.length > max) {
-        this.errors.set(fieldName, 'maxlength')
-      } else {
-        this.errors.set(fieldName, null)
-      }
-    },
     getPermissionClassLabel (name) {
       return this.getEnumlabel('permissionClass', name)
     },
@@ -415,7 +370,6 @@ export default {
     this.deleteModal = new Modal(this.$refs.deletePublisherConfirmation)
     this.updateModal = new Modal(this.$refs.savePublisherModal)
     this.loadAll()
-    this.initMapError()
   },
   created () {
     RedactorService.query().then(response => {
@@ -439,17 +393,26 @@ export default {
   },
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
+    'publisher.context.organization' (newVal) {
+      this.formValidator.checkTextFieldValidity('organization', newVal, null, null, true)
+    },
+    'publisher.context.reader' (newVal) {
+      this.formValidator.checkTextFieldValidity('reader', newVal, null, null, true)
+    },
+    'publisher.context.redactor' (newVal) {
+      this.formValidator.checkTextFieldValidity('redactor', newVal, null, null, true)
+    },
     'publisher.displayName' (newVal) {
-      this.setError('displayName', newVal, 3, 50)
+      this.formValidator.checkTextFieldValidity('displayName', newVal, 3, 50, true)
+    },
+    'publisher.permissionType' (newVal) {
+      this.formValidator.checkTextFieldValidity('permissionType', newVal, null, null, true)
+    },
+    'publisher.defaultDisplayOrder' (newVal) {
+      this.formValidator.checkTextFieldValidity('defaultDisplayOrder', newVal, null, null, true)
     },
     'publisher.displayOrder' (newVal) {
-      if (newVal != null && newVal < 0) {
-        this.errors.set('displayOrder', 'minlength')
-      } else if (newVal != null && newVal > 9) {
-        this.errors.set('displayOrder', 'maxlength')
-      } else {
-        this.errors.set('displayOrder', null)
-      }
+      this.formValidator.checkNumberFieldValidity('displayOrder', newVal, 0, 9, true)
     }
   }
 }

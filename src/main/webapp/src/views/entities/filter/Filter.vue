@@ -1,14 +1,14 @@
 <template>
 <div class='filter'>
     <h2 >{{$t('filter.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveFilterModal" @click="clear" v-has-any-role="'ROLE_ADMIN'">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveFilterModal" @click="clear();initFormValidator()" v-has-any-role="'ROLE_ADMIN'">
         <span class="fas fa-bolt"></span> <span >{{$t('filter.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="saveFilterModal" tabindex="-1" role="dialog" aria-labelledby="myFilterLabel"
          aria-hidden="true" ref="saveFilterModal">
         <div class="modal-dialog modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate show-validation>
+                <form name="editForm" role="form" class="was-validated" novalidate show-validation>
                   <div class="modal-header">
                         <h4 class="modal-title" id="myFilterLabel">{{$t('filter.home.createOrEditLabel')}}</h4>
                         <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
@@ -28,21 +28,19 @@
                         </div>
                         <div class="form-group">
                             <label for ="pattern" class="control-label">{{$t('filter.pattern')}}</label>
-                            <input type="text" class="form-control" :class="(patternMinLength || patternMaxLength) ? 'is-invalid' : 'valid'" name="pattern" id="pattern"
-                                   v-model="filter.pattern" required>
-                            <div>
-                                <p class="help-block"
-                                   v-if="patternFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="patternMinLength">
-                                    {{$t('entity.validation.minlength', {min: '3'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="patternMaxLength" >
-                                    {{$t('entity.validation.maxlength', {max:'512'})}}
-                                </p>
+                            <input type="text" class="form-control" name="pattern" id="pattern"
+                                   v-model="filter.pattern" required minlength="3" maxlength="2048">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('pattern', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                           <div class="invalid-feedback"
+                                v-if="formValidator.hasError('pattern', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min: '3'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('pattern', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'2048'})}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -61,7 +59,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="isAnyFieldError" @click="createFilter" >
+                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createFilter" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                     </div>
@@ -140,6 +138,7 @@
 import FilterService from '@/services/entities/filter/FilterService'
 import OrganizationService from '@/services/entities/organization/OrganizationService'
 import EnumDatasService from '@/services/entities/enum/EnumDatasService'
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils'
 import { Modal } from 'bootstrap'
 
 export default {
@@ -151,35 +150,13 @@ export default {
       filter: { pattern: null, description: null, type: null, id: null, organization: null },
       deleteModal: null,
       updateModal: null,
-      errors: new Map()
+      formValidator: new FormValidationUtils(),
+      formErrors: FormErrorType
     }
   },
   computed: {
     filterTypeList () {
       return EnumDatasService.getFilterTypeList()
-    },
-    // Méthodes en charge du lancement des messages d'erreurs
-    // sur les champs du formulaire de création et de mise à jour
-    patternFieldRequired () {
-      if (this.filter.pattern === null || this.filter.pattern.trim().length === 0 || this.filter.pattern === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    patternMinLength () {
-      return this.errors.get('pattern') === 'minlength'
-    },
-    patternMaxLength () {
-      return this.errors.get('pattern') === 'maxlength'
-    },
-    // Méthode en charge d'activer ou non le boutton
-    // de sauvegarde du formulaire de saisie
-    isAnyFieldError () {
-      if (this.patternFieldRequired || this.patternMaxLength || this.patternMinLength) {
-        return 'disabled'
-      }
-      return null
     }
   },
   methods: {
@@ -191,10 +168,10 @@ export default {
         console.error(error)
       })
     },
-    // Méthode permettant d'initialiser la map contenant
-    // les types d'erreurs pour chaque champs de formulaire
-    initMapError () {
-      this.errors.set('pattern', null)
+    // Méthode permettant d'initialiser le FormValidator
+    initFormValidator () {
+      this.formValidator.clear()
+      this.formValidator.checkTextFieldValidity('pattern', this.filter.pattern, 3, 2048, true)
     },
     reset () {
       this.filters = []
@@ -214,6 +191,7 @@ export default {
     update (id) {
       FilterService.get(id).then(response => {
         this.filter = response.data
+        this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -243,22 +221,12 @@ export default {
     },
     filterDetail (filterId) {
       this.$router.push({ name: 'AdminEntityFilterDetails', params: { id: filterId } })
-    },
-    setError (fieldName, val, min, max) {
-      if (val != null && val.length < min) {
-        this.errors.set(fieldName, 'minlength')
-      } else if (val != null && val.length > max) {
-        this.errors.set(fieldName, 'maxlength')
-      } else {
-        this.errors.set(fieldName, null)
-      }
     }
   },
   mounted () {
     this.deleteModal = new Modal(this.$refs.deleteFilterConfirmation)
     this.updateModal = new Modal(this.$refs.saveFilterModal)
     this.loadAll()
-    this.initMapError()
   },
   created () {
     OrganizationService.query().then(response => {
@@ -270,7 +238,7 @@ export default {
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
     'filter.pattern' (newVal) {
-      this.setError('pattern', newVal, 3, 255)
+      this.formValidator.checkTextFieldValidity('pattern', newVal, 3, 2048, true)
     }
   }
 }

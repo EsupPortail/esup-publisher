@@ -1,14 +1,14 @@
 <template>
 <div class='organization'>
     <h2 >{{$t('organization.home.title')}}</h2>
-    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveOrganizationModal" @click="clear" v-has-any-role="'ROLE_ADMIN'">
+    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#saveOrganizationModal" @click="clear();initFormValidator()" v-has-any-role="'ROLE_ADMIN'">
         <span class="fas fa-bolt"></span> <span >{{$t('organization.home.createLabel')}}</span>
     </button>
     <div class="modal fade" id="saveOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="myOrganizationLabel"
          aria-hidden="true" ref="saveOrganizationModal">
         <div class="modal-dialog modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate show-validation>
+                <form name="editForm" role="form" class="was-validated" novalidate show-validation>
                     <div class="modal-header">
                         <h4 class="modal-title" id="myOrganizationLabel">{{$t('organization.home.createOrEditLabel')}}</h4>
                         <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"
@@ -23,78 +23,66 @@
 
                         <div class="form-group">
                             <label for ="name" class="control-label">{{$t('organization.name')}}</label>
-                            <input type="text" class="form-control" :class="(nameMinLength || nameMaxLength) ? 'is-invalid' : 'valid'" name="name" id="name"
-                                   v-model="organization.name">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="nameFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nameMinLength">
-                                    {{$t('entity.validation.minlength', {min:'5'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="nameMaxLength" >
-                                    {{$t('entity.validation.maxlength', {max:'255'})}}
-                                </p>
+                            <input type="text" class="form-control" name="name" id="name"
+                                   v-model="organization.name" required minlength="5" maxlength="255">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'5'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('name', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'255'})}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="description" class="control-label">{{$t('organization.description')}}</label>
-                            <input type="text" class="form-control" :class="(descriptionMinLength || descriptionMaxLength) ? 'is-invalid' : 'valid'" name="description" id="description"
-                                   v-model="organization.description" required>
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="descriptionFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="descriptionMinLength">
-                                    {{$t('entity.validation.minlength', {min:'5'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="descriptionMaxLength">
-                                    {{$t('entity.validation.maxlength', {max:'512'})}}
-                                </p>
+                            <input type="text" class="form-control" name="description" id="description"
+                                   v-model="organization.description" required minlength="5" maxlength="512">
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.MIN_LENGTH)">
+                                {{$t('entity.validation.minlength', {min:'5'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('description', formErrors.MAX_LENGTH)">
+                                {{$t('entity.validation.maxlength', {max:'512'})}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="identifiers" class="control-label">{{$t('organization.identifiers')}}</label>
                             <input type="text" id="identifiers" name="identifiers" class="form-control" v-model="organization.identifiers"
                                    :placeholder="$t('organization.identifiers-help')" required>
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="identifiersFieldRequired">
-                                    {{$t('entity.validation.required')}}
-                                </p>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('identifiers', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="displayOrder" class="control-label">{{$t('organization.displayOrder')}}</label>
-                            <input type="number" class="form-control" :class="(displayOrderMinLength || displayOrderMaxLength) ? 'is-invalid' : 'valid'" name="displayOrder" id="displayOrder"
+                            <input type="number" class="form-control" name="displayOrder" id="displayOrder"
                                    v-model="organization.displayOrder" required min="0" max="999">
-
-                            <div>
-                                <p class="help-block"
-                                   v-if="displayOrderMinLength">
-                                    {{$t('entity.validation.min', {min:'0'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="displayOrderMaxLength">
-                                    {{$t('entity.validation.max', {max:'999'})}}
-                                </p>
-                                <p class="help-block"
-                                   v-if="isNumberValue">
-                                    {{$t('entity.validation.number')}}
-                                </p>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
+                                {{$t('entity.validation.required')}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.MIN_VALUE)">
+                                {{$t('entity.validation.min', {min:'0'})}}
+                            </div>
+                            <div class="invalid-feedback"
+                                v-if="formValidator.hasError('displayOrder', formErrors.MAX_VALUE)">
+                                {{$t('entity.validation.max', {max:'999'})}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="allowNotifications" class="control-label">{{$t('organization.allowNotifications')}}</label>
+                            <label for="allowNotifications" class="control-label me-2">{{$t('organization.allowNotifications')}}</label>
                             <input type="checkbox" class="form-check-input " name="allowNotifications" id="allowNotifications"
                                    v-model="organization.allowNotifications" value="true">
                         </div>
@@ -103,7 +91,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="isAnyFieldError" @click="createOrganization" >
+                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createOrganization" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                     </div>
@@ -184,7 +172,9 @@
 
 <script>
 import OrganizationService from '@/services/entities/organization/OrganizationService'
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils'
 import { Modal } from 'bootstrap'
+
 export default {
   name: 'Organization',
   data () {
@@ -193,63 +183,8 @@ export default {
       organization: { name: null, displayName: null, description: null, displayOrder: 0, allowNotifications: false, identifiers: [], id: null },
       deleteModal: null,
       updateModal: null,
-      errors: new Map()
-    }
-  },
-  computed: {
-    // Méthodes en charge du lancement des messages d'erreurs
-    // sur les champs du formulaire de création et de mise à jour
-    nameFieldRequired () {
-      if (this.organization.name === null || this.organization.name.trim().length === 0 || this.organization.name === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    nameMinLength () {
-      return this.errors.get('name') === 'minlength'
-    },
-    nameMaxLength () {
-      return this.errors.get('name') === 'maxlength'
-    },
-    descriptionFieldRequired () {
-      if (this.organization.description === null || this.organization.description.trim().length === 0 || this.organization.description === '') {
-        return true
-      } else {
-        return false
-      }
-    },
-    descriptionMinLength () {
-      return this.errors.get('description') === 'minlength'
-    },
-    descriptionMaxLength () {
-      return this.errors.get('description') === 'maxlength'
-    },
-    identifiersFieldRequired () {
-      if (this.organization.identifiers === null || this.organization.identifiers.length === 0) {
-        return true
-      } else {
-        return false
-      }
-    },
-    displayOrderMinLength () {
-      return this.errors.get('displayOrder') === 'minlength'
-    },
-    displayOrderMaxLength () {
-      return this.errors.get('displayOrder') === 'maxlength'
-    },
-    isNumberValue () {
-      return typeof this.organization.displayOrder === 'string'
-    },
-
-    // Méthode en charge d'activer ou non le boutton
-    // de sauvegarde du formulaire de saisie
-    isAnyFieldError () {
-      if (this.nameFieldRequired || this.nameMinLength || this.nameMaxLength || this.nameFieldRequired || this.descriptionMinLength ||
-      this.descriptionMaxLength || this.identifiersFieldRequired || this.displayOrderMinLength || this.displayOrderMaxLength) {
-        return 'disabled'
-      }
-      return null
+      formValidator: new FormValidationUtils(),
+      formErrors: FormErrorType
     }
   },
   methods: {
@@ -261,12 +196,13 @@ export default {
         console.error(error)
       })
     },
-    // Méthode permettant d'initialiser la map contenant
-    // les types d'erreurs pour chaque champs de formulaire
-    initMapError () {
-      this.errors.set('name', null)
-      this.errors.set('description', null)
-      this.errors.set('displayOrder', null)
+    // Méthode permettant d'initialiser le FormValidator
+    initFormValidator () {
+      this.formValidator.clear()
+      this.formValidator.checkTextFieldValidity('name', this.organization.name, 5, 255, true)
+      this.formValidator.checkTextFieldValidity('description', this.organization.description, 5, 512, true)
+      this.formValidator.checkTextFieldValidity('identifiers', this.organization.identifiers, null, null, true)
+      this.formValidator.checkNumberFieldValidity('displayOrder', this.organization.displayOrder, 0, 999, true)
     },
     reset () {
       this.organizations = []
@@ -299,6 +235,7 @@ export default {
     update (id) {
       OrganizationService.get(id).then(response => {
         this.organization = response.data
+        this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
         console.error(error)
@@ -328,39 +265,26 @@ export default {
     },
     organizationDetail (organizationId) {
       this.$router.push({ name: 'AdminEntityOrganizationDetails', params: { id: organizationId } })
-    },
-    setError (fieldName, val, min, max) {
-      if (val != null && val.length < min) {
-        this.errors.set(fieldName, 'minlength')
-      } else if (val != null && val.length > max) {
-        this.errors.set(fieldName, 'maxlength')
-      } else {
-        this.errors.set(fieldName, null)
-      }
     }
   },
   mounted () {
     this.deleteModal = new Modal(this.$refs.deleteOrganizationConfirmation)
     this.updateModal = new Modal(this.$refs.saveOrganizationModal)
     this.loadAll()
-    this.initMapError()
   },
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
     'organization.name' (newVal) {
-      this.setError('name', newVal, 5, 255)
+      this.formValidator.checkTextFieldValidity('name', newVal, 5, 255, true)
     },
     'organization.description' (newVal) {
-      this.setError('description', newVal, 5, 512)
+      this.formValidator.checkTextFieldValidity('description', newVal, 5, 512, true)
+    },
+    'organization.identifiers' (newVal) {
+      this.formValidator.checkTextFieldValidity('identifiers', newVal, null, null, true)
     },
     'organization.displayOrder' (newVal) {
-      if (newVal != null && newVal < 0) {
-        this.errors.set('displayOrder', 'minlength')
-      } else if (newVal != null && newVal > 999) {
-        this.errors.set('displayOrder', 'maxlength')
-      } else {
-        this.errors.set('displayOrder', null)
-      }
+      this.formValidator.checkNumberFieldValidity('displayOrder', newVal, 0, 999, true)
     }
   }
 }

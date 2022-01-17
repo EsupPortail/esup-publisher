@@ -37,6 +37,10 @@ class CommonUtils {
     return value !== null && typeof value === 'object'
   }
 
+  isNumber (value) {
+    return typeof value === 'number'
+  }
+
   simpleCompare (a, b) {
     // eslint-disable-next-line no-self-compare
     return a === b || (a !== a && b !== b)
