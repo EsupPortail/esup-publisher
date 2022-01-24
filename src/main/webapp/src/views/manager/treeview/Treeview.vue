@@ -2,7 +2,7 @@
 <div class="treeview">
     <h2>{{ $t("manager.treeview.title") }}</h2>
     <div class="tree-browser">
-      <esup-js-tree class="default" v-if="isDataLoad" :datas="treeData" :config="treeConfig" .onSelection="onTreeSelection">
+      <esup-js-tree class="default" v-if="isDataLoad" .datas="treeData" .config="treeConfig" .onSelection="onTreeSelection">
       </esup-js-tree>
     </div>
     <div class="context-viewer" ui-view="contextDetails">
