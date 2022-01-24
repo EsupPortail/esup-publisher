@@ -249,6 +249,7 @@ public class PublishControllerTest {
         // number of cats in publisher newWay is needed in getItemsFromPublisherTest
         // NB important, à la une isn't persisted, it's hardcoded and should be considered
         Category cat1 = ObjTest.newCategory("Cat A", newWay);
+        cat1.setDefaultDisplayOrder(DisplayOrderType.CUSTOM);
         cat1 = categoryRepository.saveAndFlush(cat1);
         Category cat2 = ObjTest.newCategory("cat B", newWay);
         cat2 = categoryRepository.saveAndFlush(cat2);
@@ -264,6 +265,7 @@ public class PublishControllerTest {
         catsOfEsupLectureWay.add(cat6);
 
         News news1 = ObjTest.newNews("news 1", organization, newWay.getContext().getRedactor());
+        // Don't update date, a test on SCHEDULED => PUBLISHED is made
         news1.setStartDate(LocalDate.now());
         news1.setEndDate(LocalDate.now().plusMonths(1));
         news1.setStatus(ItemStatus.SCHEDULED);
@@ -310,6 +312,7 @@ public class PublishControllerTest {
         Assert.assertEquals(1, nbModif);
         news1 = (News)itemRepository.findById(news1.getId()).orElse(null);
         Assert.assertNotNull(news1);
+        Assert.assertEquals(news1.getStatus(), ItemStatus.PUBLISHED);
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
         files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));

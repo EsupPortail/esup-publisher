@@ -28,9 +28,23 @@ jobs:
           MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: publisher_test
+          MYSQL_DEFAULT_STORAGE_ENGINE: InnoDB
           MYSQL_CHARACTER_SET_SERVER: utf8mb4
           MYSQL_COLLATION_SERVER: utf8mb4_unicode_520_ci
+          MYSQL_INNODB_BUFFER_POOL_SIZE: 2G
+          MYSQL_INNODB_DEFAULT_ROW_FORMAT: dynamic
+          MYSQL_INNODB_DATA_FILE_PATH: ibdata1:100M:autoextend:max:10G
+          MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT: 1
+          MYSQL_INNODB_LOG_BUFFER_SIZE: 64M
+          MYSQL_INNODB_LOG_FILE_SIZE: 256M
+          MYSQL_INNODB_STRICT_MODE: ON
           MYSQL_LOWER_CASE_TABLE_NAME: 1
+          MYSQL_MAX_CONNECT_ERRORS: 100
+          MYSQL_MAX_CONNECTIONS: 1000
+          MYSQL_QUERY_CACHE_LIMIT: 10M
+          MYSQL_QUERY_CACHE_SIZE: 0
+          MYSQL_QUERY_CACHE_TYPE: OFF
+          TZ: Europe/Paris
         ports:
           - 3306:3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
@@ -44,6 +58,9 @@ jobs:
       secrets.RootPassword: 'root'
     name: Run java ${{ matrix.java }} version and node ${{ matrix.node }} version
     steps:
+    - uses: szenius/set-timezone@v1.0
+      with:
+        timezoneLinux: "Europe/Paris"
     - uses: actions/checkout@v2
     - name: Set up ENV
       run: |
@@ -53,7 +70,9 @@ jobs:
     - name: Check locales
       run: locale -a
     - name: Check date
-      run: date
+      run: |
+        date
+        mysql -h127.0.0.1 -uroot -proot -e "show variables like '%time_zone'; select now();"
     - name: Clone Openldap container
       uses: actions/checkout@v2
       with:
@@ -76,7 +95,7 @@ jobs:
       run: |
         netstat -pnltu
         mysql -h127.0.0.1 -uroot -proot -e "SHOW DATABASES;"
-        mysql -h127.0.0.1 -uroot -proot -e "show variables like 'char%';"
+        mysql -h127.0.0.1 -uroot -proot -e "show variables like 'char%'; show variables like 'collation%';show variables like 'innodb_default_row_format';"
         mysql -h127.0.0.1 -uroot -proot -e "USE publisher_test;SHOW TABLES;"
     - name: Project requirements
       run: |
