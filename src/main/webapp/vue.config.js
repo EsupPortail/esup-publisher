@@ -72,5 +72,16 @@ module.exports = {
           minify: true
         })
       })
+    // Configuration pour éviter les warnings sur les webcomponents
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => {
+        options.compilerOptions = {
+          ...options.compilerOptions,
+          isCustomElement: tag => tag.startsWith('esup-')
+        }
+        return options
+      })
   }
 }

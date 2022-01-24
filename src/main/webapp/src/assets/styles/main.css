@@ -1878,12 +1878,26 @@ td>evaluator>ul {
 /* ========================================
 For jstree
 ===========================================*/
-js-tree {
+esup-js-tree {
     display: inline-block;
 }
 
-.jstree-default .jstree-anchor {
-    color: #000;
+esup-js-tree {
+    --icon-0-font-family: 'Font Awesome 5 Free';
+    --icon-0-font-weight: 900;
+    --icon-0-content: '\f015';
+    --icon-1-font-family: 'Font Awesome 5 Free';
+    --icon-1-font-weight: 900;
+    --icon-1-content: '\f0b1';
+    --icon-2-font-family: 'Font Awesome 5 Free';
+    --icon-2-font-weight: 900;
+    --icon-2-content: '\f07b';
+    --icon-3-font-family: 'Font Awesome 5 Free';
+    --icon-3-font-weight: 900;
+    --icon-3-content: '\f09e';
+    --icon-4-font-family: 'Font Awesome 5 Free';
+    --icon-4-font-weight: 900;
+    --icon-4-content: '\f1ea';
 }
 
 .jstree-default>.jstree-container-ul>.jstree-node {
@@ -1891,58 +1905,69 @@ js-tree {
     margin-right: 20px;
 }
 
-.jstree-default .jstree-wholerow-clicked,
+.default esup-js-tree ,
 .jstree-default .jstree-anchor.jstree-clicked,
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #25B2F3;
+    --selected-background-color: #25B2F3;
+    --text-color: #25B2F3;
 }
-
+.clg18 esup-js-tree ,
 .clg18 .jstree-default .jstree-wholerow-clicked,
 .clg18 .jstree-default .jstree-anchor.jstree-clicked,
 .clg18 .jstree-default .jstree-clicked.jstree-hovered,
 .clg18 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #004899;
+    --selected-background-color: #004899;
+    --text-color: #004899;
 }
 
+.clg36 esup-js-tree ,
 .clg36 .jstree-default .jstree-wholerow-clicked,
 .clg36 .jstree-default .jstree-anchor.jstree-clicked,
 .clg36 .jstree-default .jstree-clicked.jstree-hovered,
 .clg36 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #0069B3;
+    --selected-background-color: #0069B3;
+    --text-color: #0069B3;
 }
 
+.clg28 esup-js-tree ,
 .clg28 .jstree-default .jstree-wholerow-clicked,
 .clg28 .jstree-default .jstree-anchor.jstree-clicked,
 .clg28 .jstree-default .jstree-clicked.jstree-hovered,
 .clg28 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #000;
-    color: #FC0;
+    --selected-background-color: #000;
+    --text-color: #FC0;
 }
 
+.clg37 esup-js-tree ,
 .clg37 .jstree-default .jstree-wholerow-clicked,
 .clg37 .jstree-default .jstree-anchor.jstree-clicked,
 .clg37 .jstree-default .jstree-clicked.jstree-hovered,
 .clg37 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #C60440;
+    --selected-background-color: #C60440;
+    --text-color: #C60440;
 }
 
+.clg41 esup-js-tree ,
 .clg41 .jstree-default .jstree-wholerow-clicked,
 .clg41 .jstree-default .jstree-anchor.jstree-clicked,
 .clg41 .jstree-default .jstree-clicked.jstree-hovered,
 .clg41 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #009FE3;
+    --selected-background-color: #009FE3;
+    --text-color: #009FE3;
 }
 
+.clg45 esup-js-tree ,
 .clg45 .jstree-default .jstree-wholerow-clicked,
 .clg45 .jstree-default .jstree-anchor.jstree-clicked,
 .clg45 .jstree-default .jstree-clicked.jstree-hovered,
 .clg45 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
-    background: #26448A;
+    --selected-background-color: #26448A;
+    --text-color: #26448A;
 }
-
+.default esup-js-tree,
 .jstree-default .jstree-anchor.jstree-clicked {
-    color: #fff;
+    --selected-text-color: #fff;
 }
 
 .jstree-default .jstree-wholerow-hovered:not(.jstree-wholerow-clicked),
@@ -1953,30 +1978,21 @@ js-tree {
 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     color: #25B2F3;
 }
-
+ 
+.clg36 esup-js-tree,
+.clg37 esup-js-tree,
+.clg41 esup-js-tree,
+.clg45 esup-js-tree,
+.clg18 esup-js-tree,
 .clg18 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #004899;
+    --selected-text-color: #fff;
 }
 
+.clg28 esup-js-tree,
 .clg28 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #303030;
+    --selected-text-color: #FC0;
 }
 
-.clg36 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #0069B3;
-}
-
-.clg37 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #C60440;
-}
-
-.clg41 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #009FE3;
-}
-
-.clg45 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
-    color: #26448A;
-}
 
 /* ========================================
 For TextAngular et specific buttons
