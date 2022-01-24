@@ -25,7 +25,22 @@ describe('PublisherService.js tests', () => {
     })
   })
 
-  it('test 2 PublisherService - get', (done) => {
+  it('test 2 PublisherService - query with params', (done) => {
+    const response = {
+      data: [],
+      headers: []
+    }
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+
+    PublisherService.query({ key1: 'val1', key2: 'val2' }).then(value => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/publishers?key1=val1&key2=val2')
+      expect(value).toStrictEqual(response)
+      done()
+    })
+  })
+
+  it('test 3 PublisherService - get', (done) => {
     const response = {
       data: {
         id: 1,
@@ -52,7 +67,7 @@ describe('PublisherService.js tests', () => {
     })
   })
 
-  it('test 3 PublisherService - update', (done) => {
+  it('test 4 PublisherService - update', (done) => {
     const response = {
       data: {},
       headers: []
@@ -70,7 +85,7 @@ describe('PublisherService.js tests', () => {
     })
   })
 
-  it('test 4 PublisherService - delete', (done) => {
+  it('test 5 PublisherService - delete', (done) => {
     const response = {
       data: {},
       headers: []

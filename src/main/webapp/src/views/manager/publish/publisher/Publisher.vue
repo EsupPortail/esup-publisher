@@ -31,7 +31,7 @@
         <div class="btn-group" role="group">
             <router-link to="/home" custom v-slot="{navigate}">
               <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
-                  <span class="far fa-times-circle"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
+                  <span class="fas fa-ban"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
               </button>
             </router-link>
             <router-link to="classification" custom v-slot="{navigate}">
@@ -45,7 +45,7 @@
 </template>
 <script>
 import ClassificationService from '@/services/entities/classification/ClassificationService'
-import FetchWrapper from '@/services/util/FetchWrapper'
+import PublisherService from '@/services/entities/publisher/PublisherService'
 import CommonUtils from '@/services/util/CommonUtils'
 
 export default {
@@ -76,8 +76,7 @@ export default {
   },
   methods: {
     loadAll () {
-      // TODO PublisherService.query(true).then(result => {
-      FetchWrapper.getJson('api/publishers?' + new URLSearchParams({ used: true })).then(result => {
+      PublisherService.query({ used: true }).then(result => {
         this.publishers = result.data
 
         this.readers = []

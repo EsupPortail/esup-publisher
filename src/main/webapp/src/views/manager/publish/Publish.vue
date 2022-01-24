@@ -33,7 +33,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                     </div>
                     <div class="modal-body">
-                        <p v-html="$t('item.action.confirmsave.question')"></p>
+                        <i18n-t keypath="item.action.confirmsave.question" tag="p" scope="global">
+                          <template v-slot:warning>
+                            <br/>
+                            <br/>
+                            <div class="alert alert-warning">{{ $t('item.action.confirmsave.warning') }}</div>
+                          </template>
+                        </i18n-t>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">

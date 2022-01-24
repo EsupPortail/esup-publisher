@@ -7,8 +7,8 @@
       <div v-if="classificationsList.length > 0" class="form-group">
         <label class="control-label">{{ $t("manager.publish.classification.choice") }}</label>
         <div class="inline-form">
-          <div v-for="classif in classificationsList" :key="classif.name" class="form-check-inline">
-            <input class="form-check-input me-1" :id="classif.name" type="checkbox" :value="classif.name" :checked="containsSelectedClassification(classif.contextKey)"
+          <div v-for="classif in classificationsList" :key="classif.name" class="form-check form-check-inline">
+            <input class="form-check-input" :id="classif.name" type="checkbox" :value="classif.name" :checked="containsSelectedClassification(classif.contextKey)"
                 @click="toggleSelection(classif.contextKey)" :class="{iconurl: inArray('ENCLOSURE', publisher.context.reader.classificationDecorations)}">
             <label class="form-check-label" :for="classif.name" v-tooltip="classif.description">
               <span class="iconurl me-1" :style="{'background-image': inArray('ENCLOSURE', publisher.context.reader.classificationDecorations) ? 'url(' + classif.icon + ')' : null}"
@@ -37,7 +37,7 @@
         </router-link>
         <router-link to="/home" custom v-slot="{navigate}">
           <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
-              <span class="far fa-times-circle"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
+              <span class="fas fa-ban"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
           </button>
         </router-link>
         <router-link to="content" custom v-slot="{navigate}">

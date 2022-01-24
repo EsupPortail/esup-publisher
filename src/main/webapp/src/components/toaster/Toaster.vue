@@ -260,7 +260,7 @@ export default defineComponent({
     right: 0;
     padding: 1em;
     overflow: hidden;
-    z-index: 1052;
+    z-index: 1056;
     pointer-events: none
 }
 

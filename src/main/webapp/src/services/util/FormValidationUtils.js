@@ -66,7 +66,7 @@ class FormValidationUtils {
     }
   }
 
-  static getCheckboxFieldError (val, min, max, required) {
+  static getArrayFieldError (val, min, max, required) {
     if (required && (val === null || val === undefined || val.length === 0)) {
       return FormErrorType.REQUIRED
     } else if (min !== null && min !== undefined && val !== null && val !== undefined && val.length < min) {
@@ -94,8 +94,8 @@ class FormValidationUtils {
     this.errors.set(fieldName, FormValidationUtils.getFileFieldError(val, pattern, maxSize, required))
   }
 
-  checkCheckboxFieldValidity (fieldName, val, min, max, required) {
-    this.errors.set(fieldName, FormValidationUtils.getCheckboxFieldError(val, min, max, required))
+  checkArrayFieldValidity (fieldName, val, min, max, required) {
+    this.errors.set(fieldName, FormValidationUtils.getArrayFieldError(val, min, max, required))
   }
 
   hasError (fieldName, error) {

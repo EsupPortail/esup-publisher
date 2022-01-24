@@ -2,8 +2,12 @@ import FetchWrapper from '../../util/FetchWrapper'
 import DateUtils from '../../util/DateUtils'
 
 class PublisherService {
-  query () {
-    return FetchWrapper.getJson('api/publishers')
+  query (params) {
+    if (params) {
+      return FetchWrapper.getJson('api/publishers?' + new URLSearchParams(params))
+    } else {
+      return FetchWrapper.getJson('api/publishers')
+    }
   }
 
   get (id) {

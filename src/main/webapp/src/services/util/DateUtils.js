@@ -1,3 +1,5 @@
+import CommonUtils from './CommonUtils'
+
 const toString = Object.prototype.toString
 
 class DateUtils {
@@ -42,6 +44,52 @@ class DateUtils {
 
   convertToIntString (date, format, lang) {
     return Intl.DateTimeFormat(lang, format).format(date)
+  }
+
+  isValidDate (dateStr) {
+    if (dateStr === undefined) {
+      return false
+    }
+    var dateTime = new Date(dateStr)
+
+    if (isNaN(dateTime)) {
+      return false
+    }
+    return true
+  }
+
+  getDateDifference (fromDate, toDate) {
+    return new Date(toDate) - new Date(fromDate)
+  }
+
+  isValidDateRange (fromDate, toDate) {
+    if (fromDate === '' || toDate === '') {
+      return true
+    }
+    if (this.isValidDate(fromDate) === false) {
+      return false
+    }
+    if (this.isValidDate(toDate) === true) {
+      var days = this.getDateDifference(fromDate, toDate)
+      if (days <= 0) {
+        return false
+      }
+    }
+    return true
+  }
+
+  // normalize string dd/mm/yyyy or yyyy-mm-dd into date
+  normalize (str) {
+    if (str && !CommonUtils.isDate(str)) {
+      var match = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+      if (match) {
+        return new Date(match[3], match[2] - 1, match[1])
+      }
+      match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+      if (match) {
+        return new Date(match[1], match[2] - 1, match[3])
+      }
+    }
   }
 }
 export default new DateUtils()

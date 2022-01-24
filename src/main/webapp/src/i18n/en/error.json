@@ -6,9 +6,9 @@
         "upload" : {
             "config": "Error of server configuration",
             "empty": "The file passed is empty",
-            "filesize": "File size exceeds the allowed limit of {{size}} !",
-            "filetype": "File type {{type}} isn't allowed !",
-            "generic": "An error {{code}} occured, file upload unsuccessfull !",
+            "filesize": "File size exceeds the allowed limit of {size} !",
+            "filetype": "File type {type} isn't allowed !",
+            "generic": "An error {code} occured, file upload unsuccessfull !",
             "ERR_INTERNET_DISCONNECTED" : "An internet disconnection occured !"
         }
     }

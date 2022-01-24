@@ -23,7 +23,7 @@
 */
 body {
     font-family: 'Roboto Condensed', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
     font-style: normal;
     font-size: 14px;
     background-color: #f3f3f3;
@@ -1466,12 +1466,16 @@ modals for cropper with input file
     background: #E4E4E4;
     overflow: hidden;
     width: 100%;
+}
+
+#cropImageModale .cropArea img {
     height: 350px;
 }
 
-#cropImageModale .previewCropArea img {
+#cropImageModale .previewCropArea {
     display: block;
     margin: 10px 0;
+    overflow: hidden;
 }
 
 #cropImageModale div.inputArea h3 {
@@ -2104,4 +2108,23 @@ label {
 button:disabled {
     cursor: not-allowed;
     pointer-events: all !important;
+}
+
+.ck-editor__editable_inline {
+    min-height: 300px;
+}
+
+.drop-area {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    border: 2px dashed #fff;
+    border-radius: 5px;
+    background-color: #ddd;
+}
+
+.drop-area.drag-active {
+    border: 2px solid #000;
 }

@@ -22,7 +22,7 @@ const TooltipDirective = {
       trigger = t.join(' ')
     }
 
-    /* eslint-disable no-new */
+    /* eslint-disable-next-line no-new */
     new Tooltip(el, {
       title: binding.value || '',
       placement: binding.arg || 'top',

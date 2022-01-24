@@ -1,5 +1,12 @@
 // Classe contenant des méthodes utilitaires provenant majoritairement d'AngularJS
 // (https://github.com/angular/angular.js/blob/master/src/Angular.js)
+
+const byteSizeCompared = [{ str: 'B', val: 1024 }]
+var sizeFormat = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+sizeFormat.forEach((el, i) => {
+  byteSizeCompared.push({ str: el, val: byteSizeCompared[i].val * 1024 })
+})
+
 class CommonUtils {
   isString (value) {
     return typeof value === 'string'
@@ -39,6 +46,10 @@ class CommonUtils {
 
   isNumber (value) {
     return typeof value === 'number'
+  }
+
+  isFile = function (file) {
+    return file != null && (file instanceof Blob || (file.flashId && file.name && file.size))
   }
 
   simpleCompare (a, b) {
@@ -88,6 +99,30 @@ class CommonUtils {
       }
     }
     return false
+  }
+
+  convertToDecimal (num, decimal) {
+    return Math.round(num * Math.pow(10, decimal)) / (Math.pow(10, decimal))
+  }
+
+  convertByteToDisplayedString (bytes, decimal) {
+    if (this.isNumber(decimal) && isFinite(decimal) && decimal % 1 === 0 && decimal >= 0 &&
+    this.isNumber(bytes) && isFinite(bytes)) {
+      var i = 0
+      while (i < byteSizeCompared.length - 1 && bytes >= byteSizeCompared[i].val) i++
+      bytes /= i > 0 ? byteSizeCompared[i - 1].val : 1
+      return this.convertToDecimal(bytes, decimal) + ' ' + byteSizeCompared[i].str
+    }
+    return 'NaN'
+  }
+
+  removeHtmlTags (html) {
+    if (html === null || html === undefined) {
+      return html
+    } else {
+      const doc = new DOMParser().parseFromString(html, 'text/html')
+      return doc.body.textContent || ''
+    }
   }
 }
 

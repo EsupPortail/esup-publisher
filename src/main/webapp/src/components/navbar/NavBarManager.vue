@@ -1,7 +1,6 @@
 <template>
 <div class="container-fluid justify-content-center">
     <div class="navbar-brand">
-        <!--<button type="button" class="navbar-toggle other-style h1" data-toggle="collapse" data-target="#navbar-collapse">-->
         <button class="navbar-toggler other-style h1" data-bs-toggle="collapse" data-bs-target="#navbar-collapse">
             <div v-if="isPageNameIncludes('owned') || isPageNameIncludes('managed')">
                 <span class="fas fa-file-alt fa-2x"></span>
@@ -26,10 +25,10 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <a class="nav-link" ui-sref="publish.publisher">
+                <router-link to="/publish/publisher" class="nav-link">
                     <span class="fas fa-pencil-alt fa-2x"></span>
                     <span translate="global.menu.write">{{$t("global.menu.write")}}</span>
-                </a>
+                </router-link>
             </li>
             <li v-if="!canModerate" class="nav-item">
                 <a class="nav-link">

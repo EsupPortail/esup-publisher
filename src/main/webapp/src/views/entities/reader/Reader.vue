@@ -240,8 +240,8 @@ export default {
       this.formValidator.checkTextFieldValidity('name', this.reader.name, 3, 20, true)
       this.formValidator.checkTextFieldValidity('displayName', this.reader.displayName, 3, 50, true)
       this.formValidator.checkTextFieldValidity('description', this.reader.description, 3, 512, true)
-      this.formValidator.checkCheckboxFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true)
-      this.formValidator.checkCheckboxFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true)
+      this.formValidator.checkArrayFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true)
+      this.formValidator.checkArrayFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true)
     },
     reset () {
       this.readers = []
@@ -334,7 +334,7 @@ export default {
         // is newly selected
         this.reader.authorizedTypes.push(type)
       }
-      this.formValidator.checkCheckboxFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true)
+      this.formValidator.checkArrayFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true)
     },
     toggleSelectionDecorType (type) {
       var i = 0
@@ -352,7 +352,7 @@ export default {
         // is newly selected
         this.reader.classificationDecorations.push(type)
       }
-      this.formValidator.checkCheckboxFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true)
+      this.formValidator.checkArrayFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true)
     }
   },
   mounted () {

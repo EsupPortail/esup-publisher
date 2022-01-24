@@ -42,7 +42,8 @@
         "action": {
             "confirmsave": {
                 "title": "Confirmation de sauvegarde du brouillon",
-                "question": "Souhaitez vous sauvegarder en tant que brouillon le contenu et reprendre plus tard la publication ?<br/><br/> <div class=\"alert alert-warning\">Un contenu déjà publié sera dépublié !</div>"
+                "question": "Souhaitez vous sauvegarder en tant que brouillon le contenu et reprendre plus tard la publication ?{warning}",
+                "warning" : "Un contenu déjà publié sera dépublié !"
             },
             "publish": "Publier",
             "save": "Sauvegarder"

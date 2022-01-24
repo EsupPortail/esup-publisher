@@ -29,6 +29,7 @@
 <script>
 import NavBar from './components/navbar/NavBar'
 import Spinner from './components/spinner/Spinner'
+import ConfigurationService from '@/services/params/ConfigurationService'
 import EnumDatasService from '@/services/entities/enum/EnumDatasService'
 
 export default {
@@ -119,7 +120,7 @@ export default {
     }
   },
   created () {
-    EnumDatasService.init().finally(() => {
+    Promise.all([ConfigurationService.init(), EnumDatasService.init()]).finally(() => {
       this.initData = true
     })
   }
