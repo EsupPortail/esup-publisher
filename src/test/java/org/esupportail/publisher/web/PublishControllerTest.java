@@ -22,9 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -270,6 +274,7 @@ public class PublishControllerTest {
         news1.setEndDate(LocalDate.now().plusMonths(1));
         news1.setStatus(ItemStatus.SCHEDULED);
         news1 = itemRepository.saveAndFlush(news1);
+        final Instant news1DateModify = news1.getLastModifiedDate().minusSeconds(1);
         News news2 = ObjTest.newNews("news 2", organization, newWay.getContext().getRedactor());
         news2.setStartDate(LocalDate.now().minusDays(1));
         news2.setEndDate(LocalDate.now().plusMonths(1));
@@ -313,6 +318,10 @@ public class PublishControllerTest {
         news1 = (News)itemRepository.findById(news1.getId()).orElse(null);
         Assert.assertNotNull(news1);
         Assert.assertEquals(news1.getStatus(), ItemStatus.PUBLISHED);
+        // This part check if the
+        log.debug("Modified time before {} and after running publishScheduled {}", news1DateModify, news1.getLastModifiedDate());
+        Assert.assertTrue("The PublishScheduled task run an update on a wrong timezone ! Check DB time_zone and your java server timezone",
+                news1.getLastModifiedDate().isAfter(news1DateModify));
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));
         files.add(new LinkedFileItem("20052/BBBAADFDSDSD.jpg", "truc2.pdf", attachment, false, "application/pdf"));

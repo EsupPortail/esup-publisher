@@ -23,12 +23,11 @@ import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -429,6 +428,10 @@ public class ItemRepositoryTest {
         assertNotNull(n2.getStatus());
 
         assertEquals(ItemStatus.PUBLISHED, n2.getStatus());
+
+		// Check on Timezone between JPA and database
+		assertTrue("The PublishScheduled task run an update with a wrong timezone ! Check your DB/OS/JVM/DB URL property time_zone.",
+				n2.getLastModifiedDate().isAfter(n1.getLastModifiedDate().minusSeconds(1)));
     }
 
 	/**
@@ -481,5 +484,4 @@ public class ItemRepositoryTest {
 		repository.deleteAll();
         assertEquals(0, repository.count());
 	}
-
 }

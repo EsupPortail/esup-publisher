@@ -25,6 +25,7 @@
         </encoder>
     </appender>
     <logger name="org.esupportail.publisher" level="WARN"/>
+    <logger name="org.esupportail.publisher.web.PublishControllerTest" level="DEBUG"/>
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>
     </root>
