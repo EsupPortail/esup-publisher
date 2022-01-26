@@ -52,7 +52,7 @@ jobs:
     strategy:
       matrix:
         java: ['8', '11']
-        node: ['12', '14']
+        node: ['12', '14', '16']
 
     env:
       secrets.RootPassword: 'root'
