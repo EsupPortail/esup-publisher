@@ -15,20 +15,17 @@
  */
 package org.esupportail.publisher.web;
 
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +33,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -66,7 +65,6 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
-import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
@@ -78,16 +76,11 @@ import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Repeat;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -95,10 +88,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Sets;
-
-import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -212,7 +201,7 @@ public class PublishControllerTest {
     private News savedNews;
 
     @Before
-    public void initTest() {
+    public void initTest() throws InterruptedException {
         organization = new Organization();
         organization.setDescription("A Desc");
         organization.setDisplayOrder(200);
@@ -312,6 +301,7 @@ public class PublishControllerTest {
         news6.setStatus(ItemStatus.PUBLISHED);
         news6 = itemRepository.saveAndFlush(news6);
 
+        Thread.sleep(1000);
         int nbModif = itemRepository.publishScheduled();
         // test news1 SCHEDULED => PUBLISHED + update datemodification and move it to First news in order
         Assert.assertEquals(1, nbModif);
