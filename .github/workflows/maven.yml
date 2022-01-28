@@ -23,7 +23,7 @@ jobs:
 
     services:
       mariadb:
-        image: giprecia/mariadb:latest
+        image: wodby/mariadb:latest
         env:
           MYSQL_USER: root
           MYSQL_ROOT_PASSWORD: root
