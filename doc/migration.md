@@ -1,7 +1,7 @@
 # Migration du front-end vers Vue
 
 A la suite de la migration du front-end de AngularJS vers Vue, celui-ci est maintenant accessible depuis le contexte /publisher/ui.
-De plus, les commandes NPM pour manipuler le front-end doivent être exécutées dans le répertoire src/main/webapps.
+De plus, les commandes NPM pour manipuler le front-end doivent être exécutées dans le répertoire src/main/webapps. Le font-end fonctionne sur la version LTS NodeJS 16.
 
 Les commandes disponibles sont :
 - `npm install` : Installation des dépendances du front-end.
