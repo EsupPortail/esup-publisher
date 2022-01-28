@@ -17,12 +17,7 @@ import './assets/styles/mdioverbootstrap.css'
 import './assets/styles/normalize.css'
 import './assets/styles/fonts.scss'
 import './assets/styles/ck-content-style.scss'
-import '@fortawesome/fontawesome-free/css/solid.css'
-import '@fortawesome/fontawesome-free/js/solid.js'
-import '@fortawesome/fontawesome-free/css/regular.css'
-import '@fortawesome/fontawesome-free/js/regular.js'
-import '@fortawesome/fontawesome-free/css/fontawesome.css'
-import '@fortawesome/fontawesome-free/js/fontawesome.js'
+import '@fortawesome/fontawesome-free/css/all.css' // Utilisation de Font Awesome via Web Fonts with CSS
 import '@mdi/font/css/materialdesignicons.css'
 import '@gip-recia/js-tree'
 

@@ -782,7 +782,7 @@ nav.navbar-expand-md .navbar-brand .navbar-toggler.other-style {
     margin-right: 0;
 }
 
-nav.navbar-expand-md .navbar-brand .navbar-toggler.other-style svg{
+nav.navbar-expand-md .navbar-brand .navbar-toggler.other-style span.fas {
     display: none;
 }
 
@@ -1072,7 +1072,7 @@ div>div.container-navbar>nav>div.container {
 }
 
 div>div.container-navbar>nav>div.container>div.navbar-collapse>ul>li>a span.glyphicon,
-div>div.container-navbar>nav>div.container-fluid>div.navbar-collapse>ul>li>a svg {
+div>div.container-navbar>nav>div.container-fluid>div.navbar-collapse>ul>li>a span.fas {
     display: none;
 }
 

@@ -10,14 +10,14 @@
     <ul class=" nav navbar-nav nav-pills justify-content-center">
       <li class="nav-item" >
         <router-link to="/home" class="nav-link">
-          <span class="glyphicon glyphicon-home"></span>
+          <span class="fas fa-home"></span>
           <span>{{ $t("global.menu.home") }}</span>
         </router-link>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
-            <span class="glyphicon glyphicon-th-list"></span>
+            <span class="fas fa-th-list"></span>
             <span translate="global.menu.entities.main">{{ $t("global.menu.entities.main") }}</span>
           </span>
         </a>
@@ -37,7 +37,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
-            <span class="glyphicon glyphicon-tower"></span>
+            <span class="fas fa-chess-rook"></span>
             <span class="hidden-tablet" translate="global.menu.admin.main">{{ $t("global.menu.admin.main") }}</span>
           </span>
         </a>
@@ -61,7 +61,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
           <span>
-            <span class="glyphicon glyphicon-flag"></span>
+            <span class="fas fa-flag"></span>
             <span class="hidden-tablet">{{ $t("global.menu.language") }}</span>
           </span>
         </a>
