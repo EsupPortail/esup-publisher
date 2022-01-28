@@ -106,6 +106,7 @@ jobs:
         # install npm
         cd src/main/webapp
         npm install
+        npm run test:unit
     - name: DB final conf
       run: |
         # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
