@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="attachmentForm">
-        <div class="form-group hidden">
+        <div class="form-group d-none">
             <label class="control-label" for="ID">ID</label>
             <input type="text" class="form-control" name="id" id="ID"
                    v-model="item.id" readonly>

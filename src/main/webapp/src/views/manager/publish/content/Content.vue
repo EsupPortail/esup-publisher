@@ -448,8 +448,7 @@ export default {
       } else {
         this.setItem({})
       }
-
-      if (CommonUtils.equals([], this.linkedFilesToContent) && this.contentData && this.contentData.linkedFiles) {
+      if ((this.linkedFilesToContent === null || this.linkedFilesToContent === undefined || this.linkedFilesToContent.length === 0) && this.contentData !== null && this.contentData !== undefined && this.contentData.linkedFiles) {
         this.setLinkedFilesToContent(Array.from(this.contentData.linkedFiles))
       }
 
