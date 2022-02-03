@@ -7,12 +7,16 @@ import CookieUtils from '@/services/util/CookieUtils'
 const store = createStore({
   state: {
     loginModalOpened: null,
+    previousRoute: null,
     nextRoute: null,
     returnRoute: null
   },
   mutations: {
     setLoginModalOpened (state, loginModalOpened) {
       state.loginModalOpened = loginModalOpened
+    },
+    setPreviousRoute (state, previousRoute) {
+      state.previousRoute = previousRoute
     },
     setNextRoute (state, nextRoute) {
       state.nextRoute = nextRoute
@@ -24,6 +28,9 @@ const store = createStore({
   getters: {
     getLoginModalOpened: (state) => {
       return state.loginModalOpened
+    },
+    getPreviousRoute: (state) => {
+      return state.previousRoute
     },
     getNextRoute: (state) => {
       return state.nextRoute

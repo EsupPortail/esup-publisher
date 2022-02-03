@@ -115,6 +115,35 @@ const routes = [
             }
           }
         ]
+      },
+      {
+        path: '/contents',
+        name: 'Contents',
+        component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/Contents.vue'),
+        meta: {
+          titleKey: 'manager.contents.title',
+          cssClass: 'contents'
+        },
+        children: [
+          {
+            path: 'owned',
+            name: 'ContentsOwned',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/owned/Owned.vue'),
+            meta: {
+              managerCssClass: 'contents owned'
+            }
+          },
+          {
+            path: 'detail/:id',
+            name: 'ContentDetail',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/details/ContentDetail.vue'),
+            meta: {
+              titleKey: 'manager.contents.details.title',
+              roles: ['ROLE_USER'],
+              managerCssClass: 'contents details'
+            }
+          }
+        ]
       }
     ]
   },
@@ -297,6 +326,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  store.commit('setPreviousRoute', {
+    name: from.name,
+    params: from.params,
+    meta: from.meta
+  })
   store.commit('setNextRoute', {
     name: to.name,
     params: to.params,

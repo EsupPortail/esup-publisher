@@ -26,7 +26,7 @@
             },
             "legend": {
                 "title": "Légende :",
-                "highlight": "These publications are highlighted in '{{ name }}'"
+                "highlight": "These publications are highlighted in '{ name }'"
             }
         },
         "publish": {

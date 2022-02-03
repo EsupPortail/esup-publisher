@@ -1,6 +1,6 @@
 <template>
   <div :class="getCssClass">
-    <div class="content">
+    <div class="content" v-if="initData">
       <router-view></router-view>
     </div>
   </div>
@@ -10,13 +10,15 @@
 import { computed, readonly } from 'vue'
 import OrganizationService from '@/services/entities/organization/OrganizationService'
 import RedactorService from '@/services/entities/redactor/RedactorService'
+import SubjectService from '@/services/params/SubjectService'
 
 export default {
   name: 'Manager',
   data () {
     return {
       organizations: null,
-      redactors: null
+      redactors: null,
+      initData: false
     }
   },
   provide () {
@@ -47,6 +49,9 @@ export default {
   },
   created () {
     this.init()
+    SubjectService.init().then(() => {
+      this.initData = true
+    })
   }
 }
 </script>

@@ -171,12 +171,12 @@ export default {
       if (content.item.id != null) {
         ContentService.update(content).then(response => {
           this.confirmSaveModal.hide()
-          // TODO $state.go("owned", {itemState: response.value.name});
+          this.$router.push({ name: 'ContentsOwned', params: { itemState: response.data.value.name } })
         })
       } else {
         ContentService.save(content).then(response => {
           this.confirmSaveModal.hide()
-          // TODO $state.go("owned", {itemState: response.value.name});
+          this.$router.push({ name: 'ContentsOwned', params: { itemState: response.data.value.name } })
         })
       }
     }

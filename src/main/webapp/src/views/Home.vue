@@ -13,7 +13,7 @@
           </div>
       </router-link>
 
-      <a ui-sref="owned" class="list-group-item list-group-item-action">
+      <router-link to="/contents/owned" class="list-group-item list-group-item-action">
           <div id="owned-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-file-alt fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -24,7 +24,7 @@
                   <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.published.desc") }}</span>
               </div>
           </div>
-      </a>
+      </router-link>
 
       <a ui-sref="pending" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="pending-item" class="bouton-action">

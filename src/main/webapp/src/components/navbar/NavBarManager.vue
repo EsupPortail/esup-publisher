@@ -44,20 +44,20 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li :class="{active: isPageNameIncludes('owned')}"><a ui-sref="owned" class="dropdown-item"><span class="fas fa-asterisk"></span>
-                        &#xA0;<span>{{ $t("global.menu.manager.contents.owned") }}</span></a></li>
+                    <li :class="{active: isPageNameIncludes('owned')}"><router-link to="/contents/owned" class="dropdown-item"><span class="fas fa-asterisk"></span>
+                        &#xA0;<span>{{ $t("global.menu.manager.contents.owned") }}</span></router-link></li>
                     <li :class="{active: isPageNameIncludes('managed')}"><a ui-sref="managed" class="dropdown-item"><span class="fas fa-asterisk"></span>
                         &#xA0;<span>{{ $t("global.menu.manager.contents.managed") }}</span></a></li>
                 </ul>
             </li>
-            <li :class="{active: isPageNameIncludes('pending')}" v-can-moderate>
+            <li :class="{active: isPageNameIncludes('pending')}" v-if="canModerate">
                 <a class="nav-link">
                     <span class="fas fa-gavel fa-2x"></span>
                     <span>{{ $t("global.menu.manager.contents.moderate") }}</span>
                 </a>
             </li>
 
-            <li :class="{active: isPageNameIncludes('treeview')}" v-can-moderate>
+            <li :class="{active: isPageNameIncludes('treeview')}" v-if="canModerate">
                 <a class="nav-link">
                     <span class="fas fa-wrench fa-2x"></span>
                     <span >{{ $t("global.menu.manager.contexts.main") }}</span>
@@ -73,13 +73,10 @@ import UserService from '../../services/user/UserService'
 export default {
   name: 'NavBarManager',
   props: ['pageName'],
-  components: {},
   data () {
     return {
       canModerate: null
     }
-  },
-  computed: {
   },
   methods: {
     // Méthode permettant de surligner l'onglet sur

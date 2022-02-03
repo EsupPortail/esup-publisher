@@ -20,6 +20,7 @@ import './assets/styles/ck-content-style.scss'
 import '@fortawesome/fontawesome-free/css/all.css' // Utilisation de Font Awesome via Web Fonts with CSS
 import '@mdi/font/css/materialdesignicons.css'
 import '@gip-recia/js-tree'
+import '@gip-recia/subject-infos'
 
 const app = createApp(App)
 
