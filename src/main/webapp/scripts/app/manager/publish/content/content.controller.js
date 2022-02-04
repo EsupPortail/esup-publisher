@@ -78,6 +78,9 @@ angular.module('publisherApp')
             $scope.updateMinDate(loadedItem);
             //console.log('loaded Item :' + JSON.stringify(loadedItem));
             $scope.$parent.item.highlight = $scope.$parent.highlight;
+            // update publisher information when modified
+            $scope.$parent.item.organization.id = $scope.$parent.publisher.context.organization.id;
+            $scope.$parent.item.redactor.id = $scope.$parent.publisher.context.redactor.id;
         } else if ($scope.$parent.item) {
             $scope.updateMinDate($scope.$parent.item);
         }
