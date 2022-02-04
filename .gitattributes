@@ -12,3 +12,5 @@
 *.png binary
 *.jpg binary
 *.jar binary
+*.eot binary
+*.ttf binary
