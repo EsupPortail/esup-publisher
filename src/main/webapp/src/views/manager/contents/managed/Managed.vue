@@ -1,6 +1,5 @@
 <template>
-
-  <h2>{{ $t("manager.contents.owned.title") }}</h2>
+  <h2>{{ $t("manager.contents.managed.title") }}</h2>
 
   <div class="modal fade" id="deleteItemConfirmation" ref="deleteItemConfirmation">
       <div class="modal-dialog">
@@ -26,10 +25,58 @@
       </div>
   </div>
 
+  <div class="modal fade" id="validateItemConfirmation" ref="invalidateItemConfirmation">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <form name="invalidateForm">
+                  <div class="modal-header">
+                    <h4 class="modal-title">{{$t('entity.unvalidate.title')}}</h4>
+                    <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                      <p>{{$t('item.unvalidate-question', {id: item.title})}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+                        <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
+                    </button>
+                    <button type="button" class="btn btn-danger" @click="confirmInvalidate(item.id)">
+                        <span class="far fa-check-circle"></span>&nbsp;<span>{{$t('entity.action.unvalidate')}}</span>
+                    </button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="inValidateItemConfirmation" ref="validateItemConfirmation">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <form name="validateForm">
+                  <div class="modal-header">
+                    <h4 class="modal-title">{{$t('entity.validate.title')}}</h4>
+                    <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                      <p>{{$t('item.validate-question', {id: item.title})}}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+                        <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
+                    </button>
+                    <button type="button" class="btn btn-danger" @click="confirmValidate(item.id)">
+                        <span class="far fa-check-circle"></span>&nbsp;<span>{{$t('entity.action.validate')}}</span>
+                    </button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
   <div id="tabs">
     <h4>{{$t('manager.contents.owned.order')}}</h4>
     <ul class="nav nav-tabs">
-      <li v-for="state in itemStateList" :key="state.label" class="nav-item">
+      <li v-for="state in itemStateForManager" :key="state.label" class="nav-item">
         <a :class="{'active': isActiveState(state.id)}" class="nav-link" :aria-current="isActiveState(state.id)" href=""
           @click.prevent="onClickState(state)">{{$t(state.label)}}</a>
       </li>
@@ -57,7 +104,7 @@
           </tr>
         </thead>
           <tbody>
-            <tr v-for="item in items" :key="item.id" :class="{highlight:item.highlight}">
+            <tr v-for="item in items" :key="item.id" :class="{highlight: item.highlight}">
               <td class="d-none" data-label="ID"><a>{{item.id}}</a></td>
               <td :data-label="$t('item.type')">{{$t('enum.itemType.' + item.type)}}</td>
               <td class="longtext" :data-label="$t('item.title')">{{item.title}}</td>
@@ -91,7 +138,13 @@
                 <button type="button" @click="update(item.id)" class="btn btn-primary btn-sm me-1">
                   <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
                 </button>
-                <button type="submit" @click="deleteItem(item.id)" class="btn btn-danger btn-sm">
+                <button type="button" v-if="item.status == 'PENDING'"  @click="validateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
+                  <span class="far fa-check-circle"></span>&nbsp;<span>{{$t("entity.action.validate")}}</span>
+                </button>
+                <button type="button" v-if="item.status == 'SCHEDULED' || item.status == 'PUBLISHED'"  @click="invalidateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
+                  <span class="fas fa-ban"></span>&nbsp;<span>{{$t("entity.action.unvalidate")}}</span>
+                  </button>
+                <button type="button" @click="deleteItem(item.id)" class="btn btn-danger btn-sm">
                   <span class="far fa-times-circle"></span>&nbsp;<span>{{$t("entity.action.delete")}}</span>
                 </button>
               </td>
@@ -132,7 +185,7 @@ import { Modal } from 'bootstrap'
 import ParseLinkUtils from '@/services/util/ParseLinkUtils'
 
 export default {
-  name: 'ContentsOwned',
+  name: 'ContentsManaged',
   data () {
     return {
       items: [],
@@ -146,11 +199,18 @@ export default {
         next: null
       },
       deleteModal: null,
+      invalidateModal: null,
+      validateModal: null,
       classificationHighlighted: {}
     }
   },
   inject: ['organizations'],
   computed: {
+    itemStateForManager () {
+      return EnumDatasService.getItemStatusList().filter(item => {
+        return item.name !== 'DRAFT'
+      })
+    },
     itemStateList () {
       return EnumDatasService.getItemStatusList()
     }
@@ -158,8 +218,8 @@ export default {
   methods: {
     // Méthode permettant de récupérer la liste des objets
     loadAll () {
-      this.itemState = this.$route.params.itemState ? this.getEnumKey(this.$route.params.itemState) : this.getEnumKey('DRAFT')
-      ItemService.query({ page: this.page, per_page: 20, owned: true, item_status: this.itemState }).then((response) => {
+      this.itemState = this.$route.params.itemState ? this.getEnumKey(this.$route.params.itemState) : this.getEnumKey('PENDING')
+      ItemService.query({ page: this.page, per_page: 20, item_status: this.itemState }).then((response) => {
         if (response) {
           this.links = ParseLinkUtils.parse(response.headers.get('link'))
           this.items = response.data
@@ -185,18 +245,18 @@ export default {
       if (result) {
         return result.id
       }
-      return this.getEnumKey('DRAFT')
+      return this.getEnumKey('PENDING')
     },
     getEnumName (key) {
       var result = this.itemStateList.find(val => val.id === key)
       if (result) {
         return result.name
       }
-      return 'DRAFT'
+      return 'PENDING'
     },
     onClickState (state) {
       this.itemState = state.id
-      this.$router.push({ name: 'ContentsOwned', params: { itemState: this.getEnumName(this.itemState) } })
+      this.$router.push({ name: 'ContentsManaged', params: { itemState: this.getEnumName(this.itemState) } })
     },
     isActiveState (stateId) {
       return stateId === this.itemState
@@ -212,6 +272,38 @@ export default {
     confirmDelete (id) {
       ContentService.delete(id).then(() => {
         this.deleteModal.hide()
+        this.loadAll()
+      }).catch(error => {
+        console.error(error)
+      })
+    },
+    validateItem (id) {
+      ItemService.get(id).then(result => {
+        this.item = result.data
+        this.validateModal.show()
+      }).catch(error => {
+        console.error(error)
+      })
+    },
+    confirmValidate (id) {
+      ItemService.patch({ objectId: id, attribute: 'validate', value: 'true' }).then(() => {
+        this.validateModal.hide()
+        this.loadAll()
+      }).catch(error => {
+        console.error(error)
+      })
+    },
+    invalidateItem (id) {
+      ItemService.get(id).then(result => {
+        this.item = result.data
+        this.invalidateModal.show()
+      }).catch(error => {
+        console.error(error)
+      })
+    },
+    confirmInvalidate (id) {
+      ItemService.patch({ objectId: id, attribute: 'validate', value: 'false' }).then(() => {
+        this.invalidateModal.hide()
         this.loadAll()
       }).catch(error => {
         console.error(error)
@@ -245,6 +337,8 @@ export default {
   },
   mounted () {
     this.deleteModal = new Modal(this.$refs.deleteItemConfirmation)
+    this.invalidateModal = new Modal(this.$refs.invalidateItemConfirmation)
+    this.validateModal = new Modal(this.$refs.validateItemConfirmation)
     this.loadAll()
   },
   created () {

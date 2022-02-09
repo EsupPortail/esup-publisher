@@ -134,6 +134,14 @@ const routes = [
             }
           },
           {
+            path: 'managed',
+            name: 'ContentsManaged',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/managed/Managed.vue'),
+            meta: {
+              managerCssClass: 'contents managed'
+            }
+          },
+          {
             path: 'detail/:id',
             name: 'ContentDetail',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/details/ContentDetail.vue'),

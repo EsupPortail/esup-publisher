@@ -30,11 +30,10 @@ export default {
   computed: {
     // Détermine le style css de la page
     getCssClass () {
-      const classe = [
+      return [
         'manager',
         this.$router.currentRoute.value.meta.managerCssClass
       ]
-      return classe
     }
   },
   methods: {

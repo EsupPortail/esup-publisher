@@ -39,7 +39,8 @@ Les commandes liées au back-end restent inchangées :
 | Page Lecteur | src\main\webapp\scripts\app\entities\reader\reader.js | src\main\webapp\src\views\entities\reader\Reader.vue |
 | Page Redacteur | src\main\webapp\scripts\app\entities\redactor\redactor.js | src\main\webapp\src\views\entities\redactor\Redactor.vue |
 | Page Contexte de publication | src\main\webapp\scripts\app\entities\publisher\publisher.js | src\main\webapp\src\views\entities\publisher\Publisher.vue |
-| Page Mes publication | src\main\webapp\scripts\app\manager\contents\owned\owned.js | src\main\webapp\src\views\manager\contents\owned\Owned.vue |
+| Page Mes publications | src\main\webapp\scripts\app\manager\contents\owned\owned.js | src\main\webapp\src\views\manager\contents\owned\Owned.vue |
+| Page Toutes les publications | src\main\webapp\scripts\app\manager\contents\managed\managed.js | src\main\webapp\src\views\manager\contents\managed\Managed.vue |
 | Page Détails de publication | src\main\webapp\scripts\app\manager\contents\details\details.js | src\main\webapp\src\views\manager\contents\details\ContentDetail.vue |
 | Modal Détails de sujet | src\main\webapp\scripts\app\entities\subject\subject.js | src\main\webapp\src\views\entities\subject\SubjectDetail.vue |
 | Filtre Truncate | src\main\webapp\scripts\components\util\truncate.filter.js | src\main\webapp\src\services\util\TruncateUtils.js |
