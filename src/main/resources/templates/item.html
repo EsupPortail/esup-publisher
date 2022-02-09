@@ -34,7 +34,7 @@
                 </div>
             </div>
         </header>
-        <section class="body" th:if="${item.getClass().getSimpleName() != 'Media' and item.getClass().getSimpleName() != 'Attachment'}" th:utext="${item.body}"></section>
+        <section class="body ck-content" th:if="${item.getClass().getSimpleName() != 'Media' and item.getClass().getSimpleName() != 'Attachment'}" th:utext="${item.body}"></section>
         <section class="attachments" th:if="${not #lists.isEmpty(attachments)}">
             <div th:each="attachment: ${attachments}">
                 <a th:href="@{'/' + ${attachment.uri}}"><span th:text="${attachment.filename}"/></a></div>
