@@ -439,9 +439,11 @@ export default {
 
       if ((this.item === null || this.item === undefined || CommonUtils.equals({}, this.item)) && this.contentData && this.contentData.item) {
         const item = Object.assign({}, this.contentData.item)
-        this.setItem(item)
         this.updateMinDate(this.contentData.item)
         item.highlight = this.highlight
+        // update publisher information when modified
+        item.organization = Object.assign({}, this.publisher.context.organization)
+        item.redactor = Object.assign({}, this.publisher.context.redactor)
         this.setItem(item)
       } else if (this.item) {
         this.updateMinDate(this.item)
