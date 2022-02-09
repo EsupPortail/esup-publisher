@@ -72,7 +72,7 @@ module.exports = {
           minify: true
         })
       })
-    // Configuration pour éviter les warnings sur les webcomponents
+    // Configuration pour Ã©viter les warnings sur les webcomponents
     config.module
       .rule('vue')
       .use('vue-loader')
