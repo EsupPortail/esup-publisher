@@ -51,12 +51,11 @@ export default {
   computed: {
     // Génère les références css de la page
     getMainClass () {
-      const classe = [
+      return [
         'esup-publisher',
         this.getCssEnv(),
         !this.isIframe() ? 'not-in-iframe' : ''
       ]
-      return classe
     },
     cssClass () {
       return this.$router.currentRoute.value.meta.cssClass
@@ -107,14 +106,12 @@ export default {
     isIframe () {
       try {
         // 2 ways to test if iframe depending on browser compatibility
-        // console.log("Testing iframe context :", window.self == window.top || window.location == window.parent.location);
         return (
           window.self !== window.top ||
           window.location !== window.parent.location
         )
       } catch (e) {
         // default use: the app is in iframe
-        // console.log("Testing iframe context returned exception :", e);
         return true
       }
     }

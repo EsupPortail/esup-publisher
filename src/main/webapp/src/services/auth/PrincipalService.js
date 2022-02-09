@@ -41,12 +41,7 @@ class PrincipalService {
       return false
     }
 
-    for (let i = 0; i < roles.length; i++) {
-      if (this.isInRole(roles[i])) {
-        return true
-      }
-    }
-    return false
+    return roles.some(role => this.isInRole(role))
   }
 
   isInRole (role) {

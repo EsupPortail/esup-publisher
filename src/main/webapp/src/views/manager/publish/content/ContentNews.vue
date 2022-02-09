@@ -31,7 +31,7 @@
                     <span>{{ $t('news.enclosure-button') }}</span>
                 </button>
 
-                <img v-if="item.enclosure" name="enclosure" id="enclosure" :src="getUrlFromEnclosure()" class="img-responsive" />
+                <img v-if="item.enclosure" id="enclosure" :src="getUrlFromEnclosure()" class="img-responsive img-fluid" :alt="$t('news.enclosure')" />
                 <a v-if="item.enclosure" href="" data-bs-toggle="modal" data-bs-target="#deleteEnclosureConfirmation" v-tooltip="$t('entity.action.delete')">
                     <i class="far fa-times-circle text-danger"></i>
                 </a>
@@ -307,9 +307,9 @@ export default {
       if (this.content.file && this.fileInputError === null) {
         const reader = new FileReader()
         reader.onload = (event) => {
-          const newContent = Object.assign({}, this.content)
-          newContent.dataUrl = event.target.result
-          this.setContent(newContent)
+          const nContent = Object.assign({}, this.content)
+          nContent.dataUrl = event.target.result
+          this.setContent(nContent)
         }
         reader.readAsDataURL(this.content.file)
       }

@@ -54,12 +54,16 @@ export default defineComponent({
     // Méthode appelée à la suppression du toaster
     onDismiss: {
       type: Function,
-      default: () => {}
+      default: () => {
+        // Rien à faire par défaut
+      }
     },
     // Méthode appelée au click sur le toaster
     onClick: {
       type: Function,
-      default: () => {}
+      default: () => {
+        // Rien à faire par défaut
+      }
     },
     // Indique si le toaster doit être affiché que lorsque tous les autres ont été supprimés
     queue: Boolean,
@@ -94,13 +98,6 @@ export default defineComponent({
     },
     transition () {
       switch (this.position) {
-        case Positions.TOP:
-        case Positions.TOP_RIGHT:
-        case Positions.TOP_LEFT:
-          return {
-            enter: 'custom-toast-fade-in-down',
-            leave: 'custom-toast-fade-out'
-          }
         case Positions.BOTTOM:
         case Positions.BOTTOM_RIGHT:
         case Positions.BOTTOM_LEFT:
@@ -108,6 +105,9 @@ export default defineComponent({
             enter: 'custom-toast-fade-in-up',
             leave: 'custom-toast-fade-out'
           }
+        case Positions.TOP:
+        case Positions.TOP_RIGHT:
+        case Positions.TOP_LEFT:
         default:
           return {
             enter: 'custom-toast-fade-in-down',
@@ -273,10 +273,10 @@ export default defineComponent({
     box-shadow: 0 0 12px #999999;
     border-radius: .25em;
     pointer-events: auto;
-    opacity: .92;
+    opacity: 1;
     color: #fff;
-    min-height: 3em;
-    cursor: pointer
+    min-height: 4em;
+    cursor: pointer;
 }
 
 .custom-toast-item-success {
@@ -338,10 +338,5 @@ export default defineComponent({
         padding:0;
         position: fixed !important
     }
-}
-
-.custom-toast-item {
-    opacity: 1;
-    min-height: 4em
 }
 </style>

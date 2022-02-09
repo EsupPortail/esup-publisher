@@ -4,23 +4,23 @@ const state = {
 }
 
 const mutations = {
-  setIdentity (state, identity) {
-    state._identity = identity
+  setIdentity (_state, identity) {
+    _state._identity = identity
   },
-  setAuthenticated (state, authenticated) {
-    state._authenticated = authenticated
+  setAuthenticated (_state, authenticated) {
+    _state._authenticated = authenticated
   },
-  clearAll (state) {
-    state._identity = null
-    state._authenticated = false
+  clearAll (_state) {
+    _state._identity = null
+    _state._authenticated = false
   }
 }
 const getters = {
-  getIdentity: (state) => {
-    return state._identity
+  getIdentity: (_state) => {
+    return _state._identity
   },
-  getAuthenticated: (state) => {
-    return state._authenticated
+  getAuthenticated: (_state) => {
+    return _state._authenticated
   }
 }
 

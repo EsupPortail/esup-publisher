@@ -216,9 +216,9 @@ export default {
         this.organization.identifiers = []
         if (identifiersValues.includes(',')) {
           identifiersValues = identifiersValues.split(',')
-          for (var i = 0; i < identifiersValues.length; i++) {
-            this.organization.identifiers.push(identifiersValues[i])
-          }
+          identifiersValues.forEach(identifiersValue => {
+            this.organization.identifiers.push(identifiersValue)
+          })
         } else {
           this.organization.identifiers.push(identifiersValues)
         }

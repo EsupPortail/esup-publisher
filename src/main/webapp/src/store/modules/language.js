@@ -3,14 +3,14 @@ const state = {
 }
 
 const mutations = {
-  setLang (state, payload) {
-    state.lang = payload
+  setLang (_state, payload) {
+    _state.lang = payload
   }
 }
 
 const getters = {
-  getLanguage: (state) => {
-    return state.lang
+  getLanguage: (_state) => {
+    return _state.lang
   }
 }
 

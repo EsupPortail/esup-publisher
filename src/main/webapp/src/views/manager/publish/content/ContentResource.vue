@@ -31,7 +31,7 @@
                     <span>{{ $t('resource.enclosure-button') }}</span>
                 </button>
 
-                <img v-if="item.enclosure" name="enclosure" id="enclosure" :src="getUrlFromEnclosure()"  class="img-responsive" />
+                <img v-if="item.enclosure" id="enclosure" :src="getUrlFromEnclosure()"  class="img-responsive img-fluid" :alt="$t('resource.enclosure')" />
                 <a v-if="item.enclosure" href="" data-bs-toggle="modal" data-bs-target="#deleteEnclosureConfirmation" v-tooltip="$t('entity.action.delete')">
                    <i class="far fa-times-circle text-danger"></i>
                 </a>
@@ -164,7 +164,7 @@
 
                                   <div class="card-body">
                                     <div v-if="content.file && fileInputError === null">
-                                        <img :src="getUrlFromBlob(content.file)" class="mw-100" />
+                                        <img :src="getUrlFromBlob(content.file)" class="mw-100" alt="" />
                                         <button type="button" @click="uploadFile()" class="btn btn-primary">
                                             <span class="fas fa-download"></span>&nbsp;<span>{{ $t('entity.action.validate') }}</span></button>
                                     </div>

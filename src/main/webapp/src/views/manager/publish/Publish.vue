@@ -150,16 +150,16 @@ export default {
       var tmpTargets = []
 
       if (this.targets) {
-        for (var i = 0; i < this.targets.length; ++i) {
+        this.targets.forEach(target => {
           tmpTargets.push({
             subject: {
-              modelId: this.targets[i].modelId,
+              modelId: target.modelId,
               displayName: null,
               foundOnExternalSource: null
             },
             subscribeType: 'FORCED'
           })
-        }
+        })
       }
 
       var content = {
@@ -168,7 +168,7 @@ export default {
         targets: tmpTargets,
         linkedFiles: this.linkedFilesToContent
       }
-      if (content.item.id != null) {
+      if (content.item.id !== null) {
         ContentService.update(content).then(response => {
           this.confirmSaveModal.hide()
           this.$router.push({ name: 'ContentsOwned', params: { itemState: response.data.value.name } })

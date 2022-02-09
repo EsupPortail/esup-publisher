@@ -28,7 +28,6 @@ class AuthenticationService {
       FetchWrapper.postJson('api/logout').then(response => {
         store.commit('clearAll')
         resolve(response)
-      }).catch(() => {
       })
     })
   }

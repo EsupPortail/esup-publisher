@@ -172,7 +172,7 @@ export default {
         this.setClassifications(Array.from(this.contentData.classifications))
       }
 
-      if ((!CommonUtils.isDefined(this.item) || CommonUtils.equals({}, this.item)) && this.contentData && this.contentData.item) {
+      if ((this.item === null || !CommonUtils.isDefined(this.item) || CommonUtils.equals({}, this.item)) && this.contentData && this.contentData.item) {
         this.setHighlight(this.contentData.item.highlight)
       }
 
