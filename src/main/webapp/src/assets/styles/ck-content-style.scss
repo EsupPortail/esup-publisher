@@ -22,6 +22,10 @@
     --ck-todo-list-checkmark-size: 16px;
 }
 
+.ck-content {
+    overflow: auto;
+}
+
 /* ckeditor5-image/theme/imagecaption.css */
 .ck-content .image > figcaption {
     display: table-caption;
