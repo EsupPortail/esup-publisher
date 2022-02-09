@@ -1924,7 +1924,7 @@ esup-js-tree {
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #25B2F3;
-    --text-color: #25B2F3;
+    --hover-text-color: #25B2F3;
 }
 .clg18 esup-js-tree ,
 .clg18 .jstree-default .jstree-wholerow-clicked,
@@ -1932,7 +1932,7 @@ esup-js-tree {
 .clg18 .jstree-default .jstree-clicked.jstree-hovered,
 .clg18 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #004899;
-    --text-color: #004899;
+    --hover-text-color: #004899;
 }
 
 .clg36 esup-js-tree ,
@@ -1941,7 +1941,7 @@ esup-js-tree {
 .clg36 .jstree-default .jstree-clicked.jstree-hovered,
 .clg36 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #0069B3;
-    --text-color: #0069B3;
+    --hover-text-color: #0069B3;
 }
 
 .clg28 esup-js-tree ,
@@ -1950,7 +1950,7 @@ esup-js-tree {
 .clg28 .jstree-default .jstree-clicked.jstree-hovered,
 .clg28 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #000;
-    --text-color: #FC0;
+    --hover-text-color: #FC0;
 }
 
 .clg37 esup-js-tree ,
@@ -1959,7 +1959,7 @@ esup-js-tree {
 .clg37 .jstree-default .jstree-clicked.jstree-hovered,
 .clg37 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #C60440;
-    --text-color: #C60440;
+    --hover-text-color: #C60440;
 }
 
 .clg41 esup-js-tree ,
@@ -1968,7 +1968,7 @@ esup-js-tree {
 .clg41 .jstree-default .jstree-clicked.jstree-hovered,
 .clg41 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #009FE3;
-    --text-color: #009FE3;
+    --hover-text-color: #009FE3;
 }
 
 .clg45 esup-js-tree ,
@@ -1977,7 +1977,7 @@ esup-js-tree {
 .clg45 .jstree-default .jstree-clicked.jstree-hovered,
 .clg45 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #26448A;
-    --text-color: #26448A;
+    --hover-text-color: #26448A;
 }
 .default esup-js-tree,
 .jstree-default .jstree-anchor.jstree-clicked {
