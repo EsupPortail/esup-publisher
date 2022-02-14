@@ -16,7 +16,7 @@ import Heading from '@ckeditor/ckeditor5-heading/src/heading'
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote'
 import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough'
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline'
-import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle'
+import ListProperties from '@ckeditor/ckeditor5-list/src/listproperties'
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'
 import Font from '@ckeditor/ckeditor5-font/src/font'
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat'
@@ -48,12 +48,13 @@ export default {
       editorConfig: {
         plugins: [
           EssentialsPlugin, BoldPlugin, ItalicPlugin, LinkPlugin, ParagraphPlugin,
-          Heading, BlockQuote, Strikethrough, Underline, ListStyle, Alignment,
+          Heading, BlockQuote, Strikethrough, Underline, ListProperties, Alignment,
           Font, RemoveFormat, SourceEditing, Image, ImageToolbar, ImageCaption,
           ImageStyle, ImageUpload, ImageInsert, ImageResize, LinkImage, MediaEmbed,
           GeneralHtmlSupport, InsertFilePlugin
         ],
         toolbar: {
+          // Définition de la barre d'outils de l'éditeur
           items: [
             'heading', '|',
             'blockQuote', 'bold', 'italic', '|',
@@ -66,6 +67,7 @@ export default {
           shouldNotGroupWhenFull: true
         },
         heading: {
+          // Définition de la liste des types de texte
           options: [
             { model: 'paragraph', title: 'Paragraph' },
             { model: 'heading1', view: 'h1', title: 'Heading 1' },
@@ -74,6 +76,7 @@ export default {
           ]
         },
         image: {
+          // Définition des options de redimensionnement
           resizeOptions: [
             {
               name: 'resizeImage:original',
@@ -96,6 +99,7 @@ export default {
               icon: 'large'
             }
           ],
+          // Définition de la barre d'options des images
           toolbar: [
             'imageTextAlternative', 'toggleImageCaption', 'linkImage', '|',
             'resizeImage', '|',
@@ -103,6 +107,7 @@ export default {
           ]
         },
         link: {
+          // Ajout d'une option "Ouvrir dans un nouvel onglet" lors de l'ajout de lien
           decorators: {
             openInNewTab: {
               mode: 'manual',
@@ -116,26 +121,26 @@ export default {
           }
         },
         htmlSupport: {
-          // Autorisation de toutes les balises HTML
           allow: [
+            // On autorise toutes les balises sauf script/iframe avec toutes les classes et styles possibles
+            // ainsi que les attributs :
+            // - "aria-*"" (accessibilité)
+            // - "ta-*", "contenteditable", "allowfullscreen", "frameborder" (pour les anciens contenus textAngular)
             {
-              name: /.*/,
-              attributes: true,
+              name: /^((?!(script|iframe)).)*$/,
               classes: true,
-              styles: true
-            }
-          ],
-          // Interdiction des balises scripts et des attributs avec du javascript
-          disallow: [
-            {
+              styles: true,
               attributes: [
-                { key: /^on(.*)/i, value: true },
-                { key: /.*/, value: /(\b)(on\S+)(\s*)=|javascript:|(<\s*)(\/*)script/i },
-                { key: /.*/, value: /data:(?!image\/(png|jpeg|gif|webp))/i }
+                { key: /^(((aria|ta)-(.*))|contenteditable|allowfullscreen|frameborder)$/, value: true }
               ]
-            },
-            { name: 'script' }
+            }
           ]
+        },
+        mediaEmbed: {
+          // Preview des médias directement dans l'output du ckeditor
+          previewsInData: true,
+          // Suppression des providers sans preview
+          removeProviders: ['instagram', 'twitter', 'googleMaps', 'flickr', 'facebook']
         },
         language: store.getters.getLanguage
       }

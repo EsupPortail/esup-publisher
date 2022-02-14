@@ -65,12 +65,14 @@ module.exports = {
       .use('postcss-loader')
       .loader('postcss-loader')
       .tap(() => {
-        return styles.getPostCssConfig({
-          themeImporter: {
-            themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
-          },
-          minify: true
-        })
+        return {
+          postcssOptions: styles.getPostCssConfig({
+            themeImporter: {
+              themePath: require.resolve('@ckeditor/ckeditor5-theme-lark')
+            },
+            minify: true
+          })
+        }
       })
     // Configuration pour éviter les warnings sur les webcomponents
     config.module
