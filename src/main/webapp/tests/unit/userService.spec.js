@@ -123,9 +123,11 @@ describe('UserService.js tests', () => {
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
-    UserService.canEditCtx().then(result => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canEditCtx(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit?keyId=' + keyId + '&keyType=' + keyType)
       expect(result).toStrictEqual(response)
       done()
     })
@@ -135,9 +137,11 @@ describe('UserService.js tests', () => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
 
-    UserService.canEditCtx().catch(error => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canEditCtx(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/edit?keyId=' + keyId + '&keyType=' + keyType)
       expect(error).toStrictEqual(response)
       done()
     })
@@ -150,9 +154,11 @@ describe('UserService.js tests', () => {
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
-    UserService.canDeleteCtx().then(result => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canDeleteCtx(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete?keyId=' + keyId + '&keyType=' + keyType)
       expect(result).toStrictEqual(response)
       done()
     })
@@ -162,9 +168,11 @@ describe('UserService.js tests', () => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
 
-    UserService.canDeleteCtx().catch(error => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canDeleteCtx(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/delete?keyId=' + keyId + '&keyType=' + keyType)
       expect(error).toStrictEqual(response)
       done()
     })
@@ -258,9 +266,11 @@ describe('UserService.js tests', () => {
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
-    UserService.canHighlight().then(result => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canHighlight(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight?keyId=' + keyId + '&keyType=' + keyType)
       expect(result).toStrictEqual(response)
       done()
     })
@@ -270,9 +280,11 @@ describe('UserService.js tests', () => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
 
-    UserService.canHighlight().catch(error => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canHighlight(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/highlight?keyId=' + keyId + '&keyType=' + keyType)
       expect(error).toStrictEqual(response)
       done()
     })

@@ -105,7 +105,7 @@
         </thead>
           <tbody>
             <tr v-for="item in items" :key="item.id" :class="{highlight: item.highlight}">
-              <td class="d-none" data-label="ID"><a>{{item.id}}</a></td>
+              <td class="d-none" data-label="ID"><router-link :to="{ name: 'ContentDetail', params: { id: item.id }}">{{item.id}}</router-link></td>
               <td :data-label="$t('item.type')">{{$t('enum.itemType.' + item.type)}}</td>
               <td class="longtext" :data-label="$t('item.title')">{{item.title}}</td>
               <td class="" :data-label="$t('item.created')">
@@ -125,7 +125,7 @@
                   <span v-if="item.validatedDate !== null" :data-label="$t('item.beforeDate')">{{formatDate(item.validatedDate)}}</span>
                   <span v-if="item.validatedBy !== null" :data-label="$t('item.beforeName')">{{item.validatedBy.displayName}}</span>
               </td>
-              <td class="d-none" :data-label="$t('item.status')">{{$t('item.status')}}</td>
+              <td class="d-none" :data-label="$t('item.status')">{{item.status}}</td>
               <td class="d-lg-none verylongtext" :data-label="$t('item.summary')">{{item.summary}}</td>
               <td class="d-none" :data-label="$t('item.body')">{{item.body}}</td>
               <td class="d-md-none d-lg-none d-xl-table-cell text-center" :data-label="$t('item.rssAllowed')"><input type="checkbox" v-model="item.rssAllowed" disabled/></td>
@@ -135,16 +135,18 @@
                 <button type="button" @click="itemDetail(item)" class="btn btn-info btn-sm me-1">
                   <span class="far fa-eye"></span>&nbsp;<span>{{$t("entity.action.view")}}</span>
                 </button>
-                <button type="button" @click="update(item.id)" class="btn btn-primary btn-sm me-1">
-                  <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
-                </button>
-                <button type="button" v-if="item.status == 'PENDING'"  @click="validateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
-                  <span class="far fa-check-circle"></span>&nbsp;<span>{{$t("entity.action.validate")}}</span>
-                </button>
-                <button type="button" v-if="item.status == 'SCHEDULED' || item.status == 'PUBLISHED'"  @click="invalidateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
-                  <span class="fas fa-ban"></span>&nbsp;<span>{{$t("entity.action.unvalidate")}}</span>
+                <div class="d-inline" v-can-edit="item.contextKey">
+                  <button type="button" @click="update(item.id)" class="btn btn-primary btn-sm me-1">
+                    <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
                   </button>
-                <button type="button" @click="deleteItem(item.id)" class="btn btn-danger btn-sm">
+                  <button type="button" v-if="item.status == 'PENDING'"  @click="validateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
+                    <span class="far fa-check-circle"></span>&nbsp;<span>{{$t("entity.action.validate")}}</span>
+                  </button>
+                  <button type="button" v-if="item.status == 'SCHEDULED' || item.status == 'PUBLISHED'"  @click="invalidateItem(item.id)" class="btn btn-warning btn-sm me-1 text-white">
+                    <span class="fas fa-ban"></span>&nbsp;<span>{{$t("entity.action.unvalidate")}}</span>
+                  </button>
+                </div>
+                <button type="button" @click="deleteItem(item.id)" class="btn btn-danger btn-sm" v-can-delete="item.contextKey">
                   <span class="far fa-times-circle"></span>&nbsp;<span>{{$t("entity.action.delete")}}</span>
                 </button>
               </td>

@@ -142,6 +142,14 @@ const routes = [
             }
           },
           {
+            path: 'pending',
+            name: 'ContentPending',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/pending/Pending.vue'),
+            meta: {
+              managerCssClass: 'contents pending'
+            }
+          },
+          {
             path: 'detail/:id',
             name: 'ContentDetail',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/details/ContentDetail.vue'),

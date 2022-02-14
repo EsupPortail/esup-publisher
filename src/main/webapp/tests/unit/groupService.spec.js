@@ -77,9 +77,10 @@ describe('GroupService.js tests', () => {
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
 
-    GroupService.userMembers().then(value => {
+    const id = 1
+    GroupService.userMembers(id).then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups/usermembers')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups/usermembers?id=' + id)
       expect(value).toStrictEqual(response)
       done()
     })

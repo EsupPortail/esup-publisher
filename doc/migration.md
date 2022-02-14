@@ -48,6 +48,9 @@ Les commandes liées au back-end restent inchangées :
 | Directive has-any-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasAnyRoleDirective.js |
 | Directive has-role | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\HasRoleDirective.js |
 | Directive can-moderate | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanModerateDirective.js |
+| Directive can-edit | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanEditDirective.js |
+| Directive can-delete | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanDeleteDirective.js |
+| Directive can-highlight | src\main\webapp\scripts\components\auth\authority.directive.js | src\main\webapp\src\directives\CanHighlightDirective.js |
 | Directive disable-click | src\main\webapp\scripts\components\form\disableClick.directive.js | src\main\webapp\src\directives\DisableClickDirective.js |
 
 ## Remarques

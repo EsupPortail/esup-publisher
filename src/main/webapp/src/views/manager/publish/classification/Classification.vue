@@ -21,7 +21,7 @@
         </div>
       </div>
       <div v-if="classificationsList.length < 1" class="alert alert-danger"><span>{{ $t("manager.publish.classification.emptyList") }}</span></div>
-      <div v-if="classificationsList.length > 0 && hasHighlightCats()" class="form-group" can-highlight="publisher.contextKey">
+      <div v-if="classificationsList.length > 0 && hasHighlightCats()" class="form-group" v-can-highlight="publisher.contextKey">
         <label class="control-label"><span>{{ $t("manager.publish.classification.highlight", {name: classificationHighlighted.name}) }}</span>
           <input type="checkbox" class="form-check-input" name="highlight" id="highlight" v-model="_highlight" />
         </label>

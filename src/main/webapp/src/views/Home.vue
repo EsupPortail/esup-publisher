@@ -26,7 +26,7 @@
           </div>
       </router-link>
 
-      <a ui-sref="pending" class="list-group-item list-group-item-action" v-can-moderate>
+      <router-link to="/contents/pending" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="pending-item" class="bouton-action">
               <div class="div-icon text-end">
                   <i class="fas fa-gavel fa-5x d-none d-sm-none d-md-inline-block"></i>
@@ -37,7 +37,7 @@
                   <span class="item-text d-none d-sm-none d-md-block" >{{ $t("main.link.moderate.desc") }}</span>
               </div>
           </div>
-      </a>
+      </router-link>
 
       <router-link to="/treeview" class="list-group-item list-group-item-action" v-can-moderate>
           <div id="treeview-item" class="bouton-action">

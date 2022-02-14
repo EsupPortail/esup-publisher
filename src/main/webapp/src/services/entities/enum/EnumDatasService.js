@@ -1,5 +1,4 @@
 import AllEnumsService from './AllEnumsService'
-import router from '@/router/index.js'
 
 class EnumDatasService {
   AccessTypeList
@@ -39,7 +38,6 @@ class EnumDatasService {
       }
     }).catch(error => {
       console.error(error)
-      router.push({ name: 'Error' })
     })
   }
 

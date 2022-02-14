@@ -51,10 +51,10 @@
                 </ul>
             </li>
             <li :class="{active: isPageNameIncludes('pending')}" v-if="canModerate">
-                <a class="nav-link">
+                <router-link to="/contents/pending" class="nav-link">
                     <span class="fas fa-gavel fa-2x"></span>
                     <span>{{ $t("global.menu.manager.contents.moderate") }}</span>
-                </a>
+                </router-link>
             </li>
 
             <li :class="{active: isPageNameIncludes('treeview')}" v-if="canModerate">

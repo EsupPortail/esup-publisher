@@ -1,6 +1,5 @@
 import UserService from '@/services/user/UserService'
 import GroupService from '@/services/entities/group/GroupService'
-import router from '@/router/index.js'
 
 class SubjectService {
     userDisplayedAttrs = null
@@ -17,7 +16,6 @@ class SubjectService {
           }
         }).catch(error => {
           console.error(error)
-          router.push({ name: 'Error' })
         })
       } else {
         return Promise.resolve()

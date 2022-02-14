@@ -17,8 +17,12 @@ class GroupService {
     return FetchWrapper.getJson('api/groups/attributes')
   }
 
-  userMembers () {
-    return FetchWrapper.getJson('api/groups/usermembers')
+  userMembers (id) {
+    return FetchWrapper.getJson('api/groups/usermembers?id=' + id)
+  }
+
+  search (data) {
+    return FetchWrapper.postJson('api/groups', data)
   }
 }
 

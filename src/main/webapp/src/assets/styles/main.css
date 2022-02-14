@@ -1269,7 +1269,7 @@ dl>dd>input[type="checkbox"] {
     .table-responsive-to-cards table>tbody>tr>td,
     .table-responsive-to-cards table>tfoot>tr>td {
         border: none;
-        white-space: initial !important;
+        white-space: pre-wrap !important;
     }
 
     .table-responsive-to-cards tr {
@@ -1301,7 +1301,7 @@ dl>dd>input[type="checkbox"] {
     }
 
     .table-responsive-to-cards td:not(.action):before {
-        content: attr(data-label) ": ";
+        content: attr(data-label) ":";
         float: left;
         margin: 0 0.5rem 0 0;
         /* effet ne plaisant pas */
@@ -1919,14 +1919,16 @@ esup-js-tree {
     margin-right: 20px;
 }
 
-.default esup-js-tree ,
+.default esup-js-tree,
+.default esup-subject-search-button,
 .jstree-default .jstree-anchor.jstree-clicked,
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
     --selected-background-color: #25B2F3;
     --hover-text-color: #25B2F3;
 }
-.clg18 esup-js-tree ,
+.clg18 esup-js-tree,
+.clg18 esup-subject-search-button,
 .clg18 .jstree-default .jstree-wholerow-clicked,
 .clg18 .jstree-default .jstree-anchor.jstree-clicked,
 .clg18 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1935,7 +1937,8 @@ esup-js-tree {
     --hover-text-color: #004899;
 }
 
-.clg36 esup-js-tree ,
+.clg36 esup-js-tree,
+.clg36 esup-subject-search-button,
 .clg36 .jstree-default .jstree-wholerow-clicked,
 .clg36 .jstree-default .jstree-anchor.jstree-clicked,
 .clg36 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1944,7 +1947,8 @@ esup-js-tree {
     --hover-text-color: #0069B3;
 }
 
-.clg28 esup-js-tree ,
+.clg28 esup-js-tree,
+.clg28 esup-subject-search-button,
 .clg28 .jstree-default .jstree-wholerow-clicked,
 .clg28 .jstree-default .jstree-anchor.jstree-clicked,
 .clg28 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1953,7 +1957,8 @@ esup-js-tree {
     --hover-text-color: #FC0;
 }
 
-.clg37 esup-js-tree ,
+.clg37 esup-js-tree,
+.clg37 esup-subject-search-button,
 .clg37 .jstree-default .jstree-wholerow-clicked,
 .clg37 .jstree-default .jstree-anchor.jstree-clicked,
 .clg37 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1962,7 +1967,8 @@ esup-js-tree {
     --hover-text-color: #C60440;
 }
 
-.clg41 esup-js-tree ,
+.clg41 esup-js-tree,
+.clg41 esup-subject-search-button,
 .clg41 .jstree-default .jstree-wholerow-clicked,
 .clg41 .jstree-default .jstree-anchor.jstree-clicked,
 .clg41 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1971,7 +1977,8 @@ esup-js-tree {
     --hover-text-color: #009FE3;
 }
 
-.clg45 esup-js-tree ,
+.clg45 esup-js-tree,
+.clg45 esup-subject-search-button,
 .clg45 .jstree-default .jstree-wholerow-clicked,
 .clg45 .jstree-default .jstree-anchor.jstree-clicked,
 .clg45 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1980,6 +1987,7 @@ esup-js-tree {
     --hover-text-color: #26448A;
 }
 .default esup-js-tree,
+.default esup-subject-search-button,
 .jstree-default .jstree-anchor.jstree-clicked {
     --selected-text-color: #fff;
 }
@@ -1994,15 +2002,21 @@ esup-js-tree {
 }
  
 .clg36 esup-js-tree,
+.clg36 esup-subject-search-button,
 .clg37 esup-js-tree,
+.clg37 esup-subject-search-button,
 .clg41 esup-js-tree,
+.clg41 esup-subject-search-button,
 .clg45 esup-js-tree,
+.clg45 esup-subject-search-button,
 .clg18 esup-js-tree,
+.clg18 esup-subject-search-button,
 .clg18 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     --selected-text-color: #fff;
 }
 
 .clg28 esup-js-tree,
+.clg28 esup-subject-search-button,
 .clg28 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     --selected-text-color: #FC0;
 }

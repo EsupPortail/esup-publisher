@@ -1,6 +1,5 @@
 import ConfImageSizeService from './ConfImageSizeService'
 import ConfFileSizeService from './ConfFileSizeService'
-import router from '@/router/index.js'
 
 class ConfigurationService {
   confImageSize
@@ -14,7 +13,6 @@ class ConfigurationService {
       }
     }).catch(error => {
       console.error(error)
-      router.push({ name: 'Error' })
     })
   }
 

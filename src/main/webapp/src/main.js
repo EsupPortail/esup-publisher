@@ -5,6 +5,9 @@ import i18n from './i18n'
 import store from './store'
 import NavbarDirective from './directives/NavbarDirective.js'
 import CanModerateDirective from './directives/CanModerateDirective.js'
+import CanEditDirective from './directives/CanEditDirective.js'
+import CanDeleteDirective from './directives/CanDeleteDirective.js'
+import CanHighlightDirective from './directives/CanHighlightDirective.js'
 import HasAnyRoleDirective from './directives/HasAnyRoleDirective.js'
 import HasRoleDirective from './directives/HasRoleDirective.js'
 import DisableClickDirective from './directives/DisableClickDirective.js'
@@ -21,11 +24,15 @@ import '@fortawesome/fontawesome-free/css/all.css' // Utilisation de Font Awesom
 import 'mdi/css/materialdesignicons.css'
 import '@gip-recia/js-tree'
 import '@gip-recia/subject-infos'
+import '@gip-recia/subject-search-button'
 
 const app = createApp(App)
 
 app.directive('active-menu', NavbarDirective)
   .directive('can-moderate', CanModerateDirective)
+  .directive('can-edit', CanEditDirective)
+  .directive('can-delete', CanDeleteDirective)
+  .directive('can-highlight', CanHighlightDirective)
   .directive('has-any-role', HasAnyRoleDirective)
   .directive('has-role', HasRoleDirective)
   .directive('disable-click', DisableClickDirective)

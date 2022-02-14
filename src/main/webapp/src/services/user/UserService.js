@@ -17,12 +17,18 @@ class UserService {
     return FetchWrapper.getJson('api/users/perm/createin')
   }
 
-  canEditCtx () {
-    return FetchWrapper.getJson('api/users/perm/edit')
+  canEditCtx (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/edit?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
-  canDeleteCtx () {
-    return FetchWrapper.getJson('api/users/perm/delete')
+  canDeleteCtx (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/delete?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
   canEditCtxPerms () {
@@ -37,8 +43,11 @@ class UserService {
     return FetchWrapper.getJson('api/users/perm/moderate')
   }
 
-  canHighlight () {
-    return FetchWrapper.getJson('api/users/perm/highlight')
+  canHighlight (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/highlight?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
   search (data) {
