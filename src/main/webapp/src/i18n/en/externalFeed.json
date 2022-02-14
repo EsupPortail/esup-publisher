@@ -1,34 +1,32 @@
 {
-    "publisherApp": {
-        "externalFeed" : {
-            "home": {
-                "title": "ExternalFeeds",
-                "createLabel": "Create a new ExternalFeed",
-                "createOrEditLabel": "Create or edit a ExternalFeed"
-            },
-            "delete": {
-                "question": "Are you sure you want to delete ExternalFeed {{ id }}?"
-            },
-            "detail": {
-                "title": "ExternalFeed"
-            },
-            "rssAllowed": "Rss Allowed",
-            "name": "Name",
-            "iconUrl": "Icon Url",
-            "color" : "Color",
-            "lang": "Lang",
-            "ttl": "Ttl",
-            "displayOrder": "Position",
-            "accessView": "Access View",
-            "description": "Description",
-            "defaultDisplayOrder": "Display order",
-            "rssUrl": "Rss Url",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "publisher": "publisher",
-            "parent": "parent"
-        }
+    "externalFeed" : {
+        "home": {
+            "title": "ExternalFeeds",
+            "createLabel": "Create a new ExternalFeed",
+            "createOrEditLabel": "Create or edit a ExternalFeed"
+        },
+        "delete": {
+            "question": "Are you sure you want to delete ExternalFeed {{ id }}?"
+        },
+        "detail": {
+            "title": "ExternalFeed"
+        },
+        "rssAllowed": "Rss Allowed",
+        "name": "Name",
+        "iconUrl": "Icon Url",
+        "color" : "Color",
+        "lang": "Lang",
+        "ttl": "Ttl",
+        "displayOrder": "Position",
+        "accessView": "Access View",
+        "description": "Description",
+        "defaultDisplayOrder": "Display order",
+        "rssUrl": "Rss Url",
+        "createdBy": "Created By",
+        "createdDate": "Created Date",
+        "lastModifiedBy": "Last Modified By",
+        "lastModifiedDate": "Last Modified Date",
+        "publisher": "publisher",
+        "parent": "parent"
     }
 }

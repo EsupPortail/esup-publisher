@@ -57,7 +57,7 @@
     <button type="submit"
             @click="readerPage"
             class="btn btn-info">
-        <span class="fas fa-arrow-left"></span>&nbsp;<span translate="entity.action.back"> {{$t('entity.action.back')}}</span>
+        <span class="fas fa-arrow-left"></span>&nbsp;<span> {{$t('entity.action.back')}}</span>
     </button>
 </div>
 </template>

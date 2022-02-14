@@ -7,9 +7,9 @@ const HasAnyRoleDirective = {
     roles = roles.replace(/\s+/g, '').split(',')
     var isInRole = Principal.isInAnyRole(roles)
     if (!isInRole) {
-      el.style.display = 'none'
+      el.classList.add('d-none')
     } else {
-      el.style.display = 'inline-block'
+      el.classList.remove('d-none')
     }
   },
   updated (el, { dir, value }) {

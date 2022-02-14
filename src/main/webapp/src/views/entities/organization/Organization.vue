@@ -91,7 +91,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createOrganization" >
+                        <button type="button" class="btn btn-primary" :disabled="formValidator.hasError()" @click="createOrganization" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                     </div>

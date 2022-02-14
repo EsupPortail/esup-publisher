@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <label class="control-label" for="organization" >{{$t('publisher.context.organization')}}</label>
                             <select class="form-select" id="organization" name="organization" v-model="publisher.context.organization" required>
-                                <option v-for="organization in organizations" v-bind:key="organization.id" :value="organization" >
+                                <option v-for="organization in organizations" :key="organization.id" :value="organization" >
                                     {{ organization.name }}
                                 </option>
                             </select>
@@ -37,7 +37,7 @@
                         <div class="form-group">
                             <label class="control-label" for="reader" >{{$t('publisher.context.reader')}}</label>
                             <select class="form-select" id="reader" name="reader" v-model="publisher.context.reader" required>
-                                <option v-for="reader in readers" v-bind:key="reader.id" :value="reader">
+                                <option v-for="reader in readers" :key="reader.id" :value="reader">
                                     {{ reader.name }}
                                 </option>
                             </select>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label class="control-label" for="redactor" >{{$t('publisher.context.redactor')}}</label>
                             <select class="form-select" id="redactor" name="redactor" v-model="publisher.context.redactor" required>
-                                <option v-for="redactor in redactors" v-bind:key="redactor.id" :value="redactor">
+                                <option v-for="redactor in redactors" :key="redactor.id" :value="redactor">
                                     {{ redactor.displayName }}
                                 </option>
                             </select>
@@ -81,7 +81,7 @@
                         <div class="form-group">
                             <label class="control-label" for="permissionType" >{{$t('publisher.permissionType')}}</label>
                             <select class="form-select" id="permissionType" name="permissionType" v-model="publisher.permissionType" required>
-                                <option v-for="permissionClass in permissionClasses" v-bind:key="permissionClass.id" :value="permissionClass.name">
+                                <option v-for="permissionClass in permissionClasses" :key="permissionClass.id" :value="permissionClass.name">
                                     {{$t(permissionClass.label)}}
                                 </option>
                             </select>
@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
                             <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required>
-                                <option v-for="defaultDisplayOrderType in displayOrderTypeList" v-bind:key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
+                                <option v-for="defaultDisplayOrderType in displayOrderTypeList" :key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
                                     {{$t(defaultDisplayOrderType.label)}}
                                 </option>
                             </select>
@@ -146,7 +146,7 @@
                         <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
                             <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
                         </button>
-                        <button type="button" class="btn btn-primary" :class="{'disabled': formValidator.hasError() }" @click="createPublisher" >
+                        <button type="button" class="btn btn-primary" :disabled="formValidator.hasError()" @click="createPublisher" >
                             <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
                         </button>
                     </div>

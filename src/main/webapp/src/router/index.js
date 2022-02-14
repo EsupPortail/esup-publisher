@@ -70,7 +70,18 @@ const routes = [
           roles: ['ROLE_USER'],
           cssClass: 'manager',
           managerCssClass: 'treeview'
-        }
+        },
+        children: [
+          {
+            path: 'details/:ctxType/:ctxId',
+            name: 'TreeviewCtxDetails',
+            component: () => import(/* webpackChunkName: "manager" */ '../views/manager/treeview/ctxDetails/CtxDetails.vue'),
+            meta: {
+              cssClass: 'treeview',
+              managerCssClass: 'treeview ctxDetails'
+            }
+          }
+        ]
       },
       {
         path: '/publish/:id?',

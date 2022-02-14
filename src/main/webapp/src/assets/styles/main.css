@@ -134,8 +134,6 @@ a:focus>div {
     color: #004899;
 }
 
-.clg28 a:focus,
-.clg28 a:hover,
 .clg28 a:hover>div,
 .clg28 a:focus>div {
     color: #fc0;
@@ -669,7 +667,7 @@ dl {
     margin-bottom: 15px;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 576px) {
     .dl-horizontal.entity-details>dt {
         margin-bottom: 15px;
         text-align: left;
@@ -682,12 +680,12 @@ dl {
         padding-left: 220px;
         margin-left: 0;
     }
-    .row.modal-subject {
+    .row.entity-details {
         border-bottom: 1px solid #eee;
     }
 }
 
-.dl-horizontal.entity-details>dd>.classification-color {
+.row.entity-details>dd>.classification-color {
     height: 24px;
     width: 24px;
     border-radius: 50%;
@@ -1921,6 +1919,7 @@ esup-js-tree {
 
 .default esup-js-tree,
 .default esup-subject-search-button,
+.default esup-edit-evaluator,
 .jstree-default .jstree-anchor.jstree-clicked,
 .jstree-default .jstree-clicked.jstree-hovered,
 .jstree-default.jstree-checkbox-no-clicked .jstree-clicked.jstree-hovered {
@@ -1929,6 +1928,7 @@ esup-js-tree {
 }
 .clg18 esup-js-tree,
 .clg18 esup-subject-search-button,
+.clg18 esup-edit-evaluator,
 .clg18 .jstree-default .jstree-wholerow-clicked,
 .clg18 .jstree-default .jstree-anchor.jstree-clicked,
 .clg18 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1939,6 +1939,7 @@ esup-js-tree {
 
 .clg36 esup-js-tree,
 .clg36 esup-subject-search-button,
+.clg36 esup-edit-evaluator,
 .clg36 .jstree-default .jstree-wholerow-clicked,
 .clg36 .jstree-default .jstree-anchor.jstree-clicked,
 .clg36 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1949,6 +1950,7 @@ esup-js-tree {
 
 .clg28 esup-js-tree,
 .clg28 esup-subject-search-button,
+.clg28 esup-edit-evaluator,
 .clg28 .jstree-default .jstree-wholerow-clicked,
 .clg28 .jstree-default .jstree-anchor.jstree-clicked,
 .clg28 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1959,6 +1961,7 @@ esup-js-tree {
 
 .clg37 esup-js-tree,
 .clg37 esup-subject-search-button,
+.clg37 esup-edit-evaluator,
 .clg37 .jstree-default .jstree-wholerow-clicked,
 .clg37 .jstree-default .jstree-anchor.jstree-clicked,
 .clg37 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1969,6 +1972,7 @@ esup-js-tree {
 
 .clg41 esup-js-tree,
 .clg41 esup-subject-search-button,
+.clg41 esup-edit-evaluator,
 .clg41 .jstree-default .jstree-wholerow-clicked,
 .clg41 .jstree-default .jstree-anchor.jstree-clicked,
 .clg41 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1979,6 +1983,7 @@ esup-js-tree {
 
 .clg45 esup-js-tree,
 .clg45 esup-subject-search-button,
+.clg45 esup-edit-evaluator,
 .clg45 .jstree-default .jstree-wholerow-clicked,
 .clg45 .jstree-default .jstree-anchor.jstree-clicked,
 .clg45 .jstree-default .jstree-clicked.jstree-hovered,
@@ -1988,6 +1993,7 @@ esup-js-tree {
 }
 .default esup-js-tree,
 .default esup-subject-search-button,
+.default esup-edit-evaluator,
 .jstree-default .jstree-anchor.jstree-clicked {
     --selected-text-color: #fff;
 }
@@ -2003,20 +2009,26 @@ esup-js-tree {
  
 .clg36 esup-js-tree,
 .clg36 esup-subject-search-button,
+.clg36 esup-edit-evaluator,
 .clg37 esup-js-tree,
 .clg37 esup-subject-search-button,
+.clg37 esup-edit-evaluator,
 .clg41 esup-js-tree,
 .clg41 esup-subject-search-button,
+.clg41 esup-edit-evaluator,
 .clg45 esup-js-tree,
 .clg45 esup-subject-search-button,
+.clg45 esup-edit-evaluator,
 .clg18 esup-js-tree,
 .clg18 esup-subject-search-button,
+.clg18 esup-edit-evaluator,
 .clg18 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     --selected-text-color: #fff;
 }
 
 .clg28 esup-js-tree,
 .clg28 esup-subject-search-button,
+.clg28 esup-edit-evaluator,
 .clg28 .jstree-default .jstree-anchor.jstree-hovered:not(.jstree-clicked) {
     --selected-text-color: #FC0;
 }
@@ -2028,33 +2040,107 @@ esup-subject-infos {
     display: inline-block;
 }
 
-.default esup-subject-infos {
+.default esup-subject-infos,
+.default esup-simple-evaluators,
+.default esup-evaluator {
     --subject-infos-focus-text-color: #25B2F3;
 
 }
-.clg18 esup-subject-infos {
+.clg18 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg18 esup-evaluator {
     --subject-infos-focus-text-color: #004899;
 }
 
-.clg36 esup-subject-infos {
+.clg36 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg36 esup-evaluator {
     --subject-infos-focus-text-color: #0069B3;
 }
 
-.clg28 esup-subject-infos {
+.clg28 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg28 esup-evaluator {
     --subject-infos-focus-background-color: #000;
     --subject-infos-focus-text-color: #FC0;
 }
 
-.clg37 esup-subject-infos {
+.clg37 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg37 esup-evaluator {
     --subject-infos-focus-text-color: #C60440;
 }
 
-.clg41 esup-subject-infos {
+.clg41 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg41 esup-evaluator {
     --subject-infos-focus-text-color: #009FE3;
 }
 
-.clg45 esup-subject-infos {
+.clg45 esup-subject-infos,
+.default esup-simple-evaluators,
+.clg45 esup-evaluator {
     --subject-infos-focus-text-color: #26448A;
+}
+
+/* ========================================
+For esup-subject-search-button
+===========================================*/
+.default esup-subject-search-button,
+.default esup-edit-evaluator {
+    --text-color-pagination: #25B2F3;
+    --selected-background-color-pagination: #25B2F3;
+}
+.clg18 esup-subject-search-button,
+.clg18 esup-edit-evaluator {
+    --text-color-pagination: #004899;
+    --selected-background-color-pagination: #004899;
+}
+
+.clg36 esup-subject-search-button,
+.clg36 esup-edit-evaluator {
+    --text-color-pagination: #0069B3;
+    --selected-background-color-pagination: #0069B3;
+}
+
+.clg28 esup-subject-search-button,
+.clg28 esup-edit-evaluator {
+    --text-color-pagination: #000;
+    --selected-background-color-pagination: #FC0;
+    --selected-text-color-pagination: #000;
+}
+
+.clg37 esup-subject-search-button,
+.clg37 esup-edit-evaluator {
+    --text-color-pagination: #C60440;
+    --selected-background-color-pagination: #C60440;
+}
+
+.clg41 esup-subject-search-button,
+.clg41 esup-edit-evaluator {
+    --text-color-pagination: #009FE3;
+    --selected-background-color-pagination: #009FE3;
+}
+
+.clg45 esup-subject-search-button,
+.clg45 esup-edit-evaluator {
+    --text-color-pagination: #26448A;
+    --selected-background-color-pagination: #26448A;
+}
+
+.default esup-subject-search-button,
+.default esup-edit-evaluator,
+.clg18 esup-subject-search-button,
+.clg18 esup-edit-evaluator,
+.clg36 esup-subject-search-button,
+.clg36 esup-edit-evaluator,
+.clg37 esup-subject-search-button,
+.clg37 esup-edit-evaluator,
+.clg41 esup-subject-search-button,
+.clg41 esup-edit-evaluator,
+.clg45 esup-subject-search-button,
+.clg45 esup-edit-evaluator {
+    --selected-text-color-pagination: #fff;
 }
 /* ========================================
 For TextAngular et specific buttons
@@ -2143,7 +2229,7 @@ h4 {
     outline: 0;
   }
 
-.navbar-default .navbar-nav>li>a {
+.navbar-nav li>a {
     color: #777;
 }
 

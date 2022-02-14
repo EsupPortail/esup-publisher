@@ -7,7 +7,7 @@
                 "createOrEditLabel": "Créer ou éditer un PermissionOnSubjects"
             },
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le PermissionOnSubjects {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le PermissionOnSubjects { id } ?"
             },
             "detail": {
                 "title": "PermissionOnSubjects"

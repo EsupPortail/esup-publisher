@@ -4,16 +4,14 @@ import UserService from '@/services/user/UserService'
 // droits de modération
 const CanModerateDirective = {
   canModerate (el) {
+    el.classList.add('d-none')
     UserService.canModerateAnyThing().then(response => {
       if (!response.data.value) {
-        el.style.display = 'none'
+        el.classList.add('d-none')
       } else {
-        el.style.display = 'inline-block'
+        el.classList.remove('d-none')
       }
     })
-  },
-  updated (el, { dir }) {
-    dir.canModerate(el)
   },
   beforeMount (el, { dir }) {
     dir.canModerate(el)

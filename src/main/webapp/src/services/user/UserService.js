@@ -13,8 +13,11 @@ class UserService {
     return FetchWrapper.getJson('api/users/fnattributes')
   }
 
-  canCreateInCtx () {
-    return FetchWrapper.getJson('api/users/perm/createin')
+  canCreateInCtx (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/createin?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
   canEditCtx (keyId, keyType) {
@@ -31,12 +34,18 @@ class UserService {
     }))
   }
 
-  canEditCtxPerms () {
-    return FetchWrapper.getJson('api/users/perm/editPerms')
+  canEditCtxPerms (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/editPerms?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
-  canEditCtxTargets () {
-    return FetchWrapper.getJson('api/users/perm/editTargets')
+  canEditCtxTargets (keyId, keyType) {
+    return FetchWrapper.getJson('api/users/perm/editTargets?' + new URLSearchParams({
+      keyId: keyId,
+      keyType: keyType
+    }))
   }
 
   canModerateAnyThing () {

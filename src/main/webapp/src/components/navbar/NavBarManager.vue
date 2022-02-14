@@ -27,7 +27,7 @@
             <li class="nav-item">
                 <router-link to="/publish/publisher" class="nav-link">
                     <span class="fas fa-pencil-alt fa-2x"></span>
-                    <span translate="global.menu.write">{{$t("global.menu.write")}}</span>
+                    <span>{{$t("global.menu.write")}}</span>
                 </router-link>
             </li>
             <li v-if="!canModerate" class="nav-item">
@@ -56,12 +56,11 @@
                     <span>{{ $t("global.menu.manager.contents.moderate") }}</span>
                 </router-link>
             </li>
-
             <li :class="{active: isPageNameIncludes('treeview')}" v-if="canModerate">
-                <a class="nav-link">
+                <router-link to="/treeview" class="nav-link">
                     <span class="fas fa-wrench fa-2x"></span>
                     <span >{{ $t("global.menu.manager.contexts.main") }}</span>
-                </a>
+                </router-link>
             </li>
         </ul>
     </div>

@@ -5,7 +5,7 @@
       </div>
       <div class="col-lg-8">
           <h1>{{ $t("errors.title") }}</h1>
-          <div class="alert alert-danger" translate="errors.403" >
+          <div class="alert alert-danger">
             {{ $t("errors.403") }}
           </div>
       </div>

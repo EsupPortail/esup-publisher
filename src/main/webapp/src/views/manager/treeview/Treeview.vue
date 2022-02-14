@@ -5,26 +5,36 @@
       <esup-js-tree class="default" v-if="isDataLoad" .datas="treeData" .config="treeConfig" .onSelection="onTreeSelection">
       </esup-js-tree>
     </div>
-    <div class="context-viewer" ui-view="contextDetails">
+    <div class="context-viewer">
+      <router-view :key="$route.fullPath"></router-view>
     </div>
 </div>
 </template>
 
 <script>
 import ContextService from '@/services/entities/context/ContextService.js'
-
+import { computed, readonly } from 'vue'
 export default {
   name: 'Treeview',
   data () {
     return {
       isDataLoad: false,
       treeData: [],
-      currentNode: null,
+      parentNodeId: null,
       treeConfig: {
         identifier: 'tree',
         showCheckbox: false,
-        isMultipleSelection: false
+        isMultipleSelection: false,
+        allowDeselection: false
       }
+    }
+  },
+  provide () {
+    return {
+      parentNodeId: readonly(computed(() => this.parentNodeId)),
+      deleteTreeNode: this.deleteTreeNode,
+      selectTreeNode: this.selectTreeNode,
+      refreshTreeNode: this.refreshTreeNode
     }
   },
   methods: {
@@ -33,30 +43,43 @@ export default {
       ContextService.query(1).then(response => {
         this.treeData = response.data
         this.treeData.forEach(element => {
-          if (element && element.children) {
+          if (element.children) {
             element.getChildren = () => this.loadTreeDataChildren(element.id)
-            element.iconIndex = this.getIconIndexByType(element.type)
           }
+          element.iconIndex = this.getIconIndexByType(element.type)
         })
         this.isDataLoad = true
       })
+    },
+    selectTreeNode (id) {
+      document.querySelector('esup-js-tree.default').selectNode(id)
+    },
+    deleteTreeNode (id) {
+      document.querySelector('esup-js-tree.default').deleteNode(id)
+    },
+    refreshTreeNode (id, properties) {
+      document.querySelector('esup-js-tree.default').refreshNode(id, properties, true)
     },
     // Méthode permettant le chargement de données asynchrone pour l'arborescence
     loadTreeDataChildren (id) {
       return ContextService.query(id).then(response => {
         response.data.forEach(element => {
-          if (element && element.children) {
+          if (element.children) {
             element.getChildren = () => this.loadTreeDataChildren(element.id)
-            element.iconIndex = this.getIconIndexByType(element.type)
           }
+          element.iconIndex = this.getIconIndexByType(element.type)
         })
         return response.data
       })
     },
     // Méthode permettant de récupérer l'élément sélectionné dans l'arborescence
     onTreeSelection (datas) {
-      this.currentNode = datas && datas.length > 0 ? datas[0] : null
-      // TODO $state.go('ctxDetails', {ctxId: _l[0], ctxType: _l[1]})
+      const currentNode = datas && datas.length > 0 ? datas[0] : null
+      this.parentNodeId = currentNode && currentNode.parent ? currentNode.parent.id : null
+      if (currentNode) {
+        const tmp = currentNode.id.split(':')
+        this.$router.push({ name: 'TreeviewCtxDetails', params: { ctxId: tmp[0], ctxType: tmp[1] } })
+      }
     },
     // Retourne l'indice de l'icône à afficher pour un elément de l'arbre selon son type
     getIconIndexByType (type) {

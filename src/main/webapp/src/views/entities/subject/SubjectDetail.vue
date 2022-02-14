@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" id="detailSubjectModal" ref="detailSubjectModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div v-if="keyType === 'PERSON'">
                     <div class="modal-header">
@@ -9,7 +9,7 @@
                             @click="close"></button>
                     </div>
                     <div class="modal-body">
-                        <dl class="row modal-subject">
+                        <dl class="row entity-details">
                             <dt class="col-sm-5">
                                 <span>{{$t('subject.user.id')}}</span>
                             </dt>
@@ -17,7 +17,7 @@
                                 <span class="subject-key">{{subject.modelId.keyId}}</span>
                             </dd>
                         </dl>
-                        <dl class="row modal-subject">
+                        <dl class="row entity-details">
                             <dt class="col-sm-5">
                                 <span>{{$t('subject.user.displayName')}}</span>
                             </dt>
@@ -26,7 +26,7 @@
                             </dd>
                         </dl>
                         <template v-for="attribute in attributes" :key="attribute">
-                            <dl class="row modal-subject">
+                            <dl class="row entity-details">
                                 <dt class="col-sm-5">
                                     <span>{{$t('subject.user.' + attribute)}}</span>
                                 </dt>
@@ -49,7 +49,7 @@
                             @click="close"></button>
                     </div>
                     <div class="modal-body">
-                        <dl class="row modal-subject">
+                        <dl class="row entity-details">
                             <dt class="col-sm-5">
                                 <span>{{$t('subject.group.id')}}</span>
                             </dt>
@@ -57,7 +57,7 @@
                                 <span class="subject-key">{{subject.modelId.keyId}}</span>
                             </dd>
                         </dl>
-                        <dl class="row modal-subject">
+                        <dl class="row entity-details">
                             <dt class="col-sm-5">
                                 <span>{{$t('subject.group.displayName')}}</span>
                             </dt>
@@ -66,7 +66,7 @@
                             </dd>
                         </dl>
                         <template v-for="attribute in attributes" :key="attribute">
-                            <dl class="row modal-subject">
+                            <dl class="row entity-details">
                                 <dt class="col-sm-5">
                                     <span>{{$t('subject.group.' + attribute)}}</span>
                                 </dt>

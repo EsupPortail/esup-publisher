@@ -4,13 +4,30 @@ import UserService from '@/services/user/UserService'
 // droits de mise à la une pour un contexte
 const CanHighlightDirective = {
   canHighlight (el, context) {
-    UserService.canHighlight(context.keyId, context.keyType).then(response => {
-      if (!response.data.value) {
+    if (context) {
+      // On ne refait la requête que si les paramètres ont changé
+      const keyId = context.keyId
+      const keyType = context.keyType
+      if (el.canHighlightKeyId !== keyId || el.canHighlightKeyType !== keyType) {
+        el.canHighlightKeyId = keyId
+        el.canHighlightKeyType = keyType
         el.classList.add('d-none')
-      } else {
-        el.classList.remove('d-none')
+        UserService.canHighlight(keyId, keyType).then(response => {
+          if (!response.data.value) {
+            el.classList.add('d-none')
+          } else {
+            el.classList.remove('d-none')
+          }
+        })
       }
-    })
+    } else {
+      el.canHighlightKeyId = undefined
+      el.canHighlightKeyType = undefined
+      el.classList.add('d-none')
+    }
+  },
+  updated (el, { dir, value }) {
+    dir.canHighlight(el, value)
   },
   beforeMount (el, { dir, value }) {
     dir.canHighlight(el, value)

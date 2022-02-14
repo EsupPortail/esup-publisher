@@ -1,39 +1,37 @@
 {
-    "publisherApp": {
-        "category" : {
-            "home": {
-                "title": "Categories",
-                "createLabel": "Create a new Category",
-                "createOrEditLabel": "Create or edit a Category"
-            },
-            "delete": {
-                "question": "Are you sure you want to delete Category {{ id }}?"
-            },
-            "detail": {
-                "title": "Category"
-            },
-            "rssAllowed": "Rss allowed",
-            "name": "Name",
-            "iconUrl": "Icon Url",
-            "color" : "Color",
-            "color.none" : "Color undefined",
-            "lang": "Lang",
-            "langList": {
-                "fr": "French",
-                "en": "English",
-                "de": "German",
-                "es": "Spanish"
-            },
-            "ttl": "Ttl",
-            "displayOrder": "Position",
-            "accessView": "Access View",
-            "description": "Description",
-            "defaultDisplayOrder": "Display order",
-            "createdBy": "Created By",
-            "createdDate": "Created Date",
-            "lastModifiedBy": "Last Modified By",
-            "lastModifiedDate": "Last Modified Date",
-            "publisher": "publisher"
-        }
+    "category" : {
+        "home": {
+            "title": "Categories",
+            "createLabel": "Create a new Category",
+            "createOrEditLabel": "Create or edit a Category"
+        },
+        "delete": {
+            "question": "Are you sure you want to delete Category { id }?"
+        },
+        "detail": {
+            "title": "Category"
+        },
+        "rssAllowed": "Rss allowed",
+        "name": "Name",
+        "iconUrl": "Icon Url",
+        "color" : "Color",
+        "color-none" : "Color undefined",
+        "lang": "Lang",
+        "langList": {
+            "fr": "French",
+            "en": "English",
+            "de": "German",
+            "es": "Spanish"
+        },
+        "ttl": "Ttl",
+        "displayOrder": "Position",
+        "accessView": "Access View",
+        "description": "Description",
+        "defaultDisplayOrder": "Display order",
+        "createdBy": "Created By",
+        "createdDate": "Created Date",
+        "lastModifiedBy": "Last Modified By",
+        "lastModifiedDate": "Last Modified Date",
+        "publisher": "publisher"
     }
 }

@@ -4,13 +4,30 @@ import UserService from '@/services/user/UserService'
 // droits d'édition pour un contexte
 const CanEditDirective = {
   canEdit (el, context) {
-    UserService.canEditCtx(context.keyId, context.keyType).then(response => {
-      if (!response.data.value) {
+    if (context) {
+      // On ne refait la requête que si les paramètres ont changé
+      const keyId = context.keyId
+      const keyType = context.keyType
+      if (el.canEditKeyId !== keyId || el.canEditKeyType !== keyType) {
+        el.canEditKeyId = keyId
+        el.canEditKeyType = keyType
         el.classList.add('d-none')
-      } else {
-        el.classList.remove('d-none')
+        UserService.canEditCtx(keyId, keyType).then(response => {
+          if (!response.data.value) {
+            el.classList.add('d-none')
+          } else {
+            el.classList.remove('d-none')
+          }
+        })
       }
-    })
+    } else {
+      el.canEditKeyId = undefined
+      el.canEditKeyType = undefined
+      el.classList.add('d-none')
+    }
+  },
+  updated (el, { dir, value }) {
+    dir.canEdit(el, value)
   },
   beforeMount (el, { dir, value }) {
     dir.canEdit(el, value)

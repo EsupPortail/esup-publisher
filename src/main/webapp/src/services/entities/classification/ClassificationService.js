@@ -26,6 +26,10 @@ class ClassificationService {
   highlighted () {
     return FetchWrapper.getJson('api/classifications/highlighted')
   }
+
+  delete (id) {
+    return FetchWrapper.deleteJson('api/classifications/' + id)
+  }
 }
 
 export default new ClassificationService()

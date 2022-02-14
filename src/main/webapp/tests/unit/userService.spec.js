@@ -95,10 +95,11 @@ describe('UserService.js tests', () => {
       headers: []
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
-
-    UserService.canCreateInCtx().then(result => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canCreateInCtx(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin?keyId=' + keyId + '&keyType=' + keyType)
       expect(result).toStrictEqual(response)
       done()
     })
@@ -107,10 +108,11 @@ describe('UserService.js tests', () => {
   it('test 8 UserService - canCreateInCtx function KO', (done) => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
-
-    UserService.canCreateInCtx().catch(error => {
+    const keyId = 1
+    const keyType = 'CATEGORY'
+    UserService.canCreateInCtx(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/createin?keyId=' + keyId + '&keyType=' + keyType)
       expect(error).toStrictEqual(response)
       done()
     })
@@ -122,7 +124,6 @@ describe('UserService.js tests', () => {
       headers: []
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
-
     const keyId = 1
     const keyType = 'CATEGORY'
     UserService.canEditCtx(keyId, keyType).then(result => {
@@ -136,7 +137,6 @@ describe('UserService.js tests', () => {
   it('test 10 UserService - canEditCtx function KO', (done) => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
-
     const keyId = 1
     const keyType = 'CATEGORY'
     UserService.canEditCtx(keyId, keyType).catch(error => {
@@ -184,10 +184,11 @@ describe('UserService.js tests', () => {
       headers: []
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
-
-    UserService.canEditCtxPerms().then(result => {
+    const keyId = 1
+    const keyType = 'ORGANIZATION'
+    UserService.canEditCtxPerms(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms?keyId=1&keyType=ORGANIZATION')
       expect(result).toStrictEqual(response)
       done()
     })
@@ -196,10 +197,11 @@ describe('UserService.js tests', () => {
   it('test 14 UserService - canEditCtxPerms function KO', (done) => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
-
-    UserService.canEditCtxPerms().catch(error => {
+    const keyId = 1
+    const keyType = 'ORGANIZATION'
+    UserService.canEditCtxPerms(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editPerms?keyId=1&keyType=ORGANIZATION')
       expect(error).toStrictEqual(response)
       done()
     })
@@ -211,10 +213,11 @@ describe('UserService.js tests', () => {
       headers: []
     }
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
-
-    UserService.canEditCtxTargets().then(result => {
+    const keyId = 1
+    const keyType = 'ORGANIZATION'
+    UserService.canEditCtxTargets(keyId, keyType).then(result => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets?keyId=1&keyType=ORGANIZATION')
       expect(result).toStrictEqual(response)
       done()
     })
@@ -223,10 +226,11 @@ describe('UserService.js tests', () => {
   it('test 16 UserService - canEditCtxTargets function KO', (done) => {
     const response = {}
     FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.reject(response))
-
-    UserService.canEditCtxTargets().catch(error => {
+    const keyId = 1
+    const keyType = 'ORGANIZATION'
+    UserService.canEditCtxTargets(keyId, keyType).catch(error => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/users/perm/editTargets?keyId=1&keyType=ORGANIZATION')
       expect(error).toStrictEqual(response)
       done()
     })

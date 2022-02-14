@@ -1,40 +1,38 @@
 {
-    "publisherApp": {
-        "category" : {
-            "home": {
-                "title": "Rubriques",
-                "createLabel": "Créer une nouvelle rubrique",
-                "createOrEditLabel": "Créer ou éditer une rubrique"
-            },
-            "delete": {
-                "question": "Etes-vous certain de vouloir supprimer la rubrique {{ id }} ?"
-            },
-            "detail": {
-                "title": "Rubrique"
-            },
-            "rssAllowed": "Autoriser RSS",
-            "name": "Nom",
-            "iconUrl": "Icône",
-            "color" : "Couleur",
-            "color.none" : "Couleur non définie",
-            "lang": "Langue",
-            "langList": {
-                "fr": "Français",
-                "en": "Anglais",
-                "de": "Allemand",
-                "es": "Espagnol"
-            },
-            "ttl": "TTL",
-            "displayOrder": "Position",
-            "accessView": "Type d'accès",
-            "description": "Description",
-            "defaultDisplayOrder": "Ordre d'affichage",
-            "createdBy": "Créé par",
-            "createdDate": "Date de création",
-            "lastModifiedBy": "Dernière modification par",
-            "lastModifiedDate": "Date de dernière modification",
-            "publisher": "Contexte de publication"
-        }
+    "category" : {
+        "home": {
+            "title": "Rubriques",
+            "createLabel": "Créer une nouvelle rubrique",
+            "createOrEditLabel": "Créer ou éditer une rubrique"
+        },
+        "delete": {
+            "question": "Etes-vous certain de vouloir supprimer la rubrique { id } ?"
+        },
+        "detail": {
+            "title": "Rubrique"
+        },
+        "rssAllowed": "Autoriser RSS",
+        "name": "Nom",
+        "iconUrl": "Icône",
+        "color" : "Couleur",
+        "color-none" : "Couleur non définie",
+        "lang": "Langue",
+        "langList": {
+            "fr": "Français",
+            "en": "Anglais",
+            "de": "Allemand",
+            "es": "Espagnol"
+        },
+        "ttl": "TTL",
+        "displayOrder": "Position",
+        "accessView": "Type d'accès",
+        "description": "Description",
+        "defaultDisplayOrder": "Ordre d'affichage",
+        "createdBy": "Créé par",
+        "createdDate": "Date de création",
+        "lastModifiedBy": "Dernière modification par",
+        "lastModifiedDate": "Date de dernière modification",
+        "publisher": "Contexte de publication"
     }
 }
 

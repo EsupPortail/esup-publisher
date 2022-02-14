@@ -76,7 +76,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <span translate="publisherApp.organization.lastModifiedDate">{{$t('organization.lastModifiedDate')}}</span>
+                        <span>{{$t('organization.lastModifiedDate')}}</span>
                     </td>
                     <td>
                         <input type="text" class="form-control form-control-sm" :value="formatDate(organization.lastModifiedDate)" readonly> <!-- | date:'dd MMMM yyyy HH:mm:ss' -->
@@ -89,7 +89,7 @@
     <button type="submit"
             @click="organizationPage"
             class="btn btn-info">
-        <span class="fas fa-arrow-left"></span>&nbsp;<span translate="entity.action.back"> {{$t('entity.action.back')}}</span>
+        <span class="fas fa-arrow-left"></span>&nbsp;<span> {{$t('entity.action.back')}}</span>
     </button>
 </div>
 </template>
