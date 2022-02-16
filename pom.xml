@@ -564,6 +564,7 @@
                         <exclude>.tmp/**</exclude>
                         <exclude>.mvn/**</exclude>
                         <exclude>src/main/webapp/META-INF/**</exclude>
+                        <exclude>src/main/webapp/public/swagger-ui/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -695,17 +696,7 @@
                         node/,
                         node_modules/,
                         src/,
-                        .jshintrc,
-                        babel.config.js,
-                        package.json,
-                        package-lock.json,
-                        vue.config.js,
-                        .env,
-                        .env.*,
                         public/,
-                        .browserslistrc,
-                        .eslintrc.js,
-                        jest.config.js,
                         tests/
                     </warSourceExcludes>
                     <webResources>
@@ -935,9 +926,6 @@
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>1.12.0</version>
-                        <configuration>
-                            <workingDirectory>src/main/webapp</workingDirectory>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>install node and npm</id>

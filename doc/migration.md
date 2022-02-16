@@ -1,14 +1,14 @@
 # Migration du front-end vers Vue
 
 A la suite de la migration du front-end de AngularJS vers Vue, celui-ci est maintenant accessible depuis le contexte /publisher/ui.
-De plus, les commandes NPM pour manipuler le front-end doivent être exécutées dans le répertoire src/main/webapps. Le font-end fonctionne sur la version LTS NodeJS 16.
+Le font-end fonctionne sur la version LTS NodeJS 16.
 
-Les commandes disponibles sont :
+Les commandes NPM pour manipuler le front-end sont :
 - `npm install` : Installation des dépendances du front-end.
 - `npm run serve` : Permet de lancer le front-end en mode développement (équivalent du `grunt serve`). Le front est alors accessible à l'adresse http://localhost:3000/publisher/ui/
-- `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources sont générées dans le répertoire src/main/webapps/dist.
+- `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources sont générées dans le répertoire src/main/webapp/dist.
 - `npm run lint` : Permet de lancer une analyse eslint sur le code source du front-end.
-- `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/main/webapps/tests/unit.
+- `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/main/webapp/tests/unit.
 
 Les commandes liées au back-end restent inchangées : 
 - Lancement en local : `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev`
@@ -72,7 +72,7 @@ L'éditeur CKEditor 5 est configuré dans le composant src\components\richtext\R
 ### Web-components
 
 Utilisation des web-components suivants :
-- @gip-recia/js-tree : Remplace de la librairie jstree
+- @gip-recia/js-tree : Remplace la librairie jstree
 - @gip-recia/color-palette-picker : Remplace la directive AngularJs color-palette-picker
 - @gip-recia/subject-infos : Remplace la directive AngularJs subject-infos
 - @gip-recia/subject-search-button : Remplace la directive AngularJs subject-search-button

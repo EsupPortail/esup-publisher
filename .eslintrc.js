@@ -25,5 +25,12 @@ module.exports = {
         jest: true
       }
     }
+  ],
+  ignorePatterns: [
+    '/src/test/',
+    '/src/main/java/',
+    '/src/main/resources/',
+    '/src/main/webapp/public/',
+    '/src/main/webapp/dist/'
   ]
 }

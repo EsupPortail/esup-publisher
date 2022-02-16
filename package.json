@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/i18n/**/*.json\""
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/main/webapp/src/**/*.?(js|vue)\" --locales \"./src/main/webapp/src/i18n/**/*.json\""
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^32.0.0",
