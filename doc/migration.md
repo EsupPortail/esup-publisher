@@ -76,6 +76,43 @@ Utilisation des web-components suivants :
 - @gip-recia/color-palette-picker : Remplace la directive AngularJs color-palette-picker
 - @gip-recia/subject-infos : Remplace la directive AngularJs subject-infos
 - @gip-recia/subject-search-button : Remplace la directive AngularJs subject-search-button
-- @gip-recia/evaluator : Remplace la directive AngularJs evaluator
+- @gip-recia/evaluator : Remplace les directives AngularJs evaluator et edit-evaluator
 
 Source des web-components : https://github.com/GIP-RECIA/esup-publisher-webcomponents
+
+### Variabilisation du thème CSS
+
+Des variables CSS ont été créées afin de faciliter la modification du thème du site. Variables disponibles :
+
+| Nom | Valeur par défaut | Description |
+| ---------- | ---------- | ----------- |
+| --theme-link-focus-color | #25B2F3 | Couleur des liens survolés ou ayant le focus |
+| --theme-link-focus-background-color | transparent | Couleur d'arrière-plan des liens survolés ou ayant le focus |
+| --theme-pagination-link-color | #25B2F3 | Couleur des liens dans les paginations |
+| --theme-pagination-active-link-color | #fff | Couleur du lien actif dans les paginations |
+| --theme-pagination-active-link-background-color | #25B2F3 | Couleur d'arrière-plan du lien actif dans les paginations |
+| --theme-tabs-link-focus-color | #25B2F3 | Couleur des liens des onglets (de type tabs) survolés ou ayant le focus |
+| --theme-tabs-active-link-color | #fff | Couleur des liens des onglets (de type tabs) actifs |
+| --theme-tabs-active-link-background-color | #25B2F3 | Couleur d'arrière-plan des liens des onglets (de type tabs) actifs |
+| --theme-pills-link-focus-color | #25B2F3 | Couleur des liens des onglets (de type pills) survolés ou ayant le focus |
+| --theme-pills-active-link-color | #fff | Couleur des liens des onglets (de type pills) actifs |
+| --theme-pills-active-link-background-color | #25B2F3 | Couleur d'arrière-plan des liens des onglets (de type pills) actifs |
+| --theme-btn-nav-focus-color | #fff | Couleur du texte des boutons de navigation survolés ou ayant le focus |
+| --theme-btn-nav-focus-background-color | #25B2F3 | Couleur d'arrière-plan des boutons de navigation survolés ou ayant le focus |
+| --theme-dropdown-menu-link-focus-color | #25B2F3 | Couleur des liens des listes déroulantes survolés ou ayant le focus |
+| --theme-dropdown-menu-link-focus-background-color | #e9ecef | Couleur d'arrière-plan des liens des listes déroulantes survolés ou ayant le focus |
+| --theme-dropdown-menu-active-link-color | #fff | Couleur des liens des listes déroulantes actifs |
+| --theme-dropdown-menu-active-link-background-color | #25B2F3 | Couleur d'arrière-plan des liens des listes déroulantes actifs |
+| --theme-navbar-collapse-border-color | #25B2F3 | Couleur des bordures des sous-menus actifs |
+| --theme-publish-active-step-number-color | #fff | Couleur du numéro de l'étape de publication actuelle |
+| --theme-publish-active-step-number-background-color | #25B2F3 | Couleur d'arrière-plan du numéro de l'étape de publication actuelle |
+| --theme-publish-title-color | #25B2F3 | Couleur du titre de l'étape de publication actuelle |
+| --theme-publish-classification-iconurl-color | #25B2F3 | Couleur des icônes des rubriques de publication |
+| --theme-js-tree-hover-text-color | #25B2F3 | Couleur du texte des entrées de l'arborescence survolées |
+| --theme-js-tree-selected-text-color | #fff | Couleur du texte des entrées de l'arborescence sélectionnées |
+| --theme-js-tree-selected-background-color | #25B2F3 | Couleur d'arrière-plan des entrées de l'arborescence sélectionnées |
+| --theme-subject-infos-focus-text-color | #25B2F3 | Couleur du texte des subject-infos survolés ou ayant le focus |
+| --theme-subject-infos-focus-text-background-color | transparent | Couleur d'arrière-plan des composants subject-infos survolés ou ayant le focus |
+| --theme-subject-search-button-pagination-text-color | #25B2F3 | Couleur des liens dans les paginations des composants subject-search-button |
+| --theme-subject-search-button-pagination-selected-background-color | #25B2F3 | Couleur d'arrière-plan des liens actifs dans les paginations des composants subject-search-button |
+| --theme-subject-search-button-pagination-selected-text-color | #fff | Couleur des liens actifs dans les paginations des composants subject-search-button |
