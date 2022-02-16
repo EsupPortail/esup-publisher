@@ -6,9 +6,9 @@ Le font-end fonctionne sur la version LTS NodeJS 16.
 Les commandes NPM pour manipuler le front-end sont :
 - `npm install` : Installation des dépendances du front-end.
 - `npm run serve` : Permet de lancer le front-end en mode développement (équivalent du `grunt serve`). Le front est alors accessible à l'adresse http://localhost:3000/publisher/ui/
-- `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources sont générées dans le répertoire src/main/webapp/dist.
+- `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources compilées sont générées dans le répertoire src/main/webapp/dist.
 - `npm run lint` : Permet de lancer une analyse eslint sur le code source du front-end.
-- `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/main/webapp/tests/unit.
+- `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/test/javascript/spec.
 
 Les commandes liées au back-end restent inchangées : 
 - Lancement en local : `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev`
