@@ -11,7 +11,7 @@
             <input class="form-check-input" :id="classif.name" type="checkbox" :value="classif.name" :checked="containsSelectedClassification(classif.contextKey)"
                 @click="toggleSelection(classif.contextKey)" :class="{iconurl: inArray('ENCLOSURE', publisher.context.reader.classificationDecorations)}">
             <label class="form-check-label" :for="classif.name" v-tooltip="classif.description">
-              <span class="iconurl me-1" :style="{'background-image': inArray('ENCLOSURE', publisher.context.reader.classificationDecorations) ? 'url(' + classif.icon + ')' : null}"
+              <span class="iconurl" :style="{'background-image': inArray('ENCLOSURE', publisher.context.reader.classificationDecorations) ? 'url(' + classif.icon + ')' : null}"
                 v-if="inArray('ENCLOSURE', publisher.context.reader.classificationDecorations)"></span>
               <span class="pastille me-1" :style="{'background-color': inArray('COLOR', publisher.context.reader.classificationDecorations) ? classif.color : null}"
                 v-if="inArray('COLOR', publisher.context.reader.classificationDecorations)"></span>

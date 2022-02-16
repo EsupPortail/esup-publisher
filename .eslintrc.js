@@ -19,7 +19,8 @@ module.exports = {
     {
       files: [
         '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+        '**/tests/unit/**/*.spec.{j,t}s?(x)',
+        '**/javascript/spec/**/*.spec.{j,t}s?(x)'
       ],
       env: {
         jest: true
@@ -27,7 +28,8 @@ module.exports = {
     }
   ],
   ignorePatterns: [
-    '/src/test/',
+    '/src/test/java/',
+    '/src/test/resources/',
     '/src/main/java/',
     '/src/main/resources/',
     '/src/main/webapp/public/',

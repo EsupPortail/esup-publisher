@@ -36,7 +36,7 @@
                     <span>{{ $t("global.menu.manager.contents.main") }}</span>
                 </a>
             </li>
-            <li v-else class="nav-item dropdown" :class="{active: isPageNameIncludes('owned') ||  pageName.includes('managed')}" >
+            <li v-else class="nav-item dropdown" :class="{active: isPageNameIncludes('owned') ||  isPageNameIncludes('managed')}" >
                 <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
                     <span>
                         <span class="fas fa-file-alt fa-2x"></span>

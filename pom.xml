@@ -560,7 +560,6 @@
                     <excludes>
                         <exclude>node_modules/**</exclude>
                         <exclude>**/dist/**</exclude>
-                        <exclude>**/bower_components/**</exclude>
                         <exclude>.tmp/**</exclude>
                         <exclude>.mvn/**</exclude>
                         <exclude>src/main/webapp/META-INF/**</exclude>
