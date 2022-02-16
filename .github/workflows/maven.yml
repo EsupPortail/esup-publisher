@@ -104,8 +104,9 @@ jobs:
         ./mvnw compile liquibase:update -Pci -B
         mkdir -p ${{ github.workspace }}/tmp
         # install npm
-        cd src/main/webapp
-        npm install
+        # Update npm car package-lock.json généré avec Node LTS 16
+        npm install -g npm
+        npm ci
         npm run test:unit
     - name: DB final conf
       run: |
