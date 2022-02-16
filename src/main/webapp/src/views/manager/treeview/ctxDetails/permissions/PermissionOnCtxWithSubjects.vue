@@ -83,7 +83,7 @@
     <button type="button" v-if="availableRoles.length > 0 && canEditCtxPerms" class="btn btn-primary" @click="addPermission()">
       <span class="fa fa-bolt"></span> <span>{{$t('permission.home.createLabel')}}</span>
     </button>
-      <div class="table-responsive table-responsive-to-cards overflow-visible" v-show="permissionAdvanced">
+      <div class="table-responsive table-responsive-to-cards overflow-visible evaluators" v-show="permissionAdvanced">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -95,7 +95,7 @@
           </thead>
           <tbody>
             <tr v-for="permission in permissions" :key="permission.id">
-            <td><span :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</span></td>
+            <td :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</td>
             <td class="verylongtext" :data-label="$t('permission.evaluator')"><esup-evaluator .evaluator="permission.evaluator" .config="evaluatorConfig"></esup-evaluator></td>
             <td class="verylongtext" :data-label="$t('permissionOnClassificationWithSubjectList.authorizedSubjects')">
               <ul class="list-unstyled">
@@ -116,7 +116,7 @@
           </tbody>
         </table>
       </div>
-      <div class="table-responsive table-responsive-to-cards overflow-visible" v-show="!permissionAdvanced">
+      <div class="table-responsive table-responsive-to-cards overflow-visible evaluators" v-show="!permissionAdvanced">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -128,7 +128,7 @@
           </thead>
           <tbody>
             <tr v-for="permission in permissions" :key="permission">
-              <td><span :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</span></td>
+              <td :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</td>
               <td class="verylongtext" :data-label="$t('permissionOnContext.evaluatorsimple')"><esup-evaluator .evaluator="permission.evaluator" .simple='true' .config="evaluatorConfig"></esup-evaluator></td>
               <td class="verylongtext" :data-label="$t('permissionOnClassificationWithSubjectList.authorizedSubjects')">
                 <ul class="list-unstyled">

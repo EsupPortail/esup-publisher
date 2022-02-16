@@ -69,12 +69,13 @@
 
 <script>
 import UserService from '../../services/user/UserService'
+
 export default {
   name: 'NavBarManager',
   props: ['pageName'],
   data () {
     return {
-      canModerate: null
+      canModerate: false
     }
   },
   methods: {

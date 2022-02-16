@@ -389,8 +389,12 @@ export default {
               })
             })
           }
-
-          this.refreshTreeNode(this.ctxId + ':' + this.ctxType, { text: text })
+          // Cas de création d'enfant, type d'objet créé différent de l'objet actuel, pas de mise à jour du texte du noeud courant
+          if (this.ctxType !== type) {
+            this.refreshTreeNode(this.ctxId + ':' + this.ctxType, {})
+          } else {
+            this.refreshTreeNode(this.ctxId + ':' + this.ctxType, { text: text })
+          }
           this.load(this.ctxType, this.ctxId)
         })
       }
