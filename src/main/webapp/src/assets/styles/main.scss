@@ -1270,6 +1270,16 @@ dl>dd>input[type="checkbox"] {
         white-space: pre-wrap !important;
     }
 
+    .table-responsive-to-cards.evaluators,
+    .table-responsive-to-cards.evaluators table>thead>tr>th,
+    .table-responsive-to-cards.evaluators table>tbody>tr>th,
+    .table-responsive-to-cards.evaluators table>tfoot>tr>th,
+    .table-responsive-to-cards.evaluators table>thead>tr>td,
+    .table-responsive-to-cards.evaluators table>tbody>tr>td,
+    .table-responsive-to-cards.evaluators table>tfoot>tr>td {
+        white-space: normal !important;
+    }
+
     .table-responsive-to-cards tr {
         /*display: block;*/
         display: flex;
@@ -2047,38 +2057,38 @@ esup-subject-infos {
 
 }
 .clg18 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg18 esup-simple-evaluators,
 .clg18 esup-evaluator {
     --subject-infos-focus-text-color: #004899;
 }
 
 .clg36 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg36 esup-simple-evaluators,
 .clg36 esup-evaluator {
     --subject-infos-focus-text-color: #0069B3;
 }
 
 .clg28 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg28 esup-simple-evaluators,
 .clg28 esup-evaluator {
     --subject-infos-focus-background-color: #000;
     --subject-infos-focus-text-color: #FC0;
 }
 
 .clg37 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg37 esup-simple-evaluators,
 .clg37 esup-evaluator {
     --subject-infos-focus-text-color: #C60440;
 }
 
 .clg41 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg41 esup-simple-evaluators,
 .clg41 esup-evaluator {
     --subject-infos-focus-text-color: #009FE3;
 }
 
 .clg45 esup-subject-infos,
-.default esup-simple-evaluators,
+.clg45 esup-simple-evaluators,
 .clg45 esup-evaluator {
     --subject-infos-focus-text-color: #26448A;
 }
@@ -2229,7 +2239,7 @@ h4 {
     outline: 0;
   }
 
-.navbar-nav li>a {
+.navbar-default .navbar-nav>li>a {
     color: #777;
 }
 
