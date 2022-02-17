@@ -24,7 +24,6 @@ import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.repository.ClassificationRepository;
@@ -33,6 +32,11 @@ import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.service.factories.impl.PublisherRssFeedView;
+
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,12 +44,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.common.collect.Lists;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 28/06/17.
@@ -73,7 +71,7 @@ public class FeedController {
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
 
-    @RequestMapping(value = "/rss/{organization_id}", method = RequestMethod.GET, produces = "application/*")
+    @RequestMapping(value = "/rss/{organization_id}", method = RequestMethod.GET, produces = "application/*" )
     public ModelAndView getRssFeed(@PathVariable("organization_id") String id,
                                 @RequestParam(value = "pid", required = false) Long publisherId,
                                 @RequestParam(value = "cid", required = false) Long classifId) {

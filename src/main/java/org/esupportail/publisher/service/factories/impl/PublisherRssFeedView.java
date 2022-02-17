@@ -24,24 +24,27 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mysema.commons.lang.Pair;
-import com.rometools.rome.feed.rss.Category;
-import com.rometools.rome.feed.rss.Channel;
-import com.rometools.rome.feed.rss.Content;
-import com.rometools.rome.feed.rss.Enclosure;
-import com.rometools.rome.feed.rss.Guid;
-import com.rometools.rome.feed.rss.Image;
-import com.rometools.rome.feed.rss.Item;
-import com.rometools.rome.feed.rss.Source;
-import lombok.Setter;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mysema.commons.lang.Pair;
+import com.rometools.rome.feed.rss.Category;
+import com.rometools.rome.feed.rss.Channel;
+import com.rometools.rome.feed.rss.Content;
+import com.rometools.rome.feed.rss.Description;
+import com.rometools.rome.feed.rss.Enclosure;
+import com.rometools.rome.feed.rss.Guid;
+import com.rometools.rome.feed.rss.Image;
+import com.rometools.rome.feed.rss.Item;
+import com.rometools.rome.feed.rss.Source;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.feed.AbstractRssFeedView;
@@ -58,8 +61,10 @@ public class PublisherRssFeedView extends AbstractRssFeedView {
     public final static String ITEMS_PARAM = "items";
 
     @Setter
+    @Getter
     private String channelGenerator = "Publisher";
     @Setter
+    @Getter
     private String docRssUrl = "http://www.rssboard.org/rss-specification";
 
     @Autowired
@@ -130,8 +135,13 @@ public class PublisherRssFeedView extends AbstractRssFeedView {
                 item.setTitle(publication.getTitle());
                 item.setLink(urlHelper.getRootDomainUrl(request) + urlHelper.getContextPath() + urlHelper.getItemUri() + publication.getId());
                 Content content = new Content();
+                content.setType(Content.TEXT);
                 content.setValue(publication.getSummary());
                 item.setContent(content);
+                Description description = new Description();
+                description.setType(Content.TEXT);
+                description.setValue(publication.getSummary());
+                item.setDescription(description);
                 if (publication.getCreatedBy() != null)
                     item.setAuthor(publication.getCreatedBy().getDisplayName());
                 if (publication.getStartDate() != null)

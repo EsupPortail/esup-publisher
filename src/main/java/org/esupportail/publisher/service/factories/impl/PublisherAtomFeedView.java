@@ -24,6 +24,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.esupportail.publisher.domain.AbstractClassification;
+import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.Organization;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mysema.commons.lang.Pair;
@@ -36,12 +43,6 @@ import com.rometools.rome.feed.atom.Link;
 import com.rometools.rome.feed.synd.SyndPerson;
 import com.rometools.rome.feed.synd.SyndPersonImpl;
 import lombok.Setter;
-import org.esupportail.publisher.domain.AbstractClassification;
-import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.ItemClassificationOrder;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.feed.AbstractAtomFeedView;
@@ -83,6 +84,7 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
             feed.setGenerator(generator);
             if (clasObj != null && clasObj instanceof AbstractClassification) {
                 Content content = new Content();
+                content.setType(Content.TEXT);
                 content.setValue("Contenus limités à la rubrique " + ((AbstractClassification) clasObj).getDisplayName() +
                     ": " + ((AbstractClassification) clasObj).getDescription());
                 feed.setSubtitle(content);
@@ -97,11 +99,13 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
                 }
             } else if (pubObj != null && pubObj instanceof Publisher) {
                 Content content = new Content();
+                content.setType(Content.TEXT);
                 content.setValue("Contenus limités au contexte de publication : " + ((Publisher) pubObj).getDisplayName());
                 feed.setSubtitle(content);
             } else {
                 Content content = new Content();
-                content.setValue("Flux RSS de l'outil de publication de contenus de l'ENT à partir des Actualités, informations " +
+                content.setType(Content.TEXT);
+                content.setValue("Flux Atom de l'outil de publication de contenus de l'ENT à partir des Actualités, informations " +
                     "et autres types de contenus publiés par l'établissement " + org.getDisplayName());
                 feed.setSubtitle(content);
             }
@@ -137,6 +141,7 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
                 link.setHref(urlHelper.getRootDomainUrl(request) + urlHelper.getContextPath() + urlHelper.getItemUri() + publication.getId());
                 item.setAlternateLinks(Lists.newArrayList(link));
                 Content content = new Content();
+                content.setType(Content.TEXT);
                 content.setValue(publication.getSummary());
                 item.setSummary(content);
                 if (publication.getCreatedBy() != null) {
