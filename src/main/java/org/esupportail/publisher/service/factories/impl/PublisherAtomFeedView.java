@@ -15,12 +15,15 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
+import java.io.File;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +32,7 @@ import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 
 import com.google.common.collect.Lists;
@@ -44,6 +48,7 @@ import com.rometools.rome.feed.synd.SyndPerson;
 import com.rometools.rome.feed.synd.SyndPersonImpl;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.feed.AbstractAtomFeedView;
 
@@ -63,6 +68,10 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
 
     @Autowired
     private ServiceUrlHelper urlHelper;
+
+    @Inject
+    @Qualifier("publicFileUploadHelper")
+    private FileUploadHelper publicFileUploadHelper;
 
     @Override
     protected void buildFeedMetadata(Map<String, Object> model, Feed feed,
@@ -179,8 +188,16 @@ public class PublisherAtomFeedView extends AbstractAtomFeedView {
                     enclosure.setRel("enclosure");
                     if (publication.getEnclosure().matches("^https?://.*$")) {
                         enclosure.setHref(publication.getEnclosure());
+                        enclosure.setType("image/" + publication.getEnclosure().substring(publication.getEnclosure().lastIndexOf(".") + 1));
                     } else {
                         enclosure.setHref(urlHelper.getRootAppUrl(request) + publication.getEnclosure());
+                        final String path = publication.getEnclosure().substring(publicFileUploadHelper.getUrlResourceMapping().length());
+                        final File file = new File(publicFileUploadHelper.getUploadDirectoryPath() + path);
+                        if (file.exists()) {
+                            MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+                            enclosure.setType(fileTypeMap.getContentType(file.getName()));
+                            enclosure.setLength(file.length());
+                        }
                     }
                     item.setOtherLinks(Lists.newArrayList(enclosure));
                 }
