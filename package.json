@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/main/webapp/src/**/*.?(js|vue)\" --locales \"./src/main/webapp/src/i18n/**/*.json\""
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^32.0.0",
@@ -32,11 +31,11 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "mdi": "^1.9.33",
     "@popperjs/core": "^2.11.0",
-    "@gip-recia/js-tree": "^0.0.6",
-    "@gip-recia/color-palette-picker": "^0.0.2",
-    "@gip-recia/subject-infos": "^0.0.5",
-    "@gip-recia/subject-search-button": "^0.0.4",
-    "@gip-recia/evaluator": "^0.0.4",
+    "@gip-recia/js-tree": "^0.0.7",
+    "@gip-recia/color-palette-picker": "^0.0.3",
+    "@gip-recia/subject-infos": "^0.0.6",
+    "@gip-recia/subject-search-button": "^0.0.5",
+    "@gip-recia/evaluator": "^0.0.5",
     "bootstrap": "^5.1.3",
     "core-js": "^3.19.2",
     "postcss-loader": "^4.3.0",
