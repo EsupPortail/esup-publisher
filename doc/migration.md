@@ -1,6 +1,6 @@
 # Migration du front-end vers Vue
 
-A la suite de la migration du front-end de AngularJS vers Vue, celui-ci est maintenant accessible depuis le contexte /publisher/ui.
+A la suite de la migration du front-end de AngularJS vers Vue 3, celui-ci est maintenant accessible depuis le contexte /publisher/ui.
 Le font-end fonctionne sur la version LTS NodeJS 16.
 
 Les commandes NPM pour manipuler le front-end sont (à exécuter à la racine du projet) :
@@ -58,6 +58,14 @@ Les commandes liées au back-end restent inchangées (à exécuter à la racine 
 
 ## Remarques
 
+### Bootstrap
+
+Passage de Bootstrap 3.3 à Bootstrap 5.1.
+
+### Font-Awesome
+
+Passage de Font-Awesome 4.5 à Font-Awesome 5.15.
+
 ### Swagger-ui
 
 Conservation de la version 2.0.24 de Swagger UI lors de la migration vers Vue.
@@ -68,6 +76,10 @@ Un passage vers à la dernière version de Swagger UI (4.0.0) nécessite une mis
 Remplacement de l'éditeur textAngular par l'éditeur CKEditor 5 (documentation : https://ckeditor.com/docs/ckeditor5/latest/index.html).
 
 L'éditeur CKEditor 5 est configuré dans le composant src\components\richtext\RichText.vue.
+
+### Cropping d'image
+
+Remplacement de la librairie ui-cropper par la librairie vue-cropperjs.
 
 ### Web-components
 
@@ -119,4 +131,4 @@ Des variables CSS ont été créées afin de faciliter la modification du thème
 
 ### GitHub Actions
 
-Le script pour l'exécution des GitHub Actions a été mise à jour pour utiliser les versions de NodeJS 16 et 17 et pour exécuter les tests unitaires du front.
+Mise à jour du script pour l'exécution des GitHub Actions pour utiliser les versions de NodeJS 16 et 17 et pour exécuter les tests unitaires du front.
