@@ -18,12 +18,15 @@ package org.esupportail.publisher.web;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.xml.HasXPath.hasXPath;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.StringReader;
@@ -31,7 +34,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.time.ZoneId;
 import java.util.Locale;
-import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,6 +59,7 @@ import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
+import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.impl.PublisherAtomFeedView;
 import org.esupportail.publisher.service.factories.impl.PublisherRssFeedView;
@@ -66,6 +69,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -116,6 +120,11 @@ public class FeedControlerTest {
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
 
+    @Inject
+    @Qualifier("publicFileUploadHelper")
+    private FileUploadHelper publicFileUploadHelper;
+
+
     private PublisherRssFeedView publisherRssFeedView;
     private PublisherAtomFeedView publisherAtomFeedView;
 
@@ -137,18 +146,20 @@ public class FeedControlerTest {
         ReflectionTestUtils.setField(feedController, "classificationRepository", classificationRepository);
         ReflectionTestUtils.setField(feedController, "itemClassificationOrderRepository", itemClassificationOrderRepository);
         ReflectionTestUtils.setField(publisherRssFeedView, "urlHelper", urlHelper);
+        ReflectionTestUtils.setField(publisherRssFeedView, "publicFileUploadHelper", publicFileUploadHelper);
         ReflectionTestUtils.setField(publisherAtomFeedView, "urlHelper", urlHelper);
-    	this.mockMvc = MockMvcBuilders.standaloneSetup(feedController, publisherRssFeedView).build();
+        ReflectionTestUtils.setField(publisherAtomFeedView, "publicFileUploadHelper", publicFileUploadHelper);
+        this.mockMvc = MockMvcBuilders.standaloneSetup(feedController, publisherRssFeedView).build();
 
-    	Organization organization = organizationRepository.saveAndFlush(ObjTest.newOrganization("1"));
-    	Reader reader = readerRepository.saveAndFlush(ObjTest.newReader("2"));
-    	Redactor redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor("3"));
+        Organization organization = organizationRepository.saveAndFlush(ObjTest.newOrganization("1"));
+        Reader reader = readerRepository.saveAndFlush(ObjTest.newReader("2"));
+        Redactor redactor = redactorRepository.saveAndFlush(ObjTest.newRedactor("3"));
 
         publisher = ObjTest.newPublisher("4");
         publisher.getContext().setOrganization(organization);
         publisher.getContext().setReader(reader);
         publisher.getContext().setRedactor(redactor);
-        publisher.setDefaultDisplayOrder(DisplayOrderType.START_DATE);
+        publisher.setDefaultDisplayOrder(DisplayOrderType.CUSTOM);
 
         Publisher p1 = publisherRepository.saveAndFlush(publisher);
         Long idOrganisation = organization.getId();
@@ -166,11 +177,12 @@ public class FeedControlerTest {
         InternalFeed feed2 = classificationRepository.saveAndFlush(ObjTest.newInternalFeed("8", p1, category));
 
         news2 = ObjTest.newNewsPublished("à tester 10", organization, redactor);
-        news2.setStartDate(news2.getStartDate().minusDays(2));
+        //news2.setStartDate(news2.getStartDate().minusDays(2));
         news2 = itemRepo.saveAndFlush(news2);
-        Thread.sleep(1000);
+        // Default order is on created date - so to avoid ordering problems we set a timeout
+        Thread.sleep(1500);
         news1 = ObjTest.newNewsPublished("à voir 9", organization, redactor);
-        news1.setStartDate(news1.getStartDate().minusDays(1));
+        //news1.setStartDate(news1.getStartDate().minusDays(1));
         news1 = itemRepo.saveAndFlush(news1);
 
 		itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news1, feed1, 25));
@@ -189,15 +201,19 @@ public class FeedControlerTest {
     @Test
     public void getRssFeed() throws Exception {
 
-        MvcResult result = mockMvc
-        		.perform(get("/feed/rss/"+url))
+        MvcResult result = mockMvc.perform(get("/feed/rss/"+url))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-        		.andExpect(forwardedUrl("publisherRssFeedView"))
-        		.andReturn();
+                .andExpect(model().size(3))
+                .andExpect(model().attributeExists(PublisherAtomFeedView.ORG_PARAM, PublisherAtomFeedView.PUB_PARAM, PublisherAtomFeedView.ITEMS_PARAM))
+                .andExpect(forwardedUrl("publisherRssFeedView"))
+                .andReturn();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getModelAndView(), is(notNullValue()));
+        assertThat(result.getModelAndView().getModelMap(), is(notNullValue()));
 		publisherRssFeedView.render(result.getModelAndView().getModelMap(), request, response);
         assertEquals("application/rss+xml", response.getContentType());
         log.debug("RSS feed result: {}", response.getContentAsString(StandardCharsets.UTF_8));
@@ -232,16 +248,20 @@ public class FeedControlerTest {
     @Test
     public void getAtomFeed() throws Exception {
 
-        MvcResult result = mockMvc
-        		.perform(get("/feed/atom/"+url))
+        MvcResult result = mockMvc.perform(get("/feed/atom/"+url))
                 .andDo(MockMvcResultHandlers.print())
-        		.andExpect(status().isOk())
-        		.andExpect(forwardedUrl("publisherAtomFeedView"))
-        		.andReturn();
+                .andExpect(status().isOk())
+                .andExpect(model().size(3))
+                .andExpect(model().attributeExists(PublisherAtomFeedView.ORG_PARAM, PublisherAtomFeedView.PUB_PARAM, PublisherAtomFeedView.ITEMS_PARAM))
+                .andExpect(forwardedUrl("publisherAtomFeedView"))
+                .andReturn();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		publisherAtomFeedView.render(Objects.requireNonNull(result.getModelAndView()).getModelMap(), request, response);
+        assertThat(result, is(notNullValue()));
+        assertThat(result.getModelAndView(), is(notNullValue()));
+        assertThat(result.getModelAndView().getModelMap(), is(notNullValue()));
+		publisherAtomFeedView.render(result.getModelAndView().getModelMap(), request, response);
         assertEquals("application/atom+xml", response.getContentType());
         log.debug("RSS feed result: {}", response.getContentAsString(StandardCharsets.UTF_8));
         log.debug("Forwarded URL: '{}'", result.getResponse().getForwardedUrl());
