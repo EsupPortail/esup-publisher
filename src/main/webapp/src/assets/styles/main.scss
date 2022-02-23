@@ -633,7 +633,7 @@ ul#strength {
 /*}*/
 
 dl {
-    margin: 20px auto;
+    margin: 15px auto;
 }
 
 .dl-horizontal.entity-details>dd {
@@ -1552,7 +1552,9 @@ Modal fullscreen
 /* ========================================
 For jstree
 ===========================================*/
-esup-js-tree {
+esup-js-tree,
+esup-subject-search-button,
+esup-edit-evaluator {
     --hover-text-color: var(--theme-js-tree-hover-text-color);
     --selected-text-color: var(--theme-js-tree-selected-text-color);
     --selected-background-color: var(--theme-js-tree-selected-background-color);

@@ -3,7 +3,7 @@ import AccountService from './AccountService'
 
 class PrincipalService {
   identify (force) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       var identity = store.getters.getIdentity
       if (force === true) {
         store.commit('setIdentity', undefined)
@@ -23,7 +23,7 @@ class PrincipalService {
         }).catch(() => {
           store.commit('setIdentity', null)
           store.commit('setAuthenticated', false)
-          resolve(identity)
+          reject(identity)
         })
       }
     })

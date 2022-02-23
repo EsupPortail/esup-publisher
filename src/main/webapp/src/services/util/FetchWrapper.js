@@ -50,15 +50,15 @@ function fetchWithRetry (resolve, reject, url, params) {
           reject(response)
         } else {
           // Si erreur 401, redirection vers la page de login
-          store.commit('setLoginModalOpened', true)
           if (router.currentRoute.value.name !== 'Login') {
+            store.commit('setLoginModalOpened', true)
             store.commit('setReturnRoute', {
               name: router.currentRoute.value.name,
               params: router.currentRoute.value.params,
               meta: router.currentRoute.value.meta
             })
+            router.push({ name: 'Login' })
           }
-          router.push({ name: 'Login' })
         }
       } else {
         response.text().then(text => {

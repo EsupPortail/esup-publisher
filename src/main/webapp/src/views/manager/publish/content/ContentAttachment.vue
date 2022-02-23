@@ -288,7 +288,7 @@ export default {
     },
     getUrlAttachment (attachment) {
       if (attachment.uri) {
-        return process.env.VUE_APP_BACK_BASE_URL + attachment.uri
+        return UploadUtils.getInternalUrl(attachment.uri)
       }
     }
   },

@@ -188,6 +188,14 @@ class UploadUtils {
     }
     return cssClassType
   }
+
+  // Retourne l'url d'un fichier interne
+  getInternalUrl (url) {
+    if (url) {
+      return url.startsWith('https:') || url.startsWith('http:') || url.startsWith('ftp:') ? url : process.env.VUE_APP_BACK_BASE_URL + url
+    }
+    return url
+  }
 }
 
 // Retourne une map des headers d'une XMLHttpRequest

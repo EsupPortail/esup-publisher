@@ -5,7 +5,6 @@ class ParseLinkUtils {
     if (!header || !header.length || header.length === 0) {
       return
     }
-
     // Split parts by comma
     var parts = header.split(',')
     var links = {}

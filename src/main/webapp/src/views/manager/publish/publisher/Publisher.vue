@@ -1,7 +1,7 @@
 <template>
   <div class="publish-publisher">
     <h3>{{ $t("manager.publish.publisher.title") }}</h3>
-    <div class="form-group" v-if="publishers.length >= 1">
+    <div class="form-group" v-if="publishers && publishers.length >= 1">
         <label class="control-label" for="reader">{{ $t("manager.publish.publisher.reader") }}</label>
         <select class="form-select" id="reader" name="reader" v-model="selectedPublisher.context.reader" @change="selectReader(selectedPublisher.context.reader)"
                 required>
@@ -25,7 +25,7 @@
         </select>
     </div>
 
-    <div v-if="publishers.length < 1" class="alert alert-danger">{{ $t("manager.publish.publisher.emptyList") }}</div>
+    <div v-if="publishers && publishers.length < 1" class="alert alert-danger">{{ $t("manager.publish.publisher.emptyList") }}</div>
 
     <div class="text-center">
         <div class="btn-group" role="group">
@@ -52,7 +52,7 @@ export default {
   name: 'Publisher',
   data () {
     return {
-      publishers: [],
+      publishers: null,
       selectedPublisher: { context: { reader: {}, redactor: {}, organization: {} } },
       readers: [],
       redactors: [],
@@ -103,6 +103,8 @@ export default {
           this.initRedactors(this.publishers, true)
           this.initOrganizations(this.filteredFromReader, true)
         }
+      }).catch(() => {
+        this.publishers = []
       })
     },
     initReaders () {

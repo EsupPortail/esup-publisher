@@ -353,7 +353,7 @@ export default {
     },
     getUrlFromEnclosure () {
       if (this.item.enclosure) {
-        return process.env.VUE_APP_BACK_BASE_URL + this.item.enclosure
+        return UploadUtils.getInternalUrl(this.item.enclosure)
       }
     },
     formatDateToString (date) {

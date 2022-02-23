@@ -24,10 +24,12 @@ class AuthenticationService {
   }
 
   logout () {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       FetchWrapper.postJson('api/logout').then(response => {
         store.commit('clearAll')
         resolve(response)
+      }).catch(err => {
+        reject(err)
       })
     })
   }

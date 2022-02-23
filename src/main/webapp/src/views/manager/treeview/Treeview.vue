@@ -14,6 +14,7 @@
 <script>
 import ContextService from '@/services/entities/context/ContextService.js'
 import { computed, readonly } from 'vue'
+
 export default {
   name: 'Treeview',
   data () {
@@ -42,12 +43,7 @@ export default {
     loadTreeData () {
       ContextService.query(1).then(response => {
         this.treeData = response.data
-        this.treeData.forEach(element => {
-          if (element.children) {
-            element.getChildren = () => this.loadTreeDataChildren(element.id)
-          }
-          element.iconIndex = this.getIconIndexByType(element.type)
-        })
+        this.treeData.forEach(element => this.initTreeNodeProperties(element))
         this.isDataLoad = true
       })
     },
@@ -63,12 +59,7 @@ export default {
     // Méthode permettant le chargement de données asynchrone pour l'arborescence
     loadTreeDataChildren (id) {
       return ContextService.query(id).then(response => {
-        response.data.forEach(element => {
-          if (element.children) {
-            element.getChildren = () => this.loadTreeDataChildren(element.id)
-          }
-          element.iconIndex = this.getIconIndexByType(element.type)
-        })
+        response.data.forEach(element => this.initTreeNodeProperties(element))
         return response.data
       })
     },
@@ -80,6 +71,13 @@ export default {
         const tmp = currentNode.id.split(':')
         this.$router.push({ name: 'TreeviewCtxDetails', params: { ctxId: tmp[0], ctxType: tmp[1] } })
       }
+    },
+    // Intialisation des propriétés d'un noeud de l'arbre
+    initTreeNodeProperties (node) {
+      if (node.children) {
+        node.getChildren = () => this.loadTreeDataChildren(node.id)
+      }
+      node.iconIndex = this.getIconIndexByType(node.type)
     },
     // Retourne l'indice de l'icône à afficher pour un elément de l'arbre selon son type
     getIconIndexByType (type) {

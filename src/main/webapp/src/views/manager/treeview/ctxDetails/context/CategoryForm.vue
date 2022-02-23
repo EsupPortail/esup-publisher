@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="form-group" v-if="publisher.context.reader.classificationDecorations && publisher.context.reader.classificationDecorations.includes('ENCLOSURE')">
-              <label class="control-label" for="iconUrl" translate="publisherApp.category.iconUrl">{{$t('category.iconUrl')}}</label>
+              <label class="control-label" for="iconUrl">{{$t('category.iconUrl')}}</label>
               <input type="url" class="form-control" name="iconUrl" id="iconUrl" placeholder="http://..."
                 v-model="editedContextIconUrl" maxlength="2048" ref="iconUrlInput">
               <div class="invalid-feedback"

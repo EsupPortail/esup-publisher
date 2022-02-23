@@ -25,7 +25,7 @@
                             <label class="control-label" for="organization" >{{$t('publisher.context.organization')}}</label>
                             <select class="form-select" id="organization" name="organization" v-model="publisher.context.organization" required>
                                 <option v-for="organization in organizations" :key="organization.id" :value="organization" >
-                                    {{ organization.name }}
+                                    {{ organization.displayName }}
                                 </option>
                             </select>
                             <div class="invalid-feedback"
@@ -38,7 +38,7 @@
                             <label class="control-label" for="reader" >{{$t('publisher.context.reader')}}</label>
                             <select class="form-select" id="reader" name="reader" v-model="publisher.context.reader" required>
                                 <option v-for="reader in readers" :key="reader.id" :value="reader">
-                                    {{ reader.name }}
+                                    {{ reader.displayName }}
                                 </option>
                             </select>
                             <div class="invalid-feedback"
@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
                             <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required>
-                                <option v-for="defaultDisplayOrderType in displayOrderTypeList" :key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
+                                <option v-for="defaultDisplayOrderType in filteredDisplayOrderTypeList" :key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
                                     {{$t(defaultDisplayOrderType.label)}}
                                 </option>
                             </select>
@@ -248,7 +248,7 @@ export default {
       redactors: [],
       organizations: [],
       readers: [],
-      publisher: { context: { organization: {}, redactor: {}, reader: {} }, displayName: null, defaultDisplayOrder: null, permissionType: null, used: false, displayOrder: 0, hasSubPermsManagement: false, doHighlight: false, id: null },
+      publisher: { context: { organization: {}, redactor: {}, reader: {} }, displayName: null, defaultDisplayOrder: null, permissionType: null, used: false, displayOrder: 0, hasSubPermsManagement: true, doHighlight: true, id: null },
       deleteModal: null,
       updateModal: null,
       formValidator: new FormValidationUtils(),
@@ -263,6 +263,13 @@ export default {
     // Liste des types de Display Order
     displayOrderTypeList () {
       return EnumDatasService.getDisplayOrderTypeList()
+    },
+    // Liste des types de Display Order filtrés
+    filteredDisplayOrderTypeList () {
+      // removing CUSTOM type until it is implemented
+      return this.displayOrderTypeList.filter(element => {
+        return element.name !== 'START_DATE'
+      })
     }
   },
   methods: {
@@ -329,7 +336,7 @@ export default {
       })
     },
     clear () {
-      this.publisher = { context: { organization: {}, redactor: {}, reader: {} }, displayName: null, defaultDisplayOrder: null, permissionType: null, used: false, displayOrder: 0, hasSubPermsManagement: false, doHighlight: false, id: null }
+      this.publisher = { context: { organization: {}, redactor: {}, reader: {} }, displayName: null, defaultDisplayOrder: null, permissionType: null, used: false, displayOrder: 0, hasSubPermsManagement: true, doHighlight: true, id: null }
     },
     // Méthode pour clear et initialiser les valeurs pour les valeurs présélectionées dans la modale de création
     clearCreate () {
@@ -338,7 +345,7 @@ export default {
       this.publisher.context.reader = this.readers && this.readers.length > 0 ? this.readers[0] : {}
       this.publisher.context.redactor = this.redactors && this.redactors.length > 0 ? this.redactors[0] : {}
       this.publisher.permissionType = this.permissionClasses && this.permissionClasses.length > 0 ? this.permissionClasses[0].name : null
-      this.publisher.defaultDisplayOrder = this.displayOrderTypeList && this.displayOrderTypeList.length > 0 ? this.displayOrderTypeList[0].name : null
+      this.publisher.defaultDisplayOrder = this.filteredDisplayOrderTypeList && this.filteredDisplayOrderTypeList.length > 0 ? this.filteredDisplayOrderTypeList[0].name : null
     },
     publisherDetail (publisherId) {
       this.$router.push({ name: 'AdminEntityPublisherDetails', params: { id: publisherId } })

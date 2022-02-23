@@ -1,7 +1,7 @@
 <template>
   <div class="ctxDetails">
     <ul class="nav nav-pills">
-      <li class="nav-item"  >
+      <li class="nav-item">
         <a class="nav-link" :aria-current="activeNav ==='content' || !activeNav" :class="{ active: activeNav ==='content' || !activeNav }" href="" @click.prevent="showNav('content')">
           <span >{{$t('manager.treeview.details.context.properties')}}</span>
         </a>
@@ -23,7 +23,7 @@
         <TabContext v-if="activeNav === 'content'"></TabContext>
       </div>
       <div id="permissions" class="nav-item" :class="{active: activeNav === 'permissions'}">
-        <TabPermissions   v-if="activeNav === 'permissions'"></TabPermissions>
+        <TabPermissions v-if="activeNav === 'permissions'"></TabPermissions>
       </div>
       <div id="targets" class="nav-item" :class="{active: activeNav === 'targets'}">
         <TabTargets ref="tabTargets" v-if="activeNav === 'targets'"></TabTargets>
@@ -74,6 +74,7 @@ export default {
       selectedSubjects: [],
       availableRoles: [],
       autorizedDisplayOrderTypeList: [],
+      autorizedPermissionClassList: [],
       search: { subject: {}, target: {} },
       edit: { authorizedSubject: {} },
       permissionAdvanced: false,
@@ -110,6 +111,7 @@ export default {
       setEditedContext: (editedContext) => { this.editedContext = editedContext },
       publisher: readonly(computed(() => this.publisher)),
       autorizedDisplayOrderTypeList: readonly(computed(() => this.autorizedDisplayOrderTypeList)),
+      autorizedPermissionClassList: readonly(computed(() => this.autorizedPermissionClassList)),
       updateContext: this.updateContext,
       confirmDeleteContext: this.confirmDeleteContext,
       confirmUpdateContext: this.confirmUpdateContext,
@@ -208,8 +210,8 @@ export default {
             this.hasPermissionManagment = this.getHasPermissionManagment(ctxType)
             this.selectTemplatePermissionTemplate(this.ctxPermissionType)
             this.setCanCreateCategory(this.publisher)
-            this.selectPermissionManager(this.ctxPermissionType).queryForCtx(ctxType, ctxId).then(result => {
-              this.permissions = result.data
+            this.selectPermissionManager(this.ctxPermissionType).queryForCtx(ctxType, ctxId).then(res => {
+              this.permissions = res.data
               this.loadAvailableRoles()
             })
           })
@@ -218,23 +220,6 @@ export default {
           })
           break
         case 'CATEGORY':
-          ClassificationService.get(ctxId).then(result => {
-            this.context = result.data
-            this.publisher = result.data.publisher
-            this.getUserCanManage(result.data.contextKey)
-            this.ctxPermissionType = this.publisher.permissionType
-            this.hasTargetManagment = this.getHasTargetManagment(ctxType)
-            this.hasPermissionManagment = this.getHasPermissionManagment(ctxType)
-            this.selectTemplatePermissionTemplate(this.ctxPermissionType)
-            this.selectPermissionManager(this.ctxPermissionType).queryForCtx(ctxType, ctxId).then(result => {
-              this.permissions = result.data
-              this.loadAvailableRoles()
-            })
-          })
-          SubscriberService.queryForCtx(ctxType, ctxId).then(result => {
-            this.targets = result.data
-          })
-          break
         case 'FEED':
           ClassificationService.get(ctxId).then(result => {
             this.context = result.data
@@ -244,8 +229,8 @@ export default {
             this.hasTargetManagment = this.getHasTargetManagment(ctxType)
             this.hasPermissionManagment = this.getHasPermissionManagment(ctxType)
             this.selectTemplatePermissionTemplate(this.ctxPermissionType)
-            this.selectPermissionManager(this.ctxPermissionType).queryForCtx(ctxType, ctxId).then(result => {
-              this.permissions = result.data
+            this.selectPermissionManager(this.ctxPermissionType).queryForCtx(ctxType, ctxId).then(res => {
+              this.permissions = res.data
               this.loadAvailableRoles()
             })
           })
@@ -447,6 +432,7 @@ export default {
     loadAvailableTypes (isEditCurrentCtx) {
       var ctx = isEditCurrentCtx ? this.editedContext : this.context
       this.autorizedDisplayOrderTypeList = this.displayOrderTypeList
+      this.autorizedPermissionClassList = this.permissionClassList
       switch (ctx.contextKey.keyType) {
         case 'ORGANIZATION':
           // in edit we are on ORGANIZATION else we create a sub context
@@ -464,7 +450,7 @@ export default {
               this.autorizedDisplayOrderTypeList = this.displayOrderTypeList.filter(element => element.name !== 'START_DATE')
             } else {
               // we keep only "CONTEXT" in Flash context
-              this.autorizedDisplayOrderTypeList = this.permissionClassList.filter(element => element.name === 'CONTEXT')
+              this.autorizedPermissionClassList = this.permissionClassList.filter(element => element.name === 'CONTEXT')
             }
           } else if (ctx.context.redactor.nbLevelsOfClassification > 1) {
             this.autorizedDisplayOrderTypeList = this.displayOrderTypeList.filter(element => element.name !== 'START_DATE')
@@ -530,10 +516,6 @@ export default {
           return PrincipalService.isInRole('ROLE_ADMIN') && CommonUtils.equals(this.publisher.context.redactor.writingMode, 'STATIC') &&
                 !this.inArray('FLASH', this.context.context.reader.authorizedTypes)
         case 'CATEGORY':
-          if (!CommonUtils.equals({}, this.publisher)) {
-            return !CommonUtils.equals(this.publisher.context.redactor.writingMode, 'TARGETS_ON_ITEM') && this.publisher.hasSubPermsManagement
-          }
-          return false
         case 'FEED':
           if (!CommonUtils.equals({}, this.publisher)) {
             return !CommonUtils.equals(this.publisher.context.redactor.writingMode, 'TARGETS_ON_ITEM') && this.publisher.hasSubPermsManagement
@@ -555,10 +537,6 @@ export default {
         case 'PUBLISHER':
           return true
         case 'CATEGORY':
-          if (!CommonUtils.equals({}, this.publisher)) {
-            return this.publisher.hasSubPermsManagement
-          }
-          return false
         case 'FEED':
           if (!CommonUtils.equals({}, this.publisher)) {
             return this.publisher.hasSubPermsManagement

@@ -45,7 +45,7 @@
             <th class="d-none">{{$t('item.enclosure')}}</th>
             <th class="fixed-date-width">{{$t('item.startDate')}}</th>
             <th class="fixed-date-width">{{$t('item.endDate')}}</th>
-            <th class="">{{$t('item.lastModified')}}</th>
+            <th>{{$t('item.lastModified')}}</th>
             <th class="d-xl-none d-lg-none">{{$t('item.validated')}}</th>
             <th class="d-none">{{$t('item.status')}}</th>
             <th class="d-lg-none">{{$t('item.summary')}}</th>
@@ -61,7 +61,7 @@
               <td class="d-none" data-label="ID"><router-link :to="{ name: 'ContentDetail', params: { id: item.id }}">{{item.id}}</router-link></td>
               <td :data-label="$t('item.type')">{{$t('enum.itemType.' + item.type)}}</td>
               <td class="longtext" :data-label="$t('item.title')">{{item.title}}</td>
-              <td class="" :data-label="$t('item.created')">
+              <td :data-label="$t('item.created')">
                   <span :data-label="$t('item.beforeDate')">{{formatDate(item.createdDate)}}</span>
                   <span :data-label="$t('item.beforeName')">{{item.createdBy.displayName}}</span>
               </td>
@@ -70,7 +70,7 @@
               </td>
               <td class="text-center fixed-date-width" :data-label="$t('item.startDate')">{{formatDateSimple(item.startDate)}}</td>
               <td class="text-center fixed-date-width" :data-label="$t('item.endDate')">{{formatDateSimple(item.endDate)}}</td>
-              <td class="" :data-label="$t('item.lastModified')">
+              <td :data-label="$t('item.lastModified')">
                   <span :data-label="$t('item.beforeDate')">{{formatDate(item.lastModifiedDate)}}</span>
                   <span :data-label="$t('item.beforeName')">{{item.lastModifiedBy.displayName}}</span>
               </td>
@@ -128,8 +128,9 @@ import EnumDatasService from '@/services/entities/enum/EnumDatasService'
 import store from '@/store/index.js'
 import ContentService from '@/services/entities/content/ContentService'
 import DateUtils from '@/services/util/DateUtils'
-import { Modal } from 'bootstrap'
 import ParseLinkUtils from '@/services/util/ParseLinkUtils'
+import UploadUtils from '@/services/util/UploadUtils'
+import { Modal } from 'bootstrap'
 
 export default {
   name: 'ContentsOwned',
@@ -240,7 +241,7 @@ export default {
     },
     // Récupération de fichier (local ou distant)
     getUrlEnclosure (enclosure) {
-      return enclosure.startsWith('https:') || enclosure.startsWith('http:') || enclosure.startsWith('ftp:') ? enclosure : process.env.VUE_APP_BACK_BASE_URL + enclosure
+      return UploadUtils.getInternalUrl(enclosure)
     }
   },
   mounted () {

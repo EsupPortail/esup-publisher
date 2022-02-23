@@ -98,7 +98,7 @@
           <td class="d-lg-none verylongtext" :data-label="$t('item.summary')">{{item.summary}}</td>
           <td class="d-none" :data-label="$t('item.body')">{{item.body}}</td>
           <td class="d-md-none d-lg-none d-xl-table-cell text-center" :data-label="$t('item.rssAllowed')"><input type="checkbox" v-model="item.rssAllowed" disabled /></td>
-          <td v-if="organizations !== null && this.organizations.length >= 1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
+          <td v-if="organizations !== null && organizations.length > 1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
           <td class="d-none" :data-label="$t('item.redactor')">{{item.redactor.displayName}}</td>
           <td class="action">
             <button type="button" class="btn btn-info btn-sm me-1" @click="itemDetail(item.id)">
@@ -145,11 +145,12 @@
 import ItemService from '@/services/entities/item/ItemService'
 import ContentService from '@/services/entities/content/ContentService'
 import EnumDatasService from '@/services/entities/enum/EnumDatasService'
-import { Modal } from 'bootstrap'
 import DateUtils from '@/services/util/DateUtils'
 import store from '@/store/index.js'
 import ParseLinkUtils from '@/services/util/ParseLinkUtils'
 import ClassificationService from '@/services/entities/classification/ClassificationService'
+import UploadUtils from '@/services/util/UploadUtils'
+import { Modal } from 'bootstrap'
 
 export default {
   name: 'Pending',
@@ -259,7 +260,7 @@ export default {
     },
     // Récupération de fichier (local ou distant)
     getUrlEnclosure (enclosure) {
-      return enclosure.startsWith('https:') || enclosure.startsWith('http:') || enclosure.startsWith('ftp:') ? enclosure : process.env.VUE_APP_BACK_BASE_URL + enclosure
+      return UploadUtils.getInternalUrl(enclosure)
     }
   },
   mounted () {

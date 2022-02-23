@@ -1,5 +1,5 @@
 <template>
-    <div id="login-modal" v-if="toggleModal" >
+    <div id="login-modal" v-if="toggleModal && logout">
       <LoginModal :showModal="toggleModal" @relog="relog" ref="modalRef"></LoginModal>
     </div>
     <div v-else class="row mx-0">
@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import AuthenticationService from '../../../services/auth/AuthenticationService'
-import PrincipalService from '../../../services/auth/PrincipalService'
+import AuthenticationService from '@/services/auth/AuthenticationService'
+import PrincipalService from '@/services/auth/PrincipalService'
 import LoginModal from './LoginModal.vue'
 
 // Objet en charge de la redirection vers le serveur CAS
@@ -36,7 +36,9 @@ export default {
   data () {
     return {
       // Booléen indiquant si une erreur est arrivée lors de l'authentification
-      authenticationError: false
+      authenticationError: false,
+      // Booléen indiquant si le logout a été effectué
+      logout: false
     }
   },
   computed: {
@@ -51,7 +53,7 @@ export default {
     login () {
       AuthenticationService.login()
         .then(() => {
-          this.authenticationError = true
+          this.authenticationError = false
           if (!this.$store.getters.getReturnRoute) {
             this.$router.push({ name: 'Home' })
           } else {
@@ -117,6 +119,15 @@ export default {
           })
         }
       })
+    }
+  },
+  created () {
+    if (this.toggleModal) {
+      AuthenticationService.logout().finally(() => {
+        this.logout = true
+      })
+    } else {
+      this.logout = true
     }
   }
 }

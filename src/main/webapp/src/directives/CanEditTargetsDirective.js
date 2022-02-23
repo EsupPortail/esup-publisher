@@ -2,7 +2,7 @@ import UserService from '@/services/user/UserService'
 
 // Directive en charge de déterminer si l'utilisateur a les
 // droits d'édition sur les cibles pour un contexte
-const CanEditTargets = {
+const CanEditTargetsDirective = {
   canEditCtxTargets (el, context) {
     if (context) {
       // On ne refait la requête que si les paramètres ont changé
@@ -34,4 +34,4 @@ const CanEditTargets = {
   }
 }
 
-export default CanEditTargets
+export default CanEditTargetsDirective

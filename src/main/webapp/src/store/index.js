@@ -80,9 +80,11 @@ const store = createStore({
             }
           }
           if (lang !== null && lang !== undefined) {
+            // Maj de l'attribut lang de la page
+            document.querySelector('html').setAttribute('lang', lang)
             lang = '"' + lang + '"'
           }
-          CookieUtils.setCookie('NG_TRANSLATE_LANG_KEY', lang || 'fr')
+          CookieUtils.setCookie('NG_TRANSLATE_LANG_KEY', lang || '"fr"')
         }
         window.localStorage.setItem(key, value)
       },

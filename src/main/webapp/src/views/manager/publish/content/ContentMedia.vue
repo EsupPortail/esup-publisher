@@ -300,8 +300,7 @@ export default {
     },
     getUrlFromEnclosure () {
       if (this.item.enclosure) {
-        return this.item.enclosure.startsWith('http:') || this.item.enclosure.startsWith('https:') || this.item.enclosure.startsWith('ftp:')
-          ? this.item.enclosure : process.env.VUE_APP_BACK_BASE_URL + this.item.enclosure
+        return UploadUtils.getInternalUrl(this.item.enclosure)
       }
     },
     getUrlFromBlob (blob) {

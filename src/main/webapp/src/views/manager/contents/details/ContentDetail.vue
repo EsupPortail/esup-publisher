@@ -272,7 +272,7 @@ export default {
     },
     // Récupération de fichier (local ou distant)
     getUrlEnclosure (enclosure) {
-      return enclosure.startsWith('https:') || enclosure.startsWith('http:') || enclosure.startsWith('ftp:') ? enclosure : process.env.VUE_APP_BACK_BASE_URL + enclosure
+      return UploadUtils.getInternalUrl(enclosure)
     },
     // Retour à la page précédente
     back () {

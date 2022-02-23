@@ -38,7 +38,7 @@
             </p>
           </div>
         </div>
-        <section v-html="item.body" class="ck-content" ></section>
+        <section v-html="item.body" class="ck-content"></section>
       </article>
     </div>
   </div>

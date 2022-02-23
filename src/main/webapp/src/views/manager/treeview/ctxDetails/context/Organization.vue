@@ -3,7 +3,7 @@
     <h3 class="mt-3 mb-2">{{ $t("manager.treeview.details.context.properties") }}</h3>
     <div class="mb-3">
       <button type="button" @click="updateOrganization()"
-        class="btn btn-primary btn-sm me-1" >
+        class="btn btn-primary btn-sm me-1" v-has-role="'ROLE_ADMIN'">
         <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{$t("entity.action.edit")}}</span>
       </button>
       <button type="button" @click="deleteOrganization()"
@@ -163,12 +163,11 @@ export default {
     return {
       deleteModal: null,
       updateModal: null,
-      appUrl: window.location.origin + process.env.VUE_APP_BACK_BASE_URL,
       formValidator: new FormValidationUtils(),
       formErrors: FormErrorType
     }
   },
-  inject: ['context', 'editedContext', 'setEditedContext', 'updateContext', 'confirmDeleteContext', 'confirmUpdateContext', 'canManage'],
+  inject: ['context', 'editedContext', 'setEditedContext', 'updateContext', 'confirmDeleteContext', 'confirmUpdateContext', 'canManage', 'appUrl'],
   computed: {
     editedContextName: {
       get () {

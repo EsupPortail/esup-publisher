@@ -102,12 +102,11 @@ export default {
   },
   data () {
     return {
-      appUrl: window.location.origin + process.env.VUE_APP_BACK_BASE_URL,
       deleteModal: null,
       categoryForm: null
     }
   },
-  inject: ['context', 'getEnumlabel', 'updateContext', 'confirmDeleteContext'],
+  inject: ['context', 'getEnumlabel', 'updateContext', 'confirmDeleteContext', 'appUrl'],
   methods: {
     getAccessTypeLabel (name) {
       return this.getEnumlabel('accessType', name) || ''

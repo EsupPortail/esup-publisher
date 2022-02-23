@@ -121,6 +121,7 @@ export default {
             id: null,
             evaluator: { class: 'OPERATOR', id: null, type: 'OR', evaluators: [] }
           }
+          this.editEvaluatorError = true
           break
         case 'CONTEXT_WITH_SUBJECTS':
           this.permission = {
@@ -135,6 +136,7 @@ export default {
             evaluator: { class: 'OPERATOR', id: null, type: 'OR', evaluators: [] },
             authorizedSubjects: []
           }
+          this.editEvaluatorError = true
           break
         default :
           this.permission = {}

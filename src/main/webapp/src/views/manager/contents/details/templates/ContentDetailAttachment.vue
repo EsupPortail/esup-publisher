@@ -39,7 +39,7 @@
           </div>
         </div>
         <section>
-          <span v-for="attachment in filterLinkedFiles(linkedFiles) " :key="attachment.uri"><a :href="attachment.uri" target="_blank" class="text-nowrap">
+          <span v-for="attachment in filterLinkedFiles(linkedFiles)" :key="attachment.uri"><a :href="getUrlEnclosure(attachment.uri)" target="_blank" class="text-nowrap">
             <i :class="getCssFileFromType(attachment.contentType, attachment.filename)"></i>{{attachment.filename}}</a>
           </span>
         </section>

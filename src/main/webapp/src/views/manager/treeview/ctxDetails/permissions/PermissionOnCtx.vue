@@ -36,7 +36,7 @@
           <ul class="list-group list-unstyled">
             <li v-for="subject in selectedSubjects" :key="subject.keyId" class="list-group-item">
               <esup-subject-infos .subject="subject" .config="subjectInfosConfig" .onSubjectClicked="() => viewSubject(subject)">
-                <a @click="removeFromSelectedSubjects(subject)" v-tooltip="$t('manager.publish.targets.remove')"><i class="far fa-times-circle text-danger"></i></a>&nbsp;
+                <a @click.prevent="removeFromSelectedSubjects(subject)" v-tooltip="$t('manager.publish.targets.remove')" href=""><i class="far fa-times-circle text-danger"></i></a>&nbsp;
               </esup-subject-infos>
             </li>
           </ul>
@@ -53,7 +53,7 @@
 
       <div class="footer">
         <button type="button" class="btn btn-default btn-outline-dark me-1" @click="clearPermission()">
-          <span class="far fa-times-circle"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
+          <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
         </button>
         <button type="button" @click="createPermission()" :disabled="!permission.role || permissionAdvanced && editEvaluatorError || !permissionAdvanced && (!areSubjectsSelected || isAdvancedEvaluator(permission.evaluator))" class="btn btn-primary">
           <span class="fas fa-download"></span>&nbsp;<span>{{$t('entity.action.save')}}</span>
@@ -177,25 +177,21 @@ export default {
     loadTreeDataSearchButton () {
       GroupService.search({ context: this.context.contextKey, search: 1, subContexts: [] }).then(response => {
         this.treeData = response.data
-        this.treeData.forEach(element => {
-          if (element && element.children) {
-            element.getChildren = () => this.loadTreeDataChildrenSearchButton(element.id)
-          }
-        })
+        this.treeData.forEach(element => this.initTreeNodeProperties(element))
         // Initialisation de la configuration du webcomponent esup-subject-search-button
         this.subjectSearchButtonConfig.treeGroupDatas = this.treeData
         this.subjectSearchButtonConfig.userDisplayedAttrs = this.userDisplayedAttrs
         this.subjectSearchButtonConfig.extendedAttrs = this.userFonctionalAttrs
-        this.subjectSearchButtonConfig.getGroupMembers = (id) => GroupService.userMembers(id).then(response => { return response.data })
-        this.subjectSearchButtonConfig.searchUsers = (search) => UserService.search({ context: this.context.contextKey, search: search, subContexts: [] }).then(response => { return response.data })
+        this.subjectSearchButtonConfig.getGroupMembers = (id) => GroupService.userMembers(id).then(res => { return res.data })
+        this.subjectSearchButtonConfig.searchUsers = (search) => UserService.search({ context: this.context.contextKey, search: search, subContexts: [] }).then(res => { return res.data })
         // Initialisation de la configuration du webcomponent esup-edit-evaluator
         this.editEvaluatorConfig.treeGroupDatas = this.treeData
         this.editEvaluatorConfig.userDisplayedAttrs = this.userDisplayedAttrs
         this.editEvaluatorConfig.userAttributes = this.userFunctionnalAttributes
         this.editEvaluatorConfig.operators = this.operatorTypeList
         this.editEvaluatorConfig.stringEvaluators = this.stringEvaluationModeList
-        this.editEvaluatorConfig.getGroupMembers = (id) => GroupService.userMembers(id).then(response => { return response.data })
-        this.editEvaluatorConfig.searchUsers = (search) => UserService.search({ context: this.context.contextKey, search: search, subContexts: [] }).then(response => { return response.data })
+        this.editEvaluatorConfig.getGroupMembers = (id) => GroupService.userMembers(id).then(res => { return res.data })
+        this.editEvaluatorConfig.searchUsers = (search) => UserService.search({ context: this.context.contextKey, search: search, subContexts: [] }).then(res => { return res.data })
         this.editEvaluatorConfig.getSubjectInfos = (keyType, keyId) => {
           return SubjectService.getSubjectInfos(keyType, keyId).then(res => {
             if (res) {
@@ -209,13 +205,15 @@ export default {
     // Mise à jour asynchrone des enfants du treeview
     loadTreeDataChildrenSearchButton (id) {
       return GroupService.search({ context: this.context.contextKey, search: id, subContexts: [] }).then(response => {
-        response.data.forEach(element => {
-          if (element && element.children) {
-            element.getChildren = () => this.loadTreeDataChildrenSearchButton(element.id)
-          }
-        })
+        response.data.forEach(element => this.initTreeNodeProperties(element))
         return response.data
       })
+    },
+    // Intialisation des propriétés d'un noeud de l'arbre
+    initTreeNodeProperties (node) {
+      if (node.children) {
+        node.getChildren = () => this.loadTreeDataChildrenSearchButton(node.id)
+      }
     },
     // Affichage des informations de la cible
     viewSubject (subject) {

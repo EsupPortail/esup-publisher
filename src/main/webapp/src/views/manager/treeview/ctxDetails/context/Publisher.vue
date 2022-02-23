@@ -95,7 +95,7 @@
               <div class="form-group" v-if="canCreateCategory">
                 <label class="control-label" for="permissionType" >{{$t('publisher.permissionType')}}</label>
                 <select class="form-select" id="permissionType" name="permissionType" v-model="editedContextPermissionType" required :disabled="!canManage">
-                  <option v-for="permission in permissionClassList" :key="permission.id" :value="permission.name">
+                  <option v-for="permission in autorizedPermissionClassList" :key="permission.id" :value="permission.name">
                     {{$t(permission.label)}}
                   </option>
                 </select>
@@ -190,7 +190,6 @@
 </template>
 
 <script>
-import EnumDatasService from '@/services/entities/enum/EnumDatasService'
 import PrincipalService from '@/services/auth/PrincipalService'
 import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils'
 import { Modal } from 'bootstrap'
@@ -206,14 +205,13 @@ export default {
       deleteModal: null,
       updateModal: null,
       categoryForm: null,
-      appUrl: window.location.origin + process.env.VUE_APP_BACK_BASE_URL,
       formValidator: new FormValidationUtils(),
       formErrors: FormErrorType
     }
   },
   inject: [
     'context', 'editedContext', 'setEditedContext', 'updateContext', 'confirmDeleteContext', 'confirmUpdateContext',
-    'canCreateCategory', 'canManage', 'autorizedDisplayOrderTypeList', 'getEnumlabel', 'createContext'
+    'canCreateCategory', 'canManage', 'autorizedDisplayOrderTypeList', 'autorizedPermissionClassList', 'getEnumlabel', 'createContext', 'appUrl'
   ],
   computed: {
     editedContextDisplayName: {
@@ -285,10 +283,6 @@ export default {
         newEditedContext.doHighlight = newVal
         this.setEditedContext(newEditedContext)
       }
-    },
-    // Liste des types de permission
-    permissionClassList () {
-      return EnumDatasService.getPermissionClassList()
     },
     // Nom du contexte du publisher
     contextName () {
