@@ -36,14 +36,6 @@ module.exports = {
   publicPath: process.env.VUE_APP_BACK_BASE_URL + 'ui/',
   outputDir: _outputDir,
   productionSourceMap: false,
-  pluginOptions: {
-    i18n: {
-      locale: 'fr',
-      fallbackLocale: 'en',
-      enableInSFC: false,
-      enableBridge: false
-    }
-  },
   parallel: false,
   transpileDependencies: [
     /ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/
@@ -56,7 +48,11 @@ module.exports = {
     },
     plugins: [
       new DefinePlugin({
-        'process.env.BACK_VERSION': loadBackVersion()
+        'process.env.BACK_VERSION': loadBackVersion(),
+        __VUE_I18N_FULL_INSTALL__: true,
+        __VUE_I18N_LEGACY_API__: true,
+        __VUE_I18N_PROD_DEVTOOLS__: false,
+        __INTLIFY_PROD_DEVTOOLS__: false
       }),
       new CKEditorWebpackPlugin({
         language: 'fr',
