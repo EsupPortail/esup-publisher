@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import Home from '@/views/Home.vue'
 import UserService from '@/services/user/UserService'
 
@@ -21,6 +21,9 @@ describe('Home.vue tests', () => {
 
     const wrapper = shallowMount(Home, {
       global: {
+        stubs: {
+          RouterLink: RouterLinkStub
+        },
         mocks: {
           $t,
           $store
@@ -59,6 +62,9 @@ describe('Home.vue tests', () => {
 
     const wrapper = shallowMount(Home, {
       global: {
+        stubs: {
+          RouterLink: RouterLinkStub
+        },
         mocks: {
           $t,
           $store
