@@ -17,15 +17,16 @@ class CookieUtils {
 
   // Modification de la valeur d'un cookie
   setCookie (name, value) {
+    const path = ';path=' + process.env.VUE_APP_BACK_BASE_URL
     if (!document.cookie) {
-      document.cookie = name + '=' + encodeURIComponent(value)
+      document.cookie = name + '=' + encodeURIComponent(value) + path
     } else {
       const cookie = document.cookie.split(';').find(c => c.trim().startsWith(name + '='))
       if (!cookie) {
-        document.cookie = name + '=' + encodeURIComponent(value)
+        document.cookie = name + '=' + encodeURIComponent(value) + path
       } else {
         const key = cookie.split('=')[0]
-        document.cookie = key + '=' + encodeURIComponent(value)
+        document.cookie = key + '=' + encodeURIComponent(value) + path
       }
     }
   }
