@@ -25,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,14 +60,22 @@ public class StaticResourcesProductionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String contextPath = ((HttpServletRequest) request).getContextPath();
+        String contextPath = httpRequest.getContextPath();
         String requestURI = httpRequest.getRequestURI();
         requestURI = StringUtils.substringAfter(requestURI, contextPath);
-        if (StringUtils.equals("/", requestURI) || StringUtils.equals("/ui/", requestURI) || !staticResourcesPattern.matcher(requestURI).matches()) {
-            requestURI = "/ui/index.html";
+        if (StringUtils.equals("/", requestURI)) {
+            // Redirection permanaente vers /ui si on essaye d'accéder à /
+            log.debug("Permanent redirection from / to /ui/");
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            httpResponse.setHeader("Location", contextPath + "/ui/");
+        } else {
+            if (StringUtils.equals("/ui/", requestURI) || !staticResourcesPattern.matcher(requestURI).matches()) {
+                requestURI = "/ui/index.html";
+            }
+            String newURI = requestURI.replace("/ui/", "/dist/");
+            log.debug("RequestDispatcher - setting newURI to {}", newURI);
+            request.getRequestDispatcher(newURI).forward(request, response);
         }
-        String newURI = requestURI.replace("/ui/", "/dist/");
-        log.debug("RequestDispatcher - setting newURI to {}", newURI);
-        request.getRequestDispatcher(newURI).forward(request, response);
     }
 }
