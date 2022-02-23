@@ -3,14 +3,14 @@
 A la suite de la migration du front-end de AngularJS vers Vue, celui-ci est maintenant accessible depuis le contexte /publisher/ui.
 Le font-end fonctionne sur la version LTS NodeJS 16.
 
-Les commandes NPM pour manipuler le front-end sont :
+Les commandes NPM pour manipuler le front-end sont (à exécuter à la racine du projet) :
 - `npm install` : Installation des dépendances du front-end.
 - `npm run serve` : Permet de lancer le front-end en mode développement (équivalent du `grunt serve`). Le front est alors accessible à l'adresse http://localhost:3000/publisher/ui/
 - `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources compilées sont générées dans le répertoire src/main/webapp/dist.
 - `npm run lint` : Permet de lancer une analyse eslint sur le code source du front-end.
 - `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/test/javascript/spec.
 
-Les commandes liées au back-end restent inchangées : 
+Les commandes liées au back-end restent inchangées (à exécuter à la racine du projet) :
 - Lancement en local : `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev`
 - Construction du livrable : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` (le front-end est construit par Maven via le plugin frontend-maven-plugin, cf. pom.xml).
 
@@ -18,8 +18,8 @@ Les commandes liées au back-end restent inchangées :
 
 | Brique | AngularJS | Vue |
 | ------ | ------ | ------ |
-| Configuration Npm | package.json | src\main\webapp\package.json |
-| Tests unitaires | src\test\javascript\ | src\main\webapp\tests\unit |
+| Configuration Npm | package.json | package.json |
+| Tests unitaires | src\test\javascript\ | src\test\javascript |
 | Router | src\main\webapp\scripts\app\app.js | src\main\webapp\src\router\index.js |
 | Internationalisation | src\main\webapp\scripts\app\app.js | src\main\webapp\src\i18n\index.js |
 | Navbar | src\main\webapp\scripts\components\navbar\navbar.controller.js | src\main\webapp\src\components\navbar\NavBar.vue |
@@ -116,3 +116,7 @@ Des variables CSS ont été créées afin de faciliter la modification du thème
 | --theme-subject-search-button-pagination-text-color | #25B2F3 | Couleur des liens dans les paginations des composants subject-search-button |
 | --theme-subject-search-button-pagination-selected-background-color | #25B2F3 | Couleur d'arrière-plan des liens actifs dans les paginations des composants subject-search-button |
 | --theme-subject-search-button-pagination-selected-text-color | #fff | Couleur des liens actifs dans les paginations des composants subject-search-button |
+
+### GitHub Actions
+
+Le script pour l'exécution des GitHub Actions a été mise à jour pour utiliser les versions de NodeJS 16 et 17 et pour exécuter les tests unitaires du front.
