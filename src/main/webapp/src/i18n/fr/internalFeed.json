@@ -6,7 +6,7 @@
             "createOrEditLabel": "Créer ou éditer un Thème"
         },
         "delete": {
-            "question": "Etes-vous certain de vouloir supprimer le Thème {{ id }} ?"
+            "question": "Etes-vous certain de vouloir supprimer le Thème { id } ?"
         },
         "detail": {
             "title": "Thème"

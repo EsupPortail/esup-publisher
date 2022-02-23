@@ -14,7 +14,7 @@
             "AuthenticatedUsers": "Personnes authentifiées"
         },
         "delete": {
-            "question": "Êtes vous sûr de vouloir supprimer cet Évaluateur {{ id }}?",
+            "question": "Êtes vous sûr de vouloir supprimer cet Évaluateur { id }?",
             "button": "Supprimer cet élément"
         },
         "detail": {
@@ -31,9 +31,9 @@
         },
         "UserAttribute": {
             "subjetIs": "Utilisateur ",
-            "attribute": "Utilisateurs avec l'attribut '{{ attribute }}'",
-            "mode": " est '{{ mode }}'",
-            "value": " la valeur '{{ value }}'",
+            "attribute": "Utilisateurs avec l'attribut '{ attribute }'",
+            "mode": " est '{ mode }'",
+            "value": " la valeur '{ value }'",
             "remove": "Supprimer l'évalution sur cet attribut d'utilisateur",
             "remove.user": "Supprimer cet utilisateur"
         },

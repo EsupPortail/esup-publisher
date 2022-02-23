@@ -6,7 +6,7 @@
             "createOrEditLabel": "Create or edit a Internal Feed"
         },
         "delete": {
-            "question": "Are you sure you want to delete InternalFeed {{ id }}?"
+            "question": "Are you sure you want to delete InternalFeed { id }?"
         },
         "detail": {
             "title": "Internal Feed"

@@ -6,7 +6,7 @@
             "createOrEditLabel": "Créer ou éditer un flux RSS externe"
         },
         "delete": {
-            "question": "Etes-vous certain de vouloir supprimer le flux RSS externe {{ id }} ?"
+            "question": "Etes-vous certain de vouloir supprimer le flux RSS externe { id } ?"
         },
         "detail": {
             "title": "Flux RSS externe"

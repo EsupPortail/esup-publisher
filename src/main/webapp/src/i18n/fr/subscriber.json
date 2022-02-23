@@ -7,7 +7,7 @@
         },
         "delete": {
             "question": "Etes-vous certain de vouloir supprimer l'abonnement de la population ciblée ?",
-            "questionbis": "Etes-vous certain de vouloir supprimer l'abonnement {{ id }} ?"
+            "questionbis": "Etes-vous certain de vouloir supprimer l'abonnement { id } ?"
         },
         "detail": {
             "title": "Abonnement"

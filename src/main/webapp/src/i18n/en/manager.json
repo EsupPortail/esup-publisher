@@ -37,7 +37,7 @@
                 "reader": "Where publishing :",
                 "redactor": "Way of writing :",
                 "organization": "For Organization :",
-                "selected": "publication in channel {{channel}} in wrinting mode {{writer}} for organization {{organization}}",
+                "selected": "publication in channel {channel} in wrinting mode {writer} for organization {organization}",
                 "emptyList": "You don't have rights defined to publish a content or no one is defined !"
             },
             "content": {
