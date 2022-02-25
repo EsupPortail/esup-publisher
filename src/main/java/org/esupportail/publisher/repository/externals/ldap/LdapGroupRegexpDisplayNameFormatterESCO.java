@@ -92,7 +92,7 @@ public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDi
                 if (group.find()) {
                     StringBuilder displayName = new StringBuilder();
                     for (int i = 0; i < this.grpNameIndex.length; i++) {
-                        if (i > 0) {
+                        if (i > 0 || this.grpNameIndex.length == 1) {
                             displayName.append(this.grpSeparator).append(group.group(this.grpNameIndex[i]));
                         } else {
                             displayName.append(group.group(this.grpNameIndex[i]));
