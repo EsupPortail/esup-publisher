@@ -23,12 +23,13 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroup;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
+
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 11/06/15.
@@ -63,7 +64,7 @@ public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
         if (profMatcher.matches()) {
             String filter = "(|";
             for (String endPattern: groupToAttachEndPattern) {
-                filter += "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replace(groupAttachEndMatch, endPattern) + ")";
+                filter += "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replaceFirst(groupAttachEndMatch, endPattern) + ")";
             }
             filter += ")";
             log.debug(" ldap filter that will be used : {}", filter);

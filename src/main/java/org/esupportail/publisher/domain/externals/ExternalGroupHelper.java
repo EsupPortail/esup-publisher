@@ -15,13 +15,13 @@
  */
 package org.esupportail.publisher.domain.externals;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -65,6 +65,8 @@ public class ExternalGroupHelper {
     private boolean groupResolveUserMember;
     //@Value("${ldap.groupResolveUserMemberByUserAttributes:true}")
     private boolean groupResolveUserMemberByUserAttributes;
+    //@Value("${ldap.groupListDontResolveUserMember:#{null}}")
+    private Set<String> groupsWithoutMembersResolving;
 
 
     /**
