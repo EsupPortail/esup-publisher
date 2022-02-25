@@ -18,11 +18,12 @@ package org.esupportail.publisher.repository.externals.ldap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroup;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
+
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -33,15 +34,16 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDisplayNameFormatter {
 
-    private Pattern grpPattern;
-    private Pattern grpNameRegex;
-    private int[] grpNameIndex;
+    private final Pattern grpPattern;
+    private final Pattern grpNameRegex;
+    private final int[] grpNameIndex;
     private String grpSeparator = "";
+    private String grpSuffixe = "";
 
-    private ExternalGroupHelper externalGroupHelper;
+    private final ExternalGroupHelper externalGroupHelper;
 
     public LdapGroupRegexpDisplayNameFormatterESCO(final ExternalGroupHelper externalGroupHelper, final String groupNamePattern,
-                                                   final String groupNameRegex, final String strIndex, final String strSeparator) {
+                                                   final String groupNameRegex, final String strIndex, final String strSeparator, final String suffixAppend) {
         Assert.hasText(groupNamePattern, "You should provide a Pattern to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         Assert.hasText(groupNameRegex, "You should provide a Group Matcher to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         Assert.hasText(strIndex, "You should provide a Group Index to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
@@ -51,12 +53,15 @@ public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDi
         String[] indexes = strIndex.split(",");
         this.grpNameIndex = new int[indexes.length];
         for (int i = 0; i < indexes.length; i++) {
-            this.grpNameIndex[i] = Integer.valueOf(indexes[i]);
+            this.grpNameIndex[i] = Integer.parseInt(indexes[i]);
         }
         Assert.isTrue(this.grpNameIndex.length > 0,
             "You should provide a Group Index to format Groups Name (bean alternative should be used if you doesn't want to use this one) !");
         if (StringUtils.hasLength(strSeparator)) {
             this.grpSeparator = strSeparator;
+        }
+        if (StringUtils.hasLength(suffixAppend)) {
+            this.grpSuffixe = suffixAppend;
         }
     }
 
@@ -85,17 +90,17 @@ public class LdapGroupRegexpDisplayNameFormatterESCO implements IExternalGroupDi
             if (matcher.matches()){
                 Matcher group = this.grpNameRegex.matcher(input);
                 if (group.find()) {
-                    String displayName = "";
+                    StringBuilder displayName = new StringBuilder();
                     for (int i = 0; i < this.grpNameIndex.length; i++) {
                         if (i > 0) {
-                            displayName += this.grpSeparator
-                                + group.group(this.grpNameIndex[i]);
+                            displayName.append(this.grpSeparator).append(group.group(this.grpNameIndex[i]));
                         } else {
-                            displayName += group.group(this.grpNameIndex[i]);
+                            displayName.append(group.group(this.grpNameIndex[i]));
                         }
                     }
+                    displayName.append(this.grpSuffixe);
                     log.debug("Matcher found group displayName, value is : {}", displayName);
-                    return displayName;
+                    return displayName.toString();
                 }
             }
             log.debug("No displayname formatting will be done as pattern isn't matching !");

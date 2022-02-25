@@ -174,7 +174,7 @@ public class GroupConfiguration {
             formatters.add(new LdapGroupRegexpDisplayNameFormatter(externalGroupHelper()));
             for (GroupRegexProperties grp: groupRegexConfiguration.getProperties()) {
                 formatters.add(new LdapGroupRegexpDisplayNameFormatterESCO(externalGroupHelper(), grp.getGroupMatcher(),
-                    grp.getGroupNameRegex(), grp.getGroupNameIndex(), grp.getGroupRecomposerSeparator()));
+                    grp.getGroupNameRegex(), grp.getGroupNameIndex(), grp.getGroupRecomposerSeparator(), grp.getGroupSuffixeToAppend()));
             }
             //should be run at final
             formatters.add(new LdapGroupRegexpDisplayNameFormatterESCOReplace());
