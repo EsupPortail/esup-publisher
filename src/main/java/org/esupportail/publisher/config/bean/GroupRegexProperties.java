@@ -15,9 +15,9 @@
  */
 package org.esupportail.publisher.config.bean;
 
-import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
+
+import lombok.Data;
 
 @Data
 public class GroupRegexProperties {
@@ -29,5 +29,6 @@ public class GroupRegexProperties {
     @NotBlank
     private String groupNameIndex;
     private String groupRecomposerSeparator;
+    private String groupSuffixeToAppend;
 
 }
