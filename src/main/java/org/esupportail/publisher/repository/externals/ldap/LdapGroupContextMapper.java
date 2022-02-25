@@ -23,12 +23,13 @@ import java.util.regex.Matcher;
 
 import javax.naming.NamingException;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroup;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroup;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.util.Assert;
@@ -69,7 +70,8 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
 
         List<String> members = Lists.newArrayList(context.getStringAttributes(externalGroupHelper.getGroupMembersAttribute()));
         List<String> filteredMembers = Lists.newArrayList();
-        if ((externalGroupHelper.isExtractGroupMembers() || externalGroupHelper.isExtractUserMembers()) && !members.isEmpty()) {
+        if ((externalGroupHelper.isExtractGroupMembers() || externalGroupHelper.isExtractUserMembers()) && !members.isEmpty()
+                && !externalGroupHelper.getGroupsWithoutMembersResolving().contains(group.getId())) {
             for (String mbr : members) {
                 if (StringUtils.hasText(mbr)) {
                     Matcher mgroup = externalGroupHelper.getGroupKeyMemberRegex().matcher(mbr);

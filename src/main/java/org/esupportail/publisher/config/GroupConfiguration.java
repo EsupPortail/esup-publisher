@@ -15,15 +15,13 @@
  */
 package org.esupportail.publisher.config;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.config.bean.GroupDesignerProperties;
 import org.esupportail.publisher.config.bean.GroupRegexProperties;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
@@ -46,6 +44,10 @@ import org.esupportail.publisher.service.IGroupService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.factories.TreeJSDTOFactory;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -109,6 +111,9 @@ public class GroupConfiguration {
         @Inject
         public GroupDesignerConfiguration groupDesignerConfiguration;
 
+        @Inject
+        public GroupListWithoutMemberResolvingConfiguration groupsWithoutMemberResolvingConfiguration;
+
 
         @Bean
         @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
@@ -120,7 +125,7 @@ public class GroupConfiguration {
             final String groupSearchAttribute = environment.getProperty(PROP_GROUP_SEARCHON, DEFAULT_GROUP_SEARCHON);
             final String groupMembersAttribute = environment.getProperty(PROP_GROUP_MEMBERS, DEFAULT_GROUP_MEMBERS);
             final String groupDisplayedAttributes = environment.getProperty(PROP_GROUP_DISPLAYEDATTR);
-            Set<String> otherGroupDisplayedAttributes = Sets.newHashSet();
+            Set<String> otherGroupDisplayedAttributes = new HashSet<>();
             if (groupDisplayedAttributes != null && !groupDisplayedAttributes.isEmpty()) {
                 String[] attrs = groupDisplayedAttributes.trim().replaceAll("\\s", "").split(",");
                 otherGroupDisplayedAttributes = Sets.newHashSet(attrs);
@@ -147,7 +152,8 @@ public class GroupConfiguration {
             ExternalGroupHelper ldapUh = new ExternalGroupHelper(groupIdAttribute, groupDisplayNameAttribute,
                 groupSearchAttribute, groupMembersAttribute, groupKeyMemberRegex, groupKeyMemberIndex, userKeyMemberRegex,
                 userKeyMemberIndex, groupDisplayNameRegex, groupDNContainsDisplayName, groupResolveUserMember,
-                groupResolveUserMemberByUserAttributes, otherGroupDisplayedAttributes, groupDNSubPath);
+                groupResolveUserMemberByUserAttributes, Sets.newHashSet(groupsWithoutMemberResolvingConfiguration.getGroups()),
+                    otherGroupDisplayedAttributes, groupDNSubPath);
             log.debug("LdapAttributes for Groups configured : {}", ldapUh);
             return ldapUh;
         }
