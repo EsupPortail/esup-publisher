@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,6 +40,7 @@ import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +75,6 @@ public class EvaluatorResourceTest {
 
 	private static final OperatorType DEFAULT_TYPE = OperatorType.AND;
 	private static final OperatorType UPDATED_TYPE = OperatorType.OR;
-	//
 	// private static final String DEFAULT_GROUP_NAME = "SAMPLE_TEXT";
 	// private static final String UPDATED_GROUP_NAME = "UPDATED_TEXT";
 
@@ -99,7 +101,7 @@ public class EvaluatorResourceTest {
 		ev.setAttribute(DEFAULT_ATTRIBUTE);
 		ev.setValue(DEFAULT_VALUE);
 		ev.setMode(DEFAULT_MODE);
-		Set<AbstractEvaluator> set = new HashSet<AbstractEvaluator>();
+		Set<AbstractEvaluator> set = new HashSet<>();
 		set.add(ev);
 		evaluator = new OperatorEvaluator(DEFAULT_TYPE, set);
 		// evaluator.setType(DEFAULT_TYPE);
@@ -110,7 +112,7 @@ public class EvaluatorResourceTest {
 	@Transactional
 	public void createEvaluator() throws Exception {
 		// Validate the database is empty
-		assertThat(evaluatorRepository.findAll()).hasSize(0);
+		assertThat(evaluatorRepository.findAll(), hasSize(0));
 
 		// Create the Evaluator
 		restEvaluatorMockMvc.perform(
@@ -121,21 +123,19 @@ public class EvaluatorResourceTest {
 
 		// Validate the Evaluator in the database
 		List<AbstractEvaluator> evaluators = evaluatorRepository.findAll();
-		assertThat(evaluators).hasSize(2);
+		assertThat(evaluators, hasSize(2));
 		AbstractEvaluator testEvaluator = evaluators.iterator().next();
 		if (testEvaluator instanceof UserMultivaluedAttributesEvaluator) {
 			testEvaluator = evaluators.iterator().next();
 		}
-		assertThat(((OperatorEvaluator) testEvaluator).getType()).isEqualTo(
-				DEFAULT_TYPE);
+		assertThat(((OperatorEvaluator) testEvaluator).getType(), equalTo(DEFAULT_TYPE));
 		UserMultivaluedAttributesEvaluator umae = (UserMultivaluedAttributesEvaluator) ((OperatorEvaluator) testEvaluator)
 				.getEvaluators().iterator().next();
-		assertThat(umae.getAttribute()).isEqualTo(DEFAULT_ATTRIBUTE);
-		assertThat(umae.getValue()).isEqualTo(DEFAULT_VALUE);
-		assertThat(umae.getMode()).isEqualTo(DEFAULT_MODE);
-		// assertThat(testEvaluator.getType()).isEqualTo(DEFAULT_TYPE);
-		// assertThat(testEvaluator.getGroupName()).isEqualTo(DEFAULT_GROUP_NAME);
-		;
+		assertThat(umae.getAttribute(), equalTo(DEFAULT_ATTRIBUTE));
+		assertThat(umae.getValue(), equalTo(DEFAULT_VALUE));
+		assertThat(umae.getMode(), equalTo(DEFAULT_MODE));
+		// assertThat(testEvaluator.getType(), equalTo(DEFAULT_TYPE));
+		// assertThat(testEvaluator.getGroupName(), equalTo(DEFAULT_GROUP_NAME));
 	}
 
 	@Test
@@ -151,19 +151,15 @@ public class EvaluatorResourceTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(
-						jsonPath("$.[0].id")
-								.value(evaluator.getId().intValue()))
+						jsonPath("$.[0].id").value(evaluator.getId().intValue()))
 				.andExpect(
 						jsonPath("$.[0].type").value(DEFAULT_TYPE.toString()))
 				.andExpect(
-						jsonPath("$.[0].evaluators.[0].attribute").value(
-								DEFAULT_ATTRIBUTE.toString()))
+						jsonPath("$.[0].evaluators.[0].attribute").value(DEFAULT_ATTRIBUTE))
 				.andExpect(
-						jsonPath("$.[0].evaluators.[0].value").value(
-								DEFAULT_VALUE.toString()))
+						jsonPath("$.[0].evaluators.[0].value").value(DEFAULT_VALUE))
 				.andExpect(
-						jsonPath("$.[0].evaluators.[0].mode").value(
-								DEFAULT_MODE.toString()));
+						jsonPath("$.[0].evaluators.[0].mode").value(DEFAULT_MODE.toString()));
 		// .andExpect(
 		// jsonPath("$.[0].type").value(DEFAULT_TYPE.toString()))
 		// .andExpect(
@@ -184,15 +180,9 @@ public class EvaluatorResourceTest {
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(evaluator.getId().intValue()))
 				.andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-				.andExpect(
-						jsonPath("$.evaluators.[0].attribute").value(
-								DEFAULT_ATTRIBUTE.toString()))
-				.andExpect(
-						jsonPath("$.evaluators.[0].value").value(
-								DEFAULT_VALUE.toString()))
-				.andExpect(
-						jsonPath("$.evaluators.[0].mode").value(
-								DEFAULT_MODE.toString()));
+				.andExpect(jsonPath("$.evaluators.[0].attribute").value(DEFAULT_ATTRIBUTE))
+				.andExpect(jsonPath("$.evaluators.[0].value").value(DEFAULT_VALUE))
+				.andExpect(jsonPath("$.evaluators.[0].mode").value(DEFAULT_MODE.toString()));
 		// .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
 		// .andExpect(
 		// jsonPath("$.groupName").value(
@@ -231,18 +221,16 @@ public class EvaluatorResourceTest {
 
 		// Validate the Evaluator in the database
 		List<AbstractEvaluator> evaluators = evaluatorRepository.findAll();
-		assertThat(evaluators).hasSize(2);
+		assertThat(evaluators, hasSize(2));
 		AbstractEvaluator testEvaluator = evaluators.iterator().next();
-		assertThat(((OperatorEvaluator) testEvaluator).getType()).isEqualTo(
-				UPDATED_TYPE);
+		assertThat(((OperatorEvaluator) testEvaluator).getType(), equalTo(UPDATED_TYPE));
 		UserMultivaluedAttributesEvaluator umaeu = (UserMultivaluedAttributesEvaluator) ((OperatorEvaluator) testEvaluator)
 				.getEvaluators().iterator().next();
-		assertThat(umaeu.getAttribute()).isEqualTo(UPDATED_ATTRIBUTE);
-		assertThat(umaeu.getValue()).isEqualTo(UPDATED_VALUE);
-		assertThat(umaeu.getMode()).isEqualTo(UPDATED_MODE);
-		// assertThat(testEvaluator.getType()).isEqualTo(UPDATED_TYPE);
-		// assertThat(testEvaluator.getGroupName()).isEqualTo(UPDATED_GROUP_NAME);
-		;
+		assertThat(umaeu.getAttribute(), equalTo(UPDATED_ATTRIBUTE));
+		assertThat(umaeu.getValue(), equalTo(UPDATED_VALUE));
+		assertThat(umaeu.getMode(), equalTo(UPDATED_MODE));
+		// assertThat(testEvaluator.getType(), equalTo(UPDATED_TYPE));
+		// assertThat(testEvaluator.getGroupName(), equalTo(UPDATED_GROUP_NAME));
 	}
 
 	@Test
@@ -254,11 +242,11 @@ public class EvaluatorResourceTest {
 		// Get the evaluator
 		restEvaluatorMockMvc.perform(
 				delete("/api/evaluators/{id}", evaluator.getId()).accept(
-						TestUtil.APPLICATION_JSON_UTF8)).andExpect(
-				status().isOk());
+						TestUtil.APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk());
 
 		// Validate the database is empty
 		List<AbstractEvaluator> evaluators = evaluatorRepository.findAll();
-		assertThat(evaluators).hasSize(0);
+		assertThat(evaluators, hasSize(0));
 	}
 }

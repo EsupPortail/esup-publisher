@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.xml.HasXPath.hasXPath;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -211,11 +210,11 @@ public class FeedControlerTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-        assertThat(result, is(notNullValue()));
-        assertThat(result.getModelAndView(), is(notNullValue()));
-        assertThat(result.getModelAndView().getModelMap(), is(notNullValue()));
+        assertThat(result, notNullValue());
+        assertThat(result.getModelAndView(), notNullValue());
+        assertThat(result.getModelAndView().getModelMap(), notNullValue());
 		publisherRssFeedView.render(result.getModelAndView().getModelMap(), request, response);
-        assertEquals("application/rss+xml", response.getContentType());
+        assertThat(response.getContentType(),equalTo("application/rss+xml"));
         log.debug("RSS feed result: {}", response.getContentAsString(StandardCharsets.UTF_8));
         log.debug("Forwarded URL: '{}'", result.getResponse().getForwardedUrl());
 
@@ -258,11 +257,11 @@ public class FeedControlerTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-        assertThat(result, is(notNullValue()));
-        assertThat(result.getModelAndView(), is(notNullValue()));
-        assertThat(result.getModelAndView().getModelMap(), is(notNullValue()));
+        assertThat(result, notNullValue());
+        assertThat(result.getModelAndView(), notNullValue());
+        assertThat(result.getModelAndView().getModelMap(), notNullValue());
 		publisherAtomFeedView.render(result.getModelAndView().getModelMap(), request, response);
-        assertEquals("application/atom+xml", response.getContentType());
+        assertThat(response.getContentType(),equalTo("application/atom+xml"));
         log.debug("RSS feed result: {}", response.getContentAsString(StandardCharsets.UTF_8));
         log.debug("Forwarded URL: '{}'", result.getResponse().getForwardedUrl());
 

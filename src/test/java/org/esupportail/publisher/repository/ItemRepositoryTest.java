@@ -15,16 +15,13 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -49,6 +46,9 @@ import org.esupportail.publisher.service.factories.ItemDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.ItemDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,10 +57,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -104,7 +100,7 @@ public class ItemRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
         user1 = userRepo.findById(ObjTest.subject1).get();
         user2 = userRepo.findById(ObjTest.subject2).get();
@@ -317,27 +313,27 @@ public class ItemRepositoryTest {
 				ObjTest.d2, user1, ItemStatus.DRAFT, "summary"
 						+ INDICE_A,  true, true, org2, redactor2);
 
-		log.info("Before insert : " + n1.toString());
+		log.info("Before insert : {}", n1);
 		repository.save(n1);
-		assertNotNull(n1.getId());
-		log.info("After insert : " + n1.toString());
+		assertThat(n1.getId(), not(nullValue()));
+		log.info("After insert : {}", n1);
 
 		Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2= (News) optionalItem.orElse(null);
-		log.info("After select : " + n2.toString());
-		assertNotNull(n2);
-		assertEquals(n1, n2);
+		News n2 = (News) optionalItem.orElse(null);
+		log.info("After select : {}", n2);
+		assertThat(n2, not(nullValue()));
+		assertThat(n1, equalTo(n2));
 
 		n2.setBody("UPDATE BODY");
 		n2.setEndDate(ObjTest.instantToLocalDate(ObjTest.d3));
 		n2.setStatus(DEFAULT_STATUS);
 		repository.save(n2);
-		log.info("After update : " + n2.toString());
-		assertTrue(repository.existsById(n2.getId()));
+		log.info("After update : {}", n2);
+		assertThat(repository.existsById(n2.getId()) , is(true));
 		n2 = (News) repository.getOne(n2.getId());
-		assertNotNull(n2);
-		log.info("After select : " + n2.toString());
-        assertEquals(5, repository.count());
+		assertThat(n2, not(nullValue()));
+		log.info("After select : {}", n2);
+        assertThat(repository.count(), equalTo(5L));
 
 		List<AbstractItem> result = repository.findAll();
 		assertThat(result.size(), is(5));
@@ -350,7 +346,7 @@ public class ItemRepositoryTest {
 		repository.deleteById(n2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(4));
-		assertFalse(repository.existsById(n2.getId()));
+		assertThat(repository.existsById(n2.getId()), is(false));
 	}
 
     @Test
@@ -361,15 +357,15 @@ public class ItemRepositoryTest {
             + INDICE_A, true, true, org2, redactor2);
 
         repository.save(n1);
-        assertNotNull(n1.getId());
+        assertThat(n1.getId(), not(nullValue()));
 
         repository.archiveExpiredPublished();
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2= (News) optionalItem.orElse(null);
-        assertNotNull(n2);
-        assertNotNull(n2.getStatus());
+		News n2 = (News) optionalItem.orElse(null);
+        assertThat(n2, not(nullValue()));
+        assertThat(n2.getStatus(), not(nullValue()));
 
-        assertEquals(ItemStatus.ARCHIVED, n2.getStatus());
+        assertThat(n2.getStatus(), equalTo(ItemStatus.ARCHIVED));
     }
 
     @Test
@@ -380,14 +376,14 @@ public class ItemRepositoryTest {
             + INDICE_A, true, true, org2, redactorOptionalEndDate);
 
         repository.save(n1);
-        assertNotNull(n1.getId());
+        assertThat(n1.getId(), not(nullValue()));
 
         repository.archiveExpiredPublished();
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2= (News) optionalItem.orElse(null);
-        assertNotNull(n2);
+		News n2 = (News) optionalItem.orElse(null);
+        assertThat(n2, not(nullValue()));
 
-        assertEquals(n1, n2);
+        assertThat(n1, equalTo(n2));
     }
 
     @Test
@@ -398,16 +394,16 @@ public class ItemRepositoryTest {
             + INDICE_A, true, true, org2, redactor2);
 
         repository.save(n1);
-        assertNotNull(n1.getId());
+        assertThat(n1.getId(), not(nullValue()));
 
         repository.publishScheduled();
 
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2= (News) optionalItem.orElse(null);
-        assertNotNull(n2);
-        assertNotNull(n2.getStatus());
+		News n2 = (News) optionalItem.orElse(null);
+        assertThat(n2, not(nullValue()));
+        assertThat(n2.getStatus(), not(nullValue()));
 
-        assertEquals(ItemStatus.PUBLISHED, n2.getStatus());
+        assertThat(n2.getStatus(), equalTo(ItemStatus.PUBLISHED));
     }
 
     @Test
@@ -418,19 +414,19 @@ public class ItemRepositoryTest {
             + INDICE_A, true, true, org2, redactorOptionalEndDate);
 
         repository.save(n1);
-        assertNotNull(n1.getId());
+        assertThat(n1.getId(), not(nullValue()));
 
         repository.publishScheduled();
 
         Optional<AbstractItem> optionalItem = repository.findById(n1.getId());
-		News n2= (News) optionalItem.orElse(null);
-        assertNotNull(n2);
-        assertNotNull(n2.getStatus());
+		News n2 = (News) optionalItem.orElse(null);
+        assertThat(n2, not(nullValue()));
+        assertThat(n2.getStatus() , not(nullValue()));
 
-        assertEquals(ItemStatus.PUBLISHED, n2.getStatus());
+        assertThat(n2.getStatus(), equalTo(ItemStatus.PUBLISHED));
 
 		// Check on Timezone between JPA and database
-		assertTrue("The PublishScheduled task run an update with a wrong timezone ! Check your DB/OS/JVM/DB URL property time_zone.",
+		assertThat("The PublishScheduled task run an update with a wrong timezone ! Check your DB/OS/JVM/DB URL property time_zone.",
 				n2.getLastModifiedDate().isAfter(n1.getLastModifiedDate().minusSeconds(1)));
     }
 
@@ -450,7 +446,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()) , is(true));
 
 	}
 
@@ -460,7 +456,7 @@ public class ItemRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-        assertEquals(4, repository.count());
+        assertThat(repository.count(), equalTo(4L));
 	}
 
 	/**
@@ -472,7 +468,7 @@ public class ItemRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-        assertEquals(repository.count(), count - 1);
+        assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -482,6 +478,6 @@ public class ItemRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-        assertEquals(0, repository.count());
+        assertThat(repository.count(), equalTo(0L));
 	}
 }

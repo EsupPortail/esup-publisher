@@ -15,8 +15,8 @@
  */
 package org.esupportail.publisher.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +42,10 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.TreeJS;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Sets;
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,10 +58,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.google.common.collect.Sets;
-import com.mysema.commons.lang.Pair;
-import com.querydsl.core.types.Predicate;
 
 @RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -101,7 +101,7 @@ public class GroupServiceTest {
 		UserDTO user1 = new UserDTO("36", "", false, false);
 		UserDTO user2 = new UserDTO("25", "", true, true);
 		List<IExternalUser> externalUserList = new ArrayList<>();
-		externalUserList.add((IExternalUser)externalUser);
+		externalUserList.add(externalUser);
 		result.add(user1);
 		result.add(user2);
 
@@ -115,7 +115,7 @@ public class GroupServiceTest {
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
-		assertThat(userList.size()).isEqualTo(2);
+		assertThat(userList.size(), equalTo(2));
 	}
 
 	@Test
@@ -136,7 +136,7 @@ public class GroupServiceTest {
 
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
-		assertThat(userList.size()).isEqualTo(0);
+		assertThat(userList.size(), equalTo(0));
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class GroupServiceTest {
 
 		// THEN
 		verify(externalGroupDao).getDirectUserMembers(idCalled);
-		assertThat(userList.size()).isEqualTo(0);
+		assertThat(userList.size(), equalTo(0));
 	}
 
 	@Test
@@ -173,7 +173,7 @@ public class GroupServiceTest {
 
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
-		assertThat(treeList.size()).isEqualTo(0);
+		assertThat(treeList.size(), equalTo(0));
 	}
 
 	@Test
@@ -189,7 +189,7 @@ public class GroupServiceTest {
 
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
-		assertThat(treeList.size()).isEqualTo(0);
+		assertThat(treeList.size(), equalTo(0));
 	}
 
 	@Test
@@ -222,7 +222,7 @@ public class GroupServiceTest {
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		assertThat(result.size()).isEqualTo(2);
+		assertThat(result.size(), equalTo(2));
 	}
 
 	@Test
@@ -253,7 +253,7 @@ public class GroupServiceTest {
 		//THEN
 		verify(externalGroupDao).getDirectGroupMembers(idCalled, true);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		assertThat(result.size()).isEqualTo(0);
+		assertThat(result.size(), equalTo(0));
 	}
 
 	@Test
@@ -275,7 +275,7 @@ public class GroupServiceTest {
 
 		//THEN
 //		verify(permissionService, times(2));
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -310,7 +310,7 @@ public class GroupServiceTest {
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -347,7 +347,7 @@ public class GroupServiceTest {
 		verify(externalGroupDao).getGroupsById(groupsIds, true);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -388,7 +388,7 @@ public class GroupServiceTest {
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
 		verify(externalGroupDao).getGroupsWithFilter(filter, null, false);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -440,7 +440,7 @@ public class GroupServiceTest {
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(treeJSDTOFactory).asDTOList(externalGroupList);
 		verify(externalGroupDao).getGroupsWithFilter(filter, null, false);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 

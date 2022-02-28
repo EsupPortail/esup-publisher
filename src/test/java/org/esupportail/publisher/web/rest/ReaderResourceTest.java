@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -116,7 +118,7 @@ public class ReaderResourceTest {
     @Transactional
     public void createReader() throws Exception {
         // Validate the database is empty
-        assertThat(readerRepository.findAll()).hasSize(0);
+        assertThat(readerRepository.findAll(), hasSize(0));
 
         // Create the Reader
         restReaderMockMvc.perform(post("/api/readers")
@@ -126,13 +128,13 @@ public class ReaderResourceTest {
 
         // Validate the Reader in the database
         List<Reader> readers = readerRepository.findAll();
-        assertThat(readers).hasSize(1);
+        assertThat(readers, hasSize(1));
         Reader testReader = readers.iterator().next();
-        assertThat(testReader.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testReader.getDisplayName()).isEqualTo(DEFAULT_DISPLAY_NAME);
-        assertThat(testReader.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testReader.getAuthorizedTypes()).isEqualTo(DEFAULT_ITEMTYPE);
-        assertThat(testReader.getClassificationDecorations()).isEqualTo(DEFAULT_DECORTYPE);
+        assertThat(testReader.getName(), equalTo(DEFAULT_NAME));
+        assertThat(testReader.getDisplayName(), equalTo(DEFAULT_DISPLAY_NAME));
+        assertThat(testReader.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+        assertThat(testReader.getAuthorizedTypes(), equalTo(DEFAULT_ITEMTYPE));
+        assertThat(testReader.getClassificationDecorations(), equalTo(DEFAULT_DECORTYPE));
     }
 
     @Test
@@ -147,9 +149,9 @@ public class ReaderResourceTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[0].id").value(reader.getId().intValue()))
-            .andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
             .andExpect(jsonPath("$.[0].authorizedTypes", Matchers.hasItems(DEFAULT_ITEMTYPE_ARRAY)))
             .andExpect(jsonPath("$.[0].classificationDecorations", Matchers.hasItems(DEFAULT_DECORTYPE_ARRAY)))
@@ -168,9 +170,9 @@ public class ReaderResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(reader.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.authorizedTypes", Matchers.hasSize(DEFAULT_ITEMTYPE.size())))
             .andExpect(jsonPath("$.authorizedTypes", Matchers.hasItems(DEFAULT_ITEMTYPE_ARRAY)))
             .andExpect(jsonPath("$.classificationDecorations", Matchers.hasItems(DEFAULT_DECORTYPE_ARRAY)))
@@ -205,13 +207,13 @@ public class ReaderResourceTest {
 
         // Validate the Reader in the database
         List<Reader> readers = readerRepository.findAll();
-        assertThat(readers).hasSize(1);
+        assertThat(readers, hasSize(1));
         Reader testReader = readers.iterator().next();
-        assertThat(testReader.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testReader.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
-        assertThat(testReader.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testReader.getAuthorizedTypes()).isEqualTo(UPDATED_ITEMTYPE);
-        assertThat(testReader.getClassificationDecorations()).isEqualTo(UPDATED_DECORTYPE);
+        assertThat(testReader.getName(), equalTo(UPDATED_NAME));
+        assertThat(testReader.getDisplayName(), equalTo(UPDATED_DISPLAY_NAME));
+        assertThat(testReader.getDescription(), equalTo(UPDATED_DESCRIPTION));
+        assertThat(testReader.getAuthorizedTypes(), equalTo(UPDATED_ITEMTYPE));
+        assertThat(testReader.getClassificationDecorations(), equalTo(UPDATED_DECORTYPE));
     }
 
     @Test
@@ -227,6 +229,6 @@ public class ReaderResourceTest {
 
         // Validate the database is empty
         List<Reader> readers = readerRepository.findAll();
-        assertThat(readers).hasSize(0);
+        assertThat(readers, hasSize(0));
     }
 }

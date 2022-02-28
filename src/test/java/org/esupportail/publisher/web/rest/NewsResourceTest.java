@@ -15,8 +15,10 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -47,6 +48,7 @@ import org.esupportail.publisher.repository.OrganizationRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.service.FileService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -177,7 +179,7 @@ public class NewsResourceTest {
     @Transactional
     public void createNews() throws Exception {
         // Validate the database is empty
-        assertThat(newsRepository.findAll()).hasSize(0);
+        assertThat(newsRepository.findAll(), hasSize(0));
 
         // Create the News
         restNewsMockMvc.perform(
@@ -187,21 +189,19 @@ public class NewsResourceTest {
 
         // Validate the News in the database
         List<News> newss = newsRepository.findAll();
-        assertThat(newss).hasSize(1);
+        assertThat(newss, hasSize(1));
         News testNews = newss.iterator().next();
-        assertThat(testNews.getTitle()).isEqualTo(DEFAULT_TITLE);
-        assertThat(testNews.getSummary()).isEqualTo(DEFAULT_SUMMARY);
-        assertThat(testNews.getEnclosure()).isEqualTo(DEFAULT_ENCLOSURE);
-        assertThat(testNews.getEndDate()).isEqualTo(DEFAULT_END_DATE);
-        assertThat(testNews.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testNews.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testNews.getValidatedDate()).isEqualTo(
-            DEFAULT_VALIDATION_DATE);
-        assertThat(testNews.getValidatedBy().getLogin()).isEqualTo(
-            user1.getLogin());
-        assertThat(testNews.getBody()).isEqualTo(DEFAULT_BODY);
-        assertThat(testNews.getRedactor()).isEqualTo(redactor);
-        assertThat(testNews.getOrganization()).isEqualTo(organization);
+        assertThat(testNews.getTitle(), equalTo(DEFAULT_TITLE));
+        assertThat(testNews.getSummary(), equalTo(DEFAULT_SUMMARY));
+        assertThat(testNews.getEnclosure(), equalTo(DEFAULT_ENCLOSURE));
+        assertThat(testNews.getEndDate(), equalTo(DEFAULT_END_DATE));
+        assertThat(testNews.getStartDate(), equalTo(DEFAULT_START_DATE));
+        assertThat(testNews.getStatus(), equalTo(DEFAULT_STATUS));
+        assertThat(testNews.getValidatedDate(), equalTo(DEFAULT_VALIDATION_DATE));
+        assertThat(testNews.getValidatedBy().getLogin(), equalTo(user1.getLogin()));
+        assertThat(testNews.getBody(), equalTo(DEFAULT_BODY));
+        assertThat(testNews.getRedactor(), equalTo(redactor));
+        assertThat(testNews.getOrganization(), equalTo(organization));
     }
 
     @Test
@@ -285,19 +285,19 @@ public class NewsResourceTest {
 
         // Validate the News in the database
         List<News> newss = newsRepository.findAll();
-        assertThat(newss).hasSize(1);
+        assertThat(newss, hasSize(1));
         News testNews = newss.iterator().next();
-        assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
-        assertThat(testNews.getSummary()).isEqualTo(UPDATED_SUMMARY);
-        assertThat(testNews.getEnclosure()).isEqualTo(UPDATED_ENCLOSURE);
-        assertThat(testNews.getEndDate()).isEqualTo(UPDATED_END_DATE);
-        assertThat(testNews.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testNews.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testNews.getValidatedDate()).isEqualTo(UPDATED_VALIDATION_DATE);
-        assertThat(testNews.getValidatedBy().getLogin()).isEqualTo(user2.getLogin());
-        assertThat(testNews.getBody()).isEqualTo(UPDATED_BODY);
-        assertThat(testNews.getRedactor()).isEqualTo(redactor);
-        assertThat(testNews.getOrganization()).isEqualTo(organization);
+        assertThat(testNews.getTitle(), equalTo(UPDATED_TITLE));
+        assertThat(testNews.getSummary(), equalTo(UPDATED_SUMMARY));
+        assertThat(testNews.getEnclosure(), equalTo(UPDATED_ENCLOSURE));
+        assertThat(testNews.getEndDate(), equalTo(UPDATED_END_DATE));
+        assertThat(testNews.getStartDate(), equalTo(UPDATED_START_DATE));
+        assertThat(testNews.getStatus(), equalTo(UPDATED_STATUS));
+        assertThat(testNews.getValidatedDate(), equalTo(UPDATED_VALIDATION_DATE));
+        assertThat(testNews.getValidatedBy().getLogin(), equalTo(user2.getLogin()));
+        assertThat(testNews.getBody(), equalTo(UPDATED_BODY));
+        assertThat(testNews.getRedactor(), equalTo(redactor));
+        assertThat(testNews.getOrganization(), equalTo(organization));
     }
 
     @Test
@@ -314,6 +314,6 @@ public class NewsResourceTest {
 
         // Validate the database is empty
         List<News> newss = newsRepository.findAll();
-        assertThat(newss).hasSize(0);
+        assertThat(newss, hasSize(0));
     }
 }

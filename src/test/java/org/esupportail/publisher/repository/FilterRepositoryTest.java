@@ -15,15 +15,17 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 import javax.inject.Inject;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Organization;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +35,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -100,12 +100,12 @@ public class FilterRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -115,7 +115,7 @@ public class FilterRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 1);
+		assertThat(repository.count(), equalTo(1L));
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class FilterRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count() , equalTo(count - 1));
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class FilterRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

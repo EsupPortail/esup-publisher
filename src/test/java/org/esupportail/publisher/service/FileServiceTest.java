@@ -15,7 +15,8 @@
  */
 package org.esupportail.publisher.service;
 
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
@@ -33,31 +34,31 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class FileServiceTest {
-	
+
 	@Mock
 	private FileUploadHelper publicFileUploadHelper;
 
 	@InjectMocks
 	private FileService fileService;
-	
+
 	@Test
 	public void deleteInternalResource_UrlPathIsNull_ReturnFalse() {
 		String urlPath = null;
 		final boolean result = fileService.deleteInternalResource(urlPath);
-		assertFalse(result);
+		assertThat(result, is(false));
 	}
-	
+
 	@Test
 	public void deleteInternalResource_UrlPathNotStartWithHtpp_ReturnFalse() {
 		String urlPath = "http://test.com";
 		final boolean result = fileService.deleteInternalResource(urlPath);
-		assertFalse(result);
+		assertThat(result, is(false));
 	}
-	
+
 	@Test
 	public void deleteInternalResource_UrlPathNotStartWithHtpps_ReturnFalse() {
 		String urlPath = "https://test.com";
 		final boolean result = fileService.deleteInternalResource(urlPath);
-		assertFalse(result);
+		assertThat(result, is(false));
 	}
 }

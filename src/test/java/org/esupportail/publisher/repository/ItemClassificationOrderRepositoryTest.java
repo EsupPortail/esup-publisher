@@ -15,14 +15,12 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -152,17 +150,16 @@ public class ItemClassificationOrderRepositoryTest {
 				feed2, 17);
 		log.info("Before insert : " + ico3.toString());
 		repository.saveAndFlush(ico3);
-		assertNotNull(ico3.getDisplayOrder());
-		assertNotNull(ico3.getItemClassificationId());
-		assertNotNull(ico3.getItemClassificationId()
-				.getAbstractClassification());
-		assertNotNull(ico3.getItemClassificationId().getAbstractItem());
+		assertThat(ico3.getDisplayOrder(), notNullValue());
+		assertThat(ico3.getItemClassificationId(), notNullValue());
+		assertThat(ico3.getItemClassificationId().getAbstractClassification(), notNullValue());
+		assertThat(ico3.getItemClassificationId().getAbstractItem(), notNullValue());
 		log.info("After insert : " + ico3.toString());
 		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
 		ItemClassificationOrder ico4 = optionalItemClassif.orElse(null);
 		log.info("After select : " + ico4.toString());
-		assertNotNull(ico4);
-		assertEquals(ico3, ico4);
+		assertThat(ico4, notNullValue());
+		assertThat(ico3, equalTo(ico4));
 
 		ico4.setDisplayOrder(0);
 		ico4 = repository.saveAndFlush(ico4);
@@ -172,24 +169,24 @@ public class ItemClassificationOrderRepositoryTest {
 		log.info("Before insert : " + ico4.toString());
 		repository.save(ico4);
 		log.info("After insert : " + ico4.toString());
-		assertNotNull(ico4.getItemClassificationId());
-		assertTrue(repository.existsById(ico4.getItemClassificationId()));
+		assertThat(ico4.getItemClassificationId(), notNullValue());
+		assertThat(repository.existsById(ico4.getItemClassificationId()), is(true));
 		ico3 = repository.getOne(ico4.getItemClassificationId());
-		assertNotNull(ico3);
+		assertThat(ico3, notNullValue());
 		log.info("After select : " + ico3.toString());
-        assertEquals(4, repository.count());
+        assertThat(repository.count(), equalTo(4L));
 
 		List<ItemClassificationOrder> results = repository.findAll();
 		assertThat(results.size(), is(4));
 		assertThat(results, hasItem(ico4));
 
 		repository.deleteById(ico4.getItemClassificationId());
-        assertEquals(3, repository.findAll().size());
-		assertFalse(repository.existsById(ico4.getItemClassificationId()));
+        assertThat(repository.findAll().size(), equalTo(3));
+		assertThat(repository.existsById(ico4.getItemClassificationId()), is(false));
 
 		Optional<ItemClassificationOrder> optionalItem = repository.findById(new ItemClassificationKey());
 		ico4 = optionalItem.orElse(null);
-		assertNull(ico4);
+		assertThat(ico4, is(nullValue()));
 
 	}
 
@@ -221,8 +218,8 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0)
-				.getItemClassificationId()));
+		assertThat(repository.existsById(repository.findAll().get(0)
+				.getItemClassificationId()), is(true));
 
 	}
 
@@ -232,7 +229,7 @@ public class ItemClassificationOrderRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-        assertEquals(2, repository.count());
+        assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -243,7 +240,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-        assertEquals(1, repository.count());
+        assertThat(repository.count(), equalTo(1L));
 	}
 
 	/**
@@ -253,7 +250,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-        assertEquals(0, repository.count());
+        assertThat(repository.count(), equalTo(0L));
 	}
 
 	@Test

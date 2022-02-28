@@ -15,13 +15,11 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +33,9 @@ import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,10 +45,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -81,7 +78,7 @@ public class PublisherRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		org1 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_1));
 		org2 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_2));
@@ -105,8 +102,7 @@ public class PublisherRepositoryTest {
 		Publisher e = new Publisher(org1, reader2, redactor1, "PUB " + INDICE_3,
             PermissionClass.SUBJECT, true, true, true);
 		repository.saveAndFlush(e);
-		assertEquals(e,
-				repository.findOne(PublisherPredicates.AllOfOrganization(org1)));
+		assertThat(e, equalTo(repository.findOne(PublisherPredicates.AllOfOrganization(org1))));
 	}
 
 	@Test
@@ -114,26 +110,26 @@ public class PublisherRepositoryTest {
 		Publisher e = new Publisher(org1, reader1, redactor1, "PUB " + INDICE_3,
             PermissionClass.CONTEXT, true, true, true);
 
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.save(e);
-		assertNotNull(e.getId());
-		log.info("After insert : " + e.toString());
+		assertThat(e.getId(), notNullValue());
+		log.info("After insert : {}", e);
 		Optional<Publisher> optionalPublisher = repository.findById(e.getId());
 		Publisher e2 = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
-		log.info("After select : " + e2.toString());
-		assertNotNull(e2);
-		assertEquals(e, e2);
+		log.info("After select : {}", e2);
+		assertThat(e2, notNullValue());
+		assertThat(e2, equalTo(e));
 
 		e = new Publisher(org2, reader2, redactor2, "PUB " + INDICE_4,
             PermissionClass.CONTEXT_WITH_SUBJECTS, true, true, true);
 		repository.save(e);
-		log.info("After update : " + e.toString());
-		assertNotNull(e.getId());
-		assertTrue(repository.existsById(e.getId()));
+		log.info("After update : {}", e);
+		assertThat(e.getId(), notNullValue());
+		assertThat(repository.existsById(e.getId()), is(true));
 		e = repository.getOne(e.getId());
-		assertNotNull(e);
-		log.info("After select : " + e.toString());
-		assertTrue(repository.count() == 4);
+		assertThat(e, notNullValue());
+		log.info("After select : {}", e);
+		assertThat(repository.count(), equalTo(4L));
 
 		List<Publisher> result = repository.findAll();
 		assertThat(result.size(), is(4));
@@ -146,7 +142,7 @@ public class PublisherRepositoryTest {
 		repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.existsById(e.getId()));
+		assertThat(repository.existsById(e.getId()), is(false));
 	}
 
 	/**
@@ -160,12 +156,12 @@ public class PublisherRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -175,7 +171,7 @@ public class PublisherRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -187,7 +183,7 @@ public class PublisherRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -197,7 +193,7 @@ public class PublisherRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -195,7 +197,7 @@ public class ExternalFeedResourceTest {
 	@Transactional
 	public void createExternalFeed() throws Exception {
 		// Validate the database is empty
-		assertThat(externalFeedRepository.findAll()).hasSize(0);
+		assertThat(externalFeedRepository.findAll(), hasSize(0));
 
 		// Create the ExternalFeed
 		restExternalFeedMockMvc.perform(
@@ -206,24 +208,19 @@ public class ExternalFeedResourceTest {
 
 		// Validate the ExternalFeed in the database
 		List<ExternalFeed> externalFeeds = externalFeedRepository.findAll();
-		assertThat(externalFeeds).hasSize(1);
+		assertThat(externalFeeds, hasSize(1));
 		ExternalFeed testExternalFeed = externalFeeds.iterator().next();
-		assertThat(testExternalFeed.getAccessView()).isEqualTo(
-				DEFAULT_ACCESS_VIEW);
-		assertThat(testExternalFeed.getDefaultDisplayOrder()).isEqualTo(
-				DEFAULT_DEFAULT_DISPLAY_ORDER);
-		assertThat(testExternalFeed.getName()).isEqualTo(DEFAULT_NAME);
-		assertThat(testExternalFeed.getDescription()).isEqualTo(
-				DEFAULT_DESCRIPTION);
-		assertThat(testExternalFeed.getDisplayOrder()).isEqualTo(
-				DEFAULT_DISPLAY_ORDER);
-		assertThat(testExternalFeed.getIconUrl()).isEqualTo(DEFAULT_ICON_URL);
-		assertThat(testExternalFeed.getTtl()).isEqualTo(DEFAULT_TTL);
-		assertThat(testExternalFeed.getLang()).isEqualTo(DEFAULT_LANG);
-		assertThat(testExternalFeed.getRssUrl()).isEqualTo(DEFAULT_RSS_URL);
-		assertThat(testExternalFeed.getPublisher()).isEqualTo(publisher);
-		assertThat(testExternalFeed.getParent()).isEqualTo(category);
-		;
+		assertThat(testExternalFeed.getAccessView(), equalTo(DEFAULT_ACCESS_VIEW));
+		assertThat(testExternalFeed.getDefaultDisplayOrder(), equalTo(DEFAULT_DEFAULT_DISPLAY_ORDER));
+		assertThat(testExternalFeed.getName(), equalTo(DEFAULT_NAME));
+		assertThat(testExternalFeed.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+		assertThat(testExternalFeed.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+		assertThat(testExternalFeed.getIconUrl(), equalTo(DEFAULT_ICON_URL));
+		assertThat(testExternalFeed.getTtl(), equalTo(DEFAULT_TTL));
+		assertThat(testExternalFeed.getLang(), equalTo(DEFAULT_LANG));
+		assertThat(testExternalFeed.getRssUrl(), equalTo(DEFAULT_RSS_URL));
+		assertThat(testExternalFeed.getPublisher(), equalTo(publisher));
+		assertThat(testExternalFeed.getParent(), equalTo(category));
 	}
 
 	@Test
@@ -238,38 +235,18 @@ public class ExternalFeedResourceTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.[0].id").value(
-								externalFeed.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].accessView").value(
-								DEFAULT_ACCESS_VIEW.name()))
-				.andExpect(
-						jsonPath("$.[0].defaultDisplayOrder").value(
-								DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
-				.andExpect(
-						jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-				.andExpect(
-						jsonPath("$.[0].description").value(
-								DEFAULT_DESCRIPTION.toString()))
-				.andExpect(
-						jsonPath("$.[0].displayOrder").value(
-								DEFAULT_DISPLAY_ORDER.intValue()))
-				.andExpect(
-						jsonPath("$.[0].iconUrl").value(
-								DEFAULT_ICON_URL.toString()))
-				.andExpect(jsonPath("$.[0].ttl").value(DEFAULT_TTL.intValue()))
-				.andExpect(
-						jsonPath("$.[0].lang").value(DEFAULT_LANG.toString()))
-				.andExpect(
-						jsonPath("$.[0].rssUrl").value(
-								DEFAULT_RSS_URL.toString()))
-				.andExpect(
-						jsonPath("$.[0].publisher.id").value(
-								publisher.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].parent.id").value(
-								category.getId().intValue()));
+				.andExpect(jsonPath("$.[0].id").value(externalFeed.getId().intValue()))
+				.andExpect(jsonPath("$.[0].accessView").value(DEFAULT_ACCESS_VIEW.name()))
+				.andExpect(jsonPath("$.[0].defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
+				.andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
+				.andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
+				.andExpect(jsonPath("$.[0].iconUrl").value(DEFAULT_ICON_URL))
+				.andExpect(jsonPath("$.[0].ttl").value(DEFAULT_TTL))
+				.andExpect(jsonPath("$.[0].lang").value(DEFAULT_LANG))
+				.andExpect(jsonPath("$.[0].rssUrl").value(DEFAULT_RSS_URL))
+				.andExpect(jsonPath("$.[0].publisher.id").value(publisher.getId().intValue()))
+				.andExpect(jsonPath("$.[0].parent.id").value(category.getId().intValue()));
 	}
 
 	@Test
@@ -285,34 +262,18 @@ public class ExternalFeedResourceTest {
 								externalFeed.getId()))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.id").value(externalFeed.getId().intValue()))
-				.andExpect(
-						jsonPath("$.accessView").value(
-								DEFAULT_ACCESS_VIEW.name()))
-				.andExpect(
-						jsonPath("$.defaultDisplayOrder").value(
-								DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
-				.andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-				.andExpect(
-						jsonPath("$.description").value(
-								DEFAULT_DESCRIPTION.toString()))
-				.andExpect(
-						jsonPath("$.displayOrder").value(
-								DEFAULT_DISPLAY_ORDER.intValue()))
-				.andExpect(
-						jsonPath("$.iconUrl")
-								.value(DEFAULT_ICON_URL.toString()))
-				.andExpect(jsonPath("$.ttl").value(DEFAULT_TTL.intValue()))
-				.andExpect(jsonPath("$.lang").value(DEFAULT_LANG.toString()))
-				.andExpect(
-						jsonPath("$.rssUrl").value(DEFAULT_RSS_URL.toString()))
-				.andExpect(
-						jsonPath("$.publisher.id").value(
-								publisher.getId().intValue()))
-				.andExpect(
-						jsonPath("$.parent.id").value(
-								category.getId().intValue()));
+				.andExpect(jsonPath("$.id").value(externalFeed.getId().intValue()))
+				.andExpect(jsonPath("$.accessView").value(DEFAULT_ACCESS_VIEW.name()))
+				.andExpect(jsonPath("$.defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
+				.andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+				.andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
+				.andExpect(jsonPath("$.iconUrl").value(DEFAULT_ICON_URL))
+				.andExpect(jsonPath("$.ttl").value(DEFAULT_TTL))
+				.andExpect(jsonPath("$.lang").value(DEFAULT_LANG))
+				.andExpect(jsonPath("$.rssUrl").value(DEFAULT_RSS_URL))
+				.andExpect(jsonPath("$.publisher.id").value(publisher.getId().intValue()))
+				.andExpect(jsonPath("$.parent.id").value(category.getId().intValue()));
 	}
 
 	@Test
@@ -348,24 +309,19 @@ public class ExternalFeedResourceTest {
 
 		// Validate the ExternalFeed in the database
 		List<ExternalFeed> externalFeeds = externalFeedRepository.findAll();
-		assertThat(externalFeeds).hasSize(1);
+		assertThat(externalFeeds, hasSize(1));
 		ExternalFeed testExternalFeed = externalFeeds.iterator().next();
-		assertThat(testExternalFeed.getAccessView()).isEqualTo(
-				UPDATED_ACCESS_VIEW);
-		assertThat(testExternalFeed.getDefaultDisplayOrder()).isEqualTo(
-				UPDATED_DEFAULT_DISPLAY_ORDER);
-		assertThat(testExternalFeed.getName()).isEqualTo(UPDATED_NAME);
-		assertThat(testExternalFeed.getDescription()).isEqualTo(
-				UPDATED_DESCRIPTION);
-		assertThat(testExternalFeed.getDisplayOrder()).isEqualTo(
-				UPDATED_DISPLAY_ORDER);
-		assertThat(testExternalFeed.getIconUrl()).isEqualTo(UPDATED_ICON_URL);
-		assertThat(testExternalFeed.getTtl()).isEqualTo(UPDATED_TTL);
-		assertThat(testExternalFeed.getLang()).isEqualTo(UPDATED_LANG);
-		assertThat(testExternalFeed.getRssUrl()).isEqualTo(UPDATED_RSS_URL);
-		assertThat(testExternalFeed.getPublisher()).isEqualTo(publisher);
-		assertThat(testExternalFeed.getParent()).isEqualTo(category);
-		;
+		assertThat(testExternalFeed.getAccessView(), equalTo(UPDATED_ACCESS_VIEW));
+		assertThat(testExternalFeed.getDefaultDisplayOrder(), equalTo(UPDATED_DEFAULT_DISPLAY_ORDER));
+		assertThat(testExternalFeed.getName(), equalTo(UPDATED_NAME));
+		assertThat(testExternalFeed.getDescription(), equalTo(UPDATED_DESCRIPTION));
+		assertThat(testExternalFeed.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+		assertThat(testExternalFeed.getIconUrl(), equalTo(UPDATED_ICON_URL));
+		assertThat(testExternalFeed.getTtl(), equalTo(UPDATED_TTL));
+		assertThat(testExternalFeed.getLang(), equalTo(UPDATED_LANG));
+		assertThat(testExternalFeed.getRssUrl(), equalTo(UPDATED_RSS_URL));
+		assertThat(testExternalFeed.getPublisher(), equalTo(publisher));
+		assertThat(testExternalFeed.getParent(), equalTo(category));
 	}
 
 	@Test
@@ -382,6 +338,6 @@ public class ExternalFeedResourceTest {
 
 		// Validate the database is empty
 		List<ExternalFeed> externalFeeds = externalFeedRepository.findAll();
-		assertThat(externalFeeds).hasSize(0);
+		assertThat(externalFeeds, hasSize(0));
 	}
 }

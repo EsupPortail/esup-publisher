@@ -15,13 +15,11 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +40,9 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,10 +53,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
@@ -186,23 +183,23 @@ public class ClassificationRepositoryTest {
 
 		log.info("Before insert : {}", c1);
 		repository.save(c1);
-		assertNotNull(c1.getId());
+		assertThat(c1.getId(), notNullValue());
 		log.info("After insert : {}", c1);
 		Optional<AbstractClassification> optionalClassif = repository.findById(c1.getId());
 		Category c2 = (Category) optionalClassif.orElse(null);
 		log.info("After select {} ", c2);
-		assertNotNull(c2);
-		assertEquals(c1, c2);
+		assertThat(c2, notNullValue());
+		assertThat(c1, equalTo(c2));
 
 		c2.setName("UPDATED CAT");
 		c2.setDefaultDisplayOrder(DisplayOrderType.ONLY_LAST_CREATED_FIRST);
 		c2 = repository.save(c2);
 		log.info("After update : {}", c2);
-		assertTrue(repository.existsById(c2.getId()));
+		assertThat(repository.existsById(c2.getId()), is(true));
 		c2 = (Category) repository.getOne(c2.getId());
-		assertNotNull(c2);
+		assertThat(c2, notNullValue());
 		log.info("After select : {}", c2);
-        assertEquals(4, repository.count());
+        assertThat(repository.count(), is(4L));
 
 		List<AbstractClassification> result = repository.findAll();
 		assertThat(result.size(), is(4));
@@ -215,7 +212,7 @@ public class ClassificationRepositoryTest {
 		repository.deleteById(c2.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.existsById(c2.getId()));
+		assertThat(repository.existsById(c2.getId()), is(false));
 	}
 
 	@Test
@@ -287,10 +284,11 @@ public class ClassificationRepositoryTest {
 	    // there is no startdate ! it's falling back to createdDate
         Category cat = ObjTest.newCategory(INDICE_4, pub1);
         cat = repository.saveAndFlush(cat);
+		Thread.sleep(1000);
         Category cat2 = ObjTest.newCategory("A name", pub1);
         cat2 = repository.saveAndFlush(cat2);
 
-        Category[] tab = { cat1, cat, cat2 };
+		Category[] tab = { cat2, cat, cat1 };
 
         List<Category> result = Lists.newArrayList(catRepo.findAll(ClassificationPredicates
             .CategoryOfPublisher(pub1.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(DisplayOrderType.START_DATE)));
@@ -329,7 +327,7 @@ public class ClassificationRepositoryTest {
      */
     @Test
     public void testFindAllOfPublisher() {
-        assertTrue(repository.count(ClassificationPredicates.CategoryClassificationOfPublisher(pub1.getId())) == 1);
+        assertThat(repository.count(ClassificationPredicates.CategoryClassificationOfPublisher(pub1.getId())), is(1L));
     }
 
 	/**
@@ -339,7 +337,7 @@ public class ClassificationRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -349,7 +347,7 @@ public class ClassificationRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 3);
+		assertThat(repository.count(), equalTo(3L));
 	}
 
 	/**
@@ -365,7 +363,7 @@ public class ClassificationRepositoryTest {
 		repository.saveAndFlush(c1);
 		long count = repository.count();
 		repository.delete(c1);
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -375,7 +373,7 @@ public class ClassificationRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

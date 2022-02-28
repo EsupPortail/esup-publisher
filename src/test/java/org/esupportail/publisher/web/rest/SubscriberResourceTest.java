@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -113,14 +115,11 @@ public class SubscriberResourceTest {
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		SubscriberResource subscriberResource = new SubscriberResource();
-		ReflectionTestUtils.setField(subscriberResource,
-            "subscriberRepository", subscriberRepository);
-        ReflectionTestUtils.setField(subscriberResource,
-            "subscriberResolvedDTOFactory", subscriberResolvedDTOFactory);
+		ReflectionTestUtils.setField(subscriberResource,"subscriberRepository", subscriberRepository);
+        ReflectionTestUtils.setField(subscriberResource,"subscriberResolvedDTOFactory", subscriberResolvedDTOFactory);
         ReflectionTestUtils.setField(subscriberResource, "subjectKeyExtendedConverter", subjectKeyExtendedConverter);
         ReflectionTestUtils.setField(subscriberResource, "contextConverter", contextConverter);
-		this.restSubscriberMockMvc = MockMvcBuilders.standaloneSetup(
-				subscriberResource).build();
+		this.restSubscriberMockMvc = MockMvcBuilders.standaloneSetup(subscriberResource).build();
 	}
 
 	@Before
@@ -134,7 +133,7 @@ public class SubscriberResourceTest {
 	@Transactional
 	public void createSubscriber() throws Exception {
 		// Validate the database is empty
-		assertThat(subscriberRepository.findAll()).hasSize(0);
+		assertThat(subscriberRepository.findAll(), hasSize(0));
 
 		// Create the Subscriber
         restSubscriberMockMvc.perform(
@@ -153,12 +152,10 @@ public class SubscriberResourceTest {
 
 		// Validate the Subscriber in the database
 		List<Subscriber> subscribers = subscriberRepository.findAll();
-		assertThat(subscribers).hasSize(1);
+		assertThat(subscribers, hasSize(1));
 		Subscriber testSubscriber = subscribers.iterator().next();
-		assertThat(testSubscriber.getSubscribeType()).isEqualTo(
-				DEFAULT_SUBSCRIBE_TYPE);
-		assertThat(testSubscriber.getSubjectCtxId()).isEqualTo(
-				DEFAULT_SUBSCRIBE_KEY);
+		assertThat(testSubscriber.getSubscribeType(), equalTo(DEFAULT_SUBSCRIBE_TYPE));
+		assertThat(testSubscriber.getSubjectCtxId(), equalTo(DEFAULT_SUBSCRIBE_KEY));
 	}
 
 	@Test
@@ -172,25 +169,12 @@ public class SubscriberResourceTest {
 				.perform(get("/api/subscribers"))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.[0].subjectCtxId.subject.keyValue").value(
-                            DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyValue()))
-				.andExpect(
-						jsonPath("$.[0].subjectCtxId.subject.keyType").value(
-								DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyType().getCode()))
-                .andExpect(
-                    jsonPath("$.[0].subjectCtxId.subject.keyAttribute").value(
-                        DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyAttribute()))
-				.andExpect(
-                    jsonPath("$.[0].subjectCtxId.context.keyId").value(
-                        DEFAULT_SUBSCRIBE_KEY.getContext().getKeyId()
-                            .intValue()))
-				.andExpect(
-						jsonPath("$.[0].subjectCtxId.context.keyType").value(
-								DEFAULT_SUBSCRIBE_KEY.getContext().getKeyType().name()))
-				.andExpect(
-						jsonPath("$.[0].subscribeType").value(
-								DEFAULT_SUBSCRIBE_TYPE.getName()));
+				.andExpect(jsonPath("$.[0].subjectCtxId.subject.keyValue").value(DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyValue()))
+				.andExpect(jsonPath("$.[0].subjectCtxId.subject.keyType").value(DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyType().getCode()))
+                .andExpect(jsonPath("$.[0].subjectCtxId.subject.keyAttribute").value(DEFAULT_SUBSCRIBE_KEY.getSubject().getKeyAttribute()))
+				.andExpect(jsonPath("$.[0].subjectCtxId.context.keyId").value(DEFAULT_SUBSCRIBE_KEY.getContext().getKeyId().intValue()))
+				.andExpect(jsonPath("$.[0].subjectCtxId.context.keyType").value(DEFAULT_SUBSCRIBE_KEY.getContext().getKeyType().name()))
+				.andExpect(jsonPath("$.[0].subscribeType").value(DEFAULT_SUBSCRIBE_TYPE.getName()));
 	}
 
 	@Test
@@ -205,36 +189,23 @@ public class SubscriberResourceTest {
 
 		// Get the subscriber
 		restSubscriberMockMvc
-				.perform(
-                    get("/api/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}",
-                        DatatypeConverter.printBase64Binary(
-                            subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)),
-                        subscriber.getSubjectCtxId().getSubject().getKeyType().getId(),
-                        subscriber.getSubjectCtxId().getSubject().getKeyAttribute(),
-                        subscriber.getSubjectCtxId().getContext().getKeyId(),
-                        subscriber.getSubjectCtxId().getContext().getKeyType().name()
-                        ))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.subjectCtxId.subject.keyValue").value(
-                            subscriber.getId().getSubject().getKeyValue()))
-				.andExpect(
-						jsonPath("$.subjectCtxId.subject.keyType").value(
-								subscriber.getId().getSubject().getKeyType().getCode()))
-                .andExpect(
-                    jsonPath("$.subjectCtxId.subject.keyAttribute").value(
-                        subscriber.getId().getSubject().getKeyAttribute()))
-				.andExpect(
-                    jsonPath("$.subjectCtxId.context.keyId").value(
-                        subscriber.getId().getContext().getKeyId()
-                            .intValue()))
-				.andExpect(
-						jsonPath("$.subjectCtxId.context.keyType").value(
-								subscriber.getId().getContext().getKeyType().name()))
-            .andExpect(
-                jsonPath("$.subscribeType").value(
-                    DEFAULT_SUBSCRIBE_TYPE.getName()));
+			.perform(
+				get("/api/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}",
+					DatatypeConverter.printBase64Binary(
+						subscriber.getSubjectCtxId().getSubject().getKeyValue().getBytes(StandardCharsets.UTF_8)),
+					subscriber.getSubjectCtxId().getSubject().getKeyType().getId(),
+					subscriber.getSubjectCtxId().getSubject().getKeyAttribute(),
+					subscriber.getSubjectCtxId().getContext().getKeyId(),
+					subscriber.getSubjectCtxId().getContext().getKeyType().name()
+					))
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.subjectCtxId.subject.keyValue").value(subscriber.getId().getSubject().getKeyValue()))
+			.andExpect(jsonPath("$.subjectCtxId.subject.keyType").value(subscriber.getId().getSubject().getKeyType().getCode()))
+			.andExpect(jsonPath("$.subjectCtxId.subject.keyAttribute").value(subscriber.getId().getSubject().getKeyAttribute()))
+			.andExpect(jsonPath("$.subjectCtxId.context.keyId").value(subscriber.getId().getContext().getKeyId().intValue()))
+			.andExpect(jsonPath("$.subjectCtxId.context.keyType").value(subscriber.getId().getContext().getKeyType().name()))
+			.andExpect(jsonPath("$.subscribeType").value(DEFAULT_SUBSCRIBE_TYPE.getName()));
 	}
 
     @Test
@@ -315,7 +286,7 @@ public class SubscriberResourceTest {
 
         // Validate the database is empty
         List<Subscriber> subscribers = subscriberRepository.findAll();
-        assertThat(subscribers).hasSize(0);
+        assertThat(subscribers, hasSize(0));
     }
 
 	@Test
@@ -338,6 +309,6 @@ public class SubscriberResourceTest {
 
 		// Validate the database is empty
 		List<Subscriber> subscribers = subscriberRepository.findAll();
-		assertThat(subscribers).hasSize(0);
+		assertThat(subscribers, hasSize(0));
 	}
 }

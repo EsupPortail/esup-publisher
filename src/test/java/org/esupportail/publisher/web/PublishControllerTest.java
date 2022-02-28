@@ -15,8 +15,11 @@
  */
 package org.esupportail.publisher.web;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,8 +36,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -73,7 +74,9 @@ import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
-import org.junit.Assert;
+
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -304,13 +307,13 @@ public class PublishControllerTest {
         Thread.sleep(1000);
         int nbModif = itemRepository.publishScheduled();
         // test news1 SCHEDULED => PUBLISHED + update datemodification and move it to First news in order
-        Assert.assertEquals(1, nbModif);
+        assertThat(nbModif, equalTo(1));
         news1 = (News)itemRepository.findById(news1.getId()).orElse(null);
-        Assert.assertNotNull(news1);
-        Assert.assertEquals(news1.getStatus(), ItemStatus.PUBLISHED);
+        assertThat(news1, notNullValue());
+        assertThat(news1.getStatus(), equalTo(ItemStatus.PUBLISHED));
         // This part check if the
         log.debug("Modified time before {} and after running publishScheduled {}", news1DateModify, news1.getLastModifiedDate());
-        Assert.assertTrue("The PublishScheduled task run an update on a wrong timezone ! Check DB time_zone and your java server timezone",
+        assertThat("The PublishScheduled task run an update on a wrong timezone ! Check DB time_zone and your java server timezone",
                 news1.getLastModifiedDate().isAfter(news1DateModify));
 
         files.add(new LinkedFileItem("20052/201608259432.jpg", "truc-image.jpg", attachment, false, "image/jpg"));

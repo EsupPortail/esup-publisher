@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -111,7 +113,7 @@ public class RedactorResourceTest {
     @Transactional
     public void createRedactor() throws Exception {
         // Validate the database is empty
-        assertThat(redactorRepository.findAll()).hasSize(0);
+        assertThat(redactorRepository.findAll(), hasSize(0));
 
         // Create the Redactor
         restRedactorMockMvc.perform(
@@ -122,21 +124,15 @@ public class RedactorResourceTest {
 
         // Validate the Redactor in the database
         List<Redactor> redactors = redactorRepository.findAll();
-        assertThat(redactors).hasSize(1);
+        assertThat(redactors, hasSize(1));
         Redactor testRedactor = redactors.iterator().next();
-        assertThat(testRedactor.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testRedactor.getDisplayName()).isEqualTo(
-            DEFAULT_DISPLAY_NAME);
-        assertThat(testRedactor.getDescription())
-            .isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testRedactor.getWritingMode()).isEqualTo(
-            DEFAULT_WRITING_MODE);
-        assertThat(testRedactor.getFormat()).isEqualTo(
-            DEFAULT_WRITING_FORMAT);
-        assertThat(testRedactor.getNbLevelsOfClassification()).isEqualTo(
-            DEFAULT_NB_LEVELS_CLASSIFICATION);
-        assertThat(testRedactor.getNbDaysMaxDuration()).isEqualTo(
-            DEFAULT_NB_DAYS_MAX_DURATION);
+        assertThat(testRedactor.getName(), equalTo(DEFAULT_NAME));
+        assertThat(testRedactor.getDisplayName(), equalTo(DEFAULT_DISPLAY_NAME));
+        assertThat(testRedactor.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+        assertThat(testRedactor.getWritingMode(), equalTo(DEFAULT_WRITING_MODE));
+        assertThat(testRedactor.getFormat(), equalTo(DEFAULT_WRITING_FORMAT));
+        assertThat(testRedactor.getNbLevelsOfClassification(), equalTo(DEFAULT_NB_LEVELS_CLASSIFICATION));
+        assertThat(testRedactor.getNbDaysMaxDuration(), equalTo(DEFAULT_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -151,28 +147,14 @@ public class RedactorResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(
-                jsonPath("$.[0].id").value(redactor.getId().intValue()))
-            .andExpect(
-                jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-            .andExpect(
-                jsonPath("$.[0].displayName").value(
-                    DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(
-                jsonPath("$.[0].description").value(
-                    DEFAULT_DESCRIPTION.toString()))
-            .andExpect(
-                jsonPath("$.[0].format").value(
-                    DEFAULT_WRITING_FORMAT.name()))
-            .andExpect(
-                jsonPath("$.[0].writingMode").value(
-                    DEFAULT_WRITING_MODE.name()))
-            .andExpect(
-                jsonPath("$.[0].nbLevelsOfClassification").value(
-                    DEFAULT_NB_LEVELS_CLASSIFICATION))
-            .andExpect(
-                jsonPath("$.[0].nbDaysMaxDuration").value(
-                    DEFAULT_NB_DAYS_MAX_DURATION));
+            .andExpect(jsonPath("$.[0].id").value(redactor.getId().intValue()))
+            .andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.[0].format").value(DEFAULT_WRITING_FORMAT.name()))
+            .andExpect(jsonPath("$.[0].writingMode").value(DEFAULT_WRITING_MODE.name()))
+            .andExpect(jsonPath("$.[0].nbLevelsOfClassification").value(DEFAULT_NB_LEVELS_CLASSIFICATION))
+            .andExpect(jsonPath("$.[0].nbDaysMaxDuration").value(DEFAULT_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -187,25 +169,13 @@ public class RedactorResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(redactor.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(
-                jsonPath("$.displayName").value(
-                    DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(
-                jsonPath("$.description").value(
-                    DEFAULT_DESCRIPTION.toString()))
-            .andExpect(
-                jsonPath("$.format").value(
-                    DEFAULT_WRITING_FORMAT.name()))
-            .andExpect(
-                jsonPath("$.writingMode").value(
-                    DEFAULT_WRITING_MODE.name()))
-            .andExpect(
-                jsonPath("$.nbLevelsOfClassification").value(
-                    DEFAULT_NB_LEVELS_CLASSIFICATION))
-            .andExpect(
-                jsonPath("$.nbDaysMaxDuration").value(
-                    DEFAULT_NB_DAYS_MAX_DURATION));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.format").value(DEFAULT_WRITING_FORMAT.name()))
+            .andExpect(jsonPath("$.writingMode").value(DEFAULT_WRITING_MODE.name()))
+            .andExpect(jsonPath("$.nbLevelsOfClassification").value(DEFAULT_NB_LEVELS_CLASSIFICATION))
+            .andExpect( jsonPath("$.nbDaysMaxDuration").value(DEFAULT_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -238,21 +208,15 @@ public class RedactorResourceTest {
 
         // Validate the Redactor in the database
         List<Redactor> redactors = redactorRepository.findAll();
-        assertThat(redactors).hasSize(1);
+        assertThat(redactors, hasSize(1));
         Redactor testRedactor = redactors.iterator().next();
-        assertThat(testRedactor.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testRedactor.getDisplayName()).isEqualTo(
-            UPDATED_DISPLAY_NAME);
-        assertThat(testRedactor.getDescription())
-            .isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testRedactor.getWritingMode()).isEqualTo(
-            UPDATED_WRITING_MODE);
-        assertThat(testRedactor.getFormat()).isEqualTo(
-            UPDATED_WRITING_FORMAT);
-        assertThat(testRedactor.getNbLevelsOfClassification()).isEqualTo(
-            UPDATED_NB_LEVELS_CLASSIFICATION);
-        assertThat(testRedactor.getNbDaysMaxDuration()).isEqualTo(
-            UPDATED_NB_DAYS_MAX_DURATION);
+        assertThat(testRedactor.getName(), equalTo(UPDATED_NAME));
+        assertThat(testRedactor.getDisplayName(), equalTo(UPDATED_DISPLAY_NAME));
+        assertThat(testRedactor.getDescription(), equalTo(UPDATED_DESCRIPTION));
+        assertThat(testRedactor.getWritingMode(), equalTo(UPDATED_WRITING_MODE));
+        assertThat(testRedactor.getFormat(), equalTo(UPDATED_WRITING_FORMAT));
+        assertThat(testRedactor.getNbLevelsOfClassification(), equalTo(UPDATED_NB_LEVELS_CLASSIFICATION));
+        assertThat(testRedactor.getNbDaysMaxDuration(), equalTo(UPDATED_NB_DAYS_MAX_DURATION));
     }
 
     @Test
@@ -269,6 +233,6 @@ public class RedactorResourceTest {
 
         // Validate the database is empty
         List<Redactor> redactors = redactorRepository.findAll();
-        assertThat(redactors).hasSize(0);
+        assertThat(redactors, hasSize(0));
     }
 }

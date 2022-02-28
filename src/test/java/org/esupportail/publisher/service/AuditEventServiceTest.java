@@ -15,7 +15,11 @@
  */
 package org.esupportail.publisher.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,28 +32,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.audit.AuditEventConverter;
 import org.esupportail.publisher.domain.PersistentAuditEvent;
 import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-//import org.powermock.core.classloader.annotations.PowerMockIgnore;
-//import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 //@RunWith(PowerMockRunner.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -79,7 +80,7 @@ public class AuditEventServiceTest {
 
     private PersistentAuditEvent auditEventNew;
 
-    private int eventRetentionDays = 30;
+    private final int eventRetentionDays = 30;
 
 	@PostConstruct
 	public void setup() {
@@ -96,7 +97,7 @@ public class AuditEventServiceTest {
         auditEventWithinRetention = new PersistentAuditEvent();
         auditEventWithinRetention.setAuditEventDate(Instant.now().minus(eventRetentionDays - 1, ChronoUnit.DAYS));
         auditEventWithinRetention.setPrincipal("test-user-retention");
-        auditEventWithinRetention.setAuditEventType("test-type");;
+        auditEventWithinRetention.setAuditEventType("test-type");
 
         auditEventNew = new PersistentAuditEvent();
         auditEventNew.setAuditEventDate(Instant.now());
@@ -142,7 +143,7 @@ public class AuditEventServiceTest {
 		//THEN
 		verify(persistenceAuditEventRepository).findAll();
 		verify(auditEventConverter).convertToAuditEvent(persistentAuditList);
-		assertThat(resultList.size()).isEqualTo(3);
+		assertThat(resultList.size(), equalTo(3));
 	}
 
 	@Test
@@ -180,7 +181,7 @@ public class AuditEventServiceTest {
 		//THEN
 		verify(persistenceAuditEventRepository).findAllByAuditEventDateBetween(fromDate, toDate);
 		verify(auditEventConverter).convertToAuditEvent(persistentAuditList);
-		assertThat(resultList.size()).isEqualTo(2);
+		assertThat(resultList.size(), equalTo(2));
 	}
 
     @Test
@@ -193,16 +194,16 @@ public class AuditEventServiceTest {
 
         persistenceAuditEventRepositoryTransactional.flush();
 
-        assertThat(persistenceAuditEventRepositoryTransactional.findAll().size()).isEqualTo(3);
+        assertThat(persistenceAuditEventRepositoryTransactional.findAll().size(), equalTo(3));
 
         auditEventServiceTransactional.removeOldAuditEvents();
 
         persistenceAuditEventRepositoryTransactional.flush();
 
-        assertThat(persistenceAuditEventRepositoryTransactional.findAll().size()).isEqualTo(2);
-        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-old")).isEmpty();
-        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-retention")).isNotEmpty();
-        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-new")).isNotEmpty();
+        assertThat(persistenceAuditEventRepositoryTransactional.findAll().size(), equalTo(2));
+        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-old"), is(empty()));
+        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-retention"), is(not(empty())));
+        assertThat(persistenceAuditEventRepositoryTransactional.findByPrincipal("test-user-new"), is(not(empty())));
     }
 
 }

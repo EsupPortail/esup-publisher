@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -84,18 +86,14 @@ public class FilterResourceTest {
 		MockitoAnnotations.initMocks(this);
 		FilterResource filterResource = new FilterResource();
 		OrganizationResource organizationResource = new OrganizationResource();
-		ReflectionTestUtils.setField(filterResource, "filterRepository",
-				filterRepository);
-		ReflectionTestUtils.setField(organizationResource,
-				"organizationRepository", organizationRepository);
-		this.restFilterMockMvc = MockMvcBuilders
-				.standaloneSetup(filterResource).build();
+		ReflectionTestUtils.setField(filterResource, "filterRepository",filterRepository);
+		ReflectionTestUtils.setField(organizationResource,"organizationRepository", organizationRepository);
+		this.restFilterMockMvc = MockMvcBuilders.standaloneSetup(filterResource).build();
 	}
 
 	@Before
 	public void initTest() {
-		organization = organizationRepository.saveAndFlush(ObjTest
-				.newOrganization(DEFAULT_PATTERN));
+		organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(DEFAULT_PATTERN));
 		filter = new Filter();
 		filter.setPattern(DEFAULT_PATTERN);
 		filter.setType(DEFAULT_TYPE);
@@ -106,23 +104,22 @@ public class FilterResourceTest {
 	@Transactional
 	public void createFilter() throws Exception {
 		// Validate the database is empty
-		assertThat(filterRepository.findAll()).hasSize(0);
+		assertThat(filterRepository.findAll(), hasSize(0));
 
 		// Create the Filter
 		restFilterMockMvc.perform(
 				post("/api/filters").contentType(
 						TestUtil.APPLICATION_JSON_UTF8).content(
-						TestUtil.convertObjectToJsonBytes(filter))).andExpect(
-				status().isCreated());
+						TestUtil.convertObjectToJsonBytes(filter)))
+				.andExpect(status().isCreated());
 
 		// Validate the Filter in the database
 		List<Filter> filters = filterRepository.findAll();
-		assertThat(filters).hasSize(1);
+		assertThat(filters, hasSize(1));
 		Filter testFilter = filters.iterator().next();
-		assertThat(testFilter.getPattern()).isEqualTo(DEFAULT_PATTERN);
-		assertThat(testFilter.getType()).isEqualTo(DEFAULT_TYPE);
-		assertThat(testFilter.getOrganization()).isEqualTo(organization);
-		;
+		assertThat(testFilter.getPattern(), equalTo(DEFAULT_PATTERN));
+		assertThat(testFilter.getType(), equalTo(DEFAULT_TYPE));
+		assertThat(testFilter.getOrganization(), equalTo(organization));
 	}
 
 	@Test
@@ -137,16 +134,10 @@ public class FilterResourceTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.[0].id").value(filter.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].pattern").value(
-								DEFAULT_PATTERN.toString()))
-				.andExpect(
-						jsonPath("$.[0].type").value(DEFAULT_TYPE.toString()))
-				.andExpect(
-						jsonPath("$.[0].organization.id").value(
-								organization.getId().intValue()));
+				.andExpect(jsonPath("$.[0].id").value(filter.getId().intValue()))
+				.andExpect(jsonPath("$.[0].pattern").value(DEFAULT_PATTERN))
+				.andExpect(jsonPath("$.[0].type").value(DEFAULT_TYPE.toString()))
+				.andExpect(jsonPath("$.[0].organization.id").value(organization.getId().intValue()));
 		// .andExpect(
 		// jsonPath("$.[0].description").value(
 		// DEFAULT_DESCRIPTION.toString()));
@@ -164,12 +155,9 @@ public class FilterResourceTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.id").value(filter.getId().intValue()))
-				.andExpect(
-						jsonPath("$.pattern").value(DEFAULT_PATTERN.toString()))
+				.andExpect(jsonPath("$.pattern").value(DEFAULT_PATTERN))
 				.andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-				.andExpect(
-						jsonPath("$.organization.id").value(
-								organization.getId().intValue()));
+				.andExpect(jsonPath("$.organization.id").value(organization.getId().intValue()));
 		// .andExpect(
 		// jsonPath("$.description").value(
 		// DEFAULT_DESCRIPTION.toString()));
@@ -201,12 +189,11 @@ public class FilterResourceTest {
 
 		// Validate the Filter in the database
 		List<Filter> filters = filterRepository.findAll();
-		assertThat(filters).hasSize(1);
+		assertThat(filters, hasSize(1));
 		Filter testFilter = filters.iterator().next();
-		assertThat(testFilter.getPattern()).isEqualTo(UPDATED_PATTERN);
-		assertThat(testFilter.getType()).isEqualTo(UPDATED_TYPE);
-		assertThat(testFilter.getOrganization()).isEqualTo(organization);
-		;
+		assertThat(testFilter.getPattern(), equalTo(UPDATED_PATTERN));
+		assertThat(testFilter.getType(), equalTo(UPDATED_TYPE));
+		assertThat(testFilter.getOrganization(), equalTo(organization));
 	}
 
 	@Test
@@ -223,6 +210,6 @@ public class FilterResourceTest {
 
 		// Validate the database is empty
 		List<Filter> filters = filterRepository.findAll();
-		assertThat(filters).hasSize(0);
+		assertThat(filters, hasSize(0));
 	}
 }

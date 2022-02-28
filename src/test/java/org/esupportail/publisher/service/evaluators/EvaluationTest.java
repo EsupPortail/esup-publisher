@@ -15,9 +15,8 @@
  */
 package org.esupportail.publisher.service.evaluators;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,131 +67,131 @@ public class EvaluationTest {
 	public void testUserAttributesEvaluator() {
 		UserAttributesEvaluator uae1 = new UserAttributesEvaluator("uid",
 				"F08001ut", StringEvaluationMode.EQUALS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserAttributesEvaluator("cn", "PONT",
 				StringEvaluationMode.CONTAINS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserAttributesEvaluator("cn", "ean",
 				StringEvaluationMode.ENDS_WITH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserAttributesEvaluator("cn", "",
 				StringEvaluationMode.EXISTS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserAttributesEvaluator("cn", "DUPONT",
 				StringEvaluationMode.STARTS_WITH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserAttributesEvaluator("cn", ".*PONT .*",
 				StringEvaluationMode.MATCH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 
 		uae1 = new UserAttributesEvaluator("uid", "A08001ut",
 				StringEvaluationMode.EQUALS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserAttributesEvaluator("cn", "pont",
 				StringEvaluationMode.CONTAINS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserAttributesEvaluator("cn", "EAN",
 				StringEvaluationMode.ENDS_WITH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserAttributesEvaluator("sn", "",
 				StringEvaluationMode.EXISTS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserAttributesEvaluator("cn", "dupont",
 				StringEvaluationMode.STARTS_WITH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserAttributesEvaluator("cn", ".*pont .*",
 				StringEvaluationMode.MATCH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 	}
 
 	@Test(expected = java.lang.IllegalArgumentException.class)
 	public void testUserAttributesBadEvaluator() {
 		UserAttributesEvaluator uae1 = new UserAttributesEvaluator(
 				"isMemberOf", "F08001ut", StringEvaluationMode.EQUALS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 	}
 
 	@Test
 	public void testUserMultivaluedAttributesEvaluator() {
 		UserMultivaluedAttributesEvaluator uae1 = new UserMultivaluedAttributesEvaluator(
 				"isMemberOf", "esco:admin:central", StringEvaluationMode.EQUALS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"esco:admin", StringEvaluationMode.CONTAINS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"admin:central", StringEvaluationMode.ENDS_WITH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf", "",
 				StringEvaluationMode.EXISTS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"esco:admin", StringEvaluationMode.STARTS_WITH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"((esco)|(clg37)):admin:.*", StringEvaluationMode.MATCH);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"esco:admin", StringEvaluationMode.EQUALS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"cfa:admin", StringEvaluationMode.CONTAINS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"centralise", StringEvaluationMode.ENDS_WITH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserMultivaluedAttributesEvaluator("sn", "",
 				StringEvaluationMode.EXISTS);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"cfa:admin", StringEvaluationMode.STARTS_WITH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 		uae1 = new UserMultivaluedAttributesEvaluator("isMemberOf",
 				"((cfa)|(clg37)):admin:.*", StringEvaluationMode.MATCH);
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 	}
 
 	@Test
 	public void testUserGroupEvaluator() {
 		UserGroupEvaluator uae1 = new UserGroupEvaluator("esco:admin");
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 
 		uae1 = new UserGroupEvaluator("esco:admin:local");
-		assertFalse(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 	}
 
 	@Test
 	public void testOperatorEvaluator() {
 		UserGroupEvaluator uge1 = new UserGroupEvaluator("esco:admin");
-		assertTrue(evalFactory.from(uge1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uge1).isApplicable(userInfos), is(true));
 		UserAttributesEvaluator uae1 = new UserAttributesEvaluator("uid",
 				"F08001ut", StringEvaluationMode.EQUALS);
-		assertTrue(evalFactory.from(uae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(true));
 		UserMultivaluedAttributesEvaluator umae1 = new UserMultivaluedAttributesEvaluator(
 				"isMemberOf", "esco:admin:central", StringEvaluationMode.EQUALS);
-		assertTrue(evalFactory.from(umae1).isApplicable(userInfos));
+		assertThat(evalFactory.from(umae1).isApplicable(userInfos), is(true));
 
 		OperatorEvaluator oe1 = new OperatorEvaluator(OperatorType.AND,
 				Sets.newHashSet(uge1, uae1, umae1));
-		assertTrue(evalFactory.from(oe1).isApplicable(userInfos));
+		assertThat(evalFactory.from(oe1).isApplicable(userInfos), is(true));
 
 		UserGroupEvaluator uge2 = new UserGroupEvaluator("esco:admin:local");
-		assertFalse(evalFactory.from(uge2).isApplicable(userInfos));
+		assertThat(evalFactory.from(uge2).isApplicable(userInfos), is(false));
 		UserAttributesEvaluator uae2 = new UserMultivaluedAttributesEvaluator(
 				"isMemberOf", "esco:admin", StringEvaluationMode.EQUALS);
-		assertFalse(evalFactory.from(uae2).isApplicable(userInfos));
+		assertThat(evalFactory.from(uae2).isApplicable(userInfos), is(false));
 		UserMultivaluedAttributesEvaluator umae2 = new UserMultivaluedAttributesEvaluator(
 				"isMemberOf", "esco:admin", StringEvaluationMode.EQUALS);
-		assertFalse(evalFactory.from(umae2).isApplicable(userInfos));
+		assertThat(evalFactory.from(umae2).isApplicable(userInfos), is(false));
 
 		OperatorEvaluator oe2 = new OperatorEvaluator(OperatorType.AND,
 				Sets.newHashSet(uge2, uae2, umae2));
-		assertFalse(evalFactory.from(oe2).isApplicable(userInfos));
+		assertThat(evalFactory.from(oe2).isApplicable(userInfos), is(false));
 
 		oe1 = new OperatorEvaluator(OperatorType.NOT,
 				Sets.newHashSet((AbstractEvaluator) uge2));
-		assertTrue(evalFactory.from(oe1).isApplicable(userInfos));
+		assertThat(evalFactory.from(oe1).isApplicable(userInfos), is(true));
 
 		oe1 = new OperatorEvaluator(OperatorType.OR, Sets.newHashSet(uge1,
 				uae2, umae2));

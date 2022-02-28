@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -149,27 +151,24 @@ public class PermissionOnContextResourceTest {
 	@Transactional
 	public void createPermissionOnContext() throws Exception {
 		// Validate the database is empty
-		assertThat(permissionOnContextRepository.findAll()).hasSize(0);
+		assertThat(permissionOnContextRepository.findAll(), hasSize(0));
 
 		// Create the PermissionOnContext
 		restPermissionOnContextMockMvc
-				.perform(
-						post("/api/permissionOnContexts")
+				.perform(post("/api/permissionOnContexts")
 								.contentType(TestUtil.APPLICATION_JSON_UTF8)
-								.content(
-										TestUtil.convertObjectToJsonBytes(permissionOnContext)))
+								.content(TestUtil.convertObjectToJsonBytes(permissionOnContext)))
 				.andExpect(status().isCreated());
 
 		// Validate the PermissionOnContext in the database
 		List<PermissionOnContext> permissionOnContexts = permissionOnContextRepository
 				.findAll();
-		assertThat(permissionOnContexts).hasSize(1);
+		assertThat(permissionOnContexts, hasSize(1));
 		PermissionOnContext testPermissionOnContext = permissionOnContexts
 				.iterator().next();
-		assertThat(testPermissionOnContext.getContext()).isEqualTo(DEFAULT_CTX);
-		assertThat(testPermissionOnContext.getRole()).isEqualTo(DEFAULT_ROLE);
-		assertThat(testPermissionOnContext.getEvaluator()).isEqualTo(evaluator);
-		;
+		assertThat(testPermissionOnContext.getContext(), equalTo(DEFAULT_CTX));
+		assertThat(testPermissionOnContext.getRole(), equalTo(DEFAULT_ROLE));
+		assertThat(testPermissionOnContext.getEvaluator(), equalTo(evaluator));
 	}
 
 	@Test
@@ -184,19 +183,11 @@ public class PermissionOnContextResourceTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.[0].id").value(
-								permissionOnContext.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].context.keyId").value(
-								DEFAULT_CTXID.intValue()))
-				.andExpect(
-						jsonPath("$.[0].context.keyType").value(
-								DEFAULT_CTX_TYPE.toString()))
+				.andExpect(jsonPath("$.[0].id").value(permissionOnContext.getId().intValue()))
+				.andExpect(jsonPath("$.[0].context.keyId").value(DEFAULT_CTXID.intValue()))
+				.andExpect(jsonPath("$.[0].context.keyType").value(DEFAULT_CTX_TYPE.toString()))
 				.andExpect(jsonPath("$.[0].role").value(DEFAULT_ROLE.name()))
-				.andExpect(
-						jsonPath("$.[0].evaluator.id").value(
-								evaluator.getId().intValue()));
+				.andExpect(jsonPath("$.[0].evaluator.id").value(evaluator.getId().intValue()));
 	}
 
 	@Test
@@ -207,24 +198,14 @@ public class PermissionOnContextResourceTest {
 
 		// Get the permissionOnContext
 		restPermissionOnContextMockMvc
-				.perform(
-						get("/api/permissionOnContexts/{id}",
-								permissionOnContext.getId()))
+				.perform(get("/api/permissionOnContexts/{id}",permissionOnContext.getId()))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.id").value(
-								permissionOnContext.getId().intValue()))
-				.andExpect(
-						jsonPath("$.context.keyId").value(
-								DEFAULT_CTXID.intValue()))
-				.andExpect(
-						jsonPath("$.context.keyType").value(
-								DEFAULT_CTX_TYPE.toString()))
+				.andExpect(jsonPath("$.id").value(permissionOnContext.getId().intValue()))
+				.andExpect(jsonPath("$.context.keyId").value(DEFAULT_CTXID.intValue()))
+				.andExpect(jsonPath("$.context.keyType").value(DEFAULT_CTX_TYPE.toString()))
 				.andExpect(jsonPath("$.role").value(DEFAULT_ROLE.name()))
-				.andExpect(
-						jsonPath("$.evaluator.id").value(
-								evaluator.getId().intValue()));
+				.andExpect(jsonPath("$.evaluator.id").value(evaluator.getId().intValue()));
 	}
 
 	@Test
@@ -250,21 +231,20 @@ public class PermissionOnContextResourceTest {
 				.perform(
 						put("/api/permissionOnContexts")
 								.contentType(TestUtil.APPLICATION_JSON_UTF8)
-								.content(
-										TestUtil.convertObjectToJsonBytes(permissionOnContext)))
+								.content(TestUtil.convertObjectToJsonBytes(permissionOnContext)))
 				.andExpect(status().isOk());
 
 		// Validate the PermissionOnContext in the database
 		List<PermissionOnContext> permissionOnContexts = permissionOnContextRepository
 				.findAll();
-		assertThat(permissionOnContexts).hasSize(1);
+		assertThat(permissionOnContexts, hasSize(1));
 		PermissionOnContext testPermissionOnContext = permissionOnContexts
 				.iterator().next();
-		assertThat(testPermissionOnContext.getContext()).isEqualTo(UPDATED_CTX);
-		assertThat(testPermissionOnContext.getRole()).isEqualTo(UPDATED_ROLE);
-		assertThat(testPermissionOnContext.getEvaluator()).isEqualTo(evaluator);
+		assertThat(testPermissionOnContext.getContext(), equalTo(UPDATED_CTX));
+		assertThat(testPermissionOnContext.getRole(), equalTo(UPDATED_ROLE));
+		assertThat(testPermissionOnContext.getEvaluator(), equalTo(evaluator));
 		List<AbstractEvaluator> evaluators = evaluatorRepository.findAll();
-		assertThat(evaluators).hasSize(4);
+		assertThat(evaluators, hasSize(4));
 	}
 
 	@Test
@@ -284,8 +264,8 @@ public class PermissionOnContextResourceTest {
 		// Validate the database is empty
 		List<PermissionOnContext> permissionOnContexts = permissionOnContextRepository
 				.findAll();
-		assertThat(permissionOnContexts).hasSize(0);
+		assertThat(permissionOnContexts, hasSize(0));
 		List<AbstractEvaluator> evaluators = evaluatorRepository.findAll();
-		assertThat(evaluators).hasSize(0);
+		assertThat(evaluators, hasSize(0));
 	}
 }

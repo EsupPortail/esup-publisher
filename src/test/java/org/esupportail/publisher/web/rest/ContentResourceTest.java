@@ -15,8 +15,11 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,6 +78,11 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,12 +98,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by jgribonvald on 08/06/16.
@@ -262,7 +264,7 @@ public class ContentResourceTest {
     @Transactional
     public void testSimpleInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -273,41 +275,42 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getTitle()).isEqualTo(content.getItem().getTitle());
-        assertThat(testNews.getSummary()).isEqualTo(content.getItem().getSummary());
-        assertThat(testNews.getEnclosure()).isEqualTo(content.getItem().getEnclosure());
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(content.getItem().getStatus());
-        //assertThat(testNews.getValidatedDate()).isEqualTo(content.getItem().getValidatedDate());
-        assertThat(testNews.getValidatedBy().getLogin()).isEqualTo(USER_ADMIN);
-        assertThat(testNews.getBody()).isEqualTo(((News)content.getItem()).getBody());
-        assertThat(testNews.isRssAllowed()).isEqualTo(content.getItem().isRssAllowed());
-        assertThat(testNews.isHighlight()).isEqualTo(content.getItem().isHighlight());
-        assertThat(testNews.getRedactor()).isEqualTo(content.getItem().getRedactor());
-        assertThat(testNews.getOrganization()).isEqualTo(content.getItem().getOrganization());
+        assertThat(testNews.getTitle(), equalTo(content.getItem().getTitle()));
+        assertThat(testNews.getSummary(), equalTo(content.getItem().getSummary()));
+        assertThat(testNews.getEnclosure(), equalTo(content.getItem().getEnclosure()));
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(content.getItem().getStatus()));
+        //assertThat(testNews.getValidatedDate(), equalTo(content.getItem().getValidatedDate()));
+        assertThat(testNews.getValidatedBy().getLogin(), equalTo(USER_ADMIN));
+        assertThat(testNews.getBody(), equalTo(((News)content.getItem()).getBody()));
+        assertThat(testNews.isRssAllowed(), equalTo(content.getItem().isRssAllowed()));
+        assertThat(testNews.isHighlight(), equalTo(content.getItem().isHighlight()));
+        assertThat(testNews.getRedactor(), equalTo(content.getItem().getRedactor()));
+        assertThat(testNews.getOrganization(), equalTo(content.getItem().getOrganization()));
 
         List<ItemClassificationOrder> itemClassificationOrders =
             Lists.newArrayList(itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(item.getId())));
-        assertThat(itemClassificationOrders).hasSize(2);
-        Set<AbstractClassification> classifs = Sets.newHashSet();
+        assertThat(itemClassificationOrders, hasSize(2));
+        Set<ContextKey> classifs = Sets.newHashSet();
         for (ItemClassificationOrder ico: itemClassificationOrders) {
-            classifs.add(ico.getItemClassificationId().getAbstractClassification());
+            classifs.add(ico.getItemClassificationId().getAbstractClassification().getContextKey());
         }
-        assertThat(classifs.containsAll(content.getClassifications()));
-        assertThat(content.getClassifications().containsAll(classifs));
+        log.info("check {} equals in any order {}", classifs, content.getClassifications());
+        assertThat(classifs, containsInAnyOrder(content.getClassifications().toArray()));
+        assertThat(content.getClassifications(), containsInAnyOrder(classifs.toArray()));
     }
 
     @Test
     @Transactional
     public void testOptionalDateWithoutEndInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -321,21 +324,21 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.PUBLISHED);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.PUBLISHED));
     }
 
     @Test
     @Transactional
     public void testOptionalDateScheduledInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -349,21 +352,21 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.SCHEDULED);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.SCHEDULED));
     }
 
     @Test
     @Transactional
     public void testOptionalDatePublishedOnEmptyClassifsInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -383,7 +386,7 @@ public class ContentResourceTest {
     @Transactional
     public void testOptionalDateDraftOnDateBeforeInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -397,21 +400,21 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.DRAFT);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.DRAFT));
     }
 
     @Test
     @Transactional
     public void testOptionalDateDraftOnNotCompleteInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -427,21 +430,21 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.DRAFT);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.DRAFT));
     }
 
     @Test
     @Transactional
     public void testOptionalDateDraftOnEmptyTargetsInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -457,21 +460,21 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.DRAFT);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.DRAFT));
     }
 
     @Test
     @Transactional
     public void testOptionalDateDraftOnSaveInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -486,14 +489,14 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.DRAFT);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.DRAFT));
     }
 
     @Test
@@ -501,7 +504,7 @@ public class ContentResourceTest {
     public void testOptionalDatePendingOnUserInsert() throws Exception {
 
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserContributor);
 
@@ -512,19 +515,19 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.PENDING);
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.PENDING));
     }
 
     @Test
     @Transactional
     public void testOptionalDateFilteredClassifInsert() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         // This user is only editor on one category
         PermissionOnContext perm = new PermissionOnContext(
@@ -545,23 +548,23 @@ public class ContentResourceTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
 
-        assertThat(testNews.getEndDate()).isEqualTo(content.getItem().getEndDate());
-        assertThat(testNews.getStartDate()).isEqualTo(content.getItem().getStartDate());
-        assertThat(testNews.getStatus()).isEqualTo(ItemStatus.PUBLISHED);
+        assertThat(testNews.getEndDate(), equalTo(content.getItem().getEndDate()));
+        assertThat(testNews.getStartDate(), equalTo(content.getItem().getStartDate()));
+        assertThat(testNews.getStatus(), equalTo(ItemStatus.PUBLISHED));
 
         List<ItemClassificationOrder> itemClassificationOrders =
             Lists.newArrayList(itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(item.getId())));
-        assertThat(itemClassificationOrders).hasSize(1);
+        assertThat(itemClassificationOrders, hasSize(1));
         Set<AbstractClassification> classifs = Sets.newHashSet();
         for (ItemClassificationOrder ico: itemClassificationOrders) {
             classifs.add(ico.getItemClassificationId().getAbstractClassification());
         }
-        assertThat(classifs.contains(category1));
+        assertThat(classifs, containsInAnyOrder(category1));
     }
 
     @Test

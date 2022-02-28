@@ -57,19 +57,15 @@ public class UserResourceTest {
 	@Before
 	public void setup() {
 		UserResource userResource = new UserResource();
-		ReflectionTestUtils.setField(userResource, "userRepository",
-				userRepository);
+		ReflectionTestUtils.setField(userResource, "userRepository",userRepository);
 		ReflectionTestUtils.setField(userResource, "userFactory", userFactory);
-		this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
-				.build();
+		this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
 	}
 
 	@Test
 	public void testGetExistingUser() throws Exception {
-		restUserMockMvc
-				.perform(
-						get("/api/users/extended/admin").accept(
-								MediaType.APPLICATION_JSON))
+		restUserMockMvc.perform(
+			get("/api/users/extended/admin").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType("application/json"))
 				.andExpect(jsonPath("$.login").value("admin"));
@@ -78,16 +74,14 @@ public class UserResourceTest {
 	@Test
 	public void testGetUnknownUser() throws Exception {
 		restUserMockMvc.perform(
-				get("/api/users/unknown").accept(
-						MediaType.APPLICATION_JSON)).andExpect(
-				status().isNotFound());
+			get("/api/users/unknown").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 
     @Test
     public void testGetExtendedUnknownUser() throws Exception {
         restUserMockMvc.perform(
-            get("/api/users/extended/unknown").accept(
-                MediaType.APPLICATION_JSON)).andExpect(
-            status().isNotFound());
+            get("/api/users/extended/unknown").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
     }
 }

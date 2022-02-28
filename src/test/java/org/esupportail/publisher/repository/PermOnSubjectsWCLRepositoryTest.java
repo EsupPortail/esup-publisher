@@ -15,13 +15,12 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +88,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 
 	@Before
 	public void setUp() {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		Organization o = orgRepo.saveAndFlush(ObjTest
 				.newOrganization(PERM_INDICE_1));
@@ -97,12 +96,12 @@ public class PermOnSubjectsWCLRepositoryTest {
 				.newPermissionOnSubjectsWCL(PERM_INDICE_1,
 						o, Sets.newHashSet(subkeys1),
 						Sets.newHashSet(o.getContextKey()));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.saveAndFlush(e);
 		e = ObjTest.newPermissionOnSubjectsWCL(PERM_INDICE_2,
 				o, Sets.newHashSet(subkeys2),
 				Sets.newHashSet(o.getContextKey()));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.saveAndFlush(e);
 	}
 
@@ -117,36 +116,37 @@ public class PermOnSubjectsWCLRepositoryTest {
 				.newPermissionOnSubjectsWCL(PERM_INDICE_3,
 						o, Sets.newHashSet(subkeys3),
 						Sets.newHashSet(o.getContextKey()));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.save(e);
-		assertNotNull(e.getId());
-		log.info("After insert : " + e.toString());
+		assertThat(e.getId(), notNullValue());
+		log.info("After insert : {}", e);
 		Optional<PermissionOnSubjectsWithClassificationList> optionalPerm = repository.findById(e.getId());
 		PermissionOnSubjectsWithClassificationList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
-		log.info("After select : " + e2.toString());
-		assertNotNull(e2);
-		assertTrue(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
-		assertEquals(e, e2);
+		log.info("After select : {}", e2);
+		assertThat(e2, notNullValue());
+		assertThat(e.getRolesOnSubjects(), equalTo(Sets.newHashSet(subkeys3)));
+		assertThat(e2, equalTo(e));
 
-		assertTrue(e.getRolesOnSubjects().equals(e2.getRolesOnSubjects()));
+		assertThat(e2.getRolesOnSubjects(), equalTo(e.getRolesOnSubjects()));
 		e2.getRolesOnSubjects().remove(ObjTest.subjectPerm1);
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
 		Optional<PermissionOnSubjectsWithClassificationList> optionalPermission = repository.findById(e2.getId());
 		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
-		assertFalse(e.getRolesOnSubjects().equals(Sets.newHashSet(subkeys3)));
+		assertThat(e, notNullValue());
+		assertThat(e.getRolesOnSubjects(), not(equalTo(Sets.newHashSet(subkeys3))));
 
 		e = ObjTest.newPermissionOnSubjectsWCL(PERM_INDICE_4,
 				o, Sets.newHashSet(subkeys4),
 				Sets.newHashSet(o.getContextKey()));
 		repository.save(e);
-		log.info("After update : " + e.toString());
-		assertNotNull(e.getId());
-		assertTrue(repository.existsById(e.getId()));
+		log.info("After update : {}", e);
+		assertThat(e.getId(), notNullValue());
+		assertThat(repository.existsById(e.getId()), is(true));
 		e = repository.getOne(e.getId());
-		assertNotNull(e);
-		log.info("After select : " + e.toString());
-		assertTrue(repository.count() == 4);
+		assertThat(e, notNullValue());
+		log.info("After select : {}", e);
+		assertThat(repository.count(), equalTo(4L));
 
 		List<PermissionOnSubjectsWithClassificationList> result = repository
 				.findAll();
@@ -167,7 +167,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 		repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.existsById(e.getId()));
+		assertThat(repository.existsById(e.getId()), is(false));
 	}
 
 	/**
@@ -183,14 +183,14 @@ public class PermOnSubjectsWCLRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
 		List<PermissionOnSubjectsWithClassificationList> result = repository
 				.findAll();
-		assertTrue(repository.existsById(result.get(0).getId()));
+		assertThat(repository.existsById(result.get(0).getId()), is(true));
 
 	}
 
@@ -200,7 +200,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 		long count = repository.count();
 		List<PermissionOnSubjectsWithClassificationList> result = repository.findAll();
 		repository.delete(result.get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

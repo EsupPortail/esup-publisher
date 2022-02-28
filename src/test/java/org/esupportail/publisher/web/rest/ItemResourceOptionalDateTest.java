@@ -15,10 +15,11 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +60,8 @@ import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,8 +81,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
 import org.springframework.validation.Validator;
 
 /**
@@ -223,7 +222,7 @@ public class ItemResourceOptionalDateTest {
     @Transactional
     public void createItem() throws Exception {
         // Validate the database is empty
-        assertThat(itemRepository.findAll()).hasSize(0);
+        assertThat(itemRepository.findAll(), hasSize(0));
 
         // Create the Item
         restNewsMockMvc.perform(
@@ -232,22 +231,22 @@ public class ItemResourceOptionalDateTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(1);
+        assertThat(items, hasSize(1));
         AbstractItem item = items.iterator().next();
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
-        assertThat(testNews.getTitle()).isEqualTo(DEFAULT_TITLE);
-        assertThat(testNews.getSummary()).isEqualTo(DEFAULT_SUMMARY);
-        assertThat(testNews.getEnclosure()).isEqualTo(DEFAULT_ENCLOSURE);
-        assertThat(testNews.getEndDate()).isEqualTo(DEFAULT_END_DATE);
-        assertThat(testNews.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testNews.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testNews.getValidatedDate()).isEqualTo(DEFAULT_VALIDATION_DATE);
-        assertThat(testNews.getValidatedBy().getLogin()).isEqualTo(ObjTest.subject1);
-        assertThat(testNews.getBody()).isEqualTo(DEFAULT_BODY);
-        assertThat(testNews.isRssAllowed()).isEqualTo(DEFAULT_RSS_ALLOWED);
-        assertThat(testNews.getRedactor()).isEqualTo(redactor);
-        assertThat(testNews.getOrganization()).isEqualTo(organization);
+        assertThat(testNews.getTitle(), equalTo(DEFAULT_TITLE));
+        assertThat(testNews.getSummary(), equalTo(DEFAULT_SUMMARY));
+        assertThat(testNews.getEnclosure(), equalTo(DEFAULT_ENCLOSURE));
+        assertThat(testNews.getEndDate(), equalTo(DEFAULT_END_DATE));
+        assertThat(testNews.getStartDate(), equalTo(DEFAULT_START_DATE));
+        assertThat(testNews.getStatus(), equalTo(DEFAULT_STATUS));
+        assertThat(testNews.getValidatedDate(), equalTo(DEFAULT_VALIDATION_DATE));
+        assertThat(testNews.getValidatedBy().getLogin(), equalTo(ObjTest.subject1));
+        assertThat(testNews.getBody(), equalTo(DEFAULT_BODY));
+        assertThat(testNews.isRssAllowed(), equalTo(DEFAULT_RSS_ALLOWED));
+        assertThat(testNews.getRedactor(), equalTo(redactor));
+        assertThat(testNews.getOrganization(), equalTo(organization));
 
     }
 
@@ -368,22 +367,22 @@ public class ItemResourceOptionalDateTest {
 
         // Validate the News in the database
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(databaseSizeBeforeUpdate);
+        assertThat(items, hasSize(databaseSizeBeforeUpdate));
         AbstractItem item = items.get((items.size() - 1));
-        org.junit.Assert.assertThat(item, instanceOf(News.class));
+        assertThat(item, instanceOf(News.class));
         News testNews = (News) item;
-        assertThat(testNews.getTitle()).isEqualTo(UPDATED_TITLE);
-        assertThat(testNews.getSummary()).isEqualTo(UPDATED_SUMMARY);
-        assertThat(testNews.getEnclosure()).isEqualTo(UPDATED_ENCLOSURE);
-        assertThat(testNews.getEndDate()).isEqualTo(UPDATED_END_DATE);
-        assertThat(testNews.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testNews.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testNews.getValidatedDate()).isEqualTo(UPDATED_VALIDATION_DATE);
-        assertThat(testNews.getValidatedBy().getLogin()).isEqualTo(user2.getLogin());
-        assertThat(testNews.getBody()).isEqualTo(UPDATED_BODY);
-        assertThat(testNews.isRssAllowed()).isEqualTo(UPDATED_RSS_ALLOWED);
-        assertThat(testNews.getRedactor()).isEqualTo(redactor);
-        assertThat(testNews.getOrganization()).isEqualTo(organization);
+        assertThat(testNews.getTitle(), equalTo(UPDATED_TITLE));
+        assertThat(testNews.getSummary(), equalTo(UPDATED_SUMMARY));
+        assertThat(testNews.getEnclosure(), equalTo(UPDATED_ENCLOSURE));
+        assertThat(testNews.getEndDate(), equalTo(UPDATED_END_DATE));
+        assertThat(testNews.getStartDate(), equalTo(UPDATED_START_DATE));
+        assertThat(testNews.getStatus(), equalTo(UPDATED_STATUS));
+        assertThat(testNews.getValidatedDate(), equalTo(UPDATED_VALIDATION_DATE));
+        assertThat(testNews.getValidatedBy().getLogin(), equalTo(user2.getLogin()));
+        assertThat(testNews.getBody(), equalTo(UPDATED_BODY));
+        assertThat(testNews.isRssAllowed(), equalTo(UPDATED_RSS_ALLOWED));
+        assertThat(testNews.getRedactor(), equalTo(redactor));
+        assertThat(testNews.getOrganization(), equalTo(organization));
     }
 
     @Test
@@ -400,6 +399,6 @@ public class ItemResourceOptionalDateTest {
 
         // Validate the database is empty
         List<AbstractItem> items = itemRepository.findAll();
-        assertThat(items).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(items, hasSize(databaseSizeBeforeDelete - 1));
     }
 }

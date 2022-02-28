@@ -15,13 +15,12 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,10 @@ import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +48,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 19 août 2014
@@ -90,18 +88,18 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 
 	@Before
 	public void setUp() {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		Organization o = orgRepo.saveAndFlush(ObjTest
 				.newOrganization(PERM_INDICE_1));
 		PermissionOnClassificationWithSubjectList e = ObjTest
 				.newPermissionOnClassificationWSL(PERM_INDICE_1,
 						PermissionType.ADMIN, o, Sets.newHashSet(subkeys1));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.saveAndFlush(e);
 		e = ObjTest.newPermissionOnClassificationWSL(PERM_INDICE_2,
 				PermissionType.CONTRIBUTOR, o, Sets.newHashSet(subkeys2));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.saveAndFlush(e);
 	}
 
@@ -115,37 +113,37 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		PermissionOnClassificationWithSubjectList e = ObjTest
 				.newPermissionOnClassificationWSL(PERM_INDICE_3,
 						PermissionType.MANAGER, o, Sets.newHashSet(subkeys3));
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.save(e);
-		assertNotNull(e.getId());
-		log.info("After insert : " + e.toString());
-		
+		assertThat(e.getId(), notNullValue());
+		log.info("After insert : {}", e);
+
 		Optional<PermissionOnClassificationWithSubjectList> optionalPerm = repository.findById(e.getId());
 		PermissionOnClassificationWithSubjectList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
-		log.info("After select : " + e2.toString());
-		assertNotNull(e2);
-		assertTrue(e.getAuthorizedSubjects().equals(Sets.newHashSet(subkeys3)));
-		assertEquals(e, e2);
+		log.info("After select : {}", e2);
+		assertThat(e2, notNullValue());
+		assertThat((Sets.newHashSet(subkeys3)), equalTo(e.getAuthorizedSubjects()));
+		assertThat( e2, equalTo(e));
 
-		assertTrue(e.getAuthorizedSubjects().equals(e2.getAuthorizedSubjects()));
+		assertThat((e2.getAuthorizedSubjects()), equalTo(e.getAuthorizedSubjects()));
 		e2.getAuthorizedSubjects().remove(subkeys3[1]);
 		repository.save(e2);
-		
+
 		Optional<PermissionOnClassificationWithSubjectList> optionalPermission = repository.findById(e2.getId());
 		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
 
-		assertFalse(e.getAuthorizedSubjects().equals(Sets.newHashSet(subkeys3)));
+		assertThat((Sets.newHashSet(subkeys3)), not(equalTo(e.getAuthorizedSubjects())));
 
 		e = ObjTest.newPermissionOnClassificationWSL(PERM_INDICE_4,
 				PermissionType.LOOKOVER, o, Sets.newHashSet(subkeys4));
 		repository.save(e);
-		log.info("After update : " + e.toString());
-		assertNotNull(e.getId());
-		assertTrue(repository.existsById(e.getId()));
+		log.info("After update : {}", e);
+		assertThat(e.getId(), notNullValue());
+		assertThat(repository.existsById(e.getId()), is(true));
 		e = repository.getOne(e.getId());
-		assertNotNull(e);
-		log.info("After select : " + e.toString());
-		assertTrue(repository.count() == 4);
+		assertThat(e, notNullValue());
+		log.info("After select : {}", e);
+		assertThat(repository.count(), equalTo(4L));
 
 		List<PermissionOnClassificationWithSubjectList> result = repository
 				.findAll();
@@ -166,7 +164,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		repository.deleteById(e.getId());
 		log.debug("nb returned : {}", repository.findAll().size());
 		assertThat(repository.findAll().size(), is(3));
-		assertFalse(repository.existsById(e.getId()));
+		assertThat(repository.existsById(e.getId()), is(false));
 	}
 
 	/**
@@ -182,14 +180,14 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
 		List<PermissionOnClassificationWithSubjectList> result = repository
 				.findAll();
-		assertTrue(repository.existsById(result.get(0).getId()));
+		assertThat(repository.existsById(result.get(0).getId()), is(true));
 
 	}
 
@@ -199,7 +197,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -213,7 +211,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		List<PermissionOnClassificationWithSubjectList> result = repository
 				.findAll();
 		repository.delete(result.get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -223,7 +221,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

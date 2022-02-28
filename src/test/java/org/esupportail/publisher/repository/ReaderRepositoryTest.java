@@ -15,14 +15,13 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +32,9 @@ import javax.inject.Inject;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.repository.predicates.ReaderPredicates;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,10 +44,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 25 sept. 2014
@@ -58,12 +56,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReaderRepositoryTest {
 
+	public static final String READER_NAME = "TEST UPDATE";
 	@Inject
 	private ReaderRepository repository;
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 		Reader r = ObjTest.newReader("1");
 		repository.saveAndFlush(r);
 
@@ -80,50 +79,50 @@ public class ReaderRepositoryTest {
 	@Test
 	public void testInsert() {
 		Reader r = ObjTest.newReader("3");
-		log.info("Before insert : " + r.toString());
+		log.info("Before insert : {}", r);
 		repository.saveAndFlush(r);
-		assertNotNull(r.getId());
-		log.info("After insert : " + r.toString());
+		assertThat(r.getId(), notNullValue());
+		log.info("After insert : {}", r);
 		Optional<Reader> optionalReader = repository.findById(r.getId());
 		Reader r2 = optionalReader == null || !optionalReader.isPresent()? null : optionalReader.get();
-		log.info("After select : " + r2.toString());
-		assertNotNull(r2);
-		assertEquals(r, r2);
+		log.info("After select : {}", r2);
+		assertThat(r2, notNullValue());
+		assertThat(r2, equalTo(r));
 
-		r2.setName("TEST UPDATE");
+		r2.setName(READER_NAME);
 		r2 = repository.saveAndFlush(r2);
-		log.info("After update : " + r2.toString());
-		assertTrue("TEST UPDATE".equals(r2.getName()));
+		log.info("After update : {}", r2);
+		assertThat(r2.getName(), equalTo(READER_NAME));
 
 		Reader r4 = ObjTest.newReader("4");
-		log.info("Before insert : " + r4.toString());
+		log.info("Before insert : {}", r4);
 		repository.save(r4);
-		log.info("After insert : " + r4.toString());
-		assertNotNull(r4.getId());
-		assertTrue(repository.existsById(r4.getId()));
+		log.info("After insert : {}", r4);
+		assertThat(r4.getId(), notNullValue());
+		assertThat(repository.existsById(r4.getId()), is(true));
 		r = repository.getOne(r.getId());
-		assertNotNull(r);
-		log.info("After select : " + r.toString());
-		assertTrue(repository.count() == 4);
+		assertThat(r, notNullValue());
+		log.info("After select : {}", r);
+		assertThat(repository.count(), equalTo(4L));
 
 		List<Reader> results = repository.findAll();
 		assertThat(results.size(), is(4));
 		assertThat(results, hasItem(r));
 
 		r2 = repository.findByName(r.getName());
-		assertNotNull(r2);
+		assertThat(r2, notNullValue());
 
 		results = Lists.newArrayList(repository.findAll(ReaderPredicates
 				.sameName(r2)));
-		assertTrue(results.isEmpty());
+		assertThat(results, is(empty()));
 
 		repository.deleteById(r.getId());
-		assertTrue(repository.findAll().size() == 3);
-		assertFalse(repository.existsById(r.getId()));
-		
+		assertThat(repository.findAll().size(), equalTo(3));
+		assertThat(repository.existsById(r.getId()), is(false));
+
 		Optional<Reader> optionalR = repository.findById((long) 0);
 		r = optionalR == null || !optionalR.isPresent()? null : optionalR.get();
-		assertNull(r);
+		assertThat(r, is(nullValue()));
 
 	}
 
@@ -138,7 +137,7 @@ public class ReaderRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.jpa.repository.JpaRepository#save(java.lang.Iterable)}
+	 * {@link org.springframework.data.jpa.repository.JpaRepository#saveAll(java.lang.Iterable)}
 	 * .
 	 */
 	@Test
@@ -151,12 +150,12 @@ public class ReaderRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -166,7 +165,7 @@ public class ReaderRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -177,7 +176,7 @@ public class ReaderRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == 1);
+		assertThat(repository.count(), equalTo(1L));
 	}
 
 	/**
@@ -187,7 +186,7 @@ public class ReaderRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

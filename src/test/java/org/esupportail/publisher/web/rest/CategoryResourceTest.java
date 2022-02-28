@@ -15,7 +15,11 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -165,6 +169,7 @@ public class CategoryResourceTest {
 
 		Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
         User userPart1 = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+		assertThat(userPart1, notNullValue());
         Map<String, List<String>> userAttrs1 = Maps.newHashMap();
         userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));
         userAttrs1.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
@@ -204,7 +209,7 @@ public class CategoryResourceTest {
 	@Transactional
 	public void createCategory() throws Exception {
 		// Validate the database is empty
-		assertThat(categoryRepository.findAll()).hasSize(0);
+		assertThat(categoryRepository.findAll(), hasSize(0));
 
         SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
@@ -215,18 +220,17 @@ public class CategoryResourceTest {
 
 		// Validate the Category in the database
 		List<Category> categorys = categoryRepository.findAll();
-		assertThat(categorys).hasSize(1);
+		assertThat(categorys, hasSize(1));
 		Category testCategory = categorys.iterator().next();
-		assertThat(testCategory.getAccessView()).isEqualTo(DEFAULT_ACCESS_VIEW);
-		assertThat(testCategory.getDefaultDisplayOrder()).isEqualTo(DEFAULT_DEFAULT_DISPLAY_ORDER);
-		assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);
-		assertThat(testCategory.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-		assertThat(testCategory.getDisplayOrder()).isEqualTo(DEFAULT_DISPLAY_ORDER);
-		assertThat(testCategory.getIconUrl()).isEqualTo(DEFAULT_ICON_URL);
-		assertThat(testCategory.isRssAllowed()).isEqualTo(DEFAULT_RSS_ALLOWED);
-		assertThat(testCategory.getTtl()).isEqualTo(DEFAULT_TTL);
-		assertThat(testCategory.getPublisher()).isEqualTo(publisher);
-		;
+		assertThat(testCategory.getAccessView(), equalTo(DEFAULT_ACCESS_VIEW));
+		assertThat(testCategory.getDefaultDisplayOrder(), equalTo(DEFAULT_DEFAULT_DISPLAY_ORDER));
+		assertThat(testCategory.getName(), equalTo(DEFAULT_NAME));
+		assertThat(testCategory.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+		assertThat(testCategory.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+		assertThat(testCategory.getIconUrl(), equalTo(DEFAULT_ICON_URL));
+		assertThat(testCategory.isRssAllowed(), equalTo(DEFAULT_RSS_ALLOWED));
+		assertThat(testCategory.getTtl(), equalTo(DEFAULT_TTL));
+		assertThat(testCategory.getPublisher(), equalTo(publisher));
 	}
 
 	@Test
@@ -242,11 +246,11 @@ public class CategoryResourceTest {
 				.andExpect(jsonPath("$.[0].id").value(category.getId().intValue()))
 				.andExpect(jsonPath("$.[0].accessView").value(DEFAULT_ACCESS_VIEW.getName()))
 				.andExpect(jsonPath("$.[0].defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.getName()))
-				.andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-				.andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION.toString()))
+				.andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
 				.andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
-				.andExpect(jsonPath("$.[0].iconUrl").value(DEFAULT_ICON_URL.toString()))
-				.andExpect(jsonPath("$.[0].rssAllowed").value(DEFAULT_RSS_ALLOWED.booleanValue()))
+				.andExpect(jsonPath("$.[0].iconUrl").value(DEFAULT_ICON_URL))
+				.andExpect(jsonPath("$.[0].rssAllowed").value(DEFAULT_RSS_ALLOWED))
 				.andExpect(jsonPath("$.[0].ttl").value(DEFAULT_TTL))
 				.andExpect(jsonPath("$.[0].publisher.id").value(publisher.getId().intValue()));
 	}
@@ -263,11 +267,11 @@ public class CategoryResourceTest {
 				.andExpect(jsonPath("$.id").value(category.getId().intValue()))
 				.andExpect(jsonPath("$.accessView").value(DEFAULT_ACCESS_VIEW.getName()))
 				.andExpect(jsonPath("$.defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.getName()))
-				.andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-				.andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+				.andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
 				.andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
-				.andExpect(jsonPath("$.iconUrl").value(DEFAULT_ICON_URL.toString()))
-				.andExpect(jsonPath("$.rssAllowed").value(DEFAULT_RSS_ALLOWED.booleanValue()))
+				.andExpect(jsonPath("$.iconUrl").value(DEFAULT_ICON_URL))
+				.andExpect(jsonPath("$.rssAllowed").value(DEFAULT_RSS_ALLOWED))
 				.andExpect(jsonPath("$.ttl").value(DEFAULT_TTL))
 				.andExpect(jsonPath("$.publisher.id").value(publisher.getId().intValue()));
 	}
@@ -302,18 +306,17 @@ public class CategoryResourceTest {
 
 		// Validate the Category in the database
 		List<Category> categorys = categoryRepository.findAll();
-		assertThat(categorys).hasSize(1);
+		assertThat(categorys, hasSize(1));
 		Category testCategory = categorys.iterator().next();
-		assertThat(testCategory.getAccessView()).isEqualTo(UPDATED_ACCESS_VIEW);
-		assertThat(testCategory.getDefaultDisplayOrder()).isEqualTo(UPDATED_DEFAULT_DISPLAY_ORDER);
-		assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
-		assertThat(testCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-		assertThat(testCategory.getDisplayOrder()).isEqualTo(UPDATED_DISPLAY_ORDER);
-		assertThat(testCategory.getIconUrl()).isEqualTo(UPDATED_ICON_URL);
-		assertThat(testCategory.isRssAllowed()).isEqualTo(UPDATED_RSS_ALLOWED);
-		assertThat(testCategory.getTtl()).isEqualTo(UPDATED_TTL);
-		assertThat(testCategory.getPublisher()).isEqualTo(publisher);
-		;
+		assertThat(testCategory.getAccessView(), equalTo(UPDATED_ACCESS_VIEW));
+		assertThat(testCategory.getDefaultDisplayOrder(), equalTo(UPDATED_DEFAULT_DISPLAY_ORDER));
+		assertThat(testCategory.getName(), equalTo(UPDATED_NAME));
+		assertThat(testCategory.getDescription(), equalTo(UPDATED_DESCRIPTION));
+		assertThat(testCategory.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+		assertThat(testCategory.getIconUrl(), equalTo(UPDATED_ICON_URL));
+		assertThat(testCategory.isRssAllowed(), equalTo(UPDATED_RSS_ALLOWED));
+		assertThat(testCategory.getTtl(), equalTo(UPDATED_TTL));
+		assertThat(testCategory.getPublisher(), equalTo(publisher));
 	}
 
 	@Test
@@ -329,6 +332,6 @@ public class CategoryResourceTest {
 
 		// Validate the database is empty
 		List<Category> categorys = categoryRepository.findAll();
-		assertThat(categorys).hasSize(0);
+		assertThat(categorys, hasSize(0));
 	}
 }

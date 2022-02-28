@@ -15,23 +15,23 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+
 
 import java.time.Instant;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.User;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,8 +39,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -55,13 +53,13 @@ public class UserRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
         assertThat(repository.findAll().size(), is(4));
 		/*User u = new User(ObjTest.subject1, "Prénom NOM");
-		log.info("Before insert : " + u.toString());
+		log.info("Before insert : {}", u);
 		u = repository.saveAndFlush(u);
 		u = new User(ObjTest.subject2, "Prénom NOM");
-		log.info("Before insert : " + u.toString());
+		log.info("Before insert : {}", u);
 		u = repository.saveAndFlush(u);*/
 	}
 
@@ -71,43 +69,44 @@ public class UserRepositoryTest {
 		Instant d = Instant.now();
 		Optional<User> optionalUser = repository.findById(ObjTest.subject1);
 		User u = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
-		log.debug("loaded user :" + u.toString());
-		assertNotNull(u);
-		log.debug(ObjTest.subjectKey1.toString() + " test equals with "
-				+ u.getSubject().toString());
-		assertTrue(ObjTest.subjectKey1.equals(u.getSubject()));
-		assertNotNull(u.getCreatedDate());
-		log.debug(d.toString() + " is same or before  "
-				+ u.getCreatedDate().toString());
-		assertTrue(d.compareTo(u.getCreatedDate()) >= 0);
+		log.info("loaded user :{}", u);
+		assertThat(u, notNullValue());
+		log.debug("{} test equals with {}", ObjTest.subjectKey1, u.getSubject());
+		assertThat(u.getSubject(), equalTo(ObjTest.subjectKey1));
+		assertThat(u.getCreatedDate(), notNullValue());
+		log.info("{} is same or before  {}", d, u.getCreatedDate());
+		assertThat(u.getCreatedDate(), is(lessThanOrEqualTo(d)));
 
 		User u2 = new User(ObjTest.subject1, "Prénom NOM");
-		assertEquals(u, u2);
+		assertThat(u, equalTo(u2));
 
 		u.setAcceptNotifications(true);
 		repository.saveAndFlush(u);
 		Optional<User> optionalU = repository.findById(ObjTest.subject2);
 		u = optionalU == null || !optionalU.isPresent()? null : optionalU.get();
-		assertFalse(u.equals(u2));
+		assertThat(u, notNullValue());
+		assertThat(u, not(equalTo(u2)));
 		u2.setAcceptNotifications(true);
 		// assertEquals(u, u2);
 
 		repository.saveAndFlush(u);
 		Optional<User> optionalU1 = repository.findById(ObjTest.subject1);
-		u = optionalU1 == null || !optionalU1.isPresent()? null : optionalU1.get();
-		assertTrue(u.equals(u2));
-		assertEquals(u, u2);
+		u = (optionalU1 == null || !optionalU1.isPresent()) ? null : optionalU1.get();
+		assertThat(u, notNullValue());
+		assertThat(u, equalTo(u2));
+		assertThat(u, equalTo(u2));
 
 		u.setEnabled(false);
 		repository.saveAndFlush(u);
 		Optional<User> optionalU2 = repository.findById(ObjTest.subject1);
 		u2 = optionalU2 == null || !optionalU2.isPresent()? null : optionalU2.get();
-		assertTrue(u.equals(u2));
+		assertThat(u2, notNullValue());
+		assertThat(u2, equalTo(u));
 		u2.setEnabled(true);
-		assertTrue(u.equals(u2));
+		assertThat(u2, equalTo(u));
 
 		repository.deleteById(u2.getLogin());
-        assertTrue(repository.count() == count - 1);
+        assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class UserRepositoryTest {
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getLogin()));
+		assertThat(repository.existsById(repository.findAll().get(0).getLogin()), is(true));
 
 	}
 
@@ -136,7 +135,7 @@ public class UserRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 4);
+		assertThat(repository.count(), equalTo(4L));
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class UserRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -158,7 +157,7 @@ public class UserRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

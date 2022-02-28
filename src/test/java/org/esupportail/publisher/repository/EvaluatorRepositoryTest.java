@@ -15,14 +15,12 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -104,37 +102,36 @@ public class EvaluatorRepositoryTest {
 		OperatorEvaluator oe = ObjTest.newGlobalEvaluator(OperatorType.OR);
 		log.info("Before insert : " + oe.toString());
 		repository.saveAndFlush(oe);
-		assertNotNull(oe.getId());
+		assertThat(oe.getId(), notNullValue());
 		log.info("After insert : " + oe.toString());
 		Optional<AbstractEvaluator> optionalEvaluator = repository.findById(oe.getId());
 		OperatorEvaluator oe2 = optionalEvaluator == null || !optionalEvaluator.isPresent()? null : (OperatorEvaluator) optionalEvaluator.get();
 		log.info("After select : " + oe2.toString());
-		assertNotNull(oe2);
-		assertEquals(oe, oe2);
+		assertThat(oe2, notNullValue());
+		assertThat(oe, equalTo(oe2));
 
 		OperatorEvaluator oe3 = ObjTest.newGlobalEvaluator(OperatorType.AND);
 		log.info("Before insert : " + oe3.toString());
 		repository.save(oe3);
 		log.info("After insert : " + oe3.toString());
-		assertNotNull(oe3.getId());
-		assertTrue(repository.existsById(oe3.getId()));
+		assertThat(oe3.getId(), notNullValue());
+		assertThat(repository.existsById(oe3.getId()), is(true));
 		oe = (OperatorEvaluator) repository.getOne(oe3.getId());
-		assertNotNull(oe);
+		assertThat(oe, notNullValue());
 		log.info("After select : " + oe.toString());
-		assertTrue(repository.count() == 16);
+		assertThat(repository.count(), equalTo(16L));
 
 		List<AbstractEvaluator> results = repository.findAll();
 		assertThat(results.size(), is(16));
 		assertThat(results, hasItem(oe));
 
 		repository.deleteById(oe.getId());
-		assertTrue(repository.findAll().size() == 12);
-		assertFalse(repository.existsById(oe.getId()));
+		assertThat(repository.findAll().size(), equalTo(12));
+		assertThat(repository.existsById(oe.getId()), is(false));
 
 		Optional<AbstractEvaluator> optionalAe = repository.findById((long) 0);
 		AbstractEvaluator ae = optionalAe.isPresent() ? optionalAe.get() : null;
-		assertNull(ae);
-
+		assertThat(ae, is(nullValue()));
 	}
 
 	/**
@@ -148,7 +145,7 @@ public class EvaluatorRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.jpa.repository.JpaRepository#save(java.lang.Iterable)}
+	 * {@link org.springframework.data.jpa.repository.JpaRepository#saveAll(java.lang.Iterable)}
 	 * .
 	 */
 	@Test
@@ -161,12 +158,12 @@ public class EvaluatorRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(oe1.getId()));
+		assertThat(repository.existsById(oe1.getId()), is(true));
 
 	}
 
@@ -176,7 +173,7 @@ public class EvaluatorRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 8);
+		assertThat(repository.count(), equalTo(8L));
 	}
 
 	/**
@@ -187,7 +184,7 @@ public class EvaluatorRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.deleteById(oe2.getId());
-		assertTrue(repository.count() == 4);
+		assertThat(repository.count(), equalTo(4L));
 	}
 
 	/**
@@ -206,7 +203,7 @@ public class EvaluatorRepositoryTest {
 		// repository.save(Arrays.asList(ae1, ae2, ae3, ae4));
 		repository.saveAll(Arrays.asList(ae2, ae3, ae4));
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

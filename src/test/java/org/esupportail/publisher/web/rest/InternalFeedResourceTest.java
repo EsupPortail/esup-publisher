@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -190,7 +192,7 @@ public class InternalFeedResourceTest {
 	@Transactional
 	public void createInternalFeed() throws Exception {
 		// Validate the database is empty
-		assertThat(internalFeedRepository.findAll()).hasSize(0);
+		assertThat(internalFeedRepository.findAll(), hasSize(0));
 
 		// Create the InternalFeed
 		restInternalFeedMockMvc.perform(
@@ -201,23 +203,18 @@ public class InternalFeedResourceTest {
 
 		// Validate the InternalFeed in the database
 		List<InternalFeed> internalFeeds = internalFeedRepository.findAll();
-		assertThat(internalFeeds).hasSize(1);
+		assertThat(internalFeeds, hasSize(1));
 		InternalFeed testInternalFeed = internalFeeds.iterator().next();
-		assertThat(testInternalFeed.getAccessView()).isEqualTo(
-				DEFAULT_ACCESS_VIEW);
-		assertThat(testInternalFeed.getDefaultDisplayOrder()).isEqualTo(
-				DEFAULT_DEFAULT_DISPLAY_ORDER);
-		assertThat(testInternalFeed.getName()).isEqualTo(DEFAULT_NAME);
-		assertThat(testInternalFeed.getDescription()).isEqualTo(
-				DEFAULT_DESCRIPTION);
-		assertThat(testInternalFeed.getDisplayOrder()).isEqualTo(
-				DEFAULT_DISPLAY_ORDER);
-		assertThat(testInternalFeed.getIconUrl()).isEqualTo(DEFAULT_ICON_URL);
-		assertThat(testInternalFeed.getTtl()).isEqualTo(DEFAULT_TTL);
-		assertThat(testInternalFeed.getLang()).isEqualTo(DEFAULT_LANG);
-		assertThat(testInternalFeed.getPublisher()).isEqualTo(publisher);
-		assertThat(testInternalFeed.getParent()).isEqualTo(category);
-		;
+		assertThat(testInternalFeed.getAccessView(), equalTo(DEFAULT_ACCESS_VIEW));
+		assertThat(testInternalFeed.getDefaultDisplayOrder(), equalTo(DEFAULT_DEFAULT_DISPLAY_ORDER));
+		assertThat(testInternalFeed.getName(), equalTo(DEFAULT_NAME));
+		assertThat(testInternalFeed.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+		assertThat(testInternalFeed.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+		assertThat(testInternalFeed.getIconUrl(), equalTo(DEFAULT_ICON_URL));
+		assertThat(testInternalFeed.getTtl(), equalTo(DEFAULT_TTL));
+		assertThat(testInternalFeed.getLang(), equalTo(DEFAULT_LANG));
+		assertThat(testInternalFeed.getPublisher(), equalTo(publisher));
+		assertThat(testInternalFeed.getParent(), equalTo(category));
 	}
 
 	@Test
@@ -232,35 +229,17 @@ public class InternalFeedResourceTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.[0].id").value(
-								internalFeed.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].accessView").value(
-								DEFAULT_ACCESS_VIEW.name()))
-				.andExpect(
-						jsonPath("$.[0].defaultDisplayOrder").value(
-								DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
-				.andExpect(
-						jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-				.andExpect(
-						jsonPath("$.[0].description").value(
-								DEFAULT_DESCRIPTION.toString()))
-				.andExpect(
-						jsonPath("$.[0].displayOrder").value(
-								DEFAULT_DISPLAY_ORDER))
-				.andExpect(
-						jsonPath("$.[0].iconUrl").value(
-								DEFAULT_ICON_URL.toString()))
+				.andExpect(jsonPath("$.[0].id").value(internalFeed.getId().intValue()))
+				.andExpect(jsonPath("$.[0].accessView").value(DEFAULT_ACCESS_VIEW.name()))
+				.andExpect(jsonPath("$.[0].defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
+				.andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
+				.andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
+				.andExpect(jsonPath("$.[0].iconUrl").value(DEFAULT_ICON_URL))
 				.andExpect(jsonPath("$.[0].ttl").value(DEFAULT_TTL))
-				.andExpect(
-						jsonPath("$.[0].lang").value(DEFAULT_LANG.toString()))
-				.andExpect(
-						jsonPath("$.[0].publisher.id").value(
-								publisher.getId().intValue()))
-				.andExpect(
-						jsonPath("$.[0].parent.id").value(
-								category.getId().intValue()));
+				.andExpect(jsonPath("$.[0].lang").value(DEFAULT_LANG))
+				.andExpect(jsonPath("$.[0].publisher.id").value(publisher.getId().intValue()))
+				.andExpect(jsonPath("$.[0].parent.id").value(category.getId().intValue()));
 	}
 
 	@Test
@@ -271,36 +250,20 @@ public class InternalFeedResourceTest {
 
 		// Get the internalFeed
 		restInternalFeedMockMvc
-				.perform(
-						get("/api/internalFeeds/{id}",
-								internalFeed.getId()))
+				.perform(get("/api/internalFeeds/{id}",internalFeed.getId()))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(
-						jsonPath("$.id").value(internalFeed.getId().intValue()))
-				.andExpect(
-						jsonPath("$.accessView").value(
-								DEFAULT_ACCESS_VIEW.name()))
-				.andExpect(
-						jsonPath("$.defaultDisplayOrder").value(
-								DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
-				.andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-				.andExpect(
-						jsonPath("$.description").value(
-								DEFAULT_DESCRIPTION.toString()))
-				.andExpect(
-						jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
-				.andExpect(
-						jsonPath("$.iconUrl")
-								.value(DEFAULT_ICON_URL.toString()))
+				.andExpect(jsonPath("$.id").value(internalFeed.getId().intValue()))
+				.andExpect(jsonPath("$.accessView").value(DEFAULT_ACCESS_VIEW.name()))
+				.andExpect(jsonPath("$.defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()))
+				.andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+				.andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+				.andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
+				.andExpect(jsonPath("$.iconUrl").value(DEFAULT_ICON_URL))
 				.andExpect(jsonPath("$.ttl").value(DEFAULT_TTL))
-				.andExpect(jsonPath("$.lang").value(DEFAULT_LANG.toString()))
-				.andExpect(
-						jsonPath("$.publisher.id").value(
-								publisher.getId().intValue()))
-				.andExpect(
-						jsonPath("$.parent.id").value(
-								category.getId().intValue()));
+				.andExpect(jsonPath("$.lang").value(DEFAULT_LANG))
+				.andExpect(jsonPath("$.publisher.id").value(publisher.getId().intValue()))
+				.andExpect(jsonPath("$.parent.id").value(category.getId().intValue()));
 	}
 
 	@Test
@@ -308,8 +271,8 @@ public class InternalFeedResourceTest {
 	public void getNonExistingInternalFeed() throws Exception {
 		// Get the internalFeed
 		restInternalFeedMockMvc
-				.perform(get("/api/internalFeeds/{id}", 1L)).andExpect(
-						status().isNotFound());
+				.perform(get("/api/internalFeeds/{id}", 1L))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -335,23 +298,18 @@ public class InternalFeedResourceTest {
 
 		// Validate the InternalFeed in the database
 		List<InternalFeed> internalFeeds = internalFeedRepository.findAll();
-		assertThat(internalFeeds).hasSize(1);
+		assertThat(internalFeeds, hasSize(1));
 		InternalFeed testInternalFeed = internalFeeds.iterator().next();
-		assertThat(testInternalFeed.getAccessView()).isEqualTo(
-				UPDATED_ACCESS_VIEW);
-		assertThat(testInternalFeed.getDefaultDisplayOrder()).isEqualTo(
-				UPDATED_DEFAULT_DISPLAY_ORDER);
-		assertThat(testInternalFeed.getName()).isEqualTo(UPDATED_NAME);
-		assertThat(testInternalFeed.getDescription()).isEqualTo(
-				UPDATED_DESCRIPTION);
-		assertThat(testInternalFeed.getDisplayOrder()).isEqualTo(
-				UPDATED_DISPLAY_ORDER);
-		assertThat(testInternalFeed.getIconUrl()).isEqualTo(UPDATED_ICON_URL);
-		assertThat(testInternalFeed.getTtl()).isEqualTo(UPDATED_TTL);
-		assertThat(testInternalFeed.getLang()).isEqualTo(UPDATED_LANG);
-		assertThat(testInternalFeed.getPublisher()).isEqualTo(publisher);
-		assertThat(testInternalFeed.getParent()).isEqualTo(category);
-		;
+		assertThat(testInternalFeed.getAccessView(), equalTo(UPDATED_ACCESS_VIEW));
+		assertThat(testInternalFeed.getDefaultDisplayOrder(), equalTo(UPDATED_DEFAULT_DISPLAY_ORDER));
+		assertThat(testInternalFeed.getName(), equalTo(UPDATED_NAME));
+		assertThat(testInternalFeed.getDescription(), equalTo(UPDATED_DESCRIPTION));
+		assertThat(testInternalFeed.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+		assertThat(testInternalFeed.getIconUrl(), equalTo(UPDATED_ICON_URL));
+		assertThat(testInternalFeed.getTtl(), equalTo(UPDATED_TTL));
+		assertThat(testInternalFeed.getLang(), equalTo(UPDATED_LANG));
+		assertThat(testInternalFeed.getPublisher(), equalTo(publisher));
+		assertThat(testInternalFeed.getParent(), equalTo(category));
 	}
 
 	@Test
@@ -368,6 +326,6 @@ public class InternalFeedResourceTest {
 
 		// Validate the database is empty
 		List<InternalFeed> internalFeeds = internalFeedRepository.findAll();
-		assertThat(internalFeeds).hasSize(0);
+		assertThat(internalFeeds, hasSize(0));
 	}
 }

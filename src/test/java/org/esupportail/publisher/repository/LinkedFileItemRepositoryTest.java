@@ -15,9 +15,9 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import javax.inject.Inject;
 
@@ -69,7 +69,7 @@ public class LinkedFileItemRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
         org1 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_1));
         redactor1 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_1));
@@ -79,7 +79,7 @@ public class LinkedFileItemRepositoryTest {
         itemRepo.saveAndFlush(item1);
 
 		LinkedFileItem f = new LinkedFileItem(FILE_PATH_DEFAULT, item1);
-		log.info("Before insert : " + f.toString());
+		log.info("Before insert : {}", f);
 		repository.saveAndFlush(f);
 	}
 
@@ -88,7 +88,7 @@ public class LinkedFileItemRepositoryTest {
         AbstractItem item = itemRepo.findAll().get(0);
 
         LinkedFileItem f = new LinkedFileItem(FILE_PATH_DEFAULT, item);
-        log.info("Before insert : " + f.toString());
+        log.info("Before insert : {}", f);
         repository.saveAndFlush(f);
 
     }
@@ -98,7 +98,7 @@ public class LinkedFileItemRepositoryTest {
 		AbstractItem item = itemRepo.findAll().get(0);
 
         LinkedFileItem f = new LinkedFileItem(FILE_PATH_1, item);
-		log.info("Before insert : " + f.toString());
+		log.info("Before insert : {}", f);
 		repository.saveAndFlush(f);
 
 	}
@@ -117,12 +117,12 @@ public class LinkedFileItemRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -132,7 +132,7 @@ public class LinkedFileItemRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 1);
+		assertThat(repository.count(), equalTo(1L));
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class LinkedFileItemRepositoryTest {
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == count - 1);
+		assertThat(repository.count(), equalTo(count - 1));
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class LinkedFileItemRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

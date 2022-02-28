@@ -18,14 +18,13 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,7 +74,7 @@ public class OrganizationRepositoryTest {
 
 	@Before
 	public void setUp() {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 		Organization e = ObjTest.newOrganization("init1");
         e.setIdentifiers(DEFAULT_IDS1);
 		repository.save(e);
@@ -92,29 +91,29 @@ public class OrganizationRepositoryTest {
 	public void testInsert() {
 		Organization e = ObjTest.newOrganization("");
         e.setIdentifiers(DEFAULT_IDS3);
-		log.info("Before insert : " + e.toString());
+		log.info("Before insert : {}", e);
 		repository.save(e);
-		assertNotNull(e.getId());
-		log.info("After insert : " + e.toString());
+		assertThat(e.getId(), notNullValue());
+		log.info("After insert : {}", e);
         assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS3.size()));
-        
+
         Optional<Organization> optionalOrganization = repository.findById(e.getId());
         Organization e2 = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
         //e2.setIdentifiers(DEFAULT_IDS3);
-		log.info("After select : " + e2.toString());
-		assertNotNull(e2);
-		assertEquals(e, e2);
+		log.info("After select : {}", e2);
+		assertThat(e2, notNullValue());
+		assertThat(e, equalTo( e2));
 
 		e = ObjTest.newOrganization("1");
         e.setIdentifiers(DEFAULT_IDS4);
 		repository.save(e);
-		log.info("After insert : " + e.toString());
-		assertNotNull(e.getId());
-		assertTrue(repository.existsById(e.getId()));
+		log.info("After insert : {}", e);
+		assertThat(e.getId(), notNullValue());
+		assertThat(repository.existsById(e.getId()), is(true));
 		e = repository.getOne(e.getId());
-		assertNotNull(e);
-		log.info("After select : " + e.toString());
-		assertTrue(repository.count() == 4);
+		assertThat(e, notNullValue());
+		log.info("After select : {}", e);
+		assertThat(repository.count(), equalTo(4L));
 
 		List<Organization> result = repository.findAll();
 		assertThat(result.size(), is(4));
@@ -128,39 +127,15 @@ public class OrganizationRepositoryTest {
 		// BooleanExpression orgExistId = organization.id.eq(e.getId());
 		results = Lists.newArrayList(repository.findAll(OrganizationPredicates
 				.sameName(e)));
-		assertTrue(results.isEmpty());
-
-		/*
-		 * assertTrue(repository.canDelete(e.getId()));
-		 * assertTrue(repository.selectAll().size() > 0 );
-		 */
-		/*
-		 * Category cat = newCategory(true); cat.setOrganizationId(e.getId());
-		 * categoryDao.updateById(cat);
-		 * assertFalse(repository.canDelete(e.getId()));
-		 * assertTrue(repository.insertLinkToOneType(e.getId(), new Long(1)) ==
-		 * 1); List<Long> typeList = new ArrayList<Long>(); typeList.add(new
-		 * Long(4)); typeList.add(new Long(5));
-		 * assertTrue(repository.insertLinkToListOfType(e.getId(), typeList) ==
-		 * 2); List<Type> listType = repository.selectLinkedType(e.getId());
-		 * log.info("Liste de Type : " + listType.toString());
-		 * assertTrue(listType.size() == 3); List<Organization> listOrganization
-		 * = repository.selectAllOfType(new Long(5));
-		 * log.info("Liste d'Organization : " + listOrganization.toString());
-		 * assertTrue(listOrganization.size() == 1);
-		 * assertTrue(repository.deleteLinkToOneType(e.getId(), new Long(5)) ==
-		 * 1); assertTrue(repository.deleteAllLinkToType(e.getId()) == 2);
-		 * categoryDao.deleteById(cat.getCatId());
-		 * assertTrue(repository.selectLinkedType(e.getId()).size() == 0);
-		 */
+		assertThat(results, is(empty()));
 
 		repository.deleteById(e.getId());
-		assertTrue(repository.findAll().size() == 3);
-		assertFalse(repository.existsById(e.getId()));
-		
+		assertThat(repository.findAll().size(), equalTo(3));
+		assertThat(repository.existsById(e.getId()), is(false));
+
 		Optional<Organization> optionalO = repository.findById((long) 0);
         e2 = optionalO == null || !optionalO.isPresent()? null : optionalO.get();
-		assertNull(e2);
+		assertThat(e2, is(nullValue()));
 	}
 
 	/**
@@ -174,7 +149,7 @@ public class OrganizationRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.jpa.repository.JpaRepository#save(java.lang.Iterable)}
+	 * {@link org.springframework.data.jpa.repository.JpaRepository#saveAll(java.lang.Iterable)}
 	 * .
 	 */
 	@Test
@@ -187,12 +162,12 @@ public class OrganizationRepositoryTest {
 
 	/**
 	 * Test method for
-	 * {@link org.springframework.data.repository.CrudRepository#exists(java.io.Serializable)}
+	 * {@link org.springframework.data.repository.CrudRepository#existsById(Object)}
 	 * .
 	 */
 	@Test
 	public void testExists() {
-		assertTrue(repository.existsById(repository.findAll().get(0).getId()));
+		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
 	}
 
@@ -202,7 +177,7 @@ public class OrganizationRepositoryTest {
 	 */
 	@Test
 	public void testCount() {
-		assertTrue(repository.count() == 2);
+		assertThat(repository.count(), equalTo(2L));
 	}
 
 	/**
@@ -213,7 +188,7 @@ public class OrganizationRepositoryTest {
 	@Test
 	public void testDelete() {
 		repository.delete(repository.findAll().get(0));
-		assertTrue(repository.count() == 1);
+		assertThat(repository.count(), equalTo(1L));
 	}
 
 	/**
@@ -223,7 +198,7 @@ public class OrganizationRepositoryTest {
 	@Test
 	public void testDeleteAll() {
 		repository.deleteAll();
-		assertTrue(repository.count() == 0);
+		assertThat(repository.count(), equalTo(0L));
 	}
 
 }

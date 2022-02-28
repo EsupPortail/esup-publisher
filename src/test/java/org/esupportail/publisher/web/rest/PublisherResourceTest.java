@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -167,7 +169,7 @@ public class PublisherResourceTest {
     @Transactional
     public void createPublisher() throws Exception {
         // Validate the database is empty
-        assertThat(publisherRepository.findAll()).hasSize(0);
+        assertThat(publisherRepository.findAll(), hasSize(0));
 
         // Create the Publisher
         restPublisherMockMvc.perform(
@@ -178,19 +180,15 @@ public class PublisherResourceTest {
 
         // Validate the Publisher in the database
         List<Publisher> publishers = publisherRepository.findAll();
-        assertThat(publishers).hasSize(1);
+        assertThat(publishers, hasSize(1));
         Publisher testPublisher = publishers.iterator().next();
-        assertThat(testPublisher.getDisplayName()).isEqualTo(DEFAULT_PUBLISHER_NAME);
-        assertThat(testPublisher.getPermissionType()).isEqualTo(
-            DEFAULT_PERMISSION_CLASS);
-        assertThat(testPublisher.isUsed()).isEqualTo(DEFAULT_BOOLEAN);
-        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(DEFAULT_BOOLEAN);
-        assertThat(testPublisher.isDoHighlight()).isEqualTo(DEFAULT_BOOLEAN);
-        assertThat(testPublisher.getDisplayOrder()).isEqualTo(
-            DEFAULT_DISPLAY_ORDER);
-        assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(
-            DEFAULT_DEFAULT_DISPLAY_ORDER);
-        ;
+        assertThat(testPublisher.getDisplayName(), equalTo(DEFAULT_PUBLISHER_NAME));
+        assertThat(testPublisher.getPermissionType(), equalTo(DEFAULT_PERMISSION_CLASS));
+        assertThat(testPublisher.isUsed(), equalTo(DEFAULT_BOOLEAN));
+        assertThat(testPublisher.isHasSubPermsManagement(), equalTo(DEFAULT_BOOLEAN));
+        assertThat(testPublisher.isDoHighlight(), equalTo(DEFAULT_BOOLEAN));
+        assertThat(testPublisher.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+        assertThat(testPublisher.getDefaultDisplayOrder(), equalTo(DEFAULT_DEFAULT_DISPLAY_ORDER));
     }
 
     @Test
@@ -205,30 +203,14 @@ public class PublisherResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(
-                jsonPath("$.[0].id")
-                    .value(publisher.getId().intValue()))
-            .andExpect(
-                jsonPath("$.[0].displayName").value(
-                    DEFAULT_PUBLISHER_NAME))
-            .andExpect(
-                jsonPath("$.[0].permissionType").value(
-                    DEFAULT_PERMISSION_CLASS.name()))
-            .andExpect(
-                jsonPath("$.[0].used").value(
-                    DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.[0].hasSubPermsManagement").value(
-                    DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.[0].doHighlight").value(
-                    DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.[0].displayOrder").value(
-                    DEFAULT_DISPLAY_ORDER))
-            .andExpect(
-                jsonPath("$.[0].defaultDisplayOrder").value(
-                    DEFAULT_DEFAULT_DISPLAY_ORDER.name()));
+            .andExpect(jsonPath("$.[0].id").value(publisher.getId().intValue()))
+            .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_PUBLISHER_NAME))
+            .andExpect(jsonPath("$.[0].permissionType").value(DEFAULT_PERMISSION_CLASS.name()))
+            .andExpect(jsonPath("$.[0].used").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.[0].hasSubPermsManagement").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.[0].doHighlight").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
+            .andExpect(jsonPath("$.[0].defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()));
     }
 
     @Test
@@ -244,20 +226,12 @@ public class PublisherResourceTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(publisher.getId().intValue()))
             .andExpect(jsonPath("$.displayName").value(DEFAULT_PUBLISHER_NAME))
-            .andExpect(
-                jsonPath("$.permissionType").value(
-                    DEFAULT_PERMISSION_CLASS.name()))
-            .andExpect(
-                jsonPath("$.used").value(DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.hasSubPermsManagement").value(DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.doHighlight").value(DEFAULT_BOOLEAN.booleanValue()))
-            .andExpect(
-                jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
-            .andExpect(
-                jsonPath("$.defaultDisplayOrder").value(
-                    DEFAULT_DEFAULT_DISPLAY_ORDER.name()));
+            .andExpect(jsonPath("$.permissionType").value(DEFAULT_PERMISSION_CLASS.name()))
+            .andExpect(jsonPath("$.used").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.hasSubPermsManagement").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.doHighlight").value(DEFAULT_BOOLEAN))
+            .andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
+            .andExpect(jsonPath("$.defaultDisplayOrder").value(DEFAULT_DEFAULT_DISPLAY_ORDER.name()));
     }
 
     @Test
@@ -290,19 +264,15 @@ public class PublisherResourceTest {
 
         // Validate the Publisher in the database
         List<Publisher> publishers = publisherRepository.findAll();
-        assertThat(publishers).hasSize(1);
+        assertThat(publishers, hasSize(1));
         Publisher testPublisher = publishers.iterator().next();
-        assertThat(testPublisher.getDisplayName()).isEqualTo(
-            UPDATED_PUBLISHER_NAME);
-        assertThat(testPublisher.getPermissionType()).isEqualTo(
-            UPDATED_PERMISSION_CLASS);
-        assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_BOOLEAN);
-        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(UPDATED_BOOLEAN);
-        assertThat(testPublisher.isDoHighlight()).isEqualTo(UPDATED_BOOLEAN);
-        assertThat(testPublisher.getDisplayOrder()).isEqualTo(
-            UPDATED_DISPLAY_ORDER);
-        assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(
-            UPDATED_DEFAULT_DISPLAY_ORDER);
+        assertThat(testPublisher.getDisplayName(), equalTo(UPDATED_PUBLISHER_NAME));
+        assertThat(testPublisher.getPermissionType(), equalTo(UPDATED_PERMISSION_CLASS));
+        assertThat(testPublisher.isUsed(), equalTo(UPDATED_BOOLEAN));
+        assertThat(testPublisher.isHasSubPermsManagement(), equalTo(UPDATED_BOOLEAN));
+        assertThat(testPublisher.isDoHighlight(), equalTo(UPDATED_BOOLEAN));
+        assertThat(testPublisher.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+        assertThat(testPublisher.getDefaultDisplayOrder(), equalTo(UPDATED_DEFAULT_DISPLAY_ORDER));
 
     }
 
@@ -326,19 +296,15 @@ public class PublisherResourceTest {
 
         // Validate the Publisher in the database
         List<Publisher> publishers = publisherRepository.findAll();
-        assertThat(publishers).hasSize(1);
+        assertThat(publishers, hasSize(1));
         Publisher testPublisher = publishers.iterator().next();
-        assertThat(testPublisher.getDisplayName()).isEqualTo(
-            DEFAULT_PUBLISHER_NAME);
-        assertThat(testPublisher.getPermissionType()).isEqualTo(
-            DEFAULT_PERMISSION_CLASS);
-        assertThat(testPublisher.isUsed()).isEqualTo(UPDATED_BOOLEAN);
-        assertThat(testPublisher.isHasSubPermsManagement()).isEqualTo(DEFAULT_BOOLEAN);
-        assertThat(testPublisher.isDoHighlight()).isEqualTo(DEFAULT_BOOLEAN);
-        assertThat(testPublisher.getDisplayOrder()).isEqualTo(
-            DEFAULT_DISPLAY_ORDER);
-        assertThat(testPublisher.getDefaultDisplayOrder()).isEqualTo(
-            DEFAULT_DEFAULT_DISPLAY_ORDER);
+        assertThat(testPublisher.getDisplayName(), equalTo(DEFAULT_PUBLISHER_NAME));
+        assertThat(testPublisher.getPermissionType(), equalTo(DEFAULT_PERMISSION_CLASS));
+        assertThat(testPublisher.isUsed(), equalTo(UPDATED_BOOLEAN));
+        assertThat(testPublisher.isHasSubPermsManagement(), equalTo(DEFAULT_BOOLEAN));
+        assertThat(testPublisher.isDoHighlight(), equalTo(DEFAULT_BOOLEAN));
+        assertThat(testPublisher.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+        assertThat(testPublisher.getDefaultDisplayOrder(), equalTo(DEFAULT_DEFAULT_DISPLAY_ORDER));
     }
 
     @Test
@@ -355,6 +321,6 @@ public class PublisherResourceTest {
 
         // Validate the database is empty
         List<Publisher> publishers = publisherRepository.findAll();
-        assertThat(publishers).hasSize(0);
+        assertThat(publishers, hasSize(0));
     }
 }

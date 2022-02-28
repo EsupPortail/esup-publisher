@@ -15,8 +15,8 @@
  */
 package org.esupportail.publisher.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +38,8 @@ import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.mysema.commons.lang.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,8 +51,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.mysema.commons.lang.Pair;
 
 @RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -94,7 +94,7 @@ public class UserServiceTest {
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 
 		//THEN
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 
 	}
 
@@ -111,7 +111,7 @@ public class UserServiceTest {
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 
 		//THEN
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class UserServiceTest {
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 
 		//THEN
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class UserServiceTest {
 		final List<UserDTO> resultList = userService.getUserFromSearchInCtx(contextKey, subContextKeys, search);
 
 		//THEN
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -183,7 +183,7 @@ public class UserServiceTest {
 		verify(externalUserDao).getUsersWithFilter(filter.getPattern(), search);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -220,7 +220,7 @@ public class UserServiceTest {
 		verify(externalUserDao).getUsersWithFilter(filter, search);
 		verify(contextService).getOrganizationCtxOfCtx(contextKey);
 		verify(userDTOFactory).asDTOList(externalUserList, false);
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 	@Test
@@ -244,7 +244,7 @@ public class UserServiceTest {
 
 		//THEN
 //		verify(permissionService, times(2));
-		assertThat(resultList.size()).isEqualTo(0);
+		assertThat(resultList.size(), equalTo(0));
 	}
 
 }

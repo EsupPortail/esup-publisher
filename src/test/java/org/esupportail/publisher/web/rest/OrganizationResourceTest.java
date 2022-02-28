@@ -15,7 +15,9 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -133,7 +135,7 @@ public class OrganizationResourceTest {
             "permissionService", permissionService);
         this.restOrganizationMockMvc = MockMvcBuilders.standaloneSetup(
             organizationResource).build();
-        
+
         Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
         User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
         UserDTO userDTOPart = userDTOFactory.from(userPart);
@@ -156,7 +158,7 @@ public class OrganizationResourceTest {
     @Transactional
     public void createOrganization() throws Exception {
         // Validate the database is empty
-        assertThat(organizationRepository.findAll()).hasSize(0);
+        assertThat(organizationRepository.findAll(), hasSize(0));
 
         // Create the Organization
         restOrganizationMockMvc
@@ -169,19 +171,14 @@ public class OrganizationResourceTest {
 
         // Validate the Organization in the database
         List<Organization> organizations = organizationRepository.findAll();
-        assertThat(organizations).hasSize(1);
+        assertThat(organizations, hasSize(1));
         Organization testOrganization = organizations.iterator().next();
-        assertThat(testOrganization.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testOrganization.getDisplayName()).isEqualTo(
-            DEFAULT_DISPLAY_NAME);
-        assertThat(testOrganization.getDescription()).isEqualTo(
-            DEFAULT_DESCRIPTION);
-        assertThat(testOrganization.getDisplayOrder()).isEqualTo(
-            DEFAULT_DISPLAY_ORDER);
-        assertThat(testOrganization.isAllowNotifications()).isEqualTo(
-            DEFAULT_ALLOW_NOTIFICATIONS);
-        assertThat(testOrganization.getIdentifiers()).isEqualTo(
-            DEFAULT_IDS);
+        assertThat(testOrganization.getName(), equalTo(DEFAULT_NAME));
+        assertThat(testOrganization.getDisplayName(), equalTo(DEFAULT_DISPLAY_NAME));
+        assertThat(testOrganization.getDescription(), equalTo(DEFAULT_DESCRIPTION));
+        assertThat(testOrganization.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
+        assertThat(testOrganization.isAllowNotifications(), equalTo(DEFAULT_ALLOW_NOTIFICATIONS));
+        assertThat(testOrganization.getIdentifiers(), equalTo(DEFAULT_IDS));
     }
 
     @Test
@@ -196,27 +193,14 @@ public class OrganizationResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(
-                jsonPath("$.[0].id").value(
-                    organization.getId().intValue()))
-            .andExpect(
-                jsonPath("$.[0].name").value(DEFAULT_NAME.toString()))
-            .andExpect(
-                jsonPath("$.[0].displayName").value(
-                    DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(
-                jsonPath("$.[0].description").value(
-                    DEFAULT_DESCRIPTION.toString()))
-            .andExpect(
-                jsonPath("$.[0].displayOrder").value(
-                    DEFAULT_DISPLAY_ORDER))
-            .andExpect(
-                jsonPath("$.[0].allowNotifications").value(
-                    DEFAULT_ALLOW_NOTIFICATIONS.booleanValue()))
-            .andExpect(
-                jsonPath("$.[0].identifiers", Matchers.hasItems(DEFAULT_IDS.toArray(new String[DEFAULT_IDS.size()]))))
-            .andExpect(
-                jsonPath("$.[0].identifiers", Matchers.hasSize(DEFAULT_IDS.size())));
+            .andExpect(jsonPath("$.[0].id").value(organization.getId().intValue()))
+            .andExpect(jsonPath("$.[0].name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.[0].displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.[0].description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
+            .andExpect(jsonPath("$.[0].allowNotifications").value(DEFAULT_ALLOW_NOTIFICATIONS))
+            .andExpect(jsonPath("$.[0].identifiers", Matchers.hasItems(DEFAULT_IDS.toArray())))
+            .andExpect(jsonPath("$.[0].identifiers", Matchers.hasSize(DEFAULT_IDS.size())));
     }
 
     @Test
@@ -227,29 +211,17 @@ public class OrganizationResourceTest {
 
         // Get the organization
         restOrganizationMockMvc
-            .perform(
-                get("/api/organizations/{id}",
-                    organization.getId()))
+            .perform(get("/api/organizations/{id}",organization.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(
-                jsonPath("$.id").value(organization.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(
-                jsonPath("$.displayName").value(
-                    DEFAULT_DISPLAY_NAME.toString()))
-            .andExpect(
-                jsonPath("$.description").value(
-                    DEFAULT_DESCRIPTION.toString()))
-            .andExpect(
-                jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
-            .andExpect(
-                jsonPath("$.allowNotifications").value(
-                    DEFAULT_ALLOW_NOTIFICATIONS.booleanValue()))
-            .andExpect(
-                jsonPath("$.identifiers", Matchers.hasItems(DEFAULT_IDS.toArray(new String[DEFAULT_IDS.size()]))))
-            .andExpect(
-                jsonPath("$.identifiers", Matchers.hasSize(DEFAULT_IDS.size())));
+            .andExpect(jsonPath("$.id").value(organization.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
+            .andExpect(jsonPath("$.allowNotifications").value(DEFAULT_ALLOW_NOTIFICATIONS))
+            .andExpect(jsonPath("$.identifiers", Matchers.hasItems(DEFAULT_IDS.toArray())))
+            .andExpect(jsonPath("$.identifiers", Matchers.hasSize(DEFAULT_IDS.size())));
     }
 
     @Test
@@ -290,15 +262,10 @@ public class OrganizationResourceTest {
         for (Organization org : organizationRepository.findAll()) {
             log.debug(org.toString());
         }
-        assertThat(
-            organizationRepository.getOne(organization.getId())
-                .getDisplayOrder()).isEqualTo(UPDATED_DISPLAY_ORDER);
-        assertThat(organizationRepository.getOne(o1.getId()).getDisplayOrder())
-            .isEqualTo(0);
-        assertThat(organizationRepository.getOne(o2.getId()).getDisplayOrder())
-            .isEqualTo(1);
-        assertThat(organizationRepository.getOne(o3.getId()).getDisplayOrder())
-            .isEqualTo(3);
+        assertThat(organizationRepository.getOne(organization.getId()).getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+        assertThat(organizationRepository.getOne(o1.getId()).getDisplayOrder(), equalTo(0));
+        assertThat(organizationRepository.getOne(o2.getId()).getDisplayOrder(), equalTo(1));
+        assertThat(organizationRepository.getOne(o3.getId()).getDisplayOrder(), equalTo(3));
     }
 
     @Test
@@ -337,19 +304,14 @@ public class OrganizationResourceTest {
 
         // Validate the Organization in the database
         List<Organization> organizations = organizationRepository.findAll();
-        assertThat(organizations).hasSize(1);
+        assertThat(organizations, hasSize(1));
         Organization testOrganization = organizations.iterator().next();
-        assertThat(testOrganization.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testOrganization.getDisplayName()).isEqualTo(
-            UPDATED_DISPLAY_NAME);
-        assertThat(testOrganization.getDescription()).isEqualTo(
-            UPDATED_DESCRIPTION);
-        assertThat(testOrganization.getDisplayOrder()).isEqualTo(
-            UPDATED_DISPLAY_ORDER);
-        assertThat(testOrganization.isAllowNotifications()).isEqualTo(
-            UPDATED_ALLOW_NOTIFICATIONS);
-        assertThat(testOrganization.getIdentifiers()).isEqualTo(
-            UPDATED_IDS);
+        assertThat(testOrganization.getName(), equalTo(UPDATED_NAME));
+        assertThat(testOrganization.getDisplayName(), equalTo(UPDATED_DISPLAY_NAME));
+        assertThat(testOrganization.getDescription(), equalTo(UPDATED_DESCRIPTION));
+        assertThat(testOrganization.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+        assertThat(testOrganization.isAllowNotifications(), equalTo(UPDATED_ALLOW_NOTIFICATIONS));
+        assertThat(testOrganization.getIdentifiers(), equalTo(UPDATED_IDS));
     }
 
     @Test
@@ -366,6 +328,6 @@ public class OrganizationResourceTest {
 
         // Validate the database is empty
         List<Organization> organizations = organizationRepository.findAll();
-        assertThat(organizations).hasSize(0);
+        assertThat(organizations, hasSize(0));
     }
 }
