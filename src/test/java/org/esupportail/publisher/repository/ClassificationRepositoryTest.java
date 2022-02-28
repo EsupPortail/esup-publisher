@@ -282,7 +282,8 @@ public class ClassificationRepositoryTest {
     }
 
     @Test
-    public void testOrderStartDate() {
+    public void testOrderStartDate() throws InterruptedException {
+		Thread.sleep(1000);
 	    // there is no startdate ! it's falling back to createdDate
         Category cat = ObjTest.newCategory(INDICE_4, pub1);
         cat = repository.saveAndFlush(cat);
