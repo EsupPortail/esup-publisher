@@ -4,6 +4,6 @@ angular.module('publisherApp')
 
 .constant('ENV', 'dev')
 
-.constant('VERSION', '2.1.7-SNAPSHOT')
+.constant('VERSION', '2.1.7')
 
 ;
