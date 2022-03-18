@@ -82,8 +82,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="allowNotifications" class="control-label me-2">{{$t('organization.allowNotifications')}}</label>
-                            <input type="checkbox" class="form-check-input " name="allowNotifications" id="allowNotifications"
+                            <label for="allowNotifications" class="control-label">{{$t('organization.allowNotifications')}}</label>
+                            <input type="checkbox" class="form-check-input d-block mx-auto" name="allowNotifications" id="allowNotifications"
                                    v-model="organization.allowNotifications" value="true">
                         </div>
                     </div>

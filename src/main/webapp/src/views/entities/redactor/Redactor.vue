@@ -110,8 +110,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                          <label for ="optionalPublishTime" class="control-label me-2">{{$t('redactor.optionalPublishTime')}}</label>
-                          <input type="checkbox" class="form-check-input " name="optionalPublishTime" id="optionalPublishTime"
+                          <label for ="optionalPublishTime" class="control-label">{{$t('redactor.optionalPublishTime')}}</label>
+                          <input type="checkbox" class="form-check-input d-block mx-auto" name="optionalPublishTime" id="optionalPublishTime"
                                    v-model="redactor.optionalPublishTime" value="false">
                         </div>
                         <div class="form-group">

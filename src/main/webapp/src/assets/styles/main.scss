@@ -683,10 +683,9 @@ output {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 0, 0, .6);
 }
 
-.modal input[type=checkbox].form-control {
-    height: inherit;
-    transform: scale(2);
-    margin-top: 10px;
+.modal :not(.form-check-inline) > input[type=checkbox].form-check-input {
+    width: 2em;
+    height: 2em;
 }
 
 button,
@@ -1486,14 +1485,9 @@ div>div.container-fluid>div.card>div>div>div>div.publish-header {
     display: block;
 }
 
-.manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-control {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    width: 100%;
-    height: inherit;
-    transform: scale(2);
-    margin-top: 10px;
+.manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-check-input {
+    width: 2em;
+    height: 2em;
 }
 
 .manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles {

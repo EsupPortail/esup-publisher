@@ -82,8 +82,8 @@
               </div>
             </div>
             <div class="form-group" v-has-role="'ROLE_ADMIN'">
-              <label for="rssAllowed" class="control-label me-2">{{$t('category.rssAllowed')}}</label>
-              <input type="checkbox" class="form-check-input " name="rssAllowed" id="rssAllowed"
+              <label for="rssAllowed" class="control-label">{{$t('category.rssAllowed')}}</label>
+              <input type="checkbox" class="form-check-input d-block mx-auto" name="rssAllowed" id="rssAllowed"
                 v-model="editedContextRssAllowed">
             </div>
             <div class="form-group">

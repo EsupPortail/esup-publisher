@@ -105,8 +105,8 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="used" class="control-label me-2">{{$t('publisher.used')}}</label>
-                <input type="checkbox" class="form-check-input " name="used" id="used" v-model="editedContextUsed" :disabled="!canManage">
+                <label for="used" class="control-label">{{$t('publisher.used')}}</label>
+                <input type="checkbox" class="form-check-input d-block mx-auto" name="used" id="used" v-model="editedContextUsed" :disabled="!canManage">
               </div>
                 <div class="form-group">
                   <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
@@ -138,13 +138,13 @@
                   </div>
                 </div>
                 <div class="form-group" v-if="canCreateCategory">
-                  <label for="hasSubPermsManagement" class="control-label me-2">{{$t('publisher.hasSubPermsManagement')}}</label>
-                  <input type="checkbox" class="form-check-input " name="hasSubPermsManagement" id="hasSubPermsManagement"
+                  <label for="hasSubPermsManagement" class="control-label">{{$t('publisher.hasSubPermsManagement')}}</label>
+                  <input type="checkbox" class="form-check-input d-block mx-auto" name="hasSubPermsManagement" id="hasSubPermsManagement"
                     v-model="editedContextHasSubPermsManagement" disabled>
                 </div>
                 <div class="form-group" v-has-role="'ROLE_ADMIN'">
-                  <label for="doHighlight" class="control-label me-2">{{$t('publisher.doHighlight')}}</label>
-                  <input type="checkbox" class="form-check-input " name="doHighlight" id="doHighlight"
+                  <label for="doHighlight" class="control-label">{{$t('publisher.doHighlight')}}</label>
+                  <input type="checkbox" class="form-check-input d-block mx-auto" name="doHighlight" id="doHighlight"
                     v-model="editedContextDoHighlight" :disabled="!isInRole('ROLE_ADMIN')">
                 </div>
             </div>

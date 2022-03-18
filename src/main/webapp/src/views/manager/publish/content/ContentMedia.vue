@@ -95,9 +95,9 @@
                     {{ $t('entity.validation.maxdate', { max: formatDateToIntString(maxDate)}) }}
                 </div>
             </div>
-            <div class="form-group col-md-4">
-                <label class="control-label me-2" for="rssAllowed">{{ $t('media.rssAllowed') }}</label>
-                <input type="checkbox" class="form-check-input" name="rssAllowed" id="rssAllowed" v-model="itemRssAllowed" />
+            <div class="form-group col-md-4 text-md-center">
+                <label class="control-label" for="rssAllowed">{{ $t('media.rssAllowed') }}</label>
+                <input type="checkbox" class="form-check-input d-block mx-auto" name="rssAllowed" id="rssAllowed" v-model="itemRssAllowed" />
             </div>
         </div>
     </div>

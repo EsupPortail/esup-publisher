@@ -105,8 +105,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="used" class="control-label me-2">{{$t('publisher.used')}}</label>
-                            <input type="checkbox" class="form-check-input " name="used" id="used"
+                            <label for="used" class="control-label">{{$t('publisher.used')}}</label>
+                            <input type="checkbox" class="form-check-input d-block mx-auto" name="used" id="used"
                                    v-model="publisher.used" value="true">
                         </div>
 
@@ -129,14 +129,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="hasSubPermsManagement" class="control-label me-2">{{$t('publisher.hasSubPermsManagement')}}</label>
-                            <input type="checkbox" class="form-check-input " name="hasSubPermsManagement" id="hasSubPermsManagement"
+                            <label for="hasSubPermsManagement" class="control-label">{{$t('publisher.hasSubPermsManagement')}}</label>
+                            <input type="checkbox" class="form-check-input d-block mx-auto" name="hasSubPermsManagement" id="hasSubPermsManagement"
                                    v-model="publisher.hasSubPermsManagement" value="true">
                         </div>
 
                         <div class="form-group">
-                            <label for="doHighlight" class="control-label me-2">{{$t('publisher.doHighlight')}}</label>
-                            <input type="checkbox" class="form-check-input " name="doHighlight" id="doHighlight"
+                            <label for="doHighlight" class="control-label">{{$t('publisher.doHighlight')}}</label>
+                            <input type="checkbox" class="form-check-input d-block mx-auto" name="doHighlight" id="doHighlight"
                                    v-model="publisher.doHighlight" value="true">
                         </div>
 
