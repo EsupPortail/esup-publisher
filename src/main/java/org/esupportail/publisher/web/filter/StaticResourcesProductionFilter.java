@@ -45,7 +45,7 @@ public class StaticResourcesProductionFilter implements Filter {
     /**
      * Pattern pour les ressources statiques
      */
-    private Pattern staticResourcesPattern = Pattern.compile("^/ui/(favicon\\.ico|css/.*|fonts/.*|img/.*|js/.*|swagger-ui/.*|iframe-resizer/.*)$");
+    private Pattern staticResourcesPattern = Pattern.compile("^/ui/(favicon\\.ico|css/.*|fonts/.*|img/.*|js/.*|swagger-ui/.*)$");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

@@ -117,6 +117,12 @@ export default {
     }
   },
   created () {
+    // Ajout du script iframe-resizer si on est dans une iFrame
+    if (this.isIframe()) {
+      const iframeResizerScript = document.createElement('script')
+      iframeResizerScript.setAttribute('src', '/commun/postMessage-resize-iframe-in-parent.js')
+      document.head.appendChild(iframeResizerScript)
+    }
     Promise.all([ConfigurationService.init(), EnumDatasService.init()]).finally(() => {
       this.initData = true
     })
