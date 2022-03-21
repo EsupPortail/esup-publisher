@@ -449,6 +449,7 @@ export default {
         this.setItem(item)
       } else if (this.item) {
         this.updateMinDate(this.item)
+        this.updateMaxDate(this.item)
       } else {
         this.setItem({})
       }
