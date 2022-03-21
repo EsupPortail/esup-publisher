@@ -564,6 +564,7 @@
                         <exclude>.mvn/**</exclude>
                         <exclude>src/main/webapp/META-INF/**</exclude>
                         <exclude>src/main/webapp/public/swagger-ui/**</exclude>
+                        <exclude>src/main/webapp/public/iframe-resizer/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
