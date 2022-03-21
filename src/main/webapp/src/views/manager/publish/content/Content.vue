@@ -298,6 +298,8 @@ export default {
     changeContentType (oldValue) {
       if (!CommonUtils.equals(oldValue, this.content.type) || !CommonUtils.isDefined(this.item) || CommonUtils.equals({}, this.item)) {
         this.initItem()
+      } else {
+        this.initCropper()
       }
     },
     cancel () {
