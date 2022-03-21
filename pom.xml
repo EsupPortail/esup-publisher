@@ -689,15 +689,12 @@
                         WEB-INF/classes/config/application-*.yml,
                         scripts/**,assets/**,
                         index.html,
-                        WEB-INF/classes/.h2.server.properties
-                    </packagingExcludes>
-                    <warSourceExcludes>
-                        node/,
+                        WEB-INF/classes/.h2.server.properties</packagingExcludes>
+                    <warSourceExcludes>node/,
                         node_modules/,
                         src/,
                         public/,
-                        tests/
-                    </warSourceExcludes>
+                        tests/</warSourceExcludes>
                     <webResources>
                         <resource>
                             <directory>src/main/webapp/public</directory>
