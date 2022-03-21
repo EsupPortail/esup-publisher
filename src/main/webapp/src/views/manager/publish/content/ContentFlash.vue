@@ -100,7 +100,7 @@
                 <input type="checkbox" class="form-check-input d-block mx-auto" name="rssAllowed" id="rssAllowed" v-model="itemRssAllowed" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" :class="formValidator.hasError('body') ? 'invalid' : 'valid'">
             <label class="control-label" for="body">{{ $t('flash.body') }}</label>
             <RichText v-model="itemBody" :entityId="publisher.context.organization.id"
               :imageSizeMax="imageSizeMax" :fileSizeMax="fileSizeMax"
