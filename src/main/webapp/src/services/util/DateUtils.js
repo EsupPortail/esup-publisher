@@ -43,7 +43,11 @@ class DateUtils {
   }
 
   convertToIntString (date, format, lang) {
-    return Intl.DateTimeFormat(lang, format).format(date)
+    if (date && format && lang) {
+      return Intl.DateTimeFormat(lang, format).format(date)
+    } else {
+      return null
+    }
   }
 
   isValidDate (dateStr) {

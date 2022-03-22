@@ -314,24 +314,28 @@ export default {
     },
     // Fonction de formatage de date avec heure etc
     formatDate (date) {
-      var date2 = new Date(date)
-      return DateUtils.convertToIntString(date2, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }, store.getters.getLanguage)
+      if (date) {
+        var date2 = new Date(date)
+        return DateUtils.convertToIntString(date2, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        }, store.getters.getLanguage)
+      }
     },
     // Fonction de formatage de date
     formatDateSimple (date) {
-      var date2 = new Date(date)
-      return DateUtils.convertToIntString(date2, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }, store.getters.getLanguage)
+      if (date) {
+        var date2 = new Date(date)
+        return DateUtils.convertToIntString(date2, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }, store.getters.getLanguage)
+      }
     },
     // Récupération de fichier (local ou distant)
     getUrlEnclosure (enclosure) {
