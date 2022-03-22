@@ -129,6 +129,9 @@ Des variables CSS ont été créées afin de faciliter la modification du thème
 | --theme-subject-search-button-pagination-text-color | #25B2F3 | Couleur des liens dans les paginations des composants subject-search-button |
 | --theme-subject-search-button-pagination-selected-background-color | #25B2F3 | Couleur d'arrière-plan des liens actifs dans les paginations des composants subject-search-button |
 | --theme-subject-search-button-pagination-selected-text-color | #fff | Couleur des liens actifs dans les paginations des composants subject-search-button |
+| --theme-subject-search-button-validate-button-text-color | #fff | Couleur du texte du bouton de validation des modales des composants subject-search-button |
+| --theme-subject-search-button-validate-button-background-color | #25B2F3 | Couleur de fond du bouton de validation des modales des composants subject-search-button |
+| --theme-subject-search-button-validate-button-border-color | #25B2F3 | Couleur de la bordure du bouton de validation des modales des composants subject-search-button |
 
 ### GitHub Actions
 
