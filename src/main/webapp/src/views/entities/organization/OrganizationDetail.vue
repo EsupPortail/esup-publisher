@@ -122,14 +122,7 @@ export default {
     },
     // Fonction de formatage de date
     formatDate (date) {
-      return DateUtils.convertToIntString(date, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateTimeToLongIntString(date, store.getters.getLanguage)
     },
     // Méthode de redirection sur la page listant les structures
     organizationPage () {

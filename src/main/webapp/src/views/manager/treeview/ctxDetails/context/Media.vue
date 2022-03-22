@@ -69,21 +69,10 @@ export default {
   inject: ['context', 'getEnumlabel', 'detailSubject', 'getUrlEnclosure'],
   methods: {
     formatDate (date) {
-      return DateUtils.convertToIntString(date, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateToLongIntString(date, store.getters.getLanguage)
     },
     formatDateAction (date) {
-      return DateUtils.convertToIntString(date, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateTimeToLongIntString(date, store.getters.getLanguage)
     },
     getItemStatusLabel (name) {
       return this.getEnumlabel('itemStatus', name) || ''

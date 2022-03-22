@@ -239,22 +239,11 @@ export default {
     },
     // Formatage d'une date au format 'DD MMMM YYYY, HH:mm:ss'
     formatDateTime (date) {
-      return DateUtils.convertToIntString(DateUtils.convertDateTimeFromServer(date), {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateTimeToLongIntString(DateUtils.convertDateTimeFromServer(date), store.getters.getLanguage)
     },
     // Formatage d'une date au format 'DD MMMM YYYY'
     formatDateDayMonthYear (date) {
-      return DateUtils.convertToIntString(DateUtils.convertDateTimeFromServer(date), {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateToLongIntString(DateUtils.convertDateTimeFromServer(date), store.getters.getLanguage)
     },
     // Filtre sur les fichiers
     filterLinkedFiles (linkedFiles) {

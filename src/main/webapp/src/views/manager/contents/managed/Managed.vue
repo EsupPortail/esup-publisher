@@ -312,30 +312,13 @@ export default {
         console.error(error)
       })
     },
-    // Fonction de formatage de date avec heure etc
+    // Fonction de formatage de date avec heure
     formatDate (date) {
-      if (date) {
-        var date2 = new Date(date)
-        return DateUtils.convertToIntString(date2, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-        }, store.getters.getLanguage)
-      }
+      return DateUtils.formatDateTimeToShortIntString(date, store.getters.getLanguage)
     },
     // Fonction de formatage de date
     formatDateSimple (date) {
-      if (date) {
-        var date2 = new Date(date)
-        return DateUtils.convertToIntString(date2, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }, store.getters.getLanguage)
-      }
+      return DateUtils.formatDateToShortIntString(date, store.getters.getLanguage)
     },
     // Récupération de fichier (local ou distant)
     getUrlEnclosure (enclosure) {

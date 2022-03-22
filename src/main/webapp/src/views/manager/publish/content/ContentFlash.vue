@@ -360,11 +360,7 @@ export default {
       return DateUtils.convertLocalDateToServer(date)
     },
     formatDateToIntString (date) {
-      return DateUtils.convertToIntString(date, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }, store.getters.getLanguage)
+      return DateUtils.formatDateToShortIntString(date, store.getters.getLanguage)
     },
     formatStringToDate (date) {
       return DateUtils.convertLocalDateFromServer(date)

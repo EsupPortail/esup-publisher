@@ -44,7 +44,61 @@ class DateUtils {
 
   convertToIntString (date, format, lang) {
     if (date && format && lang) {
-      return Intl.DateTimeFormat(lang, format).format(date)
+      return Intl.DateTimeFormat(lang, format).format(CommonUtils.isString(date) ? new Date(date) : date)
+    } else {
+      return null
+    }
+  }
+
+  formatDateToShortIntString (date, lang) {
+    if (date && lang) {
+      return this.convertToIntString(date, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      }, lang)
+    } else {
+      return null
+    }
+  }
+
+  formatDateToLongIntString (date, lang) {
+    if (date && lang) {
+      return this.convertToIntString(date, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }, lang)
+    } else {
+      return null
+    }
+  }
+
+  formatDateTimeToShortIntString (date, lang) {
+    if (date && lang) {
+      return this.convertToIntString(date, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }, lang)
+    } else {
+      return null
+    }
+  }
+
+  formatDateTimeToLongIntString (date, lang) {
+    if (date && lang) {
+      return this.convertToIntString(date, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+      }, lang)
     } else {
       return null
     }
