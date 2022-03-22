@@ -47,6 +47,7 @@
     --theme-publish-active-step-number-background-color: #25B2F3;
     --theme-publish-title-color: #25B2F3;
     --theme-publish-classification-iconurl-color: #25B2F3;
+    --theme-publish-content-checkbox-color: #25B2F3;
     --theme-js-tree-hover-text-color: #25B2F3;
     --theme-js-tree-selected-text-color: #fff;
     --theme-js-tree-selected-background-color: #25B2F3;
@@ -78,6 +79,7 @@
         --theme-publish-active-step-number-background-color: #004899;
         --theme-publish-title-color: #004899;
         --theme-publish-classification-iconurl-color: #004899;
+        --theme-publish-content-checkbox-color: #004899;
         --theme-js-tree-hover-text-color: #004899;
         --theme-js-tree-selected-text-color: #fff;
         --theme-js-tree-selected-background-color: #004899;
@@ -110,6 +112,7 @@
         --theme-publish-active-step-number-background-color: #FC0;
         --theme-publish-title-color: #303030;
         --theme-publish-classification-iconurl-color: #FC0;
+        --theme-publish-content-checkbox-color: #FC0;
         --theme-js-tree-hover-text-color: #FC0;
         --theme-js-tree-selected-text-color: #FC0;
         --theme-js-tree-selected-background-color: #000;
@@ -142,6 +145,7 @@
         --theme-publish-active-step-number-background-color: #0069B3;
         --theme-publish-title-color: #0069B3;
         --theme-publish-classification-iconurl-color: #0069B3;
+        --theme-publish-content-checkbox-color: #0069B3;
         --theme-js-tree-hover-text-color: #0069B3;
         --theme-js-tree-selected-text-color: #fff;
         --theme-js-tree-selected-background-color: #0069B3;
@@ -174,6 +178,7 @@
         --theme-publish-active-step-number-background-color: #C60440;
         --theme-publish-title-color: #C60440;
         --theme-publish-classification-iconurl-color: #C60440;
+        --theme-publish-content-checkbox-color: #C60440;
         --theme-js-tree-hover-text-color: #C60440;
         --theme-js-tree-selected-text-color: #fff;
         --theme-js-tree-selected-background-color: #C60440;
@@ -206,6 +211,7 @@
         --theme-publish-active-step-number-background-color: #009FE3;
         --theme-publish-title-color: #009FE3;
         --theme-publish-classification-iconurl-color: #009FE3;
+        --theme-publish-content-checkbox-color: #009FE3;
         --theme-js-tree-hover-text-color: #009FE3;
         --theme-js-tree-selected-text-color: #fff;
         --theme-js-tree-selected-background-color: #009FE3;
@@ -238,6 +244,7 @@
         --theme-publish-active-step-number-background-color: #26448A;
         --theme-publish-title-color: #26448A;
         --theme-publish-classification-iconurl-color: #26448A;
+        --theme-publish-content-checkbox-color: #26448A;
         --theme-js-tree-hover-text-color: #26448A;
         --theme-js-tree-selected-text-color: #fff;
         --theme-js-tree-selected-background-color: #26448A;
@@ -1488,6 +1495,15 @@ div>div.container-fluid>div.card>div>div>div>div.publish-header {
 .manager.publish .publish-form-container .publish-content .form-group input[type=checkbox].form-check-input {
     width: 2em;
     height: 2em;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    &:focus, &:hover {
+        border-color: rgba(0, 0, 0, 0.6);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(0 0 0 / 60%);
+    }
+    &:checked {
+        background-color: var(--theme-publish-content-checkbox-color);
+        border-color: var(--theme-publish-content-checkbox-color);
+    }
 }
 
 .manager.publish .publish-form-container .publish-content .form-group>.form-inline>.linkedFiles {

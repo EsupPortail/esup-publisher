@@ -120,6 +120,7 @@ Des variables CSS ont été créées afin de faciliter la modification du thème
 | --theme-publish-active-step-number-background-color | #25B2F3 | Couleur d'arrière-plan du numéro de l'étape de publication actuelle |
 | --theme-publish-title-color | #25B2F3 | Couleur du titre de l'étape de publication actuelle |
 | --theme-publish-classification-iconurl-color | #25B2F3 | Couleur des icônes des rubriques de publication |
+| --theme-publish-content-checkbox-color | #25B2F3 | Couleur des checkboxes dans le formulaire de création/modification de contenu |
 | --theme-js-tree-hover-text-color | #25B2F3 | Couleur du texte des entrées de l'arborescence survolées |
 | --theme-js-tree-selected-text-color | #fff | Couleur du texte des entrées de l'arborescence sélectionnées |
 | --theme-js-tree-selected-background-color | #25B2F3 | Couleur d'arrière-plan des entrées de l'arborescence sélectionnées |
