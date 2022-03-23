@@ -16,8 +16,8 @@ specific language governing permissions and limitations
 under the License.
 
 This project includes:
-  akka-actor under Apache License, Version 2.0
-  akka-slf4j under Apache License, Version 2.0
+  akka-actor under Apache-2.0
+  akka-slf4j under Apache-2.0
   Annotations for Metrics under Apache License 2.0
   AntLR Parser Generator under BSD License
   Apache Commons Codec under Apache License, Version 2.0
@@ -35,10 +35,11 @@ This project includes:
   attoparser under The Apache Software License, Version 2.0
   Awaitility under Apache 2.0
   Bean Validation API under Apache License 2.0
-  boopickle under Apache 2.0 license
+  boopickle under Apache-2.0
   Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs under Bouncy Castle Licence
   Bouncy Castle Provider under Bouncy Castle Licence
   Bridge method injection annotations under MIT License
+  brotli4j under Apache License 2.0
   Byte Buddy (without dependencies) under Apache License, Version 2.0
   Byte Buddy agent under Apache License, Version 2.0
   Caffeine cache under Apache License, Version 2.0
@@ -61,15 +62,25 @@ This project includes:
   gatling-charts under Apache-2.0
   gatling-charts-highcharts under Gatling Highcharts
   gatling-commons under Apache-2.0
+  gatling-commons-shared under Apache-2.0
+  gatling-commons-shared-unstable under Apache-2.0
   gatling-core under Apache-2.0
+  gatling-core-java under Apache-2.0
   gatling-graphite under Apache-2.0
   gatling-http under Apache-2.0
   gatling-http-client under Apache-2.0
+  gatling-http-java under Apache-2.0
   gatling-jdbc under Apache-2.0
+  gatling-jdbc-java under Apache-2.0
   gatling-jms under Apache-2.0
+  gatling-jms-java under Apache-2.0
+  gatling-jsonpath under Apache-2.0
+  gatling-mqtt under Apache-2.0
+  gatling-mqtt-java under Apache-2.0
   gatling-netty-util under Apache-2.0
   gatling-recorder under Apache-2.0
   gatling-redis under Apache-2.0
+  gatling-redis-java under Apache-2.0
   Graphite Integration for Metrics under Apache License 2.0
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   H2 Database Engine under MPL 2.0 or EPL 1.0
@@ -110,7 +121,6 @@ This project includes:
   Java Annotation Indexer under Apache License, Version 2.0
   Java Persistence API, Version 2.1 under Eclipse Public License (EPL), Version 1.0 or Eclipse Distribution License (EDL), Version 1.0
   Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
-  JavaBeans Activation Framework under CDDL/GPLv2+CE
   JavaBeans Activation Framework API jar under CDDL/GPLv2+CE
   Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
   javax.inject under The Apache Software License, Version 2.0
@@ -123,17 +133,11 @@ This project includes:
   JMESPath Core under BSD 3-Clause
   JMESPath Jackson under BSD 3-Clause
   JMS API under CDDL + GPLv2 with classpath exception
-  Jodd Core under The BSD 2-Clause License
-  Jodd Lagarto under The BSD 2-Clause License
-  Jodd Log under The BSD 2-Clause License
+  Jodd Lagarto under BSD-2-Clause
+  Jodd Util under BSD-2-Clause
   JSON in Java under The JSON License
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
-  json4s-ast under Apache-2.0
-  json4s-core under Apache-2.0
-  json4s-jackson under Apache-2.0
-  json4s-scalap under Apache-2.0
   JSONassert under The Apache Software License, Version 2.0
-  jsonpath under Apache-2.0
   JSR107 API and SPI under Apache License, Version 2.0
   JUL to SLF4J bridge under MIT License
   JUnit under Eclipse Public License 1.0
@@ -163,11 +167,16 @@ This project includes:
   micrometer-core under The Apache Software License, Version 2.0
   mockito-core under The MIT License
   mockito-junit-jupiter under The MIT License
+  native-linux-aarch64 under Apache License 2.0
+  native-linux-x86_64 under Apache License 2.0
+  native-osx-x86_64 under Apache License 2.0
+  native-windows-x86_64 under Apache License 2.0
   Netty/Buffer under Apache License, Version 2.0
   Netty/Codec under Apache License, Version 2.0
   Netty/Codec/DNS under Apache License, Version 2.0
   Netty/Codec/HTTP under Apache License, Version 2.0
   Netty/Codec/HTTP2 under Apache License, Version 2.0
+  Netty/Codec/MQTT under Apache License, Version 2.0
   Netty/Codec/Socks under Apache License, Version 2.0
   Netty/Common under Apache License, Version 2.0
   Netty/Handler under Apache License, Version 2.0
@@ -175,14 +184,15 @@ This project includes:
   Netty/Resolver under Apache License, Version 2.0
   Netty/Resolver/DNS under Apache License, Version 2.0
   Netty/TomcatNative [BoringSSL - Static] under Apache License, Version 2.0
+  Netty/TomcatNative [OpenSSL - Classes] under The Apache Software License, Version 2.0
   Netty/Transport under Apache License, Version 2.0
+  Netty/Transport/Classes/Epoll under Apache License, Version 2.0
   Netty/Transport/Native/Epoll under Apache License, Version 2.0
   Netty/Transport/Native/Unix/Common under Apache License, Version 2.0
   Objenesis under Apache 2
   org.apiguardian:apiguardian-api under The Apache License, Version 2.0
   org.opentest4j:opentest4j under The Apache License, Version 2.0
   org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0
-  ParaNamer Core under BSD
   Pebble under BSD 3-Clause License
   PowerMock under The Apache Software License, Version 2.0
   Problem under MIT License
@@ -195,7 +205,7 @@ This project includes:
   Querydsl - Codegen module under Apache License, Version 2.0
   Querydsl - Core module under Apache License, Version 2.0
   Querydsl - JPA support under Apache License, Version 2.0
-  quicklens under Apache2
+  quicklens under Apache 2.0
   RabbitMQ Java Client under ASL 2.0 or GPL v2 or MPL 1.1
   RedisClient under Apache 2.0 License
   Reflections under WTFPL or The New BSD License
@@ -204,11 +214,10 @@ This project includes:
   Saxon-HE under Mozilla Public License Version 2.0
   Scala Compiler under Apache-2.0
   Scala Library under Apache-2.0
-  scala-java8-compat under BSD 3-clause
+  scala-java8-compat under Apache-2.0
   scala-logging under Apache 2.0 License
   scala-parser-combinators under Apache-2.0
   scala-swing under Apache-2.0
-  scala-xml under Apache-2.0
   scopt under MIT
   sfm-util under The MIT License (MIT)
   shedlock-core under The Apache Software License, Version 2.0
@@ -276,6 +285,7 @@ This project includes:
   tomcat-embed-core under Apache License, Version 2.0
   tomcat-embed-websocket under Apache License, Version 2.0
   TXW2 Runtime under Eclipse Distribution License - v 1.0
+  TypeTools under Apache License, Version 2.0
   unbescape under The Apache Software License, Version 2.0
   Woodstox under The Apache Software License, Version 2.0
 
