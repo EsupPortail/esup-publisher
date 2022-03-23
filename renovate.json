@@ -2,7 +2,9 @@
   "extends": [
     "config:base"
   ],
+  "rebaseWhen": "behind-base-branch",
   "enabledManagers": [
-    "maven"
+    "maven",
+    "npm"
   ]
 }
