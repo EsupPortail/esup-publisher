@@ -126,6 +126,13 @@ export default {
     Promise.all([ConfigurationService.init(), EnumDatasService.init()]).finally(() => {
       this.initData = true
     })
+  },
+  beforeMount () {
+    // Initialisation du store et de la langue
+    this.$store.commit('initializeStore')
+    if (this.$i18n.locale !== this.$store.getters.getLanguage) {
+      this.$i18n.locale = this.$store.getters.getLanguage
+    }
   }
 }
 </script>

@@ -25,6 +25,15 @@ describe('App.vue tests', () => {
         }
       }
     }
+    const $store = {
+      commit: jest.fn(),
+      getters: {
+        getLanguage: 'fr'
+      }
+    }
+    const $i18n = {
+      locale: 'en'
+    }
     const wrapper = shallowMount(App, {
       global: {
         stubs: {
@@ -33,7 +42,9 @@ describe('App.vue tests', () => {
         },
         mocks: {
           $router,
-          $t
+          $t,
+          $store,
+          $i18n
         }
       }
     })
@@ -41,5 +52,8 @@ describe('App.vue tests', () => {
     expect(wrapper.find('.development').exists()).toBe(false)
     expect(ConfigurationService.init).toHaveBeenCalledTimes(1)
     expect(EnumDatasService.init).toHaveBeenCalledTimes(1)
+    expect($store.commit).toHaveBeenCalledTimes(1)
+    expect($store.commit).toHaveBeenCalledWith('initializeStore')
+    expect($i18n.locale).toBe('fr')
   })
 })
