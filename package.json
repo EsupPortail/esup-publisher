@@ -37,7 +37,7 @@
     "@popperjs/core": "^2.11.0",
     "bootstrap": "^5.1.3",
     "core-js": "^3.19.2",
-    "mdi": "^1.9.33",
+    "mdi": "^2.2.43",
     "postcss-loader": "^4.3.0",
     "postcss-url": "^10.1.3",
     "raw-loader": "^4.0.2",
