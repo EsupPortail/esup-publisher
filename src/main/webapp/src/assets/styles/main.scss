@@ -594,6 +594,10 @@ ul#strength {
     border-color: #D0D0D0;
 }
 
+.pagination .page-link:focus {
+    box-shadow: none;
+}
+
 /* end link for pagination */
 /* start nav-tabs for tables - for all table containing contents */
 
