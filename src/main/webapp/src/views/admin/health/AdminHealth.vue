@@ -117,7 +117,7 @@ export default {
     // Rafraichissement de la liste des disgnostics
     refresh () {
       MonitoringService.checkHealth().then(response => {
-        this.healths = this.transformHealthData(response.data)
+        this.healths = this.transformHealthData(response.data.components)
       }).catch(error => {
         error.text().then(text => {
           if (text) {
