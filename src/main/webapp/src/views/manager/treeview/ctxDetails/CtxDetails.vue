@@ -559,23 +559,28 @@ export default {
     },
     getEnumlabel (type, name) {
       if (name) {
-        switch (type) {
-          case 'accessType':
-            return this.accessTypeList.find(val => val.name === name).label
-          case 'permissionClass':
-            return this.permissionClassList.find(val => val.name === name).label
-          case 'displayOrderType':
-            return this.displayOrderTypeList.find(val => val.name === name).label
-          case 'subjectType':
-            return this.subjectTypeList.find(val => val.code === name).descKey
-          case 'permissionType':
-            return this.permissionTypeList.find(val => val.name === name).label
-          case 'subscribeType':
-            return this.subscribeTypeList.find(val => val.name === name).label
-          case 'lang':
-            return this.langList.find(val => val.id === name).label
-          case 'itemStatus':
-            return this.itemStatusList.find(val => val.name === name).label
+        try {
+          switch (type) {
+            case 'accessType':
+              return this.accessTypeList.find(val => val.name === name).label
+            case 'permissionClass':
+              return this.permissionClassList.find(val => val.name === name).label
+            case 'displayOrderType':
+              return this.displayOrderTypeList.find(val => val.name === name).label
+            case 'subjectType':
+              return this.subjectTypeList.find(val => val.code === name).descKey
+            case 'permissionType':
+              return this.permissionTypeList.find(val => val.name === name).label
+            case 'subscribeType':
+              return this.subscribeTypeList.find(val => val.name === name).label
+            case 'lang':
+              return this.langList.find(val => val.id === name).label
+            case 'itemStatus':
+              return this.itemStatusList.find(val => val.name === name).label
+          }
+        } catch {
+          // Fallback sur un label vide si propriété non trouvé dan les énums
+          return ''
         }
       }
     },
