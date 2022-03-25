@@ -88,7 +88,8 @@
             </div>
             <div class="form-group">
               <label for="defaultDisplayOrder" class="control-label">{{$t('category.defaultDisplayOrder')}}</label>
-              <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="editedContextDefaultDisplayOrder" required>
+              <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="editedContextDefaultDisplayOrder" required
+                @change="onChangeDefaultDisplayOrder()">
                 <option v-for="displayOrderType in autorizedDisplayOrderTypeList" :key="displayOrderType.id" :value="displayOrderType.name">
                   {{$t(displayOrderType.label)}}
                 </option>
@@ -130,7 +131,7 @@
             <div class="form-group" v-has-role="'ROLE_ADMIN'">
               <label for="displayOrder" class="control-label">{{$t('category.displayOrder')}}</label>
               <input type="number" class="form-control" name="displayOrder" id="displayOrder"
-                v-model="editedContextDisplayOrder" required min="0" max="999">
+                v-model="editedContextDisplayOrder" required min="0" max="999" :disabled="editedContext.defaultDisplayOrder !== 'CUSTOM'">
               <div class="invalid-feedback"
                 v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
                 {{$t('entity.validation.required')}}
@@ -303,6 +304,13 @@ export default {
       this.formValidator.checkTextFieldValidity('lang', this.editedContext.lang, null, null, true)
       this.formValidator.checkNumberFieldValidity('ttl', this.editedContext.ttl, 900, 86400, true)
       this.formValidator.checkNumberFieldValidity('displayOrder', this.editedContext.displayOrder, 0, 999, true)
+    },
+    onChangeDefaultDisplayOrder () {
+      // Au changement de type d'ordre d'affichage de la catégory, si celui-ce est différent de CUSTOM
+      // et que l'ordre d'affichage est invalide, on le passe à 0
+      if (this.editedContext.defaultDisplayOrder !== 'CUSTOM' && this.formValidator.hasError('displayOrder')) {
+        this.editedContextDisplayOrder = 0
+      }
     }
   },
   mounted () {
