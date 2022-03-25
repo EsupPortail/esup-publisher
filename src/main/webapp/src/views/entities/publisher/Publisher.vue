@@ -93,7 +93,8 @@
 
                         <div class="form-group">
                             <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
-                            <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required>
+                            <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="publisher.defaultDisplayOrder" required
+                              @change="onChangeDefaultDisplayOrder()">
                                 <option v-for="defaultDisplayOrderType in filteredDisplayOrderTypeList" :key="defaultDisplayOrderType.id" :value="defaultDisplayOrderType.name">
                                     {{$t(defaultDisplayOrderType.label)}}
                                 </option>
@@ -113,7 +114,7 @@
                         <div class="form-group">
                             <label for="displayOrder" class="control-label">{{$t('publisher.displayOrder')}}</label>
                             <input type="number" class="form-control" name="displayOrder" id="displayOrder"
-                                   v-model="publisher.displayOrder" required min="0" max="9">
+                                   v-model="publisher.displayOrder" required min="0" max="9" :disabled="publisher.defaultDisplayOrder !== 'CUSTOM'">
                             <div class="invalid-feedback"
                                 v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
                                 {{$t('entity.validation.required')}}
@@ -371,6 +372,13 @@ export default {
           return data ? data.label : ''
       }
       return ''
+    },
+    onChangeDefaultDisplayOrder () {
+      // Au changement de type d'ordre d'affichage du contexte, si celui-ce est différent de CUSTOM
+      // et que l'ordre d'affichage est invalide, on le passe à 0
+      if (this.publisher.defaultDisplayOrder !== 'CUSTOM' && this.formValidator.hasError('displayOrder')) {
+        this.publisher.displayOrder = 0
+      }
     }
   },
   mounted () {

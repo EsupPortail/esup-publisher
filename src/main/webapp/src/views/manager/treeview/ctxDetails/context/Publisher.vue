@@ -110,7 +110,8 @@
               </div>
                 <div class="form-group">
                   <label class="control-label" for="defaultDisplayOrder" >{{$t('publisher.defaultDisplayOrder')}}</label>
-                  <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="editedContextDefaultDisplayOrder" required :disabled="!canManage">
+                  <select class="form-select" id="defaultDisplayOrder" name="defaultDisplayOrder" v-model="editedContextDefaultDisplayOrder" required :disabled="!canManage"
+                    @change="onChangeDefaultDisplayOrder()">
                     <option v-for="displayOrderType in autorizedDisplayOrderTypeList" :key="displayOrderType.id" :value="displayOrderType.name">
                       {{$t(displayOrderType.label)}}
                     </option>
@@ -123,7 +124,7 @@
                 <div class="form-group" v-has-role="'ROLE_ADMIN'">
                   <label for="displayOrder" class="control-label">{{$t('publisher.displayOrder')}}</label>
                   <input type="number" class="form-control" name="displayOrder" id="displayOrder"
-                    v-model="editedContextDisplayOrder" required min="0" max="9" :disabled="!isInRole('ROLE_ADMIN')">
+                    v-model="editedContextDisplayOrder" required min="0" max="9" :disabled="!isInRole('ROLE_ADMIN') || editedContext.defaultDisplayOrder !== 'CUSTOM'">
                   <div class="invalid-feedback"
                     v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
                     {{$t('entity.validation.required')}}
@@ -333,6 +334,13 @@ export default {
     },
     getPermissionClassLabel (name) {
       return this.getEnumlabel('permissionClass', name) || ''
+    },
+    onChangeDefaultDisplayOrder () {
+      // Au changement de type d'ordre d'affichage du contexte, si celui-ce est différent de CUSTOM
+      // et que l'ordre d'affichage est invalide, on le passe à 0
+      if (this.editedContext.defaultDisplayOrder !== 'CUSTOM' && this.formValidator.hasError('displayOrder')) {
+        this.editedContextDisplayOrder = 0
+      }
     }
   },
   mounted () {
