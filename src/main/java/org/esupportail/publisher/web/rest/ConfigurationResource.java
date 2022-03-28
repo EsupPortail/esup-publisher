@@ -57,4 +57,11 @@ public class ConfigurationResource {
     public ResponseEntity<ValueResource> getConfFileSize() {
         return new ResponseEntity<ValueResource>(new ValueResource(protectedFileUploadHelper.getFileMaxSize()), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/conf/authorizedmimetypes",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ValueResource> getConfAuthorizedMimeTypes() {
+        return new ResponseEntity<ValueResource>(new ValueResource(protectedFileUploadHelper.getAuthorizedMimeType()), HttpStatus.OK);
+    }
 }
