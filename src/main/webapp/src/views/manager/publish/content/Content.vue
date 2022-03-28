@@ -178,6 +178,7 @@ export default {
       setItemValidated: this.setItemValidated,
       imageSizeMax: readonly(computed(() => this.imageSizeMax)),
       fileSizeMax: readonly(computed(() => this.fileSizeMax)),
+      authorizedMimeTypes: readonly(computed(() => this.authorizedMimeTypes)),
       manageUploadError: this.manageUploadError,
       deleteAttachment: this.deleteAttachment,
       minDate: readonly(computed(() => this.minDate)),
@@ -205,6 +206,9 @@ export default {
     },
     fileSizeMax () {
       return ConfigurationService.getConfUploadFileSize()
+    },
+    authorizedMimeTypes () {
+      return ConfigurationService.getConfAuthorizedMimeTypes()
     }
   },
   methods: {

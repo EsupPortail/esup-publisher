@@ -143,7 +143,7 @@
                                 <button type="button" class="btn btn-primary btn-file" name="fileEnclosure" @click="fileInput.click()">
                                   <i class="fas fa-folder-open"></i>&nbsp;<span>{{ $t('media.inputfile.upload-button') }}</span>
                                 </button>
-                                <input type="file" id="file" name="file" ref="fileInput" accept="image/*,video/*,audio/*,application/*" @change="onSelectFile()" hidden/>
+                                <input type="file" id="file" name="file" ref="fileInput" :accept="authorizedMimeTypes.join(',')" @change="onSelectFile()" hidden/>
                             </div>
                             <div class="card-body">
                                   <div v-if="content.file" class="card">
@@ -220,7 +220,7 @@ export default {
   },
   inject: [
     'publisher', 'item', 'setItem', 'progress', 'setProgress', 'progressStatus', 'setProgressStatus', 'content', 'setContent',
-    'minDate', 'endMinDate', 'maxDate', 'clearUpload', 'setItemValidated', 'uploadLinkedFile'
+    'minDate', 'endMinDate', 'maxDate', 'clearUpload', 'setItemValidated', 'uploadLinkedFile', 'authorizedMimeTypes'
   ],
   computed: {
     itemTitle: {
@@ -320,7 +320,7 @@ export default {
       if (file) {
         // Vérification de la validatié du fichier sélectionnée
         // 10MB = 10 * 1024 * 1024 B
-        this.fileInputError = FormValidationUtils.getFileFieldError(file, '(image/*|video/*|audio/*|application/*)', 10 * 1024 * 1024, false)
+        this.fileInputError = FormValidationUtils.getFileFieldError(file, '(' + this.authorizedMimeTypes.join('|') + ')', 10 * 1024 * 1024, false)
 
         if (this.fileInputError === null) {
           const isImage = file.type.match('image/*') !== null

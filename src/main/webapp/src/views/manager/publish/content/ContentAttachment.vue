@@ -120,7 +120,7 @@
             <button type="button" class="btn btn-primary btn-file" name="fileEnclosure" @click="fileInput.click()">
               <i class="fas fa-folder-open"></i>&nbsp;<span>{{ $t('media.inputfile.upload-button') }}</span>
             </button>
-            <input type="file" id="file" name="file" ref="fileInput" accept="image/*,video/*,audio/*,application/*" @change="onSelectFile()" hidden/>
+            <input type="file" id="file" name="file" ref="fileInput" :accept="authorizedMimeTypes.join(',')" @change="onSelectFile()" hidden/>
             <div class="drop-area" :class="{ 'drag-active' : dragActive }"
               @drop.prevent="onDropFile" @dragover.prevent="dragActive = true" @dragleave.prevent="dragActive = false">
               <span>{{ $t('media.inputfile.drop-here')}}</span>
@@ -149,7 +149,7 @@ export default {
   },
   inject: [
     'publisher', 'item', 'setItem', 'setItemValidated', 'minDate', 'endMinDate', 'maxDate', 'linkedFilesToContent',
-    'setLinkedFilesToContent', 'progress', 'setProgress', 'progressStatus', 'uploadLinkedFile', 'deleteAttachment'
+    'setLinkedFilesToContent', 'progress', 'setProgress', 'progressStatus', 'uploadLinkedFile', 'deleteAttachment', 'authorizedMimeTypes'
   ],
   computed: {
     itemTitle: {
@@ -246,7 +246,7 @@ export default {
       if (file) {
         // Vérification de la validatié du fichier sélectionnée
         // 10MB = 10 * 1024 * 1024 B
-        this.fileInputError = FormValidationUtils.getFileFieldError(file, '(image/*|video/*|audio/*|application/*)', 10 * 1024 * 1024, false)
+        this.fileInputError = FormValidationUtils.getFileFieldError(file, '(' + this.authorizedMimeTypes.join('|') + ')', 10 * 1024 * 1024, false)
 
         if (this.fileInputError === null) {
           const isImage = file.type.match('image/*') !== null
