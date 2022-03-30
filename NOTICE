@@ -107,7 +107,7 @@ This project includes:
   Jackson-core under The Apache Software License, Version 2.0
   jackson-databind under The Apache Software License, Version 2.0
   Jackson-datatype-Hibernate5 under The Apache Software License, Version 2.0
-  Jackson-datatype-Problem under MIT License
+  jackson-datatype-problem under MIT License
   Jackson-module-parameter-names under The Apache Software License, Version 2.0
   Jakarta Activation under EDL 1.0
   Jakarta Activation API jar under EDL 1.0
@@ -195,10 +195,10 @@ This project includes:
   org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0
   Pebble under BSD 3-Clause License
   PowerMock under The Apache Software License, Version 2.0
-  Problem under MIT License
-  Problem: Spring Common under MIT License
-  Problem: Spring Web under MIT License
-  Problem: Violations under MIT License
+  problem under MIT License
+  problem-spring-common under MIT License
+  problem-spring-web under MIT License
+  problem-violations under MIT License
   project ':json-path' under The Apache Software License, Version 2.0
   Project Lombok under The MIT License
   Querydsl - APT support under Apache License, Version 2.0
