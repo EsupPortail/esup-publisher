@@ -100,7 +100,7 @@ public class ReaderRepositoryTest {
 		log.info("After insert : {}", r4);
 		assertThat(r4.getId(), notNullValue());
 		assertThat(repository.existsById(r4.getId()), is(true));
-		r = repository.getOne(r.getId());
+		r = repository.getById(r.getId());
 		assertThat(r, notNullValue());
 		log.info("After select : {}", r);
 		assertThat(repository.count(), equalTo(4L));

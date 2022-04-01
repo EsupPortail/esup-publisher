@@ -162,7 +162,7 @@ public class ClassificationRepositoryTest {
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
 				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
-				(Category) repository.getOne(cat1.getId()), "RSS_URL");
+				(Category) repository.getById(cat1.getId()), "RSS_URL");
 		repository.saveAndFlush(c3);
 	}
 
@@ -196,7 +196,7 @@ public class ClassificationRepositoryTest {
 		c2 = repository.save(c2);
 		log.info("After update : {}", c2);
 		assertThat(repository.existsById(c2.getId()), is(true));
-		c2 = (Category) repository.getOne(c2.getId());
+		c2 = (Category) repository.getById(c2.getId());
 		assertThat(c2, notNullValue());
 		log.info("After select : {}", c2);
         assertThat(repository.count(), is(4L));

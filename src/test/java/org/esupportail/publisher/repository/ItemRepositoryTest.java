@@ -330,7 +330,7 @@ public class ItemRepositoryTest {
 		repository.save(n2);
 		log.info("After update : {}", n2);
 		assertThat(repository.existsById(n2.getId()) , is(true));
-		n2 = (News) repository.getOne(n2.getId());
+		n2 = (News) repository.getById(n2.getId());
 		assertThat(n2, not(nullValue()));
 		log.info("After select : {}", n2);
         assertThat(repository.count(), equalTo(5L));

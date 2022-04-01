@@ -162,7 +162,7 @@ public class PermissionRepositoryTest {
 		p2 = repository.save(p2);
 		log.info("After update : {}", p2);
 		assertThat(repository.existsById(p2.getId()), is(true));
-		p2 = (PermissionOnContext) repository.getOne(p2.getId());
+		p2 = (PermissionOnContext) repository.getById(p2.getId());
 		assertThat(p2, notNullValue());
 		log.info("After select : {}", p2);
 		assertThat(repository.count(), equalTo(5L));
