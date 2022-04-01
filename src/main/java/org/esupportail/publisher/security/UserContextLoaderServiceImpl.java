@@ -24,11 +24,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.mysema.commons.lang.Pair;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -58,6 +53,12 @@ import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.factories.PermissionDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.mysema.commons.lang.Pair;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -101,7 +102,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 	@Inject
 	private ItemRepository<AbstractItem> itemDao;
 
-	private static EnumSet<PermissionClass> contextPermsType = EnumSet
+	private static final EnumSet<PermissionClass> contextPermsType = EnumSet
 			.of(PermissionClass.CONTEXT, PermissionClass.CONTEXT_WITH_SUBJECTS);
 
 	public void loadUserTree(Authentication authentication) {
@@ -347,6 +348,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 
 			// shortcut to avoid to evaluate all perms, check if upper perm can be found on childs
 			if (checkPerms) {
+				@SuppressWarnings("unchecked")
 				final List<? extends PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(
 						publisher.getPermissionType()).findAll(
 						PermissionPredicates.OnCtx(catsCtx, publisher.getPermissionType(), false)));
@@ -459,6 +461,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 
 			// shortcut to avoid to evaluate all perms
 			if (checkPerms) {
+				@SuppressWarnings("unchecked")
 				final List<? extends PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(
 						permClass).findAll(PermissionPredicates.OnCtx(feedsCtx, permClass, false)));
 				// we need to evaluate all permissions of a publisher to get the
@@ -533,6 +536,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 			ctxRoles.put(cat.getContextKey(), null);
 		}
 
+		@SuppressWarnings("unchecked")
 		final List<? extends PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(
 				publisher.getPermissionType()).findAll(
 				PermissionPredicates.OnCtx(catsCtx, publisher.getPermissionType(), false)));
@@ -646,6 +650,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 				feedsCtx.add(feed.getContextKey());
 			}
 
+			@SuppressWarnings("unchecked")
 			final List<? extends PermissionOnContext> perms = Lists.newArrayList(permissionDao.getPermissionDao(
 					permClass).findAll(PermissionPredicates.OnCtx(feedsCtx, permClass, false)));
 			// we need to evaluate all permissions of a publisher to get the
