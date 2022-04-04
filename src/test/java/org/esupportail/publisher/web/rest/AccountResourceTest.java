@@ -34,9 +34,9 @@ import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.UserService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -46,6 +46,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -59,7 +60,7 @@ import com.google.common.collect.Lists;
  *
  * @see UserService
  */
-@RunWith(PowerMockRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(SpringJUnit4ClassRunner.class)
 @PrepareForTest({SecurityUtils.class})
 @SpringBootTest(classes = Application.class)
@@ -72,7 +73,7 @@ public class AccountResourceTest {
 
 	private MockMvc restUserMockMvc;
 
-	@Before
+	@BeforeAll
 	public void setup() {
 		//MockitoAnnotations.initMocks(this);
 		AccountResource accountResource = new AccountResource();

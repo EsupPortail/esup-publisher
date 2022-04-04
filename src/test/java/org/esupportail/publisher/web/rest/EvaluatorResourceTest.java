@@ -41,13 +41,13 @@ import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -59,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see EvaluatorResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class EvaluatorResourceTest {
@@ -87,7 +87,7 @@ public class EvaluatorResourceTest {
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		MockitoAnnotations.openMocks(this);
 		EvaluatorResource evaluatorResource = new EvaluatorResource();
 		ReflectionTestUtils.setField(evaluatorResource, "evaluatorRepository",
 				evaluatorRepository);
@@ -95,7 +95,7 @@ public class EvaluatorResourceTest {
 				evaluatorResource).build();
 	}
 
-	@Before
+	@BeforeAll
 	public void initTest() {
 		UserMultivaluedAttributesEvaluator ev = new UserMultivaluedAttributesEvaluator();
 		ev.setAttribute(DEFAULT_ATTRIBUTE);

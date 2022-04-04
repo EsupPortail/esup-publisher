@@ -52,30 +52,29 @@ import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberResolvedDTO;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Test class for the SubscriberResource REST controller.
  *
  * @see SubscriberResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -122,7 +121,7 @@ public class SubscriberResourceTest {
 		this.restSubscriberMockMvc = MockMvcBuilders.standaloneSetup(subscriberResource).build();
 	}
 
-	@Before
+	@BeforeAll
 	public void initTest() {
 		subscriber = new Subscriber();
 		subscriber.setSubjectCtxId(DEFAULT_SUBSCRIBE_KEY);

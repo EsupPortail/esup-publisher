@@ -18,11 +18,11 @@
  */
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
@@ -37,24 +37,23 @@ import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.QOrganization;
 import org.esupportail.publisher.repository.predicates.OrganizationPredicates;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -72,7 +71,7 @@ public class OrganizationRepositoryTest {
     final static Set<String> DEFAULT_IDS3 = Sets.newHashSet("ID3");
     final static Set<String> DEFAULT_IDS4 = Sets.newHashSet("ID4");
 
-	@Before
+	@BeforeAll
 	public void setUp() {
 		log.info("starting up {}", this.getClass().getName());
 		Organization e = ObjTest.newOrganization("init1");

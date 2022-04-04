@@ -42,21 +42,20 @@ import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -107,7 +106,7 @@ public class ItemClassificationOrderRepositoryTest {
 	@SuppressWarnings("unused")
 	private ItemClassificationOrder ico2;
 
-	@Before
+	@BeforeAll
 	public void setUp() throws Exception {
 		log.info("starting up " + this.getClass().getName());
 

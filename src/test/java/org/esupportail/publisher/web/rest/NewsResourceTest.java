@@ -49,16 +49,16 @@ import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.service.FileService;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,7 +71,7 @@ import org.springframework.validation.Validator;
  *
  * @see NewsResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class NewsResourceTest {
@@ -151,7 +151,7 @@ public class NewsResourceTest {
             .build();
     }
 
-    @Before
+    @BeforeAll
     public void initTest() {
         final String name = "NAME";
         organization = organizationRepository.saveAndFlush(ObjTest

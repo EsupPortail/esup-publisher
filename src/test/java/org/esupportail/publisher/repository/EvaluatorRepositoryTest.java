@@ -33,23 +33,22 @@ import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 1 oct. 2014
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -63,7 +62,7 @@ public class EvaluatorRepositoryTest {
 	private OperatorEvaluator oe1;
 	private OperatorEvaluator oe2;
 
-	@Before
+	@BeforeAll
 	public void setUp() throws Exception {
 		log.info("starting up " + this.getClass().getName());
 		oe1 = repository.saveAndFlush(ObjTest

@@ -22,7 +22,6 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 
-
 import java.time.Instant;
 import java.util.Optional;
 
@@ -30,17 +29,17 @@ import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -51,7 +50,7 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository repository;
 
-	@Before
+	@BeforeAll
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
         assertThat(repository.findAll().size(), is(4));

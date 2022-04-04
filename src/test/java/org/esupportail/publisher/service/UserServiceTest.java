@@ -40,9 +40,9 @@ import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 
 import com.mysema.commons.lang.Pair;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -50,9 +50,10 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
@@ -76,7 +77,7 @@ public class UserServiceTest {
 	@InjectMocks
 	private UserService userService;
 
-	@Before
+	@BeforeAll
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 	}

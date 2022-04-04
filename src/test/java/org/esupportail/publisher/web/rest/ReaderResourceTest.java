@@ -38,14 +38,15 @@ import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.enums.ClassificationDecorType;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.repository.ReaderRepository;
+
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,7 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see ReaderResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class ReaderResourceTest {
@@ -104,7 +105,7 @@ public class ReaderResourceTest {
         this.restReaderMockMvc = MockMvcBuilders.standaloneSetup(readerResource).build();
     }
 
-    @Before
+    @BeforeAll
     public void initTest() {
         reader = new Reader();
         reader.setName(DEFAULT_NAME);

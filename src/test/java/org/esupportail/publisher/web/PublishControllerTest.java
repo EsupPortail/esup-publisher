@@ -77,14 +77,14 @@ import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -96,7 +96,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by jgribonvald on 08/06/16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -203,7 +203,7 @@ public class PublishControllerTest {
     private List<Category> catsOfEsupLectureWay = new ArrayList<>();
     private News savedNews;
 
-    @Before
+    @BeforeAll
     public void initTest() throws InterruptedException {
         organization = new Organization();
         organization.setDescription("A Desc");

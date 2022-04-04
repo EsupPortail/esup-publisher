@@ -41,19 +41,19 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -81,7 +81,7 @@ public class PermissionOnContextRepositoryTest {
 	final static String PERM_INDICE_3 = "perm3";
 	final static String PERM_INDICE_4 = "perm4";
 
-	@Before
+	@BeforeAll
 	public void setUp() {
 		log.info("starting up {}", this.getClass().getName());
 

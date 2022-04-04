@@ -49,16 +49,18 @@ import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -98,7 +100,7 @@ public class ItemRepositoryTest {
 
     private User user1;private User user2;private User user3;
 
-	@Before
+	@BeforeAll
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 
@@ -174,13 +176,17 @@ public class ItemRepositoryTest {
 		repository.saveAndFlush(m1);
 	}
 
-    @Test (expected = javax.validation.ValidationException.class)
+    @Test
     public void testOptionalDateOK() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             null, null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
+
     }
     @Test
     public void testOptionalDateOK2() {
@@ -198,46 +204,56 @@ public class ItemRepositoryTest {
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
     }
-    @Test (expected = javax.validation.ValidationException.class)
+    @Test
     public void testOptionalDateOK4() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
 
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testNotOptionalDateKO1() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             null, null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testNotOptionalDateKO2() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testNotOptionalDateKO3() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testMaxEndDateKO() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             null, ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d2.plus(nbDaysMaxDuration+1, ChronoUnit.DAYS),
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactor1);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
 
 	@Test(expected = javax.validation.ValidationException.class)

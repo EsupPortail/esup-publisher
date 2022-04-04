@@ -21,21 +21,20 @@ This project includes:
   Annotations for Metrics under Apache License 2.0
   AntLR Parser Generator under BSD License
   Apache Commons Codec under Apache License, Version 2.0
-  Apache Commons Compress under Apache License, Version 2.0
   Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Pool under Apache License, Version 2.0
   Apache Commons Text under Apache License, Version 2.0
   Apache Log4j API under Apache License, Version 2.0
   Apache Log4j to SLF4J Adapter under Apache License, Version 2.0
   Apache Spark Integration for Metrics under The Apache License, Version 2.0
+  asm under BSD-3-Clause
   ASM based accessors helper used by json-smart under The Apache Software License, Version 2.0
-  ASM Core under BSD
-  AspectJ weaver under Eclipse Public License - v 1.0
+  AspectJ Weaver under Eclipse Public License - v 2.0
   AssertJ fluent assertions under Apache License, Version 2.0
   attoparser under The Apache Software License, Version 2.0
-  Awaitility under Apache 2.0
   Bean Validation API under Apache License 2.0
   boopickle under Apache-2.0
+  Bouncy Castle ASN.1 Extension and Utility APIs under Bouncy Castle Licence
   Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs under Bouncy Castle Licence
   Bouncy Castle Provider under Bouncy Castle Licence
   Bridge method injection annotations under MIT License
@@ -45,7 +44,6 @@ This project includes:
   Caffeine cache under Apache License, Version 2.0
   Checker Qual under The MIT License
   ClassMate under Apache License, Version 2.0
-  Code Generation Library under ASF 2.0
   Codegen under Apache License, Version 2.0
   com.helger:profiler under The Apache License, Version 2.0
   config under Apache-2.0
@@ -54,6 +52,7 @@ This project includes:
   Ehcache under The Apache Software License, Version 2.0
   error-prone annotations under Apache 2.0
   esup-publisher-ui under Apache License, Version 2.0
+  Evo Inflector under Apache License, Version 2.0
   fast-uuid under The MIT License (MIT)
   Faux Pas under MIT License
   FindBugs-Annotations under GNU Lesser Public License
@@ -85,8 +84,6 @@ This project includes:
   Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   H2 Database Engine under MPL 2.0 or EPL 1.0
   Hamcrest under BSD License 3
-  Hamcrest Core under BSD License 3
-  Hamcrest Library under BSD License 3
   HdrHistogram under Public Domain, per Creative Commons CC0 or BSD-2-Clause
   Hibernate Commons Annotations under GNU Library General Public License v2.1 or later
   Hibernate ORM - hibernate-core under GNU Library General Public License v2.1 or later
@@ -113,19 +110,18 @@ This project includes:
   Jakarta Activation API jar under EDL 1.0
   Jakarta Annotations API under EPL 2.0 or GPL2 w/ CPE
   Jakarta Bean Validation API under Apache License 2.0
-  Jakarta Expression Language 3.0 under EPL 2.0 or GPL2 w/ CPE
   Jakarta Mail API under EPL 2.0 or GPL2 w/ CPE or EDL 1.0
   Jakarta Persistence API under Eclipse Public License v. 2.0 or Eclipse Distribution License v. 1.0
   Jakarta XML Binding API under Eclipse Distribution License - v 1.0
   Jasig CAS Client for Java - Core under Apache License Version 2.0
   Java Annotation Indexer under Apache License, Version 2.0
-  Java Persistence API, Version 2.1 under Eclipse Public License (EPL), Version 1.0 or Eclipse Distribution License (EDL), Version 1.0
   Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
   JavaBeans Activation Framework API jar under CDDL/GPLv2+CE
   Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
   javax.inject under The Apache Software License, Version 2.0
   javax.persistence-api under Eclipse Public License v1.0 or Eclipse Distribution License v. 1.0
   javax.transaction API under CDDL + GPLv2 with classpath exception
+  JAXB Core under CDDL+GPL License
   JAXB Runtime under Eclipse Distribution License - v 1.0
   jaxb-api under CDDL 1.1 or GPL2 w/ CPE
   JBoss Logging 3 under Apache License, version 2.0
@@ -136,18 +132,17 @@ This project includes:
   Jodd Lagarto under BSD-2-Clause
   Jodd Util under BSD-2-Clause
   JSON in Java under The JSON License
+  JSON library from Android SDK under Apache License 2.0
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
   JSONassert under The Apache Software License, Version 2.0
   JSR107 API and SPI under Apache License, Version 2.0
   JUL to SLF4J bridge under MIT License
-  JUnit under Eclipse Public License 1.0
   JUnit Jupiter (Aggregator) under Eclipse Public License v2.0
   JUnit Jupiter API under Eclipse Public License v2.0
   JUnit Jupiter Engine under Eclipse Public License v2.0
   JUnit Jupiter Params under Eclipse Public License v2.0
   JUnit Platform Commons under Eclipse Public License v2.0
   JUnit Platform Engine API under Eclipse Public License v2.0
-  JUnit Vintage Engine under Eclipse Public License v2.0
   JVM Integration for Metrics under Apache License 2.0
   lang under The Apache Software License, Version 2.0
   LatencyUtils under Public Domain, per Creative Commons CC0
@@ -183,18 +178,17 @@ This project includes:
   Netty/Handler/Proxy under Apache License, Version 2.0
   Netty/Resolver under Apache License, Version 2.0
   Netty/Resolver/DNS under Apache License, Version 2.0
-  Netty/TomcatNative [BoringSSL - Static] under Apache License, Version 2.0
+  Netty/TomcatNative [BoringSSL - Static] under The Apache Software License, Version 2.0
   Netty/TomcatNative [OpenSSL - Classes] under The Apache Software License, Version 2.0
   Netty/Transport under Apache License, Version 2.0
   Netty/Transport/Classes/Epoll under Apache License, Version 2.0
   Netty/Transport/Native/Epoll under Apache License, Version 2.0
   Netty/Transport/Native/Unix/Common under Apache License, Version 2.0
-  Objenesis under Apache 2
+  Objenesis under Apache License, Version 2.0
   org.apiguardian:apiguardian-api under The Apache License, Version 2.0
   org.opentest4j:opentest4j under The Apache License, Version 2.0
   org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0
   Pebble under BSD 3-Clause License
-  PowerMock under The Apache Software License, Version 2.0
   problem under MIT License
   problem-spring-common under MIT License
   problem-spring-web under MIT License
@@ -206,7 +200,7 @@ This project includes:
   Querydsl - Core module under Apache License, Version 2.0
   Querydsl - JPA support under Apache License, Version 2.0
   quicklens under Apache 2.0
-  RabbitMQ Java Client under ASL 2.0 or GPL v2 or MPL 1.1
+  RabbitMQ Java Client under ASL 2.0 or GPL v2 or MPL 2.0
   RedisClient under Apache 2.0 License
   Reflections under WTFPL or The New BSD License
   rome under The Apache Software License, Version 2.0
@@ -228,19 +222,20 @@ This project includes:
   Spring AOP under Apache License, Version 2.0
   Spring Aspects under Apache License, Version 2.0
   Spring Beans under Apache License, Version 2.0
-  Spring Cloud Connectors Cloud Foundry Connector under The Apache Software License, Version 2.0
-  Spring Cloud Connectors Core under The Apache Software License, Version 2.0
-  Spring Cloud Connectors local-configuration Connector under The Apache Software License, Version 2.0
-  Spring Cloud Connectors Spring Service Connectors under The Apache Software License, Version 2.0
   Spring Commons Logging Bridge under Apache License, Version 2.0
   Spring Context under Apache License, Version 2.0
   Spring Context Support under Apache License, Version 2.0
   Spring Core under Apache License, Version 2.0
   Spring Data Core under Apache License, Version 2.0
   Spring Data JPA under Apache License, Version 2.0
+  Spring Data LDAP under Apache License, Version 2.0
+  Spring Data REST - Core under Apache License, Version 2.0
+  Spring Data REST - WebMVC under Apache License, Version 2.0
   Spring Expression Language (SpEL) under Apache License, Version 2.0
+  Spring HATEOAS under Apache License, Version 2.0
   Spring JDBC under Apache License, Version 2.0
   Spring Object/Relational Mapping under Apache License, Version 2.0
+  Spring Plugin - Core under Apache License, Version 2.0
   Spring TestContext Framework under Apache License, Version 2.0
   Spring Transaction under Apache License, Version 2.0
   Spring Web under Apache License, Version 2.0
@@ -249,14 +244,13 @@ This project includes:
   spring-boot-actuator under Apache License, Version 2.0
   spring-boot-actuator-autoconfigure under Apache License, Version 2.0
   spring-boot-autoconfigure under Apache License, Version 2.0
-  spring-boot-configuration-metadata under Apache License, Version 2.0
-  spring-boot-loader-tools under Apache License, Version 2.0
-  spring-boot-properties-migrator under Apache License, Version 2.0
   spring-boot-starter under Apache License, Version 2.0
   spring-boot-starter-actuator under Apache License, Version 2.0
   spring-boot-starter-aop under Apache License, Version 2.0
   spring-boot-starter-cache under Apache License, Version 2.0
   spring-boot-starter-data-jpa under Apache License, Version 2.0
+  spring-boot-starter-data-ldap under Apache License, Version 2.0
+  spring-boot-starter-data-rest under Apache License, Version 2.0
   spring-boot-starter-jdbc under Apache License, Version 2.0
   spring-boot-starter-json under Apache License, Version 2.0
   spring-boot-starter-logging under Apache License, Version 2.0
@@ -265,14 +259,16 @@ This project includes:
   spring-boot-starter-test under Apache License, Version 2.0
   spring-boot-starter-thymeleaf under Apache License, Version 2.0
   spring-boot-starter-tomcat under Apache License, Version 2.0
+  spring-boot-starter-validation under Apache License, Version 2.0
   spring-boot-starter-web under Apache License, Version 2.0
   spring-boot-test under Apache License, Version 2.0
   spring-boot-test-autoconfigure under Apache License, Version 2.0
   spring-ldap-core under The Apache Software License, Version 2.0
-  spring-security-cas under The Apache Software License, Version 2.0
-  spring-security-config under The Apache Software License, Version 2.0
-  spring-security-core under The Apache Software License, Version 2.0
-  spring-security-web under The Apache Software License, Version 2.0
+  spring-security-cas under Apache License, Version 2.0
+  spring-security-config under Apache License, Version 2.0
+  spring-security-core under Apache License, Version 2.0
+  spring-security-crypto under Apache License, Version 2.0
+  spring-security-web under Apache License, Version 2.0
   Stax2 API under The BSD License
   Streaming API for XML under Sun Binary Code License
   swagger-annotations under Apache License 2.0
@@ -283,6 +279,7 @@ This project includes:
   thymeleaf-extras-java8time under The Apache Software License, Version 2.0
   thymeleaf-spring5 under The Apache Software License, Version 2.0
   tomcat-embed-core under Apache License, Version 2.0
+  tomcat-embed-el under Apache License, Version 2.0
   tomcat-embed-websocket under Apache License, Version 2.0
   TXW2 Runtime under Eclipse Distribution License - v 1.0
   TypeTools under Apache License, Version 2.0

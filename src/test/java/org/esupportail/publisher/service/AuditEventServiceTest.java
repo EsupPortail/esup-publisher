@@ -39,21 +39,21 @@ import org.esupportail.publisher.config.audit.AuditEventConverter;
 import org.esupportail.publisher.domain.PersistentAuditEvent;
 import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-//@RunWith(PowerMockRunner.class)
-@RunWith(SpringJUnit4ClassRunner.class)
+//@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
 //@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
@@ -87,7 +87,7 @@ public class AuditEventServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	@Before
+	@BeforeAll
     public void init() {
         auditEventOld = new PersistentAuditEvent();
         auditEventOld.setAuditEventDate(Instant.now().minus(eventRetentionDays + 1, ChronoUnit.DAYS));

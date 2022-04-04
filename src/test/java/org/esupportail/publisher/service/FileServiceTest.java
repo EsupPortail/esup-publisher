@@ -20,16 +20,17 @@ import static org.hamcrest.Matchers.is;
 
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@RunWith(PowerMockRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
 @PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration

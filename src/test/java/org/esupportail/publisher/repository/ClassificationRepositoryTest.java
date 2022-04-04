@@ -44,20 +44,21 @@ import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -100,7 +101,7 @@ public class ClassificationRepositoryTest {
 	private Publisher pub2;
     private Category cat1;
 
-	@Before
+	@BeforeAll
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 
@@ -157,21 +158,26 @@ public class ClassificationRepositoryTest {
 	// assertThat(c2, not(samePropertyValuesAs(c)));
 	// }
 
-	@Test(expected = javax.validation.ConstraintViolationException.class)
+	@Test
 	public void testBadURL() {
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
 				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
 				(Category) repository.getById(cat1.getId()), "RSS_URL");
-		repository.saveAndFlush(c3);
+		Assertions.assertThrows(javax.validation.ConstraintViolationException.class, () -> {
+			repository.saveAndFlush(c3);
+		});
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test
 	public void testDuplicateCategoryName() {
 		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
 				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
-		repository.saveAndFlush(c1);
+		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+			repository.saveAndFlush(c1);
+		});
+
 	}
 
 	@Test

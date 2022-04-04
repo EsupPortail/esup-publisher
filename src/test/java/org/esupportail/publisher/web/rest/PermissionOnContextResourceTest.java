@@ -49,9 +49,12 @@ import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -59,23 +62,19 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Test class for the PermissionOnContextResource REST controller.
  *
  * @see PermissionOnContextResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -136,7 +135,7 @@ public class PermissionOnContextResourceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	@Before
+	@BeforeAll
 	public void initTest() {
 		// evaluator = evaluatorRepository.saveAndFlush(ObjTest
 		// .newGlobalEvaluator());

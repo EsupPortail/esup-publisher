@@ -59,9 +59,9 @@ import org.esupportail.publisher.security.UserContextLoaderService;
 import org.esupportail.publisher.security.UserContextLoaderServiceImpl;
 import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -86,7 +86,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @see CategoryResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -181,7 +181,7 @@ public class CategoryResourceTest {
         authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
 	}
 
-	@Before
+	@BeforeAll
 	public void initTest() {
 		final String name = "NAME";
 		organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(name));
