@@ -27,12 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.mysema.commons.lang.Pair;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.enums.ContextType;
@@ -42,6 +36,13 @@ import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PermOnCtxDTO;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.mysema.commons.lang.Pair;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -78,7 +79,7 @@ public class UserContextTree {
      * More several reload are made when the user connect to several async call
      * requesting user permissions and contexts
      * */
-    private Duration duration = Duration.ofSeconds(10000);
+    private Duration duration = Duration.ofSeconds(10);
     @Setter
     private volatile Instant expiringInstant;
     private volatile boolean loadingInProgress = false;
