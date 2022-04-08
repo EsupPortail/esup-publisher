@@ -38,6 +38,7 @@ video/avi
 video/ogg
 video/msvideo
 video/x-msvideo
+video/mp4
 video/mpeg
 video/mpeg3
 video/x-mpeg
