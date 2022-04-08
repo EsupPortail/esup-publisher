@@ -167,10 +167,10 @@ export default {
       if (!this.permissionAdvanced) {
         this.permission.evaluator.evaluators = []
         for (var i = 0; i < this.selectedSubjects.length; i++) {
-          if (this.selectedSubjects[i].keyType === 'PERSON' || (this.selectedSubjects[i].modelId && this.selectedSubjects[i].modelId.keyType === 'PERSON')) {
-            this.permission.evaluator.evaluators.push({ class: 'USERATTRIBUTES', id: null, mode: 'EQUALS', attribute: 'uid', value: this.selectedSubjects[i].modelId ? this.selectedSubjects[i].modelId.keyId : this.selectedSubjects[i].keyId })
-          } else if (this.selectedSubjects[i].keyType === 'GROUP' || (this.selectedSubjects[i].modelId && this.selectedSubjects[i].modelId.keyType === 'GROUP')) {
-            this.permission.evaluator.evaluators.push({ class: 'USERGROUP', id: null, group: this.selectedSubjects[i].modelId ? this.selectedSubjects[i].modelId.keyId : this.selectedSubjects[i].keyId })
+          if (this.selectedSubjects[i].keyType === 'PERSON') {
+            this.permission.evaluator.evaluators.push({ class: 'USERATTRIBUTES', id: null, mode: 'EQUALS', attribute: 'uid', value: this.selectedSubjects[i].keyId })
+          } else if (this.selectedSubjects[i].keyType === 'GROUP') {
+            this.permission.evaluator.evaluators.push({ class: 'USERGROUP', id: null, group: this.selectedSubjects[i].keyId })
           }
         }
       }
@@ -260,7 +260,7 @@ export default {
     },
     updateAuthorizedSubjects (datas) {
       var newVal = datas[0]
-      if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal) && !CommonUtils.equals(newVal, this.permission.authorizedSubjects)) {
+      if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal)) {
         var found = false
         this.permission.authorizedSubjects.forEach(value => {
           if (CommonUtils.equals(newVal.modelId, value)) {
@@ -286,7 +286,7 @@ export default {
     // Mise à jour du sujet séléctionné
     updateSelectedSubject (datas) {
       var newVal = datas[0]
-      if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal) && !CommonUtils.equals(newVal, this.selectedSubjects)) {
+      if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal)) {
         var found = false
         this.selectedSubjects.forEach(subject => {
           if (CommonUtils.equals(newVal.modelId, subject)) {
@@ -294,7 +294,7 @@ export default {
           }
         })
         if (!found) {
-          this.selectedSubjects.push(newVal)
+          this.selectedSubjects.push(newVal.modelId)
         } else {
           this.$toast.warning(t('permission.subjectAlreadySelected'))
         }
