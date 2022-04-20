@@ -30,6 +30,12 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.esupportail.publisher.domain.enums.WritingFormat;
+import org.esupportail.publisher.domain.enums.WritingMode;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
+import org.esupportail.publisher.domain.util.CustomEnumSerializer;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -37,13 +43,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import org.esupportail.publisher.domain.enums.WritingFormat;
-import org.esupportail.publisher.domain.enums.WritingMode;
-import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 16 juin 2014
