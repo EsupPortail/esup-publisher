@@ -15,9 +15,9 @@
  */
 package org.esupportail.publisher.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import javax.inject.Inject;
 
@@ -27,6 +27,9 @@ import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.Redactor;
+
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,11 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.extern.slf4j.Slf4j;
 
 @ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -84,14 +84,15 @@ public class LinkedFileItemRepositoryTest {
 		repository.saveAndFlush(f);
 	}
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test
     public void testInsertDuplicate() {
         AbstractItem item = itemRepo.findAll().get(0);
 
         LinkedFileItem f = new LinkedFileItem(FILE_PATH_DEFAULT, item);
         log.info("Before insert : {}", f);
-        repository.saveAndFlush(f);
-
+		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+			repository.saveAndFlush(f);
+		});
     }
 
 	@Test()

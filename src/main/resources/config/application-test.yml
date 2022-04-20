@@ -4,11 +4,9 @@ server:
     port: 8080
     servlet:
         contextPath: /publisher
-
-spring:
-    profiles:
-        active: dev
-        include: ldapgrp
+        multipart:
+            maxFileSize: 10MB
+            maxRequestSize: 10MB
 
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
@@ -43,11 +41,6 @@ spring:
 
     mail:
         baseUrl: http://localhost:8080
-
-    servlet:
-        multipart:
-            maxFileSize: 10MB
-            maxRequestSize: 10MB
 
     thymeleaf:
         cache: false

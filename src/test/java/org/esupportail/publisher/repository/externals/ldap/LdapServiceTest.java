@@ -36,6 +36,7 @@ import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 
 import com.google.common.collect.Sets;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +47,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.ldap.CommunicationException;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +79,7 @@ public class LdapServiceTest {
 			externalUserDao.getUsersWithFilter("(ESCOUAI=0290009C)", "ALE");
 		} catch (CommunicationException e) {
 			log.warn("WARNING no LDAP connection acquired !");
-			org.junit.Assume.assumeTrue(
-					"WARNING no LDAP connection acquired !", false);
+            Assumptions.assumeTrue(false, "WARNING no LDAP connection acquired !");
 		}
 	}
 

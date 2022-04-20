@@ -161,6 +161,7 @@ This project includes:
   Metrics Utility Servlets under Apache License 2.0
   micrometer-core under The Apache Software License, Version 2.0
   mockito-core under The MIT License
+  mockito-inline under The MIT License
   mockito-junit-jupiter under The MIT License
   native-linux-aarch64 under Apache License 2.0
   native-linux-x86_64 under Apache License 2.0

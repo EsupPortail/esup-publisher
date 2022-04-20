@@ -36,6 +36,7 @@ import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +44,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,11 +98,13 @@ public class PublisherRepositoryTest {
 		repository.saveAndFlush(e2);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test
 	public void testUnique() {
 		Publisher e = new Publisher(org1, reader2, redactor1, "PUB " + INDICE_3,
             PermissionClass.SUBJECT, true, true, true);
-		repository.saveAndFlush(e);
+		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+			repository.saveAndFlush(e);
+		});
 		assertThat(e, equalTo(repository.findOne(PublisherPredicates.AllOfOrganization(org1))));
 	}
 

@@ -7,6 +7,13 @@ async:
     queueCapacity: 10000
 
 spring:
+    profiles:
+        group:
+            test: dev,fast,ldapgrp,test
+            dev: dev,ldapgrp
+            prod: prod,ldapgrp
+            ci: dev,ldapgrp,test
+            fast: dev,fast,ldapgrp
     jpa:
         open-in-view: false
         properties:

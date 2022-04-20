@@ -17,6 +17,7 @@ package org.esupportail.publisher.service.evaluators;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +33,16 @@ import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserGroupEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 @ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -105,11 +106,13 @@ public class EvaluationTest {
 		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
 	}
 
-	@Test(expected = java.lang.IllegalArgumentException.class)
+	@Test
 	public void testUserAttributesBadEvaluator() {
 		UserAttributesEvaluator uae1 = new UserAttributesEvaluator(
 				"isMemberOf", "F08001ut", StringEvaluationMode.EQUALS);
-		assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
+		Assertions.assertThrows(java.lang.IllegalArgumentException.class, () -> {
+			assertThat(evalFactory.from(uae1).isApplicable(userInfos), is(false));
+		});
 	}
 
 	@Test

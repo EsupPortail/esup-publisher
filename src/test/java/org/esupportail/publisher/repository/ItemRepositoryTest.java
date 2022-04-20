@@ -56,7 +56,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -256,7 +255,7 @@ public class ItemRepositoryTest {
 		});
     }
 
-	@Test(expected = javax.validation.ValidationException.class)
+	@Test
 	public void testDateOKUpdateKO() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d2), ObjTest.d3,
@@ -264,10 +263,12 @@ public class ItemRepositoryTest {
 				org1, redactor1);
 		repository.saveAndFlush(m1);
 		m1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d1));
-		repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
 	}
 
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testDateOptionalOKUpdateKO() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             ObjTest.instantToLocalDate(ObjTest.d1), null, ObjTest.d3,
@@ -275,7 +276,9 @@ public class ItemRepositoryTest {
             org1, redactorOptionalEndDate);
         repository.saveAndFlush(m1);
         m1.setEndDate(ObjTest.instantToLocalDate(ObjTest.d1));
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
     }
     @Test
     public void testDateOptionalOKUpdateOK() {
@@ -288,38 +291,46 @@ public class ItemRepositoryTest {
         repository.saveAndFlush(m1);
     }
 
-	@Test(expected = javax.validation.ValidationException.class)
+	@Test
 	public void testDateKOLT() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
-		repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
 	}
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testDateOptionalKOLT() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             ObjTest.instantToLocalDate(ObjTest.d3), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+        	repository.saveAndFlush(m1);
+		});
     }
 
-	@Test(expected = javax.validation.ValidationException.class)
+	@Test
 	public void testDateKOEQ() {
 		Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
 				ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
 				user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
 				org1, redactor1);
-		repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+			repository.saveAndFlush(m1);
+		});
 	}
-    @Test(expected = javax.validation.ValidationException.class)
+    @Test
     public void testDateOptionalKOEQ() {
         Media m1 = new Media("Titre " + INDICE_1, "enclosure" + INDICE_1,
             ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.instantToLocalDate(ObjTest.d1), ObjTest.d1,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
-        repository.saveAndFlush(m1);
+		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
+        	repository.saveAndFlush(m1);
+		});
     }
 
 	@Test
