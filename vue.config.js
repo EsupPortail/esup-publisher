@@ -31,7 +31,7 @@ module.exports = {
   },
   devServer: {
     port: 3000,
-    proxy: 'http://localhost:8080'
+    proxy: process.env.VUE_APP_PROXY_URL
   },
   publicPath: process.env.VUE_APP_BACK_BASE_URL + 'ui/',
   outputDir: _outputDir,
