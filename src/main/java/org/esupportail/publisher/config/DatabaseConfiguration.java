@@ -15,33 +15,23 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.Arrays;
-
 import javax.sql.DataSource;
 
+import com.codahale.metrics.MetricRegistry;
+import liquibase.integration.spring.SpringLiquibase;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.codahale.metrics.MetricRegistry;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
-import liquibase.integration.spring.SpringLiquibase;
 
 @Configuration
 @EnableJpaRepositories("org.esupportail.publisher.repository")
@@ -102,15 +92,16 @@ public class DatabaseConfiguration {
 	public SpringLiquibase liquibase(DataSource dataSource) {
 		SpringLiquibase liquibase = new SpringLiquibase();
 		liquibase.setDataSource(dataSource);
-        liquibase.setIgnoreClasspathPrefix(true);
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");
 		liquibase.setContexts("development, production");
 		if (env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
-            liquibase.setShouldRun(true);
             if ("org.h2.jdbcx.JdbcDataSource".equals(env.getProperty("spring.datasource.dataSourceClassName"))) {
-                log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
+				liquibase.setShouldRun(true);
+				log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
                     " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);
-            }
+            } else {
+				liquibase.setShouldRun(false);
+			}
 		} else {
 			log.debug("Configuring Liquibase");
 		}

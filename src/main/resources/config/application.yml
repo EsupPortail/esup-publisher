@@ -8,16 +8,14 @@ async:
 
 spring:
     profiles:
+        active: #spring.profiles.active#
         group:
-            test: dev,fast,ldapgrp,test
+            test: fast,ldapgrp,test
             dev: dev,ldapgrp
             prod: prod,ldapgrp
             ci: dev,ldapgrp,test
-            fast: dev,fast,ldapgrp
     jpa:
         open-in-view: false
-        properties:
-            #hibernate.jdbc.time_zone: GMT+1
         hibernate:
             ddl-auto: none
     main:

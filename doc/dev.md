@@ -35,6 +35,9 @@ __Don't forget to make a dump of your datas before such operation__
 `./mvnw license:format` add the license header when missing. If a header is existing, it is updated to the new one.
 `./mvnw license:remove` remove existing license header
 
+## to sort dependencies in pom
+`./mvnw sortpom:sort` will sort all in pom
+`./mvnw sortpom:verify` will check the order in the pom and provide a bak file to compare.
 
 ## In dev process when changing the entities
 `./mvnw clean generate-sources` will generates new or modified Q__ classes or to update evaluator's entites when updating evaluator lib
@@ -54,8 +57,8 @@ __Don't forget to make a dump of your datas before such operation__
 
 
 ## to run tests :
-- `./mvnw test -Dspring.profiles.active=dev,fast,ldapgrp,test` don't forget to change databasename between prod
-- `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Dspring.profiles.active=dev,fast,ldapgrp` don't forget to change databasename between prod for a specific class
+- `./mvnw test -Ptest` don't forget to change databasename between prod, adding argument `-Dspring.profiles.active=test,fast,ldapgrp` will permit to override the default conf
+- `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Ptest` don't forget to change databasename between prod for a specific class
 
 
 ## to run in dev :

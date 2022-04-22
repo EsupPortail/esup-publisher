@@ -19,35 +19,33 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.esupportail.publisher.config.Constants;
+
+import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner.Mode;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
-import com.google.common.base.Joiner;
-import com.ryantenney.metrics.spring.config.annotation.DelegatingMetricsConfiguration;
-
 @SpringBootApplication
 @EnableConfigurationProperties
-public class Application implements InitializingBean {
+public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-	@Inject
-	private Environment env;
+	private final Environment env;
+
+	public Application(Environment env) {
+		this.env = env;
+	}
 
 	/**
 	 * Initializes publisher.
@@ -62,18 +60,22 @@ public class Application implements InitializingBean {
         } else {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
             final List<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-            if (activeProfiles.contains("dev") && activeProfiles.contains("prod")) {
+            if (activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION)) {
                 log.error("You have misconfigured your application! " +
                     "It should not run with both the 'dev' and 'prod' profiles at the same time.");
             }
-            if (activeProfiles.contains("prod") && activeProfiles.contains("fast")) {
+            if (activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION) && activeProfiles.contains(Constants.SPRING_PROFILE_FAST)) {
                 log.error("You have misconfigured your application! " +
                     "It should not run with both the 'prod' and 'fast' profiles at the same time.");
             }
-            if (activeProfiles.contains("dev") && activeProfiles.contains("cloud")) {
-                log.error("You have misconfigured your application! " +
-                    "It should not run with both the 'dev' and 'cloud' profiles at the same time.");
-            }
+			if (activeProfiles.contains(Constants.SPRING_PROFILE_TEST) && activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION)) {
+				log.error("You have misconfigured your application! " +
+						"It should not run with both the 'prod' and 'test' profiles at the same time.");
+			}
+			if (activeProfiles.contains(Constants.SPRING_PROFILE_TEST) && activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+				log.error("You have misconfigured your application! " +
+						"It should not run with both the 'dev' and 'test' profiles at the same time.");
+			}
         }
 	}
 
@@ -121,11 +123,5 @@ public class Application implements InitializingBean {
 						"liquibase.sqlgenerator", "liquibase.executor", "liquibase.snapshot", "liquibase.logging",
 						"liquibase.diff", "liquibase.structure", "liquibase.structurecompare", "liquibase.lockservice",
 						"liquibase.ext", "liquibase.changelog"));
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 }

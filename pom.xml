@@ -650,7 +650,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <argLine>${argLine} -Xmx4096m</argLine>
+                    <argLine>-Dspring.profiles.active=@{spring.profiles.active} @{argLine} -Xmx4096m</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                     <testFailureIgnore>false</testFailureIgnore>
@@ -813,6 +813,9 @@
     <profiles>
         <profile>
             <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -831,9 +834,6 @@
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
-                            <arguments>
-                                <argument>--spring.profiles.active=dev</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -841,6 +841,9 @@
         </profile>
         <profile>
             <id>ci</id>
+            <properties>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -862,22 +865,29 @@
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
-                            <arguments>
-                                <argument>--spring.profiles.active=dev</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         <profile>
-            <id>fast</id>
+            <id>test</id>
+            <properties>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
+                    <artifactId>spring-boot-properties-migrator</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
+            <!-- Same as dev expect for some properties to have less log, etc... all things required by travis -->
             <build>
                 <plugins>
                     <plugin>
@@ -886,9 +896,6 @@
                         <configuration>
                             <jvmArguments>-Djava.rmi.server.hostname=localhost -Xdebug -Duser.timezone="Europe/Paris"
                                 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Xms2G -Xmx3G</jvmArguments>
-                            <arguments>
-                                <argument>--spring.profiles.active=dev,fast,ldapgrp</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -896,6 +903,9 @@
         </profile>
         <profile>
             <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
