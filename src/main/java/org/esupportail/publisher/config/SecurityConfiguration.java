@@ -56,7 +56,6 @@ import org.springframework.security.cas.authentication.CasAssertionAuthenticatio
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -282,13 +281,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
-
-    @Override
-    public void configure(WebSecurity web){
-        web.ignoring().antMatchers("/ui/**")
-            .antMatchers("/test/**").antMatchers("/console/**");
-    }
-
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
@@ -336,12 +329,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/console/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
             + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
             .antMatchers(FeedController.PRIVATE_RSS_FEED_URL_PATH + "**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
             + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
             .antMatchers(PROTECTED_PATH + "**").authenticated()
-            .antMatchers("/view/**").permitAll();
+            .antMatchers("/view/**").permitAll()
+            .antMatchers("/ui/**").permitAll();
         http
             .logout()
             .logoutUrl("/api/logout")
