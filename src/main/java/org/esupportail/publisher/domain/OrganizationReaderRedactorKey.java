@@ -22,7 +22,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,17 +41,14 @@ public class OrganizationReaderRedactorKey implements Serializable {
 
     /** The organization. */
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JsonManagedReference("organization-key")
     @JoinColumn(name="entity_id")
     private Organization organization;
     /** The reader. */
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JsonManagedReference("reader-key")
     @JoinColumn(name="reader_id")
     private Reader reader;
     /** The Redactor. */
     @ManyToOne(fetch = FetchType.EAGER, cascade = {})
-    @JsonManagedReference("redactor-key")
     @JoinColumn(name="redactor_id")
     private Redactor redactor;
 

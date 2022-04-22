@@ -36,10 +36,10 @@ import javax.validation.constraints.Size;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -51,9 +51,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  *
  * @author GIP RECIA - Julien Gribonvald 14 Juin 2014
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false, of = "name")
-@ToString(callSuper = true, exclude = "availablePublisherContexts")
+@ToString(callSuper = true)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "T_ENTITY", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
@@ -93,15 +94,15 @@ public class Organization extends AbstractAuditingEntity implements IContext, Se
     @CollectionTable(name = "T_ENTITY_IDENTIFIERS", uniqueConstraints = @UniqueConstraint(columnNames = "identifiers"))
     private Set<String> identifiers = new HashSet<>();
 
+	@OneToMany(mappedBy = "context.organization", fetch = FetchType.LAZY)
+	@JsonIgnore
+	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@ToString.Exclude
+	private Set<Publisher> availablePublisherContexts = new HashSet<>();
+
 	public Organization() {
 		super();
 	}
-
-    @OneToMany(mappedBy = "context.organization", fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JsonBackReference("organization-key")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Publisher> availablePublisherContexts = new HashSet<>();
 
 	public Organization(final String name, final String displayName,
 			final String description, final Integer displayOrder, final Set<String> identifiers) {
