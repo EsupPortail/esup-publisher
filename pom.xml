@@ -813,12 +813,12 @@
     <profiles>
         <profile>
             <id>dev</id>
-            <properties>
-                <spring.profiles.active>dev</spring.profiles.active>
-            </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
