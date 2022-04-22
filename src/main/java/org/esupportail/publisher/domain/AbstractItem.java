@@ -16,6 +16,8 @@
 package org.esupportail.publisher.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -30,21 +32,20 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.util.CstPropertiesLength;
+import org.esupportail.publisher.domain.util.CustomEnumSerializer;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.esupportail.publisher.domain.enums.ContextType;
-import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.esupportail.publisher.domain.util.CstPropertiesLength;
-import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.ScriptAssert;
-import java.time.Instant;
-import java.time.LocalDate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 24 Juin 2014
@@ -64,7 +65,7 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "T_ITEM")
 @DiscriminatorColumn(name = "type")
-@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate, _this.redactor.nbDaysMaxDuration)"
+@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor, _this.startDate, _this.endDate)"
     , message = "Not valid startDate that should be before endDate or with maximum number of days duration")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public abstract class AbstractItem extends AbstractAuditingEntity implements
@@ -204,8 +205,10 @@ public abstract class AbstractItem extends AbstractAuditingEntity implements
     }
 
     /** for scriptAssert validation. */
-    public static boolean complexeDateValidation(final boolean isPeriodOptional, final LocalDate startDate, final LocalDate endDate, final int maxDuration) {
-        if (!isPeriodOptional) {
+    public static boolean complexeDateValidation(final Redactor redactor, final LocalDate startDate, final LocalDate endDate) {
+        if (redactor == null) return false;
+        final int maxDuration = redactor.getNbDaysMaxDuration();
+        if (!redactor.isOptionalPublishTime()) {
             return  startDate != null &&  endDate != null && startDate.isBefore(endDate) && startDate.plusDays(maxDuration+1).isAfter(endDate);
         } else if (startDate != null &&  endDate != null) {
             return startDate.isBefore(endDate) && startDate.plusDays(maxDuration+1).isAfter(endDate);

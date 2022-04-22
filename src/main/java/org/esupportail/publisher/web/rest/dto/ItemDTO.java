@@ -15,22 +15,24 @@
  */
 package org.esupportail.publisher.web.rest.dto;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.ScriptAssert;
-import java.time.Instant;
-import java.time.LocalDate;
 
 @ToString
-@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor.optionalPublishTime, _this.startDate, _this.endDate, _this.redactor.nbDaysMaxDuration)"
+@ScriptAssert(lang = "javascript", script = "org.esupportail.publisher.domain.AbstractItem.complexeDateValidation(_this.redactor, _this.startDate, _this.endDate)"
     , message = "Not valid startDate that should be before endDate or with maximum number of days duration")
 public abstract class ItemDTO extends PermissibleDTO {
 
