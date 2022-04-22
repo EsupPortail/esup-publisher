@@ -22,28 +22,36 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-public class CORSInterceptor extends HandlerInterceptorAdapter{
+import org.springframework.web.servlet.HandlerInterceptor;
+@Slf4j
+public class CORSInterceptor implements HandlerInterceptor {
 
 	@Autowired
 	private Environment env;
 
+	private Set<String> allowedOrigins;
+
+	public CORSInterceptor() {
+		allowedOrigins = new HashSet<>(
+				Arrays.asList(env.getProperty("app.cors.allowed.origins")
+						.split(",")));
+	}
+
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-
-		Set<String> allowedOrigins = new HashSet<String>(
-				Arrays.asList(env.getProperty("app.cors.allowed.origins")
-						.split(",")));
+		log.debug("Entering into {}", this.getClass().getName());
 
 		String origin = request.getHeader("Origin");
 		if (allowedOrigins.contains(origin)) {
+			log.debug("Allowed Origin {}", origin);
 			response.addHeader("Access-Control-Allow-Origin", origin);
 			return true;
 		} else {
+			log.debug("Origin {} isn't allowed from configured {}", origin, allowedOrigins);
 			return false;
 		}
 	}
