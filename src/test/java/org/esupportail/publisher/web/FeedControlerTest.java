@@ -64,14 +64,12 @@ import org.esupportail.publisher.service.factories.impl.PublisherRssFeedView;
 
 import com.rometools.rome.io.impl.DateParser;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -82,57 +80,44 @@ import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Transactional
 @Slf4j
 public class FeedControlerTest {
 
-    private MockMvc mockMvc;
-
     @Inject
     private ServiceUrlHelper urlHelper;
-
     @Inject
     private CategoryRepository categoryRepository;
-
     @Inject
     private ReaderRepository readerRepository;
-
     @Inject
     private RedactorRepository redactorRepository;
-
     @Inject
     private OrganizationRepository organizationRepository;
-
     @Inject
     private PublisherRepository publisherRepository;
-
 	@Inject
 	private ItemRepository<AbstractItem> itemRepo;
-
     @Inject
     private ClassificationRepository<AbstractClassification> classificationRepository;
-
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
-
     @Inject
     @Qualifier("publicFileUploadHelper")
     private FileUploadHelper publicFileUploadHelper;
 
+    private MockMvc mockMvc;
 
     private PublisherRssFeedView publisherRssFeedView;
     private PublisherAtomFeedView publisherAtomFeedView;
-
     private Publisher publisher;
     private News news1;
     private News news2;
-
     private String url;
 
-    @BeforeAll
+    @BeforeEach
     public void setup() throws InterruptedException {
         System.setProperty("file.encoding","UTF-8");
     	FeedController feedController = new FeedController();
@@ -169,7 +154,7 @@ public class FeedControlerTest {
         internalFeed.setParent(category);
 
         InternalFeed intFeed = classificationRepository.saveAndFlush(internalFeed);
-        Long idClassif = intFeed.getId();
+        final Long idClassif = intFeed.getId();
 
         InternalFeed feed1 = classificationRepository.saveAndFlush(ObjTest.newInternalFeed("7", p1, category));
         InternalFeed feed2 = classificationRepository.saveAndFlush(ObjTest.newInternalFeed("8", p1, category));

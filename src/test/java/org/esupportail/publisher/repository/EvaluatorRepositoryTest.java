@@ -36,19 +36,16 @@ import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 1 oct. 2014
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -62,9 +59,9 @@ public class EvaluatorRepositoryTest {
 	private OperatorEvaluator oe1;
 	private OperatorEvaluator oe2;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 		oe1 = repository.saveAndFlush(ObjTest
 				.newGlobalEvaluator(OperatorType.OR));
 
@@ -99,25 +96,25 @@ public class EvaluatorRepositoryTest {
 	@Test
 	public void testInsert() {
 		OperatorEvaluator oe = ObjTest.newGlobalEvaluator(OperatorType.OR);
-		log.info("Before insert : " + oe.toString());
+		log.info("Before insert : {}", oe);
 		repository.saveAndFlush(oe);
 		assertThat(oe.getId(), notNullValue());
-		log.info("After insert : " + oe.toString());
+		log.info("After insert : {}", oe);
 		Optional<AbstractEvaluator> optionalEvaluator = repository.findById(oe.getId());
 		OperatorEvaluator oe2 = optionalEvaluator == null || !optionalEvaluator.isPresent()? null : (OperatorEvaluator) optionalEvaluator.get();
-		log.info("After select : " + oe2.toString());
+		log.info("After select : {}", oe2);
 		assertThat(oe2, notNullValue());
 		assertThat(oe, equalTo(oe2));
 
 		OperatorEvaluator oe3 = ObjTest.newGlobalEvaluator(OperatorType.AND);
-		log.info("Before insert : " + oe3.toString());
+		log.info("Before insert : {}", oe3);
 		repository.save(oe3);
-		log.info("After insert : " + oe3.toString());
+		log.info("After insert : {}", oe3);
 		assertThat(oe3.getId(), notNullValue());
 		assertThat(repository.existsById(oe3.getId()), is(true));
 		oe = (OperatorEvaluator) repository.getById(oe3.getId());
 		assertThat(oe, notNullValue());
-		log.info("After select : " + oe.toString());
+		log.info("After select : {}", oe);
 		assertThat(repository.count(), equalTo(16L));
 
 		List<AbstractEvaluator> results = repository.findAll();

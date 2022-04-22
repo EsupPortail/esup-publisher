@@ -53,10 +53,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -64,7 +62,6 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -77,7 +74,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see OrganizationResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -85,40 +81,33 @@ public class OrganizationResourceTest {
 
     private static final String DEFAULT_NAME = "SAMPLE_TEXT";
     private static final String UPDATED_NAME = "UPDATED_TEXT";
-
     private static final String DEFAULT_DISPLAY_NAME = "SAMPLE_TEXT";
     private static final String UPDATED_DISPLAY_NAME = "UPDATED_TEXT";
-
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-
     private static final Integer DEFAULT_DISPLAY_ORDER = 0;
     private static final Integer UPDATED_DISPLAY_ORDER = 2;
-
     private static final Boolean DEFAULT_ALLOW_NOTIFICATIONS = false;
     private static final Boolean UPDATED_ALLOW_NOTIFICATIONS = true;
-
     private static final Set<String> DEFAULT_IDS = Sets.newHashSet("0450822x");
     private static final Set<String> UPDATED_IDS = Sets.newHashSet("0450822x", "0377777Y");
 
     @Inject
     private OrganizationRepository organizationRepository;
-
     @Inject
     private IPermissionService permissionService;
-
-    private MockMvc restOrganizationMockMvc;
-
-    private Organization organization;
-
     @Inject
     private UserRepository userRepo;
     @Inject
     private UserDTOFactory userDTOFactory;
 
+    private MockMvc restOrganizationMockMvc;
+
+    private Organization organization;
+
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         OrganizationResource organizationResource = new OrganizationResource();
         UserContextTree userContextTree = new UserContextTree();
         OrganizationService organizationService = new OrganizationService();
@@ -143,7 +132,7 @@ public class OrganizationResourceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() {
         organization = new Organization();
         organization.setName(DEFAULT_NAME);

@@ -32,63 +32,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.audit.AuditEventConverter;
 import org.esupportail.publisher.domain.PersistentAuditEvent;
 import org.esupportail.publisher.repository.PersistenceAuditEventRepository;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 //@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
-//@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class AuditEventServiceTest {
 
 	@Mock
 	private PersistenceAuditEventRepository persistenceAuditEventRepository;
-
 	@Mock
 	private AuditEventConverter auditEventConverter;
-
 	@InjectMocks
 	private AuditEventService auditEventService;
-
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepositoryTransactional;
-
     @Autowired
     private AuditEventService auditEventServiceTransactional;
 
+	private AutoCloseable closeable;
+
     private PersistentAuditEvent auditEventOld;
-
     private PersistentAuditEvent auditEventWithinRetention;
-
     private PersistentAuditEvent auditEventNew;
-
     private final int eventRetentionDays = 30;
 
-	@PostConstruct
-	public void setup() {
-		MockitoAnnotations.initMocks(this);
-	}
-
-	@BeforeAll
+	@BeforeEach
     public void init() {
+		closeable = MockitoAnnotations.openMocks(this);
+
         auditEventOld = new PersistentAuditEvent();
         auditEventOld.setAuditEventDate(Instant.now().minus(eventRetentionDays + 1, ChronoUnit.DAYS));
         auditEventOld.setPrincipal("test-user-old");
@@ -104,6 +91,12 @@ public class AuditEventServiceTest {
         auditEventNew.setPrincipal("test-user-new");
         auditEventNew.setAuditEventType("test-type");
     }
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
+	}
+
 
 	@Test
 	public void findAll_ShouldBeReturnAllAuditEvent() {

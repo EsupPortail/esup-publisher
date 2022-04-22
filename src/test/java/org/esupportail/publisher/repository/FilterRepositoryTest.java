@@ -27,17 +27,14 @@ import org.esupportail.publisher.domain.Organization;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -55,15 +52,15 @@ public class FilterRepositoryTest {
 	final static String FILTER_LDAP_PATTERN = "(ESCOUAI=0450822X)";
 	final static String FILTER_GROUP_PATTERN = "esco:Etablissements:FICTIF_0450822X";
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		Organization o = orgRepo.saveAndFlush(ObjTest
 				.newOrganization(FILTER_INDICE_1));
 
 		Filter f = ObjTest.newFilterLDAP(FILTER_LDAP_PATTERN, o);
-		log.info("Before insert : " + f.toString());
+		log.info("Before insert : {}", f);
 		repository.saveAndFlush(f);
 	}
 
@@ -71,8 +68,7 @@ public class FilterRepositoryTest {
 	public void testInsertDuplicate() {
 		Organization o = orgRepo.findAll().get(0);
 		Filter f = ObjTest.newFilterLDAP(FILTER_LDAP_PATTERN, o);
-		log.info("Before insert : " + f.toString());
-		repository.saveAndFlush(f);
+		log.info("Before insert : {}", f);
 		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 			repository.saveAndFlush(f);
 		});
@@ -83,7 +79,7 @@ public class FilterRepositoryTest {
 		Organization o = orgRepo.findAll().get(0);
 
 		Filter f = ObjTest.newFilterGroup(FILTER_GROUP_PATTERN, o);
-		log.info("Before insert : " + f.toString());
+		log.info("Before insert :  {}", f);
 		repository.saveAndFlush(f);
 
 	}

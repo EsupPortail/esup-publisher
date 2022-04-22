@@ -58,21 +58,18 @@ import org.esupportail.publisher.security.UserContextLoaderService;
 import org.esupportail.publisher.security.UserContextLoaderServiceImpl;
 import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.junit.jupiter.api.BeforeAll;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -84,7 +81,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see CategoryResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -92,63 +88,49 @@ public class CategoryResourceTest {
 
 	private static final AccessType DEFAULT_ACCESS_VIEW = AccessType.AUTHENTICATED;
 	private static final AccessType UPDATED_ACCESS_VIEW = AccessType.AUTHORIZED;
-
 	private static final DisplayOrderType DEFAULT_DEFAULT_DISPLAY_ORDER = DisplayOrderType.CUSTOM;
 	private static final DisplayOrderType UPDATED_DEFAULT_DISPLAY_ORDER = DisplayOrderType.NAME;
-
 	private static final String DEFAULT_NAME = "SAMPLE_TEXT";
 	private static final String UPDATED_NAME = "UPDATED_TEXT";
-
 	private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
 	private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-
 	private static final Integer DEFAULT_DISPLAY_ORDER = 0;
 	private static final Integer UPDATED_DISPLAY_ORDER = 1;
-
 	private static final String DEFAULT_ICON_URL = "http://default.app.fr/icon.ico";
 	private static final String UPDATED_ICON_URL = "http://updated.app.fr/icon.ico";
-
 	private static final Boolean DEFAULT_RSS_ALLOWED = false;
 	private static final Boolean UPDATED_RSS_ALLOWED = true;
 	private static final Integer DEFAULT_TTL = 1000;
 	private static final Integer UPDATED_TTL = 10000;
-
     private static final String USER_ADMIN = "admin";
     private static final String USER = "user";
 
 	@Inject
 	private CategoryRepository categoryRepository;
+	@Inject
+	private PublisherRepository publisherRepository;
+	@Inject
+	private OrganizationRepository organizationRepository;
+	@Inject
+	private ReaderRepository readerRepository;
+	@Inject
+	private RedactorRepository redactorRepository;
+	@Inject
+    private UserRepository userRepo;
 
 	private MockMvc restCategoryMockMvc;
 
-	private Category category;
-
-	@Inject
-	private PublisherRepository publisherRepository;
-
-	private Publisher publisher;
-
-	@Inject
-	private OrganizationRepository organizationRepository;
 	private Organization organization;
-
-	@Inject
-	private ReaderRepository readerRepository;
-	private Reader reader;
-
-	@Inject
-	private RedactorRepository redactorRepository;
 	private Redactor redactor;
-
-    @Inject
-    private UserRepository userRepo;
-
-    private Authentication authUserAdmin;
-    private CustomUserDetails userAdminDetails;
+	private Reader reader;
+	private Publisher publisher;
+	private Category category;
+	private Authentication authUserAdmin;
+	private CustomUserDetails userAdminDetails;
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		CategoryResource categoryResource = new CategoryResource();
 		OrganizationResource organizationResource = new OrganizationResource();
         UserContextLoaderService userSessionTreeLoader = new UserContextLoaderServiceImpl();
@@ -179,7 +161,7 @@ public class CategoryResourceTest {
         authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		final String name = "NAME";
 		organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(name));

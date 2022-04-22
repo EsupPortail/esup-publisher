@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.esupportail.publisher.Application;
@@ -35,17 +36,14 @@ import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.UserService;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-import org.junit.jupiter.api.BeforeAll;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
@@ -56,24 +54,21 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
  *
  * @see UserService
  */
-@ExtendWith(SpringExtension.class)//@RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
-//@PowerMockIgnore({"javax.management.*","com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class AccountResourceTest {
-
 	@Inject
 	private UserRepository userRepository;
+	private AutoCloseable closeable;
+	private static MockMvc restUserMockMvc;
 
-	private MockMvc restUserMockMvc;
-
-	@BeforeAll
+	@PostConstruct
 	public void setup() {
-		//MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		AccountResource accountResource = new AccountResource();
 		//ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
 		//ReflectionTestUtils.setField(accountResource, "userService", userService);
-		this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountResource).build();
+		restUserMockMvc = MockMvcBuilders.standaloneSetup(accountResource).build();
 	}
 
 	@Test

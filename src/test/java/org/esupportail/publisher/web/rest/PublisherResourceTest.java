@@ -57,17 +57,14 @@ import org.esupportail.publisher.web.rest.dto.ActionDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 
 import com.google.common.collect.Lists;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -79,56 +76,48 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see PublisherResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class PublisherResourceTest {
 
     private static final PermissionClass DEFAULT_PERMISSION_CLASS = PermissionClass.CONTEXT;
     private static final PermissionClass UPDATED_PERMISSION_CLASS = PermissionClass.CONTEXT_WITH_SUBJECTS;
-
     private static final Boolean DEFAULT_BOOLEAN = false;
     private static final Boolean UPDATED_BOOLEAN = true;
     private static final Integer DEFAULT_DISPLAY_ORDER = 0;
     private static final Integer UPDATED_DISPLAY_ORDER = 1;
-
     private static final DisplayOrderType DEFAULT_DEFAULT_DISPLAY_ORDER = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
     private static final DisplayOrderType UPDATED_DEFAULT_DISPLAY_ORDER = DisplayOrderType.ONLY_LAST_CREATED_FIRST;
-
     private static final String DEFAULT_PUBLISHER_NAME = "My Publisher";
     private static final String UPDATED_PUBLISHER_NAME = "Your Publisher";
 
     @Inject
     private OrganizationRepository organizationRepository;
-    private Organization organization;
-
     @Inject
     private IPermissionService permissionService;
-
     @Inject
     private ReaderRepository readerRepository;
-    private Reader reader;
-
     @Inject
     private RedactorRepository redactorRepository;
-    private Redactor redactor;
-
     @Inject
     private PublisherRepository publisherRepository;
-
-    private MockMvc restPublisherMockMvc;
-
-    private Publisher publisher;
-    private OrganizationReaderRedactorKey context;
-
     @Inject
     private UserRepository userRepo;
     @Inject
     private UserDTOFactory userDTOFactory;
 
+    private MockMvc restPublisherMockMvc;
+
+    private Organization organization;
+    private OrganizationReaderRedactorKey context;
+    private Redactor redactor;
+    private Reader reader;
+    private Publisher publisher;
+
+
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         OrganizationResource organizationResource = new OrganizationResource();
         ReaderResource readerResource = new ReaderResource();
         RedactorResource redactorResource = new RedactorResource();
@@ -152,7 +141,7 @@ public class PublisherResourceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() {
         final String name = "NAME";
         organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(name));

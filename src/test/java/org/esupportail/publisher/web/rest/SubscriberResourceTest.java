@@ -56,13 +56,10 @@ import org.esupportail.publisher.web.rest.dto.SubscriberResolvedDTO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -74,7 +71,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see SubscriberResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -82,24 +78,19 @@ public class SubscriberResourceTest {
 
 	private static final SubscribeType DEFAULT_SUBSCRIBE_TYPE = SubscribeType.FORCED;
 	private static final SubscribeType UPDATED_SUBSCRIBE_TYPE = SubscribeType.FREE;
-
 	//private static final SubjectKey DEFAULT_SUBJECT = new SubjectKey("admin", SubjectType.PERSON);
 	private static final SubjectKeyExtended DEFAULT_SUBJECT = new SubjectKeyExtended(new SubjectKey(
             "grouper.coll:collectivite:region_centre_val_de_loire:applications:gestion_et_reservation_de_ressources:" +
                     "administrateurs_des_ressources:test_de_longueur_totale_superieur_a_deux_cent_cinquante_six_characters:" +
                     "et_pourquoi_pas_vu_le_nombre_de_noeuds_dans_l_arborescence_des_groupes", SubjectType.GROUP));
-
 	private static final ContextKey DEFAULT_CTX = new ContextKey(1L, ContextType.ORGANIZATION);
-
 	private static final SubjectContextKey DEFAULT_SUBSCRIBE_KEY = new SubjectContextKey(
 			DEFAULT_SUBJECT, DEFAULT_CTX);
 
 	@Inject
 	private SubscriberRepository subscriberRepository;
-
     @Inject
     private SubscriberResolvedDTOFactory subscriberResolvedDTOFactory;
-
     @Inject
     private transient CompositeKeyExtendedDTOFactory<SubjectKeyExtendedDTO, SubjectKeyExtended, String, String, SubjectType> subjectKeyExtendedConverter;
     @Inject
@@ -112,7 +103,7 @@ public class SubscriberResourceTest {
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		SubscriberResource subscriberResource = new SubscriberResource();
 		ReflectionTestUtils.setField(subscriberResource,"subscriberRepository", subscriberRepository);
         ReflectionTestUtils.setField(subscriberResource,"subscriberResolvedDTOFactory", subscriberResolvedDTOFactory);
@@ -121,7 +112,7 @@ public class SubscriberResourceTest {
 		this.restSubscriberMockMvc = MockMvcBuilders.standaloneSetup(subscriberResource).build();
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		subscriber = new Subscriber();
 		subscriber.setSubjectCtxId(DEFAULT_SUBSCRIBE_KEY);

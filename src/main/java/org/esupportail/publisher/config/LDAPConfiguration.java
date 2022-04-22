@@ -18,17 +18,16 @@ package org.esupportail.publisher.config;
 import java.util.Arrays;
 import java.util.Set;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
+
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
-
-import com.google.common.collect.Sets;
 
 /**
  *
@@ -88,6 +87,7 @@ public class LDAPConfiguration {
         ldapCtx.setUserDn(environment.getProperty(PROP_USERDN));
         ldapCtx.setPassword(environment.getProperty(PROP_PASSWORD));
         ldapCtx.setPooled(environment.getProperty(PROP_POOLED, Boolean.class, DEFAULT_POOL));
+        log.debug("LDAPContext is configured on {} with user {}", environment.getProperty(PROP_URLS), environment.getProperty(PROP_USERDN));
         return ldapCtx;
     }
 
@@ -111,12 +111,12 @@ public class LDAPConfiguration {
         final String UserAttributes = environment.getRequiredProperty(PROP_USER_OTHERATTR);
         final String userDisplayedAttributes = environment.getRequiredProperty(PROP_USER_DISPLAYEDATTR);
         Set<String> otherUserDisplayedAttributes = null;
-        if (userDisplayedAttributes != null && !userDisplayedAttributes.isEmpty()) {
+        if (!userDisplayedAttributes.isEmpty()) {
             String[] attrs = userDisplayedAttributes.trim().replaceAll("\\s", "").split(",");
             otherUserDisplayedAttributes = Sets.newHashSet(attrs);
         }
         Set<String> otherUserAttributes = null;
-        if (UserAttributes != null && !UserAttributes.isEmpty()) {
+        if (!UserAttributes.isEmpty()) {
             String[] attrs = UserAttributes.trim().replaceAll("\\s", "").split(",");
             otherUserAttributes = Sets.newHashSet(attrs);
         }

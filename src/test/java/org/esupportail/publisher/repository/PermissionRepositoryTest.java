@@ -43,30 +43,25 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
-// @Transactional
+@Transactional
 @Slf4j
 public class PermissionRepositoryTest {
 
 	@Inject
 	@Named("permissionRepository")
 	private PermissionRepository<AbstractPermission> repository;
-
     @Inject
     private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
-
 	@Inject
 	private OrganizationRepository orgRepo;
 
@@ -81,7 +76,7 @@ public class PermissionRepositoryTest {
 	private Organization org1;
 	private Organization org2;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 
@@ -141,7 +136,6 @@ public class PermissionRepositoryTest {
 	// }
 
 	@Test
-	@Transactional
 	public void testInsert() {
 		PermissionOnContext p1 = new PermissionOnContext(org1.getContextKey(),
 				PermissionType.ADMIN,
@@ -187,7 +181,6 @@ public class PermissionRepositoryTest {
 	 * {@link org.springframework.data.jpa.repository.JpaRepository#findAll()}.
 	 */
 	@Test
-	@Transactional
 	public void testFindAll() {
 		assertThat(repository.findAll().size(), is(4));
 	}
@@ -198,7 +191,6 @@ public class PermissionRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Transactional
 	public void testExists() {
 		assertThat(repository.existsById(repository.findAll().get(0).getId()), is(true));
 
@@ -209,7 +201,6 @@ public class PermissionRepositoryTest {
 	 * {@link org.springframework.data.repository.CrudRepository#count()}.
 	 */
 	@Test
-	@Transactional
 	public void testCount() {
 		assertThat(repository.count(), equalTo(4L));
 	}
@@ -220,7 +211,6 @@ public class PermissionRepositoryTest {
 	 * .
 	 */
 	@Test
-	@Transactional
 	public void testDelete() {
 		long count = repository.count();
 		repository.delete(repository.findAll().get(0));
@@ -232,7 +222,6 @@ public class PermissionRepositoryTest {
 	 * {@link org.springframework.data.repository.CrudRepository#deleteAll()}.
 	 */
 	@Test
-	@Transactional
 	public void testDeleteAll() {
 		repository.deleteAll();
 		assertThat(repository.count(), equalTo(0L));

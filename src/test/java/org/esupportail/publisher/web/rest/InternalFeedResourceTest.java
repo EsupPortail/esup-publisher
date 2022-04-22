@@ -49,13 +49,10 @@ import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -67,67 +64,53 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see InternalFeedResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class InternalFeedResourceTest {
 
 	private static final AccessType DEFAULT_ACCESS_VIEW = AccessType.AUTHENTICATED;
 	private static final AccessType UPDATED_ACCESS_VIEW = AccessType.AUTHORIZED;
-
 	private static final DisplayOrderType DEFAULT_DEFAULT_DISPLAY_ORDER = DisplayOrderType.CUSTOM;
 	private static final DisplayOrderType UPDATED_DEFAULT_DISPLAY_ORDER = DisplayOrderType.NAME;
-
 	private static final String DEFAULT_NAME = "SAMPLE_TEXT";
 	private static final String UPDATED_NAME = "UPDATED_TEXT";
-
 	private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
 	private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-
 	private static final Integer DEFAULT_DISPLAY_ORDER = 0;
 	private static final Integer UPDATED_DISPLAY_ORDER = 1;
-
 	private static final String DEFAULT_ICON_URL = "http://default.app.fr/icon.ico";
 	private static final String UPDATED_ICON_URL = "http://updated.app.fr/icon.ico";
-
 	private static final Integer DEFAULT_TTL = 1000;
 	private static final Integer UPDATED_TTL = 10000;
-
 	private static final String DEFAULT_LANG = "fr";
 	private static final String UPDATED_LANG = "fr_fr";
-
 	private static final Boolean DEFAULT_RSS_ALLOWED = true;
 
 	@Inject
 	private InternalFeedRepository internalFeedRepository;
+	@Inject
+	private OrganizationRepository organizationRepository;
+	@Inject
+	private CategoryRepository categoryRepository;
+	@Inject
+	private ReaderRepository readerRepository;
+	@Inject
+	private RedactorRepository redactorRepository;
+	@Inject
+	private PublisherRepository publisherRepository;
 
 	private MockMvc restInternalFeedMockMvc;
 
-	private InternalFeed internalFeed;
-
-	@Inject
-	private OrganizationRepository organizationRepository;
 	private Organization organization;
-
-	@Inject
-	private CategoryRepository categoryRepository;
-	private Category category;
-
-	@Inject
-	private ReaderRepository readerRepository;
 	private Reader reader;
-
-	@Inject
-	private RedactorRepository redactorRepository;
 	private Redactor redactor;
-
-	@Inject
-	private PublisherRepository publisherRepository;
 	private Publisher publisher;
+	private Category category;
+	private InternalFeed internalFeed;
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		InternalFeedResource internalFeedResource = new InternalFeedResource();
 		OrganizationResource organizationResource = new OrganizationResource();
 		CategoryResource categoryResource = new CategoryResource();
@@ -150,7 +133,7 @@ public class InternalFeedResourceTest {
 				internalFeedResource).build();
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		final String name = "NAME";
 		organization = organizationRepository.saveAndFlush(ObjTest

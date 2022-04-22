@@ -50,16 +50,12 @@ import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -69,15 +65,12 @@ public class ItemRepositoryTest {
 
 	@Inject
 	private ItemRepository<AbstractItem> repository;
-
     @Inject
     private ItemDTOSelectorFactory factoryDTO;
-
 	@Inject
 	private OrganizationRepository orgRepo;
 	@Inject
 	private RedactorRepository redactorRepo;
-
 	@Inject
 	private UserRepository userRepo;
 
@@ -99,13 +92,13 @@ public class ItemRepositoryTest {
 
     private User user1;private User user2;private User user3;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 
-        user1 = userRepo.findById(ObjTest.subject1).get();
-        user2 = userRepo.findById(ObjTest.subject2).get();
-        user3 = userRepo.findById(ObjTest.subject3).get();
+        user1 = userRepo.findById(ObjTest.subject1).orElse(null);
+        user2 = userRepo.findById(ObjTest.subject2).orElse(null);
+        user3 = userRepo.findById(ObjTest.subject3).orElse(null);
 
 		org1 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_1));
 		org2 = orgRepo.saveAndFlush(ObjTest.newOrganization(INDICE_2));
@@ -181,7 +174,6 @@ public class ItemRepositoryTest {
             null, null, ObjTest.d3,
             user1, DEFAULT_STATUS, "summary" + INDICE_1, true, true,
             org1, redactorOptionalEndDate);
-        repository.saveAndFlush(m1);
 		Assertions.assertThrows(javax.validation.ValidationException.class, () -> {
 			repository.saveAndFlush(m1);
 		});

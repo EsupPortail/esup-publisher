@@ -46,48 +46,45 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import com.google.common.collect.Sets;
 import com.mysema.commons.lang.Pair;
 import com.querydsl.core.types.Predicate;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-@ExtendWith(SpringExtension.class)//@RunWith(PowerMockRunner.class)
 @SpringBootTest(classes = Application.class)
-//@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.*"})
 @WebAppConfiguration
 public class GroupServiceTest {
 
 	@Mock
 	private IExternalGroupDao externalGroupDao;
-
 	@Mock
 	private UserDTOFactory userDTOFactory;
-
 	@Mock
 	private TreeJSDTOFactory treeJSDTOFactory;
-
 	@Mock
 	private IPermissionService permissionService;
-
 	@Mock
 	private ContextService contextService;
-
 	@Mock
 	private FilterRepository filterRepository;
-
 	@InjectMocks
 	private GroupService groupService;
 
-	@BeforeAll
+	private AutoCloseable closeable;
+
+	@BeforeEach
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		closeable = MockitoAnnotations.openMocks(this);
+	}
+
+	@AfterEach
+	void closeService() throws Exception {
+		closeable.close();
 	}
 
 	@Test

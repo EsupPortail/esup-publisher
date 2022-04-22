@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class DateAdaptersTest {
     private final String RFC822_DATE = "Sun, 9 Feb 2020 11:10:12 +0100";
     private final String ISO8601_DATE = "2020-02-09T11:10:12+01:00";

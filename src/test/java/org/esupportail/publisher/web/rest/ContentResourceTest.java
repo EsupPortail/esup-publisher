@@ -83,16 +83,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -102,7 +99,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by jgribonvald on 08/06/16.
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -111,46 +107,35 @@ public class ContentResourceTest {
     private static final String USER_ADMIN = "admin";
     private static final String USER = "user";
 
-    private MockMvc restContentMockMvc;
-
     @Inject
     private OrganizationRepository organizationRepository;
-
     @Inject
     private PublisherRepository publisherRepository;
-
     @Inject
     private CategoryRepository categoryRepository;
-
     @Inject
     private ReaderRepository readerRepository;
-
     @Inject
     private RedactorRepository redactorRepository;
-
     @Inject
     private ItemRepository<AbstractItem> itemRepository;
-
     @Inject
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
-
     @Inject
     private ContentService contentService;
     @Inject
     private ContentDTOFactory contentDTOFactory;
-
     @Inject
     private SubscriberRepository subscriberRepository;
-
     @Inject
     private UserRepository userRepo;
     @Inject
     private UserDTOFactory userDTOFactory;
-
     @Inject
     @Named("permissionRepository")
     private PermissionRepository<AbstractPermission> permissionRepository;
 
+    private MockMvc restContentMockMvc;
 
     private Authentication authUserAdmin;
     private CustomUserDetails userAdminDetails;
@@ -161,7 +146,7 @@ public class ContentResourceTest {
 
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         ContentResource contentResource = new ContentResource();
 
         ReflectionTestUtils.setField(contentResource, "contentService", this.contentService);
@@ -214,7 +199,7 @@ public class ContentResourceTest {
     // not saved before test
     private ContentDTO content;
 
-    @BeforeAll
+    @BeforeEach
     public void initTest()  throws Exception{
         organization = ObjTest.newOrganization("A Desc 1");
         organization.setIdentifiers(Sets.newHashSet("0450822X", "0370028X"));

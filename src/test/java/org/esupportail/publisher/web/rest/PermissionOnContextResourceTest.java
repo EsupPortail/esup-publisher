@@ -52,17 +52,14 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -74,7 +71,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see PermissionOnContextResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
@@ -82,40 +78,34 @@ public class PermissionOnContextResourceTest {
 
 	private static final Long DEFAULT_CTXID = 0L;
 	private static final Long UPDATED_CTXID = 1L;
-
 	private static final ContextType DEFAULT_CTX_TYPE = ContextType.ORGANIZATION;
 	private static final ContextType UPDATED_CTX_TYPE = ContextType.CATEGORY;
-
 	private static final ContextKey DEFAULT_CTX = new ContextKey(DEFAULT_CTXID,
 			DEFAULT_CTX_TYPE);
 	private static final ContextKey UPDATED_CTX = new ContextKey(UPDATED_CTXID,
 			UPDATED_CTX_TYPE);
-
 	private static final PermissionType DEFAULT_ROLE = PermissionType.ADMIN;
 	private static final PermissionType UPDATED_ROLE = PermissionType.MANAGER;
 
 	@Inject
 	private PermissionOnContextRepository permissionOnContextRepository;
+	@Inject
+    private IPermissionService permissionService;
+	@Inject
+	private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
+	@Inject
+    private UserRepository userRepo;
+	@Inject
+	private UserDTOFactory userDTOFactory;
 
 	private MockMvc restPermissionOnContextMockMvc;
 
 	private PermissionOnContext permissionOnContext;
-
-    @Inject
-    private IPermissionService permissionService;
-
-	@Inject
-	private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
 	private AbstractEvaluator evaluator;
-    @Inject
-    private UserRepository userRepo;
-    @Inject
-    private UserDTOFactory userDTOFactory;
-
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		PermissionOnContextResource permissionOnContextResource = new PermissionOnContextResource();
 		EvaluatorResource evaluatorResource = new EvaluatorResource();
 		ReflectionTestUtils.setField(permissionOnContextResource,
@@ -135,7 +125,7 @@ public class PermissionOnContextResourceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		// evaluator = evaluatorRepository.saveAndFlush(ObjTest
 		// .newGlobalEvaluator());

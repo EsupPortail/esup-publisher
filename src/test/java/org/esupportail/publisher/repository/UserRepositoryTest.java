@@ -29,28 +29,24 @@ import org.esupportail.publisher.Application;
 import org.esupportail.publisher.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
 @Transactional
 @Slf4j
 public class UserRepositoryTest {
-
 	@Autowired
 	private UserRepository repository;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
         assertThat(repository.findAll().size(), is(4));

@@ -39,13 +39,10 @@ import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.ObjTest;
 import org.esupportail.publisher.repository.OrganizationRepository;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -57,7 +54,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see FilterResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class FilterResourceTest {
@@ -84,7 +80,7 @@ public class FilterResourceTest {
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		FilterResource filterResource = new FilterResource();
 		OrganizationResource organizationResource = new OrganizationResource();
 		ReflectionTestUtils.setField(filterResource, "filterRepository",filterRepository);
@@ -92,7 +88,7 @@ public class FilterResourceTest {
 		this.restFilterMockMvc = MockMvcBuilders.standaloneSetup(filterResource).build();
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(DEFAULT_PATTERN));
 		filter = new Filter();

@@ -46,16 +46,13 @@ import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -65,7 +62,6 @@ public class ItemClassificationOrderRepositoryTest {
 
 	@Inject
 	private ItemClassificationOrderRepository repository;
-
 	@Inject
 	private ClassificationRepository<AbstractClassification> classifRepo;
 	@Inject
@@ -106,9 +102,9 @@ public class ItemClassificationOrderRepositoryTest {
 	@SuppressWarnings("unused")
 	private ItemClassificationOrder ico2;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
-		log.info("starting up " + this.getClass().getName());
+		log.info("starting up {}", this.getClass().getName());
 
 		cat1 = ObjTest.newCategory(INDICE_1);
 		pub1 = cat1.getPublisher();
@@ -147,32 +143,32 @@ public class ItemClassificationOrderRepositoryTest {
 	public void testInsert() {
 		ItemClassificationOrder ico3 = new ItemClassificationOrder(news1,
 				feed2, 17);
-		log.info("Before insert : " + ico3.toString());
+		log.info("Before insert : {}", ico3);
 		repository.saveAndFlush(ico3);
 		assertThat(ico3.getDisplayOrder(), notNullValue());
 		assertThat(ico3.getItemClassificationId(), notNullValue());
 		assertThat(ico3.getItemClassificationId().getAbstractClassification(), notNullValue());
 		assertThat(ico3.getItemClassificationId().getAbstractItem(), notNullValue());
-		log.info("After insert : " + ico3.toString());
+		log.info("After insert : {}", ico3);
 		Optional<ItemClassificationOrder> optionalItemClassif = repository.findById(ico3.getItemClassificationId());
 		ItemClassificationOrder ico4 = optionalItemClassif.orElse(null);
-		log.info("After select : " + ico4.toString());
+		log.info("After select : {}", ico4);
 		assertThat(ico4, notNullValue());
 		assertThat(ico3, equalTo(ico4));
 
 		ico4.setDisplayOrder(0);
 		ico4 = repository.saveAndFlush(ico4);
-		log.info("After update : " + ico4.toString());
+		log.info("After update : {}", ico4);
 
 		ico4 = new ItemClassificationOrder(news2, feed1, 5);
-		log.info("Before insert : " + ico4.toString());
+		log.info("Before insert : {}", ico4);
 		repository.save(ico4);
-		log.info("After insert : " + ico4.toString());
+		log.info("After insert : {}", ico4);
 		assertThat(ico4.getItemClassificationId(), notNullValue());
 		assertThat(repository.existsById(ico4.getItemClassificationId()), is(true));
 		ico3 = repository.getById(ico4.getItemClassificationId());
 		assertThat(ico3, notNullValue());
-		log.info("After select : " + ico3.toString());
+		log.info("After select : {}", ico3);
         assertThat(repository.count(), equalTo(4L));
 
 		List<ItemClassificationOrder> results = repository.findAll();

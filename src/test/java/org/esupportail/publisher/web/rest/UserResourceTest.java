@@ -26,12 +26,10 @@ import org.esupportail.publisher.Application;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,20 +40,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
  *
  * @see UserResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class UserResourceTest {
-
 	@Inject
 	private UserRepository userRepository;
-
-	private MockMvc restUserMockMvc;
-
 	@Inject
 	private UserDTOFactory userFactory;
 
-	@BeforeAll
+	private MockMvc restUserMockMvc;
+
+	@BeforeEach
 	public void setup() {
 		UserResource userResource = new UserResource();
 		ReflectionTestUtils.setField(userResource, "userRepository",userRepository);

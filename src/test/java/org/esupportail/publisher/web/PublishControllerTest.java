@@ -77,14 +77,11 @@ import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -96,82 +93,53 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by jgribonvald on 08/06/16.
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Slf4j
 @Transactional
 public class PublishControllerTest {
-
-    private MockMvc restPublishControllerMockMvc;
-
+    private static final Map<String, String> namespaces =
+            Collections.singletonMap("dc", "http://purl.org/dc/elements/1.1/");
     @Autowired
     private OrganizationRepository organizationRepository;
-
     @Autowired
     private PublisherRepository publisherRepository;
-
-//    @Autowired
-//    private ClassificationRepository<AbstractClassification> classificationRepository;
-
     @Autowired
     private CategoryRepository categoryRepository;
-//
-//    @Inject
-//    private FeedRepository<AbstractFeed> feedRepository;
-
     @Autowired
     private ReaderRepository readerRepository;
-
     @Autowired
     private RedactorRepository redactorRepository;
-
     @Autowired
     private ItemRepository<AbstractItem> itemRepository;
-
-//    @Inject
-//    private FlashRepository flashRepository;
-
     @Autowired
     private ItemClassificationOrderRepository itemClassificationOrderRepository;
-
     @Autowired
     private FlashInfoVOFactory flashInfoVOFactory;
-
     @Autowired
     private RubriqueVOFactory rubriqueVOFactory;
-
     @Autowired
     private ItemVOFactory itemVOFactory;
-
     @Autowired
     private CategoryProfileFactory categoryProfileFactory;
-
     @Autowired
     private CategoryFactory categoryFactory;
-
     @Autowired
     private SubscriberService subscriberService;
-
     @Autowired
     private SubscriberRepository subscriberRepository;
-
     @Autowired
     private ServiceUrlHelper urlHelper;
-
     @Autowired
     private HighlightedClassificationService highlightedClassificationService;
-
     @Autowired
     private LinkedFileItemRepository linkedFileItemRepository;
 
-    private static final Map<String, String> namespaces =
-        Collections.singletonMap("dc", "http://purl.org/dc/elements/1.1/");
-
+    private MockMvc restPublishControllerMockMvc;
 
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         PublishController publishController = new PublishController();
 
         ReflectionTestUtils.setField(publishController, "organizationRepository", organizationRepository);
@@ -203,7 +171,7 @@ public class PublishControllerTest {
     private List<Category> catsOfEsupLectureWay = new ArrayList<>();
     private News savedNews;
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() throws InterruptedException {
         organization = new Organization();
         organization.setDescription("A Desc");
@@ -292,7 +260,7 @@ public class PublishControllerTest {
         attachment.setEndDate(null);
         attachment.setStatus(ItemStatus.PUBLISHED);
         attachment = itemRepository.saveAndFlush(attachment);
-        log.debug("==============+> Saved attachment {}", attachment);
+        log.debug("==============> Saved attachment {}", attachment);
         News news5 = ObjTest.newNews("news 5", organization, esupLectureWay.getContext().getRedactor());
         news5.setStartDate(LocalDate.now());
         news5.setEndDate(LocalDate.now().plusMonths(1));

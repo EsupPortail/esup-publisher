@@ -37,17 +37,14 @@ import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -57,7 +54,6 @@ public class PublisherRepositoryTest {
 
 	@Inject
 	private PublisherRepository repository;
-
 	@Inject
 	private OrganizationRepository orgRepo;
 	@Inject
@@ -76,8 +72,9 @@ public class PublisherRepositoryTest {
 	private Reader reader2;
 	private Redactor redactor1;
 	private Redactor redactor2;
+	Publisher publisher;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 
@@ -90,9 +87,9 @@ public class PublisherRepositoryTest {
 		redactor1 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_1));
 		redactor2 = redactorRepo.saveAndFlush(ObjTest.newRedactor(INDICE_2));
 
-		Publisher e1 = new Publisher(org1, reader2, redactor1,"PUB " + INDICE_1,
+		publisher = new Publisher(org1, reader2, redactor1,"PUB " + INDICE_1,
             PermissionClass.CONTEXT, false, true, true);
-		repository.saveAndFlush(e1);
+		repository.saveAndFlush(publisher);
 		Publisher e2 = new Publisher(org2, reader1, redactor2,"PUB " + INDICE_2,
             PermissionClass.CONTEXT, false, true, true);
 		repository.saveAndFlush(e2);
@@ -105,7 +102,11 @@ public class PublisherRepositoryTest {
 		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 			repository.saveAndFlush(e);
 		});
-		assertThat(e, equalTo(repository.findOne(PublisherPredicates.AllOfOrganization(org1))));
+	}
+
+	@Test
+	public void testUnique2() {
+		assertThat(publisher, equalTo(repository.findOne(PublisherPredicates.AllOfOrganization(org1)).orElse(null)));
 	}
 
 	@Test

@@ -62,11 +62,10 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 
 import com.google.common.collect.Lists;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
@@ -75,7 +74,6 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -88,35 +86,26 @@ import org.springframework.validation.Validator;
  *
  * @see org.esupportail.publisher.web.rest.NewsResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class ItemResourceTest {
 
     private static final String DEFAULT_TITLE = "SAMPLE_TEXT";
     private static final String UPDATED_TITLE = "UPDATED_TEXT";
-
     private static final String DEFAULT_SUMMARY = "SAMPLE_TEXT";
     private static final String UPDATED_SUMMARY = "UPDATED_TEXT";
-
     private static final String DEFAULT_ENCLOSURE = "http://un.domaine.fr/path/file.jpg";
     private static final String UPDATED_ENCLOSURE = "http://deux.domaine.fr/path/media.png";
-
     private static final LocalDate DEFAULT_END_DATE = LocalDate.now().plusDays(2);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now().plusMonths(1);
-
     private static final LocalDate DEFAULT_START_DATE = LocalDate.now();
     private static final LocalDate UPDATED_START_DATE = LocalDate.now().minusDays(1);
-
     private static final ItemStatus DEFAULT_STATUS = ItemStatus.DRAFT;
     private static final ItemStatus UPDATED_STATUS = ItemStatus.PENDING;
-
     private static final Boolean DEFAULT_RSS_ALLOWED = true;
     private static final Boolean UPDATED_RSS_ALLOWED = false;
-
     private static final Instant DEFAULT_VALIDATION_DATE = ObjTest.d1;
     private static final Instant UPDATED_VALIDATION_DATE = ObjTest.d1.plus(1, ChronoUnit.DAYS);
-
     private static final String DEFAULT_BODY = "SAMPLE_TEXT";
     private static final String UPDATED_BODY = "UPDATED_TEXT";
 
@@ -124,43 +113,38 @@ public class ItemResourceTest {
     private ItemRepository<AbstractItem> itemRepository;
 
     @Autowired
+    @Qualifier("mappingJackson2HttpMessageConverter")
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
     @Autowired
     private Validator validator;
-
     @Autowired
     private EntityManager em;
-
-    private MockMvc restNewsMockMvc;
-
-    private AbstractItem item;
-
     @Inject
     private OrganizationRepository organizationRepository;
-    private Organization organization;
     @Inject
     private RedactorRepository redactorRepository;
-    private Redactor redactor;
     @Inject
     private ContentService contentService;
-
-
     @Inject
     private UserRepository userRepo;
     @Inject
     private UserDTOFactory userDTOFactory;
-    private User user1;private User user2;private User user3;
-
     @Inject
     private IPermissionService permissionService;
 
+    private MockMvc restNewsMockMvc;
+
+    private Organization organization;
+    private AbstractItem item;
+    private Redactor redactor;
+    private User user1;private User user2;private User user3;
+
+
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         ItemResource itemResource = new ItemResource();
         OrganizationResource organizationResource = new OrganizationResource();
         FileService fileservice = new FileService();
@@ -187,7 +171,7 @@ public class ItemResourceTest {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() {
         final String name = "NAME";
         organization = organizationRepository.saveAndFlush(ObjTest.newOrganization(name));
@@ -195,8 +179,6 @@ public class ItemResourceTest {
         user1 = userRepo.findById(ObjTest.subject1).get();
         user2 = userRepo.findById(ObjTest.subject2).get();
         user3 = userRepo.findById(ObjTest.subject3).get();
-
-
 
         News news = new News();
         news.setTitle(DEFAULT_TITLE);

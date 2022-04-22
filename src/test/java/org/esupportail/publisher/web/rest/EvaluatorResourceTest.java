@@ -41,13 +41,10 @@ import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -59,20 +56,16 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see EvaluatorResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class EvaluatorResourceTest {
 
 	private static final String DEFAULT_ATTRIBUTE = "SAMPLE_TEXT";
 	private static final String UPDATED_ATTRIBUTE = "UPDATED_TEXT";
-
 	private static final String DEFAULT_VALUE = "SAMPLE_TEXT";
 	private static final String UPDATED_VALUE = "UPDATED_TEXT";
-
 	private static final StringEvaluationMode DEFAULT_MODE = StringEvaluationMode.EQUALS;
 	private static final StringEvaluationMode UPDATED_MODE = StringEvaluationMode.STARTS_WITH;
-
 	private static final OperatorType DEFAULT_TYPE = OperatorType.AND;
 	private static final OperatorType UPDATED_TYPE = OperatorType.OR;
 	// private static final String DEFAULT_GROUP_NAME = "SAMPLE_TEXT";
@@ -82,12 +75,11 @@ public class EvaluatorResourceTest {
 	private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
 
 	private MockMvc restEvaluatorMockMvc;
-
 	private AbstractEvaluator evaluator;
 
 	@PostConstruct
 	public void setup() {
-		MockitoAnnotations.openMocks(this);
+		//closeable = MockitoAnnotations.openMocks(this);
 		EvaluatorResource evaluatorResource = new EvaluatorResource();
 		ReflectionTestUtils.setField(evaluatorResource, "evaluatorRepository",
 				evaluatorRepository);
@@ -95,7 +87,7 @@ public class EvaluatorResourceTest {
 				evaluatorResource).build();
 	}
 
-	@BeforeAll
+	@BeforeEach
 	public void initTest() {
 		UserMultivaluedAttributesEvaluator ev = new UserMultivaluedAttributesEvaluator();
 		ev.setAttribute(DEFAULT_ATTRIBUTE);

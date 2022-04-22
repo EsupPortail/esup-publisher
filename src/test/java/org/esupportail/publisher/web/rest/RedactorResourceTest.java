@@ -37,13 +37,10 @@ import org.esupportail.publisher.domain.enums.WritingFormat;
 import org.esupportail.publisher.domain.enums.WritingMode;
 import org.esupportail.publisher.repository.RedactorRepository;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -55,29 +52,22 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @see RedactorResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class RedactorResourceTest {
 
     private static final String DEFAULT_NAME = "SAMPLE_TEXT";
     private static final String UPDATED_NAME = "UPDATED_TEXT";
-
     private static final String DEFAULT_DISPLAY_NAME = "SAMPLE_TEXT";
     private static final String UPDATED_DISPLAY_NAME = "UPDATED_TEXT";
-
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-
     private static final WritingFormat DEFAULT_WRITING_FORMAT = WritingFormat.HTML;
     private static final WritingFormat UPDATED_WRITING_FORMAT = WritingFormat.HTML;
-
     private static final WritingMode DEFAULT_WRITING_MODE = WritingMode.STATIC;
     private static final WritingMode UPDATED_WRITING_MODE = WritingMode.TARGETS_ON_ITEM;
-
     private static final Integer DEFAULT_NB_LEVELS_CLASSIFICATION = 1;
     private static final Integer UPDATED_NB_LEVELS_CLASSIFICATION = 2;
-
     private static final int DEFAULT_NB_DAYS_MAX_DURATION = 90;
     private static final int UPDATED_NB_DAYS_MAX_DURATION = 120;
 
@@ -86,11 +76,11 @@ public class RedactorResourceTest {
 
     private MockMvc restRedactorMockMvc;
 
-    private Redactor redactor;
+    private static Redactor redactor;
 
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         RedactorResource redactorResource = new RedactorResource();
         ReflectionTestUtils.setField(redactorResource, "redactorRepository",
             redactorRepository);
@@ -98,7 +88,7 @@ public class RedactorResourceTest {
             redactorResource).build();
     }
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() {
         redactor = new Redactor();
         redactor.setName(DEFAULT_NAME);

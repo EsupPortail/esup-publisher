@@ -49,16 +49,14 @@ import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.service.FileService;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -71,66 +69,54 @@ import org.springframework.validation.Validator;
  *
  * @see NewsResource
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class NewsResourceTest {
 
     private static final String DEFAULT_TITLE = "SAMPLE_TEXT";
     private static final String UPDATED_TITLE = "UPDATED_TEXT";
-
     private static final String DEFAULT_SUMMARY = "SAMPLE_TEXT";
     private static final String UPDATED_SUMMARY = "UPDATED_TEXT";
-
     private static final String DEFAULT_ENCLOSURE = "http://un.domaine.fr/path/file.jpg";
     private static final String UPDATED_ENCLOSURE = "http://deux.domaine.fr/path/media.png";
-
     private static final LocalDate DEFAULT_END_DATE = LocalDate.now().plusDays(2);
     private static final LocalDate UPDATED_END_DATE = LocalDate.now().plusMonths(1);
-
     private static final LocalDate DEFAULT_START_DATE = LocalDate.now();
     private static final LocalDate UPDATED_START_DATE = LocalDate.now().minusDays(1);
-
     private static final ItemStatus DEFAULT_STATUS = ItemStatus.DRAFT;
     private static final ItemStatus UPDATED_STATUS = ItemStatus.PENDING;
-
     private static final Instant DEFAULT_VALIDATION_DATE = ObjTest.d1;
     private static final Instant UPDATED_VALIDATION_DATE = ObjTest.d1.plus(1, ChronoUnit.DAYS);
-
     private static final String DEFAULT_BODY = "SAMPLE_TEXT";
     private static final String UPDATED_BODY = "UPDATED_TEXT";
 
     @Inject
     private NewsRepository newsRepository;
-
     @Autowired
+    @Qualifier("mappingJackson2HttpMessageConverter")
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
     @Autowired
     private Validator validator;
+    @Inject
+    private OrganizationRepository organizationRepository;
+    @Inject
+    private RedactorRepository redactorRepository;
+    @Inject
+    private UserRepository userRepo;
 
 
     private MockMvc restNewsMockMvc;
-
     private News news;
-
-    @Inject
-    private OrganizationRepository organizationRepository;
     private Organization organization;
-    @Inject
-    private RedactorRepository redactorRepository;
     private Redactor redactor;
-    @Inject
-    private UserRepository userRepo;
     private User user1;private User user2;private User user3;
 
 
     @PostConstruct
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        //closeable = MockitoAnnotations.openMocks(this);
         NewsResource newsResource = new NewsResource();
         OrganizationResource organizationResource = new OrganizationResource();
         RedactorResource redactorResource = new RedactorResource();
@@ -151,7 +137,7 @@ public class NewsResourceTest {
             .build();
     }
 
-    @BeforeAll
+    @BeforeEach
     public void initTest() {
         final String name = "NAME";
         organization = organizationRepository.saveAndFlush(ObjTest

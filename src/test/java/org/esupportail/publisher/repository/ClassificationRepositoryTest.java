@@ -45,33 +45,28 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-@WebAppConfiguration
 @Rollback
 @Transactional
+@WebAppConfiguration
 @Slf4j
 public class ClassificationRepositoryTest {
 
 	@Inject
 	private ClassificationRepository<AbstractClassification> repository;
-
     @Inject
     private CategoryRepository catRepo;
-
 	@Inject
 	private OrganizationRepository orgRepo;
 	@Inject
@@ -101,7 +96,7 @@ public class ClassificationRepositoryTest {
 	private Publisher pub2;
     private Category cat1;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 

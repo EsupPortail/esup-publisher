@@ -20,12 +20,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.esupportail.publisher.domain.enums.OperatorType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
@@ -47,11 +44,13 @@ import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
 import org.esupportail.publisher.service.evaluators.UserMultivaluedAttributesEvaluation;
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -143,7 +142,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         Assert.notNull(env, "environment must not be null");
         AuthoritiesDefinition defs = new AuthoritiesDefinition();
 
-        Set<IEvaluation> set = new HashSet<IEvaluation>();
+        Set<IEvaluation> set = new HashSet<>();
 
         final String userAdmin = env.getProperty(APP_ADMIN_USER_NAME);
         if (userAdmin != null && !userAdmin.isEmpty()) {

@@ -30,33 +30,26 @@ import org.esupportail.publisher.domain.Redactor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
 @Transactional
 @Slf4j
 public class LinkedFileItemRepositoryTest {
-
 	@Inject
     private LinkedFileItemRepository repository;
-
     @Inject
     private OrganizationRepository orgRepo;
-
     @Inject
     private RedactorRepository redactorRepo;
-
     @Inject
     private ItemRepository<News> itemRepo;
 
@@ -68,7 +61,7 @@ public class LinkedFileItemRepositoryTest {
     private Redactor redactor1;
     private News item1;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 

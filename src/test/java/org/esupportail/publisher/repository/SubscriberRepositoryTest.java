@@ -37,16 +37,13 @@ import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -56,18 +53,13 @@ public class SubscriberRepositoryTest {
 
 	@Inject
 	private SubscriberRepository repository;
-
 	@Inject
 	private OrganizationRepository orgRepo;
-
 	@Inject
 	private RedactorRepository redactorRepo;
-
 	@Inject
 	private ItemRepository<News> itemRepo;
 
-	// @Inject
-	// private SubscriberDTOFactory factoryDTO;
 
 	final static String INDICE_1 = "ind1";
 	final static String INDICE_2 = "ind2";
@@ -81,7 +73,7 @@ public class SubscriberRepositoryTest {
 	private News news1;
 	private News news2;
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() throws Exception {
 		log.info("starting up {}", this.getClass().getName());
 

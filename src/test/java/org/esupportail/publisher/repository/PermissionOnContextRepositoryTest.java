@@ -41,19 +41,16 @@ import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 7 juil. 2014
  */
-@ExtendWith(SpringExtension.class)//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 @Rollback
@@ -63,13 +60,10 @@ public class PermissionOnContextRepositoryTest {
 
 	@Inject
 	private PermissionOnContextRepository repository;
-
 	@Inject
 	private PermissionRepository<AbstractPermission> abstractRepo;
-
     @Inject
     private EvaluatorRepository<AbstractEvaluator> evaluatorRepository;
-
 	@Inject
 	private OrganizationRepository orgRepo;
 
@@ -81,7 +75,7 @@ public class PermissionOnContextRepositoryTest {
 	final static String PERM_INDICE_3 = "perm3";
 	final static String PERM_INDICE_4 = "perm4";
 
-	@BeforeAll
+	@BeforeEach
 	public void setUp() {
 		log.info("starting up {}", this.getClass().getName());
 
@@ -113,11 +107,11 @@ public class PermissionOnContextRepositoryTest {
 		// ArrayList<AbstractEvaluator>());
 		// // ((OperatorEvaluator) e2.getEvaluator()).setAbstractEvaluators(new
 		// ArrayList<AbstractEvaluator>());
-		// log.info("Operator : " + ((OperatorEvaluator)
+		// log.info("Operator : {}", ((OperatorEvaluator)
 		// e.getEvaluator()).getType());
-		// log.info("Operator 2 : " + ((OperatorEvaluator)
+		// log.info("Operator 2 : {}", ((OperatorEvaluator)
 		// e2.getEvaluator()).getType());
-		// log.info("last test = " +
+		// log.info("last test = {}",
 		// e.getEvaluator().equals(e2.getEvaluator()));
 		assertThat(e.getEvaluator(), equalTo(e2.getEvaluator()));
 	}
