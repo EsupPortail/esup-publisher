@@ -35,11 +35,15 @@ jobs:
       with:
         timezoneLinux: "Europe/Paris"
     - uses: actions/checkout@v2
-    - name: Set up ENV
+    - name: Set up locale ENV
       run: |
         sudo locale-gen $LANG
         sudo update-locale LANG=$LANG
         sudo apt install net-tools
+    - name: Set up variable ENV
+      if: startsWith(matrix.java, '8')
+      run: |
+        echo "MVN_PARAMS=-Dmaven.compiler.target=1.8" >> $GITHUB_ENV
     - name: Check locales
       run: locale -a
     - name: Pull $MARIADB_IMG:${{ matrix.mariadb }} docker image
@@ -104,8 +108,8 @@ jobs:
     - name: Project requirements
       run: |
         ./mvnw --version
-        ./mvnw clean generate-sources -Pci -B
-        ./mvnw compile liquibase:update -Pci -B
+        ./mvnw clean generate-sources -Pci -B ${MVN_PARAMS}
+        ./mvnw compile liquibase:update -Pci -B ${MVN_PARAMS}
         mkdir -p ${{ github.workspace }}/tmp
         # install npm
         npm ci
@@ -115,15 +119,15 @@ jobs:
         # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
         mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"
     - name: Maven running API test agains DB/OS timezone
-      run: ./mvnw test -Pci -Dtest=org.esupportail.publisher.repository.ItemRepositoryTest#testRequestScheduledPublishedOptionalDate -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B
+      run: ./mvnw test -Pci -Dtest=org.esupportail.publisher.repository.ItemRepositoryTest#testRequestScheduledPublishedOptionalDate -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
     - name: Maven notice:check
       if: startsWith(matrix.java, '8')
-      run: ./mvnw notice:check -B
+      run: ./mvnw notice:check -B ${MVN_PARAMS}
     - name: Maven license:check
-      run: ./mvnw license:check -B
+      run: ./mvnw license:check -B ${MVN_PARAMS}
     - name: Maven running API test
-      run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B
+      run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
     - name: Build with Maven
-      run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B
+      run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
     - name: Stop containers
       run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
