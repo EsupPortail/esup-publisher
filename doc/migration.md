@@ -64,7 +64,25 @@ Passage de Bootstrap 3.3 à Bootstrap 5.1.
 
 ### Font-Awesome
 
-Passage de Font-Awesome 4.5 à Font-Awesome 5.15.
+Passage de Font-Awesome 4.5 à Font-Awesome 6.1.
+
+### MaterialDesignIcons
+
+Suppression de mdi au profit de Font-Awesome.
+
+Tableau de correspondance Classes Mdi / Classes Font-Awesome (pour la migration en base de données):
+ 
+| Mdi  | Font-Awesome |
+| ------------- | ------------- |
+| mdi mdi-file mdi-dark mdi-lg  | fas fa-file fa-lg  |
+| mdi mdi-file-image mdi-dark mdi-lg  | fas fa-file-image fa-lg  |
+| mdi mdi-file-video mdi-dark mdi-lg | fas fa-file-video fa-lg |
+| mdi mdi-file-music mdi-dark mdi-lg | fas fa-file-audio fa-lg |
+| mdi mdi-file-pdf mdi-dark mdi-lg | fas fa-file-pdf fa-lg |
+| mdi mdi-file-word mdi-dark mdi-lg | fas fa-file-word fa-lg |
+| mdi mdi-file-excel mdi-dark mdi-lg | fas fa-file-excel fa-lg |
+| mdi mdi-file-powerpoint mdi-dark mdi-lg | fas fa-file-powerpoint fa-lg |
+| mdi mdi-file-document mdi-dark mdi-lg | fas fa-file-lines fa-lg |
 
 ### Swagger-ui
 
