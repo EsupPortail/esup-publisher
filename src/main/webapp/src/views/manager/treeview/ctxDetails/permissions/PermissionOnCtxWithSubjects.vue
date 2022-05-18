@@ -22,7 +22,7 @@
 
         <div class="form-group" v-show="permissionAdvanced">
           <label>{{$t('permissionOnClassificationWithSubjectList.evaluator')}}</label>
-          <esup-edit-evaluator ref="editEvaluatorPermissionOnCtx" .evaluator="permission.evaluator" .config="editEvaluatorConfig" .onModification="onModificationEvaluator"></esup-edit-evaluator>
+          <esup-edit-evaluator ref="editEvaluatorPermissionOnCtx" .evaluator="permission.evaluator" .config="editEvaluatorConfig" .onModification="onModificationEvaluator" .onSubjectClicked="(subject) => viewSubject(subject)"></esup-edit-evaluator>
           <div class="invalid-feedback d-block"
             v-if="editEvaluatorError">
             {{ $t('entity.validation.required') }}
@@ -96,7 +96,7 @@
           <tbody>
             <tr v-for="permission in permissions" :key="permission.id">
             <td :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</td>
-            <td class="verylongtext" :data-label="$t('permission.evaluator')"><esup-evaluator .evaluator="permission.evaluator" .config="evaluatorConfig"></esup-evaluator></td>
+            <td class="verylongtext" :data-label="$t('permission.evaluator')"><esup-evaluator .evaluator="permission.evaluator" .config="evaluatorConfig" .onSubjectClicked="(subject) => viewSubject(subject)"></esup-evaluator></td>
             <td class="verylongtext" :data-label="$t('permissionOnClassificationWithSubjectList.authorizedSubjects')">
               <ul class="list-unstyled">
                 <li v-for="subject in permission.authorizedSubjects" :key="subject" class="list-unstyled">
@@ -129,7 +129,7 @@
           <tbody>
             <tr v-for="permission in permissions" :key="permission">
               <td :data-label="$t('permission.role')">{{$t(getPermissionTypeLabel(permission.role))}}</td>
-              <td class="verylongtext" :data-label="$t('permissionOnContext.evaluatorsimple')"><esup-evaluator .evaluator="permission.evaluator" .simple='true' .config="evaluatorConfig"></esup-evaluator></td>
+              <td class="verylongtext" :data-label="$t('permissionOnContext.evaluatorsimple')"><esup-evaluator .evaluator="permission.evaluator" .simple='true' .config="evaluatorConfig" .onSubjectClicked="(subject) => viewSubject(subject)"></esup-evaluator></td>
               <td class="verylongtext" :data-label="$t('permissionOnClassificationWithSubjectList.authorizedSubjects')">
                 <ul class="list-unstyled">
                   <li v-for="subject in permission.authorizedSubjects" :key="subject" class="list-unstyled">

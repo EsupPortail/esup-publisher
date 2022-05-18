@@ -14,7 +14,7 @@
                                 <span>{{$t('subject.user.id')}}</span>
                             </dt>
                             <dd class="col-sm-7">
-                                <span class="subject-key">{{subject.modelId.keyId}}</span>
+                                <span class="subject-key">{{subject.modelId.keyId || '&nbsp;'}}</span>
                             </dd>
                         </dl>
                         <dl class="row entity-details">
@@ -22,7 +22,7 @@
                                 <span>{{$t('subject.user.displayName')}}</span>
                             </dt>
                             <dd class="col-sm-7">
-                                <span>{{subject.displayName}}</span>
+                                <span>{{subject.displayName || '&nbsp;'}}</span>
                             </dd>
                         </dl>
                         <template v-for="attribute in attributes" :key="attribute">
@@ -32,6 +32,7 @@
                                 </dt>
                                 <dd class="col-sm-7">
                                     <span v-for="value in subject.attributes[attribute]" :key="value.id" class="list-comma">{{value}}</span>
+                                    <span v-if="!subject.attributes[attribute]" class="list-comma">&nbsp;</span>
                                 </dd>
                             </dl>
                         </template>
@@ -54,7 +55,7 @@
                                 <span>{{$t('subject.group.id')}}</span>
                             </dt>
                             <dd class="col-sm-7">
-                                <span class="subject-key">{{subject.modelId.keyId}}</span>
+                                <span class="subject-key">{{subject.modelId.keyId || '&nbsp;'}}</span>
                             </dd>
                         </dl>
                         <dl class="row entity-details">
@@ -62,7 +63,7 @@
                                 <span>{{$t('subject.group.displayName')}}</span>
                             </dt>
                             <dd class="col-sm-7">
-                                <span>{{subject.displayName}}</span>
+                                <span>{{subject.displayName || '&nbsp;'}}</span>
                             </dd>
                         </dl>
                         <template v-for="attribute in attributes" :key="attribute">
@@ -72,6 +73,7 @@
                                 </dt>
                                 <dd class="col-sm-7">
                                     <span v-for="value in subject.attributes[attribute]" :key="value.id" class="list-comma">{{value}}</span>
+                                    <span v-if="!subject.attributes[attribute]" class="list-comma">&nbsp;</span>
                                 </dd>
                             </dl>
                         </template>
@@ -106,6 +108,7 @@ export default {
     showSubjectModal (target) {
       SubjectService.getSubjectInfos(target.keyType, target.keyId).then(response => {
         this.subject = response.data
+        this.subject.attributes =  this.subject.attributes || []
         this.attributes = target.keyType === 'PERSON' ? SubjectService.getUserDisplayedAttrs() : SubjectService.getGroupDisplayedAttrs()
         this.keyType = target.keyType
         this.detailSubjectModal.show()
