@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.PermissionOnContext;
@@ -64,7 +63,6 @@ public class PermissionResource {
     @RequestMapping(value = "/permissions", method = RequestMethod.POST,  produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-	@Timed
     public ResponseEntity<Void> create(@RequestBody AbstractPermission permission) throws URISyntaxException {
         log.debug("REST request to save AbstractPermission : {}", permission);
         if (permission.getId() != null) {
@@ -80,7 +78,6 @@ public class PermissionResource {
     @RequestMapping(value = "/permissions", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody AbstractPermission permission) throws URISyntaxException {
         log.debug("REST request to update AbstractPermission : {}", permission);
         if (permission.getId() == null) {
@@ -96,7 +93,6 @@ public class PermissionResource {
 	@RequestMapping(value = "/permissions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
     @PostFilter("hasPermission(filterObject.context.keyId, filterObject.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public List<AbstractPermission> getAll() {
 		log.debug("REST request to get all AbstractPermission");
 		return permissionRepository.findAll();
@@ -108,7 +104,6 @@ public class PermissionResource {
     @RequestMapping(value = "/permissions/{ctx_type}/{ctx_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  #type, '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public List<AbstractPermission> getAllOf(@PathVariable("ctx_type") ContextType type, @PathVariable("ctx_id") Long id,
                                               HttpServletResponse response) {
         log.debug("REST request to get AbstractPermission : CtxKey [{}, {}]", type, id);
@@ -122,7 +117,6 @@ public class PermissionResource {
  //   @RequestMapping(value = "/permissions",
  //           method = RequestMethod.GET,
 //            produces = MediaType.APPLICATION_JSON_VALUE)
-//    @Timed
 //    public ResponseEntity<List<AbstractPermission>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
 //                                  @RequestParam(value = "per_page", required = false) Integer limit)
  //       throws URISyntaxException {
@@ -137,7 +131,6 @@ public class PermissionResource {
 	@RequestMapping(value = "/permissions/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostAuthorize("hasPermission(returnObject.body.context.keyId, returnObject.body.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public ResponseEntity<AbstractPermission> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get AbstractPermission : {}", id);
@@ -155,7 +148,6 @@ public class PermissionResource {
 	 */
 	@RequestMapping(value = "/permissions/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
-	@Timed
     public ResponseEntity delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractPermission : {}", id);
         Optional<AbstractPermission> optionalPermission =  permissionRepository.findById(id);

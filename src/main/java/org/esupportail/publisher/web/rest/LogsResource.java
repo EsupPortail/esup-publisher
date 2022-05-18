@@ -17,7 +17,6 @@ package org.esupportail.publisher.web.rest;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.web.rest.dto.LoggerDTO;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,6 @@ public class LogsResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public List<LoggerDTO> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         List<LoggerDTO> loggers = new ArrayList<>();
@@ -54,7 +52,6 @@ public class LogsResource {
             method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void changeLevel(@RequestBody LoggerDTO jsonLogger) {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.getLogger(jsonLogger.getName()).setLevel(Level.valueOf(jsonLogger.getLevel()));

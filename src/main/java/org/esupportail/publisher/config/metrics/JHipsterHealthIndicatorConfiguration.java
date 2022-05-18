@@ -15,30 +15,37 @@
  */
 package org.esupportail.publisher.config.metrics;
 
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.esupportail.publisher.config.LDAPConfiguration;
+import org.esupportail.publisher.config.LiquibaseConfiguration;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
+
 import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
+@AutoConfigureAfter({LiquibaseConfiguration.class, LDAPConfiguration.class, ExternalUserHelper.class, JavaMailSenderImpl.class})
 public class JHipsterHealthIndicatorConfiguration {
 
-	@Inject
 	private JavaMailSenderImpl javaMailSender;
 
-	@Inject
 	private DataSource dataSource;
 
-	@Inject
 	private LdapContextSource contextSource;
 
-	@Inject
 	private ExternalUserHelper externalUserHelper;
+
+	public JHipsterHealthIndicatorConfiguration(JavaMailSenderImpl javaMailSender, DataSource dataSource, LdapContextSource contextSource, ExternalUserHelper externalUserHelper) {
+		this.javaMailSender = javaMailSender;
+		this.dataSource = dataSource;
+		this.contextSource = contextSource;
+		this.externalUserHelper = externalUserHelper;
+	}
 
 	@Bean
 	public HealthIndicator dbHealthIndicator() {

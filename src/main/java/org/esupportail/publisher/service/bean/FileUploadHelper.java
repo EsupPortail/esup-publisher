@@ -15,9 +15,11 @@
  */
 package org.esupportail.publisher.service.bean;
 
-import java.util.List;
+import java.util.Set;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by jgribonvald on 25/01/16.
@@ -33,11 +35,11 @@ public class FileUploadHelper {
 
     private String urlResourceMapping;
 
-    private List<String> unremovablePaths;
+    private Set<String> unremovablePaths;
 
     private boolean useDefaultPath;
 
     private long fileMaxSize;
 
-    private List<String> authorizedMimeType;
+    private Set<String> authorizedMimeType;
 }

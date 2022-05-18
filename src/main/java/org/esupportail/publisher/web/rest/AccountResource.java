@@ -17,7 +17,6 @@ package org.esupportail.publisher.web.rest;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.slf4j.Logger;
@@ -57,7 +56,6 @@ public class AccountResource {
 //    @RequestMapping(value = "/register",
 //            method = RequestMethod.POST,
 //            produces = MediaType.TEXT_PLAIN_VALUE)
-//    @Timed
 //    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {
 //        User user = userRepository.findOneByLogin(userDTO.getLogin());
 //        if (user != null) {
@@ -84,7 +82,6 @@ public class AccountResource {
 	 */
 	// @RequestMapping(value = "/activate", method = RequestMethod.GET,
 	// produces = MediaType.APPLICATION_JSON_VALUE)
-	// @Timed
 	// public ResponseEntity<String> activateAccount(
 	// @RequestParam(value = "key") String key) {
 	// User user = userService.activateRegistration(key);
@@ -100,7 +97,6 @@ public class AccountResource {
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public String isAuthenticated(HttpServletRequest request) {
 		log.debug("REST request to check if the current user is authenticated");
 		return request.getRemoteUser();
@@ -112,7 +108,6 @@ public class AccountResource {
     @RequestMapping(value = "/account",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public ResponseEntity<CustomUserDetails> getAccount() {
         CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
 		if (user == null) {
@@ -142,7 +137,6 @@ public class AccountResource {
 		// 	@RequestMapping(value = "/account",
   		//           method = RequestMethod.POST,
   		//           produces = MediaType.APPLICATION_JSON_VALUE)
- 		//    @Timed
 		//     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
  		//        User userHavingThisLogin = userRepository.findOneByLogin(userDTO.getLogin());
  		//        if (userHavingThisLogin != null && !userHavingThisLogin.getLogin().equals(SecurityUtils.getCurrentLogin())) {
@@ -156,7 +150,6 @@ public class AccountResource {
 	 */
 	// @RequestMapping(value = "/account/change_password", method =
 	// RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	// @Timed
 	// public ResponseEntity<?> changePassword(@RequestBody String password) {
 	// if (StringUtils.isEmpty(password)) {
 	// return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -170,7 +163,6 @@ public class AccountResource {
 	 */
 //    @RequestMapping(value = "/account/sessions", method =
 //        RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @Timed
 //    public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
 //        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
 //        if (user == null) {
@@ -195,7 +187,6 @@ public class AccountResource {
      */
 //    @RequestMapping(value = "/account/sessions/{series}", method =
 //        RequestMethod.DELETE)
-//    @Timed
 //    public void invalidateSession(@PathVariable String series)
 //        throws UnsupportedEncodingException {
 //        String decodedSeries = URLDecoder.decode(series, "UTF-8");

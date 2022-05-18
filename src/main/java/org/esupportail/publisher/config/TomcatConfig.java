@@ -15,7 +15,7 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import org.apache.catalina.Context;
 import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
@@ -33,7 +33,7 @@ public class TomcatConfig {
     @Bean
     public ServletWebServerFactory servletContainer() {
     	TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        factory.setTomcatContextCustomizers(Arrays.asList(new CustomCustomizer()));
+        factory.setTomcatContextCustomizers(Collections.singletonList(new CustomCustomizer()));
         return factory;
     }
 

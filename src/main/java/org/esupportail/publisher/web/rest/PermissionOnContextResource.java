@@ -23,7 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 
 import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
@@ -76,7 +75,6 @@ public class PermissionOnContextResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-	@Timed
     public ResponseEntity<Void> create(@RequestBody PermissionOnContext permission) throws URISyntaxException {
         log.debug("REST request to save PermissionOnContext : {}", permission);
         if (permission.getId() != null) {
@@ -94,7 +92,6 @@ public class PermissionOnContextResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody PermissionOnContext permission) throws URISyntaxException {
         log.debug("REST request to update PermissionOnContext : {}", permission);
         if (permission.getId() == null) {
@@ -110,7 +107,6 @@ public class PermissionOnContextResource {
 	@RequestMapping(value = "/permissionOnContexts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
     @PostFilter("hasPermission(filterObject.context.keyId, filterObject.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public List<PermissionOnContext> getAll() {
 		log.debug("REST request to get all PermissionOnContexts");
 		return Lists.newArrayList(permissionOnContextRepository.findAll(PermissionPredicates.ofType(PermissionClass.CONTEXT, false)));
@@ -122,7 +118,6 @@ public class PermissionOnContextResource {
     @RequestMapping(value = "/permissionOnContexts/{ctx_type}/{ctx_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  #type, '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public List<PermissionOnContext> getAllOf(@PathVariable("ctx_type") ContextType type, @PathVariable("ctx_id") Long id) {
         log.debug("REST request to get PermissionOnContext : CtxKey [{}, {}]", type, id);
         return Lists.newArrayList(permissionOnContextRepository.findAll(PermissionPredicates.OnCtx(type, id, PermissionClass.CONTEXT, false)));
@@ -135,7 +130,6 @@ public class PermissionOnContextResource {
  //   @RequestMapping(value = "/permissionOnContexts",
  //           method = RequestMethod.GET,
 //            produces = MediaType.APPLICATION_JSON_VALUE)
-//    @Timed
 //    public ResponseEntity<List<PermissionOnContext>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
 //                                  @RequestParam(value = "per_page", required = false) Integer limit)
  //       throws URISyntaxException {
@@ -150,7 +144,6 @@ public class PermissionOnContextResource {
 	@RequestMapping(value = "/permissionOnContexts/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostAuthorize("hasPermission(returnObject.body.context.keyId, returnObject.body.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public ResponseEntity<PermissionOnContext> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get PermissionOnContext : {}", id);
@@ -168,7 +161,6 @@ public class PermissionOnContextResource {
 	 */
 	@RequestMapping(value = "/permissionOnContexts/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
-	@Timed
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete PermissionOnContext : {}", id);
 		Optional<PermissionOnContext> optionalPermissionOnContext =  permissionOnContextRepository.findById(id);

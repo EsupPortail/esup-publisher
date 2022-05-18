@@ -31,12 +31,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 @SpringBootApplication
-@EnableConfigurationProperties
+@EnableConfigurationProperties({ LiquibaseProperties.class, MailProperties.class})
 public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);

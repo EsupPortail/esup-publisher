@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.InternalFeed;
@@ -55,7 +54,6 @@ public class InternalFeedResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody InternalFeed internalFeed) throws URISyntaxException {
         log.debug("REST request to save InternalFeed : {}", internalFeed);
         if (internalFeed.getId() != null) {
@@ -72,7 +70,6 @@ public class InternalFeedResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody InternalFeed internalFeed) throws URISyntaxException {
         log.debug("REST request to update InternalFeed : {}", internalFeed);
         if (internalFeed.getId() == null) {
@@ -89,7 +86,6 @@ public class InternalFeedResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public List<InternalFeed> getAll() {
         log.debug("REST request to get all InternalFeeds");
         return internalFeedRepository.findAll();
@@ -102,7 +98,6 @@ public class InternalFeedResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<InternalFeed> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get InternalFeed : {}", id);
         Optional<InternalFeed> optionalInternalFeed =  internalFeedRepository.findById(id);
@@ -120,7 +115,6 @@ public class InternalFeedResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete InternalFeed : {}", id);
         internalFeedRepository.deleteById(id);

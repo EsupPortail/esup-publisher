@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST controller for managing Evaluator.
@@ -55,7 +54,6 @@ public class EvaluatorResource {
 	 * POST /evaluators -> Create a new evaluator.
 	 */
 	@RequestMapping(value = "/evaluators", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
- 	@Timed
     public ResponseEntity<Void> create(@RequestBody AbstractEvaluator evaluator) throws URISyntaxException {
         log.debug("REST request to save Evaluator : {}", evaluator);
         if (evaluator.getId() != null) {
@@ -69,7 +67,6 @@ public class EvaluatorResource {
      * PUT  /operatorEvaluators -> Updates an existing operatorEvaluator.
      */
     @RequestMapping(value = "/evaluators", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody AbstractEvaluator evaluator) throws URISyntaxException {
         log.debug("REST request to update Evaluator : {}", evaluator);
         if (evaluator.getId() == null) {
@@ -83,7 +80,6 @@ public class EvaluatorResource {
 	 * GET /evaluators -> get all the evaluators.
 	 */
 	@RequestMapping(value = "/evaluators", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public List<AbstractEvaluator> getAll() {
 		log.debug("REST request to get all Evaluators");
 		return evaluatorRepository.findAll();
@@ -93,7 +89,6 @@ public class EvaluatorResource {
 	 * GET /evaluators/:id -> get the "id" evaluator.
 	 */
 	@RequestMapping(value = "/evaluators/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public ResponseEntity<AbstractEvaluator> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get Evaluator : {}", id);
@@ -109,7 +104,6 @@ public class EvaluatorResource {
 	 * DELETE /evaluators/:id -> delete the "id" evaluator.
 	 */
 	@RequestMapping(value = "/evaluators/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public void delete(@PathVariable Long id) {
 		log.debug("REST request to delete Evaluator : {}", id);
 		evaluatorRepository.deleteById(id);

@@ -15,19 +15,41 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
+import org.esupportail.publisher.config.bean.CustomLdapProperties;
+import org.esupportail.publisher.config.bean.GroupDesignerProperties;
+import org.esupportail.publisher.config.bean.GroupRegexProperties;
+import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
+import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
+import org.esupportail.publisher.repository.FilterRepository;
+import org.esupportail.publisher.repository.externals.EmptyGroupDaoImpl;
+import org.esupportail.publisher.repository.externals.IExternalGroupDao;
+import org.esupportail.publisher.repository.externals.IExternalUserDao;
+import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupAttachMemberDesignerImpl;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatter;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCO;
+import org.esupportail.publisher.repository.externals.ldap.LdapGroupRegexpDisplayNameFormatterESCOReplace;
+import org.esupportail.publisher.security.IPermissionService;
+import org.esupportail.publisher.service.ContextService;
+import org.esupportail.publisher.service.GroupService;
+import org.esupportail.publisher.service.GroupServiceEmpty;
+import org.esupportail.publisher.service.IGroupService;
+import org.esupportail.publisher.service.SubscriberService;
+import org.esupportail.publisher.service.factories.TreeJSDTOFactory;
+import org.esupportail.publisher.service.factories.UserDTOFactory;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.util.Assert;
 
 /**
  *
@@ -37,57 +59,23 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Slf4j
 public class LDAPConfiguration {
 
-    private static final String PROP_ANONYMRO = "ldap.anonymousReadOnly";
-    private static final String PROP_BASE = "ldap.base";
-    private static final String PROP_URLS = "ldap.urls";
-    private static final String PROP_USERDN = "ldap.userDn";
-    private static final String PROP_PASSWORD = "ldap.password";
-    private static final String PROP_POOLED = "ldap.pooled";
-    private static final boolean DEFAULT_POOL = false;
-    private static final String PROP_TIMEOUT = "ldap.timeLimit";
-    private static final Integer DEFAULT_TIMEOUT = 10000;
-    private static final String PROP_NBOBJ_LIMIT = "ldap.countLimit";
-    private static final Integer DEFAULT_NBOBJ_LIMIT = 1500;
-    private static final String PROP_USERDN_SUBPATH = "ldap.DNsubpath.people";
-    private static final String DEFAULT_USERDN_SUBPATH = "ou=people";
-    private static final String PROP_USER_ID = "ldap.userId";
-    private static final String DEFAULT_USER_ID = "uid";
-    private static final String PROP_USER_DISPLAYNAME = "ldap.userDisplayNameAttribute";
-    private static final String DEFAULT_USER_DISPLAYNAME = "displayName";
-    private static final String PROP_USER_MAIL = "ldap.userEmailAttribute";
-    private static final String DEFAULT_USER_MAIL = "mail";
-    private static final String PROP_USER_GROUP = "ldap.userGroupAttribute";
-    private static final String DEFAULT_USER_GROUP = "isMemberOf";
+    private final CustomLdapProperties ldapProperties;
 
-    private static final String PROP_USER_SEARCHON = "ldap.userSearchAttribute";
-    private static final String DEFAULT_USER_SEARCHON = "cn";
-    private static final String PROP_USER_DISPLAYEDATTR = "ldap.otherUserDisplayedAttributes";
-    private static final String PROP_USER_OTHERATTR = "ldap.otherUserOtherAttributes";
-
-    private Environment environment;
-
-    public LDAPConfiguration(Environment env) {
-        this.environment = env;
+    public LDAPConfiguration(ESUPPublisherProperties esupPublisherProperties) {
+        this.ldapProperties = esupPublisherProperties.getLdap();
     }
 
     @Bean
     public LdapContextSource contextSource() {
         log.debug("Configuring LdapContextSource");
         final LdapContextSource ldapCtx = new LdapContextSource();
-        if (environment.getProperty(PROP_URLS) == null && environment.getProperty(PROP_BASE) == null) {
-            log.error("Your LDAP connection configuration is incorrect! The application"
-                    + "cannot start. Please check your Spring profile, current profiles are: {}",
-                Arrays.toString(environment.getActiveProfiles()));
-
-            throw new ApplicationContextException("LDAP connection is not configured correctly");
-        }
-        ldapCtx.setAnonymousReadOnly(environment.getProperty(PROP_ANONYMRO, Boolean.class, false));
-        ldapCtx.setBase(environment.getProperty(PROP_BASE));
-        ldapCtx.setUrl(environment.getProperty(PROP_URLS));
-        ldapCtx.setUserDn(environment.getProperty(PROP_USERDN));
-        ldapCtx.setPassword(environment.getProperty(PROP_PASSWORD));
-        ldapCtx.setPooled(environment.getProperty(PROP_POOLED, Boolean.class, DEFAULT_POOL));
-        log.debug("LDAPContext is configured on {} with user {}", environment.getProperty(PROP_URLS), environment.getProperty(PROP_USERDN));
+        ldapCtx.setAnonymousReadOnly(ldapProperties.getContextSource().isAnonymousReadOnly());
+        ldapCtx.setBase(ldapProperties.getContextSource().getBase());
+        ldapCtx.setUrls(ldapProperties.getContextSource().getUrls());
+        ldapCtx.setUserDn(ldapProperties.getContextSource().getUsername());
+        ldapCtx.setPassword(ldapProperties.getContextSource().getPassword());
+        ldapCtx.setPooled(ldapProperties.getContextSource().isNativePooling());
+        log.debug("LDAPContext is configured with properties {}", ldapProperties.getContextSource());
         return ldapCtx;
     }
 
@@ -95,37 +83,104 @@ public class LDAPConfiguration {
     public LdapTemplate ldapTemplate() {
         final LdapTemplate ldapTpl = new LdapTemplate();
         ldapTpl.setContextSource(contextSource());
-        ldapTpl.setDefaultCountLimit(environment.getProperty(PROP_NBOBJ_LIMIT, Integer.class, DEFAULT_NBOBJ_LIMIT));
-        ldapTpl.setDefaultTimeLimit(environment.getProperty(PROP_TIMEOUT, Integer.class, DEFAULT_TIMEOUT));
+        ldapTpl.setDefaultCountLimit(ldapProperties.getLdapTemplate().getCountLimit());
+        ldapTpl.setDefaultTimeLimit(ldapProperties.getLdapTemplate().getTimeLimit());
+        ldapTpl.setDefaultSearchScope(ldapProperties.getLdapTemplate().getSearchScope());
+        ldapTpl.setIgnoreNameNotFoundException(ldapProperties.getLdapTemplate().isIgnoreNameNotFoundException());
+        ldapTpl.setIgnorePartialResultException(ldapProperties.getLdapTemplate().isIgnorePartialResultException());
+        ldapTpl.setIgnoreSizeLimitExceededException(ldapProperties.getLdapTemplate().isIgnoreSizeLimitExceededException());
         return ldapTpl;
     }
 
     @Bean
     public ExternalUserHelper externalUserHelper() {
-        final String userIdAttribute = environment.getProperty(PROP_USER_ID, DEFAULT_USER_ID);
-        final String userDisplayNameAttribute = environment.getProperty(PROP_USER_DISPLAYNAME,
-            DEFAULT_USER_DISPLAYNAME);
-        final String userEmailAttribute = environment.getProperty(PROP_USER_MAIL, DEFAULT_USER_MAIL);
-        final String userSearchAttribute = environment.getProperty(PROP_USER_SEARCHON, DEFAULT_USER_SEARCHON);
-        final String userGroupAttribute = environment.getProperty(PROP_USER_GROUP, DEFAULT_USER_GROUP);
-        final String UserAttributes = environment.getRequiredProperty(PROP_USER_OTHERATTR);
-        final String userDisplayedAttributes = environment.getRequiredProperty(PROP_USER_DISPLAYEDATTR);
-        Set<String> otherUserDisplayedAttributes = null;
-        if (!userDisplayedAttributes.isEmpty()) {
-            String[] attrs = userDisplayedAttributes.trim().replaceAll("\\s", "").split(",");
-            otherUserDisplayedAttributes = Sets.newHashSet(attrs);
-        }
-        Set<String> otherUserAttributes = null;
-        if (!UserAttributes.isEmpty()) {
-            String[] attrs = UserAttributes.trim().replaceAll("\\s", "").split(",");
-            otherUserAttributes = Sets.newHashSet(attrs);
-        }
-        final String userDNSubPath = environment.getProperty(PROP_USERDN_SUBPATH, DEFAULT_USERDN_SUBPATH);
-
-        final ExternalUserHelper ldapUh = new ExternalUserHelper(userIdAttribute, userDisplayNameAttribute,
-            userEmailAttribute, userSearchAttribute, userGroupAttribute, otherUserAttributes,
-            otherUserDisplayedAttributes, userDNSubPath);
+        final ExternalUserHelper ldapUh = new ExternalUserHelper(
+                ldapProperties.getUserBranch().getIdAttribute(),
+                ldapProperties.getUserBranch().getDisplayNameAttribute(),
+                ldapProperties.getUserBranch().getMailAttribute(),
+                ldapProperties.getUserBranch().getSearchAttribute(),
+                ldapProperties.getUserBranch().getGroupAttribute(),
+                ldapProperties.getUserBranch().getOtherBackendAttributes(),
+                ldapProperties.getUserBranch().getOtherDisplayedAttributes(),
+                ldapProperties.getUserBranch().getBaseDN());
         log.debug("LdapAttributes for Users configured : {}", ldapUh);
         return ldapUh;
+    }
+
+    @Bean
+    @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
+    public ExternalGroupHelper externalGroupHelper() {
+        log.debug("Configure bean ExternalGroupHelper with LDAP attributes");
+        Assert.notNull(ldapProperties.getGroupBranch(), "Use of profile " + Constants.SPRING_PROFILE_LDAP_GROUP + " require 'app.ldap.groupBranch.*' properties configured !");
+        ExternalGroupHelper ldapUh = new ExternalGroupHelper(
+                ldapProperties.getGroupBranch().getIdAttribute(),
+                ldapProperties.getGroupBranch().getDisplayNameAttribute(),
+                ldapProperties.getGroupBranch().getSearchAttribute(),
+                ldapProperties.getGroupBranch().getGroupAttribute(),
+                ldapProperties.getGroupBranch().getGroupMemberKeyPattern(),
+                ldapProperties.getGroupBranch().getGroupMemberKeyPatternIndex(),
+                ldapProperties.getGroupBranch().getUserMemberKeyPattern(),
+                ldapProperties.getGroupBranch().getUserMemberKeyPatternIndex(),
+                ldapProperties.getGroupBranch().getGroupDisplayNamePattern(),
+                ldapProperties.getGroupBranch().isDNContainsDisplayName(),
+                ldapProperties.getGroupBranch().isResolveUserMembers(),
+                ldapProperties.getGroupBranch().isResolveUserMembersByUserAttributes(),
+                ldapProperties.getGroupBranch().getDontResolveMembersWithGroupPattern(),
+                ldapProperties.getGroupBranch().getOtherDisplayedAttributes(),
+                ldapProperties.getGroupBranch().getBaseDN());
+        log.debug("LdapAttributes for Groups configured : {}", ldapUh);
+        return ldapUh;
+    }
+
+    @Bean
+    @Profile("!" + Constants.SPRING_PROFILE_LDAP_GROUP)
+    public ExternalGroupHelper emptyExternalGroupHelper() {
+        log.debug("Configure bean ExternalGroupHelper without attributes");
+        return new ExternalGroupHelper();
+    }
+
+    @Bean
+    @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
+    public IExternalGroupDao ldapExternalGroupDao(IExternalUserDao externalUserDao, LdapTemplate ldapTemplate) {
+        log.debug("Configuring IExternalGroupDao with LDAP DAO");
+        Assert.notNull(ldapProperties.getGroupBranch(), "Use of profile " + Constants.SPRING_PROFILE_LDAP_GROUP + " require 'app.ldap.groupBranch.*' properties configured !");
+        List<IExternalGroupDisplayNameFormatter> formatters = Lists.newLinkedList();
+        // should be run firstly !
+        formatters.add(new LdapGroupRegexpDisplayNameFormatter(externalGroupHelper()));
+        for (GroupRegexProperties grp: ldapProperties.getGroupBranch().getNameFormatters()) {
+            formatters.add(new LdapGroupRegexpDisplayNameFormatterESCO(externalGroupHelper(), grp.getGroupMatcher(),
+                    grp.getGroupNameRegex(), grp.getGroupNameIndex(), grp.getGroupRecomposerSeparator(), grp.getGroupSuffixeToAppend()));
+        }
+        //should be run at final
+        formatters.add(new LdapGroupRegexpDisplayNameFormatterESCOReplace());
+
+        List<IGroupMemberDesigner> designers = Lists.newArrayList();
+        for (GroupDesignerProperties grp: ldapProperties.getGroupBranch().getDesigners()) {
+            designers.add(new LdapGroupAttachMemberDesignerImpl(externalGroupHelper(), grp.getGroupRootPattern(),
+                    grp.getGroupAttachEndMatch(), grp.getGroupToAttachEndPattern()));
+        }
+        return new LdapGroupDaoImpl(ldapTemplate, externalGroupHelper(), formatters, externalUserDao, designers);
+    }
+
+    @Bean
+    //@ConditionalOnMissingClass("org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl")
+    @Profile("!" + Constants.SPRING_PROFILE_LDAP_GROUP)
+    public IExternalGroupDao emptyExternalGroupDao() {
+        log.debug("Configuring emtpy IExternalGroupDao");
+        return new EmptyGroupDaoImpl();
+    }
+
+    @Bean
+    //@ConditionalOnMissingClass("org.esupportail.publisher.repository.externals.ldap.LdapGroupDaoImpl")
+    @Profile("!" + Constants.SPRING_PROFILE_LDAP_GROUP)
+    public IGroupService emptyGroupService() {
+        return new GroupServiceEmpty();
+    }
+
+    @Bean
+    @Profile(Constants.SPRING_PROFILE_LDAP_GROUP)
+    public IGroupService ldapGroupService(IPermissionService permissionService, TreeJSDTOFactory treeJSDTOFactory, UserDTOFactory userDTOFactory,
+                                          SubscriberService subscriberService, FilterRepository filterRepository, ContextService contextService, IExternalGroupDao externalGroupDao) {
+        return new GroupService(permissionService, treeJSDTOFactory, userDTOFactory, externalGroupDao, subscriberService, filterRepository, contextService);
     }
 }

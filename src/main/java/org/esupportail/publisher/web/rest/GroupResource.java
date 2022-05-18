@@ -15,8 +15,12 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
+import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
@@ -27,6 +31,8 @@ import org.esupportail.publisher.service.factories.GroupDTOFactory;
 import org.esupportail.publisher.service.factories.SubjectDTOSimpleFactory;
 import org.esupportail.publisher.web.rest.dto.GroupDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
+
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -36,11 +42,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * REST controller for managing users.
@@ -67,7 +68,6 @@ public class GroupResource {
 	 * GET /groups/:id -> get the "id" group.
 	 */
 	@RequestMapping(value = "/groups/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	@RolesAllowed(AuthoritiesConstants.USER)
 	public ResponseEntity<IExternalGroup> getGroup(@PathVariable String id) {
 		log.debug("REST request to get Group : {}", id);
@@ -82,7 +82,6 @@ public class GroupResource {
 	 * GET /groups/extended/:id -> get the "id" group.
 	 */
 	@RequestMapping(value = "/groups/extended/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	@RolesAllowed(AuthoritiesConstants.USER)
 	public ResponseEntity<GroupDTO> getAllInfoGroup(@PathVariable String id) {
 		log.debug("REST request to get GroupInfo of : {}", id);
@@ -97,7 +96,6 @@ public class GroupResource {
      * GET /groups/subject/:id -> get the "id" group.
      */
     @RequestMapping(value = "/groups/subject/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<SubjectDTO> getAllInfoSubject(@PathVariable String id) {
         log.debug("REST request to get SubjetInfos of group : {}", id);
@@ -112,7 +110,6 @@ public class GroupResource {
      * GET /group/attributes/ -> get list of displayed group attributes.
      */
     @RequestMapping(value = "/groups/attributes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public List<String> getShownGroupAttributes(HttpServletResponse response) {
         log.debug("REST request to get List of group Attributes to show !");

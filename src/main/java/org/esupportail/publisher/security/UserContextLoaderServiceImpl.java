@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -198,6 +199,7 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
 	}
 
 	// add publishers
+	@SuppressWarnings("unchecked")
 	private void loadAuthorizedOrganizationChilds(final UserDTO user, final ContextKey organizationCtx,
 			final boolean checkPerms, final Pair<PermissionType, ? extends PermOnCtxDTO> parentPerm) {
 		log.debug("Call loadAuthorizedOrganizationChilds {},{}", organizationCtx, checkPerms);
@@ -244,10 +246,11 @@ public class UserContextLoaderServiceImpl implements UserContextLoaderService {
         }
 
 		if (checkPerms) {
-            List<? extends PermissionOnContext> perms = Lists.newArrayList();
+
+            List<? extends PermissionOnContext> perms = new ArrayList<>();
             for (Map.Entry<PermissionClass, List<ContextKey>> ctx : pubsCtx.entrySet()) {
                 log.debug("foreach : for permClass {} the publishers ctx are {}", ctx.getKey(), ctx.getValue());
-                perms.addAll(Lists.newArrayList(permissionDao.getPermissionDao(ctx.getKey())
+				perms.addAll(Lists.newArrayList(permissionDao.getPermissionDao(ctx.getKey())
                     .findAll(PermissionPredicates.OnCtx(ctx.getValue(), ctx.getKey(), false))));
             }
 			// we need to evaluate all permissions of a publisher to get the

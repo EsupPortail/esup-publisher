@@ -73,7 +73,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -146,7 +145,6 @@ public class PublishController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Deprecated
     @JsonView(Views.Flash.class)
-    @Timed
     public List<FlashInfoVO> getFlashInfo(@PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
         log.debug("Entering getFlashInfo with params : organization identifier={}", uai);
         Organization org = organizationRepository.findByIdentifiers(uai);
@@ -185,7 +183,6 @@ public class PublishController {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(Views.Flash.class)
-    @Timed
     public List<FlashInfoVO> getFlashInfo(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId,
                                           @PathVariable("organization_id") String uai, final HttpServletRequest request ) throws URISyntaxException {
         log.debug("Entering getFlashInfo with params : organization identifier={}, reader_id={}, redactor_id={}", uai, readerId, redactorId);
@@ -221,7 +218,6 @@ public class PublishController {
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @PreAuthorize("hasIpAddress(@appIpVariableHolder.getIpRange())")
-    @Timed
     public Object getItems(@PathVariable("organization_id") String uai, @PathVariable("reader_id") Long reader, @RequestParam(value = "redactor_id", required = false) Long redactor) {
         log.debug("Entering getItems with params : uai={}, reader_id={}, redactor_id={}", uai, reader, redactor);
         Organization org = organizationRepository.findByIdentifiers(uai);
@@ -246,7 +242,6 @@ public class PublishController {
     @RequestMapping(value = "/contexts/{reader_id}/{redactor_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_XML_VALUE})
-    @Timed
     public CategoryProfilesUrl getAllPublisherContext(@PathVariable("reader_id") Long readerId, @PathVariable("redactor_id") Long redactorId, final HttpServletRequest request ) {
         log.debug("Entering getAllPublisherContext with params :  reader_id={}, redactor_id={}", readerId, redactorId);
         BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
@@ -274,7 +269,6 @@ public class PublishController {
     @RequestMapping(value = "/contextOf/{organization_id}/{reader_id}/{redactor_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_XML_VALUE})
-    @Timed
     public CategoryProfilesUrl getPublisherContextOf(@PathVariable("organization_id") String id, @PathVariable("reader_id") Long readerId,
                                                      @PathVariable("redactor_id") Long redactorId, final HttpServletRequest request ) {
         log.debug("Entering getPublisherContextOf with params : organization_id={}, reader_id={}, redactor_id={}", id, readerId, redactorId);
@@ -317,7 +311,6 @@ public class PublishController {
     @RequestMapping(value = "/items/{publisher_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_XML_VALUE})
-    @Timed
     public Actualite getItemsFromPublisher(@PathVariable("publisher_id") Long publisherId, HttpServletRequest request ) {
         //getting items on new way
         log.debug("Entering getItems with param : publisher_id={}", publisherId);
@@ -330,7 +323,6 @@ public class PublishController {
     @RequestMapping(value = "/categories/{publisher_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @Timed
     public Category getCategories(@PathVariable("publisher_id") Long publisherId, final HttpServletRequest request) {
         log.debug("Entering getCategories with param : publisher_id={}", publisherId);
         Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
@@ -360,7 +352,6 @@ public class PublishController {
     @RequestMapping(value = "/feeds/{category_id}",
         method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @Timed
     public Category getAbstractFeeds(@PathVariable("category_id") Long categoryId, final HttpServletRequest request) {
         // systeme classic esup-lecture/esup-news
         log.debug("Entering getAbstractFeeds with param : category_id={}", categoryId);

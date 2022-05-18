@@ -16,6 +16,7 @@
 package org.esupportail.publisher.config;
 
 import org.esupportail.publisher.service.bean.FileUploadHelper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,13 @@ public class WebMvcConfig implements WebMvcConfigurer{
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/" + publicFileUploadHelper.getUrlResourceMapping() + "**").addResourceLocations(publicFileUploadHelper.getResourceLocation());
     }
+
+//    @Bean
+//    public Doclet api() {
+//        return new Docket(DocumentationType.SWAGGER_2).select()
+//                .apis(RequestHandlerSelectors.basePackage("your.package.scan.to.swagger.annotations")).paths(PathSelectors.any()).build()
+//                .apiInfo(apiEndPointInfo());
+//    }
 
     /*@Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

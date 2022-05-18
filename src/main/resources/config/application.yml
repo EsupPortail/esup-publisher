@@ -1,61 +1,174 @@
 # security configuration (this key should be unique for your application, and kept secret)
 #jhipster.security.rememberme.key: publisher
-
-async:
-    corePoolSize: 2
-    maxPoolSize: 50
-    queueCapacity: 10000
-
+# Conditionally disable springdoc on missing api-docs profile
 spring:
-    profiles:
-        active: #spring.profiles.active#
-        group:
-            test: fast,ldapgrp,test
-            dev: dev,ldapgrp
-            prod: prod,ldapgrp
-            ci: dev,ldapgrp,test
+  config:
+    activate:
+      on-profile: '!api-docs'
+springdoc:
+  api-docs:
+    enabled: false
+---
+spring:
+  application:
+    name: ESUP-Publisher
+  profiles:
+    active: #spring.profiles.active#
+    group:
+      test: fast,ldapgrp,api-docs,test
+      dev: dev,ldapgrp,api-docs
+      prod: prod,ldapgrp
+      ci: dev,ldapgrp,test
+  jmx:
+    enabled: false
+  data:
     jpa:
-        open-in-view: false
-        hibernate:
-            ddl-auto: none
-    main:
-        allow-bean-definition-overriding: true
-    mail:
-        host: localhost
-        port: 25
-        user:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
-        from: publisher@localhost
-
-    messageSource:
-        cacheSeconds: 1
-    thymeleaf:
-        mode: HTML
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  messages:
+    basename: i18n/messages
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    protocol: smtp
+    properties:
+      "mail.smtp.auth": false
+      "mail.smtp.starttls.enable": false
+      "mail.transport.protocol": ${spring.mail.protocol}
+  messageSource:
+    cacheSeconds: 1
+  task:
+    execution:
+      thread-name-prefix: esup-publisher-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: esup-publisher-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
 
 management:
   endpoints:
     web:
-      base-path:
+      base-path: /management
       exposure:
-        include: ['configprops', 'health', 'env', 'threaddump', 'info', 'loggers']
+        include:
+          [
+            'configprops',
+            'env',
+            'health',
+            'info',
+            'jhimetrics',
+            'jhiopenapigroups',
+            'logfile',
+            'loggers',
+            'prometheus',
+            'threaddump',
+            'caches',
+            'liquibase',
+          ]
   endpoint:
     health:
       show-details: when-authorized
       roles: 'ROLE_ADMIN'
+      probes:
+        enabled: true
+        group:
+          liveness:
+            include: livenessState
+          readiness:
+            include: readinessState,db
+    jhimetrics:
+      enabled: true
+  info:
+    git:
+      mode: full
+    env:
+      enabled: true
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
+  metrics:
+    export:
+      # Prometheus is the default metrics backend
+      prometheus:
+        enabled: true
+        step: 60
+    enable:
+      http: true
+      jvm: true
+      logback: true
+      process: true
+      system: true
+    distribution:
+      percentiles-histogram:
+        all: true
+      percentiles:
+        all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+    tags:
+      application: ${spring.application.name}
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
 
 logging:
-    config: "classpath:logback.xml"
+  config: "classpath:logback.xml"
 
-swagger:
-    title: publisher API
-    description: publisher applications and beyond!
-    termsOfServiceUrl: http://jhipster.github.io/
-    contact:
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+
+springdoc:
+  show-actuator: true
+  paths-to-match: /api/**
+
+# Properties to be exposed on the /info management endpoint
+info:
+  # Comma separated list of profiles that will trigger the ribbon to show
+  display-ribbon-on-profiles: 'dev'
+
+#swagger:
+#  title: publisher API
+#  description: publisher applications and beyond!
+#  termsOfServiceUrl: http://jhipster.github.io/
+#  contact:
+#  license: Apache 2.0
+#  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
+
+app:
+  api-docs:
+    default-include-pattern: ${server.servlet.context-path:}/api/**
+    management-include-pattern: ${server.servlet.context-path:}/management/**
+    title: Jhipster Sample Application API
+    description: Jhipster Sample Application API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
     license: Apache 2.0
-    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
+    license-url:
+    servers:
+      - url: http://192.168.36.7:8080/publisher/
+
+  mail:
+    base-url: http://localhost:8080
+    from: publisher@localhost

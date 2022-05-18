@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -31,12 +30,12 @@ import org.esupportail.publisher.security.AjaxLogoutSuccessHandler;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomSessionFixationProtectionStrategy;
 import org.esupportail.publisher.security.CustomSingleSignOutFilter;
+import org.esupportail.publisher.security.HasIpRangeExpressionCreator;
 import org.esupportail.publisher.security.RememberCasAuthenticationEntryPoint;
 import org.esupportail.publisher.security.RememberCasAuthenticationProvider;
 import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource;
 import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
-import org.esupportail.publisher.service.bean.IpVariableHolder;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.evaluators.IEvaluation;
 import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
@@ -45,12 +44,13 @@ import org.esupportail.publisher.service.evaluators.UserMultivaluedAttributesEva
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
 
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -58,6 +58,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -74,32 +75,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private static final String CAS_URL_LOGIN = "cas.url.login";
-    private static final String CAS_URL_LOGOUT = "cas.url.logout";
-    private static final String CAS_URL_PREFIX = "cas.url.prefix";
-    private static final String CAS_SERVICE_URI = "app.service.security";
-    private static final String CAS_SERVICE_KEY = "app.service.idKeyProvider";
-    private static final String CAS_SERVICE_SERVERNAMES = "app.service.authorizedDomainNames";
-    private static final String APP_SERVICE_REDIRECTPARAM = "app.service.redirectParamName";
     private static final String APP_URI_LOGIN = "/app/login";
-    private static final String APP_ADMIN_USER_NAME = "app.admin.userName";
-    private static final String APP_ADMIN_GROUP_NAME = "app.admin.groupName";
-    private static final String APP_USERS_GROUP_NAME = "app.users.groupName";
-    private static final String APP_CONTEXT_PATH = "server.servlet.contextPath";
-    private static final String APP_PROTOCOL = "app.service.protocol";
-    private static final String APP_CORS_ALLOWED_ORIGINS = "app.cors.allowed.origins";
+
+    private static final String APP_CONTEXT_PATH = "server.servlet.context-path";
 
     // preflight cache duration in the browser
     private static final Long maxAge = 600L; // 600 seconds = 10 minutes
     private static final String[] allowedMethods = {"GET","POST","PUT","DELETE","OPTIONS"};
     private static final String[] allowedHeaders = {"X-CSRF-TOKEN","Content-Type","Accept","Origin"};
 
-    private static final String DefaultTargetUrlParameter = "spring-security-redirect";
+    private final ESUPPublisherProperties esupPublisherProperties;
 
-
-    @Inject
     private Environment env;
-
     @Inject
     private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
 
@@ -115,11 +102,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Inject
     private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> userDetailsService;
 
-    @Inject
-    private IpVariableHolder ipVariableHolder;
-
     // @Inject
     // private RememberMeServices rememberMeServices;
+
+    public SecurityConfiguration(Environment environment, ESUPPublisherProperties esupPublisherProperties) {
+        this.env = environment;
+        this.esupPublisherProperties = esupPublisherProperties;
+    }
 
     // @Bean
     // public PasswordEncoder passwordEncoder() {
@@ -138,41 +127,44 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public IAuthoritiesDefinition mainRolesDefs() {
-        Assert.notNull(env, "environment must not be null");
+        Assert.notNull(esupPublisherProperties, "Properties must not be null");
         AuthoritiesDefinition defs = new AuthoritiesDefinition();
 
         Set<IEvaluation> set = new HashSet<>();
 
-        final String userAdmin = env.getProperty(APP_ADMIN_USER_NAME);
+        final String userAdmin = esupPublisherProperties.getAdmins().getUserName();
         if (userAdmin != null && !userAdmin.isEmpty()) {
             final UserAttributesEvaluation uae1 = new UserAttributesEvaluation("uid", userAdmin, StringEvaluationMode.EQUALS);
             set.add(uae1);
         }
 
-        final String groupAdmin = env.getProperty(APP_ADMIN_GROUP_NAME);
+        final String groupAdmin = esupPublisherProperties.getAdmins().getGroupName();
         if (groupAdmin != null && !groupAdmin.isEmpty()) {
             final UserAttributesEvaluation uae2 = new UserMultivaluedAttributesEvaluation("isMemberOf", groupAdmin, StringEvaluationMode.EQUALS);
             set.add(uae2);
         }
 
-        Assert.isTrue(set.size() > 0, "Properties '" + APP_ADMIN_USER_NAME + "' or '" + APP_ADMIN_GROUP_NAME
-            + "' aren't defined in properties, there are needed to define an Admin user");
+        Assert.isTrue(set.size() > 0, "Properties that define admins aren't set in properties, there are needed to define an Admin user" +
+                ", name should be 'app.admins.userName' or 'app.admins.groupName'");
 
 
         OperatorEvaluation admins = new OperatorEvaluation(OperatorType.OR, set);
         defs.setAdmins(admins);
 
-        final String groupUsers = env.getProperty(APP_USERS_GROUP_NAME);
+        final String groupUsers = esupPublisherProperties.getUsers().getGroupName();
         UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf", groupUsers, StringEvaluationMode.MATCH);
         defs.setUsers(umae);
 
+        Assert.isTrue(!groupUsers.isEmpty(), "Properties that define users aren't set in properties, there are needed to define all access users" +
+                ", name should be 'app.users.groupName'");
         return defs;
     }
 
     @Bean
     public ServiceProperties serviceProperties() {
         ServiceProperties sp = new ServiceProperties();
-        sp.setService(env.getRequiredProperty(CAS_SERVICE_URI));
+        Assert.hasText(esupPublisherProperties.getSecurity().getAuthUriFilterPath(), "The CAS URI service should be set to be able to apply CAS Auth Filter, see property 'app.security.auth-uri-filter-path'");
+        sp.setService(esupPublisherProperties.getSecurity().getAuthUriFilterPath());
         sp.setSendRenew(false);
         sp.setAuthenticateAllArtifacts(true);
         return sp;
@@ -182,21 +174,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public ServiceUrlHelper serviceUrlHelper() {
         String ctxPath = env.getRequiredProperty(APP_CONTEXT_PATH);
         if (!ctxPath.startsWith("/")) ctxPath = "/" + ctxPath;
-        final String protocol = env.getRequiredProperty(APP_PROTOCOL);
-        //final List<String> domainName = Lists.newArrayList(env.getRequiredProperty(CAS_SERVICE_SERVERNAMES).replaceAll(",//s", ",").split(","));
-        List<String> validCasServerHosts = new ArrayList<>();
-        for (String ending : StringUtils.split(env.getRequiredProperty(CAS_SERVICE_SERVERNAMES), ",")) {
-            if (StringUtils.isNotBlank(ending)){
-                validCasServerHosts.add(StringUtils.trim(ending));
-            }
-        }
-        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, validCasServerHosts, protocol, "/view/item/");
+        final String protocol = esupPublisherProperties.getSecurity().getProtocol();
+        Assert.isTrue(Lists.newArrayList("http://", "https://").contains(protocol), "Protocol param doesn't match required value, see property 'app.security.protocol'");
+        final List<String> domainNames = Lists.newArrayList(esupPublisherProperties.getSecurity().getAuthorizedDomainNames());
+        Assert.notEmpty(domainNames, "The list of the application Domain Names set shouldn't be empty, see property 'app.security.authorizedDomainNames'");
+        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, domainNames, protocol, "/view/item/");
         log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());
         return serviceUrlHelper;
     }
 
     @Bean String getCasTargetUrlParameter() {
-        return env.getProperty(APP_SERVICE_REDIRECTPARAM, DefaultTargetUrlParameter);
+        Assert.hasText(esupPublisherProperties.getSecurity().getRedirectParamName(), "Redirect Param Name shouldn't be null, see property 'app.security.redirectParamName'");
+        return esupPublisherProperties.getSecurity().getRedirectParamName();
     }
 
     @Bean
@@ -213,7 +202,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         casAuthenticationProvider.setAuthenticationUserDetailsService(userDetailsService);
         casAuthenticationProvider.setServiceProperties(serviceProperties());
         casAuthenticationProvider.setTicketValidator(cas20ServiceTicketValidator());
-        casAuthenticationProvider.setKey(env.getRequiredProperty(CAS_SERVICE_KEY));
+        Assert.hasText(esupPublisherProperties.getSecurity().getIdKeyProvider(), "The CAS security Key should be set, see property 'app.security.idKeyProvider'");
+        casAuthenticationProvider.setKey(esupPublisherProperties.getSecurity().getIdKeyProvider());
         return casAuthenticationProvider;
     }
 
@@ -227,13 +217,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public Cas20ServiceTicketValidator cas20ServiceTicketValidator() {
-        return new Cas20ServiceTicketValidator(env.getRequiredProperty(CAS_URL_PREFIX));
+        return new Cas20ServiceTicketValidator(esupPublisherProperties.getCas().getUrlPrefix());
     }
 
     @Bean
     public CasAuthenticationFilter casAuthenticationFilter() throws Exception {
         CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
-        casAuthenticationFilter.setFilterProcessesUrl("/" + env.getRequiredProperty(CAS_SERVICE_URI));
+        Assert.hasText(esupPublisherProperties.getSecurity().getAuthUriFilterPath(), "The CAS URI service should be set to be able to apply CAS Auth Filter, see property 'app.security.auth-uri-filter-path'");
+        casAuthenticationFilter.setFilterProcessesUrl("/" + esupPublisherProperties.getSecurity().getAuthUriFilterPath());
         casAuthenticationFilter.setAuthenticationManager(authenticationManager());
         casAuthenticationFilter.setAuthenticationDetailsSource(new RememberWebAuthenticationDetailsSource(
             serviceUrlHelper(), serviceProperties(), getCasTargetUrlParameter()));
@@ -248,7 +239,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public RememberCasAuthenticationEntryPoint casAuthenticationEntryPoint() {
         RememberCasAuthenticationEntryPoint casAuthenticationEntryPoint = new RememberCasAuthenticationEntryPoint();
-        casAuthenticationEntryPoint.setLoginUrl(env.getRequiredProperty(CAS_URL_LOGIN));
+        casAuthenticationEntryPoint.setLoginUrl(esupPublisherProperties.getCas().getUrlLogin());
         casAuthenticationEntryPoint.setServiceProperties(serviceProperties());
         casAuthenticationEntryPoint.setUrlHelper(serviceUrlHelper());
         //move to /app/login due to cachebuster instead of api/authenticate
@@ -259,7 +250,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public CustomSingleSignOutFilter singleSignOutFilter() {
         CustomSingleSignOutFilter singleSignOutFilter = new CustomSingleSignOutFilter();
-        singleSignOutFilter.setCasServerUrlPrefix(env.getRequiredProperty(CAS_URL_PREFIX));
+        singleSignOutFilter.setCasServerUrlPrefix(esupPublisherProperties.getCas().getUrlPrefix());
         return singleSignOutFilter;
     }
 
@@ -268,20 +259,47 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(casAuthenticationProvider());
     }
     @Bean
-    public CorsConfigurationSource corsConfigurationSource()
-    {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList(
-            env.getRequiredProperty(APP_CORS_ALLOWED_ORIGINS, String.class).replaceAll("\\s", "").split(",")));
-        corsConfiguration.setAllowedMethods(Arrays.asList(allowedMethods));
-        corsConfiguration.setAllowedHeaders(Arrays.asList(allowedHeaders));
-        corsConfiguration.setMaxAge(maxAge);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = esupPublisherProperties.getCors();
+        if (config.getAllowedMethods() == null || config.getAllowedMethods().isEmpty())
+            config.setAllowedMethods(Arrays.asList(allowedMethods));
+        if (config.getAllowedHeaders() == null || config.getAllowedHeaders().isEmpty())
+            config.setAllowedHeaders(Arrays.asList(allowedHeaders));
+        if (config.getMaxAge() == null)
+            config.setMaxAge(maxAge);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
+        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/management/**", config);
+        source.registerCorsConfiguration("/v3/api-docs", config);
+        source.registerCorsConfiguration("/swagger-ui/**", config);
         return source;
     }
-    
+
+    @Bean
+    public HasIpRangeExpressionCreator servicesPublishedIpAdressFilter(ESUPPublisherProperties esupPublisherProperties) {
+        return new HasIpRangeExpressionCreator(esupPublisherProperties.getAuthorizedServices().getIpRanges());
+    }
+
+    @Bean
+    public HasIpRangeExpressionCreator prometeusIpAdressFilter(ESUPPublisherProperties esupPublisherProperties) {
+        return new HasIpRangeExpressionCreator(esupPublisherProperties.getMetrics().getPrometeusAuthorizedAcess().getIpRanges());
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web ->
+                web
+                        .ignoring()
+                        .antMatchers(HttpMethod.OPTIONS, "/**")
+                        .antMatchers("/app/**/*.{js,html}")
+                        .antMatchers("/i18n/**")
+                        .antMatchers("/content/**")
+                        .antMatchers("/h2-console/**")
+                        .antMatchers("/swagger-ui/**")
+                        .antMatchers("/test/**");
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
@@ -316,27 +334,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/enums/**").permitAll()
             .antMatchers("/api/conf/**").permitAll()
+            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").hasAuthority(AuthoritiesConstants.USER)
-            .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/health").access("hasRole('" + AuthoritiesConstants.ADMIN + "') or (" + prometeusIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers("/management/health/**").access("hasRole('" + AuthoritiesConstants.ADMIN + "') or (" + prometeusIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers("/management/info").access("hasRole('" + AuthoritiesConstants.ADMIN + "') or (" + prometeusIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers("/management/prometheus").access("hasRole('" + AuthoritiesConstants.ADMIN + "') or (" + prometeusIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/console/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
-            + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
-            .antMatchers(FeedController.PRIVATE_RSS_FEED_URL_PATH + "**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (hasIpAddress('" + ipVariableHolder.getIpRange()
-            + "') or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers("/published/**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (" + servicesPublishedIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers(FeedController.PRIVATE_RSS_FEED_URL_PATH + "**").access("hasRole('" + AuthoritiesConstants.ANONYMOUS + "') and (" + servicesPublishedIpAdressFilter(esupPublisherProperties).getExpression()
+                        + " or hasIpAddress('127.0.0.1/32') or hasIpAddress('::1'))")
+            .antMatchers(FeedController.FEED_CONTROLLER_PATH + "/**").permitAll()
             .antMatchers(PROTECTED_PATH + "**").authenticated()
             .antMatchers("/view/**").permitAll()
-            .antMatchers("/ui/**").permitAll();
+            .antMatchers("/css/**").permitAll()
+            .antMatchers("/images/**").permitAll()
+            .antMatchers("/fonts/**").permitAll()
+            .antMatchers("/public/**").permitAll()
+            .antMatchers("/ui/**").permitAll()
+            .anyRequest().denyAll();
         http
             .logout()
             .logoutUrl("/api/logout")
@@ -350,10 +372,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // Specific path where pages are served (outter of REST API with ANGULAR)
     public static final String PROTECTED_PATH = "/protected/";
 
-    /**
+    /*
      * This allows SpEL support in Spring Data JPA @Query definitions.
      *
-     * See https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
+     * Watch https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
      */
 	/*@Bean
 	EvaluationContextExtension securityExtension() {

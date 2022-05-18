@@ -20,7 +20,6 @@ import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
-import com.codahale.metrics.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.FileService;
@@ -52,7 +51,6 @@ public class UploadController {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#entityId,  '" + SecurityConstants.CTX_ORGANIZATION + "', '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<?> upload(@RequestParam(value = "isPublic", required = false, defaultValue = "false") boolean isPublic,
                                        @RequestParam(value = "entityId") Long entityId,
                                        @RequestParam(value = "name", required = false) String name,

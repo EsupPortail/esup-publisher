@@ -27,6 +27,8 @@ public final class Constants {
 	public static final String SPRING_PROFILE_PRODUCTION = "prod";
 	public static final String SPRING_PROFILE_TEST = "test";
 	public static final String SPRING_PROFILE_FAST = "fast";
+	public static final String SPRING_PROFILE_API_DOCS = "api-docs";
+	public static final String SPRING_PROFILE_DBH2 = "db-h2";
 	//public static final String SPRING_PROFILE_CLOUD = "cloud";
 	public static final String SYSTEM_ACCOUNT = "system";
     public static final String SPRING_PROFILE_LDAP_GROUP = "ldapgrp";

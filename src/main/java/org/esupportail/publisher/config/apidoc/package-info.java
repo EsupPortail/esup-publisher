@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 /**
- * Swagger api specific code.
+ * Springfox configuraiton to generate ApiDocs documentation.
  */
-package org.esupportail.publisher.config.apidoc;
+package tech.jhipster.config.apidoc;

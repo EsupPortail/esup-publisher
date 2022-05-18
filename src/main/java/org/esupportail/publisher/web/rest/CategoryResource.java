@@ -23,7 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.Category;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.repository.CategoryRepository;
@@ -66,7 +65,6 @@ public class CategoryResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canCreateInCtx(authentication, #category.publisher.contextKey)")
-    @Timed
     public ResponseEntity<Void> create(@RequestBody Category category) throws URISyntaxException {
         log.debug("REST request to save Category : {}", category);
         if (category.getId() != null) {
@@ -86,7 +84,6 @@ public class CategoryResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && (@permissionService.canCreateInCtx(authentication, #category.publisher.contextKey) || @permissionService.canEditCtx(authentication, #category.contextKey))")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody Category category) throws URISyntaxException {
         log.debug("REST request to update Category : {}", category);
         if (category.getId() == null) {
@@ -104,7 +101,6 @@ public class CategoryResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostFilter("hasPermission(filterObject, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public List<Category> getAll() {
         log.debug("REST request to get all Categorys");
         return categoryRepository.findAll();
@@ -118,7 +114,6 @@ public class CategoryResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  '" + SecurityConstants.CTX_CATEGORY + "', '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<Category> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Category : {}", id);
         Optional<Category> optionalCategory =  categoryRepository.findById(id);
@@ -137,7 +132,6 @@ public class CategoryResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_CATEGORY + "')")
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Category : {}", id);
         categoryRepository.deleteById(id);

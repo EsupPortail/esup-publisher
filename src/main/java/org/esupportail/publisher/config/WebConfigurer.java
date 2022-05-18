@@ -26,29 +26,29 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;
+import org.esupportail.publisher.config.h2.H2ConfigurationHelper;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
-import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;;
+import org.esupportail.publisher.web.filter.CachingHttpHeadersFilter;
 import org.esupportail.publisher.web.filter.StaticResourcesProductionFilter;
 import org.esupportail.publisher.web.filter.gzip.GZipServletFilter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.web.server.WebServerFactory;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.web.server.MimeMappings;
+import org.springframework.boot.web.server.WebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
+
+;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -62,9 +62,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 	@Inject
 	private Environment env;
 
-	@Autowired(required = false)
-	private MetricRegistry metricRegistry;
-
     @Autowired
     @Qualifier("publicFileUploadHelper")
     private FileUploadHelper publicFileUploadHelper;
@@ -73,9 +70,6 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-		if (!env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
-			initMetrics(servletContext, disps);
-		}
 		if (env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_PRODUCTION))) {
 			initCachingHttpHeadersFilter(servletContext, disps);
 			initStaticResourcesProductionFilter(servletContext, disps);
@@ -119,7 +113,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.ttf");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.woff2");
 		compressingFilter.addMappingForUrlPatterns(disps, true, "/api/*");
-		compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
+		compressingFilter.addMappingForUrlPatterns(disps, true, "/management/*");
 		compressingFilter.setAsyncSupported(true);
 	}
 
@@ -158,41 +152,13 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 		cachingHttpHeadersFilter.setAsyncSupported(true);
 	}
 
-
-	/**
-	 * Initializes Metrics.
-	 */
-    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-		log.debug("Initializing Metrics registries");
-		servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-				metricRegistry);
-		servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-				metricRegistry);
-
-		log.debug("Registering Metrics Filter");
-        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                new InstrumentedFilter());
-
-		metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
-		metricsFilter.setAsyncSupported(true);
-
-		log.debug("Registering Metrics Servlet");
-        ServletRegistration.Dynamic metricsAdminServlet =
-                servletContext.addServlet("metricsServlet", new MetricsServlet());
-
-		metricsAdminServlet.addMapping("/metrics/metrics/*");
-		metricsAdminServlet.setAsyncSupported(true);
-		metricsAdminServlet.setLoadOnStartup(2);
-    }
-
     /**
      * Initializes H2 console
      */
     private void initH2Console(ServletContext servletContext) {
-        log.debug("Initialize H2 console");
-        ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
-        h2ConsoleServlet.addMapping("/console/*");
-        h2ConsoleServlet.setInitParameter("-properties", "src/main/resources");
-        h2ConsoleServlet.setLoadOnStartup(1);
+		if (env.getProperty("spring.h2.console.enabled", Boolean.class, false)) {
+			log.debug("Initialize H2 console");
+			H2ConfigurationHelper.initH2Console(servletContext);
+		}
 	}
 }

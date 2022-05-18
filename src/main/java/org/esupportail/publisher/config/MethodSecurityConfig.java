@@ -17,7 +17,7 @@ package org.esupportail.publisher.config;
 
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomPermissionEvaluator;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,9 +35,8 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
-	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	public MethodSecurityConfig(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
@@ -87,28 +86,4 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 		expressionHandler.setApplicationContext(applicationContext);
 		return expressionHandler;
 	}
-
-	/*protected AccessDecisionManager accessDecisionManager() {
-	    List<AccessDecisionVoter> decisionVoters = new ArrayList<AccessDecisionVoter>();
-	    WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
-	    webExpressionVoter.setExpressionHandler(webExpressionHandler());
-	    decisionVoters.add(webExpressionVoter);
-	    decisionVoters.add(roleVoter());
-	    return new AffirmativeBased(decisionVoters);
-	}*/
-	/*@Bean
-	@Override
-	protected AccessDecisionManager accessDecisionManager() {
-	    List<AccessDecisionVoter> decisionVoters = new ArrayList<AccessDecisionVoter>();*/
-	/*WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
-	webExpressionVoter.setExpressionHandler(webExpressionHandler());
-	decisionVoters.add(webExpressionVoter);*/
-	/*ExpressionBasedPreInvocationAdvice expressionAdvice = new ExpressionBasedPreInvocationAdvice();
-	expressionAdvice.setExpressionHandler(getExpressionHandler());
-	decisionVoters.add(new PreInvocationAuthorizationAdviceVoter(expressionAdvice));
-	decisionVoters.add(new Jsr250Voter());
-	decisionVoters.add(roleVoter());
-	decisionVoters.add(new AuthenticatedVoter());
-	return new AffirmativeBased(decisionVoters);
-	}*/
 }
