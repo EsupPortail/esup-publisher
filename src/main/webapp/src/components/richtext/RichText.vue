@@ -3,6 +3,7 @@
 </template>
 <script>
 import CustomUploadAdapter from './CustomUploadAdapter'
+import IconEditingPlugin from './IconEditingPlugin'
 import InsertFilePlugin from './InsertFilePlugin'
 import store from '@/store/index.js'
 import CKEditor from '@ckeditor/ckeditor5-vue'
@@ -51,7 +52,7 @@ export default {
           Heading, BlockQuote, Strikethrough, Underline, ListProperties, Alignment,
           Font, RemoveFormat, SourceEditing, Image, ImageToolbar, ImageCaption,
           ImageStyle, ImageUpload, ImageInsert, ImageResize, LinkImage, MediaEmbed,
-          GeneralHtmlSupport, InsertFilePlugin
+          GeneralHtmlSupport, IconEditingPlugin, InsertFilePlugin
         ],
         toolbar: {
           // Définition de la barre d'outils de l'éditeur
@@ -122,12 +123,12 @@ export default {
         },
         htmlSupport: {
           allow: [
-            // On autorise toutes les balises sauf script/iframe avec toutes les classes et styles possibles
-            // ainsi que les attributs :
+            // On autorise toutes les balises sauf <i> (gérée par IconEditingPlugin), <script> et <iframe> avec toutes
+            // les classes et styles possibles ainsi que les attributs :
             // - "aria-*"" (accessibilité)
             // - "ta-*", "contenteditable", "allowfullscreen", "frameborder" (pour les anciens contenus textAngular)
             {
-              name: /^((?!(script|iframe)).)*$/,
+              name: /^((?!(i|script|iframe)).)*$/,
               classes: true,
               styles: true,
               attributes: [

@@ -377,8 +377,9 @@ body {
 }
 
 .publisher-view article>section.attachments>div>a>span::before {
-    content: "\f214";
-    font: normal normal normal 24px/1 "Material Design Icons";
+    content: "\f15b";
+    font: normal normal 900 21px/1 "Font Awesome 6 Free";
+    margin-right: 3px
 }
 
 .publisher-view article>section.attachments>div {
@@ -392,7 +393,7 @@ body {
 }
 
 /** Add to center image on line */
-.publisher-view .mdi.mdi-lg {
+.publisher-view .ck-content .fa-lg {
     font-size: 1.33333333em;
     line-height: 0.75em;
     vertical-align: -15%;

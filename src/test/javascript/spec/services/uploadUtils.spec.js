@@ -10,11 +10,11 @@ describe('UploadUtils.js tests', () => {
 
   it('test 2 UploadUtils - getCssFileFromName', () => {
     const type = UploadUtils.getCssFileFromName('test.jpg')
-    expect(type).toStrictEqual('mdi mdi-file-image mdi-dark mdi-lg')
+    expect(type).toStrictEqual('fas fa-file-image fa-lg')
   })
 
   it('test 3 UploadUtils - getCssFileFromType', () => {
     const type = UploadUtils.getCssFileFromType('image/jpg', 'test.jpg')
-    expect(type).toStrictEqual('mdi mdi-file-image mdi-dark mdi-lg')
+    expect(type).toStrictEqual('fas fa-file-image fa-lg')
   })
 })

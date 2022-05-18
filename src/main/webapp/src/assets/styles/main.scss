@@ -1802,3 +1802,18 @@ button:disabled {
 .drop-area.drag-active {
     border: 2px solid #000;
 }
+
+.attachment-preview .fa-lg,
+.attachmentForm .linkedFiles .fa-lg {
+    margin-right: 0.25rem;
+    font-size: 1.33333333em;
+    line-height: 0.75em;
+    vertical-align: -15%;
+}
+
+.attachment-preview section a {
+    margin-right: 0.5rem;
+}
+.ck .ck-widget.ck-icon-widget {
+    outline-color: transparent !important;
+}

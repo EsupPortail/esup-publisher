@@ -139,7 +139,7 @@ class UploadUtils {
 
   // Retourne les classes CSS pour l'icône d'un fichier à partir de son nom
   getCssFileFromName (fileName) {
-    var cssClassType = 'mdi mdi-file mdi-dark mdi-lg'
+    var cssClassType = 'fas fa-file fa-lg'
     if (fileName) {
       var fext = fileName.substr(fileName.lastIndexOf('.') + 1).trim()
 
@@ -149,21 +149,21 @@ class UploadUtils {
 
       if (fext && fext.length > 2) {
         if (imageExt.indexOf(fext) > -1) {
-          cssClassType = 'mdi mdi-file-image mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-image fa-lg'
         } else if (videoExt.indexOf(fext) > -1) {
-          cssClassType = 'mdi mdi-file-video mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-video fa-lg'
         } else if (audioExt.indexOf(fext) > -1) {
-          cssClassType = 'mdi mdi-file-music mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-audio fa-lg'
         } else if (fext === 'pdf') {
-          cssClassType = 'mdi mdi-file-pdf mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-pdf fa-lg'
         } else if (fext === 'odt' || fext === 'doc' || fext === 'docx') {
-          cssClassType = 'mdi mdi-file-word mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-word fa-lg'
         } else if (fext === 'ods' || fext === 'xls' || fext === 'xlsx') {
-          cssClassType = 'mdi mdi-file-excel mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-excel fa-lg'
         } else if (fext === 'odp' || fext === 'ppt' || fext === 'pptx') {
-          cssClassType = 'mdi mdi-file-powerpoint mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-powerpoint fa-lg'
         } else if (fext === 'txt') {
-          cssClassType = 'mdi mdi-file-document mdi-dark mdi-lg'
+          cssClassType = 'fas fa-file-lines fa-lg'
         }
       }
     }
@@ -176,11 +176,11 @@ class UploadUtils {
     if (fileType) {
       var subFiletype = fileType.substring(0, 5)
       if (subFiletype === 'image' || subFiletype === 'video') {
-        cssClassType = 'mdi mdi-file-' + subFiletype + ' mdi-dark mdi-lg'
+        cssClassType = 'fas fa-file-' + subFiletype + ' fa-lg'
       } else if (subFiletype === 'audio') {
-        cssClassType = 'mdi mdi-file-music mdi-dark mdi-lg'
+        cssClassType = 'fas fa-file-audio fa-lg'
       } else if (fileType === 'application/pdf') {
-        cssClassType = 'mdi mdi-file-pdf mdi-dark mdi-lg'
+        cssClassType = 'fas fa-file-pdf fa-lg'
       }
     }
     if (!cssClassType) {
