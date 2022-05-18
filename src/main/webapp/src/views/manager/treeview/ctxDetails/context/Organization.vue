@@ -250,7 +250,7 @@ export default {
       this.deleteModal.show()
     },
     // Méthode en charge de supprimer une structure
-    confirmDelete (id) {
+    confirmDelete () {
       this.confirmDeleteContext(() => {
         this.deleteModal.hide()
       })

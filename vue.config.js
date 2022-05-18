@@ -1,3 +1,4 @@
+const { defineConfig } = require('@vue/cli-service')
 const { DefinePlugin } = require('webpack')
 const fs = require('fs')
 const xml2js = require('xml2js')
@@ -21,7 +22,7 @@ function loadBackVersion () {
   return JSON.stringify(version)
 }
 
-module.exports = {
+module.exports = defineConfig({
   pages: {
     app: {
       entry: 'src/main/webapp/src/main.js',
@@ -64,12 +65,16 @@ module.exports = {
   chainWebpack: config => {
     config
       .plugin('copy')
-      .use(require('copy-webpack-plugin'), [[{
-        from: path.resolve(__dirname, 'src/main/webapp/public'),
-        to: path.resolve(__dirname, _outputDir),
-        toType: 'dir',
-        ignore: ['.DS_Store']
-      }]])
+      .use(require('copy-webpack-plugin'), [{
+        patterns: [{
+          from: path.resolve(__dirname, 'src/main/webapp/public'),
+          to: path.resolve(__dirname, _outputDir),
+          toType: 'dir',
+          globOptions: {
+            ignore: ['**/.DS_Store', '**/public/index.html']
+          }
+        }]
+      }])
     // Configuration pour CKEditor
     const svgRule = config.module.rule('svg')
     svgRule.exclude.add(path.join(__dirname, 'node_modules', '@ckeditor'))
@@ -105,4 +110,4 @@ module.exports = {
         return options
       })
   }
-}
+})

@@ -33,7 +33,7 @@ export default {
     }
   },
   watch: {
-    $route (to, from) {
+    $route (to) {
       this.navBarView = to.meta.navBarView || ''
       this.pageName = to.name
     }
