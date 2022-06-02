@@ -19,10 +19,12 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <property name="now" value="now()" dbms="mysql,h2" />
+    <property name="now" value="now()" dbms="mysql,mariadb,h2" />
     <property name="now" value="current_timestamp" dbms="postgresql" />
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
     <changeSet author="jgribonvald (generated)" id="1427879970790-1">
         <createTable tableName="t_classification">
             <column name="type" type="varchar(31)">
@@ -529,13 +531,13 @@
 
     <changeSet id="1421860634824-58" author="jgribonvald (manual)">
         <loadData encoding="utf-8"
-                  file="config/liquibase/users.csv"
-                  separator=";"
-                  tableName="t_user">
+            file="config/liquibase/users.csv"
+            separator=";"
+            tableName="t_user">
             <column name="enabled" type="boolean"/>
             <column name="accept_notifications" type="boolean"/>
-            <column name="created_date" type="timestamp" />
+            <column name="created_date" type="DATETIME"/>
         </loadData>
-        <modifyDataType tableName="t_user" columnName="created_date" newDataType="datetime"/>
+        <modifyDataType tableName="t_user" columnName="created_date" newDataType="${datetimeType}"/>
     </changeSet>
 </databaseChangeLog>
