@@ -15,9 +15,21 @@
  */
 package org.esupportail.publisher.config;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.esupportail.publisher.domain.enums.OperatorType;
+import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomPermissionEvaluator;
+import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
+import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
+import org.esupportail.publisher.service.evaluators.IEvaluation;
+import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
+import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
+import org.esupportail.publisher.service.evaluators.UserMultivaluedAttributesEvaluation;
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,15 +42,20 @@ import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.util.Assert;
 
 @Configuration
+@AutoConfigureBefore(SecurityConfiguration.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
 	private ApplicationContext applicationContext;
 
-	public MethodSecurityConfig(ApplicationContext applicationContext) {
+	private final ESUPPublisherProperties esupPublisherProperties;
+
+	public MethodSecurityConfig(ApplicationContext applicationContext, ESUPPublisherProperties esupPublisherProperties) {
 		this.applicationContext = applicationContext;
+		this.esupPublisherProperties = esupPublisherProperties;
 	}
 
 	@Bean
@@ -79,11 +96,37 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 	}
 
 	@Bean
-	public DefaultMethodSecurityExpressionHandler expressionHandler() {
-		DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
-		expressionHandler.setPermissionEvaluator(permissionEvaluator());
-		expressionHandler.setRoleHierarchy(roleHierarchy());
-		expressionHandler.setApplicationContext(applicationContext);
-		return expressionHandler;
+	public IAuthoritiesDefinition mainRolesDefs() {
+		Assert.notNull(esupPublisherProperties, "Properties must not be null");
+		AuthoritiesDefinition defs = new AuthoritiesDefinition();
+
+		Set<IEvaluation> set = new HashSet<>();
+
+		final String userAdmin = esupPublisherProperties.getAdmins().getUserName();
+		if (userAdmin != null && !userAdmin.isEmpty()) {
+			final UserAttributesEvaluation uae1 = new UserAttributesEvaluation("uid", userAdmin, StringEvaluationMode.EQUALS);
+			set.add(uae1);
+		}
+
+		final String groupAdmin = esupPublisherProperties.getAdmins().getGroupName();
+		if (groupAdmin != null && !groupAdmin.isEmpty()) {
+			final UserAttributesEvaluation uae2 = new UserMultivaluedAttributesEvaluation("isMemberOf", groupAdmin, StringEvaluationMode.EQUALS);
+			set.add(uae2);
+		}
+
+		Assert.isTrue(set.size() > 0, "Properties that define admins aren't set in properties, there are needed to define an Admin user" +
+				", name should be 'app.admins.userName' or 'app.admins.groupName'");
+
+
+		OperatorEvaluation admins = new OperatorEvaluation(OperatorType.OR, set);
+		defs.setAdmins(admins);
+
+		final String groupUsers = esupPublisherProperties.getUsers().getGroupName();
+		UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf", groupUsers, StringEvaluationMode.MATCH);
+		defs.setUsers(umae);
+
+		Assert.isTrue(!groupUsers.isEmpty(), "Properties that define users aren't set in properties, there are needed to define all access users" +
+				", name should be 'app.users.groupName'");
+		return defs;
 	}
 }

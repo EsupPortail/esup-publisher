@@ -15,19 +15,21 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
-import lombok.Getter;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+
 import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.repository.PermissionRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.APermissionDTOFactory;
 import org.esupportail.publisher.service.factories.PermissionDTOSelectorFactory;
 import org.esupportail.publisher.web.rest.dto.PermissionDTO;
+
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  *

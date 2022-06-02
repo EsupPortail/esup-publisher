@@ -16,14 +16,10 @@
 package org.esupportail.publisher.config;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.esupportail.publisher.domain.enums.OperatorType;
-import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
 import org.esupportail.publisher.security.AjaxAuthenticationSuccessHandler;
 import org.esupportail.publisher.security.AjaxLogoutSuccessHandler;
@@ -34,13 +30,7 @@ import org.esupportail.publisher.security.HasIpRangeExpressionCreator;
 import org.esupportail.publisher.security.RememberCasAuthenticationEntryPoint;
 import org.esupportail.publisher.security.RememberCasAuthenticationProvider;
 import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource;
-import org.esupportail.publisher.service.bean.AuthoritiesDefinition;
-import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
-import org.esupportail.publisher.service.evaluators.IEvaluation;
-import org.esupportail.publisher.service.evaluators.OperatorEvaluation;
-import org.esupportail.publisher.service.evaluators.UserAttributesEvaluation;
-import org.esupportail.publisher.service.evaluators.UserMultivaluedAttributesEvaluation;
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
 
@@ -58,7 +48,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -124,41 +113,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             jsonConverter.setObjectMapper(objectMapper);
         return jsonConverter;
         }*/
-
-    @Bean
-    public IAuthoritiesDefinition mainRolesDefs() {
-        Assert.notNull(esupPublisherProperties, "Properties must not be null");
-        AuthoritiesDefinition defs = new AuthoritiesDefinition();
-
-        Set<IEvaluation> set = new HashSet<>();
-
-        final String userAdmin = esupPublisherProperties.getAdmins().getUserName();
-        if (userAdmin != null && !userAdmin.isEmpty()) {
-            final UserAttributesEvaluation uae1 = new UserAttributesEvaluation("uid", userAdmin, StringEvaluationMode.EQUALS);
-            set.add(uae1);
-        }
-
-        final String groupAdmin = esupPublisherProperties.getAdmins().getGroupName();
-        if (groupAdmin != null && !groupAdmin.isEmpty()) {
-            final UserAttributesEvaluation uae2 = new UserMultivaluedAttributesEvaluation("isMemberOf", groupAdmin, StringEvaluationMode.EQUALS);
-            set.add(uae2);
-        }
-
-        Assert.isTrue(set.size() > 0, "Properties that define admins aren't set in properties, there are needed to define an Admin user" +
-                ", name should be 'app.admins.userName' or 'app.admins.groupName'");
-
-
-        OperatorEvaluation admins = new OperatorEvaluation(OperatorType.OR, set);
-        defs.setAdmins(admins);
-
-        final String groupUsers = esupPublisherProperties.getUsers().getGroupName();
-        UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf", groupUsers, StringEvaluationMode.MATCH);
-        defs.setUsers(umae);
-
-        Assert.isTrue(!groupUsers.isEmpty(), "Properties that define users aren't set in properties, there are needed to define all access users" +
-                ", name should be 'app.users.groupName'");
-        return defs;
-    }
 
     @Bean
     public ServiceProperties serviceProperties() {
@@ -254,8 +208,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return singleSignOutFilter;
     }
 
-    @Inject
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(casAuthenticationProvider());
     }
     @Bean

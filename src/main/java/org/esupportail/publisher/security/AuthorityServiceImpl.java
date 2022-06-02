@@ -21,19 +21,18 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import lombok.Getter;
-
 import org.esupportail.publisher.service.bean.IAuthoritiesDefinition;
 import org.esupportail.publisher.service.evaluators.IEvaluation;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import lombok.Getter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Lists;
 
 @Service
 public class AuthorityServiceImpl implements IAuthorityService {
