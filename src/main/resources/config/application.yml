@@ -4,10 +4,11 @@
 spring:
   config:
     activate:
-      on-profile: '!api-docs'
+      on-profile: 'no-api-docs'
 springdoc:
   api-docs:
     enabled: false
+  show-actuator: false
 ---
 spring:
   application:
@@ -15,9 +16,9 @@ spring:
   profiles:
     active: #spring.profiles.active#
     group:
-      test: fast,ldapgrp,!api-docs,test
-      dev: dev,ldapgrp,api-docs
-      prod: prod,ldapgrp
+      test: fast,ldapgrp,no-api-docs,test
+      dev: dev,ldapgrp
+      prod: prod,ldapgrp,no-api-docs
       ci: dev,ldapgrp,test
   jmx:
     enabled: false

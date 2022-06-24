@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Optional;
 
+import org.esupportail.publisher.config.Constants;
 import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.config.apidoc.customizer.JHipsterOpenApiCustomizer;
 
@@ -32,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.core.GroupedOpenApi;
 import org.springdoc.core.GroupedOpenApi.Builder;
-import org.springdoc.core.SpringDocConfigProperties;
 import org.springdoc.core.customizers.ActuatorOpenApiCustomizer;
 import org.springdoc.core.customizers.ActuatorOperationCustomizer;
 import org.springdoc.core.customizers.OpenApiCustomiser;
@@ -44,6 +44,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * OpenApi Groups configuration.
@@ -52,6 +53,7 @@ import org.springframework.context.annotation.Configuration;
  * In that case, you can use the "no-api-docs" Spring profile, so that this bean is ignored.
  */
 @Configuration
+@Profile(Constants.SPRING_PROFILE_API_DOCS)
 public class JHipsterSpringDocGroupsConfiguration {
 
     public static final String MANAGEMENT_GROUP_NAME = "management";
@@ -97,18 +99,17 @@ public class JHipsterSpringDocGroupsConfiguration {
     public GroupedOpenApi openAPIDefaultGroupedOpenAPI(
         List<OpenApiCustomiser> openApiCustomisers,
         List<OperationCustomizer> operationCustomizers,
-        @Qualifier("apiFirstGroupedOpenAPI") Optional<GroupedOpenApi> apiFirstGroupedOpenAPI,
-        SpringDocConfigProperties springDocConfigProperties
+        @Qualifier("apiFirstGroupedOpenAPI") Optional<GroupedOpenApi> apiFirstGroupedOpenAPI
     ) {
         log.debug("Initializing JHipster OpenApi default group");
         Builder builder = GroupedOpenApi.builder()
             .group(DEFAULT_GROUP_NAME)
             .pathsToMatch(properties.getApiDocs().getDefaultIncludePattern());
         openApiCustomisers.stream()
-            .filter(customiser -> !(customiser instanceof ActuatorOpenApiCustomizer))
+            .filter(customizer -> !(customizer instanceof ActuatorOpenApiCustomizer))
             .forEach(builder::addOpenApiCustomiser);
         operationCustomizers.stream()
-            .filter(customiser -> !(customiser instanceof ActuatorOperationCustomizer))
+            .filter(customizer -> !(customizer instanceof ActuatorOperationCustomizer))
             .forEach(builder::addOperationCustomizer);
         apiFirstGroupedOpenAPI.map(GroupedOpenApi::getPackagesToScan)
             .ifPresent(packagesToScan -> packagesToScan.forEach(builder::packagesToExclude));

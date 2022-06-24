@@ -89,6 +89,7 @@ public class Application {
 		app.setBannerMode(Mode.OFF);
 
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
+		log.info("Properties from command line " + Arrays.toString(args));
 
 		// Check if the selected profile has been set as argument.
 		// if not the development profile will be added
@@ -109,7 +110,6 @@ public class Application {
 	private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
             !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
-
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
 	}
