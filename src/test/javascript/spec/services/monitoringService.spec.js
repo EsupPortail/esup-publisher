@@ -18,7 +18,7 @@ describe('MonitoringService.js tests', () => {
 
     MonitoringService.getMetrics().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('metrics/metrics')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('management/jhimetrics')
       expect(value).toStrictEqual(response)
       done()
     })
@@ -33,7 +33,7 @@ describe('MonitoringService.js tests', () => {
 
     MonitoringService.checkHealth().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('health')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('management/health')
       expect(value).toStrictEqual(response)
       done()
     })
@@ -48,7 +48,7 @@ describe('MonitoringService.js tests', () => {
 
     MonitoringService.threadDump().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('threaddump')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('management/threaddump')
       expect(value).toStrictEqual(response)
       done()
     })

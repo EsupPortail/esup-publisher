@@ -21,7 +21,7 @@ describe('ConfigurationService.js tests', () => {
 
     ConfigurationService.get().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('configprops')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('management/configprops')
       expect(value).toStrictEqual(['val1', 'val2'])
       done()
     })
@@ -36,7 +36,7 @@ describe('ConfigurationService.js tests', () => {
 
     ConfigurationService.getEnv().then(value => {
       expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('env')
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith('management/env')
       expect(value).toStrictEqual(response)
       done()
     })
