@@ -240,20 +240,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new HasIpRangeExpressionCreator(esupPublisherProperties.getMetrics().getPrometeusAuthorizedAcess().getIpRanges());
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web ->
-                web
-                        .ignoring()
-                        .antMatchers(HttpMethod.OPTIONS, "/**")
-                        .antMatchers("/app/**/*.{js,html}")
-                        .antMatchers("/i18n/**")
-                        .antMatchers("/content/**")
-                        .antMatchers("/h2-console/**")
-                        .antMatchers("/swagger-ui/**")
-                        .antMatchers("/test/**");
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
@@ -281,6 +267,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .disable()
             .and()
             .authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .antMatchers("/app/**/*.{js,html}").permitAll()
+            .antMatchers("/i18n/**").permitAll()
+            .antMatchers("/content/**").permitAll()
+            .antMatchers("/h2-console/**").permitAll()
+            .antMatchers("/swagger-ui/**").permitAll()
+            .antMatchers("/test/**").permitAll()
             .antMatchers("/app/**").authenticated()
             .antMatchers("/api/register").denyAll()
             .antMatchers("/api/activate").denyAll()
@@ -309,8 +302,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/view/**").permitAll()
             .antMatchers("/css/**").permitAll()
             .antMatchers("/images/**").permitAll()
+            .antMatchers("/files/**").permitAll()
             .antMatchers("/fonts/**").permitAll()
             .antMatchers("/public/**").permitAll()
+            .antMatchers("/static/**").permitAll()
             .antMatchers("/ui/**").permitAll()
             .anyRequest().denyAll();
         http
