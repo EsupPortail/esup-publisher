@@ -2,7 +2,7 @@ import FetchWrapper from '../util/FetchWrapper'
 
 class ConfigurationService {
   get () {
-    return FetchWrapper.getJson('configprops').then(response => {
+    return FetchWrapper.getJson('management/configprops').then(response => {
       var properties = []
       Object.values(response.data).forEach(data => {
         properties.push(data)
@@ -12,7 +12,7 @@ class ConfigurationService {
   }
 
   getEnv () {
-    return FetchWrapper.getJson('env')
+    return FetchWrapper.getJson('management/env')
   }
 }
 

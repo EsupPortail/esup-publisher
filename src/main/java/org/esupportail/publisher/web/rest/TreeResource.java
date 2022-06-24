@@ -30,7 +30,6 @@ import org.esupportail.publisher.web.rest.dto.SearchSubjectFormDTO;
 import org.esupportail.publisher.web.rest.dto.TreeJS;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 
-import com.codahale.metrics.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -68,7 +67,6 @@ public class TreeResource {
      * GET /nodes -> get root nodes
      */
     @RequestMapping(value = "/contexts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     public ResponseEntity<List<TreeJS>> getContexts(@RequestParam("search") String id/*, @RequestParam(value="filtered", required = false) Boolean filtered*/) {
         log.debug("REST request to get tree of Context from id {}", id);
         List<TreeJS> nodes = null;
@@ -97,7 +95,6 @@ public class TreeResource {
 //    @RequestMapping(value = "/groups/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
 //        + " && hasPermission(#ctxId,  #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-//    @Timed
 //    public ResponseEntity<List<TreeJS>> getGroups(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
 //                                                  @RequestParam(value = "subctxs", required = false) List<ContextKey> ctxs, @RequestParam("id") String id) {
 //        log.debug("REST request to get tree of groups from id {}, ctx Key {}, other ctx Keys {}", id, new ContextKey(ctxId, ctxType), ctxs);
@@ -118,7 +115,6 @@ public class TreeResource {
     @RequestMapping(value = "/groups", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#form.context.keyId, #form.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<List<TreeJS>> getGroupsBis(@RequestBody SearchSubjectFormDTO form) {
         log.debug("REST request to get tree of groups from {}", form);
         List<TreeJS> nodes = null;
@@ -139,7 +135,6 @@ public class TreeResource {
     @RequestMapping(value = "/groups/usermembers", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER)
     //TODO checking rights of gettings members of the passed group
-    @Timed
     public ResponseEntity<List<UserDTO>> getUserOfGroup(@RequestParam("id") String id) {
         log.debug("REST request to get user members of groups from id {}", id);
         return new ResponseEntity<>(groupService.getUserMembers(id), HttpStatus.OK);
@@ -151,7 +146,6 @@ public class TreeResource {
     /*@RequestMapping(value = "/tree/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#ctxId, #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<List<TreeJS>> getTree(@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") String ctxType, HttpServletResponse response) {
         log.debug("REST request to get Childs of Ctx type: {} and id: {}", ctxType, ctxId);
 

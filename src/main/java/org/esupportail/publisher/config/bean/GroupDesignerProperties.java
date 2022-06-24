@@ -16,13 +16,16 @@
 package org.esupportail.publisher.config.bean;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 @Data
+@Validated
 public class GroupDesignerProperties {
 
     @NotNull
@@ -32,4 +35,14 @@ public class GroupDesignerProperties {
     @NotEmpty
     private List<String> groupToAttachEndPattern;
 
+    @Override
+    public String toString() {
+        return "{\n\"GroupDesignerProperties\":{"
+                + "\n \"groupRootPattern\":\"" + groupRootPattern + "\""
+                + ",\n \"groupAttachEndMatch\":\"" + groupAttachEndMatch + "\""
+                + ",\n \"groupToAttachEndPattern\":" + groupToAttachEndPattern.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining("\",\"", "[\"", "\"]"))
+                + "\n}\n}";
+    }
 }

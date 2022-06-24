@@ -15,27 +15,28 @@
  */
 package org.esupportail.publisher.domain.enums;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Sets;
+import java.util.Arrays;
+import java.util.Set;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.Arrays;
-import java.util.Set;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 16 juin 2014
  */
 @Converter
-public class StringListConverter implements AttributeConverter<Set, String> {
+public class StringListConverter implements AttributeConverter<Set<?>, String> {
 
     @Override
-    public String convertToDatabaseColumn(Set list) {
+    public String convertToDatabaseColumn(Set<?> list) {
         return Joiner.on(',').join(list);
     }
 
     @Override
-    public Set convertToEntityAttribute(String joined) {
+    public Set<?> convertToEntityAttribute(String joined) {
         return Sets.newHashSet(Arrays.asList(joined.split(",")).iterator());
     }
 }

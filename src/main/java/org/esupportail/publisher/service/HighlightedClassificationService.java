@@ -17,38 +17,41 @@ package org.esupportail.publisher.service;
 
 import javax.annotation.PostConstruct;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.service.bean.HighlightedClassification;
-import org.springframework.beans.factory.annotation.Value;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /**
  * Created by jgribonvald on 12/04/17.
  */
-@Data
 @Service
 @Slf4j
 public class HighlightedClassificationService {
 
-    @Value("${app.service.highlightClassification.name}")
-    private String name;
+    private ESUPPublisherProperties esupPublisherProperties;
 
-    @Value("${app.service.highlightClassification.description}")
-    private String description;
-
-    @Value("${app.service.highlightClassification.color}")
-    private String color;
-
+    @Getter
     private HighlightedClassification classification;
+
+    public HighlightedClassificationService(ESUPPublisherProperties esupPublisherProperties) {
+        this.esupPublisherProperties = esupPublisherProperties;
+        this.classification = new HighlightedClassification(
+                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getName(),
+                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getColor(),
+                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getDescription()
+        );
+    }
 
     @PostConstruct
     public void init() {
-        Assert.notNull(name, "The highlighted classification name property `app.service.highlightClassification.name` is not defined");
-        Assert.notNull(description, "The highlighted classification description property `app.service.highlightClassification.description` is not defined");
-        Assert.notNull(color, "The highlighted classification color property `app.service.highlightClassification.color` is not defined");
-        classification = new HighlightedClassification(name, description, color);
+        Assert.notNull(classification.getName(), "The highlighted classification name property `app.service.highlight-classification.name` is not defined");
+        Assert.notNull(classification.getDescription(), "The highlighted classification description property `app.service.highlight-classification.description` is not defined");
+        Assert.notNull(classification.getColor(), "The highlighted classification color property `app.service.highlight-classification.color` is not defined");
+
         log.debug("Contructed {}", classification);
 
         Assert.notNull(classification, "The constructed Highlighted Classification should not be null!");

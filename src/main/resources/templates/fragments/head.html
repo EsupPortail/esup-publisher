@@ -8,6 +8,10 @@
     <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet"/>
     <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" href="/commun/font-awesome/6.1.1/css/all.min.css" rel="stylesheet"/>
     <link href="../static/css/item.css" th:href="@{/css/item.css}" rel="stylesheet" />
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<!--    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css' />-->
+<!--    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />-->
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" href="https://fonts.googleapis.com/css?family=Roboto+Slab" rel="stylesheet" type='text/css' />
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'dev')}" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" type='text/css' />
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" href="/commun/fonts/noc/RobotoSlab.css" rel="stylesheet" type='text/css'  />
+    <link th:if="${#arrays.contains(@environment.getActiveProfiles(),'prod')}" href="/commun/fonts/noc/RobotoCondensed.css" rel="stylesheet" type='text/css'  />
 </head>

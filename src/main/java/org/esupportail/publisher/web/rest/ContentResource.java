@@ -19,7 +19,6 @@ import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
-import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.bean.UserSearchs;
@@ -63,7 +62,6 @@ public class ContentResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public ResponseEntity<?> create(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to save ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
             content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFiles());
@@ -81,7 +79,6 @@ public class ContentResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtx(authentication, #content.item.contextKey)")
-    @Timed
     public ResponseEntity<?> update(@RequestBody ContentDTO content) throws URISyntaxException {
         log.debug("REST request to update ContentDTO : classifications : {} \n item : {} \n targets : {} \n linkedFiles : {}",
             content.getClassifications(), content.getItem(), content.getTargets(), content.getLinkedFiles());
@@ -96,7 +93,6 @@ public class ContentResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_CONTRIBUTOR + "')")
-    @Timed
     public ResponseEntity<ContentDTO> get(@PathVariable Long id) {
         log.debug("REST request to get ContentDTO : {}", id);
         ContentDTO content = null;
@@ -120,7 +116,6 @@ public class ContentResource {
         + " && @permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_ITEM + "')")
     //+ " && (hasPermission(#item, '" + SecurityConstants.PERM_EDITOR + "') || #item.createdBy.login.equals(principal.username))")
     //+ " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_EDITOR + "')")
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Content : {}", id);
         contentService.deleteContent(id);

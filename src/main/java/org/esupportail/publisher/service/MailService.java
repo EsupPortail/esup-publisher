@@ -15,23 +15,23 @@
  */
 package org.esupportail.publisher.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+
+import javax.mail.internet.MimeMessage;
+
+import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.domain.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 
 /**
  * Service for sending e-mails.
@@ -45,26 +45,23 @@ public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
-    @Inject
-    private Environment env;
+    private static final String USER = "user";
 
-    @Inject
-    private JavaMailSenderImpl javaMailSender;
+    private static final String BASE_URL = "baseUrl";
 
-    @Inject
-    private MessageSource messageSource;
-
-    @Inject
-    private SpringTemplateEngine templateEngine;
+    private final ESUPPublisherProperties esupPublisherProperties;
+    private final JavaMailSenderImpl javaMailSender;
+    private final MessageSource messageSource;
+    private final SpringTemplateEngine templateEngine;
 
     /**
      * System default email address that sends the e-mails.
      */
-    private String from;
-
-    @PostConstruct
-    public void init() {
-        this.from = env.getProperty("spring.mail.from");
+    public MailService(ESUPPublisherProperties esupPublisherProperties, JavaMailSenderImpl javaMailSender, MessageSource messageSource, SpringTemplateEngine templateEngine) {
+        this.esupPublisherProperties = esupPublisherProperties;
+        this.javaMailSender = javaMailSender;
+        this.messageSource = messageSource;
+        this.templateEngine = templateEngine;
     }
 
     @Async
@@ -75,27 +72,48 @@ public class MailService {
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.displayName());
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
             message.setTo(to);
-            message.setFrom(from);
+            message.setFrom(esupPublisherProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'", to);
         } catch (Exception e) {
-            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e);
         }
     }
 
     @Async
-    public void sendActivationEmail(User user, String baseUrl) {
-        log.debug("Sending activation e-mail to '{}'", user.getEmail());
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
-        context.setVariable("user", user);
-        context.setVariable("baseUrl", baseUrl);
-        String content = templateEngine.process("activationEmail", context);
-        String subject = messageSource.getMessage("email.activation.title", null, locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, esupPublisherProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendActivationEmail(User user) {
+        log.debug("Sending activation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendCreationEmail(User user) {
+        log.debug("Sending creation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+    }
+
+    @Async
+    public void sendPasswordResetMail(User user) {
+        log.debug("Sending password reset email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 }

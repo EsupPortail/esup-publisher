@@ -112,12 +112,8 @@ public class RememberCasAuthenticationProvider implements AuthenticationProvider
                 "Failed to provide a CAS service ticket to validate"));
         }
 
-        boolean stateless = false;
-
-        if (authentication instanceof UsernamePasswordAuthenticationToken
-            && CasAuthenticationFilter.CAS_STATELESS_IDENTIFIER.equals(authentication.getPrincipal())) {
-            stateless = true;
-        }
+        boolean stateless = authentication instanceof UsernamePasswordAuthenticationToken
+                && CasAuthenticationFilter.CAS_STATELESS_IDENTIFIER.equals(authentication.getPrincipal());
 
         CasAuthenticationToken result = null;
 

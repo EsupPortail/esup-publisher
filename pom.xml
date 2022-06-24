@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.12</version>
+        <version>2.6.7</version>
         <relativePath/>
     </parent>
 
@@ -35,29 +35,35 @@
     </distributionManagement>
 
     <properties>
-        <awaitility.version>1.7.0</awaitility.version>
-        <check.java.version>1.8</check.java.version>
+
+        <check.java.version>11</check.java.version>
         <eclipse-maven-plugin.version>2.10</eclipse-maven-plugin.version>
         <gatling-maven-plugin.version>4.1.3</gatling-maven-plugin.version>
         <gatling.version>3.7.6</gatling.version>
+        <guava.version>31.1-jre</guava.version>
+        <jackson-databind-nullable.version>0.2.2</jackson-databind-nullable.version>
+        <java.version>11</java.version>
         <javax.inject.version>1</javax.inject.version>
-        <liquibase-hibernate5.version>4.0.0</liquibase-hibernate5.version>
+        <liquibase-hibernate5.version>${liquibase.version}</liquibase-hibernate5.version>
         <liquibase-plugin.version>${liquibase.version}</liquibase-plugin.version>
-        <maven.compiler.target>11</maven.compiler.target>
+        <liquibase.version>4.6.1</liquibase.version>
         <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>3.0.1</maven-sortpom-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-        <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
-        <metrics-spring.version>3.1.3</metrics-spring.version>
+        <node.version>v16.13.0</node.version>
+        <npm.version>8.6.0</npm.version>
+        <openapi-generator-maven-plugin.version>5.4.0</openapi-generator-maven-plugin.version>
         <problem-spring-web.version>${problem-spring.version}</problem-spring-web.version>
         <problem-spring.version>0.27.0</problem-spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
         <shedlock.version>4.33.0</shedlock.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <spring-cloud-connector.version>2.0.7.RELEASE</spring-cloud-connector.version>
+        <springdoc-api.version>1.6.8</springdoc-api.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
 
@@ -102,38 +108,19 @@
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.seancfoley</groupId>
+            <artifactId>ipaddress</artifactId>
+            <version>5.3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <!--            <scope>test</scope>-->
-        </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.jayway.awaitility</groupId>-->
-        <!--            <artifactId>awaitility</artifactId>-->
-        <!--            <version>${awaitility.version}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version>${swagger-springmvc.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.module</groupId>
-                    <artifactId>jackson-module-scala_2.10</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scalap</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-compiler</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>joda-time</groupId>
-                    <artifactId>joda-time</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>test</scope>
         </dependency>
         <!--custom -->
         <dependency>
@@ -155,74 +142,16 @@
             <version>1.18.0</version>
         </dependency>
         <dependency>
-            <groupId>com.ryantenney.metrics</groupId>
-            <artifactId>metrics-spring</artifactId>
-            <version>${metrics-spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.ippon.spark.metrics</groupId>
-            <artifactId>metrics-spark-reporter</artifactId>
-            <version>${metrics-spark-reporter.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>joda-time</groupId>
-                    <artifactId>joda-time</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-annotation</artifactId>
-            <version>${dropwizard-metrics.version}</version>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-graphite</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-healthchecks</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-jcache</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-jmx</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-json</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-jvm</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-servlet</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-servlets</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <version>${gatling.version}</version>
-            <scope>test</scope>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -239,6 +168,11 @@
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-spring</artifactId>
             <version>${shedlock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -265,6 +199,10 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jcache</artifactId>
         </dependency>
         <dependency>
@@ -276,6 +214,10 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -291,18 +233,39 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-autoconfigure</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-loader-tools</artifactId>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-data-rest</artifactId>
+            <version>${springdoc-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webmvc-core</artifactId>
+            <version>${springdoc-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-loader-tools</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -318,10 +281,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -357,6 +316,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.ldap</groupId>
@@ -461,9 +424,51 @@
                                         <ignore/>
                                     </action>
                                 </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.openapitools</groupId>
+                                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                                        <versionRange>${openapi-generator-maven-plugin.version}</versionRange>
+                                        <goals>
+                                            <goal>generate</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <!--
+                        Plugin that provides API-first development using openapi-generator to
+                        generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
+                    -->
+                    <groupId>org.openapitools</groupId>
+                    <artifactId>openapi-generator-maven-plugin</artifactId>
+                    <version>${openapi-generator-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                            <configuration>
+                                <inputSpec>${project.basedir}/src/main/resources/swagger/api.yml</inputSpec>
+                                <generatorName>spring</generatorName>
+                                <apiPackage>org.esupportail.publisher.web.rest</apiPackage>
+                                <modelPackage>org.esupportail.publisher.service.rest.dto</modelPackage>
+                                <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                                <importMappings>Problem=org.zalando.problem.Problem</importMappings>
+                                <skipValidateSpec>false</skipValidateSpec>
+                                <configOptions>
+                                    <delegatePattern>true</delegatePattern>
+                                    <title>esup-publisher</title>
+                                </configOptions>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -563,6 +568,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <compilerArgs>
                         <!--<arg>-verbose</arg>-->
                         <arg>-Xlint:all</arg>
@@ -712,8 +719,8 @@
             </plugin>
             <plugin>
                 <groupId>org.jasig.maven</groupId>
-                <artifactId>maven-notice-plugin</artifactId>
-                <version>1.1.0</version>
+                <artifactId>notice-maven-plugin</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
                 <configuration>
                     <noticeTemplate>etc/NOTICE.template</noticeTemplate>
                     <licenseMapping>
@@ -829,6 +836,14 @@
             <build>
                 <plugins>
                     <plugin>
+                        <!--
+                            Plugin that provides API-first development using openapi-generator to
+                            generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
+                        -->
+                        <groupId>org.openapitools</groupId>
+                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
@@ -842,7 +857,7 @@
         <profile>
             <id>ci</id>
             <properties>
-                <spring.profiles.active>test</spring.profiles.active>
+                <spring.profiles.active>test,!api-docs</spring.profiles.active>
             </properties>
             <dependencies>
                 <dependency>
@@ -873,7 +888,7 @@
         <profile>
             <id>test</id>
             <properties>
-                <spring.profiles.active>test</spring.profiles.active>
+                <spring.profiles.active>test,!api-docs</spring.profiles.active>
             </properties>
             <dependencies>
                 <dependency>
@@ -927,6 +942,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
                                     <nodeVersion>v16.13.0</nodeVersion>
                                 </configuration>
                             </execution>

@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Reader;
@@ -55,7 +54,6 @@ public class ReaderResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody Reader reader) throws URISyntaxException {
         log.debug("REST request to save Reader : {}", reader);
         if (reader.getId() != null) {
@@ -72,7 +70,6 @@ public class ReaderResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody Reader reader) throws URISyntaxException {
         log.debug("REST request to update Reader : {}", reader);
         if (reader.getId() == null) {
@@ -89,7 +86,6 @@ public class ReaderResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public List<Reader> getAll() {
         log.debug("REST request to get all Readers");
         return readerRepository.findAll();
@@ -102,7 +98,6 @@ public class ReaderResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public ResponseEntity<Reader> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Reader : {}", id);
         Optional<Reader> optionalReader =  readerRepository.findById(id);
@@ -120,7 +115,6 @@ public class ReaderResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Reader : {}", id);
         readerRepository.deleteById(id);

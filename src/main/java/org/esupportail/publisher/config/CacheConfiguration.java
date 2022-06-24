@@ -17,44 +17,26 @@ package org.esupportail.publisher.config;
 
 import java.time.Duration;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.jcache.JCacheGaugeSet;
-import org.ehcache.config.builders.*;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.jsr107.Eh107Configuration;
-
 import org.hibernate.cache.jcache.ConfigSettings;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
-import org.springframework.util.Assert;
 
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
-
-    private Environment env;
-
-    @Autowired(required = false)
-    private MetricRegistry metricRegistry;
-
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
-    public CacheConfiguration(Environment env) throws IllegalStateException {
-        Assert.notNull(env, "Environnement is null !");
-        this.env = env;
-        long defaultNbEntries = env.getRequiredProperty("cache.ehcache.maxEntries", long.class);
-        long defaultTTL = env.getRequiredProperty("cache.ehcache.timeToLiveSeconds", long.class);
+    public CacheConfiguration(ESUPPublisherProperties esupPublisherProperties) throws IllegalStateException {
+        long defaultNbEntries = esupPublisherProperties.getCache().getMaxEntries();
+        long defaultTTL = esupPublisherProperties.getCache().getTimeToLiveSeconds();
         jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
                 ResourcePoolsBuilder.heap(defaultNbEntries))
@@ -92,16 +74,13 @@ public class CacheConfiguration {
             createCache(cm, org.esupportail.publisher.domain.Subscriber.class.getName());
             createCache(cm, "feed");
             //createCache(cm, org.esupportail.publisher.domain.AbstractClassification.class.getName() + ".books");
-            if (!env.acceptsProfiles(Profiles.of(Constants.SPRING_PROFILE_FAST))) {
-                this.metricRegistry.register("jcache.statistics", new JCacheGaugeSet());
-            }
         };
     }
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
         if (cache != null) {
-            cm.destroyCache(cacheName);
+            cache.clear();
         }
         cm.createCache(cacheName, jcacheConfiguration);
     }

@@ -27,67 +27,76 @@ import org.springframework.core.task.AsyncTaskExecutor;
 public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
         InitializingBean, DisposableBean {
 
+    static final String EXCEPTION_MESSAGE = "Caught async exception";
+
     private final Logger log = LoggerFactory.getLogger(ExceptionHandlingAsyncTaskExecutor.class);
 
     private final AsyncTaskExecutor executor;
 
+    /**
+     * <p>Constructor for ExceptionHandlingAsyncTaskExecutor.</p>
+     *
+     * @param executor a {@link org.springframework.core.task.AsyncTaskExecutor} object.
+     */
     public ExceptionHandlingAsyncTaskExecutor(AsyncTaskExecutor executor) {
         this.executor = executor;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void execute(Runnable task) {
-        executor.execute(task);
+        executor.execute(createWrappedRunnable(task));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void execute(Runnable task, long startTimeout) {
         executor.execute(createWrappedRunnable(task), startTimeout);
     }
 
     private <T> Callable<T> createCallable(final Callable<T> task) {
-        return new Callable<T>() {
-
-            @Override
-            public T call() throws Exception {
-                try {
-                    return task.call();
-                } catch (Exception e) {
-                    handle(e);
-                    throw e;
-                }
+        return () -> {
+            try {
+                return task.call();
+            } catch (Exception e) {
+                handle(e);
+                throw e;
             }
         };
     }
 
     private Runnable createWrappedRunnable(final Runnable task) {
-        return new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    task.run();
-                } catch (Exception e) {
-                    handle(e);
-                }
+        return () -> {
+            try {
+                task.run();
+            } catch (Exception e) {
+                handle(e);
             }
         };
     }
 
+    /**
+     * <p>handle.</p>
+     *
+     * @param e a {@link java.lang.Exception} object.
+     */
     protected void handle(Exception e) {
-        log.error("Caught async exception", e);
+        log.error(EXCEPTION_MESSAGE, e);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Future<?> submit(Runnable task) {
         return executor.submit(createWrappedRunnable(task));
     }
 
+    /** {@inheritDoc} */
     @Override
     public <T> Future<T> submit(Callable<T> task) {
         return executor.submit(createCallable(task));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void destroy() throws Exception {
         if (executor instanceof DisposableBean) {
@@ -96,6 +105,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void afterPropertiesSet() throws Exception {
         if (executor instanceof InitializingBean) {

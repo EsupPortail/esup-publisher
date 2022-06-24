@@ -22,10 +22,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.ContextKey;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
@@ -38,6 +35,9 @@ import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.SearchSubjectFormDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
+
+import com.google.common.collect.Lists;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -111,7 +111,6 @@ public class UserResource {
      * GET /users/attributes -> get the displayed user attributes.
      */
     @RequestMapping(value = "/users/attributes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public List<String> getShownUserAttributes(HttpServletResponse response) {
         log.debug("REST request to get List of user Attributes to show !");
@@ -122,7 +121,6 @@ public class UserResource {
      * GET /users/fnattributes -> get the functional user attributes.
      */
     @RequestMapping(value = "/users/fnattributes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public List<String> getFunctionalUserAttributes(HttpServletResponse response) {
         log.debug("REST request to get List of functional user Attributes !");
@@ -133,7 +131,6 @@ public class UserResource {
      * GET /users/perm/edit -> get the permission of editing a context.
      */
     @RequestMapping(value = "/users/perm/edit", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanEditCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user has edit permission on context !");
@@ -145,7 +142,6 @@ public class UserResource {
      * GET /users/perm/editPerms -> get the permission of editing permisions of a context.
      */
     @RequestMapping(value = "/users/perm/editPerms", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanEditCtxPerms(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user has edit rights permission on context !");
@@ -157,7 +153,6 @@ public class UserResource {
      * GET /users/perm/editTargets -> get the permission of editing permisions of a context.
      */
     @RequestMapping(value = "/users/perm/editTargets", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanEditCtxTargets(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user has edit rights permission on context !");
@@ -169,7 +164,6 @@ public class UserResource {
      * GET /users/perm/delete -> get the permission of deleting a context.
      */
     @RequestMapping(value = "/users/perm/delete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanDeleteCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user has delete rights permission on context !");
@@ -180,7 +174,6 @@ public class UserResource {
      * GET /users/perm/createin -> get the permission of creating in a context.
      */
     @RequestMapping(value = "/users/perm/createin", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanCreateInCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user has create rights permission on context !");
@@ -189,7 +182,6 @@ public class UserResource {
     }
 
     @RequestMapping(value = "/users/perm/moderate", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userModerateSomething() {
         log.debug("REST request to get if user can moderate something !");
@@ -201,7 +193,6 @@ public class UserResource {
      * GET /users/perm/highlight -> get the permission of can highlight an item in a context.
      */
     @RequestMapping(value = "/users/perm/highlight", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @RolesAllowed(AuthoritiesConstants.USER)
     public ResponseEntity<ValueResource> userCanHighlightInCtx(@RequestParam("keyId") Long ctxId, @RequestParam("keyType") ContextType ctxType) {
         log.debug("REST request to get if user can highlight in context !");
@@ -230,7 +221,6 @@ public class UserResource {
      * POST /users/search/:param -> get the "login" user.
      */
     @RequestMapping(value = "/users/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#form.context.keyId, #form.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
     public ResponseEntity<List<UserDTO>> searchUsersBis(@RequestBody SearchSubjectFormDTO form) {

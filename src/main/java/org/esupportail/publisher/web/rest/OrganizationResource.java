@@ -47,7 +47,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST controller for managing Organization.
@@ -73,7 +72,6 @@ public class OrganizationResource {
 	 * POST /organizations -> Create a new organization.
 	 */
 	@RequestMapping(value = "/organizations", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
 	public ResponseEntity<Void> create(@RequestBody Organization organization) throws URISyntaxException {
 		log.debug("REST request to save Organization : {}", organization);
@@ -90,7 +88,6 @@ public class OrganizationResource {
 	 * PUT  /organizations -> Updates an existing organization.
 	 */
 	@RequestMapping(value = "/organizations", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#organization, '" + SecurityConstants.PERM_MANAGER + "')")
 	public ResponseEntity<Void> update(@RequestBody Organization organization) throws URISyntaxException {
@@ -122,13 +119,11 @@ public class OrganizationResource {
 
 	// @RequestMapping(value = "/organizations/{id}", method =
 	// RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	// @Timed
 	// public void moveOrder(@PathVariable Long id, @RequestBody MoveDTO pos) {
 	// organizationService.doMove(id, pos.getPosition());
 	// }
 
 	@RequestMapping(value = "/organizations/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
 	public void moveOrder(@PathVariable Long id, @RequestParam int pos) {
 		organizationService.doMove(id, pos);
@@ -140,7 +135,6 @@ public class OrganizationResource {
 	@PreAuthorize(SecurityConstants.IS_ROLE_USER)
 	@PostFilter("hasPermission(filterObject, '" + SecurityConstants.PERM_LOOKOVER + "')")
 	@RequestMapping(value = "/organizations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public List<Organization> getAll() {
 		log.debug("REST request to get all Organizations");
 		return organizationRepository.findAll(sortByDisplayOrderAsc());
@@ -152,7 +146,6 @@ public class OrganizationResource {
 	//    @RequestMapping(value = "/organizations",
 	//            method = RequestMethod.GET,
 	//            produces = MediaType.APPLICATION_JSON_VALUE)
-	//    @Timed
 	//    public ResponseEntity<List<Organization>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
 	//                                  @RequestParam(value = "per_page", required = false) Integer limit)
 	//        throws URISyntaxException {
@@ -166,7 +159,6 @@ public class OrganizationResource {
 	 */
 	@PreAuthorize("hasPermission(#id, 'ORGANIZATION', '" + SecurityConstants.PERM_LOOKOVER + "')")
 	@RequestMapping(value = "/organizations/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public ResponseEntity<Organization> get(@PathVariable Long id) {
 		log.debug("REST request to get Organization : {}", id);
 		Optional<Organization> optionalOrganization =  organizationRepository.findById(id);
@@ -182,7 +174,6 @@ public class OrganizationResource {
 	 */
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
 	@RequestMapping(value = "/organizations/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Timed
 	public void delete(@PathVariable Long id) {
 		log.debug("REST request to delete Organization : {}", id);
 		organizationRepository.deleteById(id);

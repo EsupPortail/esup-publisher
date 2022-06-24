@@ -23,7 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 
 import org.esupportail.publisher.domain.Organization;
@@ -76,7 +75,6 @@ public class PermissionOnClassificationWithSubjectListResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-	@Timed
     public ResponseEntity<Void> create(@RequestBody PermissionOnClassificationWithSubjectList permission) throws URISyntaxException {
         log.debug("REST request to save permissionOnClassificationWithSubjectLists : {}", permission);
         if (permission.getId() != null) {
@@ -94,7 +92,6 @@ public class PermissionOnClassificationWithSubjectListResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxPerms(authentication, #permission.context)")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody PermissionOnClassificationWithSubjectList permission) throws URISyntaxException {
         log.debug("REST request to update permissionOnClassificationWithSubjectLists : {}", permission);
         if (permission.getId() == null) {
@@ -110,7 +107,6 @@ public class PermissionOnClassificationWithSubjectListResource {
 	@RequestMapping(value = "/permissionOnClassificationWithSubjectLists", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
     @PostFilter("hasPermission(filterObject.context.keyId, filterObject.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public List<PermissionOnClassificationWithSubjectList> getAll() {
 		log.debug("REST request to get all permissionOnClassificationWithSubjectLists");
 		return Lists.newArrayList(permissionRepository.findAll(PermissionPredicates.ofType(PermissionClass.CONTEXT_WITH_SUBJECTS, false)));
@@ -122,7 +118,6 @@ public class PermissionOnClassificationWithSubjectListResource {
     @RequestMapping(value = "/permissionOnClassificationWithSubjectLists/{ctx_type}/{ctx_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  #type, '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public List<PermissionOnClassificationWithSubjectList> getAllOf(@PathVariable("ctx_type") ContextType type, @PathVariable("ctx_id") Long id) {
         log.debug("REST request to get permissionOnClassificationWithSubjectLists : CtxKey [{}, {}]", type, id);
         return Lists.newArrayList(permissionRepository.findAll(PermissionPredicates.OnCtx(type, id, PermissionClass.CONTEXT_WITH_SUBJECTS, false)));
@@ -134,7 +129,6 @@ public class PermissionOnClassificationWithSubjectListResource {
 	@RequestMapping(value = "/permissionOnClassificationWithSubjectLists/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostAuthorize("hasPermission(returnObject.body.context.keyId, returnObject.body.context.keyType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public ResponseEntity<PermissionOnClassificationWithSubjectList> get(@PathVariable Long id,
 			HttpServletResponse response) {
 		log.debug("REST request to get permissionOnClassificationWithSubjectLists : {}", id);
@@ -152,7 +146,6 @@ public class PermissionOnClassificationWithSubjectListResource {
 	 */
 	@RequestMapping(value = "/permissionOnClassificationWithSubjectLists/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER )
-	@Timed
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete permissionOnClassificationWithSubjectLists : {}", id);
 		Optional<PermissionOnClassificationWithSubjectList> optionalPermission =  permissionRepository.findById(id);

@@ -2,15 +2,15 @@ import FetchWrapper from '../util/FetchWrapper'
 
 class MonitoringService {
   getMetrics () {
-    return FetchWrapper.getJson('metrics/metrics')
+    return FetchWrapper.getJson('management/jhimetrics')
   }
 
   checkHealth () {
-    return FetchWrapper.getJson('health')
+    return FetchWrapper.getJson('management/health')
   }
 
   threadDump () {
-    return FetchWrapper.getJson('threaddump')
+    return FetchWrapper.getJson('management/threaddump')
   }
 }
 

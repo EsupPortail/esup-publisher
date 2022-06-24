@@ -40,13 +40,13 @@ import lombok.extern.slf4j.Slf4j;
 public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
 
     @NotNull
-    private ExternalGroupHelper externalGroupHelper;
+    private final ExternalGroupHelper externalGroupHelper;
     @NotNull
-    private String groupAttachEndMatch;
+    private final String groupAttachEndMatch;
     @NotEmpty
-    private List<String> groupToAttachEndPattern;
+    private final List<String> groupToAttachEndPattern;
 
-    private Pattern patternGroupIntoAttach;
+    private final Pattern patternGroupIntoAttach;
 
     public LdapGroupAttachMemberDesignerImpl(@NotNull final ExternalGroupHelper externalGroupHelper, @NotNull final String groupRootPattern,
                                              @NotNull final String groupAttachEndMatch, @NotEmpty final List<String> groupToAttachEndPattern) {
@@ -62,13 +62,13 @@ public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
         Matcher profMatcher = patternGroupIntoAttach.matcher(group.getId());
         log.debug("Design for group id {} with matcher {}, and is matching {}", group.getId(), profMatcher.toString(), profMatcher.matches());
         if (profMatcher.matches()) {
-            String filter = "(|";
+            StringBuilder filter = new StringBuilder("(|");
             for (String endPattern: groupToAttachEndPattern) {
-                filter += "(" + externalGroupHelper.getGroupSearchAttribute() + "=" + group.getId().replaceFirst(groupAttachEndMatch, endPattern) + ")";
+                filter.append("(").append(externalGroupHelper.getGroupSearchAttribute()).append("=").append(group.getId().replaceFirst(groupAttachEndMatch, endPattern)).append(")");
             }
-            filter += ")";
-            log.debug(" ldap filter that will be used : {}", filter);
-            final List<IExternalGroup> members = externalGroupDao.getGroupsWithFilter(filter, null, false);
+            filter.append(")");
+            log.debug(" ldap filter that will be used : {}", filter.toString());
+            final List<IExternalGroup> members = externalGroupDao.getGroupsWithFilter(filter.toString(), null, false);
             if (members!=null) {
                 for (IExternalGroup externalGroup : members) {
                     log.debug("Designer adding to {} the member {}", group.getId(),externalGroup.getId());

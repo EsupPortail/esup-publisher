@@ -496,6 +496,11 @@
         <license>The JSON License</license>
     </artifact>
     <artifact>
+        <groupId>org.openapitools</groupId>
+        <artifactId>jackson-databind-nullable</artifactId>
+        <license>Apache License, Version 2.0</license>
+    </artifact>
+    <artifact>
         <groupId>org.opensaml</groupId>
         <artifactId>opensaml</artifactId>
         <license>Apache License, Version 2.0</license>

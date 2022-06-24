@@ -47,7 +47,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
@@ -77,7 +76,6 @@ public class PublisherResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody Publisher publisher) throws URISyntaxException {
         log.debug("REST request to save Publisher : {}", publisher);
         if (publisher.getId() != null) {
@@ -97,7 +95,6 @@ public class PublisherResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#publisher, '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody Publisher publisher) throws URISyntaxException {
         log.debug("REST request to update Publisher : {}", publisher);
         PermissionType permType = permissionService.getRoleOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), publisher.getContextKey());
@@ -135,7 +132,6 @@ public class PublisherResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#action.objectId, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public ResponseEntity<Void> doChange(@RequestBody ActionDTO action) {
     	Optional<Publisher> optionalPublisher =  publisherRepository.findById(action.getObjectId());
     	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
@@ -162,7 +158,6 @@ public class PublisherResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostFilter("hasPermission(filterObject, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public List<Publisher> getAll(@RequestParam(value = "organizationId" , required = false) Long organizationId,
                                   @RequestParam(value = "used" , required = false) Boolean used) {
         log.debug("REST request to get all Publishers");
@@ -187,7 +182,6 @@ public class PublisherResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<Publisher> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Publisher : {}", id);
         Optional<Publisher> optionalPublisher =  publisherRepository.findById(id);
@@ -207,7 +201,6 @@ public class PublisherResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
     //@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
     //    + " && hasPermission(#id, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_MANAGER + "')")
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Publisher : {}", id);
         publisherRepository.deleteById(id);

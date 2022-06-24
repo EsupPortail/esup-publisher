@@ -18,8 +18,9 @@ package org.esupportail.publisher.service.factories.impl;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
+import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractFeed;
 import org.esupportail.publisher.domain.Publisher;
@@ -29,23 +30,34 @@ import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.rest.vo.Category;
 import org.esupportail.publisher.web.rest.vo.SourceProfile;
-import org.springframework.beans.factory.annotation.Value;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by jgribonvald on 06/06/16.
  */
 @Component
+@Slf4j
 public class CategoryFactoryImpl implements CategoryFactory {
 
-    @Value("${app.service.defaultTTL:3600}")
+
     private int defaultTTL;
 
-    @Value("${app.service.defaultTimeout:5000}")
     private int defaultTimeout;
 
-    @Inject
+    @Autowired
+    private ESUPPublisherProperties esupPublisherProperties;
+    @Autowired
     private VisibilityFactory visibilityFactory;
+
+    @PostConstruct
+    public void init() {
+        this.defaultTimeout = esupPublisherProperties.getService().getClassificationParams().getDefaultTimeout();
+        this.defaultTTL = esupPublisherProperties.getService().getClassificationParams().getDefaultTTL();
+        log.debug("Categories are defined with defaultTTL='{}' and defaultTimeout='{}'", this.defaultTTL, this.defaultTimeout);
+    }
 
     @Override
     public Category fromCategoriesClassifs(final Publisher publisher, final String baseURL, final List<Subscriber> subscribers,

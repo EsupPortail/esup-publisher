@@ -71,7 +71,8 @@ public class LdapGroupContextMapper implements ContextMapper<IExternalGroup> {
         List<String> members = Lists.newArrayList(context.getStringAttributes(externalGroupHelper.getGroupMembersAttribute()));
         List<String> filteredMembers = Lists.newArrayList();
         if ((externalGroupHelper.isExtractGroupMembers() || externalGroupHelper.isExtractUserMembers()) && !members.isEmpty()
-                && !externalGroupHelper.getGroupsWithoutMembersResolving().contains(group.getId())) {
+                && externalGroupHelper.getGroupsPatternWithoutMembersResolving() != null
+                && !externalGroupHelper.getGroupsPatternWithoutMembersResolving().matcher(group.getId()).matches()) {
             for (String mbr : members) {
                 if (StringUtils.hasText(mbr)) {
                     Matcher mgroup = externalGroupHelper.getGroupKeyMemberRegex().matcher(mbr);

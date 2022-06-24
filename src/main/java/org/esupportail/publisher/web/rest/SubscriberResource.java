@@ -29,7 +29,6 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -101,7 +100,6 @@ public class SubscriberResource {
 	@RequestMapping(value = "/subscribers", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
 			+ " && @permissionService.canEditCtxTargets(authentication, #subscriber.subjectCtxId.context)")
-	@Timed
 	public ResponseEntity<Void> create(@Validated @RequestBody Subscriber subscriber) throws URISyntaxException,
 			UnsupportedEncodingException {
 		log.debug("REST request to save Subscriber : {}", subscriber);
@@ -168,7 +166,6 @@ public class SubscriberResource {
 	        produces = MediaType.APPLICATION_JSON_VALUE)
 	    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
 	        + " && @permissionService.canEditCtxTargets(authentication, #subscriber.subjectCtxId.context)")
-	    @Timed
 	    public ResponseEntity<Void> update(@RequestBody Subscriber subscriber) throws URISyntaxException {
 	        log.debug("REST request to update Subscriber : {}", subscriber);
 	        if (subscriberRepository.findOne(subscriber.getId()) == null) {
@@ -185,7 +182,6 @@ public class SubscriberResource {
 	@PreAuthorize(SecurityConstants.IS_ROLE_USER)
 	@PostFilter("hasPermission(filterObject.subjectCtxId.context.keyId, filterObject.subjectCtxId.context.keyType, '"
 			+ SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public List<Subscriber> getAll() {
 		log.debug("REST request to get all Subscribers");
 		return subscriberRepository.findAll();
@@ -197,7 +193,6 @@ public class SubscriberResource {
 	@RequestMapping(value = "/subscribers/{ctx_type}/{ctx_id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
 			+ " && hasPermission(#ctxId, #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public List<SubscriberResolvedDTO> getAllOf(@PathVariable("ctx_id") Long ctxId,
 			@PathVariable("ctx_type") ContextType ctxType) {
 		log.debug("REST request to get all Subscribers of context : {} {}", ctxType, ctxId);
@@ -211,7 +206,6 @@ public class SubscriberResource {
 	//   @RequestMapping(value = "/subscribers",
 	//            method = RequestMethod.GET,
 	//            produces = MediaType.APPLICATION_JSON_VALUE)
-	//    @Timed
 	//    public ResponseEntity<List<Subscriber>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
 	//                                  @RequestParam(value = "per_page", required = false) Integer limit)
 	//        throws URISyntaxException {
@@ -226,7 +220,6 @@ public class SubscriberResource {
 	//    @RequestMapping(value = "/subscribers",
 	//            method = RequestMethod.GET,
 	//            produces = MediaType.APPLICATION_JSON_VALUE)
-	//    @Timed
 	//    public ResponseEntity<List<Subscriber>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
 	//                                  @RequestParam(value = "per_page", required = false) Integer limit)
 	//        throws URISyntaxException {
@@ -241,7 +234,6 @@ public class SubscriberResource {
 	@RequestMapping(value = "/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER + " "
 			+ "&& hasPermission(#ctxId, #ctxType, '" + SecurityConstants.PERM_LOOKOVER + "')")
-	@Timed
 	public ResponseEntity<Subscriber> get(@PathVariable("subject_id") String subjectId,
 			@PathVariable("subject_type") int subjectType, @PathVariable("subject_attribute") String subjectAttr,
 			@PathVariable("ctx_id") Long ctxId, @PathVariable("ctx_type") ContextType ctxType,
@@ -265,7 +257,6 @@ public class SubscriberResource {
 	@RequestMapping(value = "/subscribers/{subject_id}/{subject_type}/{subject_attribute}/{ctx_id}/{ctx_type}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
 			+ " && @permissionService.canEditCtxTargets(authentication, #subscriber.subjectCtxId.context)")
-	@Timed
 	public void delete(@PathVariable("subject_id") String subjectId, @PathVariable("subject_type") int subjectType,
 			@PathVariable("subject_attribute") String subjectAttr, @PathVariable("ctx_id") Long ctxId,
 			@PathVariable("ctx_type") ContextType ctxType) {
@@ -281,7 +272,6 @@ public class SubscriberResource {
     @RequestMapping(value = "/subscribers", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtxTargets(authentication, #subjectContextKey.contextKey.keyId, #subjectContextKey.contextKey.keyType)")
-    @Timed
     public void delete(@Validated @RequestBody final SubjectContextKeyDTO subjectContextKey) {
         log.debug("REST request to delete Subscriber with subjectContextKey: {}", subjectContextKey);
         final SubjectContextKey modelKey = new SubjectContextKey(

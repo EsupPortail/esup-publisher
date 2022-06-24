@@ -31,8 +31,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.SecurityConfiguration;
 import org.esupportail.publisher.domain.AbstractItem;
@@ -56,6 +54,10 @@ import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
@@ -67,9 +69,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * Created by jgribonvald on 22/02/17.
@@ -117,7 +116,7 @@ public class ViewController {
 		if (itemId == null)
 			throw new IllegalArgumentException("No item identifier was provided to the request!");
 		Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED));
-		
+
 		AbstractItem item = null;
 		if (optionnalItem == null || !optionnalItem.isPresent()) {
 			return "objectNotFound";
@@ -180,7 +179,7 @@ public class ViewController {
 		for (LinkedFileItem lfiles : itemsFiles) {
 			Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
 					ItemStatus.PUBLISHED));
-			AbstractItem item = optionnalItem == null || !optionnalItem.isPresent() ? null : optionnalItem.get();	
+			AbstractItem item = optionnalItem == null || !optionnalItem.isPresent() ? null : optionnalItem.get();
 			try {
 				if (item != null && canView(item)) {
 					canView = true;

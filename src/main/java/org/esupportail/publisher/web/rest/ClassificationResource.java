@@ -51,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
 
@@ -84,7 +83,6 @@ public class ClassificationResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canCreateInCtx(authentication, #classification.publisher.contextKey)")
-    @Timed
     public ResponseEntity<Void> create(@RequestBody AbstractClassification classification) throws URISyntaxException {
         log.debug("REST request to save AbstractClassification : {}", classification);
         if (classification.getId() != null) {
@@ -102,7 +100,6 @@ public class ClassificationResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && (@permissionService.canCreateInCtx(authentication, #classification.publisher.contextKey) || @permissionService.canEditCtx(authentication, #classification.contextKey))")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody AbstractClassification classification) throws URISyntaxException {
         log.debug("REST request to update AbstractClassification : {}", classification);
         if (classification.getId() == null) {
@@ -120,7 +117,6 @@ public class ClassificationResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
     @PostFilter("hasPermission(filterObject, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ClassificationList getAll(@RequestParam(value = "publisherId" , required = false) Long publisherId,
                                                @RequestParam(value = "isPublishing", required = false) Boolean isPublishing) {
         log.debug("REST request to get all AbstractClassifications");
@@ -163,7 +159,6 @@ public class ClassificationResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER)
     @PostAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + "hasPermission(returnObject.body, '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<AbstractClassification> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get AbstractClassification : {}", id);
         Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(id);
@@ -183,7 +178,6 @@ public class ClassificationResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && (@permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_CATEGORY + "') || " +
         " @permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_FEED + "'))")
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractClassification : {}", id);
         classificationRepository.deleteById(id);
@@ -196,7 +190,6 @@ public class ClassificationResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER)
-    @Timed
     public ResponseEntity<HighlightedClassification> getHighlight() {
         log.debug("REST request to get Highlight Classification.");
         return new ResponseEntity<>(highlightedClassificationService.getClassification(), HttpStatus.OK);

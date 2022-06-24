@@ -31,12 +31,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 @SpringBootApplication
-@EnableConfigurationProperties
+@EnableConfigurationProperties({ LiquibaseProperties.class, MailProperties.class})
 public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -87,6 +89,7 @@ public class Application {
 		app.setBannerMode(Mode.OFF);
 
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
+		log.info("Properties from command line " + Arrays.toString(args));
 
 		// Check if the selected profile has been set as argument.
 		// if not the development profile will be added
@@ -107,7 +110,6 @@ public class Application {
 	private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
             !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
-
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
 	}

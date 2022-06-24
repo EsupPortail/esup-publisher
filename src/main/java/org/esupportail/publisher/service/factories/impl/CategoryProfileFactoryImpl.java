@@ -17,8 +17,9 @@ package org.esupportail.publisher.service.factories.impl;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
+import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Subscriber;
@@ -26,7 +27,9 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.service.factories.CategoryProfileFactory;
 import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.vo.CategoryProfile;
-import org.springframework.beans.factory.annotation.Value;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -34,16 +37,23 @@ import org.springframework.util.Assert;
  * Created by jgribonvald on 06/06/16.
  */
 @Component
+@Slf4j
 public class CategoryProfileFactoryImpl implements CategoryProfileFactory {
 
-    @Value("${app.service.defaultTTL:3600}")
     private int defaultTTL;
-
-    @Value("${app.service.defaultTimeout:5000}")
     private int defaultTimeout;
 
-    @Inject
+    @Autowired
+    private ESUPPublisherProperties esupPublisherProperties;
+    @Autowired
     private VisibilityFactory visibilityFactory;
+
+    @PostConstruct
+    public void init() {
+        this.defaultTimeout = esupPublisherProperties.getService().getClassificationParams().getDefaultTimeout();
+        this.defaultTTL = esupPublisherProperties.getService().getClassificationParams().getDefaultTTL();
+        log.debug("Categories are defined with defaultTTL='{}' and defaultTimeout='{}'", this.defaultTTL, this.defaultTimeout);
+    }
 
     @Override
     public CategoryProfile from(final Publisher publisher, final List<Subscriber> subscribers, final String urlActualites, final String urlCategory) {

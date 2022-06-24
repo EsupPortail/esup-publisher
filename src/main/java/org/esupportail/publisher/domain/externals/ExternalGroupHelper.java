@@ -31,56 +31,33 @@ public class ExternalGroupHelper {
     /**
      * The uid ldap attribute name.
      */
-    //@Value("${ldap.groupId:cn}")
     private String groupIdAttribute;
-
     /**
      * The display name ldap attribute name.
      */
-    //@Value("${ldap.groupDisplayNameAttribute:cn}")
     private String groupDisplayNameAttribute;
-
     /**
      * The user search attribute name.
      */
-    //@Value("${ldap.groupSearchAttribute:cn}")
     private String groupSearchAttribute;
-
-    //@Value("${ldap.groupMembersAttribute:member}")
     private String groupMembersAttribute;
-
-    //@Value("${ldap.groupKeyMembersRegex:#{null}}")
     private Pattern groupKeyMemberRegex;
-    //@Value("${ldap.groupKeyMemberIndex:0}")
     private int groupKeyMemberIndex;
-    //@Value("${ldap.userKeyMemberRegex:#{null}}")
     private Pattern userKeyMemberRegex;
-    //@Value("${ldap.userKeyMemberIndex:0}")
     private int userKeyMemberIndex;
-    //@Value("${ldap.groupDisplayNameRegex:#{null}}")
     private Pattern groupDisplayNameRegex;
-    //@Value("${ldap.groupDNContainsDisplayName:false}")
     private boolean groupDNContainsDisplayName;
-    //@Value("${ldap.groupResolveUserMember:false}")
     private boolean groupResolveUserMember;
-    //@Value("${ldap.groupResolveUserMemberByUserAttributes:true}")
     private boolean groupResolveUserMemberByUserAttributes;
-    //@Value("${ldap.groupListDontResolveUserMember:#{null}}")
-    private Set<String> groupsWithoutMembersResolving;
-
-
+    private Pattern groupsPatternWithoutMembersResolving;
     /**
      * The other attributes desired to show, facultative
      */
-    //@Value("${ldap.otherUserDisplayedAttributes:#{null}}")
     private Set<String> otherGroupDisplayedAttributes;
-
-    //@Value("${ldap.DNsubpath.group:ou=groups}")
     private String groupDNSubPath;
 
     public Set<String> getAttributes() {
-        Set<String> set = new HashSet<String>();
-        set.addAll(otherGroupDisplayedAttributes);
+        Set<String> set = new HashSet<>(otherGroupDisplayedAttributes);
         set.add(groupIdAttribute);
         set.add(groupDisplayNameAttribute);
         set.add(groupSearchAttribute);

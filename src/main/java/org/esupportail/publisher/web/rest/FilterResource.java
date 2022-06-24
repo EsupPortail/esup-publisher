@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 
 import org.esupportail.publisher.domain.ExternalFeed;
 import org.esupportail.publisher.domain.Filter;
@@ -55,7 +54,6 @@ public class FilterResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody Filter filter) throws URISyntaxException {
         log.debug("REST request to save Filter : {}", filter);
         if (filter.getId() != null) {
@@ -72,7 +70,6 @@ public class FilterResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody Filter filter) throws URISyntaxException {
         log.debug("REST request to update Filter : {}", filter);
         if (filter.getId() == null) {
@@ -89,7 +86,6 @@ public class FilterResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public List<Filter> getAll() {
         log.debug("REST request to get all Filters");
         return filterRepository.findAll();
@@ -102,7 +98,6 @@ public class FilterResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Filter> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Filter : {}", id);
         Optional<Filter> optionalFilter =  filterRepository.findById(id);
@@ -120,7 +115,6 @@ public class FilterResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Filter : {}", id);
         filterRepository.deleteById(id);

@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 
 import org.esupportail.publisher.domain.Reader;
 import org.esupportail.publisher.domain.Redactor;
@@ -55,7 +54,6 @@ public class RedactorResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody Redactor redactor) throws URISyntaxException {
         log.debug("REST request to save Redactor : {}", redactor);
         if (redactor.getId() != null) {
@@ -72,7 +70,6 @@ public class RedactorResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody Redactor redactor) throws URISyntaxException {
         log.debug("REST request to update Redactor : {}", redactor);
         if (redactor.getId() == null) {
@@ -89,7 +86,6 @@ public class RedactorResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public List<Redactor> getAll() {
         log.debug("REST request to get all Redactors");
         return redactorRepository.findAll();
@@ -102,7 +98,6 @@ public class RedactorResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public ResponseEntity<Redactor> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Redactor : {}", id);
         Optional<Redactor> optionalRedactor =  redactorRepository.findById(id);
@@ -120,7 +115,6 @@ public class RedactorResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Redactor : {}", id);
         redactorRepository.deleteById(id);

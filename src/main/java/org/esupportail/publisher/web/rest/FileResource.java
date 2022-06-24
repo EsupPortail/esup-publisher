@@ -18,7 +18,6 @@ package org.esupportail.publisher.web.rest;
 import javax.inject.Inject;
 import javax.xml.bind.DatatypeConverter;
 
-import com.codahale.metrics.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.FileService;
@@ -50,7 +49,6 @@ public class FileResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#entityId,  '" + SecurityConstants.CTX_ORGANIZATION + "', '" + SecurityConstants.PERM_LOOKOVER + "')")
-    @Timed
     public ResponseEntity<Void> delete(@PathVariable Long entityId, @PathVariable boolean isPublic, @PathVariable("fileUri") String fileUri) {
         log.debug("REST request to delete File : {}", fileUri);
         boolean result;

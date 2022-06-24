@@ -15,7 +15,6 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 import org.esupportail.publisher.domain.ExternalFeed;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.ExternalFeedRepository;
@@ -54,7 +53,6 @@ public class ExternalFeedResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody ExternalFeed externalFeed) throws URISyntaxException {
         log.debug("REST request to save ExternalFeed : {}", externalFeed);
         if (externalFeed.getId() != null) {
@@ -71,7 +69,6 @@ public class ExternalFeedResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> update(@RequestBody ExternalFeed externalFeed) throws URISyntaxException {
         log.debug("REST request to update ExternalFeed : {}", externalFeed);
         if (externalFeed.getId() == null) {
@@ -88,7 +85,6 @@ public class ExternalFeedResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public List<ExternalFeed> getAll() {
         log.debug("REST request to get all ExternalFeeds");
         return externalFeedRepository.findAll();
@@ -101,7 +97,6 @@ public class ExternalFeedResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<ExternalFeed> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get ExternalFeed : {}", id);
         Optional<ExternalFeed> optionalExternalFeed =  externalFeedRepository.findById(id);
@@ -119,7 +114,6 @@ public class ExternalFeedResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete ExternalFeed : {}", id);
         externalFeedRepository.deleteById(id);

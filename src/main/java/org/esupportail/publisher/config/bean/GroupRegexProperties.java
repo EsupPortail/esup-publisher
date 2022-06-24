@@ -18,8 +18,10 @@ package org.esupportail.publisher.config.bean;
 import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 @Data
+@Validated
 public class GroupRegexProperties {
 
     @NotBlank
@@ -31,4 +33,14 @@ public class GroupRegexProperties {
     private String groupRecomposerSeparator;
     private String groupSuffixeToAppend;
 
+    @Override
+    public String toString() {
+        return "{\n\"GroupRegexProperties\":{"
+                + "\n\"groupMatcher\":\"" + groupMatcher + "\""
+                + ",\n \"groupNameRegex\":\"" + groupNameRegex + "\""
+                + ",\n \"groupNameIndex\":\"" + groupNameIndex + "\""
+                + ",\n \"groupRecomposerSeparator\":\"" + groupRecomposerSeparator + "\""
+                + ",\n \"groupSuffixeToAppend\":\"" + groupSuffixeToAppend + "\""
+                + "\n}\n}";
+    }
 }

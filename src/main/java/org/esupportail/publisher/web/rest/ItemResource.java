@@ -55,7 +55,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.querydsl.core.types.Predicate;
 
 /**
@@ -86,7 +85,6 @@ public class ItemResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
-    @Timed
     public ResponseEntity<Void> create(@RequestBody AbstractItem item) throws URISyntaxException {
         log.debug("REST request to save AbstractItem : {}", item);
         if (item.getId() != null) {
@@ -104,7 +102,6 @@ public class ItemResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtx(authentication, #item.contextKey)")
-    @Timed
     public ResponseEntity<Void> update(@RequestBody AbstractItem item) throws URISyntaxException {
         log.debug("REST request to update Item : {}", item);
 
@@ -133,7 +130,6 @@ public class ItemResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && @permissionService.canEditCtx(authentication, #action.objectId, '" +  SecurityConstants.CTX_ITEM + "')")
-    @Timed
     public ResponseEntity<?> update(@RequestBody ActionDTO action) throws URISyntaxException {
         log.debug("REST request to update Item with action : {}", action);
         Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(action.getObjectId());
@@ -158,7 +154,6 @@ public class ItemResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_USER)
-    @Timed
     public ResponseEntity<ItemList> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                            @RequestParam(value = "per_page", required = false) Integer limit,
                                            @RequestParam(value = "displayOrder", required = false) DisplayOrderType displayOrder,
@@ -185,7 +180,6 @@ public class ItemResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_CONTRIBUTOR + "')")
-    @Timed
     public ResponseEntity<AbstractItem> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Item : {}", id);
         Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
@@ -206,7 +200,6 @@ public class ItemResource {
         + " && @permissionService.canDeleteCtx(authentication, #id, '" +  SecurityConstants.CTX_ITEM + "')")
     //+ " && (hasPermission(#item, '" + SecurityConstants.PERM_EDITOR + "') || #item.createdBy.login.equals(principal.username))")
     //+ " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_EDITOR + "')")
-    @Timed
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Item : {}", id);
         Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(id);
