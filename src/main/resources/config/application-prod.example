@@ -1,159 +1,172 @@
 server:
-    port: 8443
-    servlet:
-        contextPath: /publisher
+  port: 8443
+  servlet:
+    context-path: /publisher
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 spring:
-    profiles:
-        active: prod
-        include: ldapgrp
+  config.activate.on-profile: prod
 
-    datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mariadb://mysql.internal.fr:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris
-        username: root
-        password: root
-        hikari:
-            poolName: Hikari
-            auto-commit: false
-            data-source-properties:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mariadb://mysql.internal.fr:3306/publisher_test?useUnicode=true&characterEncoding=UTF-8&autoreconnect=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris
+    username: root
+    password: root
+    hikari:
+      pool-name: Hikari
+      auto-commit: false
+      data-source-properties:
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
 
-    jpa:
-        database-platform: org.hibernate.dialect.MariaDB10Dialect
-        database: MYSQL
-        show_sql: false
-        hibernate:
-            ddl-auto: none
-            naming:
-                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        properties:
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: true
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
-            hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
-            #hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB10Dialect
+    database: MYSQL
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.cache.region.factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+      hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
+      #hibernate.dialect: org.esupportail.publisher.utils.MySQL5InnoDBCompressedDialect
 
-    mail:
-        baseUrl: http://localhost:8080
-
-    servlet:
-        multipart:
-            maxFileSize: 10MB
-            maxRequestSize: 10MB
-
-    thymeleaf:
-        cache: true
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  thymeleaf:
+    cache: true
 
 logging:
-    config: "classpath:logback.xml"
-
-metrics:
-    jmx.enabled: true
-    spark:
-        enabled: false
-        host: localhost
-        port: 9999
-    graphite:
-        enabled: false
-        host: localhost
-        port: 2003
-        prefix: publisher
-
-cache:
-    ehcache:
-    timeToLiveSeconds: 3600
-        maxEntries: 1000
-
-ldap:
-    base: dc=esco-centre,dc=fr
-    urls: ldap://ldap.internal.fr:389/
-    userDn: cn=admin,ou=administrateurs,dc=univ,dc=fr
-    password: mymdp
-    timeLimit: 20000
-    countLimit: 2000
-    otherUserDisplayedAttributes: mail,ESCOUAI
-    userGroupAttribute: isMemberOf
-    otherUserOtherAttributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure, ESCOUAICourant, ESCOSIRENCourant
-    groupDNContainsDisplayName: true
-    groupKeyMemberRegex: "cn=(.*),ou=groups,dc=esco-centre,dc=fr"
-    groupKeyMemberIndex: 1
-    userKeyMemberRegex: "uid=(.*),ou=people,dc=esco-centre,dc=fr"
-    userKeyMemberIndex: 1
-    groupDisplayNameRegex: ".*:([^:]*)"
-    groupResolveUserMember: true
-    groupResolveUserMemberByUserAttributes: true
-     # for formatters
-    escoGroupRegexp:
-        properties:
-            -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):admin:Publication_contenus:[^:]*"
-                groupNameRegex: "[^:]*:([^:]*):([^:]*):[^:]*"
-                groupNameIndex: "1,2"
-                groupRecomposerSeparator: ":"
-            -
-                groupMatcher: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*_[0-9]{7}[a-zA-Z]:[^:]*:Profs Principaux"
-                groupNameRegex: "[^:]*:Etablissements:[^:]*:([^:]*):(Profs Principaux)"
-                groupNameIndex: "2,1"
-                groupRecomposerSeparator: " - "
-     # for designers  can be commented - used to attach groups that are not in the tree root or membrers on
-    escoGroupDesigner:
-        properties:
-            -
-                groupRootPattern: "((esco)|(cfa)|(clg37)|(agri)):Etablissements:[^:]*"
-                groupAttachEndMatch: ":Profs"
-                groupToAttachEndPattern: ":*:Profs_*,:*:Profs Principaux"
-            -
-                groupRootPattern: "ef2s:Etablissements:[^:]*"
-                groupAttachEndMatch: ":Formateurs"
-                groupToAttachEndPattern: ":*:Formateurs_*, :*:Responsable de formation"
-
-cas:
-    url:
-        prefix: https://www.univ.fr/cas/
-        login: https://www.univ.fr/cas/login
-        logout: https://www.univ.fr/cas/logout
+  config: "classpath:logback-dev.xml"
 
 app:
-    service:
-        security: j_spring_cas_security_check
-        redirectParamName: spring-security-redirect
-        authorizedDomainNames: https://www.univ.fr,https://www.univ2.fr,https://www.univ3.fr
-        protocol: https://
-        idKeyProvider: esco_cas_publisher
+  service:
+    classification-params:
+      highlight-classification :
+        name: "À la une"
+        color: "#F44336"
+        description: "Rubrique contenant les publications à mettre en avant"
+      defaultTTL: 3600
+      default-timeout: 15000
+  security:
+    #auth-uri-filter-path: j_spring_cas_security_check
+    #redirect-param-name: spring-security-redirect
+    #security: http://192.168.45.170:8080/j_spring_cas_security_check
+    authorized-domain-names:
+      - http://localhost:8080
+      - http://192.168.1.1:8080
+    protocol: http://
+    id-key-provider: esco_cas_publisher
+  cas:
+    url-prefix: https://my.univ.fr/cas/
+    url-login: https://my.univ.fr/cas/login
+    url-logout: https://my.univ.fr/cas/logout
 
-        highlightClassification :
-            name: "À la une"
-            color: "#F44336"
-            description: "Rubrique contenant les publications à mettre en avant"
+  ldap:
+    context-source:
+      base: dc=esco-centre,dc=fr
+      urls:
+        - ldap://my.univ.fr:389/
+      username: cn=admin,ou=administrateurs,dc=univ,dc=fr
+      password: mymdp
+      anonymous-read-only: false
+      native-pooling: false
+    ldap-template:
+      count-limit: 20000
+      time-limit: 20000
+    user-branch:
+      other-displayed-attributes: mail,ESCOUAI, ENTPersonProfils
+      other-backend-attributes: isMemberOf, ENTPersonProfils, ESCOPersonProfils, ENTPersonJointure, ESCOUAICourant, ESCOSIRENCourant
+    group-branch:
+      dn-contains-display-name: true
+      other-displayed-attributes: isMemberOf
+      group-member-key-pattern: "cn=(.*),ou=groups,dc=esco-centre,dc=fr"
+      group-member-key-pattern-index: 1
+      user-member-key-pattern: "uid=(.*),ou=people,dc=esco-centre,dc=fr"
+      user-member-key-pattern-index: 1
+      group-display-name-pattern: ".*:([^:]*)"
+      resolve-user-members: true
+      resolve-user-members-by-user-attributes: true
+      # designers can be commented - used to attach groups that are not in the tree root or membrers on
+      designers:
+        - group-root-pattern: "((esco)|(cfa)|(clg[0-9]{2})|(agri)):Etablissements:[^:]*"
+          group-attach-end-match: ":Profs"
+          group-to-attach-end-pattern: ":*:Profs_*,:*:Profs Principaux"
+        - group-root-pattern: "ef2s:Etablissements:[^:]*"
+          group-attach-end-match: ":Formateurs"
+          group-to-attach-end-pattern: ":*:Formateurs_*, :*:Responsable de formation"
+        - group-root-pattern: "((esco)|(cfa)|(clg[0-9]{2})|(agri)):Inter_etablissements"
+          group-attach-end-match: ":Tous_Profils_Etablissements"
+          group-to-attach-end-pattern: ":Tous_Profs,:Tous_Administratifs,:Tous_Eleves,:Tous_Parents,:Tous_Agents_Coll_Ter"
+      # for formatters can be commented
+      name-formatters:
+        - group-matcher: "((esco)|(cfa)|(clg[0-9]{2})|(agri)|(ef2s)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:groupes_locaux:Publication_contenus"
+          group-name-regex: "[^:]+:Etablissements:([^:]+)_[0-9]{7}[a-zA-Z]{1}:(groupes_locaux):Publication_contenus"
+          group-name-index: "2,1"
+          group-recomposer-separator: " - "
+        - group-matcher: "((esco)|(cfa)|(clg[0-9]{2})|(agri)):Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Profs Principaux"
+          group-name-regex: "[^:]+:Etablissements:[^:]+:([^:]+):(Profs Principaux)"
+          group-name-index: "2,1"
+          group-recomposer-separator: " - "
+        - group-matcher: "ef2s:Etablissements:[^:]+_[0-9]{7}[a-zA-Z]{1}:[^:]+:Responsable de formation"
+          group-name-regex: "ef2s:Etablissements:[^:]+:([^:]+):(Responsable de formation)"
+          group-name-index: "2,1"
+          group-recomposer-separator: " - "
+        - group-matcher: "agri:Inter_etablissements:Tous_Profils_Etablissements"
+          group-name-regex: "agri:Inter_etablissements:(Tous_Profils_Etablissements)"
+          group-name-index: "1"
+          group-recomposer-separator: " "
+          group-suffixe-to-append: " EA"
+        - group-matcher: "esco:Inter_etablissements:Tous_Profils_Etablissements"
+          group-name-regex: "esco:Inter_etablissements:(Tous_Profils_Etablissements)"
+          group-name-index: "1"
+          group-recomposer-separator: " "
+          group-suffixe-to-append: " EN"
+      dont-resolve-members-with-group-pattern:
+        "((agri)|(esco)|(clg[0-9]{2})):Inter_etablissements:Tous_((Profs)|(Administratifs)|(Eleves)|(Parents)|(Agents_Coll_Ter)|(Profils_Etablissements))"
+  cache:
+    time-to-live-seconds: 3600
+    max-entries: 1000
 
-        defaultTTL: 3600
-        defaultTimeout: 15000
+  admins:
+    user-name: admin
+    group-name: "esco:admin:central"
 
-    admin:
-        userName: admin
-        groupName: "esco:admin:central"
+  users:
+    group-name: "((esco)|(cfa)|(clg[0-9]{2})|(agri)|(coll)|(ef2s)):admin:Publication_contenus:.*"
 
-    users:
-        groupName: "((esco)|(cfa)|(clg37)|(agri)|(coll)):Applications:((Publisher)|(Publication_annonces)):.*"
+  mail:
+    base-url: http://localhost:8080
+    from: publisher@localhost
+  cors:
+    allowed-origins: "*"
 
-    cors:
-        allowed:
-            origins: "*"
+  upload:
+    path: "/home/esco/tmp/"
+    # 128Kb max
+    image-max-size: 131072
+    protected-path: "/home/esco/tmp/"
+    # not needed anymore: file-path-of-authorized-mime-types: "MimeTypes.txt"
+    # 10MB max should be equals or lower than spring.servlet.multipart.maxFileSize
+    max-file-size: 10485760
+    unremovable-path-pattern:
+      - "default/welcome.*"
+      - "test.*"
 
-    upload:
-        path: "/home/esco/uploads/"
-        # 256Kb max
-        imageMaxSize: 262144
-        protectedPath: "/home/esco/privates/"
-        filePathOfAuthorizedMimeTypes: "MimeTypes.txt"
-        # 10MB max should be equals or lower than spring.servlet.multipart.maxFileSize
-        maxFileSize: 10485760
+  authorized-services:
+    ip-ranges:
+      - "192.168.1.0/24"
 
-    authorizedServices:
-        ipRange: "192.168.0.0/16"
+  metrics:
+    prometeus-authorized-acess:
+      ip-ranges:
+        - "192.168.1.0/24"
