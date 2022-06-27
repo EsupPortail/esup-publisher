@@ -80,6 +80,7 @@ management:
             'threaddump',
             'caches',
             'liquibase',
+            'beans',
           ]
   endpoint:
     health:
@@ -93,6 +94,8 @@ management:
           readiness:
             include: readinessState,db
     jhimetrics:
+      enabled: true
+    beans:
       enabled: true
   info:
     git:
