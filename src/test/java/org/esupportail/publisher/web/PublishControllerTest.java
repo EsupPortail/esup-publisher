@@ -316,7 +316,7 @@ public class PublishControllerTest {
         sub7 = subscriberRepository.saveAndFlush(sub7);
 
         // should be order as first news
-        savedNews = (News) itemRepository.getById(news1.getId());
+        savedNews = (News) itemRepository.getReferenceById(news1.getId());
 
         log.debug("News1 {}, {}", news1.getCreatedDate(), news1.getLastModifiedDate());
         log.debug("News2 {}, {}", news2.getCreatedDate(), news2.getLastModifiedDate());

@@ -112,7 +112,7 @@ public class EvaluatorRepositoryTest {
 		log.info("After insert : {}", oe3);
 		assertThat(oe3.getId(), notNullValue());
 		assertThat(repository.existsById(oe3.getId()), is(true));
-		oe = (OperatorEvaluator) repository.getById(oe3.getId());
+		oe = (OperatorEvaluator) repository.getReferenceById(oe3.getId());
 		assertThat(oe, notNullValue());
 		log.info("After select : {}", oe);
 		assertThat(repository.count(), equalTo(16L));

@@ -148,7 +148,7 @@ public class SubscriberRepositoryTest {
 		log.info("After insert : {}", s4);
 		assertThat(s4.getSubjectCtxId(), notNullValue());
 		assertThat(repository.existsById(s4.getSubjectCtxId()), is(true));
-		s = repository.getById(s.getSubjectCtxId());
+		s = repository.getReferenceById(s.getSubjectCtxId());
 		assertThat(s, notNullValue());
 		log.info("After select : {}", s);
 		assertThat(repository.count(), equalTo(5L));

@@ -166,7 +166,7 @@ public class ItemClassificationOrderRepositoryTest {
 		log.info("After insert : {}", ico4);
 		assertThat(ico4.getItemClassificationId(), notNullValue());
 		assertThat(repository.existsById(ico4.getItemClassificationId()), is(true));
-		ico3 = repository.getById(ico4.getItemClassificationId());
+		ico3 = repository.getReferenceById(ico4.getItemClassificationId());
 		assertThat(ico3, notNullValue());
 		log.info("After select : {}", ico3);
         assertThat(repository.count(), equalTo(4L));

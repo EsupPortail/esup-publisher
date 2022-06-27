@@ -124,7 +124,7 @@ public class PermOnSubjectsRepositoryTest {
 		log.info("After update : {}", e);
 		assertThat(e.getId(), notNullValue());
 		assertThat(repository.existsById(e.getId()), is(true));
-		e = repository.getById(e.getId());
+		e = repository.getReferenceById(e.getId());
 		assertThat(e, notNullValue());
 		log.info("After select : {}", e);
 		assertThat(repository.count(), equalTo(4L));

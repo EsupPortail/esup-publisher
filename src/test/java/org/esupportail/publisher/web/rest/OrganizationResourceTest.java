@@ -250,10 +250,10 @@ public class OrganizationResourceTest {
         for (Organization org : organizationRepository.findAll()) {
             log.debug(org.toString());
         }
-        assertThat(organizationRepository.getById(organization.getId()).getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
-        assertThat(organizationRepository.getById(o1.getId()).getDisplayOrder(), equalTo(0));
-        assertThat(organizationRepository.getById(o2.getId()).getDisplayOrder(), equalTo(1));
-        assertThat(organizationRepository.getById(o3.getId()).getDisplayOrder(), equalTo(3));
+        assertThat(organizationRepository.getReferenceById(organization.getId()).getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
+        assertThat(organizationRepository.getReferenceById(o1.getId()).getDisplayOrder(), equalTo(0));
+        assertThat(organizationRepository.getReferenceById(o2.getId()).getDisplayOrder(), equalTo(1));
+        assertThat(organizationRepository.getReferenceById(o3.getId()).getDisplayOrder(), equalTo(3));
     }
 
     @Test
