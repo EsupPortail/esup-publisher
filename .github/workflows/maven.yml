@@ -121,7 +121,7 @@ jobs:
     - name: Maven running API test agains DB/OS timezone
       run: ./mvnw test -Pci -Dtest=org.esupportail.publisher.repository.ItemRepositoryTest#testRequestScheduledPublishedOptionalDate -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
     - name: Maven notice:check
-      run: ./mvnw notice:check -B ${MVN_PARAMS}
+      run: #./mvnw notice:check -B ${MVN_PARAMS}
     - name: Maven license:check
       run: ./mvnw license:check -B ${MVN_PARAMS}
     - name: Maven running API test
