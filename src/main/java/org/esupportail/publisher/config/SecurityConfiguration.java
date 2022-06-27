@@ -16,6 +16,7 @@
 package org.esupportail.publisher.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,14 +42,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
@@ -62,7 +64,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @Slf4j
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
     private static final String APP_URI_LOGIN = "/app/login";
 
@@ -208,9 +210,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return singleSignOutFilter;
     }
 
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(casAuthenticationProvider());
+    @Bean
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return new ProviderManager(Collections.singletonList(casAuthenticationProvider()));
     }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -240,8 +242,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new HasIpRangeExpressionCreator(esupPublisherProperties.getMetrics().getPrometeusAuthorizedAcess().getIpRanges());
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
             .authenticationEntryPoint(casAuthenticationEntryPoint()).and()
             .addFilterBefore(casAuthenticationFilter(), BasicAuthenticationFilter.class)
@@ -316,6 +318,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .deleteCookies("JSESSIONID")
             .permitAll();
 
+        return http.build();
     }
 
     // Specific path where pages are served (outter of REST API with ANGULAR)

@@ -93,9 +93,10 @@ This project includes:
   JBoss Logging 3 under Apache License, version 2.0
   JDOM under Similar to Apache License but with the acknowledgment clause removed
   JSON in Java under The JSON License
+  JSON library from Android SDK under Apache License 2.0
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
   JSONassert under The Apache Software License, Version 2.0
-  JsonNullable Jackson module under Apache License, Version 2.0
+  JsonNullable Jackson module under Apache License 2.0
   JSR107 API and SPI under Apache License, Version 2.0
   JUL to SLF4J bridge under MIT License
   JUnit Jupiter (Aggregator) under Eclipse Public License v2.0
@@ -167,8 +168,10 @@ This project includes:
   spring-boot-actuator under Apache License, Version 2.0
   spring-boot-actuator-autoconfigure under Apache License, Version 2.0
   spring-boot-autoconfigure under Apache License, Version 2.0
+  spring-boot-configuration-metadata under Apache License, Version 2.0
   spring-boot-configuration-processor under Apache License, Version 2.0
   spring-boot-loader-tools under Apache License, Version 2.0
+  spring-boot-properties-migrator under Apache License, Version 2.0
   spring-boot-starter under Apache License, Version 2.0
   spring-boot-starter-actuator under Apache License, Version 2.0
   spring-boot-starter-aop under Apache License, Version 2.0
@@ -186,7 +189,7 @@ This project includes:
   spring-boot-starter-web under Apache License, Version 2.0
   spring-boot-test under Apache License, Version 2.0
   spring-boot-test-autoconfigure under Apache License, Version 2.0
-  spring-ldap-core under The Apache Software License, Version 2.0
+  spring-ldap-core under Apache License, Version 2.0
   spring-security-cas under Apache License, Version 2.0
   spring-security-config under Apache License, Version 2.0
   spring-security-core under Apache License, Version 2.0
