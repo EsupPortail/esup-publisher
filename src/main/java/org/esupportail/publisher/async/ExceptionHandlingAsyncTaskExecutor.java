@@ -51,7 +51,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
     /** {@inheritDoc} */
     @Override
     public void execute(Runnable task, long startTimeout) {
-        executor.execute(createWrappedRunnable(task), startTimeout);
+        executor.execute(createWrappedRunnable(task));
     }
 
     private <T> Callable<T> createCallable(final Callable<T> task) {
