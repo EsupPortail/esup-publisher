@@ -6,5 +6,21 @@
   "enabledManagers": [
     "maven",
     "npm"
+  ],
+  "packageRules": [
+    {
+      "groupName": "CKEditor dev",
+      "matchPackagePrefixes": [
+        "@ckeditor/ckeditor5-dev"
+      ]
+    },
+    {
+      "groupName": "CKEditor",
+      "matchPackagePrefixes": [
+        "@ckeditor/ckeditor5-"
+      ]
+    }
   ]
+
+
 }
