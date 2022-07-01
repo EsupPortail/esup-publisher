@@ -68,23 +68,12 @@ __Don't forget to make a dump of your datas before such operation__
 
 ## Release process :
 - put away local change `git stash`
-- several steps to tag the new version (need to develop a custom plugin to apply custom command to avoid all these steps) :
-    - `./mvnw clean generate-sources release:prepare -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
-    - delete the previous tag, as example `git tag -d 2.1.0`
-    - rebase to add the new UI versiion constant `git rebase -i HEAD~2` and edit the commit with text '[maven-release-plugin] prepare release 2.1.0'
-    - update the UI constant `grunt ngconstant` + `git add src/main/webapp/scripts/app/app.constants.js` + `git commit --amend` + `git tag 2.1.0`
-    - `git rebase --continue`
-- update the UI constant for next version `grunt ngconstant` + `git add src/main/webapp/scripts/app/app.constants.js` + `git commit --amend`
-- publish and deploy the new release :
-    - `git checkout 2.1.0`
-    - `./mvnw release:perform -P prod -Dmaven.test.skip=true -Darguments="-DskipTests"`
-- come back to the normal workflow:
-  - `git checkout master && git push -f origin master`
-  - `git stash apply`
+- `./mvnw clean generate-sources release:prepare release:perform -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+- `git push origin master`
+- `git stash apply`
 
 ## ./mvnw remember :
 - `./mvnw release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
-- on release run `grunt ngconstant` to update version in angular app constant, we should try to watch on a grunt task to make release
 
 ## to deploy :
 - before you should build the war package : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
