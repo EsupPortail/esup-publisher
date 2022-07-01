@@ -18,6 +18,7 @@ under the License.
 This project includes:
   AntLR Parser Generator under BSD License
   Apache Commons Codec under Apache License, Version 2.0
+  Apache Commons Collections under Apache License, Version 2.0
   Apache Commons Compress under Apache License, Version 2.0
   Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Text under Apache License, Version 2.0
@@ -119,6 +120,7 @@ This project includes:
   mockito-inline under The MIT License
   mockito-junit-jupiter under The MIT License
   Objenesis under Apache License, Version 2.0
+  opencsv under Apache 2
   org.apiguardian:apiguardian-api under The Apache License, Version 2.0
   org.opentest4j:opentest4j under The Apache License, Version 2.0
   org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0

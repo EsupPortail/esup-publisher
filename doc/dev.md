@@ -57,12 +57,14 @@ __Don't forget to make a dump of your datas before such operation__
 
 
 ## to run tests :
+
+- running local docker `docker run -it -p 3306:3306/tcp --health-cmd="mysqladmin -uroot -proot ping" --health-interval=10s --health-timeout=10s --health-retries=10 -e "TZ=Europe/Paris" -e "MYSQL_USER=root" -e "MYSQL_ROOT_PASSWORD=root" -e "MYSQL_DATABASE=publisher_test" -e "MYSQL_DEFAULT_STORAGE_ENGINE=InnoDB" -e "MYSQL_CHARACTER_SET_SERVER=utf8mb4" -e "MYSQL_COLLATION_SERVER=utf8mb4_unicode_520_ci" -e "MYSQL_INNODB_BUFFER_POOL_SIZE=2G" -e "MYSQL_INNODB_DEFAULT_ROW_FORMAT=dynamic" -e "MYSQL_INNODB_DATA_FILE_PATH=ibdata1:100M:autoextend:max:10G" -e "MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT=1" -e "MYSQL_INNODB_LOG_BUFFER_SIZE=64M" -e "MYSQL_INNODB_LOG_FILE_SIZE=256M" -e "MYSQL_INNODB_STRICT_MODE=ON" -e "MYSQL_LOWER_CASE_TABLE_NAMES=1" -e "MYSQL_MAX_CONNECT_ERRORS=100" -e "MYSQL_MAX_CONNECTIONS=1000" -e "MYSQL_QUERY_CACHE_LIMIT=10M" -e "MYSQL_QUERY_CACHE_SIZE=0" -e "MYSQL_QUERY_CACHE_TYPE=OFF" wodby/mariadb:lates`
 - `./mvnw test -Ptest` don't forget to change databasename between prod, adding argument `-Dspring.profiles.active=test,fast,ldapgrp` will permit to override the default conf
 - `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Ptest` don't forget to change databasename between prod for a specific class
-
+- `./mvnw spring-boot:run -Pprod -e -Dspring-boot.run.arguments="--spring.profiles.active=prod --spring.config.additional-location=${project.home}/esup-publisher/config"` to provide custom properties, like overriding config
 
 ## to run in dev :
-- `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `grunt serve` pour firefox)
+- `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `npm run serve` pour firefox)
 
 ## Release process :
 - put away local change `git stash`
