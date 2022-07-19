@@ -149,5 +149,15 @@ class DateUtils {
       }
     }
   }
+
+  min (date1, date2) {
+    if (!date1) {
+      return date2
+    }
+    if (!date2) {
+      return date1
+    }
+    return this.getDateDifference(date1, date2) > 0 ? date1 : date2
+  }
 }
 export default new DateUtils()

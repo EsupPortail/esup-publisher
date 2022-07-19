@@ -72,4 +72,20 @@ describe('DateUtils.js tests', () => {
     }, 'en')
     expect(result).toStrictEqual('December 9, 2021, 10:55:40 AM')
   })
+
+  it('test 13 DateUtils - min function OK', () => {
+    var date1 = DateUtils.convertDateTimeFromServer('09/12/2021')
+    var date2 = DateUtils.convertDateTimeFromServer('09/12/2022')
+    var result = DateUtils.min(date1, date2)
+    expect(result).toStrictEqual(date1)
+
+    result = DateUtils.min(date1, null)
+    expect(result).toStrictEqual(date1)
+
+    result = DateUtils.min(null, date2)
+    expect(result).toStrictEqual(date2)
+
+    result = DateUtils.min(null, null)
+    expect(result).toStrictEqual(null)
+  })
 })

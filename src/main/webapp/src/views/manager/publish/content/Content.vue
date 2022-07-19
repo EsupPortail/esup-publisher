@@ -147,6 +147,7 @@ export default {
       endMinDate: null,
       defaultMaxDuration: null,
       maxDate: null,
+      startMaxDate: null,
       cropperConf: null,
       defaultCropperConf: {
         size: { w: 240, h: 240 },
@@ -184,6 +185,7 @@ export default {
       minDate: readonly(computed(() => this.minDate)),
       endMinDate: readonly(computed(() => this.endMinDate)),
       maxDate: readonly(computed(() => this.maxDate)),
+      startMaxDate: readonly(computed(() => this.startMaxDate)),
       setItem: (newItem) => {
         if (CommonUtils.isDefined(newItem) && CommonUtils.isDefined(newItem.type) &&
         (!CommonUtils.isDefined(this.item) || this.item == null || newItem.type !== this.item.type || newItem.startDate !== this.item.startDate)) {
@@ -286,17 +288,15 @@ export default {
       }
     },
     updateMinDate (item) {
-      if (CommonUtils.isDefined(item) && CommonUtils.isDefined(item.type) && CommonUtils.isDefined(item.startDate)) {
-        this.minDate = item.startDate
-        this.endMinDate = item.startDate
-        if (DateUtils.getDateDifference(this.today, this.minDate) <= 0) {
-          this.endMinDate = this.today
-        }
+      if (CommonUtils.isDefined(item) && CommonUtils.isDefined(item.type) && CommonUtils.isDefined(item.id) && item.id !== null && CommonUtils.isDefined(item.startDate)
+        && !(CommonUtils.isDefined(item.endDate) && item.endDate !== null && DateUtils.getDateDifference(item.endDate, this.today) > 0)) {
+        this.minDate = DateUtils.min(item.startDate, this.today)
       }
     },
     updateMaxDate (item) {
       if (CommonUtils.isDefined(item) && CommonUtils.isDefined(item.type) && CommonUtils.isDefined(item.startDate)) {
         this.maxDate = DateUtils.addDaysToLocalDate(item.startDate, this.defaultMaxDuration)
+        this.endMinDate = item.startDate
       }
     },
     changeContentType (oldValue) {
@@ -442,10 +442,13 @@ export default {
       this.endMinDate = DateUtils.addDaysToLocalDate(this.today, 0)
       this.defaultMaxDuration = this.publisher.context.redactor.nbDaysMaxDuration > 0 ? this.publisher.context.redactor.nbDaysMaxDuration : 365
       this.maxDate = DateUtils.addDaysToLocalDate(this.today, this.defaultMaxDuration)
+      // Pas de limite supérieure à la date de début
+      this.startMaxDate = null
 
       if ((this.item === null || this.item === undefined || CommonUtils.equals({}, this.item)) && this.contentData && this.contentData.item) {
         const item = Object.assign({}, this.contentData.item)
         this.updateMinDate(this.contentData.item)
+        this.updateMaxDate(this.contentData.item)
         item.highlight = this.highlight
         // update publisher information when modified
         item.organization = Object.assign({}, this.publisher.context.organization)

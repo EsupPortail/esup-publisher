@@ -61,7 +61,7 @@
             <div class="form-group col-md-4">
                 <label class="control-label" for="startDate">{{ $t('flash.startDate') }}</label>
                 <input type="date" class="form-control" name="startDate" id="startDate" placeholder="jj/mm/aaaa" v-model="itemStartDate"
-                    required :min="formatDateToString(minDate)" :max="formatDateToString(item.endDate)">
+                    required :min="formatDateToString(minDate)" :max="formatDateToString(startMaxDate)">
                 <div class="invalid-feedback"
                     v-if="formValidator.hasError('startDate', formErrors.REQUIRED)">
                     {{ $t('entity.validation.required') }}
@@ -72,7 +72,7 @@
                 </div>
                 <div class="invalid-feedback"
                     v-if="formValidator.hasError('startDate', formErrors.MAX_DATE)">
-                    {{ $t('entity.validation.maxdate', { max: formatDateToIntString(item.endDate)}) }}
+                    {{ $t('entity.validation.maxdate', { max: formatDateToIntString(startMaxDate)}) }}
                 </div>
             </div>
             <div class="form-group col-md-4">
@@ -222,7 +222,7 @@ export default {
   inject: [
     'publisher', 'item', 'setItem', 'progress', 'setProgress', 'progressStatus', 'setProgressStatus', 'content', 'setContent',
     'clearUpload', 'uploadLinkedFile', 'cropperConf', 'setItemValidated', 'imageSizeMax', 'fileSizeMax', 'linkedFilesToContent',
-    'setLinkedFilesToContent', 'manageUploadError', 'minDate', 'endMinDate', 'maxDate'
+    'setLinkedFilesToContent', 'manageUploadError', 'minDate', 'endMinDate', 'maxDate', 'startMaxDate'
   ],
   computed: {
     itemTitle: {
@@ -292,7 +292,7 @@ export default {
       this.formValidator.clear()
       this.formValidator.checkTextFieldValidity('title', this.item.title, 3, 200, true)
       this.formValidator.checkTextFieldValidity('summary', this.item.summary, 5, 512, true)
-      this.formValidator.checkDateFieldValidity('startDate', this.item.startDate, this.minDate, this.item.endDate, true)
+      this.formValidator.checkDateFieldValidity('startDate', this.item.startDate, this.minDate, this.startMaxDate, true)
       this.formValidator.checkDateFieldValidity('endDate', this.item.endDate, this.endMinDate, this.maxDate, !this.publisher.context.redactor.optionalPublishTime)
       this.formValidator.checkTextFieldValidity('body', CommonUtils.removeHtmlTags(this.item.body), 15, null, true)
       this.formValidator.checkTextFieldValidity('enclosure', this.item.enclosure, null, null, true)
@@ -412,12 +412,11 @@ export default {
       this.updateItemValidated()
     },
     'item.startDate' (newVal) {
-      this.formValidator.checkDateFieldValidity('startDate', newVal, this.minDate, this.item.endDate, true)
+      this.formValidator.checkDateFieldValidity('startDate', newVal, this.minDate, this.startMaxDate, true)
       this.formValidator.checkDateFieldValidity('endDate', this.item.endDate, this.endMinDate, this.maxDate, !this.publisher.context.redactor.optionalPublishTime)
       this.updateItemValidated()
     },
     'item.endDate' (newVal) {
-      this.formValidator.checkDateFieldValidity('startDate', this.item.startDate, this.minDate, newVal, true)
       this.formValidator.checkDateFieldValidity('endDate', newVal, this.endMinDate, this.maxDate, !this.publisher.context.redactor.optionalPublishTime)
       this.updateItemValidated()
     },
