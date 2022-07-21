@@ -267,7 +267,7 @@ public class ItemResourceOptionalDateTest {
 
         // Get all the Items of Status
         restNewsMockMvc
-            .perform(get("/api/items/").requestAttr("item_status", DEFAULT_STATUS.getId()).requestAttr("owned", true))
+            .perform(get("/api/items/").queryParam("item_status", Integer.toString(DEFAULT_STATUS.getId())).queryParam("owned", Boolean.toString(true)))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$", hasSize(1)))
