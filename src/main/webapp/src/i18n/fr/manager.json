@@ -27,6 +27,9 @@
             "legend": {
                 "title": "Légende :",
                 "highlight": "Ces publications sont \"{ name }\""
+            },
+            "filter": {
+                "title": "Filtrer"
             }
         },
         "publish": {

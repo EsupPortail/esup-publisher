@@ -23,6 +23,11 @@
         "createdDate": "Created Date",
         "lastModifiedBy": "Last Modified By",
         "lastModifiedDate": "Last Modified Date",
-        "availablePublisherContexts": "available Publisher Contexts"
+        "availablePublisherContexts": "available Publisher Contexts",
+        "filter": {
+            "option": {
+                "all":  "All organizations"
+            }
+        }
     }
 }

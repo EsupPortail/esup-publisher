@@ -115,7 +115,7 @@ public class ViewController {
 		log.debug("Request to render in viewer, item with id {}", itemId);
 		if (itemId == null)
 			throw new IllegalArgumentException("No item identifier was provided to the request!");
-		Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED));
+		Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED, null));
 
 		AbstractItem item = null;
 		if (optionnalItem == null || !optionnalItem.isPresent()) {
@@ -178,7 +178,7 @@ public class ViewController {
 		String filename = null;
 		for (LinkedFileItem lfiles : itemsFiles) {
 			Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
-					ItemStatus.PUBLISHED));
+					ItemStatus.PUBLISHED, null));
 			AbstractItem item = optionnalItem == null || !optionnalItem.isPresent() ? null : optionnalItem.get();
 			try {
 				if (item != null && canView(item)) {

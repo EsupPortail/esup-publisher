@@ -285,6 +285,66 @@ public class ItemResourceTest {
             .andExpect(jsonPath("$.[*].redactor.id").value(hasItem(redactor.getId().intValue())));
     }
 
+    @Test
+    @Transactional
+    public void getAllItemsOfStatusNotOfUser() throws Exception {
+        // Initialize the database
+        itemRepository.saveAndFlush(item);
+
+        // Get all the Items of Status
+        restNewsMockMvc
+                .perform(get("/api/items/").queryParam("item_status", Integer.toString(DEFAULT_STATUS.getId())).queryParam("owned", Boolean.toString(false)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    @Transactional
+    public void getAllItemsOfStatusOfUserOfOrganization() throws Exception {
+        // Initialize the database
+        itemRepository.saveAndFlush(item);
+
+        // Get all the Items of Status
+        restNewsMockMvc
+                .perform(get("/api/items/").queryParam("item_status", Integer.toString(DEFAULT_STATUS.getId())).queryParam("owned", Boolean.toString(true))
+                        .queryParam("organization_id", Long.toString(this.organization.getId()))).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$.[*].createdBy.subject.keyId").value(hasItem(Constants.SYSTEM_ACCOUNT)))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(item.getId().intValue())))
+                .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+                .andExpect(jsonPath("$.[*].summary").value(hasItem(DEFAULT_SUMMARY)))
+                .andExpect(jsonPath("$.[*].enclosure").value(hasItem(DEFAULT_ENCLOSURE)))
+                .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+                .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+                .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.getName())))
+                .andExpect(jsonPath("$.[*].validatedBy.subject.keyId").value(hasItem(ObjTest.subject1)))
+                .andExpect(jsonPath("$.[*].validatedDate").value(
+                        hasItem(DEFAULT_VALIDATION_DATE.toString())))
+                .andExpect(jsonPath("$.[*].body").value(hasItem(DEFAULT_BODY)))
+                .andExpect(jsonPath("$.[*].rssAllowed").value(DEFAULT_RSS_ALLOWED))
+                .andExpect(jsonPath("$.[*].organization.id").value(hasItem(organization.getId().intValue())))
+                .andExpect(jsonPath("$.[*].redactor.id").value(hasItem(redactor.getId().intValue())));
+    }
+
+    @Test
+    @Transactional
+    public void getAllItemsOfStatusOfUserOfWrongOrganization() throws Exception {
+        // Initialize the database
+        itemRepository.saveAndFlush(item);
+
+        // Get all the Items of Status
+        restNewsMockMvc
+                .perform(get("/api/items/").queryParam("item_status", Integer.toString(DEFAULT_STATUS.getId())).queryParam("owned", Boolean.toString(true))
+                        .queryParam("organization_id", Long.toString(this.organization.getId() + 1))).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
 
     @Test
     @Transactional

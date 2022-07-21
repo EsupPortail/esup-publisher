@@ -23,7 +23,12 @@
         "createdDate": "Date de création",
         "lastModifiedBy": "Dernière modification par",
         "lastModifiedDate": "Date de dernière modification",
-        "availablePublisherContexts": "Liste des contextes de publications disponibles"
+        "availablePublisherContexts": "Liste des contextes de publications disponibles",
+        "filter": {
+            "option": {
+                "all":  "Toutes les structures"
+            }
+        }
     }
 }
 

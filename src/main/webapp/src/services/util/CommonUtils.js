@@ -7,6 +7,8 @@ sizeFormat.forEach((el, i) => {
   byteSizeCompared.push({ str: el, val: byteSizeCompared[i].val * 1024 })
 })
 
+const stringCollator = new Intl.Collator( ['fr', 'en'], { ignorePunctuation: true, sensitivity: 'base' });
+
 class CommonUtils {
   isString (value) {
     return typeof value === 'string'
@@ -99,6 +101,10 @@ class CommonUtils {
       }
     }
     return false
+  }
+
+  compareString(o1, o2) {
+    return stringCollator.compare(o1, o2)
   }
 
   convertToDecimal (num, decimal) {

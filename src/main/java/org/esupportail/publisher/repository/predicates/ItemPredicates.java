@@ -136,21 +136,25 @@ public final class ItemPredicates {
         }
     }
 
-    public static Predicate ItemWithStatus(final long itemId, final ItemStatus status) {
+    public static Predicate ItemWithStatus(final long itemId, final ItemStatus status, final Long organizationId) {
         Predicate onStatus = qItem.status.isNotNull();
         if (status != null) {
             onStatus = qItem.status.eq(status);
         }
+        if (organizationId != null)
+            onStatus = qItem.organization.id.eq(organizationId).and(onStatus);
         return qItem.id.eq(itemId).and(onStatus);
     }
 
-    public static Predicate OwnedItemsOfStatus(final Boolean owned, final Integer status) {
+    public static Predicate OwnedItemsOfStatus(final Boolean owned, final Integer status, final Long organizationId) {
         Predicate onStatus = qItem.status.isNotNull();
         if (status != null) {
             ItemStatus itemStatus = ItemStatus.valueOf(status);
             if (itemStatus != null)
                 onStatus = qItem.status.eq(itemStatus);
         }
+        if (organizationId != null)
+            onStatus = qItem.organization.id.eq(organizationId).and(onStatus);
         if (owned != null) {
             final String userId = SecurityUtils.getCurrentLogin();
             if (owned) {

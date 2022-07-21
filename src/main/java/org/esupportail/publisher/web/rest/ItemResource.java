@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.InternalFeed;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
@@ -37,6 +36,8 @@ import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.dto.ActionDTO;
 import org.esupportail.publisher.web.rest.util.PaginationUtil;
+
+import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -54,8 +55,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.querydsl.core.types.Predicate;
 
 /**
  * REST controller for managing Evaluator.
@@ -158,14 +157,15 @@ public class ItemResource {
                                            @RequestParam(value = "per_page", required = false) Integer limit,
                                            @RequestParam(value = "displayOrder", required = false) DisplayOrderType displayOrder,
                                            @RequestParam(value = "owned", required = false) Boolean owned,
-                                           @RequestParam(value = "item_status", required = false) Integer itemStatus)
+                                           @RequestParam(value = "item_status", required = false) Integer itemStatus,
+                                           @RequestParam(value = "organization_id", required = false) Long organizationId)
         throws URISyntaxException {
         Sort sort = new QSort(ItemPredicates.orderByItemDefinition(DisplayOrderType.START_DATE));
         if (displayOrder != null) {
             sort = new QSort(ItemPredicates.orderByClassifDefinition(displayOrder));
         }
         Predicate filter = permissionService.filterAuthorizedAllOfContextType(SecurityContextHolder.getContext().getAuthentication(),
-            ContextType.ITEM, PermissionType.LOOKOVER, ItemPredicates.OwnedItemsOfStatus(owned, itemStatus));
+            ContextType.ITEM, PermissionType.LOOKOVER, ItemPredicates.OwnedItemsOfStatus(owned, itemStatus, organizationId));
         log.debug("Filter applied to obtain all items : {}", filter.toString());
         Page<AbstractItem> page = itemRepository.findAll(filter, PaginationUtil.generatePageRequest(offset, limit, sort));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/items", offset, limit);

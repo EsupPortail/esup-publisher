@@ -153,7 +153,7 @@ public class PublishController {
             final BooleanExpression builder = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
             	.in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
             		.from(QAbstractItem.abstractItem)
-                    .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId())));
+                    .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId(), null)));
             List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(displayOrder)));
 
             return getFlashInfo(itemsClasss, request);
@@ -198,9 +198,9 @@ public class PublishController {
                 if (publisher != null) {
                     final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
                         .in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
-                    		.from(QAbstractItem.abstractItem)
-                        	.where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId())))
-                    	.and(ItemPredicates.itemsClassOfPublisher(publisher));
+                            .from(QAbstractItem.abstractItem)
+                            .where(ItemPredicates.FlashItemsOfOrganization(org), ItemPredicates.OwnedItemsOfStatus(false, ItemStatus.PUBLISHED.getId(), null)))
+                            .and(ItemPredicates.itemsClassOfPublisher(publisher));
                     final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
                         ItemPredicates.orderByClassifDefinition(publisher.getDefaultDisplayOrder())));
 

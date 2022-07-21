@@ -51,6 +51,16 @@
   </div>
 
   <div class="table-responsive table-responsive-to-cards">
+      <div v-if="organizations !== null && organizations.length > 1" class="filter-area row">
+        <h5>{{ $t("manager.contents.filter.title") }}</h5>
+        <div class="organization col-auto">
+          <label class="control-label visually-hidden" for="organization">{{ $t("organization.home.title") }}</label>
+          <select class="form-select" id="organization" name="organization" v-model="organization_filter" @change="loadOrganization(organization_filter)">
+            <option value="-1">{{ $t("organization.filter.option.all") }}</option>
+            <option v-for="org in sortedOrganizations" :key="org.id" :value="org.id">{{org.name}}</option>
+          </select>
+        </div>
+      </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -67,7 +77,7 @@
           <th class="d-lg-none">{{$t('item.summary')}}</th>
           <th class="d-none">{{$t('item.body')}}</th>
           <th class="d-md-none d-lg-none d-xl-table-cell">{{$t('item.rssAllowed')}}</th>
-          <th v-if="organizations !== null && organizations.length > 1">{{$t('item.organization')}}</th>
+          <th v-if="organizations !== null && organizations.length > 1 && organization_filter == -1">{{$t('item.organization')}}</th>
           <th class="d-none">{{$t('item.redactor')}}</th>
           <th class="action"></th>
         </tr>
@@ -82,7 +92,7 @@
             <span :data-label="$t('item.beforeName')">{{item.createdBy.displayName}}</span>
           </td>
           <td class="d-none" :data-label="$t('item.enclosure')">
-            <img v-if="item.enclosure" id='enclosure' :src="getUrlEnclosure(item.enclosure)" class="img-responsive img-fluid" :alt="$t('item.enclosure')" />
+            <img v-if="item.enclosure" id="enclosure" :src="getUrlEnclosure(item.enclosure)" class="img-responsive img-fluid" :alt="$t('item.enclosure')" />
           </td>
           <td class="text-center fixed-date-width" :data-label="$t('item.startDate')">{{formatDateSimple(item.startDate)}}</td>
           <td class="text-center fixed-date-width" :data-label="$t('item.endDate')">{{formatDateSimple(item.endDate)}}</td>
@@ -97,8 +107,8 @@
           <td class="d-none" :data-label="$t('item.status')">{{item.status}}</td>
           <td class="d-lg-none verylongtext" :data-label="$t('item.summary')">{{item.summary}}</td>
           <td class="d-none" :data-label="$t('item.body')">{{item.body}}</td>
-          <td class="d-md-none d-lg-none d-xl-table-cell text-center" :data-label="$t('item.rssAllowed')"><input type="checkbox" v-model="item.rssAllowed" disabled /></td>
-          <td v-if="organizations !== null && organizations.length > 1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
+          <td class="d-md-none d-lg-none d-xl-table-cell text-center" :data-label="$t('item.rssAllowed')"><input type="checkbox" v-model="item.rssAllowed" disabled/></td>
+          <td v-if="organizations !== null && organizations.length > 1 && organization_filter == -1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
           <td class="d-none" :data-label="$t('item.redactor')">{{item.redactor.displayName}}</td>
           <td class="action">
             <button type="button" class="btn btn-info btn-sm me-1" @click="itemDetail(item.id)">
@@ -132,7 +142,6 @@
         <li v-if="links.last" @click.prevent="loadPage(links.last)" class="page-item"><a class="page-link" href="">&gt;&gt;</a></li>
       </ul>
     </nav>
-
     <div class="legend">
       <h5>{{$t("manager.contents.legend.title")}}</h5>
       <span class="highlight">
@@ -150,6 +159,7 @@ import store from '@/store/index.js'
 import ParseLinkUtils from '@/services/util/ParseLinkUtils'
 import ClassificationService from '@/services/entities/classification/ClassificationService'
 import UploadUtils from '@/services/util/UploadUtils'
+import CommonUtils from '@/services/util/CommonUtils'
 import { Modal } from 'bootstrap'
 
 export default {
@@ -158,6 +168,7 @@ export default {
     return {
       items: [],
       page: 1,
+      organization_filter: -1,
       item: { title: null, enclosure: null, endDate: null, startDate: null, validatedBy: null, validatedDate: null, status: null, summary: null, body: null, createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null, organizations: null, redactor: null },
       deleteModal: null,
       validateModal: null,
@@ -175,11 +186,22 @@ export default {
   computed: {
     itemStateList () {
       return EnumDatasService.getItemStatusList()
+    },
+    sortedOrganizations () {
+      var sortedOrganizations = Object.assign([], this.organizations)
+      sortedOrganizations.sort((org1, org2) => {
+        return CommonUtils.compareString(org1.name, org2.name)
+      })
+      return sortedOrganizations
     }
   },
   methods: {
     loadAll () {
-      ItemService.query({ page: this.page, per_page: 20, owned: false, item_status: this.getEnumKey('PENDING') }).then((response) => {
+      let query_params = { page: this.page, per_page: 20, owned: false, item_status: this.getEnumKey('PENDING')}
+      if (CommonUtils.isDefined(this.organization_filter) && this.organization_filter > -1) {
+        query_params.organization_id =  this.organization_filter
+      }
+      ItemService.query(query_params).then((response) => {
         this.items = response.data
         this.links = ParseLinkUtils.parse(response.headers.get('link'))
       }).catch(error => {
@@ -191,6 +213,14 @@ export default {
         this.page = page
         this.loadAll()
       }
+    },
+    loadOrganization (organization_id) {
+      if (organization_id) {
+        this.organization_filter = organization_id
+      } else {
+        this.organization_filter = -1
+      }
+      this.loadAll()
     },
     // Fonction de formatage de date avec heure etc
     formatDate (date) {

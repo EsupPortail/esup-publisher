@@ -35,6 +35,16 @@
       </li>
     </ul>
     <div class="table-responsive table-responsive-to-cards">
+      <div v-if="organizations !== null && organizations.length > 1" class="filter-area row">
+        <h5>{{ $t("manager.contents.filter.title") }}</h5>
+        <div class="organization col-auto">
+          <label class="control-label visually-hidden" for="organization">{{ $t("organization.home.title") }}</label>
+          <select class="form-select" id="organization" name="organization" v-model="organization_filter" @change="loadOrganization(organization_filter)">
+            <option value="-1">{{ $t("organization.filter.option.all") }}</option>
+            <option v-for="org in sortedOrganizations" :key="org.id" :value="org.id">{{org.name}}</option>
+          </select>
+        </div>
+      </div>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -51,13 +61,13 @@
             <th class="d-lg-none">{{$t('item.summary')}}</th>
             <th class="d-none">{{$t('item.body')}}</th>
             <th class="d-md-none d-lg-none d-xl-table-cell">{{$t('item.rssAllowed')}}</th>
-            <th v-if="organizations !== null && organizations.length > 1">{{$t('item.organization')}}</th>
+            <th v-if="organizations !== null && organizations.length > 1 && organization_filter == -1">{{$t('item.organization')}}</th>
             <th class="d-none">{{$t('item.redactor')}}</th>
             <th class="action"></th>
           </tr>
         </thead>
           <tbody>
-            <tr v-for="item in items" :key="item.id" :class="{highlight:item.highlight}">
+            <tr v-for="item in items" :key="item.id" :class="{highlight: item.highlight}">
               <td class="d-none" data-label="ID"><router-link :to="{ name: 'ContentDetail', params: { id: item.id }}">{{item.id}}</router-link></td>
               <td :data-label="$t('item.type')">{{$t('enum.itemType.' + item.type)}}</td>
               <td class="longtext" :data-label="$t('item.title')">{{item.title}}</td>
@@ -82,7 +92,7 @@
               <td class="d-lg-none verylongtext" :data-label="$t('item.summary')">{{item.summary}}</td>
               <td class="d-none" :data-label="$t('item.body')">{{item.body}}</td>
               <td class="d-md-none d-lg-none d-xl-table-cell text-center" :data-label="$t('item.rssAllowed')"><input type="checkbox" v-model="item.rssAllowed" disabled/></td>
-              <td v-if="organizations !== null && organizations.length > 1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
+              <td v-if="organizations !== null && organizations.length > 1 && organization_filter == -1" :data-label="$t('item.organization')">{{item.organization.name}}</td>
               <td class="d-none" :data-label="$t('item.redactor')">{{item.redactor.displayName}}</td>
               <td class="action">
                 <button type="button" @click="itemDetail(item)" class="btn btn-info btn-sm me-1">
@@ -130,6 +140,7 @@ import ContentService from '@/services/entities/content/ContentService'
 import DateUtils from '@/services/util/DateUtils'
 import ParseLinkUtils from '@/services/util/ParseLinkUtils'
 import UploadUtils from '@/services/util/UploadUtils'
+import CommonUtils from '@/services/util/CommonUtils'
 import { Modal } from 'bootstrap'
 
 export default {
@@ -139,6 +150,7 @@ export default {
       items: [],
       item: {},
       page: 1,
+      organization_filter: -1,
       itemState: null,
       links: {
         first: null,
@@ -154,13 +166,24 @@ export default {
   computed: {
     itemStateList () {
       return EnumDatasService.getItemStatusList()
+    },
+    sortedOrganizations () {
+      var sortedOrganizations = Object.assign([], this.organizations)
+      sortedOrganizations.sort((org1, org2) => {
+        return CommonUtils.compareString(org1.name, org2.name)
+      })
+      return sortedOrganizations
     }
   },
   methods: {
     // Méthode permettant de récupérer la liste des objets
     loadAll () {
       this.itemState = this.$route.params.itemState ? this.getEnumKey(this.$route.params.itemState) : this.getEnumKey('DRAFT')
-      ItemService.query({ page: this.page, per_page: 20, owned: true, item_status: this.itemState }).then((response) => {
+      let query_params = { page: this.page, per_page: 20, owned: true, item_status: this.itemState}
+      if (CommonUtils.isDefined(this.organization_filter) && this.organization_filter > -1) {
+        query_params.organization_id =  this.organization_filter
+      }
+      ItemService.query(query_params).then((response) => {
         if (response) {
           this.links = ParseLinkUtils.parse(response.headers.get('link'))
           this.items = response.data
@@ -180,6 +203,14 @@ export default {
         this.page = page
         this.loadAll()
       }
+    },
+    loadOrganization (organization_id) {
+      if (organization_id) {
+        this.organization_filter = organization_id
+      } else {
+        this.organization_filter = -1
+      }
+      this.loadAll()
     },
     getEnumKey (name) {
       var result = this.itemStateList.find(val => val.name === name)
