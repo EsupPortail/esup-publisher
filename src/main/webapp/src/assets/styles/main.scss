@@ -130,6 +130,9 @@
         --theme-subject-search-button-validate-button-text-color: #000;
         --theme-subject-search-button-validate-button-background-color: #FC0;
         --theme-subject-search-button-validate-button-border-color: #FC0;
+        .publish-header {
+            --theme-link-focus-background-color: transparent;
+        }
     }
     &.clg36 {
         --theme-link-focus-color: #0069B3;
