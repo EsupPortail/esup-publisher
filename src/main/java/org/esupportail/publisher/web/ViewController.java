@@ -51,6 +51,7 @@ import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
+import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
@@ -60,6 +61,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -92,6 +94,9 @@ public class ViewController {
 
 	@Inject
 	private LinkedFileItemRepository linkedFileItemRepository;
+
+	@Inject
+	private IPermissionService permissionService;
 
 	private static final String REDIRECT_PARAM = "local-back-to";
 
@@ -177,20 +182,36 @@ public class ViewController {
 		boolean canView = false;
 		String filename = null;
 		for (LinkedFileItem lfiles : itemsFiles) {
-			Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
-					ItemStatus.PUBLISHED, null));
-			AbstractItem item = optionnalItem == null || !optionnalItem.isPresent() ? null : optionnalItem.get();
-			try {
-				if (item != null && canView(item)) {
+			Optional<AbstractItem> optionalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
+					null, null));
+			AbstractItem item = optionalItem.orElse(null);
+			// a user can see only when published expect if he can Edit the content
+			if (item != null && item.getStatus().equals(ItemStatus.PUBLISHED)) {
+				try {
+					if (canView(item)) {
+						canView = true;
+						filename = lfiles.getFilename();
+						break;
+					}
+				} catch (AccessDeniedException ade) {
+					log.trace("Redirect to establish authentication !");
+					response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?"
+							+ REDIRECT_PARAM + "=" + query);
+					return;
+				}
+			} else if (item != null) {
+				if (SecurityUtils.getCurrentUserDetails() == null) {
+					log.trace("Redirect to establish authentication !");
+					response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?"
+							+ REDIRECT_PARAM + "=" + query);
+					return;
+				}
+
+				if ( permissionService.canEditCtx(SecurityContextHolder.getContext().getAuthentication(), item.getContextKey())) {
 					canView = true;
 					filename = lfiles.getFilename();
 					break;
 				}
-			} catch (AccessDeniedException ade) {
-				log.trace("Redirect to establish authentication !");
-				response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?"
-						+ REDIRECT_PARAM + "=" + query);
-				return;
 			}
 		}
 
