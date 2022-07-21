@@ -124,8 +124,10 @@ export default {
     },
     canSave () {
       // to be able to save an item at least all mandatory attributes should be setted
+      // we can't save in edit mode if the user don't check all already setted steps else these steps are cleaned
       return this.publisher && this.publisher.id && this.classifications &&
-        this.classifications.length > 0 && this.item && this.item.title && this.itemValidated
+        this.classifications.length > 0 && this.item && this.item.title && this.itemValidated &&
+        (!this.contentData || (this.publisher.context.redactor.writingMode === 'STATIC' || this.targets || !this.contentData.targets))
     },
     canSubmit () {
       return this.publisher && this.publisher.id && this.itemValidated &&
