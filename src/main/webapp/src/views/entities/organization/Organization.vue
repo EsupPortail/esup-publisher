@@ -193,6 +193,7 @@ export default {
       OrganizationService.query().then(response => {
         this.organizations = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -228,6 +229,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -238,6 +240,7 @@ export default {
         this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -247,6 +250,7 @@ export default {
         this.organization = response.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -257,6 +261,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

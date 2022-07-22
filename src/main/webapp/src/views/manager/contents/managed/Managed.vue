@@ -251,6 +251,7 @@ export default {
           this.items = response.data
         }
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -300,6 +301,7 @@ export default {
         this.item = result.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -308,6 +310,7 @@ export default {
         this.deleteModal.hide()
         this.loadAll()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -316,6 +319,7 @@ export default {
         this.item = result.data
         this.validateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -324,6 +328,7 @@ export default {
         this.validateModal.hide()
         this.loadAll()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -332,6 +337,7 @@ export default {
         this.item = result.data
         this.invalidateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -340,6 +346,7 @@ export default {
         this.invalidateModal.hide()
         this.loadAll()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

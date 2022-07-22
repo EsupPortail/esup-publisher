@@ -37,6 +37,7 @@ class EnumDatasService {
         this.ClassificationDecorTypeList = response.data.ClassificationDecorType
       }
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
   }

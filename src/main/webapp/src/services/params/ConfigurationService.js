@@ -15,6 +15,7 @@ class ConfigurationService {
         this.confMimeTypes = results[2].data.value
       }
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
   }

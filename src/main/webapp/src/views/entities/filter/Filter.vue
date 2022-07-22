@@ -165,6 +165,7 @@ export default {
       FilterService.query().then(response => {
         this.filters = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -184,6 +185,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -194,6 +196,7 @@ export default {
         this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -203,6 +206,7 @@ export default {
         this.filter = response.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -213,6 +217,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -232,6 +237,7 @@ export default {
     OrganizationService.query().then(response => {
       this.organizations = response.data
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
   },

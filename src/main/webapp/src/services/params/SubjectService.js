@@ -15,6 +15,7 @@ class SubjectService {
             this.UserFonctionalAttrs = results[2].data
           }
         }).catch(error => {
+          // eslint-disable-next-line
           console.error(error)
         })
       } else {

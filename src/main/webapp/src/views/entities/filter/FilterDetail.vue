@@ -69,6 +69,7 @@ export default {
       FilterService.get(this.$route.params.id).then(response => {
         this.filter = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

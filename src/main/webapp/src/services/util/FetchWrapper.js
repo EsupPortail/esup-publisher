@@ -94,6 +94,7 @@ function jsonp (url, callbackName, timeout) {
     let timeoutTimer = null
     if (timeout > -1) {
       timeoutTimer = setTimeout(() => {
+        // eslint-disable-next-line
         console.warn('Timeout JSONP')
         removeErrorListener()
         removeScript()
@@ -105,6 +106,7 @@ function jsonp (url, callbackName, timeout) {
     }
 
     const onError = (err) => {
+      // eslint-disable-next-line
       console.error('Error JSONP', err)
       if (timeoutTimer) {
         clearTimeout(timeoutTimer)

@@ -189,6 +189,7 @@ export default {
           this.items = response.data
         }
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -238,6 +239,7 @@ export default {
         this.item = result.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -246,6 +248,7 @@ export default {
         this.deleteModal.hide()
         this.loadAll()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

@@ -147,6 +147,7 @@ export default {
       PublisherService.get(this.$route.params.id).then(response => {
         this.publisher = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

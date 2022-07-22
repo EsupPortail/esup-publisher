@@ -93,6 +93,7 @@ export default {
           this.$store.commit('setLoginModalOpened', false)
         }
       } catch (e) {
+        // eslint-disable-next-line
         console.error(e)
       }
     },

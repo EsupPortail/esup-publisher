@@ -279,6 +279,7 @@ export default {
       PublisherService.query().then(response => {
         this.publishers = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -304,6 +305,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -314,6 +316,7 @@ export default {
         this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -323,6 +326,7 @@ export default {
         this.publisher = response.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -333,6 +337,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -391,18 +396,21 @@ export default {
       this.redactors = response.data
       this.publisher.context.redactor = this.redactors[0]
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
     OrganizationService.query().then(response => {
       this.organizations = response.data
       this.publisher.context.organization = this.organizations[0]
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
     ReaderService.query().then(response => {
       this.readers = response.data
       this.publisher.context.reader = this.readers[0]
     }).catch(error => {
+      // eslint-disable-next-line
       console.error(error)
     })
   },

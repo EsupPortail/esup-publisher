@@ -252,6 +252,7 @@ export default {
       RedactorService.query().then(response => {
         this.redactors = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -277,6 +278,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -287,6 +289,7 @@ export default {
         this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -296,6 +299,7 @@ export default {
         this.redactor = response.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -306,6 +310,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

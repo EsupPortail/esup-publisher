@@ -231,6 +231,7 @@ export default {
       ReaderService.query().then(response => {
         this.readers = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -254,6 +255,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -264,6 +266,7 @@ export default {
         this.initFormValidator()
         this.updateModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -273,6 +276,7 @@ export default {
         this.reader = response.data
         this.deleteModal.show()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
@@ -283,6 +287,7 @@ export default {
         this.reset()
         this.clear()
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

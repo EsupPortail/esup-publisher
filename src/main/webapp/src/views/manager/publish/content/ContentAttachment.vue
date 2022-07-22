@@ -254,6 +254,7 @@ export default {
             UploadUtils.convertImageToJpeg(file).then((jpeg) => {
               this.doUpload(jpeg)
             }).catch(err => {
+              // eslint-disable-next-line
               console.error(err)
               this.doUpload(file)
             })

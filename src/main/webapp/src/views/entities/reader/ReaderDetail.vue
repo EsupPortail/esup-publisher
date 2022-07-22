@@ -78,6 +78,7 @@ export default {
       ReaderService.get(this.$route.params.id).then(response => {
         this.reader = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },

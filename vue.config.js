@@ -14,6 +14,7 @@ function loadBackVersion () {
   const pomXml = fs.readFileSync('./pom.xml', 'utf8')
   xml2js.parseString(pomXml, function (err, result) {
     if (err) {
+      // eslint-disable-next-line
       console.error(err)
     } else {
       version = result.project.version[0]

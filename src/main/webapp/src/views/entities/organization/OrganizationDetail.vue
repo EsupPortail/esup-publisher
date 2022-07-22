@@ -117,6 +117,7 @@ export default {
       OrganizationService.get(this.$route.params.id).then(response => {
         this.organization = response.data
       }).catch(error => {
+        // eslint-disable-next-line
         console.error(error)
       })
     },
