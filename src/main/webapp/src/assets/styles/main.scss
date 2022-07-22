@@ -607,35 +607,36 @@ ul#strength {
 /* end link for pagination */
 /* start nav-tabs for tables - for all table containing contents */
 
-.nav-link {
-    color: black;
-}
-.nav-tabs .nav-link:hover,
-.nav-tabs .nav-link:focus {
-    color: var(--theme-tabs-link-focus-color);
-}
-.nav-tabs>li>a.nav-link.active,
-.nav-tabs>li>a.nav-link.active:hover,
-.nav-tabs>li>a.nav-link.active:focus {
-    color: var(--theme-tabs-active-link-color);
-    cursor: default;
-    background-color: var(--theme-tabs-active-link-background-color);
-    border-bottom-color: transparent;
-}
+.esup-publisher > .container-fluid {
+    .nav-link {
+        color: black;
+    }
+    .nav-tabs .nav-link:hover,
+    .nav-tabs .nav-link:focus {
+        color: var(--theme-tabs-link-focus-color);
+    }
+    .nav-tabs>li>a.nav-link.active,
+    .nav-tabs>li>a.nav-link.active:hover,
+    .nav-tabs>li>a.nav-link.active:focus {
+        color: var(--theme-tabs-active-link-color);
+        cursor: default;
+        background-color: var(--theme-tabs-active-link-background-color);
+        border-bottom-color: transparent;
+    }
 
-/* end nav-tabs for tables - for all table containing contents */
-/* start nav-pills for all sub-nav in contents*/
-
-.nav-pills .nav-link:hover,
-.nav-pills .nav-link:focus {
-    color: var(--theme-pills-link-focus-color);
-}
-.nav-pills .nav-link.active,
-.nav-pills>li.active>a,
-.nav-pills>li.active>a:hover,
-.nav-pills>li.active>a:focus {
-    color: var(--theme-pills-active-link-color);
-    background-color: var(--theme-pills-active-link-background-color);
+    /* end nav-tabs for tables - for all table containing contents */
+        /* start nav-pills for all sub-nav in contents*/
+    .nav-pills .nav-link:hover,
+    .nav-pills .nav-link:focus {
+        color: var(--theme-pills-link-focus-color);
+    }
+    .nav-pills .nav-link.active,
+    .nav-pills>li.active>a,
+    .nav-pills>li.active>a:hover,
+    .nav-pills>li.active>a:focus {
+        color: var(--theme-pills-active-link-color);
+        background-color: var(--theme-pills-active-link-background-color);
+    }
 }
 
 .pastille {
