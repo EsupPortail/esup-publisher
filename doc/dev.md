@@ -77,7 +77,7 @@ __Don't forget to make a dump of your datas before such operation__
 
 ## Release process :
 - put away local change `git stash`
-- `./mvnw clean generate-sources release:prepare release:perform -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+- `./mvnw clean generate-sources release:prepare release:perform deploy -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
 - `git push origin master`
 - `git stash apply`
 
