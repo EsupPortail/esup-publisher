@@ -23,9 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Lists;
-
-import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
 import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -33,6 +30,8 @@ import org.esupportail.publisher.repository.PermissionOnContextRepository;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
+
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -148,7 +147,7 @@ public class PermissionOnContextResource {
 			HttpServletResponse response) {
 		log.debug("REST request to get PermissionOnContext : {}", id);
 		Optional<PermissionOnContext> optionalPermissionOnContext =  permissionOnContextRepository.findById(id);
-		PermissionOnContext permissionOnContext = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
+		PermissionOnContext permissionOnContext = optionalPermissionOnContext.orElse(null);
 		if (permissionOnContext == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -164,7 +163,7 @@ public class PermissionOnContextResource {
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete PermissionOnContext : {}", id);
 		Optional<PermissionOnContext> optionalPermissionOnContext =  permissionOnContextRepository.findById(id);
-		PermissionOnContext permissionOnContext = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
+		PermissionOnContext permissionOnContext = optionalPermissionOnContext.orElse(null);
         if (permissionOnContext == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

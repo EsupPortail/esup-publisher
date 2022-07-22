@@ -29,11 +29,9 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
-import com.google.common.collect.Lists;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ContextKey;
-import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectContextKey;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
@@ -52,6 +50,8 @@ import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberResolvedDTO;
+
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -104,7 +104,7 @@ public class SubscriberResource {
 			UnsupportedEncodingException {
 		log.debug("REST request to save Subscriber : {}", subscriber);
 		Optional<Subscriber> optionalSubscriber =  subscriberRepository.findById(subscriber.getId());
-		Subscriber subscriberRepo = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
+		Subscriber subscriberRepo = optionalSubscriber.orElse(null);
 
 		if (subscriberRepo != null) {
 			return ResponseEntity.badRequest().header("Failure", "The subscriber should not already exist").build();
@@ -124,7 +124,7 @@ public class SubscriberResource {
 		case FEED:
 			Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(subscriber.getSubjectCtxId().getContext()
 					.getKeyId());
-			AbstractClassification classif = optionalAbstractClassification == null || !optionalAbstractClassification.isPresent()? null : optionalAbstractClassification.get();
+			AbstractClassification classif = optionalAbstractClassification.orElse(null);
 			if (classif != null
 					&& !WritingMode.TARGETS_ON_ITEM.equals(classif.getPublisher().getContext().getRedactor()
 							.getWritingMode()) && classif.getPublisher().isHasSubPermsManagement()) {
@@ -133,7 +133,7 @@ public class SubscriberResource {
 			break;
 		case ITEM:
 			Optional<AbstractItem> optionalAbstractItem =  itemRepository.findById(subscriber.getSubjectCtxId().getContext().getKeyId());
-			AbstractItem item = optionalAbstractItem == null || !optionalAbstractItem.isPresent()? null : optionalAbstractItem.get();
+			AbstractItem item = optionalAbstractItem.orElse(null);
 			if (item != null && WritingMode.TARGETS_ON_ITEM.equals(item.getRedactor().getWritingMode())) {
 				subscribersOnCtx = true;
 			}

@@ -91,7 +91,7 @@ public class AccountResourceTest {
 	@Test
 	public void testGetExistingAccount() throws Exception {
 		Optional<User> optionalUser = userRepository.findOne(QUser.user.login.like("admin"));
-        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+        User userPart = optionalUser.orElse(null);
 		UserDTO userDTOPart = new UserDTO("admin", "admin", true, true);
 		CustomUserDetails user = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
 

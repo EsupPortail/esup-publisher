@@ -101,7 +101,7 @@ public class EvaluatorRepositoryTest {
 		assertThat(oe.getId(), notNullValue());
 		log.info("After insert : {}", oe);
 		Optional<AbstractEvaluator> optionalEvaluator = repository.findById(oe.getId());
-		OperatorEvaluator oe2 = optionalEvaluator == null || !optionalEvaluator.isPresent()? null : (OperatorEvaluator) optionalEvaluator.get();
+		OperatorEvaluator oe2 = (OperatorEvaluator) optionalEvaluator.orElse(null);
 		log.info("After select : {}", oe2);
 		assertThat(oe2, notNullValue());
 		assertThat(oe, equalTo(oe2));
@@ -126,7 +126,7 @@ public class EvaluatorRepositoryTest {
 		assertThat(repository.existsById(oe.getId()), is(false));
 
 		Optional<AbstractEvaluator> optionalAe = repository.findById((long) 0);
-		AbstractEvaluator ae = optionalAe.isPresent() ? optionalAe.get() : null;
+		AbstractEvaluator ae = optionalAe.orElse(null);
 		assertThat(ae, is(nullValue()));
 	}
 

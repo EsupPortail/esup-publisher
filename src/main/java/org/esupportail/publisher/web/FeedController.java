@@ -108,7 +108,7 @@ public class FeedController {
         try {
             long orgId = Long.parseLong(id);
             Optional<Organization> optionalOrg =  organizationRepository.findById(orgId);
-            org = optionalOrg == null || !optionalOrg.isPresent() ? null : optionalOrg.get();
+            org = optionalOrg.orElse(null);
         } catch (NumberFormatException e) {
             org = organizationRepository.findByIdentifiers(id);
         }
@@ -122,7 +122,7 @@ public class FeedController {
         if (publisherId != null) {
             builder.and(ItemPredicates.itemsClassOfPublisher(publisherId));
             Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
-            Publisher pub = optionalPublisher == null || !optionalPublisher.isPresent() ? null : optionalPublisher.get();
+            Publisher pub = optionalPublisher.orElse(null);
             if (pub != null) {
                 mav.addObject(PublisherRssFeedView.PUB_PARAM, pub);
                 orderSpecifier = ItemPredicates.orderByPublisherDefinition(pub.getDefaultDisplayOrder());
@@ -131,7 +131,7 @@ public class FeedController {
         if (classifId != null) {
             builder.and(ItemPredicates.itemsClassOfClassification(classifId));
             Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
-            AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();
+            AbstractClassification classif = optionalClassif.orElse(null);
             if (classif != null) {
                 mav.addObject(PublisherRssFeedView.CLASSIF_PARAM, classif);
                 orderSpecifier = ItemPredicates.orderByClassifDefinition(classif.getDefaultDisplayOrder());
@@ -151,7 +151,7 @@ public class FeedController {
         ModelAndView mav = new ModelAndView();
 
         Optional<AbstractClassification> optionalClassif =  classificationRepository.findById(classifId);
-        AbstractClassification classif = optionalClassif == null || !optionalClassif.isPresent() ? null : optionalClassif.get();;
+        AbstractClassification classif = optionalClassif.orElse(null);
         if (classif == null) {
             return mav;
         }

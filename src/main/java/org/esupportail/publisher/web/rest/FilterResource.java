@@ -16,24 +16,29 @@
 package org.esupportail.publisher.web.rest;
 
 
-import org.esupportail.publisher.domain.ExternalFeed;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.security.SecurityConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing Filter.
@@ -101,7 +106,7 @@ public class FilterResource {
     public ResponseEntity<Filter> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Filter : {}", id);
         Optional<Filter> optionalFilter =  filterRepository.findById(id);
-        Filter filter = optionalFilter == null || !optionalFilter.isPresent()? null : optionalFilter.get();
+        Filter filter = optionalFilter.orElse(null);
         if (filter == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

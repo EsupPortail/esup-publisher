@@ -331,7 +331,7 @@ public class GroupServiceTest {
 		when(permissionService.getPermsOfUserInContext(SecurityContextHolder
 				.getContext().getAuthentication(), contextKey1)).thenReturn(perms);
 		when(contextService.getOrganizationCtxOfCtx(contextKey)).thenReturn(contextKey);
-		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(null);
+		when(filterRepository.findOne(Mockito.any(Predicate.class))).thenReturn(Optional.empty());
 		when(externalGroupDao.getGroupsById(groupsIds, true)).thenReturn(externalGroupList);
 		when(treeJSDTOFactory.asDTOList(externalGroupList)).thenReturn(treeJSList);
 

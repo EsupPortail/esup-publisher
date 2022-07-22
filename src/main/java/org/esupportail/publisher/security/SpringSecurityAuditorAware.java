@@ -57,7 +57,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<User>, Applicati
         if (this.systemUser == null) {
             log.debug(" >>> loading system user");
             Optional<User> optionalUser = this.userRepository.findOne(QUser.user.login.like("SYSTEM"));
-            systemUser = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+            systemUser = optionalUser.orElse(null);
         }
     }
 }

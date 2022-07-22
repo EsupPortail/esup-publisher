@@ -106,7 +106,11 @@ public class OrganizationResource {
         // a manager role can only update DisplayName and if Notifications are allowed
 		if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
 			Optional<Organization> optionalOrganization =  organizationRepository.findById(organization.getId());
-			Organization model = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+			Organization model = optionalOrganization.orElse(null);
+			if (model == null) {
+				log.warn("Organization with id '{}' not found", organization.getId());
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
             model.setDisplayName(organization.getDisplayName());
             model.setAllowNotifications(organization.isAllowNotifications());
             organizationRepository.save(organization);
@@ -162,7 +166,7 @@ public class OrganizationResource {
 	public ResponseEntity<Organization> get(@PathVariable Long id) {
 		log.debug("REST request to get Organization : {}", id);
 		Optional<Organization> optionalOrganization =  organizationRepository.findById(id);
-		Organization organization = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+		Organization organization = optionalOrganization.orElse(null);
 		if (organization == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

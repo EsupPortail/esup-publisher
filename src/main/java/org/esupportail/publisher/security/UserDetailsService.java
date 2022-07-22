@@ -15,25 +15,27 @@
  */
 package org.esupportail.publisher.security;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Authenticate a user from the database.
@@ -69,7 +71,7 @@ public class UserDetailsService implements
 	@Transactional
 	public CustomUserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		Optional<User> optionalUser = userDao.findById(userName);
-		User internal = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+		User internal = optionalUser.orElse(null);
 		final IExternalUser external = extDao.getUserByUid(userName);
 		if (external == null) {
 			throw new UsernameNotFoundException(String.format(
@@ -89,7 +91,7 @@ public class UserDetailsService implements
 			if (authorities != null && !authorities.isEmpty() && isAtLeastUser) {
 				internal = userDao.saveAndFlush(userDTOFactory.from(user));
 				Optional<User> optionalU = userDao.findById(userName);
-				internal = optionalU == null || !optionalU.isPresent() ? null : optionalU.get();
+				internal = optionalU.orElse(null);
 				if (internal == null) {
 					log.error(
 							"User with username {} could not be read back after being created.",

@@ -63,7 +63,7 @@ public class GroupService implements IGroupService {
 	private ContextService contextService;
 
 	public List<TreeJS> getRootNodes(final ContextKey contextKey, final List<ContextKey> subContextKeys) {
-		if (contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
+		if (contextKey == null || contextKey.getKeyType() == null || contextKey.getKeyId() == null) {
 			return Lists.newArrayList();
 		}
 		Pair<PermissionType, PermissionDTO> perms = permissionService.getPermsOfUserInContext(SecurityContextHolder
@@ -99,7 +99,7 @@ public class GroupService implements IGroupService {
 			if (rootCtx != null) {
 				Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(rootCtx.getKeyId(),
 						FilterType.GROUP));
-				Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
+				Filter filter = optionalFilter.orElse(null);
 				if (filter != null) {
 					List<IExternalGroup> groups = externalGroupDao
 							.getGroupsWithFilter(filter.getPattern(), null, false);
@@ -137,7 +137,7 @@ public class GroupService implements IGroupService {
 					if (rootCtx != null) {
 						Optional<Filter> optionalFilter = filterRepository.findOne(FilterPredicates.ofTypeOfOrganization(
 								rootCtx.getKeyId(), FilterType.GROUP));
-						Filter filter = optionalFilter == null || !optionalFilter.isPresent() ? null : optionalFilter.get();
+						Filter filter = optionalFilter.orElse(null);
 						if (filter != null) {
 							List<IExternalGroup> groups = externalGroupDao.getGroupsWithFilter(filter.getPattern(),
 									null, false);

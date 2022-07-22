@@ -63,7 +63,7 @@ public class UserRepositoryTest {
         long count = repository.count();
 		Instant d = Instant.now();
 		Optional<User> optionalUser = repository.findById(ObjTest.subject1);
-		User u = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
+		User u = optionalUser.orElse(null);
 		log.info("loaded user :{}", u);
 		assertThat(u, notNullValue());
 		log.debug("{} test equals with {}", ObjTest.subjectKey1, u.getSubject());
@@ -78,7 +78,7 @@ public class UserRepositoryTest {
 		u.setAcceptNotifications(true);
 		repository.saveAndFlush(u);
 		Optional<User> optionalU = repository.findById(ObjTest.subject2);
-		u = optionalU == null || !optionalU.isPresent()? null : optionalU.get();
+		u = optionalU.orElse(null);
 		assertThat(u, notNullValue());
 		assertThat(u, not(equalTo(u2)));
 		u2.setAcceptNotifications(true);
@@ -86,7 +86,7 @@ public class UserRepositoryTest {
 
 		repository.saveAndFlush(u);
 		Optional<User> optionalU1 = repository.findById(ObjTest.subject1);
-		u = (optionalU1 == null || !optionalU1.isPresent()) ? null : optionalU1.get();
+		u = optionalU1.orElse(null);
 		assertThat(u, notNullValue());
 		assertThat(u, equalTo(u2));
 		assertThat(u, equalTo(u2));
@@ -94,7 +94,7 @@ public class UserRepositoryTest {
 		u.setEnabled(false);
 		repository.saveAndFlush(u);
 		Optional<User> optionalU2 = repository.findById(ObjTest.subject1);
-		u2 = optionalU2 == null || !optionalU2.isPresent()? null : optionalU2.get();
+		u2 = optionalU2.orElse(null);
 		assertThat(u2, notNullValue());
 		assertThat(u2, equalTo(u));
 		u2.setEnabled(true);

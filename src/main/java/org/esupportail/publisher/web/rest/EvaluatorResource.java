@@ -23,9 +23,9 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
 import org.esupportail.publisher.repository.EvaluatorRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -93,7 +93,7 @@ public class EvaluatorResource {
 			HttpServletResponse response) {
 		log.debug("REST request to get Evaluator : {}", id);
 		Optional<AbstractEvaluator> optionalAbstractEvaluator =  evaluatorRepository.findById(id);
-		AbstractEvaluator evaluator = optionalAbstractEvaluator == null || !optionalAbstractEvaluator.isPresent()? null : optionalAbstractEvaluator.get();
+		AbstractEvaluator evaluator = optionalAbstractEvaluator.orElse(null);
 		if (evaluator == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

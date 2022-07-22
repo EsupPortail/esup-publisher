@@ -132,7 +132,7 @@ public class PermissionOnContextRepositoryTest {
 		log.info("After insert : {}", e);
 
 		Optional<PermissionOnContext> optionalPermissionOnContext = repository.findById(e.getId());
-		PermissionOnContext e2 = optionalPermissionOnContext == null || !optionalPermissionOnContext.isPresent()? null : optionalPermissionOnContext.get();
+		PermissionOnContext e2 = optionalPermissionOnContext.orElse(null);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
 		assertThat(e, equalTo( e2));

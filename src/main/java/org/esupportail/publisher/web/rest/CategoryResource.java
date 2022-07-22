@@ -24,10 +24,10 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.repository.CategoryRepository;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.security.UserContextLoaderService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -117,7 +117,7 @@ public class CategoryResource {
     public ResponseEntity<Category> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Category : {}", id);
         Optional<Category> optionalCategory =  categoryRepository.findById(id);
-        Category category = optionalCategory == null || !optionalCategory.isPresent()? null : optionalCategory.get();
+        Category category = optionalCategory.orElse(null);
         if (category == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

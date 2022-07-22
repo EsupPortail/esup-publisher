@@ -115,7 +115,7 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		log.info("After insert : {}", e);
 
 		Optional<PermissionOnClassificationWithSubjectList> optionalPerm = repository.findById(e.getId());
-		PermissionOnClassificationWithSubjectList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
+		PermissionOnClassificationWithSubjectList e2 = optionalPerm.orElse(null);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
 		assertThat((Sets.newHashSet(subkeys3)), equalTo(e.getAuthorizedSubjects()));
@@ -126,8 +126,8 @@ public class PermOnClassifWithSubjectsRepositoryTest {
 		repository.save(e2);
 
 		Optional<PermissionOnClassificationWithSubjectList> optionalPermission = repository.findById(e2.getId());
-		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
-
+		e = optionalPermission.orElse(null);
+		assertThat(e, notNullValue());
 		assertThat((Sets.newHashSet(subkeys3)), not(equalTo(e.getAuthorizedSubjects())));
 
 		e = ObjTest.newPermissionOnClassificationWSL(PERM_INDICE_4,

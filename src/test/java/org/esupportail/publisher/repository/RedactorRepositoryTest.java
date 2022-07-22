@@ -81,7 +81,7 @@ public class RedactorRepositoryTest {
 		assertThat(r.getId(), notNullValue());
 		log.info("After insert : {}", r);
 		Optional<Redactor> optionalRedactor = repository.findById(r.getId());
-		Redactor r2 = optionalRedactor == null || !optionalRedactor.isPresent()? null : optionalRedactor.get();
+		Redactor r2 = optionalRedactor.orElse(null);
 		log.info("After select : {}", r2);
 		assertThat(r2, notNullValue());
 		assertThat(r2, equalTo(r));
@@ -118,7 +118,7 @@ public class RedactorRepositoryTest {
 		assertThat(repository.existsById(r.getId()), is(false));
 
 		Optional<Redactor> optionalR = repository.findById((long) 0);
-		r = optionalR == null || !optionalR.isPresent()? null : optionalR.get();
+		r = optionalR.orElse(null);
 		assertThat(r, is(nullValue()));
 
 	}

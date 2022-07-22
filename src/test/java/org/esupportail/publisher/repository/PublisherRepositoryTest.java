@@ -119,7 +119,7 @@ public class PublisherRepositoryTest {
 		assertThat(e.getId(), notNullValue());
 		log.info("After insert : {}", e);
 		Optional<Publisher> optionalPublisher = repository.findById(e.getId());
-		Publisher e2 = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+		Publisher e2 = optionalPublisher.orElse(null);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
 		assertThat(e2, equalTo(e));

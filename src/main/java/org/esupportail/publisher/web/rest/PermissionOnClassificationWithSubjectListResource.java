@@ -23,9 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Lists;
-
-import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
@@ -33,6 +30,8 @@ import org.esupportail.publisher.repository.PermOnClassifWithSubjectsRepository;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
+
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -133,7 +132,7 @@ public class PermissionOnClassificationWithSubjectListResource {
 			HttpServletResponse response) {
 		log.debug("REST request to get permissionOnClassificationWithSubjectLists : {}", id);
 		Optional<PermissionOnClassificationWithSubjectList> optionalPermission =  permissionRepository.findById(id);
-		PermissionOnClassificationWithSubjectList permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		PermissionOnClassificationWithSubjectList permission = optionalPermission.orElse(null);
 		if (permission == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -149,7 +148,7 @@ public class PermissionOnClassificationWithSubjectListResource {
 	public ResponseEntity delete(@PathVariable Long id) {
 		log.debug("REST request to delete permissionOnClassificationWithSubjectLists : {}", id);
 		Optional<PermissionOnClassificationWithSubjectList> optionalPermission =  permissionRepository.findById(id);
-		PermissionOnClassificationWithSubjectList permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		PermissionOnClassificationWithSubjectList permission = optionalPermission.orElse(null);
         if (permission == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

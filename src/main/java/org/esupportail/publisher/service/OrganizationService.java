@@ -19,13 +19,10 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.enums.FilterType;
 import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.predicates.FilterPredicates;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +51,7 @@ public class OrganizationService {
 		} else
 			return;
 		Optional<Organization> optionalOrganization = organizationRepository.findById(id);
-		Organization organization = optionalOrganization == null || !optionalOrganization.isPresent() ? null : optionalOrganization.get();
+		Organization organization = optionalOrganization.orElseThrow();
 		organization.setDisplayOrder(newPos);
 		organizationRepository.save(organization);
 

@@ -85,7 +85,7 @@ public class UserResource {
 	public User getUser(@PathVariable String login, HttpServletResponse response) {
 		log.debug("REST request to get User : {}", login);
 		Optional<User> optionalUser =  userRepository.findById(login);
-		User user = optionalUser == null || !optionalUser.isPresent()? null : optionalUser.get();
+		User user = optionalUser.orElse(null);
 		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}

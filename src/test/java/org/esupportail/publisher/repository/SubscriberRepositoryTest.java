@@ -133,7 +133,7 @@ public class SubscriberRepositoryTest {
 		log.info("After insert : {}", s);
 
 		Optional<Subscriber> optionalSubscriber = repository.findById(s.getSubjectCtxId());
-		Subscriber s2 = optionalSubscriber == null || !optionalSubscriber.isPresent()? null : optionalSubscriber.get();
+		Subscriber s2 = optionalSubscriber.orElse(null);
 		log.info("After select : {}", s2);
 		assertThat(s2, notNullValue());
 		assertThat( s2, equalTo(s));

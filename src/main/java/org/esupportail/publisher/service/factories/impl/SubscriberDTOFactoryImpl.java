@@ -23,31 +23,29 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.domain.ContextKey;
 import org.esupportail.publisher.domain.SubjectContextKey;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.SubjectType;
 import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
-import org.esupportail.publisher.service.factories.CompositeKeyExtendedDTOFactory;
 import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
+import org.esupportail.publisher.service.factories.CompositeKeyExtendedDTOFactory;
 import org.esupportail.publisher.service.factories.SubjectDTOFactory;
 import org.esupportail.publisher.service.factories.SubscriberDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectContextKeyDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -88,7 +86,7 @@ public class SubscriberDTOFactoryImpl implements SubscriberDTOFactory {
 			Optional<Subscriber> optionalSubscriber = dao.findById(new SubjectContextKey(subjectConverter.convertToModelKey(dtObject
 					.getModelId().getSubjectKey()), contextConverter.convertToModelKey(dtObject.getModelId()
 					.getContextKey())));
-			Subscriber model = optionalSubscriber == null || !optionalSubscriber.isPresent() ? null : optionalSubscriber.get();
+			Subscriber model = optionalSubscriber.orElse(null);
 			if (model == null) {
 				model = new Subscriber(subjectConverter.convertToModelKey(dtObject.getModelId().getSubjectKey()),
 						contextConverter.convertToModelKey(dtObject.getModelId().getContextKey()),
@@ -106,7 +104,7 @@ public class SubscriberDTOFactoryImpl implements SubscriberDTOFactory {
 	public Subscriber from(final SubjectContextKeyDTO id) throws ObjectNotFoundException {
 		Optional<Subscriber> optionalSubscriber = dao.findById(new SubjectContextKey(subjectConverter.convertToModelKey(id.getSubjectKey()),
 				contextConverter.convertToModelKey(id.getContextKey())));
-		Subscriber model = optionalSubscriber == null || !optionalSubscriber.isPresent() ? null : optionalSubscriber.get();
+		Subscriber model = optionalSubscriber.orElse(null);
 		return model;
 	}
 

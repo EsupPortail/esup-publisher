@@ -18,12 +18,13 @@
  */
 package org.esupportail.publisher.service.factories.impl;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import org.esupportail.publisher.domain.AbstractItem;
+import javax.inject.Inject;
+
 import org.esupportail.publisher.domain.SubjectKey;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.enums.SubjectType;
@@ -33,14 +34,13 @@ import org.esupportail.publisher.service.factories.CompositeKeyDTOFactory;
 import org.esupportail.publisher.service.factories.SubjectDTOFactory;
 import org.esupportail.publisher.web.rest.dto.SubjectDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.inject.Inject;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -70,8 +70,8 @@ public class SubjectDTOFactoryImpl implements SubjectDTOFactory {
     public User from(final SubjectDTO dtObject) throws ObjectNotFoundException {
         log.debug("DTO to Model of {}", dtObject);
         if (dtObject != null && SubjectType.PERSON.equals(dtObject.getModelId().getKeyType())) {
-        	Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId());
-        	User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+            Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId());
+            User user = optionalUser.orElse(null);
             if (user == null) {
                 user = new User(subjectConverter.convertToModelKey(dtObject.getModelId()).getKeyId(), dtObject.getDisplayName());
             }
@@ -112,8 +112,8 @@ public class SubjectDTOFactoryImpl implements SubjectDTOFactory {
 
     public User from(final SubjectKeyDTO id) throws ObjectNotFoundException {
         if (SubjectType.PERSON.equals(id.getKeyType())) {
-        	Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(id).getKeyId());
-        	User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+            Optional<User> optionalUser = getDao().findById(subjectConverter.convertToModelKey(id).getKeyId());
+            User user = optionalUser.orElse(null);
             return user;
         }
         return null;

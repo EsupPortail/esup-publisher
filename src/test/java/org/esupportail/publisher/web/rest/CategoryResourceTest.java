@@ -148,7 +148,7 @@ public class CategoryResourceTest {
 		this.restCategoryMockMvc = MockMvcBuilders.standaloneSetup(categoryResource).build();
 
 		Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
-        User userPart1 = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+        User userPart1 = optionalUser.orElse(null);
 		assertThat(userPart1, notNullValue());
         Map<String, List<String>> userAttrs1 = Maps.newHashMap();
         userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));

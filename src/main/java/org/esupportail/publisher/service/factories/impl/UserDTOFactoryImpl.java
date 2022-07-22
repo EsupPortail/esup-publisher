@@ -25,19 +25,17 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
-import org.esupportail.publisher.domain.SubjectContextKey;
-import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.service.factories.UserDTOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,7 +79,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 		User model = null;
 		if (extModel != null && withInternal) {
 			Optional<User> optionalUser = dao.findById(extModel.getId());
-			model = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+			model = optionalUser.orElse(null);
 		}
 		return from(model, extModel);
 	}
@@ -107,7 +105,7 @@ public class UserDTOFactoryImpl implements UserDTOFactory {
 		log.debug("DTO to model of {}", dtObject);
 		if (dtObject != null) {
 			Optional<User> optionalUser = getDao().findById(dtObject.getLogin());
-			User user = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+			User user = optionalUser.orElse(null);
 			if (user == null) {
 				user = new User(dtObject.getLogin(), dtObject.getDisplayName());
 				// set UID from LDAP UserDTO

@@ -122,13 +122,12 @@ public class ViewController {
 			throw new IllegalArgumentException("No item identifier was provided to the request!");
 		Optional<AbstractItem> optionnalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED, null));
 
-		AbstractItem item = null;
-		if (optionnalItem == null || !optionnalItem.isPresent()) {
+		AbstractItem item = optionnalItem.orElse(null);
+		if (item == null) {
 			return "objectNotFound";
-		} else {
-			item = optionnalItem.get();
-			log.debug("Item found {}", item);
 		}
+		log.debug("Item found {}", item);
+
 
 		try {
 			if (!canView(item)) {
@@ -267,10 +266,12 @@ public class ViewController {
 				|| user.getUser().getLogin().equalsIgnoreCase(item.getCreatedBy().getLogin())
 				|| user.getUser().getLogin().equalsIgnoreCase(item.getLastModifiedBy().getLogin())) {
 			return true;
-		} else {
-			final UserDTO userDTO = user.getUser();
+		}
+
+		final UserDTO userDTO = user.getUser();
+		if (userDTO != null) {
 			List<String> groups = null;
-			if (userDTO != null && userDTO.getAttributes() != null) {
+			if (userDTO.getAttributes() != null) {
 				groups = userDTO.getAttributes().get(externalUserHelper.getUserGroupAttribute());
 			}
 			for (Subscriber subscriber : subscribers) {
@@ -336,8 +337,7 @@ public class ViewController {
 	public String getVersion() throws IOException {
 		final Properties properties = new Properties();
 		properties.load(Application.class.getResourceAsStream("/version.properties"));
-		final String version = properties.getProperty("version");
-		return version;
+		return properties.getProperty("version");
 	}
 
 	private String replaceBodyUrl(final String body, final String baseUrl) {

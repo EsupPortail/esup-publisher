@@ -155,7 +155,7 @@ public class ContentResourceTest {
         this.restContentMockMvc = MockMvcBuilders.standaloneSetup(contentResource).build();
 
         Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like(USER_ADMIN));
-        User userPart1 = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+        User userPart1 = optionalUser.orElse(null);
         Map<String, List<String>> userAttrs1 = Maps.newHashMap();
         userAttrs1.put("uid", Lists.newArrayList(USER_ADMIN));
         userAttrs1.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
@@ -167,7 +167,7 @@ public class ContentResourceTest {
         authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
 
         Optional<User> optionalUser2 = userRepo.findOne(QUser.user.login.like(USER));
-        User userPart2 = !optionalUser2.isPresent() ? null : optionalUser2.get();
+        User userPart2 = optionalUser2.orElse(null);
         Map<String, List<String>> userAttrs2 = Maps.newHashMap();
         userAttrs2.put("uid", Lists.newArrayList(USER));
         userAttrs2.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));
@@ -179,7 +179,7 @@ public class ContentResourceTest {
         authUserContributor = new TestingAuthenticationToken(userContributorDetails, "password", Lists.newArrayList(userContributorDetails.getAuthorities()));
 
         Optional<User> optionalUser3 = userRepo.findOne(QUser.user.login.like(USER));
-        User userPart3 = !optionalUser3.isPresent() ? null : optionalUser3.get();
+        User userPart3 = optionalUser3.orElse(null);
         Map<String, List<String>> userAttrs3 = Maps.newHashMap();
         userAttrs3.put("uid", Lists.newArrayList(USER));
         userAttrs3.put("ENTPersonJointure", Lists.newArrayList("ENT$INCONNU"));

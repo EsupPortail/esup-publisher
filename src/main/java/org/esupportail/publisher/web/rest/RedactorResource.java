@@ -16,24 +16,29 @@
 package org.esupportail.publisher.web.rest;
 
 
-import org.esupportail.publisher.domain.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.security.SecurityConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing Redactor.
@@ -101,7 +106,7 @@ public class RedactorResource {
     public ResponseEntity<Redactor> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Redactor : {}", id);
         Optional<Redactor> optionalRedactor =  redactorRepository.findById(id);
-        Redactor redactor = optionalRedactor == null || !optionalRedactor.isPresent()? null : optionalRedactor.get();
+        Redactor redactor = optionalRedactor.orElse(null);
         if (redactor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

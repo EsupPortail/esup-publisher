@@ -134,7 +134,7 @@ public class PublisherResourceTest {
             publisherResource, publisherService).build();
 
         Optional<User> optionalUser = userRepo.findOne(QUser.user.login.like("system"));
-        User userPart = optionalUser == null || !optionalUser.isPresent() ? null : optionalUser.get();
+        User userPart = optionalUser.orElse(null);
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));

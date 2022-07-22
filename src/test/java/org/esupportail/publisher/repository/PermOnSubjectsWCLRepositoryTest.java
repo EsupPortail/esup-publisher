@@ -115,7 +115,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 		assertThat(e.getId(), notNullValue());
 		log.info("After insert : {}", e);
 		Optional<PermissionOnSubjectsWithClassificationList> optionalPerm = repository.findById(e.getId());
-		PermissionOnSubjectsWithClassificationList e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
+		PermissionOnSubjectsWithClassificationList e2 = optionalPerm.orElse(null);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
 		assertThat(e.getRolesOnSubjects(), equalTo(Sets.newHashSet(subkeys3)));
@@ -126,7 +126,7 @@ public class PermOnSubjectsWCLRepositoryTest {
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
 		Optional<PermissionOnSubjectsWithClassificationList> optionalPermission = repository.findById(e2.getId());
-		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		e = optionalPermission.orElse(null);
 		assertThat(e, notNullValue());
 		assertThat(e.getRolesOnSubjects(), not(equalTo(Sets.newHashSet(subkeys3))));
 

@@ -24,8 +24,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ContextKey;
@@ -49,11 +47,12 @@ import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.esupportail.publisher.web.rest.dto.LinkedFileItemDTO;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by jgribonvald on 22/04/15.
@@ -87,7 +86,7 @@ public class ContentDTOFactoryImpl implements ContentDTOFactory {
 	@Override
 	public ContentDTO from(@NotNull Long id) throws ObjectNotFoundException {
 		Optional<AbstractItem> optionalAbstractItem = itemRepository.findById(id);
-		AbstractItem model = optionalAbstractItem == null || !optionalAbstractItem.isPresent() ? null : optionalAbstractItem.get();
+		AbstractItem model = optionalAbstractItem.orElse(null);
 		if (model == null)
 			throw new ObjectNotFoundException(id, AbstractItem.class);
 		return from(model);

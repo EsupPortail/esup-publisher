@@ -121,8 +121,8 @@ public class ClassificationResource {
                                                @RequestParam(value = "isPublishing", required = false) Boolean isPublishing) {
         log.debug("REST request to get all AbstractClassifications");
         if (publisherId != null) {
-    	    Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
-            Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+            Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisherId);
+            Publisher publisher = optionalPublisher.orElse(null);
             if (publisher == null)
                 return new ClassificationList(new ArrayList<AbstractClassification>());
             Predicate where;
@@ -162,7 +162,7 @@ public class ClassificationResource {
     public ResponseEntity<AbstractClassification> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get AbstractClassification : {}", id);
         Optional<AbstractClassification> optionalAbstractClassification =  classificationRepository.findById(id);
-        AbstractClassification classification = optionalAbstractClassification == null || !optionalAbstractClassification.isPresent()? null : optionalAbstractClassification.get();
+        AbstractClassification classification = optionalAbstractClassification.orElse(null);
         if (classification == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

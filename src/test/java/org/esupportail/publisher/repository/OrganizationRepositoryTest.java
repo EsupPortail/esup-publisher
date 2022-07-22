@@ -94,7 +94,7 @@ public class OrganizationRepositoryTest {
         assertThat(e.getIdentifiers().size(), is(DEFAULT_IDS3.size()));
 
         Optional<Organization> optionalOrganization = repository.findById(e.getId());
-        Organization e2 = optionalOrganization == null || !optionalOrganization.isPresent()? null : optionalOrganization.get();
+        Organization e2 = optionalOrganization.orElse(null);
         //e2.setIdentifiers(DEFAULT_IDS3);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
@@ -130,7 +130,7 @@ public class OrganizationRepositoryTest {
 		assertThat(repository.existsById(e.getId()), is(false));
 
 		Optional<Organization> optionalO = repository.findById((long) 0);
-        e2 = optionalO == null || !optionalO.isPresent()? null : optionalO.get();
+        e2 = optionalO.orElse(null);
 		assertThat(e2, is(nullValue()));
 	}
 

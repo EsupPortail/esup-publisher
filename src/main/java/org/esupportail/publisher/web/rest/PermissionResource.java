@@ -15,14 +15,22 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import com.google.common.collect.Lists;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
+
 import org.esupportail.publisher.domain.AbstractPermission;
-import org.esupportail.publisher.domain.PermissionOnContext;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.repository.PermissionRepository;
 import org.esupportail.publisher.repository.predicates.PermissionPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
+
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,14 +40,11 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing AbstractPermission.
@@ -135,7 +140,7 @@ public class PermissionResource {
 			HttpServletResponse response) {
 		log.debug("REST request to get AbstractPermission : {}", id);
 		Optional<AbstractPermission> optionalPermission =  permissionRepository.findById(id);
-		AbstractPermission permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		AbstractPermission permission = optionalPermission.orElse(null);
 		if (permission == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -151,7 +156,7 @@ public class PermissionResource {
     public ResponseEntity delete(@PathVariable Long id) {
         log.debug("REST request to delete AbstractPermission : {}", id);
         Optional<AbstractPermission> optionalPermission =  permissionRepository.findById(id);
-		AbstractPermission permission = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		AbstractPermission permission = optionalPermission.orElse(null);
         if (permission == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

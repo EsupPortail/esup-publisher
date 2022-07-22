@@ -104,7 +104,7 @@ public class PermOnSubjectsRepositoryTest {
 		assertThat(e.getId(), notNullValue());
 		log.info("After insert : {}", e);
 		Optional<PermissionOnSubjects> optionalPerm = repository.findById(e.getId());
-		PermissionOnSubjects e2 = optionalPerm == null || !optionalPerm.isPresent()? null : optionalPerm.get();
+		PermissionOnSubjects e2 = optionalPerm.orElse(null);
 		log.info("After select : {}", e2);
 		assertThat(e2, notNullValue());
 		assertThat(Sets.newHashSet(ObjTest.subkeys3), equalTo(e.getRolesOnSubjects()));
@@ -115,7 +115,7 @@ public class PermOnSubjectsRepositoryTest {
 		e2.getRolesOnSubjects().add(ObjTest.subjectPerm1WithValidation);
 		repository.save(e2);
 		Optional<PermissionOnSubjects> optionalPermission = repository.findById(e2.getId());
-		e = optionalPermission == null || !optionalPermission.isPresent()? null : optionalPermission.get();
+		e = optionalPermission.orElse(null);
 		assertThat(e, notNullValue());
 		assertThat(Sets.newHashSet(ObjTest.subkeys3), not(equalTo(e.getRolesOnSubjects())));
 

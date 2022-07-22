@@ -23,7 +23,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.esupportail.publisher.domain.AbstractPermission;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.enums.PermissionType;
 import org.esupportail.publisher.repository.PublisherRepository;
@@ -32,6 +31,10 @@ import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.PublisherService;
 import org.esupportail.publisher.web.rest.dto.ActionDTO;
+
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -46,10 +49,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.common.collect.Lists;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 
 /**
  * REST controller for managing Publisher.
@@ -110,8 +109,12 @@ public class PublisherResource {
 
         // a manager role can only update DisplayName and if Notifications are allowed
         if (PermissionType.MANAGER.getMask() <= permType.getMask()) {
-        	Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisher.getId());
-        	Publisher model = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+            Optional<Publisher> optionalPublisher =  publisherRepository.findById(publisher.getId());
+            Publisher model = optionalPublisher.orElse(null);
+            if (model == null) {
+                log.warn("Publisher with id '{}' not found", publisher.getId());
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             model.setPermissionType(publisher.getPermissionType());
             model.setDefaultDisplayOrder(publisher.getDefaultDisplayOrder());
             model.setUsed(publisher.isUsed());
@@ -133,14 +136,14 @@ public class PublisherResource {
     @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN + " || " + SecurityConstants.IS_ROLE_USER
         + " && hasPermission(#action.objectId, '" + SecurityConstants.CTX_PUBLISHER + "', '" + SecurityConstants.PERM_MANAGER + "')")
     public ResponseEntity<Void> doChange(@RequestBody ActionDTO action) {
-    	Optional<Publisher> optionalPublisher =  publisherRepository.findById(action.getObjectId());
-    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+        Optional<Publisher> optionalPublisher =  publisherRepository.findById(action.getObjectId());
+        Publisher publisher = optionalPublisher.orElse(null);
         log.debug("REST request with Action {} of Publisher : {}", action, publisher);
         if (publisher != null) {
             boolean doUpdate = false;
             switch (action.getAttribute()) {
                 case "used": publisher.setUsed(Boolean.parseBoolean(action.getValue())); doUpdate=true; break;
-                case "move": publisherService.doMove(publisher, Integer.parseInt(action.getValue()));; doUpdate=false; break;
+                case "move": publisherService.doMove(publisher, Integer.parseInt(action.getValue())); break;
             }
             if (doUpdate) {
                 publisherRepository.save(publisher);
@@ -185,8 +188,9 @@ public class PublisherResource {
     public ResponseEntity<Publisher> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get Publisher : {}", id);
         Optional<Publisher> optionalPublisher =  publisherRepository.findById(id);
-    	Publisher publisher = optionalPublisher == null || !optionalPublisher.isPresent()? null : optionalPublisher.get();
+        Publisher publisher = optionalPublisher.orElse(null);
         if (publisher == null) {
+            log.warn("Publisher with id '{}' not found", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(publisher, HttpStatus.OK);
