@@ -46,7 +46,7 @@
         <javax.inject.version>1</javax.inject.version>
         <liquibase-hibernate5.version>${liquibase.version}</liquibase-hibernate5.version>
         <liquibase-plugin.version>${liquibase.version}</liquibase-plugin.version>
-        <liquibase.version>4.13.0</liquibase.version>
+        <liquibase.version>4.14.0</liquibase.version>
         <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>3.2.0</maven-sortpom-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
