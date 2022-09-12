@@ -70,7 +70,7 @@ describe('DateUtils.js tests', () => {
       minute: 'numeric',
       second: 'numeric'
     }, 'en')
-    expect(result).toStrictEqual('December 9, 2021, 10:55:40 AM')
+    expect(result).toStrictEqual('December 9, 2021 at 10:55:40 AM')
   })
 
   it('test 13 DateUtils - min function OK', () => {

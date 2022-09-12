@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         java: ['11']
-        node: ['16', '17']
+        node: ['16.17.0','16', '18']
         mariadb: ['10.4','10.5','10.6','latest']
 
     env:
