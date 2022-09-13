@@ -38,7 +38,7 @@
 
         <check.java.version>11</check.java.version>
         <eclipse-maven-plugin.version>2.10</eclipse-maven-plugin.version>
-        <gatling-maven-plugin.version>4.2.6</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.2.7</gatling-maven-plugin.version>
         <gatling.version>3.7.6</gatling.version>
         <guava.version>31.1-jre</guava.version>
         <jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
