@@ -63,7 +63,7 @@
         <run.addResources>false</run.addResources>
         <shedlock.version>4.42.0</shedlock.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <springdoc-api.version>1.6.12</springdoc-api.version>
+        <springdoc-api.version>1.6.13</springdoc-api.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
 
