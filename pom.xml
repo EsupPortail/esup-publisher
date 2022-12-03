@@ -61,7 +61,7 @@
         <problem-spring.version>0.27.0</problem-spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
-        <shedlock.version>4.42.0</shedlock.version>
+        <shedlock.version>4.43.0</shedlock.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <springdoc-api.version>1.6.13</springdoc-api.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
