@@ -70,7 +70,8 @@ describe('DateUtils.js tests', () => {
       minute: 'numeric',
       second: 'numeric'
     }, 'en')
-    expect(result).toStrictEqual('December 9, 2021 at 10:55:40 AM')
+    // warning nodejs version have a change moving from whitespace to a non-breaking whitespace
+    expect(result).toMatch(new RegExp('December 9, 2021 at 10:55:40\\sAM'))
   })
 
   it('test 13 DateUtils - min function OK', () => {
