@@ -25,7 +25,7 @@ jobs:
       matrix:
         java: ['11']
         node: ['16.17.0','16', '18']
-        mariadb: ['10.4','10.6','latest']
+        mariadb: ['10.5','10.6','latest']
 
     env:
       MARIADB_IMG: "wodby/mariadb"
