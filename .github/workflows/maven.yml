@@ -31,7 +31,7 @@ jobs:
       MARIADB_IMG: "wodby/mariadb"
     name: Run MariaDB ${{ matrix.mariadb }} + java ${{ matrix.java }} + node ${{ matrix.node }}
     steps:
-    - uses: szenius/set-timezone@v1.0
+    - uses: szenius/set-timezone@v1.1
       with:
         timezoneLinux: "Europe/Paris"
     - uses: actions/checkout@v3
