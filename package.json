@@ -28,7 +28,7 @@
     "@ckeditor/ckeditor5-source-editing": "36.0.1",
     "@ckeditor/ckeditor5-theme-lark": "36.0.1",
     "@ckeditor/ckeditor5-vue": "4.0.1",
-    "@fortawesome/fontawesome-free": "6.2.1",
+    "@fortawesome/fontawesome-free": "6.3.0",
     "@gip-recia/color-palette-picker": "0.0.8",
     "@gip-recia/evaluator": "0.0.15",
     "@gip-recia/js-tree": "0.0.13",
