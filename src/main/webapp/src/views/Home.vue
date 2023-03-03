@@ -13,7 +13,7 @@
       </div>
     </router-link>
 
-    <router-link to="/contents/owned" class="list-group-item">
+    <router-link to="/contents/owned/DRAFT" class="list-group-item">
       <div id="owned-item" class="bouton-action">
         <div class="div-icon text-end">
           <i class="fas fa-file-alt fa-5x d-none d-sm-none d-md-inline-block"></i>

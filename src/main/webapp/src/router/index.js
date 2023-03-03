@@ -137,7 +137,7 @@ const routes = [
         },
         children: [
           {
-            path: 'owned',
+            path: 'owned/:itemState',
             name: 'ContentsOwned',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/owned/Owned.vue'),
             meta: {
@@ -145,7 +145,7 @@ const routes = [
             }
           },
           {
-            path: 'managed',
+            path: 'managed/:itemState',
             name: 'ContentsManaged',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/managed/Managed.vue'),
             meta: {
