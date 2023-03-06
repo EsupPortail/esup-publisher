@@ -17,17 +17,7 @@ package org.esupportail.publisher.config;
 
 import javax.annotation.PostConstruct;
 
-import org.esupportail.publisher.config.bean.ApiDocsProperties;
-import org.esupportail.publisher.config.bean.CASProperties;
-import org.esupportail.publisher.config.bean.CacheProperties;
-import org.esupportail.publisher.config.bean.CustomLdapProperties;
-import org.esupportail.publisher.config.bean.CustomMailProperties;
-import org.esupportail.publisher.config.bean.CustomMetricsProperties;
-import org.esupportail.publisher.config.bean.IpRangeProperties;
-import org.esupportail.publisher.config.bean.RoleMappingProperties;
-import org.esupportail.publisher.config.bean.SecurityProperties;
-import org.esupportail.publisher.config.bean.ServiceProperties;
-import org.esupportail.publisher.config.bean.UploadProperties;
+import org.esupportail.publisher.config.bean.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Data;
@@ -60,6 +50,7 @@ public class ESUPPublisherProperties {
     private CASProperties cas = new CASProperties();
     private CacheProperties cache = new CacheProperties();
     private CustomLdapProperties ldap = new CustomLdapProperties();
+    private CKEditorProperties ckeditor = new CKEditorProperties();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
@@ -82,6 +73,7 @@ public class ESUPPublisherProperties {
                 + ",\n\t \"cas\":" + cas
                 + ",\n\t \"cache\":" + cache
                 + ",\n\t \"ldap\":" + ldap
+                + ",\n\t \"ckeditor\":" + ckeditor
                 + "\n\t}\n}";
     }
 }

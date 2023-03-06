@@ -39,6 +39,7 @@ import MediaEmbed from "@ckeditor/ckeditor5-media-embed/src/mediaembed";
 import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
 import FileManagerService from "@/services/entities/file/FileManagerService";
 import Base64Utils from "@/services/util/Base64Utils";
+import ConfigurationService from "@/services/params/ConfigurationService";
 
 export default {
   name: "RichText",
@@ -217,7 +218,7 @@ export default {
           extraProviders: [
             {
               name: "POD",
-              url: /^(?:(?:https?:)?\/\/)?(pod\.recia\.fr\/video|.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/,
+              url: ConfigurationService.getConfCKEditor(),
               html: (match) => `<div>
                   <iframe src="https://${match[1]}/${match[2]}/?is_iframe=true" width="640" height="360" style="padding: 0; margin: 0; border:0" allowfullscreen ></iframe>
                 </div>`,

@@ -171,3 +171,7 @@ app:
     prometeus-authorized-acess:
       ip-ranges:
         - "192.168.1.0/24"
+
+  ckeditor:
+    media-embed:
+      media-url-pattern: /^(?:(?:https?:)?\/\/)?(pod\.univ\.fr\/video|.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/
