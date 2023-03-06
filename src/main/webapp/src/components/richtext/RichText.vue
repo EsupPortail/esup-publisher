@@ -213,6 +213,16 @@ export default {
             "flickr",
             "facebook",
           ],
+          // Prise en charge de POD
+          extraProviders: [
+            {
+              name: "POD",
+              url: /^(?:(?:https?:)?\/\/)?(pod\.recia\.fr\/video|.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/,
+              html: (match) => `<div>
+                  <iframe src="https://${match[1]}/${match[2]}/?is_iframe=true" width="640" height="360" style="padding: 0; margin: 0; border:0" allowfullscreen ></iframe>
+                </div>`,
+            },
+          ],
         },
         language: store.getters.getLanguage,
       },
