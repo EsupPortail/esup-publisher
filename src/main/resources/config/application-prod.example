@@ -174,4 +174,4 @@ app:
 
   ckeditor:
     media-embed:
-      media-url-pattern: /^(?:(?:https?:)?\/\/)?(pod\.univ\.fr\/video|.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/
+      media-url-pattern: "/^(?:(?:https?:)?\/\/)?(pod\.univ\.fr\/video|.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/"

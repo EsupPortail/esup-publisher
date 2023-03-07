@@ -17,7 +17,19 @@ package org.esupportail.publisher.config;
 
 import javax.annotation.PostConstruct;
 
-import org.esupportail.publisher.config.bean.*;
+
+import org.esupportail.publisher.config.bean.ApiDocsProperties;
+import org.esupportail.publisher.config.bean.CASProperties;
+import org.esupportail.publisher.config.bean.CKEditorProperties;
+import org.esupportail.publisher.config.bean.CacheProperties;
+import org.esupportail.publisher.config.bean.CustomLdapProperties;
+import org.esupportail.publisher.config.bean.CustomMailProperties;
+import org.esupportail.publisher.config.bean.CustomMetricsProperties;
+import org.esupportail.publisher.config.bean.IpRangeProperties;
+import org.esupportail.publisher.config.bean.RoleMappingProperties;
+import org.esupportail.publisher.config.bean.SecurityProperties;
+import org.esupportail.publisher.config.bean.ServiceProperties;
+import org.esupportail.publisher.config.bean.UploadProperties;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Data;

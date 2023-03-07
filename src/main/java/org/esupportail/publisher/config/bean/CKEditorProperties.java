@@ -15,45 +15,30 @@
  */
 package org.esupportail.publisher.config.bean;
 
-import lombok.Data;
-import org.springframework.validation.annotation.Validated;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
 public class CKEditorProperties {
 
     @NotNull
-    private CKEditor ckeditor = new CKEditor();
+    private MediaEmbed mediaEmbed = new MediaEmbed();
 
     @Data
     @Validated
-    public static class CKEditor {
+    public static class MediaEmbed {
 
-        @NotNull
-        private MediaEmbed mediaEmbed = new MediaEmbed();
-
-        @Data
-        @Validated
-        public static class MediaEmbed {
-
-            @NotBlank
-            private String mediaUrlPattern;
-
-            @Override
-            public String toString() {
-                return "{\n\"MediaEmbed\":{"
-                        + "\n \"mediaUrlPattern\":\"" + mediaUrlPattern
-                        + "\n}\n}";
-            }
-        }
+        @NotBlank
+        private String mediaUrlPattern;
 
         @Override
         public String toString() {
-            return "{\n\"CKEditor\":{"
-                    + "\n \"mediaEmbed\":\"" + mediaEmbed
+            return "{\n\"MediaEmbed\":{"
+                    + "\n \"mediaUrlPattern\":\"" + mediaUrlPattern
                     + "\n}\n}";
         }
     }
@@ -61,8 +46,7 @@ public class CKEditorProperties {
     @Override
     public String toString() {
         return "{\n\"CKEditorProperties\":{"
-                + "\n \"ckeditor\":" + ckeditor
+                + "\n \"mediaEmbed\":" + mediaEmbed
                 + "\n}\n}";
     }
-
 }

@@ -15,9 +15,10 @@
  */
 package org.esupportail.publisher.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.config.bean.CKEditorProperties;
 import org.esupportail.publisher.service.bean.CKEditorHelper;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,7 +36,7 @@ public class UIConfiguration {
     public CKEditorHelper ckeditorHelper() {
         log.debug("Configuring CKEditorHelper");
         final CKEditorHelper ckeditorHelper = new CKEditorHelper();
-        ckeditorHelper.setMediaUrlPattern(ckeditorProperties.getCkeditor().getMediaEmbed().getMediaUrlPattern());
+        ckeditorHelper.setMediaUrlPattern(ckeditorProperties.getMediaEmbed().getMediaUrlPattern());
         log.debug("CKEditorHelper is configured with properties {}", ckeditorHelper);
         return ckeditorHelper;
     }
