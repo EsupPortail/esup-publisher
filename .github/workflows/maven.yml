@@ -73,7 +73,7 @@ jobs:
           -e "MYSQL_QUERY_CACHE_LIMIT=10M" \
           -e "MYSQL_QUERY_CACHE_SIZE=0" \
           -e "MYSQL_QUERY_CACHE_TYPE=OFF" \
-          wodby/mariadb:${{ matrix.mariadb }} &
+          ${MARIADB_IMG}:${{ matrix.mariadb }} &
         sleep 30
     - name: Test MariaDB
       run: docker exec mariadb /bin/bash -c "mysql -h127.0.0.1 -uroot -proot -e \"show variables like '%time_zone'; select now();\""
