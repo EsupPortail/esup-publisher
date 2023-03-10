@@ -218,10 +218,9 @@ export default {
           extraProviders: [
             {
               name: "POD",
-              url: ConfigurationService.getConfCKEditor(),
-              html: (match) => `<div>
-                  <iframe src="https://${match[1]}/${match[2]}/?is_iframe=true" width="640" height="360" style="padding: 0; margin: 0; border:0" allowfullscreen ></iframe>
-                </div>`,
+              url: this.getRegex(),
+              html: (match) =>
+                `<div><iframe src="https://${match[1]}/${match[2]}/?is_iframe=true" width="640" height="360" style="padding: 0; margin: 0; border:0" allowfullscreen ></iframe></div>`,
             },
           ],
         },
@@ -286,6 +285,12 @@ export default {
       );
 
       return uploadedFiles ? uploadedFiles : [];
+    },
+    getRegex() {
+      const { mediaUrlPattern } = ConfigurationService.getConfCKEditor();
+      return new RegExp(
+        mediaUrlPattern.substring(1, mediaUrlPattern.length - 1)
+      );
     },
   },
   watch: {
