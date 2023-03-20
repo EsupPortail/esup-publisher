@@ -36,6 +36,7 @@
     "@gip-recia/subject-search-button": "0.0.15",
     "@popperjs/core": "2.11.6",
     "bootstrap": "5.2.3",
+    "compressorjs": "^1.2.1",
     "core-js": "3.29.0",
     "postcss-loader": "7.0.2",
     "postcss-url": "10.1.3",

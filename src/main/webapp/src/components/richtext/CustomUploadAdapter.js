@@ -1,4 +1,5 @@
 import UploadUtils from '@/services/util/UploadUtils'
+import Compressor from 'compressorjs'
 
 // Upload adpter utilisé pour l'upload de fichier
 class CustomUploadAdapter {
@@ -14,46 +15,60 @@ class CustomUploadAdapter {
     this.callBackAbord = callBackAbord
   }
 
-  upload () {
+  upload() {
+    const  { entityId, fileSizeMax } = this;
     return this.loader.file.then(file => new Promise((resolve, reject) => {
-      const isPublic = file.type.match('image/*') !== null || file.type.match('audio/*') !== null || file.type.match('video/*') !== null
-      if (!this.fileSizeMax || file.size <= this.fileSizeMax) {
-        this.xhr = UploadUtils.upload('app/upload/',
-          {
-            file: file,
-            isPublic: isPublic,
-            entityId: this.entityId,
-            name: file.name
-          }, (response, headers) => {
-            const location = decodeURIComponent(headers.location)
-            if (this.callBackSuccess) {
-              this.callBackSuccess(file, location)
-            }
-            resolve({
-              default: process.env.VUE_APP_BACK_BASE_URL + location
-            })
-          }, (response) => {
+      new Compressor(file, {
+        quality: 0.8,
+        maxWidth: 800,
+        maxHeight: 600,
+        convertTypes: 'image/jpeg',
+        success(blob) {
+          const file = new File([blob], blob.name, { type: blob.type })
+          const isPublic = file.type.match('image/*') !== null || file.type.match('audio/*') !== null || file.type.match('video/*') !== null;
+          if (!fileSizeMax || file.size <= fileSizeMax) {
+            this.xhr = UploadUtils.upload('app/upload/',
+              {
+                file: file,
+                isPublic: isPublic,
+                entityId: entityId,
+                name: file.name
+              }, (response, headers) => {
+                const location = decodeURIComponent(headers.location)
+                if (this.callBackSuccess) {
+                  this.callBackSuccess(file, location)
+                }
+                resolve({
+                  default: process.env.VUE_APP_BACK_BASE_URL + location
+                })
+              }, (response) => {
+                if (this.callBackError) {
+                  this.callBackError(response)
+                }
+                /* eslint-disable-next-line prefer-promise-reject-errors */
+                reject()
+              }, (evt) => {
+                if (this.callBackProgress) {
+                  this.callBackProgress(evt)
+                }
+              })
+          } else {
             if (this.callBackError) {
-              this.callBackError(response)
+              this.callBackError(this.errorFileSizeMsg)
             }
             /* eslint-disable-next-line prefer-promise-reject-errors */
             reject()
-          }, (evt) => {
-            if (this.callBackProgress) {
-              this.callBackProgress(evt)
-            }
-          })
-      } else {
-        if (this.callBackError) {
-          this.callBackError(this.errorFileSizeMsg)
-        }
-        /* eslint-disable-next-line prefer-promise-reject-errors */
-        reject()
-      }
-    }))
+          }
+        },
+        error(err) {
+          console.error(err.message);
+          reject()
+        },
+      })
+    }));
   }
 
-  abort () {
+  abort() {
     if (this.callBackAbord) {
       this.callBackAbord()
     }
