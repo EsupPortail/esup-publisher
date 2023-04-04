@@ -287,10 +287,16 @@ export default {
       return uploadedFiles ? uploadedFiles : [];
     },
     getRegex() {
-      const { mediaUrlPattern } = ConfigurationService.getConfCKEditor();
-      return new RegExp(
-        mediaUrlPattern.substring(1, mediaUrlPattern.length - 1)
-      );
+      try {
+        const { mediaUrlPattern } = ConfigurationService.getConfCKEditor();
+        return new RegExp(
+          mediaUrlPattern.substring(1, mediaUrlPattern.length - 1)
+        );
+      } catch (error) {
+        return new RegExp(
+          /^(?:(?:https?:)?\/\/)?(.*\.fr\/POD\/video)\/(.*)\/(\?is_iframe=true)?$/
+        );
+      }
     },
   },
   watch: {
