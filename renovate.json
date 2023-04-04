@@ -1,6 +1,7 @@
 {
   "extends": [
-    "config:base"
+    "config:base",
+    "schedule:weekly"
   ],
   "rebaseWhen": "behind-base-branch",
   "enabledManagers": [
