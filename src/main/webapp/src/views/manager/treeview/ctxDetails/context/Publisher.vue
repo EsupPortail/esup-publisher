@@ -75,7 +75,18 @@
         /></span>
       </dd>
     </dl>
-    <dl class="row entity-details">
+    <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
+      <dt class="col-sm-5">
+        <span>{{ $t("publisher.displayOrder") }}</span>
+      </dt>
+      <dd class="col-sm-7">
+        <span>{{ context.displayOrder }}</span>
+      </dd>
+    </dl>
+    <dl
+      class="row entity-details"
+      v-if="!(isStaticWritingMode && isFlashAuthorizedType)"
+    >
       <dt class="col-sm-5">
         <span>{{ $t("publisher.defaultDisplayOrder") }}</span>
       </dt>
@@ -85,12 +96,17 @@
         }}</span>
       </dd>
     </dl>
-    <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
+    <dl
+      class="row entity-details"
+      v-if="!isStaticWritingMode || isFlashAuthorizedType"
+    >
       <dt class="col-sm-5">
-        <span>{{ $t("publisher.displayOrder") }}</span>
+        <span>{{ $t("publisher.defaultItemsDisplayOrder") }}</span>
       </dt>
       <dd class="col-sm-7">
-        <span>{{ context.displayOrder }}</span>
+        <span>{{
+          $t(getDisplayOrderTypeLabel(context.defaultItemsDisplayOrder))
+        }}</span>
       </dd>
     </dl>
     <dl class="row entity-details" v-if="canCreateCategory">
@@ -291,39 +307,6 @@
                   :disabled="!canManage"
                 />
               </div>
-              <div class="form-group">
-                <label class="control-label" for="defaultDisplayOrder">{{
-                  $t("publisher.defaultDisplayOrder")
-                }}</label>
-                <select
-                  class="form-select"
-                  id="defaultDisplayOrder"
-                  name="defaultDisplayOrder"
-                  v-model="editedContextDefaultDisplayOrder"
-                  required
-                  :disabled="!canManage"
-                  @change="onChangeDefaultDisplayOrder()"
-                >
-                  <option
-                    v-for="displayOrderType in autorizedDisplayOrderTypeList"
-                    :key="displayOrderType.id"
-                    :value="displayOrderType.name"
-                  >
-                    {{ $t(displayOrderType.label) }}
-                  </option>
-                </select>
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError(
-                      'defaultDisplayOrder',
-                      formErrors.REQUIRED
-                    )
-                  "
-                >
-                  {{ $t("entity.validation.required") }}
-                </div>
-              </div>
               <div class="form-group" v-has-role="'ROLE_ADMIN'">
                 <label for="displayOrder" class="control-label">{{
                   $t("publisher.displayOrder")
@@ -365,6 +348,77 @@
                   "
                 >
                   {{ $t("entity.validation.max", { max: "9" }) }}
+                </div>
+              </div>
+              <div
+                class="form-group"
+                v-if="!(isStaticWritingMode && isFlashAuthorizedType)"
+              >
+                <label class="control-label" for="defaultDisplayOrder">{{
+                  $t("publisher.defaultDisplayOrder")
+                }}</label>
+                <select
+                  class="form-select"
+                  id="defaultDisplayOrder"
+                  name="defaultDisplayOrder"
+                  v-model="editedContextDefaultDisplayOrder"
+                  required
+                  :disabled="!canManage"
+                  @change="onChangeDefaultDisplayOrder()"
+                >
+                  <option
+                    v-for="displayOrderType in autorizedDisplayOrderTypeList"
+                    :key="displayOrderType.id"
+                    :value="displayOrderType.name"
+                  >
+                    {{ $t(displayOrderType.label) }}
+                  </option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  v-if="
+                    formValidator.hasError(
+                      'defaultDisplayOrder',
+                      formErrors.REQUIRED
+                    )
+                  "
+                >
+                  {{ $t("entity.validation.required") }}
+                </div>
+              </div>
+              <div
+                class="form-group"
+                v-if="!isStaticWritingMode || isFlashAuthorizedType"
+              >
+                <label class="control-label" for="defaultItemsDisplayOrder">{{
+                  $t("publisher.defaultItemsDisplayOrder")
+                }}</label>
+                <select
+                  class="form-select"
+                  id="defaultItemsDisplayOrder"
+                  name="defaultItemsDisplayOrder"
+                  v-model="editedContextDefaultItemsDisplayOrder"
+                  required
+                  :disabled="!canManage"
+                >
+                  <option
+                    v-for="displayOrderType in itemsDisplayOrderTypeList"
+                    :key="displayOrderType.id"
+                    :value="displayOrderType.name"
+                  >
+                    {{ $t(displayOrderType.label) }}
+                  </option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  v-if="
+                    formValidator.hasError(
+                      'defaultItemsDisplayOrder',
+                      formErrors.REQUIRED
+                    )
+                  "
+                >
+                  {{ $t("entity.validation.required") }}
                 </div>
               </div>
               <div class="form-group" v-if="canCreateCategory">
@@ -502,6 +556,9 @@ export default {
     "getEnumlabel",
     "createContext",
     "appUrl",
+    "itemsDisplayOrderTypeList",
+    "isStaticWritingMode",
+    "isFlashAuthorizedType",
   ],
   computed: {
     editedContextDisplayName: {
@@ -541,6 +598,16 @@ export default {
       set(newVal) {
         const newEditedContext = Object.assign({}, this.editedContext);
         newEditedContext.defaultDisplayOrder = newVal;
+        this.setEditedContext(newEditedContext);
+      },
+    },
+    editedContextDefaultItemsDisplayOrder: {
+      get() {
+        return this.editedContext.defaultItemsDisplayOrder || "";
+      },
+      set(newVal) {
+        const newEditedContext = Object.assign({}, this.editedContext);
+        newEditedContext.defaultItemsDisplayOrder = newVal;
         this.setEditedContext(newEditedContext);
       },
     },
@@ -617,6 +684,13 @@ export default {
         this.editedContext.displayOrder,
         0,
         9,
+        true
+      );
+      this.formValidator.checkTextFieldValidity(
+        "defaultItemsDisplayOrder",
+        this.editedContext.defaultItemsDisplayOrder,
+        null,
+        null,
         true
       );
     },
@@ -705,6 +779,15 @@ export default {
         newVal,
         0,
         9,
+        true
+      );
+    },
+    "editedContext.defaultItemsDisplayOrder"(newVal) {
+      this.formValidator.checkTextFieldValidity(
+        "defaultItemsDisplayOrder",
+        newVal,
+        null,
+        null,
         true
       );
     },

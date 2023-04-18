@@ -424,7 +424,7 @@ public class PublishController {
         log.debug("list of categories associated to publisher : {}", cts);
 
         List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder,
-            ItemPredicates.orderByPublisherDefinition(publisher.getDefaultDisplayOrder()), ItemPredicates.orderByClassifDefinition(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST)));
+            ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
         log.debug("list of itemsClasss associated to publisher : {}", itemsClasss);
 
         Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();

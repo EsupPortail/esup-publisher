@@ -117,6 +117,7 @@ export default {
       selectedSubjects: [],
       availableRoles: [],
       autorizedDisplayOrderTypeList: [],
+      itemsDisplayOrderTypeList: [],
       autorizedPermissionClassList: [],
       search: { subject: {}, target: {} },
       edit: { authorizedSubject: {} },
@@ -133,6 +134,8 @@ export default {
       },
       permissionTemplate: "",
       canCreateCategory: false,
+      isStaticWritingMode: false,
+      isFlashAuthorizedType: false,
       paletteColorPicker: [
         "#F44336",
         "#E91E63",
@@ -180,6 +183,9 @@ export default {
       autorizedDisplayOrderTypeList: readonly(
         computed(() => this.autorizedDisplayOrderTypeList)
       ),
+      itemsDisplayOrderTypeList: readonly(
+        computed(() => this.itemsDisplayOrderTypeList)
+      ),
       autorizedPermissionClassList: readonly(
         computed(() => this.autorizedPermissionClassList)
       ),
@@ -189,6 +195,10 @@ export default {
       createContext: this.createContext,
       canManage: readonly(computed(() => this.canManage)),
       canCreateCategory: readonly(computed(() => this.canCreateCategory)),
+      isStaticWritingMode: readonly(computed(() => this.isStaticWritingMode)),
+      isFlashAuthorizedType: readonly(
+        computed(() => this.isFlashAuthorizedType)
+      ),
       paletteColorPicker: readonly(computed(() => this.paletteColorPicker)),
       langList: readonly(computed(() => this.langList)),
       targets: readonly(computed(() => this.targets)),
@@ -234,9 +244,7 @@ export default {
       return EnumDatasService.getSubjectTypeList();
     },
     displayOrderTypeList() {
-      return EnumDatasService.getDisplayOrderTypeList().filter((element) => {
-        return !CommonUtils.equals(element.name, "CUSTOM");
-      });
+      return EnumDatasService.getDisplayOrderTypeList();
     },
     permissionTypeList() {
       return EnumDatasService.getPermissionTypeList();
@@ -317,6 +325,7 @@ export default {
             this.hasPermissionManagment =
               this.getHasPermissionManagment(ctxType);
             this.selectTemplatePermissionTemplate(this.ctxPermissionType);
+            this.setPublishingEnv(this.publisher);
             this.selectPermissionManager(this.ctxPermissionType)
               .queryForCtx(ctxType, ctxId)
               .then((res) => {
@@ -520,6 +529,7 @@ export default {
               accessView: "PUBLIC",
               description: null,
               defaultDisplayOrder: this.autorizedDisplayOrderTypeList[0].name,
+              defaultItemsDisplayOrder: this.itemsDisplayOrderTypeList[0].name,
               createdBy: null,
               createdDate: null,
               lastModifiedBy: null,
@@ -540,14 +550,23 @@ export default {
     },
     loadAvailableTypes(isEditCurrentCtx) {
       var ctx = isEditCurrentCtx ? this.editedContext : this.context;
-      this.autorizedDisplayOrderTypeList = this.displayOrderTypeList;
+      this.autorizedDisplayOrderTypeList = this.displayOrderTypeList.filter(
+        (element) => {
+          return !CommonUtils.equals(element.name, "CUSTOM");
+        }
+      );
+      this.itemsDisplayOrderTypeList = this.displayOrderTypeList.filter(
+        (element) => {
+          return !CommonUtils.equals(element.name, "CUSTOM");
+        }
+      );
       this.autorizedPermissionClassList = this.permissionClassList;
       switch (ctx.contextKey.keyType) {
         case "ORGANIZATION":
           // in edit we are on ORGANIZATION else we create a sub context
           if (isEditCurrentCtx) {
             this.autorizedDisplayOrderTypeList =
-              this.displayOrderTypeList.filter(
+              this.autorizedDisplayOrderTypeList.filter(
                 (element) => element.name !== "START_DATE"
               );
           } else {
@@ -565,7 +584,7 @@ export default {
               )
             ) {
               this.autorizedDisplayOrderTypeList =
-                this.displayOrderTypeList.filter(
+                this.autorizedDisplayOrderTypeList.filter(
                   (element) => element.name !== "START_DATE"
                 );
             } else {
@@ -577,7 +596,7 @@ export default {
             }
           } else if (ctx.context.redactor.nbLevelsOfClassification > 1) {
             this.autorizedDisplayOrderTypeList =
-              this.displayOrderTypeList.filter(
+              this.autorizedDisplayOrderTypeList.filter(
                 (element) => element.name !== "START_DATE"
               );
           }
@@ -587,7 +606,7 @@ export default {
           if (isEditCurrentCtx) {
             if (ctx.publisher.context.redactor.nbLevelsOfClassification > 1) {
               this.autorizedDisplayOrderTypeList =
-                this.displayOrderTypeList.filter(
+                this.autorizedDisplayOrderTypeList.filter(
                   (element) => element.name !== "START_DATE"
                 );
             }
@@ -628,11 +647,15 @@ export default {
           throw new Error("not yet implemented");
       }
     },
+    setPublishingEnv(publisher) {
+      this.isStaticWritingMode =
+        publisher.context.redactor.writingMode === "STATIC";
+      this.isFlashAuthorizedType =
+        publisher.context.reader.authorizedTypes.includes("FLASH");
+    },
     setCanCreateCategory(publisher) {
-      if (
-        publisher.context.redactor.writingMode === "STATIC" &&
-        publisher.context.reader.authorizedTypes.includes("FLASH")
-      ) {
+      this.setPublishingEnv(publisher);
+      if (this.isStaticWritingMode && this.isFlashAuthorizedType) {
         this.canCreateCategory = false;
       } else {
         UserService.canCreateInCtx(
@@ -641,7 +664,6 @@ export default {
         ).then((response) => {
           this.canCreateCategory = response.data.value === true;
         });
-        this.canCreateCategory = false;
       }
     },
     getHasTargetManagment(ctxType) {

@@ -108,7 +108,7 @@
         /></span>
       </dd>
     </dl>
-    <dl class="row entity-details">
+    <dl class="row entity-details" v-if="isStaticWritingMode">
       <dt class="col-sm-5">
         <span>{{ $t("category.defaultDisplayOrder") }}</span>
       </dt>
@@ -116,14 +116,6 @@
         <span>{{
           $t(getDisplayOrderTypeLabel(context.defaultDisplayOrder))
         }}</span>
-      </dd>
-    </dl>
-    <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
-      <dt class="col-sm-5">
-        <span>{{ $t("category.displayOrder") }}</span>
-      </dt>
-      <dd class="col-sm-7">
-        <span>{{ context.displayOrder }}</span>
       </dd>
     </dl>
     <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
@@ -140,6 +132,14 @@
       </dt>
       <dd class="col-sm-7">
         <span>{{ context.ttl }}</span>
+      </dd>
+    </dl>
+    <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
+      <dt class="col-sm-5">
+        <span>{{ $t("category.displayOrder") }}</span>
+      </dt>
+      <dd class="col-sm-7">
+        <span>{{ context.displayOrder }}</span>
       </dd>
     </dl>
     <dl class="row entity-details">
@@ -234,6 +234,7 @@ export default {
     "updateContext",
     "confirmDeleteContext",
     "appUrl",
+    "isStaticWritingMode",
   ],
   methods: {
     getAccessTypeLabel(name) {

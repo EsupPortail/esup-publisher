@@ -221,7 +221,6 @@
                   name="defaultDisplayOrder"
                   v-model="publisher.defaultDisplayOrder"
                   required
-                  @change="onChangeDefaultDisplayOrder()"
                 >
                   <option
                     v-for="defaultDisplayOrderType in filteredDisplayOrderTypeList"
@@ -236,6 +235,39 @@
                   v-if="
                     formValidator.hasError(
                       'defaultDisplayOrder',
+                      formErrors.REQUIRED
+                    )
+                  "
+                >
+                  {{ $t("entity.validation.required") }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label" for="defaultItemsDisplayOrder">{{
+                  $t("publisher.defaultItemsDisplayOrder")
+                }}</label>
+                <select
+                  class="form-select"
+                  id="defaultItemsDisplayOrder"
+                  name="defaultItemsDisplayOrder"
+                  v-model="publisher.defaultItemsDisplayOrder"
+                  required
+                  @change="onChangeDefaultItemsDisplayOrder()"
+                >
+                  <option
+                    v-for="defaultItemsDisplayOrderType in filteredItemsDisplayOrderTypeList"
+                    :key="defaultItemsDisplayOrderType.id"
+                    :value="defaultItemsDisplayOrderType.name"
+                  >
+                    {{ $t(defaultItemsDisplayOrderType.label) }}
+                  </option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  v-if="
+                    formValidator.hasError(
+                      'defaultItemsDisplayOrder',
                       formErrors.REQUIRED
                     )
                   "
@@ -531,9 +563,16 @@ export default {
     },
     // Liste des types de Display Order filtrés
     filteredDisplayOrderTypeList() {
-      // removing CUSTOM type until it is implemented
+      // removing START_DATE type until it is implemented
       return this.displayOrderTypeList.filter((element) => {
         return element.name !== "START_DATE";
+      });
+    },
+    // Liste des types de Display Order filtrés
+    filteredItemsDisplayOrderTypeListForItems() {
+      // removing CUSTOM type until it is implemented - Not granted for items !
+      return this.displayOrderTypeList.filter((element) => {
+        return element.name !== "CUSTOM";
       });
     },
   },

@@ -74,6 +74,23 @@
           </tr>
           <tr>
             <td>
+              <span>{{ $t("publisher.defaultItemsDisplayOrder") }}</span>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                :value="
+                  $t(
+                    getDisplayOrderTypeLabel(publisher.defaultItemsDisplayOrder)
+                  )
+                "
+                readonly
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
               <span>{{ $t("publisher.used") }}</span>
             </td>
             <td>

@@ -207,7 +207,7 @@
                 v-model="editedContextRssAllowed"
               />
             </div>
-            <div class="form-group">
+            <div class="form-group" v-if="isStaticWritingMode">
               <label for="defaultDisplayOrder" class="control-label">{{
                 $t("category.defaultDisplayOrder")
               }}</label>
@@ -419,6 +419,7 @@ export default {
     "paletteColorPicker",
     "autorizedDisplayOrderTypeList",
     "langList",
+    "isStaticWritingMode",
   ],
   computed: {
     editedContextName: {
