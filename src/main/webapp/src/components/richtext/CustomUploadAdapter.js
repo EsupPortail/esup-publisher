@@ -23,68 +23,82 @@ class CustomUploadAdapter {
     this.callBackAbord = callBackAbord;
   }
 
-  upload() {
-    const { entityId, fileSizeMax } = this;
-    return this.loader.file.then(
-      (file) =>
-        new Promise((resolve, reject) => {
-          new Compressor(file, {
-            quality: 0.8,
-            maxWidth: 800,
-            maxHeight: 600,
-            convertTypes: "image/jpeg",
-            success(blob) {
-              const file = new File([blob], blob.name, { type: blob.type });
-              const isPublic =
-                file.type.match("image/*") !== null ||
-                file.type.match("audio/*") !== null ||
-                file.type.match("video/*") !== null;
-              if (!fileSizeMax || file.size <= fileSizeMax) {
-                this.xhr = UploadUtils.upload(
-                  "app/upload/",
-                  {
-                    file: file,
-                    isPublic: isPublic,
-                    entityId: entityId,
-                    name: file.name,
-                  },
-                  (response, headers) => {
-                    const location = decodeURIComponent(headers.location);
-                    if (this.callBackSuccess) {
-                      this.callBackSuccess(file, location);
-                    }
-                    resolve({
-                      default: process.env.VUE_APP_BACK_BASE_URL + location,
-                    });
-                  },
-                  (response) => {
-                    if (this.callBackError) {
-                      this.callBackError(response);
-                    }
-                    /* eslint-disable-next-line prefer-promise-reject-errors */
-                    reject();
-                  },
-                  (evt) => {
-                    if (this.callBackProgress) {
-                      this.callBackProgress(evt);
-                    }
+  async upload() {
+    const { entityId, fileSizeMax, isPublic } = this;
+    return this.loader.file
+      .then(async (file) =>
+        file.type.match("image/*") !== null
+          ? await this.compressImage(file)
+          : file
+      )
+      .then(
+        (file) =>
+          new Promise((resolve, reject) => {
+            if (!fileSizeMax || file.size <= fileSizeMax) {
+              this.xhr = UploadUtils.upload(
+                "app/upload/",
+                {
+                  file: file,
+                  isPublic: isPublic(file),
+                  entityId: entityId,
+                  name: file.name,
+                },
+                (response, headers) => {
+                  const location = decodeURIComponent(headers.location);
+                  if (this.callBackSuccess) {
+                    this.callBackSuccess(file, location);
                   }
-                );
-              } else {
-                if (this.callBackError) {
-                  this.callBackError(this.errorFileSizeMsg);
+                  resolve({
+                    default: process.env.VUE_APP_BACK_BASE_URL + location,
+                  });
+                },
+                (response) => {
+                  if (this.callBackError) {
+                    this.callBackError(response);
+                  }
+                  /* eslint-disable-next-line prefer-promise-reject-errors */
+                  reject();
+                },
+                (evt) => {
+                  if (this.callBackProgress) {
+                    this.callBackProgress(evt);
+                  }
                 }
-                /* eslint-disable-next-line prefer-promise-reject-errors */
-                reject();
+              );
+            } else {
+              if (this.callBackError) {
+                this.callBackError(this.errorFileSizeMsg);
               }
-            },
-            error(err) {
-              console.error(err.message);
+              /* eslint-disable-next-line prefer-promise-reject-errors */
               reject();
-            },
-          });
-        })
+            }
+          })
+      );
+  }
+
+  isPublic(file) {
+    return (
+      file.type.match("image/*") !== null ||
+      file.type.match("audio/*") !== null ||
+      file.type.match("video/*") !== null
     );
+  }
+
+  compressImage(file) {
+    return new Promise((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.8,
+        maxWidth: 800,
+        maxHeight: 600,
+        convertTypes: "image/jpeg",
+        async success(blob) {
+          resolve(new File([blob], blob.name, { type: blob.type }));
+        },
+        error(err) {
+          reject(err);
+        },
+      });
+    });
   }
 
   abort() {
