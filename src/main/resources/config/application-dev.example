@@ -4,9 +4,6 @@ server:
   port: 8080
   servlet:
     context-path: /publisher
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
 
 spring:
   config.activate.on-profile: dev
@@ -60,6 +57,10 @@ spring:
 
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   thymeleaf:
     cache: false
 
