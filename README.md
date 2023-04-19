@@ -21,6 +21,7 @@ create database publisher DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_
 ```
 
 run mvn command to init the database
+
 ```shell
 ./mvnw compile liquibase:update
 ```

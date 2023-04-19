@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import ExternalFeed from './ExternalFeed'
-import InternalFeed from './InternalFeed'
+import ExternalFeed from "./ExternalFeed";
+import InternalFeed from "./InternalFeed";
 export default {
-  name: 'Feed',
+  name: "Feed",
   components: {
     ExternalFeed,
-    InternalFeed
+    InternalFeed,
   },
-  inject: ['context']
-}
+  inject: ["context"],
+};
 </script>

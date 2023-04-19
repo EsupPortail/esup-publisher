@@ -1,27 +1,15 @@
 {
-  "extends": [
-    "config:base",
-    "schedule:weekly"
-  ],
+  "extends": ["config:base", "schedule:weekly"],
   "rebaseWhen": "behind-base-branch",
-  "enabledManagers": [
-    "maven",
-    "npm"
-  ],
+  "enabledManagers": ["maven", "npm"],
   "packageRules": [
     {
       "groupName": "CKEditor dev",
-      "matchPackagePrefixes": [
-        "@ckeditor/ckeditor5-dev"
-      ]
+      "matchPackagePrefixes": ["@ckeditor/ckeditor5-dev"]
     },
     {
       "groupName": "CKEditor",
-      "matchPackagePrefixes": [
-        "@ckeditor/ckeditor5-"
-      ]
+      "matchPackagePrefixes": ["@ckeditor/ckeditor5-"]
     }
   ]
-
-
 }

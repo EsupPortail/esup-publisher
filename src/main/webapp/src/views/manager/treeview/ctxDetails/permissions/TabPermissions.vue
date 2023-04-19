@@ -6,23 +6,52 @@
     <PermissionOnCtxWithSubjects></PermissionOnCtxWithSubjects>
   </div>
 
-  <div class="modal fade" id="deletePermissionConfirmation" ref="deletePermissionConfirmation">
+  <div
+    class="modal fade"
+    id="deletePermissionConfirmation"
+    ref="deletePermissionConfirmation"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
-        <form name="deleteForm" >
+        <form name="deleteForm">
           <div class="modal-header">
-            <h4 class="modal-title">{{$t('entity.delete.title')}}</h4>
-            <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal" @click="clearPermission"></button>
+            <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
+            <button
+              type="button"
+              class="btn-close"
+              aria-hidden="true"
+              data-bs-dismiss="modal"
+              @click="clearPermission"
+            ></button>
           </div>
           <div class="modal-body">
-            <p>{{$t('permission.delete.question', {id: $t(getPermissionTypeLabel(permission.role))})}}</p>
+            <p>
+              {{
+                $t("permission.delete.question", {
+                  id: $t(getPermissionTypeLabel(permission.role)),
+                })
+              }}
+            </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clearPermission">
-              <span class="fas fa-ban"></span>&nbsp;<span>{{$t('entity.action.cancel')}}</span>
+            <button
+              type="button"
+              class="btn btn-default btn-outline-dark"
+              data-bs-dismiss="modal"
+              @click="clearPermission"
+            >
+              <span class="fas fa-ban"></span>&nbsp;<span>{{
+                $t("entity.action.cancel")
+              }}</span>
             </button>
-            <button type="button" class="btn btn-danger" @click="confirmDeletePermission(permission.id)">
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{$t('entity.action.delete')}}</span>
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="confirmDeletePermission(permission.id)"
+            >
+              <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                $t("entity.action.delete")
+              }}</span>
             </button>
           </div>
         </form>
@@ -32,25 +61,25 @@
 </template>
 
 <script>
-import PermissionOnCtxWithSubjects from './PermissionOnCtxWithSubjects'
-import PermissionOnCtx from './PermissionOnCtx'
-import PermissionService from '@/services/entities/permission/PermissionService'
-import PermissionOnContextService from '@/services/entities/permissionOnContext/PermissionOnContextService'
-import SubjectService from '@/services/params/SubjectService'
-import CommonUtils from '@/services/util/CommonUtils'
-import i18n from '@/i18n'
-import { computed, readonly } from 'vue'
-import { Modal } from 'bootstrap'
+import PermissionOnCtxWithSubjects from "./PermissionOnCtxWithSubjects";
+import PermissionOnCtx from "./PermissionOnCtx";
+import PermissionService from "@/services/entities/permission/PermissionService";
+import PermissionOnContextService from "@/services/entities/permissionOnContext/PermissionOnContextService";
+import SubjectService from "@/services/params/SubjectService";
+import CommonUtils from "@/services/util/CommonUtils";
+import i18n from "@/i18n";
+import { computed, readonly } from "vue";
+import { Modal } from "bootstrap";
 
-const { t } = i18n.global
+const { t } = i18n.global;
 
 export default {
-  name: 'TabPermissions',
+  name: "TabPermissions",
   components: {
     PermissionOnCtx,
-    PermissionOnCtxWithSubjects
+    PermissionOnCtxWithSubjects,
   },
-  data () {
+  data() {
     return {
       addPerm: true,
       deletePermissionConfirmation: null,
@@ -59,12 +88,23 @@ export default {
       ctxId: this.$route.params.ctxId,
       contextPermission: { keyId: null, keyType: null },
       editEvaluatorError: false,
-      permission: { type: '', context: { keyId: null, keyType: null }, role: null, createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null, evaluator: { class: null, id: null, type: null, evaluators: [] }, authorizedSubjects: [] },
+      permission: {
+        type: "",
+        context: { keyId: null, keyType: null },
+        role: null,
+        createdBy: null,
+        createdDate: null,
+        lastModifiedBy: null,
+        lastModifiedDate: null,
+        id: null,
+        evaluator: { class: null, id: null, type: null, evaluators: [] },
+        authorizedSubjects: [],
+      },
       permissionAdvanced: false,
-      isDatasLoad: false
-    }
+      isDatasLoad: false,
+    };
   },
-  provide () {
+  provide() {
     return {
       addPerm: readonly(computed(() => this.addPerm)),
       editEvaluatorError: readonly(computed(() => this.editEvaluatorError)),
@@ -72,7 +112,9 @@ export default {
       permission: computed(() => this.permission),
       permissionAdvanced: readonly(computed(() => this.permissionAdvanced)),
       isDatasLoad: readonly(computed(() => this.isDatasLoad)),
-      setIsDatasLoad: (isDatasLoad) => { this.isDatasLoad = isDatasLoad },
+      setIsDatasLoad: (isDatasLoad) => {
+        this.isDatasLoad = isDatasLoad;
+      },
       addPermission: this.addPermission,
       areSubjectsSelected: this.areSubjectsSelected,
       changePermissionAdvanced: this.changePermissionAdvanced,
@@ -88,221 +130,301 @@ export default {
       removeFromSelectedSubjects: this.removeFromSelectedSubjects,
       removePermTarget: this.removePermTarget,
       userDisplayedAttrs: this.userDisplayedAttrs,
-      userFonctionalAttrs: this.userFonctionalAttrs
-    }
+      userFonctionalAttrs: this.userFonctionalAttrs,
+    };
   },
   inject: [
-    'load', 'context', 'ctxPermissionType', 'loadAvailableRoles', 'availableRoles', 'permissionTypeList',
-    'selectPermissionManager', 'setCtxPermissionType', 'setPermissions', 'permissionTemplate'
+    "load",
+    "context",
+    "ctxPermissionType",
+    "loadAvailableRoles",
+    "availableRoles",
+    "permissionTypeList",
+    "selectPermissionManager",
+    "setCtxPermissionType",
+    "setPermissions",
+    "permissionTemplate",
   ],
   computed: {
-    userDisplayedAttrs () {
-      return SubjectService.getUserDisplayedAttrs()
+    userDisplayedAttrs() {
+      return SubjectService.getUserDisplayedAttrs();
     },
-    userFonctionalAttrs () {
-      return SubjectService.getUserFonctionalAttrs()
-    }
+    userFonctionalAttrs() {
+      return SubjectService.getUserFonctionalAttrs();
+    },
   },
   methods: {
-    addPermission () {
-      this.addPerm = false
-      this.loadAvailableRoles()
-      this.selectedSubjects = []
+    addPermission() {
+      this.addPerm = false;
+      this.loadAvailableRoles();
+      this.selectedSubjects = [];
       switch (this.ctxPermissionType) {
-        case 'CONTEXT':
+        case "CONTEXT":
           this.permission = {
-            type: 'PERMONCTX',
-            context: { keyId: this.context.contextKey.keyId, keyType: this.context.contextKey.keyType },
+            type: "PERMONCTX",
+            context: {
+              keyId: this.context.contextKey.keyId,
+              keyType: this.context.contextKey.keyType,
+            },
             role: this.availableRoles[0].name,
             createdBy: null,
             createdDate: null,
             lastModifiedBy: null,
             lastModifiedDate: null,
             id: null,
-            evaluator: { class: 'OPERATOR', id: null, type: 'OR', evaluators: [] }
-          }
-          this.editEvaluatorError = true
-          break
-        case 'CONTEXT_WITH_SUBJECTS':
+            evaluator: {
+              class: "OPERATOR",
+              id: null,
+              type: "OR",
+              evaluators: [],
+            },
+          };
+          this.editEvaluatorError = true;
+          break;
+        case "CONTEXT_WITH_SUBJECTS":
           this.permission = {
-            type: 'PERMONCTXWSUBJS',
-            context: { keyId: this.context.contextKey.keyId, keyType: this.context.contextKey.keyType },
+            type: "PERMONCTXWSUBJS",
+            context: {
+              keyId: this.context.contextKey.keyId,
+              keyType: this.context.contextKey.keyType,
+            },
             role: this.availableRoles[0].name,
             createdBy: null,
             createdDate: null,
             lastModifiedBy: null,
             lastModifiedDate: null,
             id: null,
-            evaluator: { class: 'OPERATOR', id: null, type: 'OR', evaluators: [] },
-            authorizedSubjects: []
-          }
-          this.editEvaluatorError = true
-          break
-        default :
-          this.permission = {}
-          break
+            evaluator: {
+              class: "OPERATOR",
+              id: null,
+              type: "OR",
+              evaluators: [],
+            },
+            authorizedSubjects: [],
+          };
+          this.editEvaluatorError = true;
+          break;
+        default:
+          this.permission = {};
+          break;
       }
     },
-    areSubjectsSelected () {
-      return this.selectedSubjects.length > 0
+    areSubjectsSelected() {
+      return this.selectedSubjects.length > 0;
     },
-    changePermissionAdvanced () {
-      this.permissionAdvanced = !this.permissionAdvanced
+    changePermissionAdvanced() {
+      this.permissionAdvanced = !this.permissionAdvanced;
     },
-    clearPermission () {
-      this.permission = { type: '', context: { keyId: null, keyType: null }, role: null, createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null, evaluator: { class: null, id: null, type: null, evaluators: [] } }
-      this.deletePermissionConfirmation.hide()
-      this.loadAvailableRoles()
-      this.editEvaluatorError = false
-      this.addPerm = true
+    clearPermission() {
+      this.permission = {
+        type: "",
+        context: { keyId: null, keyType: null },
+        role: null,
+        createdBy: null,
+        createdDate: null,
+        lastModifiedBy: null,
+        lastModifiedDate: null,
+        id: null,
+        evaluator: { class: null, id: null, type: null, evaluators: [] },
+      };
+      this.deletePermissionConfirmation.hide();
+      this.loadAvailableRoles();
+      this.editEvaluatorError = false;
+      this.addPerm = true;
     },
-    confirmDeletePermission (id) {
+    confirmDeletePermission(id) {
       PermissionService.delete(id).then(() => {
-        this.load(this.ctxType, this.context.id)
-        this.deletePermissionConfirmation.hide()
-        this.permission = { type: '', context: { keyId: null, keyType: null }, role: null, createdBy: null, createdDate: null, lastModifiedBy: null, lastModifiedDate: null, id: null, evaluator: { class: null, id: null, type: null, evaluators: [] } }
-      })
+        this.load(this.ctxType, this.context.id);
+        this.deletePermissionConfirmation.hide();
+        this.permission = {
+          type: "",
+          context: { keyId: null, keyType: null },
+          role: null,
+          createdBy: null,
+          createdDate: null,
+          lastModifiedBy: null,
+          lastModifiedDate: null,
+          id: null,
+          evaluator: { class: null, id: null, type: null, evaluators: [] },
+        };
+      });
     },
-    createPermission () {
+    createPermission() {
       if (!this.permissionAdvanced) {
-        this.permission.evaluator.evaluators = []
+        this.permission.evaluator.evaluators = [];
         for (var i = 0; i < this.selectedSubjects.length; i++) {
-          if (this.selectedSubjects[i].keyType === 'PERSON') {
-            this.permission.evaluator.evaluators.push({ class: 'USERATTRIBUTES', id: null, mode: 'EQUALS', attribute: 'uid', value: this.selectedSubjects[i].keyId })
-          } else if (this.selectedSubjects[i].keyType === 'GROUP') {
-            this.permission.evaluator.evaluators.push({ class: 'USERGROUP', id: null, group: this.selectedSubjects[i].keyId })
+          if (this.selectedSubjects[i].keyType === "PERSON") {
+            this.permission.evaluator.evaluators.push({
+              class: "USERATTRIBUTES",
+              id: null,
+              mode: "EQUALS",
+              attribute: "uid",
+              value: this.selectedSubjects[i].keyId,
+            });
+          } else if (this.selectedSubjects[i].keyType === "GROUP") {
+            this.permission.evaluator.evaluators.push({
+              class: "USERGROUP",
+              id: null,
+              group: this.selectedSubjects[i].keyId,
+            });
           }
         }
       }
-      this.selectPermissionManager(this.ctxPermissionType).update(this.permission).then(() => {
-        this.load(this.ctxType, this.context.id)
-        this.clearPermission()
-      })
+      this.selectPermissionManager(this.ctxPermissionType)
+        .update(this.permission)
+        .then(() => {
+          this.load(this.ctxType, this.context.id);
+          this.clearPermission();
+        });
     },
-    deletePermission (id) {
-      PermissionService.get(id).then(result => {
-        this.permission = result.data
-        this.deletePermissionConfirmation.show()
-      })
+    deletePermission(id) {
+      PermissionService.get(id).then((result) => {
+        this.permission = result.data;
+        this.deletePermissionConfirmation.show();
+      });
     },
-    getEnumlabel (name) {
-      var data
-      data = this.permissionTypeList.find(val => {
-        return val.name === name
-      })
-      return data ? data.label : ''
+    getEnumlabel(name) {
+      var data;
+      data = this.permissionTypeList.find((val) => {
+        return val.name === name;
+      });
+      return data ? data.label : "";
     },
-    getPermissionTypeLabel (name) {
-      return this.getEnumlabel(name)
+    getPermissionTypeLabel(name) {
+      return this.getEnumlabel(name);
     },
-    onModificationEditEvaluator (data, isValid) {
-      this.permission.evaluator = data
-      this.editEvaluatorError = !isValid
+    onModificationEditEvaluator(data, isValid) {
+      this.permission.evaluator = data;
+      this.editEvaluatorError = !isValid;
     },
-    isAdvancedEvaluator (evaluator, depth) {
-      depth = (typeof depth === 'undefined') ? 0 : depth
-      if (depth < 2 && CommonUtils.isDefined(evaluator) && CommonUtils.isDefined(evaluator.class)) {
+    isAdvancedEvaluator(evaluator, depth) {
+      depth = typeof depth === "undefined" ? 0 : depth;
+      if (
+        depth < 2 &&
+        CommonUtils.isDefined(evaluator) &&
+        CommonUtils.isDefined(evaluator.class)
+      ) {
         switch (evaluator.class) {
-          case 'OPERATOR':
-            if (CommonUtils.isDefined(evaluator.type) && CommonUtils.equals('OR', evaluator.type) && CommonUtils.isDefined(evaluator.evaluators)) {
-              var boolEval = false
+          case "OPERATOR":
+            if (
+              CommonUtils.isDefined(evaluator.type) &&
+              CommonUtils.equals("OR", evaluator.type) &&
+              CommonUtils.isDefined(evaluator.evaluators)
+            ) {
+              var boolEval = false;
               for (var i = 0; i < evaluator.evaluators.length; i++) {
-                boolEval = boolEval && this.isAdvancedEvaluator(evaluator.evaluators[i], depth + 1)
-                if (boolEval) return true
+                boolEval =
+                  boolEval &&
+                  this.isAdvancedEvaluator(evaluator.evaluators[i], depth + 1);
+                if (boolEval) return true;
               }
-              return false
+              return false;
             }
-            return true
-          case 'USERATTRIBUTES':
-          case 'USERMULTIVALUEDATTRIBUTES':
-          case 'USERGROUP':
-            return false
+            return true;
+          case "USERATTRIBUTES":
+          case "USERMULTIVALUEDATTRIBUTES":
+          case "USERGROUP":
+            return false;
           default:
-            return true
+            return true;
         }
       }
-      return true
+      return true;
     },
-    removeFromSelectedSubjects (subject) {
+    removeFromSelectedSubjects(subject) {
       this.selectedSubjects = this.selectedSubjects.filter(function (element) {
-        if ('modelId' in subject) {
-          return !CommonUtils.equals(element.modelId, subject.modelId)
+        if ("modelId" in subject) {
+          return !CommonUtils.equals(element.modelId, subject.modelId);
         } else {
-          return !CommonUtils.equals(element, subject)
+          return !CommonUtils.equals(element, subject);
         }
-      })
+      });
     },
-    removePermTarget (subject) {
-      this.permission.authorizedSubjects = this.permission.authorizedSubjects.filter(function (element) {
-        if ('modelId' in subject) return !CommonUtils.equals(element, subject.modelId)
-        return !CommonUtils.equals(element, subject)
-      })
+    removePermTarget(subject) {
+      this.permission.authorizedSubjects =
+        this.permission.authorizedSubjects.filter(function (element) {
+          if ("modelId" in subject)
+            return !CommonUtils.equals(element, subject.modelId);
+          return !CommonUtils.equals(element, subject);
+        });
     },
-    setSelectedSubjectsFromEvaluator (evaluator) {
-      this.selectedSubjects = []
+    setSelectedSubjectsFromEvaluator(evaluator) {
+      this.selectedSubjects = [];
       if (!this.isAdvancedEvaluator(evaluator)) {
         for (var i = 0; i < evaluator.evaluators.length; i++) {
-          var subjectEval = evaluator.evaluators[i]
+          var subjectEval = evaluator.evaluators[i];
           switch (subjectEval.class) {
-            case 'USERATTRIBUTES':
-            case 'USERMULTIVALUEDATTRIBUTES':
-              if (subjectEval.attribute === 'uid' && subjectEval.mode === 'EQUALS') {
-                this.selectedSubjects.push({ keyType: 'PERSON', keyId: subjectEval.value })
+            case "USERATTRIBUTES":
+            case "USERMULTIVALUEDATTRIBUTES":
+              if (
+                subjectEval.attribute === "uid" &&
+                subjectEval.mode === "EQUALS"
+              ) {
+                this.selectedSubjects.push({
+                  keyType: "PERSON",
+                  keyId: subjectEval.value,
+                });
               }
-              break
-            case 'USERGROUP':
-              this.selectedSubjects.push({ keyType: 'GROUP', keyId: subjectEval.group })
-              break
-            default : throw new Error('not yet implemented')
+              break;
+            case "USERGROUP":
+              this.selectedSubjects.push({
+                keyType: "GROUP",
+                keyId: subjectEval.group,
+              });
+              break;
+            default:
+              throw new Error("not yet implemented");
           }
         }
       }
     },
-    updateAuthorizedSubjects (datas) {
-      var newVal = datas[0]
+    updateAuthorizedSubjects(datas) {
+      var newVal = datas[0];
       if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal)) {
-        var found = false
-        this.permission.authorizedSubjects.forEach(value => {
+        var found = false;
+        this.permission.authorizedSubjects.forEach((value) => {
           if (CommonUtils.equals(newVal.modelId, value)) {
-            found = true
+            found = true;
           }
-        })
+        });
         if (!found) {
-          this.permission.authorizedSubjects.push(newVal.modelId)
+          this.permission.authorizedSubjects.push(newVal.modelId);
         } else {
-          this.$toast.warning(t('permission.subjectAlreadySelected'))
+          this.$toast.warning(t("permission.subjectAlreadySelected"));
         }
       }
     },
-    updatePermission (id) {
-      PermissionOnContextService.get(id).then(result => {
-        this.permission = result.data
-        this.loadAvailableRoles(result.data.role)
-        this.setSelectedSubjectsFromEvaluator(this.permission.evaluator)
-        this.editEvaluatorError = false
-        this.addPerm = false
-      })
+    updatePermission(id) {
+      PermissionOnContextService.get(id).then((result) => {
+        this.permission = result.data;
+        this.loadAvailableRoles(result.data.role);
+        this.setSelectedSubjectsFromEvaluator(this.permission.evaluator);
+        this.editEvaluatorError = false;
+        this.addPerm = false;
+      });
     },
     // Mise à jour du sujet séléctionné
-    updateSelectedSubject (datas) {
-      var newVal = datas[0]
+    updateSelectedSubject(datas) {
+      var newVal = datas[0];
       if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal)) {
-        var found = false
-        this.selectedSubjects.forEach(subject => {
+        var found = false;
+        this.selectedSubjects.forEach((subject) => {
           if (CommonUtils.equals(newVal.modelId, subject)) {
-            found = true
+            found = true;
           }
-        })
+        });
         if (!found) {
-          this.selectedSubjects.push(newVal.modelId)
+          this.selectedSubjects.push(newVal.modelId);
         } else {
-          this.$toast.warning(t('permission.subjectAlreadySelected'))
+          this.$toast.warning(t("permission.subjectAlreadySelected"));
         }
       }
-    }
+    },
   },
-  mounted () {
-    this.deletePermissionConfirmation = new Modal(this.$refs.deletePermissionConfirmation)
-  }
-}
+  mounted() {
+    this.deletePermissionConfirmation = new Modal(
+      this.$refs.deletePermissionConfirmation
+    );
+  },
+};
 </script>

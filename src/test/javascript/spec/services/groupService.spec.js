@@ -1,88 +1,93 @@
+import GroupService from "@/services/entities/group/GroupService.js";
+import FetchWrapper from "@/services/util/FetchWrapper.js";
 
-import GroupService from '@/services/entities/group/GroupService.js'
-import FetchWrapper from '@/services/util/FetchWrapper.js'
+jest.mock("@/services/util/FetchWrapper.js");
 
-jest.mock('@/services/util/FetchWrapper.js')
-
-describe('GroupService.js tests', () => {
+describe("GroupService.js tests", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('test 1 GroupService - query without params', (done) => {
+  it("test 1 GroupService - query without params", (done) => {
     const response = {
       data: [],
-      headers: []
-    }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+      headers: [],
+    };
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response));
 
-    GroupService.query().then(value => {
-      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups')
-      expect(value).toStrictEqual(response)
-      done()
-    })
-  })
+    GroupService.query().then((value) => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1);
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith("api/groups");
+      expect(value).toStrictEqual(response);
+      done();
+    });
+  });
 
-  it('test 2 GroupService - query with params', (done) => {
+  it("test 2 GroupService - query with params", (done) => {
     const response = {
       data: [],
-      headers: []
-    }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+      headers: [],
+    };
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response));
 
-    GroupService.query({ key: 'value' }).then(value => {
-      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups?key=value')
-      expect(value).toStrictEqual(response)
-      done()
-    })
-  })
+    GroupService.query({ key: "value" }).then((value) => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1);
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith("api/groups?key=value");
+      expect(value).toStrictEqual(response);
+      done();
+    });
+  });
 
-  it('test 3 GroupService - details', (done) => {
+  it("test 3 GroupService - details", (done) => {
     const response = {
       data: {},
-      headers: []
-    }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+      headers: [],
+    };
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response));
 
-    const id = 1
-    GroupService.details(id).then(value => {
-      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups/extended/' + id)
-      expect(value).toStrictEqual(response)
-      done()
-    })
-  })
+    const id = 1;
+    GroupService.details(id).then((value) => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1);
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith(
+        "api/groups/extended/" + id
+      );
+      expect(value).toStrictEqual(response);
+      done();
+    });
+  });
 
-  it('test 4 GroupService - attribute', (done) => {
+  it("test 4 GroupService - attribute", (done) => {
     const response = {
       data: [],
-      headers: []
-    }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+      headers: [],
+    };
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response));
 
-    GroupService.attributes().then(value => {
-      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups/attributes')
-      expect(value).toStrictEqual(response)
-      done()
-    })
-  })
+    GroupService.attributes().then((value) => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1);
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith(
+        "api/groups/attributes"
+      );
+      expect(value).toStrictEqual(response);
+      done();
+    });
+  });
 
-  it('test 5 GroupService - userMembers', (done) => {
+  it("test 5 GroupService - userMembers", (done) => {
     const response = {
       data: {},
-      headers: []
-    }
-    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response))
+      headers: [],
+    };
+    FetchWrapper.getJson = jest.fn().mockReturnValue(Promise.resolve(response));
 
-    const id = 1
-    GroupService.userMembers(id).then(value => {
-      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1)
-      expect(FetchWrapper.getJson).toHaveBeenCalledWith('api/groups/usermembers?id=' + id)
-      expect(value).toStrictEqual(response)
-      done()
-    })
-  })
-})
+    const id = 1;
+    GroupService.userMembers(id).then((value) => {
+      expect(FetchWrapper.getJson).toHaveBeenCalledTimes(1);
+      expect(FetchWrapper.getJson).toHaveBeenCalledWith(
+        "api/groups/usermembers?id=" + id
+      );
+      expect(value).toStrictEqual(response);
+      done();
+    });
+  });
+});

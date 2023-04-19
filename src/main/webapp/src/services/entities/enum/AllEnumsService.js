@@ -1,9 +1,9 @@
-import FetchWrapper from '../../util/FetchWrapper'
+import FetchWrapper from "../../util/FetchWrapper";
 
 class AllEnumsService {
-  query () {
-    return FetchWrapper.getJson('api/enums/all')
+  query() {
+    return FetchWrapper.getJson("api/enums/all");
   }
 }
 
-export default new AllEnumsService()
+export default new AllEnumsService();

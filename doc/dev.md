@@ -2,8 +2,8 @@
 
 ## migrating from utf8 to utf8mb4
 
-*   old liquibase migration files where removed and a new init schema was generated
-*   to migrate :  
+-   old liquibase migration files where removed and a new init schema was generated
+-   to migrate :  
     **Don't forget to make a dump of your datas before such operation**
 
 1.  dump datas with
@@ -47,51 +47,51 @@
 
 \[WARN\]JAVA 8 use: Don't forget to add `-Djadira.usertype.useJdbc42Apis=false` jvm arg to the command line
 
-*   see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
-*   on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
-*   `./mvnw compile liquibase:update` will apply changelog not loaded (from liquibase files) to the database
-*   `./mvnw compile liquibase:generateChangeLog` will generate the creation of database changelog file
-*   `./mvnw compile liquibase:diff` to generate each diff
-*   IMPORTANT : check for mysql that table names are in lower case in changelog files, do sames things for all table links...
+-   see in liquibase.properties.generation to set database name and defaultSchemaName (important for mysql, schemaName must be equals to database name)
+-   on non local database you can have X11 error if your are running the script from a server, see in liquibase.properties.generation property promptOnNonLocalDatabase to set to false
+-   `./mvnw compile liquibase:update` will apply changelog not loaded (from liquibase files) to the database
+-   `./mvnw compile liquibase:generateChangeLog` will generate the creation of database changelog file
+-   `./mvnw compile liquibase:diff` to generate each diff
+-   IMPORTANT : check for mysql that table names are in lower case in changelog files, do sames things for all table links...
 
 ## to run tests :
 
 ### Init steps :
 
-*   running local docker `docker run -it -p 3306:3306/tcp --health-cmd="mysqladmin -uroot -proot ping" --health-interval=10s --health-timeout=10s --health-retries=10 -e "TZ=Europe/Paris" -e "MYSQL_USER=root" -e "MYSQL_ROOT_PASSWORD=root" -e "MYSQL_DATABASE=publisher_test" -e "MYSQL_DEFAULT_STORAGE_ENGINE=InnoDB" -e "MYSQL_CHARACTER_SET_SERVER=utf8mb4" -e "MYSQL_COLLATION_SERVER=utf8mb4_unicode_520_ci" -e "MYSQL_INNODB_BUFFER_POOL_SIZE=2G" -e "MYSQL_INNODB_DEFAULT_ROW_FORMAT=dynamic" -e "MYSQL_INNODB_DATA_FILE_PATH=ibdata1:100M:autoextend:max:10G" -e "MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT=1" -e "MYSQL_INNODB_LOG_BUFFER_SIZE=64M" -e "MYSQL_INNODB_LOG_FILE_SIZE=256M" -e "MYSQL_INNODB_STRICT_MODE=ON" -e "MYSQL_LOWER_CASE_TABLE_NAMES=1" -e "MYSQL_MAX_CONNECT_ERRORS=100" -e "MYSQL_MAX_CONNECTIONS=1000" -e "MYSQL_QUERY_CACHE_LIMIT=10M" -e "MYSQL_QUERY_CACHE_SIZE=0" -e "MYSQL_QUERY_CACHE_TYPE=OFF" wodby/mariadb:latest`
-*   `./mvnw clean generate-sources compile liquibase:update`
-*   `mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"`
-*   run the openldap-unittest docker like on github-action description
+-   running local docker `docker run -it -p 3306:3306/tcp --health-cmd="mysqladmin -uroot -proot ping" --health-interval=10s --health-timeout=10s --health-retries=10 -e "TZ=Europe/Paris" -e "MYSQL_USER=root" -e "MYSQL_ROOT_PASSWORD=root" -e "MYSQL_DATABASE=publisher_test" -e "MYSQL_DEFAULT_STORAGE_ENGINE=InnoDB" -e "MYSQL_CHARACTER_SET_SERVER=utf8mb4" -e "MYSQL_COLLATION_SERVER=utf8mb4_unicode_520_ci" -e "MYSQL_INNODB_BUFFER_POOL_SIZE=2G" -e "MYSQL_INNODB_DEFAULT_ROW_FORMAT=dynamic" -e "MYSQL_INNODB_DATA_FILE_PATH=ibdata1:100M:autoextend:max:10G" -e "MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT=1" -e "MYSQL_INNODB_LOG_BUFFER_SIZE=64M" -e "MYSQL_INNODB_LOG_FILE_SIZE=256M" -e "MYSQL_INNODB_STRICT_MODE=ON" -e "MYSQL_LOWER_CASE_TABLE_NAMES=1" -e "MYSQL_MAX_CONNECT_ERRORS=100" -e "MYSQL_MAX_CONNECTIONS=1000" -e "MYSQL_QUERY_CACHE_LIMIT=10M" -e "MYSQL_QUERY_CACHE_SIZE=0" -e "MYSQL_QUERY_CACHE_TYPE=OFF" wodby/mariadb:latest`
+-   `./mvnw clean generate-sources compile liquibase:update`
+-   `mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"`
+-   run the openldap-unittest docker like on github-action description
 
 ### And running test:
 
-*   `./mvnw test -Ptest -Dspring.profiles.active=test` don't forget to change databasename between prod, adding argument `-Dspring.profiles.active=test,fast,ldapgrp` will permit to override the default conf
-*   `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Ptest -Dspring.profiles.active=test` don't forget to change databasename between prod for a specific class
+-   `./mvnw test -Ptest -Dspring.profiles.active=test` don't forget to change databasename between prod, adding argument `-Dspring.profiles.active=test,fast,ldapgrp` will permit to override the default conf
+-   `./mvnw test -Dtest=org.esupportail.publisher.repository.PermissionOnContextRepositoryTest#testInsert -Ptest -Dspring.profiles.active=test` don't forget to change databasename between prod for a specific class
 
 ## to run in dev :
 
-*   `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `npm run serve` pour firefox)
+-   `./mvnw clean spring-boot:run -Dmaven.test.skip=true -Pdev` (+ `npm run serve` pour firefox)
 
 ## to run with additional configuration overriding
 
-*   `./mvnw spring-boot:run -Pprod -e -Dspring-boot.run.arguments="--spring.profiles.active=prod --spring.config.additional-location=${project.home}/esup-publisher/config"` to provide custom properties, like overriding config
+-   `./mvnw spring-boot:run -Pprod -e -Dspring-boot.run.arguments="--spring.profiles.active=prod --spring.config.additional-location=${project.home}/esup-publisher/config"` to provide custom properties, like overriding config
 
 ## Release process :
 
-*   put away local change `git stash`
-*   `./mvnw clean generate-sources release:prepare release:perform deploy -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
-*   `git push origin master`
-*   `git stash apply`
+-   put away local change `git stash`
+-   `./mvnw clean generate-sources release:prepare release:perform deploy -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+-   `git push origin master`
+-   `git stash apply`
 
 ## ./mvnw remember :
 
-*   `./mvnw release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
+-   `./mvnw release:perform -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"` to avoid to deploy a release
 
 ## to deploy :
 
-*   before you should build the war package : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
-*   and deploy the war into your webapps directory `unzip esup-publisher-ui-x.y.z.war -d publisher`
-*   into a local nexus `./mvnw deploy:deploy-file -Durl=https://nexus.recia.fr/repository/public/ -DrepositoryId=local-nexus-snapshot -Dfile=target/esup-publisher-ui-2.0.0-SNAPSHOT.war -DpomFile=pom.xml`
+-   before you should build the war package : `./mvnw clean package -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+-   and deploy the war into your webapps directory `unzip esup-publisher-ui-x.y.z.war -d publisher`
+-   into a local nexus `./mvnw deploy:deploy-file -Durl=https://nexus.recia.fr/repository/public/ -DrepositoryId=local-nexus-snapshot -Dfile=target/esup-publisher-ui-2.0.0-SNAPSHOT.war -DpomFile=pom.xml`
 
 ## mvn param to debug xml binding :
 

@@ -1,9 +1,9 @@
-import FetchWrapper from '../util/FetchWrapper'
+import FetchWrapper from "../util/FetchWrapper";
 
 class ConfMimeTypesService {
-  query () {
-    return FetchWrapper.getJson('api/conf/authorizedmimetypes')
+  query() {
+    return FetchWrapper.getJson("api/conf/authorizedmimetypes");
   }
 }
 
-export default new ConfMimeTypesService()
+export default new ConfMimeTypesService();

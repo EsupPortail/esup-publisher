@@ -16,11 +16,11 @@
 
 <script>
 export default {
-  name: 'Error',
-  data () {
+  name: "Error",
+  data() {
     return {
-      errorMessage: null
-    }
-  }
-}
+      errorMessage: null,
+    };
+  },
+};
 </script>

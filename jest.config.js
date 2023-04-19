@@ -1,16 +1,16 @@
 module.exports = {
-  preset: '@vue/cli-plugin-unit-jest',
+  preset: "@vue/cli-plugin-unit-jest",
   transform: {
-    '^.+\\.vue$': '@vue/vue3-jest'
+    "^.+\\.vue$": "@vue/vue3-jest",
   },
-  roots: ['<rootDir>/src/test/javascript/spec/'],
-  testMatch: ['<rootDir>/src/test/javascript/spec/**/@(*.)@(spec.js)'],
+  roots: ["<rootDir>/src/test/javascript/spec/"],
+  testMatch: ["<rootDir>/src/test/javascript/spec/**/@(*.)@(spec.js)"],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/main/webapp/src/$1'
+    "^@/(.*)$": "<rootDir>/src/main/webapp/src/$1",
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!lodash-es)(?!@ckeditor/*)(?!ckeditor5/*)',
-    '\\.pnp\\.[^\\/]+$'
+    "/node_modules/(?!lodash-es)(?!@ckeditor/*)(?!ckeditor5/*)",
+    "\\.pnp\\.[^\\/]+$",
   ],
-  testEnvironment: 'jsdom'
-}
+  testEnvironment: "jsdom",
+};

@@ -7,50 +7,47 @@
 </template>
 
 <script>
-import { computed, readonly } from 'vue'
-import OrganizationService from '@/services/entities/organization/OrganizationService'
-import RedactorService from '@/services/entities/redactor/RedactorService'
-import SubjectService from '@/services/params/SubjectService'
+import { computed, readonly } from "vue";
+import OrganizationService from "@/services/entities/organization/OrganizationService";
+import RedactorService from "@/services/entities/redactor/RedactorService";
+import SubjectService from "@/services/params/SubjectService";
 
 export default {
-  name: 'Manager',
-  data () {
+  name: "Manager",
+  data() {
     return {
       organizations: null,
       redactors: null,
-      initData: false
-    }
+      initData: false,
+    };
   },
-  provide () {
+  provide() {
     return {
       organizations: readonly(computed(() => this.organizations)),
-      redactors: readonly(computed(() => this.redactors))
-    }
+      redactors: readonly(computed(() => this.redactors)),
+    };
   },
   computed: {
     // Détermine le style css de la page
-    getCssClass () {
-      return [
-        'manager',
-        this.$router.currentRoute.value.meta.managerCssClass
-      ]
-    }
+    getCssClass() {
+      return ["manager", this.$router.currentRoute.value.meta.managerCssClass];
+    },
   },
   methods: {
-    init () {
-      OrganizationService.query().then(response => {
-        this.organizations = response.data
-      })
-      RedactorService.query().then(response => {
-        this.redactors = response.data
-      })
-    }
+    init() {
+      OrganizationService.query().then((response) => {
+        this.organizations = response.data;
+      });
+      RedactorService.query().then((response) => {
+        this.redactors = response.data;
+      });
+    },
   },
-  created () {
-    this.init()
+  created() {
+    this.init();
     SubjectService.init().then(() => {
-      this.initData = true
-    })
-  }
-}
+      this.initData = true;
+    });
+  },
+};
 </script>

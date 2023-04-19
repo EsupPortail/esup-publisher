@@ -1,9 +1,9 @@
-import FetchWrapper from '../util/FetchWrapper'
+import FetchWrapper from "../util/FetchWrapper";
 
 class AccountService {
-  account () {
-    return FetchWrapper.getJson('api/account')
+  account() {
+    return FetchWrapper.getJson("api/account");
   }
 }
 
-export default new AccountService()
+export default new AccountService();

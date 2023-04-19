@@ -1,32 +1,47 @@
-import FetchWrapper from '../../util/FetchWrapper'
-import DateUtils from '../../util/DateUtils'
+import FetchWrapper from "../../util/FetchWrapper";
+import DateUtils from "../../util/DateUtils";
 
 class PermissionOnClassificationWithSubjectListService {
-  query () {
-    return FetchWrapper.getJson('api/permissionOnClassificationWithSubjectLists')
+  query() {
+    return FetchWrapper.getJson(
+      "api/permissionOnClassificationWithSubjectLists"
+    );
   }
 
-  get (id) {
-    return FetchWrapper.getJson('api/permissionOnClassificationWithSubjectLists/' + id).then(response => {
+  get(id) {
+    return FetchWrapper.getJson(
+      "api/permissionOnClassificationWithSubjectLists/" + id
+    ).then((response) => {
       if (response.data) {
-        response.data.createdDate = DateUtils.convertDateTimeFromServer(response.data.createdDate)
-        response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(response.data.lastModifiedDate)
+        response.data.createdDate = DateUtils.convertDateTimeFromServer(
+          response.data.createdDate
+        );
+        response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(
+          response.data.lastModifiedDate
+        );
       }
-      return response
-    })
+      return response;
+    });
   }
 
-  update (permissionOnContext) {
-    return FetchWrapper.putJson('api/permissionOnClassificationWithSubjectLists', permissionOnContext)
+  update(permissionOnContext) {
+    return FetchWrapper.putJson(
+      "api/permissionOnClassificationWithSubjectLists",
+      permissionOnContext
+    );
   }
 
-  delete (id) {
-    return FetchWrapper.deleteJson('api/permissionOnClassificationWithSubjectLists/' + id)
+  delete(id) {
+    return FetchWrapper.deleteJson(
+      "api/permissionOnClassificationWithSubjectLists/" + id
+    );
   }
 
-  queryForCtx (ctxType, ctxId) {
-    return FetchWrapper.getJson('api/permissionOnClassificationWithSubjectLists/' + ctxType + '/' + ctxId)
+  queryForCtx(ctxType, ctxId) {
+    return FetchWrapper.getJson(
+      "api/permissionOnClassificationWithSubjectLists/" + ctxType + "/" + ctxId
+    );
   }
 }
 
-export default new PermissionOnClassificationWithSubjectListService()
+export default new PermissionOnClassificationWithSubjectListService();

@@ -1,21 +1,17 @@
 <template>
-<div class="container-fluid justify-content-end">
-  <div class="collapse navbar-collapse" id="navbar-collapse">
+  <div class="container-fluid justify-content-end">
+    <div class="collapse navbar-collapse" id="navbar-collapse"></div>
   </div>
-</div>
 </template>
 
 <script>
 export default {
-  name: 'NavBarPublish',
+  name: "NavBarPublish",
   components: {},
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
-  computed: {
-  },
-  methods: {
-  }
-}
+  computed: {},
+  methods: {},
+};
 </script>

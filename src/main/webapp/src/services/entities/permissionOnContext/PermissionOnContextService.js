@@ -1,32 +1,43 @@
-import FetchWrapper from '../../util/FetchWrapper'
-import DateUtils from '../../util/DateUtils'
+import FetchWrapper from "../../util/FetchWrapper";
+import DateUtils from "../../util/DateUtils";
 
 class PermissionOnContextService {
-  query () {
-    return FetchWrapper.getJson('api/permissionOnContexts')
+  query() {
+    return FetchWrapper.getJson("api/permissionOnContexts");
   }
 
-  get (id) {
-    return FetchWrapper.getJson('api/permissionOnContexts/' + id).then(response => {
-      if (response.data) {
-        response.data.createdDate = DateUtils.convertDateTimeFromServer(response.data.createdDate)
-        response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(response.data.lastModifiedDate)
+  get(id) {
+    return FetchWrapper.getJson("api/permissionOnContexts/" + id).then(
+      (response) => {
+        if (response.data) {
+          response.data.createdDate = DateUtils.convertDateTimeFromServer(
+            response.data.createdDate
+          );
+          response.data.lastModifiedDate = DateUtils.convertDateTimeFromServer(
+            response.data.lastModifiedDate
+          );
+        }
+        return response;
       }
-      return response
-    })
+    );
   }
 
-  update (permissionOnContext) {
-    return FetchWrapper.putJson('api/permissionOnContexts', permissionOnContext)
+  update(permissionOnContext) {
+    return FetchWrapper.putJson(
+      "api/permissionOnContexts",
+      permissionOnContext
+    );
   }
 
-  delete (id) {
-    return FetchWrapper.deleteJson('api/permissionOnContexts/' + id)
+  delete(id) {
+    return FetchWrapper.deleteJson("api/permissionOnContexts/" + id);
   }
 
-  queryForCtx (ctxType, ctxId) {
-    return FetchWrapper.getJson('api/permissionOnContexts/' + ctxType + '/' + ctxId)
+  queryForCtx(ctxType, ctxId) {
+    return FetchWrapper.getJson(
+      "api/permissionOnContexts/" + ctxType + "/" + ctxId
+    );
   }
 }
 
-export default new PermissionOnContextService()
+export default new PermissionOnContextService();
