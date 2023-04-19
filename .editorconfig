@@ -8,7 +8,7 @@ root = true
 
 # Change these settings to your own preference
 indent_style = space
-indent_size = 4
+indent_size = 2
 
 # We recommend you to keep these unchanged
 end_of_line = lf
@@ -19,6 +19,10 @@ insert_final_newline = true
 [*.md]
 trim_trailing_whitespace = false
 
-[{package,bower}.json]
+[*.xml]
 indent_style = space
-indent_size = 2
+indent_size = 4
+
+[*.java]
+indent_style = space
+indent_size = 4
