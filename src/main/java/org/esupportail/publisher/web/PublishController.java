@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -207,6 +208,41 @@ public class PublishController {
                     return getFlashInfo(itemsClasss, request);
                 }
             }catch(IncorrectResultSizeDataAccessException e){
+                log.error("The request to obtain all Flash-Info on an organization found more than one Flash context. Solve this problem !");
+            }
+        }
+        return Lists.newArrayList();
+    }
+
+    @RequestMapping(value = "/flash/allOf/{publisher_ids}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @JsonView(Views.Flash.class)
+    public List<FlashInfoVO> getFlashInfoFrom(@PathVariable("publisher_ids") List<Long> publisher_ids, final HttpServletRequest request ) throws URISyntaxException {
+        log.debug("Entering getFlashInfo all of with params : publisher_ids={}", List.of(publisher_ids));
+        if (publisher_ids.size() > 0) {
+            final BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
+                    .and(PublisherPredicates.AllFromIds(publisher_ids));
+            try {
+                List<Publisher> publishers =  Lists.newArrayList(publisherRepository.findAll(builder));
+                if (!publishers.isEmpty()) {
+                    final BooleanExpression builderExp = QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractItem.id
+                            .in(JPAExpressions.selectDistinct(QAbstractItem.abstractItem.id)
+                                    .from(QAbstractItem.abstractItem)
+                                    .where(ItemPredicates.OwnedItemsOfStatus(null, ItemStatus.PUBLISHED.getId(), null)))
+                                    .and(QItemClassificationOrder.itemClassificationOrder.itemClassificationId.abstractClassification.publisher.id.in(
+                                        publishers.stream().map(Publisher::getId).collect(Collectors.toList())));
+                    // Ordre décidé ainsi pour mettre en tête de liste les flash plus fraîche - on ne tient pas compte de la configuration du context publisher dans ce cas
+                    DisplayOrderType displayOrder = DisplayOrderType.LAST_CREATED_MODIFIED_FIRST;
+                    if (publishers.size() == 1) {
+                        displayOrder = publishers.get(0).getDefaultDisplayOrder();
+                    }
+                    final List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builderExp,
+                            ItemPredicates.orderByClassifDefinition(displayOrder)));
+
+                    return getFlashInfo(itemsClasss, request);
+                }
+            } catch(IncorrectResultSizeDataAccessException e) {
                 log.error("The request to obtain all Flash-Info on an organization found more than one Flash context. Solve this problem !");
             }
         }
