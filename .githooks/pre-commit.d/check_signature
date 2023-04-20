@@ -3,21 +3,21 @@
 PWD=`pwd`
 globalEmail=`git config --global --get user.email`
 signingKey=$( git config --global --get user.signingkey )
-workEmail="julien.gribonvald@recia.fr"
+workEmail="@recia.fr$"
 
 echo "Using signing key "$signingKey""
 
-if [[ $PWD != "*demo*" && $globalEmail != $workEmail ]];
+if [[ $PWD != "*demo*" && ! $globalEmail =~ $workEmail ]];
 then
-        echo "Commit email and global git config email differ"
-        echo "Global commit email: "$globalEmail""
-        echo "Committing email expected: $workEmail"
-        exit 1
+    echo "Commit email and global git config email differ"
+    echo "Global commit email: "$globalEmail""
+    echo "Committing email expected: $workEmail"
+    exit 1
 elif [[ -z $signingKey ]];
 then
-        echo "No signing key found. Check global gitconfig that provided "$signingKey""
-        exit 1
+    echo "No signing key found. Check global gitconfig that provided "$signingKey""
+    exit 1
 else
-        echo ""
-        exit 0
+    echo ""
+    exit 0
 fi
