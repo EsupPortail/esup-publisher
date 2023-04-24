@@ -418,6 +418,7 @@ import { Modal } from "bootstrap";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import RichText from "@/components/richtext/RichText";
+import ConfigurationService from "@/services/params/ConfigurationService";
 
 const { t } = i18n.global;
 
@@ -571,11 +572,10 @@ export default {
       this.setContent(newContent);
 
       // Vérification de la validatié du fichier sélectionnée
-      // 10MB = 10 * 1024 * 1024 B
       this.fileInputError = FormValidationUtils.getFileFieldError(
         this.content.file,
         "image/*",
-        10 * 1024 * 1024,
+        ConfigurationService.getConfUploadFileSize(),
         false
       );
 

@@ -444,6 +444,7 @@ import DateUtils from "@/services/util/DateUtils";
 import UploadUtils from "@/services/util/UploadUtils";
 import store from "@/store/index.js";
 import { Modal } from "bootstrap";
+import ConfigurationService from "@/services/params/ConfigurationService";
 
 export default {
   name: "ContentMedia",
@@ -612,11 +613,10 @@ export default {
       this.fileInputError = null;
       if (file) {
         // Vérification de la validatié du fichier sélectionnée
-        // 10MB = 10 * 1024 * 1024 B
         this.fileInputError = FormValidationUtils.getFileFieldError(
           file,
           "(" + this.authorizedMimeTypes.join("|") + ")",
-          10 * 1024 * 1024,
+          ConfigurationService.getConfUploadFileSize(),
           false
         );
 
