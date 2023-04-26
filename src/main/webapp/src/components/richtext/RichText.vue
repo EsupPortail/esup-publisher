@@ -37,6 +37,8 @@ import ImageResize from "@ckeditor/ckeditor5-image/src/imageresize";
 import LinkImage from "@ckeditor/ckeditor5-link/src/linkimage";
 import MediaEmbed from "@ckeditor/ckeditor5-media-embed/src/mediaembed";
 import GeneralHtmlSupport from "@ckeditor/ckeditor5-html-support/src/generalhtmlsupport";
+import FileManagerService from "@/services/entities/file/FileManagerService";
+import Base64Utils from "@/services/util/Base64Utils";
 
 export default {
   name: "RichText",
@@ -214,10 +216,14 @@ export default {
         },
         language: store.getters.getLanguage,
       },
+      uploadedFiles: [],
     };
   },
+  inject: ["publisher"],
   methods: {
     onReady(editor) {
+      // Get already uploaded files
+      this.uploadedFiles = this.getUploadedFiles(this.editorData);
       // Configuration du CustomUploadAdapter pour les images
       editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
         return new CustomUploadAdapter(
@@ -245,9 +251,33 @@ export default {
         );
       };
     },
+    checkRemovedFiles(editorData) {
+      const newUplodedFiles = this.getUploadedFiles(editorData);
+      const diff = this.uploadedFiles.filter(
+        (x) => !newUplodedFiles.includes(x)
+      );
+      this.deleteRemovedFiles(diff);
+      this.uploadedFiles = newUplodedFiles;
+    },
+    async deleteRemovedFiles(files) {
+      files.forEach((fileURI) => {
+        const isPublic = fileURI.startsWith("files/") ? true : false;
+        FileManagerService.delete(
+          this.publisher.context.organization.id,
+          isPublic,
+          Base64Utils.encode(fileURI)
+        );
+      });
+    },
+    getUploadedFiles(editorData) {
+      const uploadedFiles = editorData.match(/file.?\/(.*?).[a-z]{3,4}/g);
+
+      return uploadedFiles ? uploadedFiles : [];
+    },
   },
   watch: {
     editorData(newVal) {
+      this.checkRemovedFiles(newVal);
       this.$emit("update:modelValue", newVal);
     },
   },
