@@ -651,11 +651,13 @@ ul#strength {
 }
 
 .publish-form-container .btn-primary:hover,
+.modal-footer .btn-primary:hover,
 .contents.details .card-footer .btn-info:hover {
   opacity: 0.75;
 }
 
 .publish-form-container .btn-primary,
+.modal-footer .btn-primary,
 .contents.details .card-footer .btn-info,
 .btn-nav:not([disabled]):hover,
 .btn-nav:not([disabled]):focus {
