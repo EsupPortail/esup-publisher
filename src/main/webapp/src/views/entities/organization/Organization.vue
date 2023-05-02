@@ -211,7 +211,7 @@
                 data-bs-dismiss="modal"
                 @click="clear"
               >
-                <span class="fas fa-ban"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -221,7 +221,7 @@
                 :disabled="formValidator.hasError()"
                 @click="createOrganization"
               >
-                <span class="fas fa-download"></span>&nbsp;<span>{{
+                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                   $t("entity.action.save")
                 }}</span>
               </button>
@@ -259,7 +259,7 @@
                 data-bs-dismiss="modal"
                 @click="clear"
               >
-                <span class="fas fa-ban"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -268,7 +268,7 @@
                 class="btn btn-danger"
                 @click="confirmDelete(organization.id)"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>
@@ -336,7 +336,7 @@
                 class="btn btn-primary btn-sm me-1"
                 v-has-any-role="'ROLE_ADMIN'"
               >
-                <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{
                   $t("entity.action.edit")
                 }}</span>
               </button>
@@ -346,7 +346,7 @@
                 class="btn btn-danger btn-sm"
                 v-has-any-role="'ROLE_ADMIN'"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>

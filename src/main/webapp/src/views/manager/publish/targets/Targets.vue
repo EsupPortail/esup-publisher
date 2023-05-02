@@ -29,7 +29,7 @@
                 @click.prevent="remove(subject)"
                 v-tooltip="$t('manager.publish.targets.remove')"
               >
-                <i class="far fa-times-circle text-danger"></i> </a
+                <i class="far fa-trash-can text-danger"></i> </a
               >&nbsp;
             </esup-subject-infos>
           </li>
@@ -56,7 +56,7 @@
             class="btn btn-default btn-outline-dark btn-nav"
             @click="navigate"
           >
-            <span class="fas fa-ban"></span>&nbsp;<span>{{
+            <span class="fas fa-times"></span>&nbsp;<span>{{
               $t("entity.action.cancel")
             }}</span>
           </button>

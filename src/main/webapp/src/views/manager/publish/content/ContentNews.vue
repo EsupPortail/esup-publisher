@@ -74,7 +74,7 @@
             data-bs-target="#deleteEnclosureConfirmation"
             v-tooltip="$t('entity.action.delete')"
           >
-            <i class="far fa-times-circle text-danger"></i>
+            <i class="far fa-trash-can text-danger"></i>
           </a>
         </div>
       </div>
@@ -373,7 +373,7 @@
               class="btn btn-primary"
               :disabled="!content.file || !content.dataUrl"
             >
-              <span class="fas fa-download"></span>&nbsp;<span>{{
+              <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                 $t("entity.action.save")
               }}</span>
             </button>
@@ -383,7 +383,7 @@
               @click="clearUpload()"
               :disabled="!content.file || !content.dataUrl"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-rotate-right"></span>&nbsp;<span>{{
                 $t("entity.action.reset")
               }}</span>
             </button>
@@ -392,7 +392,7 @@
               class="btn btn-default btn-outline-dark"
               data-bs-dismiss="modal"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>

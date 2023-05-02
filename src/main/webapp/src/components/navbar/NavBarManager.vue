@@ -9,7 +9,7 @@
         <div
           v-if="isPageNameIncludes('owned') || isPageNameIncludes('managed')"
         >
-          <span class="fas fa-file-alt fa-2x"></span>
+          <span class="fas fa-file fa-2x"></span>
           <span class="dropdown-toggle">{{
             $t("global.menu.manager.contents.main")
           }}</span>
@@ -38,13 +38,13 @@
         </li>
         <li class="nav-item">
           <router-link to="/publish/publisher" class="nav-link">
-            <span class="fas fa-pencil-alt fa-2x"></span>
+            <span class="fas fa-pencil fa-2x"></span>
             <span>{{ $t("global.menu.write") }}</span>
           </router-link>
         </li>
         <li v-if="!canModerate" class="nav-item">
           <a class="nav-link">
-            <span class="fas fa-file-alt fa-2x"></span>
+            <span class="fas fa-file fa-2x"></span>
             <span>{{ $t("global.menu.manager.contents.main") }}</span>
           </a>
         </li>
@@ -63,7 +63,7 @@
             href=""
           >
             <span>
-              <span class="fas fa-file-alt fa-2x"></span>
+              <span class="fas fa-file fa-2x"></span>
               <span>{{ $t("global.menu.manager.contents.main") }}</span>
             </span>
           </a>

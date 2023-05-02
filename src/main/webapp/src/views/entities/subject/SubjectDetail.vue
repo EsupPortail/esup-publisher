@@ -60,7 +60,7 @@
               @click="close"
               data-bs-dismiss="modal"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.close")
               }}</span>
             </button>
@@ -124,7 +124,7 @@
               @click="close"
               data-bs-dismiss="modal"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.close")
               }}</span>
             </button>

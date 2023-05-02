@@ -215,7 +215,7 @@
                 v-tooltip="$t('entity.action.delete')"
                 @click.prevent="deleteAttachment(attachment)"
               >
-                <i class="far fa-times-circle text-danger"></i>
+                <i class="far fa-trash-can text-danger"></i>
               </a>
             </span>
           </div>

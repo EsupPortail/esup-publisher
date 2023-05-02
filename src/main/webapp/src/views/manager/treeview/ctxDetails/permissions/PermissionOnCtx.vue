@@ -86,7 +86,7 @@
                   @click.prevent="removeFromSelectedSubjects(subject)"
                   v-tooltip="$t('manager.publish.targets.remove')"
                   href=""
-                  ><i class="far fa-times-circle text-danger"></i></a
+                  ><i class="far fa-trash-can text-danger"></i></a
                 >&nbsp;
               </esup-subject-infos>
             </li>
@@ -112,7 +112,7 @@
           class="btn btn-default btn-outline-dark me-1"
           @click="clearPermission()"
         >
-          <span class="fas fa-ban"></span>&nbsp;<span>{{
+          <span class="fas fa-times"></span>&nbsp;<span>{{
             $t("entity.action.cancel")
           }}</span>
         </button>
@@ -128,7 +128,7 @@
           "
           class="btn btn-primary"
         >
-          <span class="fas fa-download"></span>&nbsp;<span>{{
+          <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
             $t("entity.action.save")
           }}</span>
         </button>
@@ -177,7 +177,7 @@
                 v-if="canEditCtxPerms"
                 class="btn btn-primary me-1"
               >
-                <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{
                   $t("entity.action.edit")
                 }}</span>
               </button>
@@ -187,7 +187,7 @@
                 v-if="canEditCtxPerms"
                 class="btn btn-danger"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>
@@ -233,7 +233,7 @@
                 @click="updatePermission(permission.id)"
                 class="btn btn-primary me-1"
               >
-                <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{
                   $t("entity.action.edit")
                 }}</span>
               </button>
@@ -245,7 +245,7 @@
                 @click="deletePermission(permission.id)"
                 class="btn btn-danger"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>

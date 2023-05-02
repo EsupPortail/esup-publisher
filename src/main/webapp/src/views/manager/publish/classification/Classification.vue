@@ -115,7 +115,7 @@
             class="btn btn-default btn-outline-dark btn-nav"
             @click="navigate"
           >
-            <span class="fas fa-ban"></span>&nbsp;<span>{{
+            <span class="fas fa-times"></span>&nbsp;<span>{{
               $t("entity.action.cancel")
             }}</span>
           </button>

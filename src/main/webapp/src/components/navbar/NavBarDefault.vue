@@ -89,7 +89,7 @@
           <ul class="dropdown-menu">
             <li :class="{ active: isPageNameIncludes('metrics') }">
               <router-link to="/metrics" class="dropdown-item"
-                ><span class="fas fa-tachometer-alt"></span> &#xA0;<span>{{
+                ><span class="fas fa-gauge"></span> &#xA0;<span>{{
                   $t("global.menu.admin.metrics")
                 }}</span></router-link
               >
@@ -103,7 +103,7 @@
             </li>
             <li :class="{ active: isPageNameIncludes('configuration') }">
               <router-link to="/configuration" class="dropdown-item"
-                ><span class="fas fa-list-alt"></span> &#xA0;<span>{{
+                ><span class="fas fa-list"></span> &#xA0;<span>{{
                   $t("global.menu.admin.configuration")
                 }}</span></router-link
               >

@@ -10,7 +10,7 @@
         @click="updateCategory()"
         class="btn btn-primary me-1"
       >
-        <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+        <span class="fas fa-pencil"></span>&nbsp;<span>{{
           $t("entity.action.edit")
         }}</span>
       </button>
@@ -20,7 +20,7 @@
         v-can-delete="context.contextKey"
         class="btn btn-danger"
       >
-        <span class="far fa-times-circle"></span>&nbsp;<span>{{
+        <span class="far fa-trash-can"></span>&nbsp;<span>{{
           $t("entity.action.delete")
         }}</span>
       </button>
@@ -192,7 +192,7 @@
                 class="btn btn-default btn-outline-dark"
                 data-bs-dismiss="modal"
               >
-                <span class="fas fa-ban"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -201,7 +201,7 @@
                 class="btn btn-danger"
                 @click="confirmDelete()"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>

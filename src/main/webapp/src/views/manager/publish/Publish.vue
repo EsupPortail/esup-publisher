@@ -100,7 +100,7 @@
                 class="btn btn-default btn-outline-dark"
                 data-bs-dismiss="modal"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -109,7 +109,7 @@
                 class="btn btn-primary"
                 @click="publishItem('DRAFT')"
               >
-                <span class="far fa-check-circle"></span>&nbsp;<span>{{
+                <span class="fas fa-check"></span>&nbsp;<span>{{
                   $t("entity.action.validate")
                 }}</span>
               </button>
@@ -122,7 +122,7 @@
     <div class="publish-footer text-end" v-if="canSave">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-primary" @click="confirmSave()">
-          <span class="fas fa-download"></span>&nbsp;<span>{{
+          <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
             $t("item.action.save")
           }}</span>
         </button>

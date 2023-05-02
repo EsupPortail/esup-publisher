@@ -24,7 +24,7 @@
               data-bs-dismiss="modal"
               @click="clear"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>
@@ -33,7 +33,7 @@
               class="btn btn-danger"
               @click="confirmDelete(item)"
             >
-              <span class="far fa-times-circle"></span>&nbsp;<span>{{
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{
                 $t("entity.action.delete")
               }}</span>
             </button>
@@ -67,7 +67,7 @@
               data-bs-dismiss="modal"
               @click="clear"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>
@@ -76,7 +76,7 @@
               class="btn btn-danger"
               @click="confirmValidate(item)"
             >
-              <span class="far fa-check-circle"></span>&nbsp;<span>{{
+              <span class="fas fa-check"></span>&nbsp;<span>{{
                 $t("entity.action.validate")
               }}</span>
             </button>
@@ -258,7 +258,7 @@
                 class="btn btn-primary btn-sm me-1"
                 @click="editItem(item.id)"
               >
-                <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{
                   $t("entity.action.edit")
                 }}</span>
               </button>
@@ -267,7 +267,7 @@
                 class="btn btn-warning btn-sm me-1 text-white"
                 @click="validate(item.id)"
               >
-                <span class="far fa-check-circle"></span>&nbsp;<span>{{
+                <span class="fas fa-check"></span>&nbsp;<span>{{
                   $t("entity.action.validate")
                 }}</span>
               </button>
@@ -278,7 +278,7 @@
               @click="deleteItem(item.id)"
               v-can-delete="item.contextKey"
             >
-              <span class="far fa-times-circle"></span>&nbsp;<span>{{
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{
                 $t("entity.action.delete")
               }}</span>
             </button>

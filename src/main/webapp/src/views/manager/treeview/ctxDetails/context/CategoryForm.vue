@@ -364,7 +364,7 @@
               class="btn btn-default btn-outline-dark"
               data-bs-dismiss="modal"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>
@@ -376,7 +376,7 @@
               "
               @click="confirmUpdate"
             >
-              <span class="fas fa-download"></span>&nbsp;<span>{{
+              <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                 $t("entity.action.save")
               }}</span>
             </button>

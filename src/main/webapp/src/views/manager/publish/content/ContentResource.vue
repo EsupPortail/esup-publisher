@@ -76,7 +76,7 @@
             data-bs-target="#deleteEnclosureConfirmation"
             v-tooltip="$t('entity.action.delete')"
           >
-            <i class="far fa-times-circle text-danger"></i>
+            <i class="far fa-trash-can text-danger"></i>
           </a>
         </div>
       </div>
@@ -316,7 +316,7 @@
                         class="btn btn-primary"
                         @click="validatePicUrl(content.picUrl)"
                       >
-                        <span class="fas fa-download"></span>&nbsp;<span>{{
+                        <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                           $t("entity.action.validate")
                         }}</span>
                       </button>
@@ -367,7 +367,7 @@
                           @click="uploadFile()"
                           class="btn btn-primary"
                         >
-                          <span class="fas fa-download"></span>&nbsp;<span>{{
+                          <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                             $t("entity.action.validate")
                           }}</span>
                         </button>
@@ -412,7 +412,7 @@
               title="Clear selected files"
               @click="clearUpload()"
             >
-              <span class="fas fa-trash-alt"></span>&nbsp;<span>{{
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{
                 $t("entity.action.delete")
               }}</span>
             </button>
@@ -421,7 +421,7 @@
               class="btn btn-default btn-outline-dark"
               data-bs-dismiss="modal"
             >
-              <span class="far fa-times-circle"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>

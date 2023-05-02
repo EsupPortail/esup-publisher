@@ -40,7 +40,7 @@
               data-bs-dismiss="modal"
               @click="clearPermission"
             >
-              <span class="fas fa-ban"></span>&nbsp;<span>{{
+              <span class="fas fa-times"></span>&nbsp;<span>{{
                 $t("entity.action.cancel")
               }}</span>
             </button>
@@ -49,7 +49,7 @@
               class="btn btn-danger"
               @click="confirmDeletePermission(permission.id)"
             >
-              <span class="far fa-times-circle"></span>&nbsp;<span>{{
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{
                 $t("entity.action.delete")
               }}</span>
             </button>

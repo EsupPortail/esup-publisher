@@ -10,7 +10,7 @@
         @click="updatePublisher()"
         class="btn btn-primary me-1"
       >
-        <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+        <span class="fas fa-pencil"></span>&nbsp;<span>{{
           $t("entity.action.edit")
         }}</span>
       </button>
@@ -20,7 +20,7 @@
         @click="deletePublisher()"
         class="btn btn-danger me-1"
       >
-        <span class="far fa-times-circle"></span>&nbsp;<span>{{
+        <span class="far fa-trash-can"></span>&nbsp;<span>{{
           $t("entity.action.delete")
         }}</span>
       </button>
@@ -31,7 +31,7 @@
         @click="createCategory()"
         class="btn btn-primary"
       >
-        <span class="fas fa-pencil-alt"></span>&nbsp;<span>{{
+        <span class="fas fa-pencil"></span>&nbsp;<span>{{
           $t("category.home.createLabel")
         }}</span>
       </button>
@@ -400,7 +400,7 @@
                 class="btn btn-default btn-outline-dark"
                 data-bs-dismiss="modal"
               >
-                <span class="fas fa-ban"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -410,7 +410,7 @@
                 :disabled="formValidator.hasError() || !canManage"
                 @click="confirmUpdate"
               >
-                <span class="fas fa-download"></span>&nbsp;<span>{{
+                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
                   $t("entity.action.save")
                 }}</span>
               </button>
@@ -442,7 +442,7 @@
                 class="btn btn-default btn-outline-dark"
                 data-bs-dismiss="modal"
               >
-                <span class="fas fa-ban"></span>&nbsp;<span>{{
+                <span class="fas fa-times"></span>&nbsp;<span>{{
                   $t("entity.action.cancel")
                 }}</span>
               </button>
@@ -451,7 +451,7 @@
                 class="btn btn-danger"
                 @click="confirmDelete()"
               >
-                <span class="far fa-times-circle"></span>&nbsp;<span>{{
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{
                   $t("entity.action.delete")
                 }}</span>
               </button>
