@@ -15,6 +15,8 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
+import java.util.List;
+
 import org.esupportail.publisher.domain.Organization;
 import org.esupportail.publisher.domain.QPublisher;
 
@@ -37,6 +39,10 @@ public final class PublisherPredicates {
     }
     public static Predicate AllOfOrganizationByIdentifier(String orgIdentifier) {
         return qobj.context.organization.identifiers.contains(orgIdentifier);
+    }
+
+    public static Predicate AllFromIds(List<Long> publisherIds) {
+        return qobj.id.in(publisherIds);
     }
 
     public static Predicate notNull() {

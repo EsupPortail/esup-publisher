@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
@@ -164,12 +165,15 @@ public class PublishControllerTest {
 
     private Publisher newWay;
     private Publisher filesPub;
-    private Publisher flashInfo;
+    private Publisher flashInfo1;
+    private Publisher flashInfo2;
     private Publisher esupLectureWay;
     private Organization organization;
     private List<LinkedFileItem> files = new ArrayList<>();
     private List<Category> catsOfEsupLectureWay = new ArrayList<>();
     private News savedNews;
+    private Flash savedFlash1;
+    private Flash savedFlash2;
 
     @BeforeEach
     public void initTest() throws InterruptedException {
@@ -189,6 +193,8 @@ public class PublishControllerTest {
         reader3.getAuthorizedTypes().clear();
         reader3.getAuthorizedTypes().add(ItemType.ATTACHMENT);
         reader3 = readerRepository.saveAndFlush(reader3);
+        Reader reader4 = ObjTest.newReader("4");
+        reader4 = readerRepository.saveAndFlush(reader4);
         Redactor redactor1 = ObjTest.newRedactor("1");
         redactor1 = redactorRepository.saveAndFlush(redactor1);
         Redactor redactor2 = ObjTest.newRedactor("2");
@@ -204,8 +210,10 @@ public class PublishControllerTest {
         newWay = new Publisher(organization, reader1, redactor1, "PUB 1", PermissionClass.CONTEXT, true,true, true);
         newWay.setDefaultDisplayOrder(DisplayOrderType.NAME);
         newWay = publisherRepository.saveAndFlush(newWay);
-        flashInfo = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false, false);
-        flashInfo = publisherRepository.saveAndFlush(flashInfo);
+        flashInfo1 = new Publisher(organization, reader2, redactor2, "PUB 2", PermissionClass.CONTEXT, true,false, false);
+        flashInfo1 = publisherRepository.saveAndFlush(flashInfo1);
+        flashInfo2 = new Publisher(organization, reader4, redactor2, "PUB 22", PermissionClass.CONTEXT, true,false, false);
+        flashInfo2 = publisherRepository.saveAndFlush(flashInfo2);
         filesPub = new Publisher(organization, reader3, redactor3, "PUB 3", PermissionClass.CONTEXT, true,true, false);
         filesPub = publisherRepository.saveAndFlush(filesPub);
         esupLectureWay = new Publisher(organization, reader1, redactor4, "PUB 4 ", PermissionClass.CONTEXT, true, true, false);
@@ -217,7 +225,7 @@ public class PublishControllerTest {
         cat1 = categoryRepository.saveAndFlush(cat1);
         Category cat2 = ObjTest.newCategory("cat B", newWay);
         cat2 = categoryRepository.saveAndFlush(cat2);
-        Category cat3 = ObjTest.newCategory("cat C", flashInfo);
+        Category cat3 = ObjTest.newCategory("cat C", flashInfo1);
         cat3 = categoryRepository.saveAndFlush(cat3);
         Category cat4 = ObjTest.newCategory("cat D", filesPub);
         cat4 = categoryRepository.saveAndFlush(cat4);
@@ -227,6 +235,8 @@ public class PublishControllerTest {
         Category cat6 = ObjTest.newCategory("cat F", esupLectureWay);
         cat6 = categoryRepository.saveAndFlush(cat6);
         catsOfEsupLectureWay.add(cat6);
+        Category cat7 = ObjTest.newCategory("cat G", flashInfo2);
+        cat7 = categoryRepository.saveAndFlush(cat7);
 
         News news1 = ObjTest.newNews("news 1", organization, newWay.getContext().getRedactor());
         // Don't update date, a test on SCHEDULED => PUBLISHED is made
@@ -250,11 +260,6 @@ public class PublishControllerTest {
         news4.setStartDate(LocalDate.now().minusMonths(1));
         news4.setEndDate(LocalDate.now().minusDays(1));
         news4 = itemRepository.saveAndFlush(news4);
-        Flash flash = ObjTest.newFlash("flash 1", organization, flashInfo.getContext().getRedactor());
-        flash.setStatus(ItemStatus.PUBLISHED);
-        flash.setStartDate(LocalDate.now());
-        flash.setEndDate(LocalDate.now().plusMonths(1));
-        flash = itemRepository.saveAndFlush(flash);
         Attachment attachment = ObjTest.newAttachment("file 1", organization, filesPub.getContext().getRedactor());
         attachment.setStartDate(LocalDate.now());
         attachment.setEndDate(null);
@@ -271,8 +276,18 @@ public class PublishControllerTest {
         news6.setEndDate(LocalDate.now().plusMonths(1));
         news6.setStatus(ItemStatus.PUBLISHED);
         news6 = itemRepository.saveAndFlush(news6);
+        savedFlash1 = ObjTest.newFlash("flash 1", organization, flashInfo1.getContext().getRedactor());
+        savedFlash1.setStatus(ItemStatus.PUBLISHED);
+        savedFlash1.setStartDate(LocalDate.now().minusDays(1));
+        savedFlash1.setEndDate(LocalDate.now().plusMonths(1));
+        savedFlash1 = itemRepository.saveAndFlush(savedFlash1);
 
         Thread.sleep(1000);
+        savedFlash2 = ObjTest.newFlash("flash 2", organization, flashInfo2.getContext().getRedactor());
+        savedFlash2.setStatus(ItemStatus.PUBLISHED);
+        savedFlash2.setStartDate(LocalDate.now());
+        savedFlash2.setEndDate(LocalDate.now().plusMonths(2));
+        savedFlash2 = itemRepository.saveAndFlush(savedFlash2);
         int nbModif = itemRepository.publishScheduled();
         // test news1 SCHEDULED => PUBLISHED + update datemodification and move it to First news in order
         assertThat(nbModif, equalTo(1));
@@ -292,7 +307,8 @@ public class PublishControllerTest {
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat1, 1));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news3, cat2, 2));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news4, cat2, 3));
-        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(flash, cat3, 0));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(savedFlash1, cat3, 0));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(savedFlash2, cat7, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(attachment, cat4, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news5, cat5, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news6, cat6, 0));
@@ -321,6 +337,36 @@ public class PublishControllerTest {
         log.debug("News1 {}, {}", news1.getCreatedDate(), news1.getLastModifiedDate());
         log.debug("News2 {}, {}", news2.getCreatedDate(), news2.getLastModifiedDate());
         log.debug("News3 {}, {}", news3.getCreatedDate(), news3.getLastModifiedDate());
+        log.debug("News4 {}, {}", news4.getCreatedDate(), news4.getLastModifiedDate());
+        log.debug("News5 {}, {}", news5.getCreatedDate(), news5.getLastModifiedDate());
+        log.debug("News6 {}, {}", news6.getCreatedDate(), news6.getLastModifiedDate());
+        log.debug("Flash1 {}, {}", savedFlash1.getCreatedDate(), savedFlash1.getLastModifiedDate());
+        log.debug("Flash2 {}, {}", savedFlash2.getCreatedDate(), savedFlash2.getLastModifiedDate());
+    }
+
+    @Test
+    public void getAllFlashInfoFromAllPublisher() throws Exception {
+        restPublishControllerMockMvc.perform(get("/published/flash/allOf/{publisher_ids}", flashInfo1.getId() + "," + flashInfo2.getId())
+                .accept(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[*]").isNotEmpty())
+                // Ordre d'affichage étant sur LAST_CREATED_MODIFIED_FIRST, donc la savedflash 2 est en première
+                .andExpect(jsonPath("$.[0].title").value(savedFlash2.getTitle()))
+                .andExpect(jsonPath("$.[0].mediaUrl").isNotEmpty())
+                .andExpect(jsonPath("$.[0].summary").value(savedFlash2.getSummary()))
+                .andExpect(jsonPath("$.[0].link").isNotEmpty())
+                .andExpect(jsonPath("$.[0].rubriques.[*]").isNotEmpty())
+                .andExpect(jsonPath("$.[0].rubriques.[0].name").isNotEmpty())
+                .andExpect(jsonPath("$.[0].rubriques.[0].color").isNotEmpty())
+                .andExpect(jsonPath("$.[0].rubriques.[1]").doesNotExist())
+                .andExpect(jsonPath("$.[1].title").value(savedFlash1.getTitle()))
+                .andExpect(jsonPath("$.[1].mediaUrl").isNotEmpty())
+                .andExpect(jsonPath("$.[1].summary").value(savedFlash1.getSummary()))
+                .andExpect(jsonPath("$.[1].link").isNotEmpty())
+                .andExpect(jsonPath("$.[1].rubriques.[*]").isNotEmpty())
+                .andExpect(jsonPath("$.[1].rubriques.[0].name").isNotEmpty())
+                .andExpect(jsonPath("$.[1].rubriques.[0].color").isNotEmpty())
+                .andExpect(jsonPath("$.[1].rubriques.[1]").doesNotExist());
     }
 
     @Test
