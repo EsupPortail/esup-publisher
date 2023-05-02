@@ -65,7 +65,7 @@
       </article>
       <section>
         <a class="btn btn-primary" :href="item.ressourceUrl" target="_blank"
-          ><i class="fas fa-external-link-square"></i>&nbsp;<span>{{
+          ><i class="fas fa-arrow-up-right-from-square"></i>&nbsp;<span>{{
             $t("resource.action.goto-ressourceUrl")
           }}</span></a
         >

@@ -20,9 +20,11 @@
     <router-link to="/contents/owned/DRAFT" class="list-group-item">
       <div id="owned-item" class="bouton-action">
         <div class="div-icon text-end">
-          <i class="fas fa-file fa-5x d-none d-sm-none d-md-inline-block"></i>
           <i
-            class="fas fa-file fa-2x d-inline-block d-sm-inline-block d-md-none"
+            class="fas fa-file-lines fa-5x d-none d-sm-none d-md-inline-block"
+          ></i>
+          <i
+            class="fas fa-file-lines fa-2x d-inline-block d-sm-inline-block d-md-none"
           ></i>
         </div>
         <div class="div-text text-start">
