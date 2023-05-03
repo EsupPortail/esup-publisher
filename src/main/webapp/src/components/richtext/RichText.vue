@@ -227,6 +227,7 @@ export default {
         language: store.getters.getLanguage,
       },
       uploadedFiles: [],
+      editorState: undefined,
     };
   },
   inject: ["publisher"],
@@ -260,6 +261,8 @@ export default {
           this.callBackAbord
         );
       };
+      // Set editor state for tests
+      this.editorState = editor;
     },
     checkRemovedFiles(editorData) {
       const newUplodedFiles = this.getUploadedFiles(editorData);
