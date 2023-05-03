@@ -270,7 +270,9 @@ export default {
       });
     },
     getUploadedFiles(editorData) {
-      const uploadedFiles = editorData.match(/file.?\/(.*?).[a-z]{3,4}/g);
+      const uploadedFiles = editorData.match(
+        /files\/(.*?).[a-z]{2,4}|view\/file\/(.*?).[a-z]{2,4}/g
+      );
 
       return uploadedFiles ? uploadedFiles : [];
     },
