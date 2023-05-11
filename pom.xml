@@ -326,6 +326,11 @@
             <artifactId>problem-spring-web</artifactId>
             <version>${problem-spring-web.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>

@@ -26,6 +26,10 @@ This project includes:
   Apache Log4j to SLF4J Adapter under Apache License, Version 2.0
   asm under BSD-3-Clause
   ASM based accessors helper used by json-smart under The Apache Software License, Version 2.0
+  asm-analysis under BSD-3-Clause
+  asm-commons under BSD-3-Clause
+  asm-tree under BSD-3-Clause
+  asm-util under BSD-3-Clause
   AspectJ Weaver under Eclipse Public License - v 2.0
   AssertJ fluent assertions under Apache License, Version 2.0
   attoparser under The Apache Software License, Version 2.0
@@ -121,6 +125,7 @@ This project includes:
   mockito-junit-jupiter under The MIT License
   Objenesis under Apache License, Version 2.0
   opencsv under Apache 2
+  OpenJDK Nashorn under GPL v2 with the Classpath exception
   org.apiguardian:apiguardian-api under The Apache License, Version 2.0
   org.opentest4j:opentest4j under The Apache License, Version 2.0
   org.xmlunit:xmlunit-core under The Apache Software License, Version 2.0
