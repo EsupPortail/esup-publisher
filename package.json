@@ -34,7 +34,7 @@
     "@gip-recia/js-tree": "0.0.15",
     "@gip-recia/subject-infos": "0.0.13",
     "@gip-recia/subject-search-button": "0.0.17",
-    "@popperjs/core": "2.11.7",
+    "@popperjs/core": "2.11.8",
     "bootstrap": "5.2.3",
     "compressorjs": "^1.2.1",
     "core-js": "3.29.1",
