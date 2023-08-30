@@ -15,69 +15,17 @@
  */
 package org.esupportail.publisher.web;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.blankOrNullString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
+import com.google.common.collect.Sets;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
 import org.esupportail.publisher.config.Constants;
-import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.Attachment;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.Flash;
-import org.esupportail.publisher.domain.ItemClassificationOrder;
-import org.esupportail.publisher.domain.LinkedFileItem;
-import org.esupportail.publisher.domain.News;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
-import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.domain.enums.DisplayOrderType;
-import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.esupportail.publisher.domain.enums.ItemType;
-import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.domain.enums.SubscribeType;
-import org.esupportail.publisher.domain.enums.WritingMode;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
-import org.esupportail.publisher.repository.ItemRepository;
-import org.esupportail.publisher.repository.LinkedFileItemRepository;
-import org.esupportail.publisher.repository.ObjTest;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
-import org.esupportail.publisher.repository.ReaderRepository;
-import org.esupportail.publisher.repository.RedactorRepository;
-import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.enums.*;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
-import org.esupportail.publisher.service.factories.CategoryFactory;
-import org.esupportail.publisher.service.factories.CategoryProfileFactory;
-import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
-import org.esupportail.publisher.service.factories.ItemVOFactory;
-import org.esupportail.publisher.service.factories.RubriqueVOFactory;
-
-import com.google.common.collect.Sets;
-import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.service.factories.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +37,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 /**
@@ -358,6 +321,7 @@ public class PublishControllerTest {
                 .andExpect(jsonPath("$.[0].rubriques.[*]").isNotEmpty())
                 .andExpect(jsonPath("$.[0].rubriques.[0].name").isNotEmpty())
                 .andExpect(jsonPath("$.[0].rubriques.[0].color").isNotEmpty())
+                .andExpect(jsonPath("$.[0].rubriques.[0].hiddenIfEmpty").isBoolean())
                 .andExpect(jsonPath("$.[0].rubriques.[1]").doesNotExist())
                 .andExpect(jsonPath("$.[1].title").value(savedFlash1.getTitle()))
                 .andExpect(jsonPath("$.[1].mediaUrl").isNotEmpty())
@@ -366,6 +330,7 @@ public class PublishControllerTest {
                 .andExpect(jsonPath("$.[1].rubriques.[*]").isNotEmpty())
                 .andExpect(jsonPath("$.[1].rubriques.[0].name").isNotEmpty())
                 .andExpect(jsonPath("$.[1].rubriques.[0].color").isNotEmpty())
+                .andExpect(jsonPath("$.[1].rubriques.[0].hiddenIfEmpty").isBoolean())
                 .andExpect(jsonPath("$.[1].rubriques.[1]").doesNotExist());
     }
 
@@ -423,6 +388,8 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/rubriques/rubrique/color").string(not(blankOrNullString())))
             .andExpect(xpath("/actualites/rubriques/rubrique/highlight").exists())
             .andExpect(xpath("/actualites/rubriques/rubrique/highlight").booleanValue(true))
+            .andExpect(xpath("/actualites/rubriques/rubrique/hiddenIfEmpty").exists())
+            .andExpect(xpath("/actualites/rubriques/rubrique/hiddenIfEmpty").booleanValue(true))
             .andExpect(xpath("/actualites/items/*").nodeCount(3))
             .andExpect(xpath("/actualites/items/item/article/title").exists())
             .andExpect(xpath("/actualites/items/item/article/title").string(not(blankOrNullString())))

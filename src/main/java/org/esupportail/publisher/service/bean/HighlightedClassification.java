@@ -15,17 +15,16 @@
  */
 package org.esupportail.publisher.service.bean;
 
-import java.io.Serializable;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * Created by jgribonvald on 12/04/17.
@@ -61,6 +60,8 @@ public class HighlightedClassification implements Serializable {
     @NotNull
     private String color;
 
+    private boolean hiddenIfEmpty = true;
+
     /**
      * Empty Constructor of HighlightedClassification.
      */
@@ -74,10 +75,11 @@ public class HighlightedClassification implements Serializable {
      * @param description
      * @param color
      */
-    public HighlightedClassification(final String name, final String description, final String color) {
+    public HighlightedClassification(final String name, final String description, final String color, final boolean hiddenIfEmpty) {
         this.name = name;
         this.description = description;
         this.color = color;
+        this.hiddenIfEmpty = hiddenIfEmpty;
     }
 
     /**
@@ -94,7 +96,7 @@ public class HighlightedClassification implements Serializable {
      */
     public HighlightedClassification(final boolean rssAllowed, final String name, final String lang,
                                      final int ttl, final int displayOrder, final AccessType accessView, final String description,
-                                     final boolean highlight, final String color, final DisplayOrderType defaultDisplayOrder) {
+                                     final boolean highlight, final String color, final boolean hiddenIfEmpty, final DisplayOrderType defaultDisplayOrder) {
         this.name = name;
         this.lang = lang;
         this.ttl = ttl;
@@ -105,5 +107,6 @@ public class HighlightedClassification implements Serializable {
         this.rssAllowed = rssAllowed;
         this.highlight = highlight;
         this.color = color;
+        this.hiddenIfEmpty = hiddenIfEmpty;
     }
 }

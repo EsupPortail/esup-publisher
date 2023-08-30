@@ -15,12 +15,12 @@
  */
 package org.esupportail.publisher.config.bean;
 
+import lombok.Data;
+import org.springframework.validation.annotation.Validated;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
@@ -49,6 +49,7 @@ public class ServiceProperties {
             private String color;
             @NotBlank
             private String description;
+            private boolean hiddenIfEmpty = true;
 
             @Override
             public String toString() {
@@ -56,6 +57,7 @@ public class ServiceProperties {
                         + "\n \"name\":\"" + name + "\""
                         + ",\n \"color\":\"" + color + "\""
                         + ",\n \"description\":\"" + description + "\""
+                        + ",\n \"hiddenIfEmpty\":\"" + hiddenIfEmpty + "\""
                         + "\n}\n}";
             }
         }

@@ -15,28 +15,16 @@
  */
 package org.esupportail.publisher.service;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
-
-import org.esupportail.publisher.domain.AbstractFeed;
-import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.ContextKey;
-import org.esupportail.publisher.domain.IContext;
-import org.esupportail.publisher.domain.Publisher;
+import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.PermissionType;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.FeedRepository;
-import org.esupportail.publisher.repository.ItemRepository;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.OrganizationPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
@@ -47,11 +35,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author GIP RECIA - Julien Gribonvald
@@ -157,14 +144,9 @@ public class ContextService {
                 if(permissionService.getRoleOfUserInContext(SecurityContextHolder.getContext().getAuthentication(), ctx).getMask() < PermissionType.ADMIN.getMask()) {
                     // A loop is needed due to hibernate bug, NPE on publisher.context.reader.authorizedTypes.contains(ItemType.FLASH)
                     //builder.andNot(QCategory.category.publisher.context.isNull());
-                    for(Iterator<Category> iterator = myList.iterator(); iterator.hasNext(); ) {
-                        final Category cat = iterator.next();
-                        // other cat properties can't be null
-                        if(!cat.getPublisher().getContext().getReader().getAuthorizedTypes().isEmpty()
-                            && cat.getPublisher().getContext().getReader().getAuthorizedTypes().contains(ItemType.FLASH)) {
-                            iterator.remove();
-                        }
-                    }
+                    // other cat properties can't be null
+                    myList.removeIf(cat -> !cat.getPublisher().getContext().getReader().getAuthorizedTypes().isEmpty()
+                            && cat.getPublisher().getContext().getReader().getAuthorizedTypes().contains(ItemType.FLASH));
                 }
                 return myList;
             case CATEGORY :

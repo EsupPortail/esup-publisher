@@ -15,53 +15,21 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.QUser;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
-import org.esupportail.publisher.domain.User;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.ObjTest;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
-import org.esupportail.publisher.repository.ReaderRepository;
-import org.esupportail.publisher.repository.RedactorRepository;
-import org.esupportail.publisher.repository.UserRepository;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserContextLoaderService;
 import org.esupportail.publisher.security.UserContextLoaderServiceImpl;
 import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,6 +43,17 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the CategoryResource REST controller.
@@ -102,6 +81,9 @@ public class CategoryResourceTest {
 	private static final Boolean UPDATED_RSS_ALLOWED = true;
 	private static final Integer DEFAULT_TTL = 1000;
 	private static final Integer UPDATED_TTL = 10000;
+
+    private static final Boolean DEFAULT_HIDDEN_IF_EMPTY = false;
+    private static final Boolean UPDATED_HIDDEN_IF_EMPTY = true;
     private static final String USER_ADMIN = "admin";
     private static final String USER = "user";
 
@@ -182,6 +164,7 @@ public class CategoryResourceTest {
 		category.setIconUrl(DEFAULT_ICON_URL);
 		category.setRssAllowed(DEFAULT_RSS_ALLOWED);
 		category.setTtl(DEFAULT_TTL);
+        category.setHiddenIfEmpty(DEFAULT_HIDDEN_IF_EMPTY);
 		category.setPublisher(publisher);
 	}
 
@@ -209,6 +192,7 @@ public class CategoryResourceTest {
 		assertThat(testCategory.getDisplayOrder(), equalTo(DEFAULT_DISPLAY_ORDER));
 		assertThat(testCategory.getIconUrl(), equalTo(DEFAULT_ICON_URL));
 		assertThat(testCategory.isRssAllowed(), equalTo(DEFAULT_RSS_ALLOWED));
+		assertThat(testCategory.isHiddenIfEmpty(), equalTo(DEFAULT_HIDDEN_IF_EMPTY));
 		assertThat(testCategory.getTtl(), equalTo(DEFAULT_TTL));
 		assertThat(testCategory.getPublisher(), equalTo(publisher));
 	}
@@ -231,6 +215,7 @@ public class CategoryResourceTest {
 				.andExpect(jsonPath("$.[0].displayOrder").value(DEFAULT_DISPLAY_ORDER))
 				.andExpect(jsonPath("$.[0].iconUrl").value(DEFAULT_ICON_URL))
 				.andExpect(jsonPath("$.[0].rssAllowed").value(DEFAULT_RSS_ALLOWED))
+				.andExpect(jsonPath("$.[0].hiddenIfEmpty").value(DEFAULT_HIDDEN_IF_EMPTY))
 				.andExpect(jsonPath("$.[0].ttl").value(DEFAULT_TTL))
 				.andExpect(jsonPath("$.[0].publisher.id").value(publisher.getId().intValue()));
 	}
@@ -252,6 +237,7 @@ public class CategoryResourceTest {
 				.andExpect(jsonPath("$.displayOrder").value(DEFAULT_DISPLAY_ORDER))
 				.andExpect(jsonPath("$.iconUrl").value(DEFAULT_ICON_URL))
 				.andExpect(jsonPath("$.rssAllowed").value(DEFAULT_RSS_ALLOWED))
+				.andExpect(jsonPath("$.hiddenIfEmpty").value(DEFAULT_HIDDEN_IF_EMPTY))
 				.andExpect(jsonPath("$.ttl").value(DEFAULT_TTL))
 				.andExpect(jsonPath("$.publisher.id").value(publisher.getId().intValue()));
 	}
@@ -277,6 +263,7 @@ public class CategoryResourceTest {
 		category.setDisplayOrder(UPDATED_DISPLAY_ORDER);
 		category.setIconUrl(UPDATED_ICON_URL);
 		category.setRssAllowed(UPDATED_RSS_ALLOWED);
+        category.setHiddenIfEmpty(UPDATED_HIDDEN_IF_EMPTY);
 		category.setTtl(UPDATED_TTL);
 		log.debug("Category before update : {}", category);
 		restCategoryMockMvc.perform(
@@ -295,6 +282,7 @@ public class CategoryResourceTest {
 		assertThat(testCategory.getDisplayOrder(), equalTo(UPDATED_DISPLAY_ORDER));
 		assertThat(testCategory.getIconUrl(), equalTo(UPDATED_ICON_URL));
 		assertThat(testCategory.isRssAllowed(), equalTo(UPDATED_RSS_ALLOWED));
+		assertThat(testCategory.isHiddenIfEmpty(), equalTo(UPDATED_HIDDEN_IF_EMPTY));
 		assertThat(testCategory.getTtl(), equalTo(UPDATED_TTL));
 		assertThat(testCategory.getPublisher(), equalTo(publisher));
 	}

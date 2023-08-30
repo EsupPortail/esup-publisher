@@ -52,4 +52,6 @@ public class RubriqueVO implements Serializable {
     private String mediaUrl;
 
     private boolean highlight;
+
+    private boolean hiddenIfEmpty;
 }

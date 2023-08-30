@@ -18,13 +18,6 @@
  */
 package org.esupportail.publisher.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
@@ -35,6 +28,12 @@ import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
 import org.hibernate.validator.constraints.URL;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -83,10 +82,11 @@ public class ExternalFeed extends AbstractFeed implements Serializable {
                         final int displayOrder, final AccessType accessView,
                         final String description,
                         final DisplayOrderType defaultDisplayOrder, final String color,
+                        final boolean hiddenIfEmpty,
                         final Publisher publisher, final Category parent,
                         final String rssUrl) {
         super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
-            description, defaultDisplayOrder, color, publisher, parent);
+            description, defaultDisplayOrder, color, hiddenIfEmpty, publisher, parent);
         this.rssUrl = rssUrl;
     }
 }

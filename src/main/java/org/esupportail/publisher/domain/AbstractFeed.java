@@ -15,20 +15,15 @@
  */
 package org.esupportail.publisher.domain;
 
-import java.io.Serializable;
+import lombok.*;
+import org.esupportail.publisher.domain.enums.AccessType;
+import org.esupportail.publisher.domain.enums.DisplayOrderType;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
-import org.esupportail.publisher.domain.enums.AccessType;
-import org.esupportail.publisher.domain.enums.DisplayOrderType;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -57,9 +52,10 @@ public abstract class AbstractFeed extends AbstractClassification implements
                         final int displayOrder, final AccessType accessView,
                         final String description,
                         final DisplayOrderType defaultDisplayOrder, final String color,
+                        final boolean hiddenIfEmpty,
                         final Publisher publisher, final Category parent) {
         super(rssAllowed, name, iconUrl, lang, ttl, displayOrder, accessView,
-            description, defaultDisplayOrder, color, publisher);
+            description, defaultDisplayOrder, color, hiddenIfEmpty, publisher);
         this.parent = parent;
     }
 

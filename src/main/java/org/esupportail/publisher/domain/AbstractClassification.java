@@ -15,26 +15,13 @@
  */
 package org.esupportail.publisher.domain;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.querydsl.core.annotations.QueryInit;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
@@ -43,13 +30,12 @@ import org.esupportail.publisher.domain.util.CustomEnumSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.querydsl.core.annotations.QueryInit;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 16 juin 2014
@@ -123,6 +109,9 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
     @Size(max = CstPropertiesLength.COLOR)
     @Column(length = CstPropertiesLength.COLOR)
     private String color;
+    /** This field corresponds to the database column hidden_if_empty. */
+    @Column(length = 1, nullable = false, name = "hidden_if_empty")
+    private boolean hiddenIfEmpty = false;
 
     // @JsonIgnore
     @NotNull
@@ -155,7 +144,7 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
                                   final int displayOrder, final AccessType accessView,
                                   final String description,
                                   final DisplayOrderType defaultDisplayOrder,
-                                  final String color, final Publisher publisher) {
+                                  final String color, final boolean hiddenIfEmpty, final Publisher publisher) {
         super();
         this.rssAllowed = rssAllowed;
         this.name = name;
@@ -167,6 +156,7 @@ public abstract class AbstractClassification extends AbstractAuditingEntity
         this.description = description;
         this.defaultDisplayOrder = defaultDisplayOrder;
         this.color = color;
+        this.hiddenIfEmpty = hiddenIfEmpty;
         this.publisher = publisher;
     }
 

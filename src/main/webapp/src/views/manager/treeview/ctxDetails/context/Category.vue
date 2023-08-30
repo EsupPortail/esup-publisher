@@ -86,6 +86,23 @@
         <span v-if="!context.color">{{ $t("category.color-none") }}</span>
       </dd>
     </dl>
+    <dl class="row entity-details"
+      v-if="
+          context.publisher && context.publisher.context.redactor.writingMode !== 'STATIC'
+        ">
+      <dt class="col-sm-5">
+        <span>{{ $t("category.hiddenIfEmpty") }}</span>
+      </dt>
+      <dd class="col-sm-7">
+        <span
+          ><input
+            type="checkbox"
+            class="input-sm"
+            v-model="context.hiddenIfEmpty"
+            disabled
+        /></span>
+      </dd>
+    </dl>
     <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
       <dt class="col-sm-5">
         <span>{{ $t("category.accessView") }}</span>

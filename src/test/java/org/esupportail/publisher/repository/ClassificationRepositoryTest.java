@@ -15,34 +15,14 @@
  */
 package org.esupportail.publisher.repository;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import javax.inject.Inject;
-
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.AbstractClassification;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.ExternalFeed;
-import org.esupportail.publisher.domain.InternalFeed;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
-
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +32,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 3 oct. 2014
@@ -121,17 +109,17 @@ public class ClassificationRepositoryTest {
 
 		cat1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
+				+ INDICE_1, DisplayOrderType.NAME, "#F44336", true, pub1);
 		cat1 = catRepo.saveAndFlush(cat1);
 
 		InternalFeed c2 = new InternalFeed(true, "CAT " + INDICE_2, "ICON_URL"
 				+ INDICE_2, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, "#F44336", pub2, cat1);
+				"A DESC" + INDICE_2, DisplayOrderType.START_DATE, "#F44336", false, pub2, cat1);
 		repository.saveAndFlush(c2);
 
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_3, "ICON_URL"
 				+ INDICE_3, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, "#F44336", pub2, cat1, URL);
+				"A DESC" + INDICE_3, DisplayOrderType.START_DATE, "#F44336", false, pub2, cat1, URL);
 		repository.saveAndFlush(c3);
 
 	}
@@ -157,7 +145,7 @@ public class ClassificationRepositoryTest {
 	public void testBadURL() {
 		ExternalFeed c3 = new ExternalFeed(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.AUTHENTICATED,
-				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", pub2,
+				"A DESC" + INDICE_4, DisplayOrderType.START_DATE, "#F44336", false, pub2,
 				(Category) repository.getReferenceById(cat1.getId()), "RSS_URL");
 		Assertions.assertThrows(javax.validation.ConstraintViolationException.class, () -> {
 			repository.saveAndFlush(c3);
@@ -168,7 +156,7 @@ public class ClassificationRepositoryTest {
 	public void testDuplicateCategoryName() {
 		Category c1 = new Category(true, "CAT " + INDICE_1, "ICON_URL"
 				+ INDICE_1, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_1, DisplayOrderType.NAME, "#F44336", pub1);
+				+ INDICE_1, DisplayOrderType.NAME, "#F44336", true, pub1);
 		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
 			repository.saveAndFlush(c1);
 		});
@@ -179,7 +167,7 @@ public class ClassificationRepositoryTest {
 	public void testInsert() {
 		Category c1 = new Category(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_4, DisplayOrderType.NAME, "#F44336", pub1);
+				+ INDICE_4, DisplayOrderType.NAME, "#F44336", true, pub1);
 		repository.saveAndFlush(c1);
 
 		log.info("Before insert : {}", c1);
@@ -360,7 +348,7 @@ public class ClassificationRepositoryTest {
 	public void testDelete() {
 		Category c1 = new Category(true, "CAT " + INDICE_4, "ICON_URL"
 				+ INDICE_4, "fr_fr", 3600, 200, AccessType.PUBLIC, "A DESC"
-				+ INDICE_4, DisplayOrderType.NAME, "#F44336", pub1);
+				+ INDICE_4, DisplayOrderType.NAME, "#F44336", true, pub1);
 		repository.saveAndFlush(c1);
 		long count = repository.count();
 		repository.delete(c1);

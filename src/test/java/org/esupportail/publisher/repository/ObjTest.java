@@ -15,6 +15,13 @@
  */
 package org.esupportail.publisher.repository;
 
+import com.google.common.collect.Sets;
+import org.esupportail.publisher.domain.*;
+import org.esupportail.publisher.domain.enums.*;
+import org.esupportail.publisher.domain.evaluators.*;
+import org.esupportail.publisher.web.rest.dto.SubjectDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -22,49 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
-import org.esupportail.publisher.domain.Attachment;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.ContextKey;
-import org.esupportail.publisher.domain.Filter;
-import org.esupportail.publisher.domain.Flash;
-import org.esupportail.publisher.domain.InternalFeed;
-import org.esupportail.publisher.domain.News;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.PermissionOnClassificationWithSubjectList;
-import org.esupportail.publisher.domain.PermissionOnContext;
-import org.esupportail.publisher.domain.PermissionOnSubjects;
-import org.esupportail.publisher.domain.PermissionOnSubjectsWithClassificationList;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
-import org.esupportail.publisher.domain.SubjectKey;
-import org.esupportail.publisher.domain.SubjectKeyExtended;
-import org.esupportail.publisher.domain.SubjectPermKey;
-import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.domain.enums.AccessType;
-import org.esupportail.publisher.domain.enums.ClassificationDecorType;
-import org.esupportail.publisher.domain.enums.DisplayOrderType;
-import org.esupportail.publisher.domain.enums.FilterType;
-import org.esupportail.publisher.domain.enums.ItemStatus;
-import org.esupportail.publisher.domain.enums.ItemType;
-import org.esupportail.publisher.domain.enums.OperatorType;
-import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.domain.enums.PermissionType;
-import org.esupportail.publisher.domain.enums.StringEvaluationMode;
-import org.esupportail.publisher.domain.enums.SubjectType;
-import org.esupportail.publisher.domain.enums.SubscribeType;
-import org.esupportail.publisher.domain.enums.WritingFormat;
-import org.esupportail.publisher.domain.enums.WritingMode;
-import org.esupportail.publisher.domain.evaluators.AbstractEvaluator;
-import org.esupportail.publisher.domain.evaluators.OperatorEvaluator;
-import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
-import org.esupportail.publisher.domain.evaluators.UserGroupEvaluator;
-import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
-import org.esupportail.publisher.web.rest.dto.SubjectDTO;
-import org.esupportail.publisher.web.rest.dto.SubscriberFormDTO;
-
-import com.google.common.collect.Sets;
 
 public final class ObjTest {
 
@@ -274,12 +238,12 @@ public final class ObjTest {
 		// return cat;
 
 		return new Category(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
-				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", pub);
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", true, pub);
 	}
 
 	public static Category newCategory(final String indice) {
 		return new Category(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
-				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", newPublisher(indice));
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", true, newPublisher(indice));
 	}
 
 	public static Publisher newPublisher(final String indice) {
@@ -289,17 +253,17 @@ public final class ObjTest {
 
 	public static InternalFeed newInternalFeed(final String indice) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
-				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", newPublisher(indice), newCategory(indice));
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", true, newPublisher(indice), newCategory(indice));
 	}
 
 	public static InternalFeed newInternalFeed(final String indice, final Publisher publisher) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
-				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", publisher, newCategory(indice));
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", true, publisher, newCategory(indice));
 	}
 
 	public static InternalFeed newInternalFeed(final String indice, final Publisher publisher, final Category category) {
 		return new InternalFeed(true, "CAT " + indice, "ICON_URL" + indice, "fr_fr", 3600, 200, getRandomAccessType(),
-				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", publisher, category);
+				"A DESC" + indice, getRandomDisplayOrderType(), "#F44336", true, publisher, category);
 	}
 
 	public static News newNews(final String indice) {

@@ -15,15 +15,14 @@
  */
 package org.esupportail.publisher.service;
 
-import javax.annotation.PostConstruct;
-
-import org.esupportail.publisher.config.ESUPPublisherProperties;
-import org.esupportail.publisher.service.bean.HighlightedClassification;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.config.ESUPPublisherProperties;
+import org.esupportail.publisher.service.bean.HighlightedClassification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by jgribonvald on 12/04/17.
@@ -42,7 +41,8 @@ public class HighlightedClassificationService {
         this.classification = new HighlightedClassification(
                 esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getName(),
                 esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getColor(),
-                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getDescription()
+                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().getDescription(),
+                esupPublisherProperties.getService().getClassificationParams().getHighlightClassification().isHiddenIfEmpty()
         );
     }
 

@@ -16,6 +16,7 @@
         "iconUrl": "Icon Url",
         "color" : "Color",
         "color-none" : "Color undefined",
+        "hiddenIfEmpty" : "Hide is no content",
         "lang": "Lang",
         "langList": {
             "fr": "French",

@@ -15,40 +15,12 @@
  */
 package org.esupportail.publisher.web.rest;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.esupportail.publisher.Application;
-import org.esupportail.publisher.domain.Category;
-import org.esupportail.publisher.domain.InternalFeed;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.Reader;
-import org.esupportail.publisher.domain.Redactor;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.AccessType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.InternalFeedRepository;
-import org.esupportail.publisher.repository.ObjTest;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
-import org.esupportail.publisher.repository.ReaderRepository;
-import org.esupportail.publisher.repository.RedactorRepository;
-
+import org.esupportail.publisher.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -58,6 +30,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the InternalFeedResource REST controller.
@@ -85,6 +67,7 @@ public class InternalFeedResourceTest {
 	private static final String DEFAULT_LANG = "fr";
 	private static final String UPDATED_LANG = "fr_fr";
 	private static final Boolean DEFAULT_RSS_ALLOWED = true;
+    private static final Boolean DEFAULT_HIDDEN_IF_EMPTY = true;
 
 	@Inject
 	private InternalFeedRepository internalFeedRepository;
@@ -155,6 +138,7 @@ public class InternalFeedResourceTest {
 		category.setDisplayOrder(DEFAULT_DISPLAY_ORDER);
 		category.setIconUrl(DEFAULT_ICON_URL);
 		category.setRssAllowed(DEFAULT_RSS_ALLOWED);
+        category.setHiddenIfEmpty(DEFAULT_HIDDEN_IF_EMPTY);
 		category.setTtl(DEFAULT_TTL);
 		category.setPublisher(publisher);
 		category = categoryRepository.saveAndFlush(category);

@@ -169,6 +169,22 @@
                 .onColorChanged="onColorChanged"
               ></esup-color-palette-picker>
             </div>
+            <div class="form-group"
+              v-if="
+                  publisher.context.redactor.writingMode !== 'STATIC'
+                "
+                >
+              <label for="hiddenIfEmpty" class="control-label">{{
+                $t("category.hiddenIfEmpty")
+              }}</label>
+              <input
+                type="checkbox"
+                class="form-check-input d-block mx-auto"
+                name="hiddenIfEmpty"
+                id="hiddenIfEmpty"
+                v-model="editedContextHiddenIfEmpty"
+              />
+            </div>
             <div class="form-group" v-has-role="'ROLE_ADMIN'">
               <label for="accessView" class="control-label">{{
                 $t("category.accessView")
@@ -448,6 +464,16 @@ export default {
       set(newVal) {
         const newEditedContext = Object.assign({}, this.editedContext);
         newEditedContext.iconUrl = newVal;
+        this.setEditedContext(newEditedContext);
+      },
+    },
+    editedContextHiddenIfEmpty: {
+      get() {
+        return this.editedContext.hiddenIfEmpty || false;
+      },
+      set(newVal) {
+        const newEditedContext = Object.assign({}, this.editedContext);
+        newEditedContext.hiddenIfEmpty = newVal;
         this.setEditedContext(newEditedContext);
       },
     },
