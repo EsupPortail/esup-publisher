@@ -39,6 +39,7 @@ This project includes:
   Bouncy Castle Provider under Bouncy Castle Licence
   Byte Buddy (without dependencies) under Apache License, Version 2.0
   Byte Buddy agent under Apache License, Version 2.0
+  Caffeine cache under Apache License, Version 2.0
   Checker Qual under The MIT License
   ClassGraph under The MIT License (MIT)
   ClassMate under Apache License, Version 2.0
@@ -87,6 +88,8 @@ This project includes:
   Jakarta XML Binding API under Eclipse Distribution License - v 1.0
   Jasig CAS Client for Java - Core under Apache License Version 2.0
   Java Annotation Indexer under Apache License, Version 2.0
+  Java Native Access under LGPL-2.1-or-later or Apache-2.0
+  Java Native Access Platform under LGPL-2.1-or-later or Apache-2.0
   Java Persistence API, Version 2.1 under Eclipse Public License (EPL), Version 1.0 or Eclipse Distribution License (EDL), Version 1.0
   Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
   JavaBeans Activation Framework API jar under CDDL/GPLv2+CE
@@ -96,6 +99,7 @@ This project includes:
   JAXB Runtime under Eclipse Distribution License - v 1.0
   jaxb-api under CDDL 1.1 or GPL2 w/ CPE
   JBoss Logging 3 under Apache License, version 2.0
+  JCL 1.2 implemented over SLF4J under Apache License, Version 2.0
   JDOM under Similar to Apache License but with the acknowledgment clause removed
   JSON in Java under The JSON License
   JSON library from Android SDK under Apache License 2.0
@@ -221,6 +225,7 @@ This project includes:
   tomcat-embed-websocket under Apache License, Version 2.0
   TXW2 Runtime under Eclipse Distribution License - v 1.0
   unbescape under The Apache Software License, Version 2.0
+  waffle-jna under MIT
   webjars-locator-core under MIT
   Woodstox under The Apache Software License, Version 2.0
 
