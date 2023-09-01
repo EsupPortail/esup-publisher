@@ -28,16 +28,17 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ContextType;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.PermissionClass;
 import org.esupportail.publisher.domain.util.CstPropertiesLength;
 import org.esupportail.publisher.domain.util.CustomEnumSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -90,7 +91,16 @@ public class Publisher extends AbstractAuditingEntity implements IContext,
 	//@Convert(converter = DisplayOrderTypeConverter.class)
     //@JsonDeserialize(using = DisplayOrderTypeDeserializer.class)
     @JsonSerialize(using = CustomEnumSerializer.class)
-	private DisplayOrderType defaultDisplayOrder = DisplayOrderType.START_DATE;
+	private DisplayOrderType defaultDisplayOrder = DisplayOrderType.NAME;
+
+	/** This field corresponds to the database column default_display_order. */
+	@NotNull
+	@Column(length = 50, name = "default_items_display_order", nullable = false)
+	@Enumerated(EnumType.STRING)
+	// @Convert(converter = DisplayOrderTypeConverter.class)
+	// @JsonDeserialize(using = DisplayOrderTypeDeserializer.class)
+	@JsonSerialize(using = CustomEnumSerializer.class)
+	private DisplayOrderType defaultItemsDisplayOrder = DisplayOrderType.START_DATE;
 
     /** This field corresponds to the database column has_sub_perms_management. */
     @Column(length = 1, nullable = false, name = "has_sub_perms_management")

@@ -4,25 +4,11 @@
       {{ $t("manager.treeview.details.context.properties") }}
     </h3>
     <div class="mb-3">
-      <button
-        type="button"
-        v-can-edit="context.contextKey"
-        @click="updateCategory()"
-        class="btn btn-primary me-1"
-      >
-        <span class="fas fa-pencil"></span>&nbsp;<span>{{
-          $t("entity.action.edit")
-        }}</span>
+      <button type="button" v-can-edit="context.contextKey" @click="updateCategory()" class="btn btn-primary me-1">
+        <span class="fas fa-pencil"></span>&nbsp;<span>{{ $t("entity.action.edit") }}</span>
       </button>
-      <button
-        type="button"
-        @click="deleteCategory()"
-        v-can-delete="context.contextKey"
-        class="btn btn-danger"
-      >
-        <span class="far fa-trash-can"></span>&nbsp;<span>{{
-          $t("entity.action.delete")
-        }}</span>
+      <button type="button" @click="deleteCategory()" v-can-delete="context.contextKey" class="btn btn-danger">
+        <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t("entity.action.delete") }}</span>
       </button>
     </div>
 
@@ -49,58 +35,31 @@
         context.iconUrl !== '' &&
         context.iconUrl !== 'http://' &&
         context.publisher &&
-        context.publisher.context.reader.classificationDecorations.includes(
-          'ENCLOSURE'
-        )
+        context.publisher.context.reader.classificationDecorations.includes('ENCLOSURE')
       "
     >
       <dt class="col-sm-5">
         <span>{{ $t("category.iconUrl") }}</span>
       </dt>
       <dd class="col-sm-7">
-        <img
-          class="media-object img-fluid"
-          :src="context.iconUrl"
-          alt="image"
-        />
+        <img class="media-object img-fluid" :src="context.iconUrl" alt="image" />
       </dd>
     </dl>
-    <dl
-      class="row entity-details"
-      v-if="
-        context.publisher &&
-        context.publisher.context.reader.classificationDecorations.includes(
-          'COLOR'
-        )
-      "
-    >
+    <dl class="row entity-details" v-if="context.publisher && context.publisher.context.reader.classificationDecorations.includes('COLOR')">
       <dt class="col-sm-5">
         <span>{{ $t("category.color") }}</span>
       </dt>
       <dd class="col-sm-7">
-        <div
-          v-if="context.color"
-          class="classification-color"
-          :style="{ 'background-color': context.color }"
-        />
+        <div v-if="context.color" class="classification-color" :style="{ 'background-color': context.color }" />
         <span v-if="!context.color">{{ $t("category.color-none") }}</span>
       </dd>
     </dl>
-    <dl class="row entity-details"
-      v-if="
-          context.publisher && context.publisher.context.redactor.writingMode !== 'STATIC'
-        ">
+    <dl class="row entity-details" v-if="context.publisher && context.publisher.context.redactor.writingMode !== 'STATIC'">
       <dt class="col-sm-5">
         <span>{{ $t("category.hiddenIfEmpty") }}</span>
       </dt>
       <dd class="col-sm-7">
-        <span
-          ><input
-            type="checkbox"
-            class="input-sm"
-            v-model="context.hiddenIfEmpty"
-            disabled
-        /></span>
+        <span><input type="checkbox" class="input-sm" v-model="context.hiddenIfEmpty" disabled /></span>
       </dd>
     </dl>
     <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
@@ -116,23 +75,7 @@
         <span>{{ $t("category.rssAllowed") }}</span>
       </dt>
       <dd class="col-sm-7">
-        <span
-          ><input
-            type="checkbox"
-            class="input-sm"
-            v-model="context.rssAllowed"
-            disabled
-        /></span>
-      </dd>
-    </dl>
-    <dl class="row entity-details">
-      <dt class="col-sm-5">
-        <span>{{ $t("category.defaultDisplayOrder") }}</span>
-      </dt>
-      <dd class="col-sm-7">
-        <span>{{
-          $t(getDisplayOrderTypeLabel(context.defaultDisplayOrder))
-        }}</span>
+        <span><input type="checkbox" class="input-sm" v-model="context.rssAllowed" disabled /></span>
       </dd>
     </dl>
     <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
@@ -141,6 +84,14 @@
       </dt>
       <dd class="col-sm-7">
         <span>{{ context.displayOrder }}</span>
+      </dd>
+    </dl>
+    <dl class="row entity-details">
+      <dt class="col-sm-5">
+        <span>{{ $t(context.publisher && context.publisher.context.redactor.writingMode !== 'STATIC' ? "publisher.defaultItemsDisplayOrder" : "category.defaultDisplayOrder") }}</span>
+      </dt>
+      <dd class="col-sm-7">
+        <span >{{ $t(getDisplayOrderTypeLabel(context.publisher && context.publisher.context.redactor.writingMode !== 'STATIC' ? context.publisher.defaultItemsDisplayOrder : context.defaultDisplayOrder )) }}</span>
       </dd>
     </dl>
     <dl class="row entity-details" v-has-role="'ROLE_ADMIN'">
@@ -166,9 +117,7 @@
           :href="
             appUrl +
             'feed/rss/' +
-            (context.publisher
-              ? context.publisher.context.organization.id
-              : '') +
+            (context.publisher ? context.publisher.context.organization.id : '') +
             '?pid=' +
             (context.publisher ? context.publisher.id : '') +
             '&cid=' +
@@ -176,11 +125,9 @@
           "
           target="_blank"
         >
-          {{ appUrl }}feed/rss/{{
-            context.publisher ? context.publisher.context.organization.id : ""
-          }}?pid={{ context.publisher ? context.publisher.id : "" }}&cid={{
-            context.id
-          }}</a
+          {{ appUrl }}feed/rss/{{ context.publisher ? context.publisher.context.organization.id : "" }}?pid={{
+            context.publisher ? context.publisher.id : ""
+          }}&cid={{ context.id }}</a
         >
       </dd>
     </dl>
@@ -193,34 +140,17 @@
           <form name="deleteForm">
             <div class="modal-header">
               <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
-              <button
-                type="button"
-                class="btn-close"
-                aria-hidden="true"
-                data-bs-dismiss="modal"
-              ></button>
+              <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
               <p>{{ $t("category.delete.question", { id: context.name }) }}</p>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-default btn-outline-dark"
-                data-bs-dismiss="modal"
-              >
-                <span class="fas fa-times"></span>&nbsp;<span>{{
-                  $t("entity.action.cancel")
-                }}</span>
+              <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
               </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="confirmDelete()"
-              >
-                <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                  $t("entity.action.delete")
-                }}</span>
+              <button type="button" class="btn btn-danger" @click="confirmDelete()">
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t("entity.action.delete") }}</span>
               </button>
             </div>
           </form>
@@ -245,13 +175,7 @@ export default {
       categoryForm: null,
     };
   },
-  inject: [
-    "context",
-    "getEnumlabel",
-    "updateContext",
-    "confirmDeleteContext",
-    "appUrl",
-  ],
+  inject: ["context", "getEnumlabel", "updateContext", "confirmDeleteContext", "appUrl"],
   methods: {
     getAccessTypeLabel(name) {
       return this.getEnumlabel("accessType", name) || "";

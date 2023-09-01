@@ -37,29 +37,14 @@
     </ul>
 
     <div class="tab-content">
-      <div
-        id="context"
-        class="nav-item"
-        :class="{ active: activeNav === 'content' }"
-      >
+      <div id="context" class="nav-item" :class="{ active: activeNav === 'content' }">
         <TabContext v-if="activeNav === 'content'"></TabContext>
       </div>
-      <div
-        id="permissions"
-        class="nav-item"
-        :class="{ active: activeNav === 'permissions' }"
-      >
+      <div id="permissions" class="nav-item" :class="{ active: activeNav === 'permissions' }">
         <TabPermissions v-if="activeNav === 'permissions'"></TabPermissions>
       </div>
-      <div
-        id="targets"
-        class="nav-item"
-        :class="{ active: activeNav === 'targets' }"
-      >
-        <TabTargets
-          ref="tabTargets"
-          v-if="activeNav === 'targets'"
-        ></TabTargets>
+      <div id="targets" class="nav-item" :class="{ active: activeNav === 'targets' }">
+        <TabTargets ref="tabTargets" v-if="activeNav === 'targets'"></TabTargets>
       </div>
     </div>
   </div>
@@ -105,6 +90,7 @@ export default {
         context: { organization: {}, redactor: {}, reader: {} },
         displayName: null,
         defaultDisplayOrder: null,
+        defaultItemsDisplayOrder: null,
         permissionType: null,
         used: false,
         displayOrder: 0,
@@ -117,6 +103,7 @@ export default {
       selectedSubjects: [],
       availableRoles: [],
       autorizedDisplayOrderTypeList: [],
+      itemsDisplayOrderTypeList: [],
       autorizedPermissionClassList: [],
       search: { subject: {}, target: {} },
       edit: { authorizedSubject: {} },
@@ -163,12 +150,7 @@ export default {
       ],
     };
   },
-  inject: [
-    "deleteTreeNode",
-    "selectTreeNode",
-    "refreshTreeNode",
-    "parentNodeId",
-  ],
+  inject: ["deleteTreeNode", "selectTreeNode", "refreshTreeNode", "parentNodeId"],
   provide() {
     return {
       context: readonly(computed(() => this.context)),
@@ -177,12 +159,9 @@ export default {
         this.editedContext = editedContext;
       },
       publisher: readonly(computed(() => this.publisher)),
-      autorizedDisplayOrderTypeList: readonly(
-        computed(() => this.autorizedDisplayOrderTypeList)
-      ),
-      autorizedPermissionClassList: readonly(
-        computed(() => this.autorizedPermissionClassList)
-      ),
+      autorizedDisplayOrderTypeList: readonly(computed(() => this.autorizedDisplayOrderTypeList)),
+      itemsDisplayOrderTypeList: readonly(computed(() => this.itemsDisplayOrderTypeList)),
+      autorizedPermissionClassList: readonly(computed(() => this.autorizedPermissionClassList)),
       updateContext: this.updateContext,
       confirmDeleteContext: this.confirmDeleteContext,
       confirmUpdateContext: this.confirmUpdateContext,
@@ -214,9 +193,7 @@ export default {
       subjectInfosConfig: readonly(computed(() => this.subjectInfosConfig)),
       selectPermissionManager: this.selectPermissionManager,
       operatorTypeList: readonly(computed(() => this.operatorTypeList)),
-      stringEvaluationModeList: readonly(
-        computed(() => this.stringEvaluationModeList)
-      ),
+      stringEvaluationModeList: readonly(computed(() => this.stringEvaluationModeList)),
       permissionTemplate: readonly(computed(() => this.permissionTemplate)),
     };
   },
@@ -270,16 +247,13 @@ export default {
             this.ctxPermissionType = "CONTEXT";
             this.getUserCanManage(result.data.contextKey);
             this.hasTargetManagment = this.getHasTargetManagment(ctxType);
-            this.hasPermissionManagment =
-              this.getHasPermissionManagment(ctxType);
+            this.hasPermissionManagment = this.getHasPermissionManagment(ctxType);
             this.selectTemplatePermissionTemplate(this.ctxPermissionType);
           });
-          PermissionOnContextService.queryForCtx(ctxType, ctxId).then(
-            (result) => {
-              this.permissions = result.data;
-              this.loadAvailableRoles();
-            }
-          );
+          PermissionOnContextService.queryForCtx(ctxType, ctxId).then((result) => {
+            this.permissions = result.data;
+            this.loadAvailableRoles();
+          });
           SubscriberService.queryForCtx(ctxType, ctxId).then((result) => {
             this.targets = result.data;
           });
@@ -291,8 +265,7 @@ export default {
             this.getUserCanManage(result.data.contextKey);
             this.hasTargetManagment = this.getHasTargetManagment(ctxType);
             this.ctxPermissionType = this.publisher.permissionType;
-            this.hasPermissionManagment =
-              this.getHasPermissionManagment(ctxType);
+            this.hasPermissionManagment = this.getHasPermissionManagment(ctxType);
             this.selectTemplatePermissionTemplate(this.ctxPermissionType);
             this.setCanCreateCategory(this.publisher);
             this.selectPermissionManager(this.ctxPermissionType)
@@ -314,8 +287,7 @@ export default {
             this.getUserCanManage(result.data.contextKey);
             this.ctxPermissionType = this.publisher.permissionType;
             this.hasTargetManagment = this.getHasTargetManagment(ctxType);
-            this.hasPermissionManagment =
-              this.getHasPermissionManagment(ctxType);
+            this.hasPermissionManagment = this.getHasPermissionManagment(ctxType);
             this.selectTemplatePermissionTemplate(this.ctxPermissionType);
             this.selectPermissionManager(this.ctxPermissionType)
               .queryForCtx(ctxType, ctxId)
@@ -333,15 +305,14 @@ export default {
             this.context = result.data;
             this.getUserCanManage(result.data.contextKey);
             this.hasTargetManagment = this.getHasTargetManagment(ctxType);
-            this.hasPermissionManagment =
-              this.getHasPermissionManagment(ctxType);
+            this.hasPermissionManagment = this.getHasPermissionManagment(ctxType);
           });
           this.permissions = {};
           SubscriberService.queryForCtx(ctxType, ctxId).then((result) => {
             this.targets = result.data;
           });
           break;
-      }
+        }
     },
     updateContext(callback) {
       let manager = null;
@@ -461,15 +432,12 @@ export default {
             this.editedContext.context.redactor.writingMode === "STATIC" &&
             this.editedContext.context.reader.authorizedTypes.includes("FLASH")
           ) {
-            ClassificationService.query(this.editedContext.id, false).then(
-              (result) => {
-                result.data.forEach((obj) => {
-                  obj.defaultDisplayOrder =
-                    this.editedContext.defaultDisplayOrder;
-                  CategoryService.update(obj);
-                });
-              }
-            );
+            ClassificationService.query(this.editedContext.id, false).then((result) => {
+              result.data.forEach((obj) => {
+                obj.defaultDisplayOrder = this.editedContext.defaultDisplayOrder;
+                CategoryService.update(obj);
+              });
+            });
           }
           // Cas de création d'enfant, type d'objet créé différent de l'objet actuel, pas de mise à jour du texte du noeud courant
           if (this.ctxType !== type) {
@@ -494,19 +462,11 @@ export default {
           break;
         case "CATEGORY":
           // filter on creation of category on publisher flash context
-          if (
-            !(
-              this.context.context.redactor.writingMode === "STATIC" &&
-              this.context.context.reader.authorizedTypes.includes("FLASH")
-            )
-          ) {
+          if (!(this.context.context.redactor.writingMode === "STATIC" && this.context.context.reader.authorizedTypes.includes("FLASH"))) {
             // in waiting all access are PUBLIC
-            const defaultColor =
-              this.context.context.reader.classificationDecorations.includes(
-                "COLOR"
-              )
-                ? this.paletteColorPicker[0]
-                : null;
+            const defaultColor = this.context.context.reader.classificationDecorations.includes("COLOR")
+              ? this.paletteColorPicker[0]
+              : null;
             this.editedContext = {
               type: "CATEGORY",
               publisher: this.context,
@@ -546,10 +506,7 @@ export default {
         case "ORGANIZATION":
           // in edit we are on ORGANIZATION else we create a sub context
           if (isEditCurrentCtx) {
-            this.autorizedDisplayOrderTypeList =
-              this.displayOrderTypeList.filter(
-                (element) => element.name !== "START_DATE"
-              );
+            this.autorizedDisplayOrderTypeList = this.autorizedDisplayOrderTypeList.filter((element) => element.name !== "START_DATE");
           } else {
             throw new Error("not yet implemented");
           }
@@ -558,38 +515,21 @@ export default {
           // in edit we are on PUBLISHER else we create a sub context
           if (isEditCurrentCtx) {
             // If not Flash context, ie no Classification management we remove START_DATE order
-            if (
-              !(
-                ctx.context.redactor.writingMode === "STATIC" &&
-                ctx.context.reader.authorizedTypes.includes("FLASH")
-              )
-            ) {
-              this.autorizedDisplayOrderTypeList =
-                this.displayOrderTypeList.filter(
-                  (element) => element.name !== "START_DATE"
-                );
+            if (!(ctx.context.redactor.writingMode === "STATIC" && ctx.context.reader.authorizedTypes.includes("FLASH"))) {
+              this.autorizedDisplayOrderTypeList = this.autorizedDisplayOrderTypeList.filter((element) => element.name !== "START_DATE");
             } else {
               // we keep only "CONTEXT" in Flash context
-              this.autorizedPermissionClassList =
-                this.permissionClassList.filter(
-                  (element) => element.name === "CONTEXT"
-                );
+              this.autorizedPermissionClassList = this.permissionClassList.filter((element) => element.name === "CONTEXT");
             }
           } else if (ctx.context.redactor.nbLevelsOfClassification > 1) {
-            this.autorizedDisplayOrderTypeList =
-              this.displayOrderTypeList.filter(
-                (element) => element.name !== "START_DATE"
-              );
+            this.autorizedDisplayOrderTypeList = this.autorizedDisplayOrderTypeList.filter((element) => element.name !== "START_DATE");
           }
           break;
         case "CATEGORY":
           // in edit we are on CATEGORY else we create a sub context
           if (isEditCurrentCtx) {
             if (ctx.publisher.context.redactor.nbLevelsOfClassification > 1) {
-              this.autorizedDisplayOrderTypeList =
-                this.displayOrderTypeList.filter(
-                  (element) => element.name !== "START_DATE"
-                );
+              this.autorizedDisplayOrderTypeList = this.autorizedDisplayOrderTypeList.filter((element) => element.name !== "START_DATE");
             }
           } else {
             throw new Error("not yet implemented");
@@ -598,6 +538,7 @@ export default {
         default:
           break;
       }
+      this.itemsDisplayOrderTypeList = this.displayOrderTypeList.filter((element) => element.name !== "CUSTOM");
     },
     selectPermissionManager(permissionClass) {
       switch (permissionClass) {
@@ -610,11 +551,9 @@ export default {
       }
     },
     getUserCanManage(contextKey) {
-      UserService.canEditCtx(contextKey.keyId, contextKey.keyType).then(
-        (result) => {
-          this.canManage = result.data.value === true;
-        }
-      );
+      UserService.canEditCtx(contextKey.keyId, contextKey.keyType).then((result) => {
+        this.canManage = result.data.value === true;
+      });
     },
     selectTemplatePermissionTemplate(permissionClass) {
       switch (permissionClass) {
@@ -629,19 +568,12 @@ export default {
       }
     },
     setCanCreateCategory(publisher) {
-      if (
-        publisher.context.redactor.writingMode === "STATIC" &&
-        publisher.context.reader.authorizedTypes.includes("FLASH")
-      ) {
+      if (publisher.context.redactor.writingMode === "STATIC" && publisher.context.reader.authorizedTypes.includes("FLASH")) {
         this.canCreateCategory = false;
       } else {
-        UserService.canCreateInCtx(
-          this.context.contextKey.keyId,
-          this.context.contextKey.keyType
-        ).then((response) => {
+        UserService.canCreateInCtx(this.context.contextKey.keyId, this.context.contextKey.keyType).then((response) => {
           this.canCreateCategory = response.data.value === true;
         });
-        this.canCreateCategory = false;
       }
     },
     getHasTargetManagment(ctxType) {
@@ -651,29 +583,20 @@ export default {
         case "PUBLISHER":
           return (
             PrincipalService.isInRole("ROLE_ADMIN") &&
-            CommonUtils.equals(
-              this.publisher.context.redactor.writingMode,
-              "STATIC"
-            ) &&
+            CommonUtils.equals(this.publisher.context.redactor.writingMode, "STATIC") &&
             !this.inArray("FLASH", this.context.context.reader.authorizedTypes)
           );
         case "CATEGORY":
         case "FEED":
           if (!CommonUtils.equals({}, this.publisher)) {
             return (
-              !CommonUtils.equals(
-                this.publisher.context.redactor.writingMode,
-                "TARGETS_ON_ITEM"
-              ) && this.publisher.hasSubPermsManagement
+              !CommonUtils.equals(this.publisher.context.redactor.writingMode, "TARGETS_ON_ITEM") && this.publisher.hasSubPermsManagement
             );
           }
           return false;
         case "ITEM":
           if (!CommonUtils.equals({}, this.context)) {
-            return CommonUtils.equals(
-              this.context.redactor.writingMode,
-              "TARGETS_ON_ITEM"
-            );
+            return CommonUtils.equals(this.context.redactor.writingMode, "TARGETS_ON_ITEM");
           }
           return false;
         default:
@@ -699,13 +622,7 @@ export default {
       }
     },
     inArray(item, array) {
-      if (
-        array === null ||
-        array === undefined ||
-        !CommonUtils.isArray(array) ||
-        array.length < 1
-      )
-        return false;
+      if (array === null || array === undefined || !CommonUtils.isArray(array) || array.length < 1) return false;
       for (var i = 0, size = array.length; i < size; i++) {
         if (CommonUtils.equals(array[i], item)) {
           return true;
@@ -720,20 +637,15 @@ export default {
             case "accessType":
               return this.accessTypeList.find((val) => val.name === name).label;
             case "permissionClass":
-              return this.permissionClassList.find((val) => val.name === name)
-                .label;
+              return this.permissionClassList.find((val) => val.name === name).label;
             case "displayOrderType":
-              return this.displayOrderTypeList.find((val) => val.name === name)
-                .label;
+              return this.displayOrderTypeList.find((val) => val.name === name).label;
             case "subjectType":
-              return this.subjectTypeList.find((val) => val.code === name)
-                .descKey;
+              return this.subjectTypeList.find((val) => val.code === name).descKey;
             case "permissionType":
-              return this.permissionTypeList.find((val) => val.name === name)
-                .label;
+              return this.permissionTypeList.find((val) => val.name === name).label;
             case "subscribeType":
-              return this.subscribeTypeList.find((val) => val.name === name)
-                .label;
+              return this.subscribeTypeList.find((val) => val.name === name).label;
             case "lang":
               return this.langList.find((val) => val.id === name).label;
             case "itemStatus":
@@ -753,23 +665,13 @@ export default {
           case "CONTEXT":
             var found = false;
             for (var l = 0; l < this.permissions.length; l++) {
-              if (
-                CommonUtils.equals(
-                  this.permissions[l].role,
-                  this.permissionTypeList[i].name
-                )
-              ) {
+              if (CommonUtils.equals(this.permissions[l].role, this.permissionTypeList[i].name)) {
                 found = true;
               }
             }
             if (
-              (!found &&
-                !CommonUtils.equals(
-                  this.permissionTypeList[i].name,
-                  "ADMIN"
-                )) ||
-              (CommonUtils.isDefined(withRole) &&
-                CommonUtils.equals(this.permissionTypeList[i].name, withRole))
+              (!found && !CommonUtils.equals(this.permissionTypeList[i].name, "ADMIN")) ||
+              (CommonUtils.isDefined(withRole) && CommonUtils.equals(this.permissionTypeList[i].name, withRole))
             ) {
               this.availableRoles.push(this.permissionTypeList[i]);
             }

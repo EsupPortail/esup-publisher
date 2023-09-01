@@ -15,39 +15,20 @@
  */
 package org.esupportail.publisher.web;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
-
-import org.esupportail.publisher.domain.AbstractClassification;
-import org.esupportail.publisher.domain.AbstractFeed;
-import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.Flash;
-import org.esupportail.publisher.domain.ItemClassificationOrder;
-import org.esupportail.publisher.domain.LinkedFileItem;
-import org.esupportail.publisher.domain.Organization;
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.QAbstractItem;
-import org.esupportail.publisher.domain.QItemClassificationOrder;
-import org.esupportail.publisher.domain.Redactor;
-import org.esupportail.publisher.domain.Subscriber;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.DisplayOrderType;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.WritingMode;
 import org.esupportail.publisher.domain.util.Views;
-import org.esupportail.publisher.repository.CategoryRepository;
-import org.esupportail.publisher.repository.FeedRepository;
-import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
-import org.esupportail.publisher.repository.LinkedFileItemRepository;
-import org.esupportail.publisher.repository.OrganizationRepository;
-import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
@@ -55,17 +36,9 @@ import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.SubscriberService;
 import org.esupportail.publisher.service.bean.HighlightedClassification;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
-import org.esupportail.publisher.service.factories.CategoryFactory;
-import org.esupportail.publisher.service.factories.CategoryProfileFactory;
-import org.esupportail.publisher.service.factories.FlashInfoVOFactory;
-import org.esupportail.publisher.service.factories.ItemVOFactory;
-import org.esupportail.publisher.service.factories.RubriqueVOFactory;
-import org.esupportail.publisher.web.rest.vo.Actualite;
+import org.esupportail.publisher.service.factories.*;
 import org.esupportail.publisher.web.rest.vo.Category;
-import org.esupportail.publisher.web.rest.vo.CategoryProfilesUrl;
-import org.esupportail.publisher.web.rest.vo.FlashInfoVO;
-import org.esupportail.publisher.web.rest.vo.ItemVO;
-import org.esupportail.publisher.web.rest.vo.RubriqueVO;
+import org.esupportail.publisher.web.rest.vo.*;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.MediaType;
@@ -74,15 +47,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mysema.commons.lang.Pair;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
-
-import lombok.extern.slf4j.Slf4j;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by jgribonvald on 22/01/16.
@@ -220,7 +193,7 @@ public class PublishController {
     @JsonView(Views.Flash.class)
     public List<FlashInfoVO> getFlashInfoFrom(@PathVariable("publisher_ids") List<Long> publisher_ids, final HttpServletRequest request ) throws URISyntaxException {
         log.debug("Entering getFlashInfo all of with params : publisher_ids={}", List.of(publisher_ids));
-        if (publisher_ids.size() > 0) {
+        if (!publisher_ids.isEmpty()) {
             final BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
                     .and(PublisherPredicates.AllFromIds(publisher_ids));
             try {
@@ -424,7 +397,7 @@ public class PublishController {
         log.debug("list of categories associated to publisher : {}", cts);
 
         List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder,
-            ItemPredicates.orderByPublisherDefinition(publisher.getDefaultDisplayOrder()), ItemPredicates.orderByClassifDefinition(DisplayOrderType.LAST_CREATED_MODIFIED_FIRST)));
+            ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
         log.debug("list of itemsClasss associated to publisher : {}", itemsClasss);
 
         Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();

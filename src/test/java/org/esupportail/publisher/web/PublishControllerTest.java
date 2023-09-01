@@ -134,7 +134,9 @@ public class PublishControllerTest {
     private Organization organization;
     private List<LinkedFileItem> files = new ArrayList<>();
     private List<Category> catsOfEsupLectureWay = new ArrayList<>();
-    private News savedNews;
+    private News savedNews1;
+    private News savedNews2;
+    private News savedNews3;
     private Flash savedFlash1;
     private Flash savedFlash2;
 
@@ -267,8 +269,8 @@ public class PublishControllerTest {
         linkedFileItemRepository.saveAll(files);
 
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news1, cat1, 0));
-        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat1, 1));
-        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news3, cat2, 2));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news2, cat2, 1));
+        itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news3, cat1, 2));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(news4, cat2, 3));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(savedFlash1, cat3, 0));
         itemClassificationOrderRepository.saveAndFlush(new ItemClassificationOrder(savedFlash2, cat7, 0));
@@ -294,8 +296,10 @@ public class PublishControllerTest {
         sub6 = subscriberRepository.saveAndFlush(sub6);
         sub7 = subscriberRepository.saveAndFlush(sub7);
 
-        // should be order as first news
-        savedNews = (News) itemRepository.getReferenceById(news1.getId());
+        // should be ordered as first news and other news in their order
+        savedNews1 = (News) itemRepository.getReferenceById(news1.getId());
+        savedNews2 = news2;
+        savedNews3 = news3;
 
         log.debug("News1 {}, {}", news1.getCreatedDate(), news1.getLastModifiedDate());
         log.debug("News2 {}, {}", news2.getCreatedDate(), news2.getLastModifiedDate());
@@ -374,7 +378,7 @@ public class PublishControllerTest {
 
     @Test
     public void getItemsFromPublisherTest() throws Exception {
-        log.info("try to compare to {}", savedNews);
+        log.info("try to compare to {} and with order of {},{},{}", savedNews1, savedNews1.getTitle(), savedNews2.getTitle(), savedNews3.getTitle());
         restPublishControllerMockMvc.perform(get("/published/items/{publisher_id}", newWay.getId())
             .accept(MediaType.APPLICATION_XML)).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_XML))
@@ -420,10 +424,13 @@ public class PublishControllerTest {
             .andExpect(xpath("/actualites/items/item/modifiedDate").string(not(blankOrNullString())))
             .andExpect(xpath("/actualites/items/item/uuid").exists())
             .andExpect(xpath("/actualites/items/item/uuid").string(not(blankOrNullString())))
-            .andExpect(xpath("/actualites/items/item[1]/article/title").string(savedNews.getTitle()))
-            .andExpect(xpath("/actualites/items/item[1]/article/description").string(savedNews.getSummary()))
+            .andExpect(xpath("/actualites/items/item[1]/article/title").string(savedNews1.getTitle()))
+            .andExpect(xpath("/actualites/items/item[1]/article/description").string(savedNews1.getSummary()))
             .andExpect(xpath("/actualites/items/item[1]/article/pubDate").string(
-                DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.systemDefault()).format(savedNews.getStartDate().atStartOfDay(ZoneId.systemDefault()))))
+                    DateTimeFormatter.RFC_1123_DATE_TIME.withZone(ZoneId.systemDefault())
+                            .format(savedNews1.getStartDate().atStartOfDay(ZoneId.systemDefault()))))
+            .andExpect(xpath("/actualites/items/item[2]/article/title").string(savedNews2.getTitle()))
+            .andExpect(xpath("/actualites/items/item[3]/article/title").string(savedNews3.getTitle()))
             .andExpect(xpath("/actualites/items/item/visibility").exists())
             .andExpect(xpath("/actualites/items/item/visibility/obliged").exists())
             .andExpect(xpath("/actualites/items/item/visibility/*[self::obliged or self::allowed or self::autoSubscribed]/*[self::regular or self::group or self::regex]").exists())
