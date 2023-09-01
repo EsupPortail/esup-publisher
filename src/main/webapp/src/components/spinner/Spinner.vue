@@ -1,18 +1,15 @@
 <template>
-  <div
-    v-if="showSpinner"
-    class="overlay d-flex align-items-center justify-content-center"
-  >
+  <div v-if="showSpinner" class="overlay d-flex align-items-center justify-content-center">
     <div class="spinner-border" role="status">
-      <span class="visually-hidden">{{ $t("wait.dialog") }}</span>
+      <span class="visually-hidden">{{ $t('wait.dialog') }}</span>
     </div>
   </div>
 </template>
 <script>
-import FetchWrapper from "@/services/util/FetchWrapper.js";
+import FetchWrapper from '@/services/util/FetchWrapper.js';
 
 export default {
-  name: "Spinner",
+  name: 'Spinner',
   data() {
     return {
       showSpinner: false,

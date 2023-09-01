@@ -1,6 +1,6 @@
 <template>
   <div class="reader">
-    <h2>{{ $t("reader.home.title") }}</h2>
+    <h2>{{ $t('reader.home.title') }}</h2>
     <button
       class="btn btn-primary btn-lg"
       data-bs-toggle="modal"
@@ -11,7 +11,7 @@
       "
     >
       <span class="fas fa-bolt"></span>
-      <span>{{ $t("reader.home.createLabel") }}</span>
+      <span>{{ $t('reader.home.createLabel') }}</span>
     </button>
     <div
       class="modal fade"
@@ -24,76 +24,35 @@
     >
       <div class="modal-dialog modal-fullscreen-md-down modal-lg">
         <div class="modal-content">
-          <form
-            name="editForm"
-            role="form"
-            class="was-validated"
-            novalidate
-            show-validation
-          >
+          <form name="editForm" role="form" class="was-validated" novalidate show-validation>
             <div class="modal-header">
               <h4 class="modal-title" id="myReaderLabel">
-                {{ $t("reader.home.createOrEditLabel") }}
+                {{ $t('reader.home.createOrEditLabel') }}
               </h4>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-hidden="true"
-                @click="clear()"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" @click="clear()"></button>
             </div>
             <div class="modal-body">
               <div class="form-group">
                 <label class="control-label" for="ID">ID</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="id"
-                  id="ID"
-                  v-model="reader.id"
-                  disabled
-                />
+                <input type="text" class="form-control" name="id" id="ID" v-model="reader.id" disabled />
               </div>
 
               <div class="form-group">
-                <label for="name" class="control-label">{{
-                  $t("reader.name")
-                }}</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="name"
-                  id="name"
-                  v-model="reader.name"
-                  required
-                  minlength="3"
-                  maxlength="20"
-                />
-                <div
-                  class="invalid-feedback"
-                  v-if="formValidator.hasError('name', formErrors.REQUIRED)"
-                >
-                  {{ $t("entity.validation.required") }}
+                <label for="name" class="control-label">{{ $t('reader.name') }}</label>
+                <input type="text" class="form-control" name="name" id="name" v-model="reader.name" required minlength="3" maxlength="20" />
+                <div class="invalid-feedback" v-if="formValidator.hasError('name', formErrors.REQUIRED)">
+                  {{ $t('entity.validation.required') }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="formValidator.hasError('name', formErrors.MIN_LENGTH)"
-                >
-                  {{ $t("entity.validation.minlength", { min: "3" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('name', formErrors.MIN_LENGTH)">
+                  {{ $t('entity.validation.minlength', { min: '3' }) }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="formValidator.hasError('name', formErrors.MAX_LENGTH)"
-                >
-                  {{ $t("entity.validation.maxlength", { max: "20" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('name', formErrors.MAX_LENGTH)">
+                  {{ $t('entity.validation.maxlength', { max: '20' }) }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="displayName" class="control-label">{{
-                  $t("reader.displayName")
-                }}</label>
+                <label for="displayName" class="control-label">{{ $t('reader.displayName') }}</label>
                 <input
                   type="text"
                   class="form-control"
@@ -104,36 +63,19 @@
                   minlength="3"
                   maxlength="50"
                 />
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('displayName', formErrors.REQUIRED)
-                  "
-                >
-                  {{ $t("entity.validation.required") }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.REQUIRED)">
+                  {{ $t('entity.validation.required') }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('displayName', formErrors.MIN_LENGTH)
-                  "
-                >
-                  {{ $t("entity.validation.minlength", { min: "3" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.MIN_LENGTH)">
+                  {{ $t('entity.validation.minlength', { min: '3' }) }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('displayName', formErrors.MAX_LENGTH)
-                  "
-                >
-                  {{ $t("entity.validation.maxlength", { max: "50" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.MAX_LENGTH)">
+                  {{ $t('entity.validation.maxlength', { max: '50' }) }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="description" class="control-label">{{
-                  $t("reader.description")
-                }}</label>
+                <label for="description" class="control-label">{{ $t('reader.description') }}</label>
                 <input
                   type="text"
                   class="form-control"
@@ -144,42 +86,21 @@
                   minlength="3"
                   maxlength="512"
                 />
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('description', formErrors.REQUIRED)
-                  "
-                >
-                  {{ $t("entity.validation.required") }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('description', formErrors.REQUIRED)">
+                  {{ $t('entity.validation.required') }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('description', formErrors.MIN_LENGTH)
-                  "
-                >
-                  {{ $t("entity.validation.minlength", { min: "3" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('description', formErrors.MIN_LENGTH)">
+                  {{ $t('entity.validation.minlength', { min: '3' }) }}
                 </div>
-                <div
-                  class="invalid-feedback"
-                  v-if="
-                    formValidator.hasError('description', formErrors.MAX_LENGTH)
-                  "
-                >
-                  {{ $t("entity.validation.maxlength", { max: "512" }) }}
+                <div class="invalid-feedback" v-if="formValidator.hasError('description', formErrors.MAX_LENGTH)">
+                  {{ $t('entity.validation.maxlength', { max: '512' }) }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="authorizedTypes">{{
-                  $t("reader.authorizedTypes")
-                }}</label>
+                <label class="control-label" for="authorizedTypes">{{ $t('reader.authorizedTypes') }}</label>
                 <div class="inline-form">
-                  <div
-                    v-for="authorizedType in authorizedTypesList"
-                    :key="authorizedType"
-                    class="form-check form-check-inline"
-                  >
+                  <div v-for="authorizedType in authorizedTypesList" :key="authorizedType" class="form-check form-check-inline">
                     <input
                       :id="authorizedType"
                       class="form-check-input"
@@ -188,35 +109,20 @@
                       :value="authorizedType"
                       :checked="containsSelectedType(authorizedType)"
                       @click="toggleSelectionType(authorizedType)"
-                      :required="
-                        formValidator.hasError(
-                          'authorizedTypes',
-                          formErrors.REQUIRED
-                        )
-                      "
+                      :required="formValidator.hasError('authorizedTypes', formErrors.REQUIRED)"
                     />
                     <label :for="authorizedType" class="form-check-label">
-                      <span>{{ $t("enum.itemType." + authorizedType) }}</span>
+                      <span>{{ $t('enum.itemType.' + authorizedType) }}</span>
                     </label>
                   </div>
-                  <div
-                    class="invalid-feedback d-block"
-                    v-if="
-                      formValidator.hasError(
-                        'authorizedTypes',
-                        formErrors.REQUIRED
-                      )
-                    "
-                  >
-                    {{ $t("entity.validation.required") }}
+                  <div class="invalid-feedback d-block" v-if="formValidator.hasError('authorizedTypes', formErrors.REQUIRED)">
+                    {{ $t('entity.validation.required') }}
                   </div>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="classificationDecorations">{{
-                  $t("reader.classificationDecorations")
-                }}</label>
+                <label class="control-label" for="classificationDecorations">{{ $t('reader.classificationDecorations') }}</label>
                 <div class="inline-form">
                   <div
                     v-for="classificationDecoration in classificationDecorationsList"
@@ -229,66 +135,27 @@
                       type="checkbox"
                       name="classificationDecorations"
                       :value="classificationDecoration"
-                      :checked="
-                        containsSelectedDecorType(classificationDecoration)
-                      "
-                      @click="
-                        toggleSelectionDecorType(classificationDecoration)
-                      "
-                      :required="
-                        formValidator.hasError(
-                          'classificationDecorations',
-                          formErrors.REQUIRED
-                        )
-                      "
+                      :checked="containsSelectedDecorType(classificationDecoration)"
+                      @click="toggleSelectionDecorType(classificationDecoration)"
+                      :required="formValidator.hasError('classificationDecorations', formErrors.REQUIRED)"
                     />
-                    <label
-                      :for="classificationDecoration"
-                      class="form-check-label"
-                    >
-                      <span>{{
-                        $t(
-                          "enum.classificationDecorType." +
-                            classificationDecoration
-                        )
-                      }}</span>
+                    <label :for="classificationDecoration" class="form-check-label">
+                      <span>{{ $t('enum.classificationDecorType.' + classificationDecoration) }}</span>
                     </label>
                   </div>
-                  <div
-                    class="invalid-feedback d-block"
-                    v-if="
-                      formValidator.hasError(
-                        'classificationDecorations',
-                        formErrors.REQUIRED
-                      )
-                    "
-                  >
-                    {{ $t("entity.validation.required") }}
+                  <div class="invalid-feedback d-block" v-if="formValidator.hasError('classificationDecorations', formErrors.REQUIRED)">
+                    {{ $t('entity.validation.required') }}
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-default btn-outline-dark"
-                data-bs-dismiss="modal"
-                @click="clear()"
-              >
-                <span class="fas fa-times"></span>&nbsp;<span>{{
-                  $t("entity.action.cancel")
-                }}</span>
+              <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear()">
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
               </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                :disabled="formValidator.hasError()"
-                @click="createReader"
-              >
-                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
-                  $t("entity.action.save")
-                }}</span>
+              <button type="button" class="btn btn-primary" :disabled="formValidator.hasError()" @click="createReader">
+                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{ $t('entity.action.save') }}</span>
               </button>
             </div>
           </form>
@@ -301,37 +168,18 @@
         <div class="modal-content">
           <form name="deleteForm">
             <div class="modal-header">
-              <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
-              <button
-                type="button"
-                class="btn-close"
-                aria-hidden="true"
-                data-bs-dismiss="modal"
-                @click="clear"
-              ></button>
+              <h4 class="modal-title">{{ $t('entity.delete.title') }}</h4>
+              <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal" @click="clear"></button>
             </div>
             <div class="modal-body">
-              <p>{{ $t("reader.delete.question", { id: reader.id }) }}</p>
+              <p>{{ $t('reader.delete.question', { id: reader.id }) }}</p>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-default btn-outline-dark"
-                data-bs-dismiss="modal"
-                @click="clear"
-              >
-                <span class="fas fa-times"></span>&nbsp;<span>{{
-                  $t("entity.action.cancel")
-                }}</span>
+              <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
               </button>
-              <button
-                type="button"
-                class="btn btn-danger"
-                @click="confirmDelete(reader.id)"
-              >
-                <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                  $t("entity.action.delete")
-                }}</span>
+              <button type="button" class="btn btn-danger" @click="confirmDelete(reader.id)">
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
               </button>
             </div>
           </form>
@@ -344,11 +192,11 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>{{ $t("reader.name") }}</th>
-            <th>{{ $t("reader.displayName") }}</th>
-            <th>{{ $t("reader.description") }}</th>
-            <th>{{ $t("reader.authorizedTypes") }}</th>
-            <th>{{ $t("reader.classificationDecorations") }}</th>
+            <th>{{ $t('reader.name') }}</th>
+            <th>{{ $t('reader.displayName') }}</th>
+            <th>{{ $t('reader.description') }}</th>
+            <th>{{ $t('reader.authorizedTypes') }}</th>
+            <th>{{ $t('reader.classificationDecorations') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -368,48 +216,22 @@
             <td>{{ reader.displayName }}</td>
             <td>{{ reader.description }}</td>
             <td>
-              <span
-                class="list-comma"
-                v-for="type in reader.authorizedTypes"
-                :key="type"
-                >{{ $t("enum.itemType." + type) }}</span
-              >
+              <span class="list-comma" v-for="type in reader.authorizedTypes" :key="type">{{ $t('enum.itemType.' + type) }}</span>
             </td>
             <td>
-              <span
-                class="list-comma"
-                v-for="type in reader.classificationDecorations"
-                :key="type"
-                >{{ $t("enum.classificationDecorType." + type) }}</span
-              >
+              <span class="list-comma" v-for="type in reader.classificationDecorations" :key="type">{{
+                $t('enum.classificationDecorType.' + type)
+              }}</span>
             </td>
             <td>
-              <button
-                type="submit"
-                @click="readerDetail(reader.id)"
-                class="btn btn-info btn-sm me-1"
-              >
-                <span class="far fa-eye"></span>&nbsp;<span>{{
-                  $t("entity.action.view")
-                }}</span>
+              <button type="submit" @click="readerDetail(reader.id)" class="btn btn-info btn-sm me-1">
+                <span class="far fa-eye"></span>&nbsp;<span>{{ $t('entity.action.view') }}</span>
               </button>
-              <button
-                type="submit"
-                @click="update(reader.id)"
-                class="btn btn-primary btn-sm me-1"
-              >
-                <span class="fas fa-pencil"></span>&nbsp;<span>{{
-                  $t("entity.action.edit")
-                }}</span>
+              <button type="submit" @click="update(reader.id)" class="btn btn-primary btn-sm me-1">
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{ $t('entity.action.edit') }}</span>
               </button>
-              <button
-                type="submit"
-                @click="deleteReader(reader.id)"
-                class="btn btn-danger btn-sm"
-              >
-                <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                  $t("entity.action.delete")
-                }}</span>
+              <button type="submit" @click="deleteReader(reader.id)" class="btn btn-danger btn-sm">
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
               </button>
             </td>
           </tr>
@@ -420,16 +242,13 @@
 </template>
 
 <script>
-import ReaderService from "@/services/entities/reader/ReaderService";
-import EnumDatasService from "@/services/entities/enum/EnumDatasService";
-import {
-  FormValidationUtils,
-  FormErrorType,
-} from "@/services/util/FormValidationUtils";
-import { Modal } from "bootstrap";
+import ReaderService from '@/services/entities/reader/ReaderService';
+import EnumDatasService from '@/services/entities/enum/EnumDatasService';
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils';
+import { Modal } from 'bootstrap';
 
 export default {
-  name: "Reader",
+  name: 'Reader',
   components: {},
   data() {
     return {
@@ -473,41 +292,11 @@ export default {
     // Méthode permettant d'initialiser le FormValidator
     initFormValidator() {
       this.formValidator.clear();
-      this.formValidator.checkTextFieldValidity(
-        "name",
-        this.reader.name,
-        3,
-        20,
-        true
-      );
-      this.formValidator.checkTextFieldValidity(
-        "displayName",
-        this.reader.displayName,
-        3,
-        50,
-        true
-      );
-      this.formValidator.checkTextFieldValidity(
-        "description",
-        this.reader.description,
-        3,
-        512,
-        true
-      );
-      this.formValidator.checkArrayFieldValidity(
-        "authorizedTypes",
-        this.reader.authorizedTypes,
-        null,
-        null,
-        true
-      );
-      this.formValidator.checkArrayFieldValidity(
-        "classificationDecorations",
-        this.reader.classificationDecorations,
-        null,
-        null,
-        true
-      );
+      this.formValidator.checkTextFieldValidity('name', this.reader.name, 3, 20, true);
+      this.formValidator.checkTextFieldValidity('displayName', this.reader.displayName, 3, 50, true);
+      this.formValidator.checkTextFieldValidity('description', this.reader.description, 3, 512, true);
+      this.formValidator.checkArrayFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true);
+      this.formValidator.checkArrayFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true);
     },
     reset() {
       this.readers = [];
@@ -576,7 +365,7 @@ export default {
     },
     readerDetail(readerId) {
       this.$router.push({
-        name: "AdminEntityReaderDetails",
+        name: 'AdminEntityReaderDetails',
         params: { id: readerId },
       });
     },
@@ -622,22 +411,12 @@ export default {
         // is newly selected
         this.reader.authorizedTypes.push(type);
       }
-      this.formValidator.checkArrayFieldValidity(
-        "authorizedTypes",
-        this.reader.authorizedTypes,
-        null,
-        null,
-        true
-      );
+      this.formValidator.checkArrayFieldValidity('authorizedTypes', this.reader.authorizedTypes, null, null, true);
     },
     toggleSelectionDecorType(type) {
       var i = 0;
       var idx = -1;
-      for (
-        var size = this.reader.classificationDecorations.length;
-        i < size;
-        i++
-      ) {
+      for (var size = this.reader.classificationDecorations.length; i < size; i++) {
         if (this.reader.classificationDecorations[i] === type) {
           idx = i;
           break;
@@ -650,13 +429,7 @@ export default {
         // is newly selected
         this.reader.classificationDecorations.push(type);
       }
-      this.formValidator.checkArrayFieldValidity(
-        "classificationDecorations",
-        this.reader.classificationDecorations,
-        null,
-        null,
-        true
-      );
+      this.formValidator.checkArrayFieldValidity('classificationDecorations', this.reader.classificationDecorations, null, null, true);
     },
   },
   mounted() {
@@ -666,26 +439,14 @@ export default {
   },
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
-    "reader.name"(newVal) {
-      this.formValidator.checkTextFieldValidity("name", newVal, 3, 20, true);
+    'reader.name'(newVal) {
+      this.formValidator.checkTextFieldValidity('name', newVal, 3, 20, true);
     },
-    "reader.displayName"(newVal) {
-      this.formValidator.checkTextFieldValidity(
-        "displayName",
-        newVal,
-        3,
-        50,
-        true
-      );
+    'reader.displayName'(newVal) {
+      this.formValidator.checkTextFieldValidity('displayName', newVal, 3, 50, true);
     },
-    "reader.description"(newVal) {
-      this.formValidator.checkTextFieldValidity(
-        "description",
-        newVal,
-        3,
-        512,
-        true
-      );
+    'reader.description'(newVal) {
+      this.formValidator.checkTextFieldValidity('description', newVal, 3, 512, true);
     },
   },
 };

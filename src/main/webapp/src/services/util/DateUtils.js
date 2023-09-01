@@ -1,4 +1,4 @@
-import CommonUtils from "./CommonUtils";
+import CommonUtils from './CommonUtils';
 
 const toString = Object.prototype.toString;
 
@@ -13,7 +13,7 @@ class DateUtils {
 
   convertLocalDateFromServer(date) {
     if (date) {
-      var dateString = date.split("-");
+      var dateString = date.split('-');
       return new Date(dateString[0], dateString[1] - 1, dateString[2]);
     }
     return null;
@@ -22,44 +22,29 @@ class DateUtils {
   convertLocalDateToServer(date) {
     if (date) {
       var parseDate = new Date(date);
-      var day =
-        parseDate.getDate().toString().length === 1
-          ? "0" + parseDate.getDate()
-          : parseDate.getDate();
-      var month =
-        (parseDate.getMonth() + 1).toString().length === 1
-          ? "0" + (parseDate.getMonth() + 1)
-          : parseDate.getMonth() + 1;
-      return parseDate.getFullYear() + "-" + month + "-" + day;
+      var day = parseDate.getDate().toString().length === 1 ? '0' + parseDate.getDate() : parseDate.getDate();
+      var month = (parseDate.getMonth() + 1).toString().length === 1 ? '0' + (parseDate.getMonth() + 1) : parseDate.getMonth() + 1;
+      return parseDate.getFullYear() + '-' + month + '-' + day;
     } else {
       return null;
     }
   }
 
   addDaysToLocalDate(date, nbDays) {
-    if (
-      date &&
-      toString.call(date) === "[object Date]" &&
-      !isNaN(nbDays) &&
-      typeof nbDays === "number"
-    ) {
+    if (date && toString.call(date) === '[object Date]' && !isNaN(nbDays) && typeof nbDays === 'number') {
       var tmp = new Date(date.getTime() + nbDays * 24 * 60 * 60 * 1000);
-      return new Date(
-        new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate())
-      );
+      return new Date(new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate()));
     }
     return null;
   }
 
   dateformat() {
-    return "yyyy-MM-dd";
+    return 'yyyy-MM-dd';
   }
 
   convertToIntString(date, format, lang) {
     if (date && format && lang) {
-      return Intl.DateTimeFormat(lang, format).format(
-        CommonUtils.isString(date) ? new Date(date) : date
-      );
+      return Intl.DateTimeFormat(lang, format).format(CommonUtils.isString(date) ? new Date(date) : date);
     } else {
       return null;
     }
@@ -70,11 +55,11 @@ class DateUtils {
       return this.convertToIntString(
         date,
         {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
         },
-        lang
+        lang,
       );
     } else {
       return null;
@@ -86,11 +71,11 @@ class DateUtils {
       return this.convertToIntString(
         date,
         {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
         },
-        lang
+        lang,
       );
     } else {
       return null;
@@ -102,14 +87,14 @@ class DateUtils {
       return this.convertToIntString(
         date,
         {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
         },
-        lang
+        lang,
       );
     } else {
       return null;
@@ -121,14 +106,14 @@ class DateUtils {
       return this.convertToIntString(
         date,
         {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          second: "numeric",
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
         },
-        lang
+        lang,
       );
     } else {
       return null;
@@ -152,7 +137,7 @@ class DateUtils {
   }
 
   isValidDateRange(fromDate, toDate) {
-    if (fromDate === "" || toDate === "") {
+    if (fromDate === '' || toDate === '') {
       return true;
     }
     if (this.isValidDate(fromDate) === false) {

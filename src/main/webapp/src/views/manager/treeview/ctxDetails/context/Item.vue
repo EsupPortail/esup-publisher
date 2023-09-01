@@ -17,14 +17,14 @@
 </template>
 
 <script>
-import News from "./News";
-import Media from "./Media";
-import Resource from "./Resource";
-import Flash from "./Flash";
-import Empty from "./Empty";
+import News from './News';
+import Media from './Media';
+import Resource from './Resource';
+import Flash from './Flash';
+import Empty from './Empty';
 
 export default {
-  name: "TabItem",
+  name: 'TabItem',
   components: {
     News,
     Media,
@@ -32,6 +32,6 @@ export default {
     Flash,
     Empty,
   },
-  inject: ["context"],
+  inject: ['context'],
 };
 </script>

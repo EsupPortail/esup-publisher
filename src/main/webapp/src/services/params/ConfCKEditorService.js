@@ -1,9 +1,9 @@
-import FetchWrapper from '../util/FetchWrapper'
+import FetchWrapper from '../util/FetchWrapper';
 
 class ConfCKEditorService {
-  query () {
-    return FetchWrapper.getJson('api/conf/ckeditor')
+  query() {
+    return FetchWrapper.getJson('api/conf/ckeditor');
   }
 }
 
-export default new ConfCKEditorService()
+export default new ConfCKEditorService();

@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import { computed, readonly } from "vue";
-import OrganizationService from "@/services/entities/organization/OrganizationService";
-import RedactorService from "@/services/entities/redactor/RedactorService";
-import SubjectService from "@/services/params/SubjectService";
+import { computed, readonly } from 'vue';
+import OrganizationService from '@/services/entities/organization/OrganizationService';
+import RedactorService from '@/services/entities/redactor/RedactorService';
+import SubjectService from '@/services/params/SubjectService';
 
 export default {
-  name: "Manager",
+  name: 'Manager',
   data() {
     return {
       organizations: null,
@@ -30,7 +30,7 @@ export default {
   computed: {
     // Détermine le style css de la page
     getCssClass() {
-      return ["manager", this.$router.currentRoute.value.meta.managerCssClass];
+      return ['manager', this.$router.currentRoute.value.meta.managerCssClass];
     },
   },
   methods: {

@@ -1,13 +1,11 @@
 <template>
   <div class="publish-target">
-    <h3>{{ $t("manager.publish.targets.title") }}</h3>
+    <h3>{{ $t('manager.publish.targets.title') }}</h3>
 
     <SubjectDetail ref="subjectDetail"></SubjectDetail>
 
     <div class="form-group">
-      <label class="control-label" for="targets">{{
-        $t("manager.publish.targets.selected")
-      }}</label>
+      <label class="control-label" for="targets">{{ $t('manager.publish.targets.selected') }}</label>
       <div id="targets">
         <esup-subject-search-button
           .search-id="'targetSubject'"
@@ -19,16 +17,8 @@
 
         <ul class="list-group list-unstyled">
           <li v-for="subject in targets" :key="subject" class="list-group-item">
-            <esup-subject-infos
-              .subject="subject"
-              .config="subjectInfosConfig"
-              .onSubjectClicked="() => viewSubject(subject)"
-            >
-              <a
-                href=""
-                @click.prevent="remove(subject)"
-                v-tooltip="$t('manager.publish.targets.remove')"
-              >
+            <esup-subject-infos .subject="subject" .config="subjectInfosConfig" .onSubjectClicked="() => viewSubject(subject)">
+              <a href="" @click.prevent="remove(subject)" v-tooltip="$t('manager.publish.targets.remove')">
                 <i class="far fa-trash-can text-danger"></i> </a
               >&nbsp;
             </esup-subject-infos>
@@ -40,25 +30,13 @@
     <div class="text-center">
       <div class="btn-group" role="group">
         <router-link to="content" custom v-slot="{ navigate }">
-          <button
-            type="button"
-            class="btn btn-default btn-outline-dark btn-nav"
-            @click="navigate"
-          >
-            <span class="fas fa-arrow-left"></span>&nbsp;<span>{{
-              $t("entity.action.back")
-            }}</span>
+          <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
+            <span class="fas fa-arrow-left"></span>&nbsp;<span>{{ $t('entity.action.back') }}</span>
           </button>
         </router-link>
         <router-link to="/home" custom v-slot="{ navigate }">
-          <button
-            type="button"
-            class="btn btn-default btn-outline-dark btn-nav"
-            @click="navigate"
-          >
-            <span class="fas fa-times"></span>&nbsp;<span>{{
-              $t("entity.action.cancel")
-            }}</span>
+          <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
+            <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
           </button>
         </router-link>
       </div>
@@ -66,14 +44,14 @@
   </div>
 </template>
 <script>
-import GroupService from "@/services/entities/group/GroupService";
-import UserService from "@/services/user/UserService";
-import SubjectService from "@/services/params/SubjectService";
-import SubjectDetail from "@/views/entities/subject/SubjectDetail";
-import CommonUtils from "@/services/util/CommonUtils";
+import GroupService from '@/services/entities/group/GroupService';
+import UserService from '@/services/user/UserService';
+import SubjectService from '@/services/params/SubjectService';
+import SubjectDetail from '@/views/entities/subject/SubjectDetail';
+import CommonUtils from '@/services/util/CommonUtils';
 
 export default {
-  name: "Targets",
+  name: 'Targets',
   components: {
     SubjectDetail,
   },
@@ -94,13 +72,7 @@ export default {
       },
     };
   },
-  inject: [
-    "publisher",
-    "targets",
-    "setTargets",
-    "classifications",
-    "contentData",
-  ],
+  inject: ['publisher', 'targets', 'setTargets', 'classifications', 'contentData'],
   computed: {
     userDisplayedAttrs() {
       return SubjectService.getUserDisplayedAttrs();
@@ -135,13 +107,11 @@ export default {
         const treeData = response.data;
         treeData.forEach((element) => {
           if (element.children) {
-            element.getChildren = () =>
-              this.loadTreeDataChildrenSearchButton(element.id);
+            element.getChildren = () => this.loadTreeDataChildrenSearchButton(element.id);
           }
         });
         this.subjectSearchButtonConfig.treeGroupDatas = treeData;
-        this.subjectSearchButtonConfig.userDisplayedAttrs =
-          this.userDisplayedAttrs;
+        this.subjectSearchButtonConfig.userDisplayedAttrs = this.userDisplayedAttrs;
         this.subjectSearchButtonConfig.extendedAttrs = this.userFonctionalAttrs;
         this.subjectSearchButtonConfig.getGroupMembers = (id) =>
           GroupService.userMembers(id).then((response) => {
@@ -166,8 +136,7 @@ export default {
       }).then((response) => {
         response.data.forEach((element) => {
           if (element.children) {
-            element.getChildren = () =>
-              this.loadTreeDataChildrenSearchButton(element.id);
+            element.getChildren = () => this.loadTreeDataChildrenSearchButton(element.id);
           }
         });
         return response.data;
@@ -195,11 +164,7 @@ export default {
     // Mise à jour du sujet séléctionné
     updateSelectedSubject(datas) {
       datas.forEach((newVal) => {
-        if (
-          newVal !== null &&
-          "modelId" in newVal &&
-          !this.containsSubcriber(newVal.modelId)
-        ) {
+        if (newVal !== null && 'modelId' in newVal && !this.containsSubcriber(newVal.modelId)) {
           const newTargets = this.targets ? Array.from(this.targets) : [];
           newTargets.push(newVal);
           this.setTargets(newTargets);
@@ -208,9 +173,7 @@ export default {
     },
     containsSubcriber(subjectKey) {
       if (this.targets && this.targets.length > 0) {
-        return this.targets.some(
-          (target) => target.modelId.keyId === subjectKey.keyId
-        );
+        return this.targets.some((target) => target.modelId.keyId === subjectKey.keyId);
       }
       return false;
     },
@@ -221,18 +184,14 @@ export default {
   created() {
     // Si aucun publisher de saisie, on redirige vers la page Publisher
     if (this.publisher === null || this.publisher === undefined) {
-      this.$router.push({ path: "publisher" });
+      this.$router.push({ path: 'publisher' });
     } else {
       if (
-        (this.targets === null ||
-          this.targets === undefined ||
-          CommonUtils.equals([], this.targets)) &&
+        (this.targets === null || this.targets === undefined || CommonUtils.equals([], this.targets)) &&
         this.contentData !== null &&
         this.contentData.targets
       ) {
-        this.setTargets(
-          Array.from(this.contentData.targets.map((target) => target.subject))
-        );
+        this.setTargets(Array.from(this.contentData.targets.map((target) => target.subject)));
       }
       this.initDatas();
     }

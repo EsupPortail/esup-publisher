@@ -20,17 +20,17 @@
 </template>
 
 <script>
-import { computed, readonly } from "vue";
-import UploadUtils from "@/services/util/UploadUtils";
-import Organization from "./Organization";
-import Publisher from "./Publisher";
-import Empty from "./Empty";
-import Category from "./Category";
-import Feed from "./Feed";
-import Item from "./Item";
+import { computed, readonly } from 'vue';
+import UploadUtils from '@/services/util/UploadUtils';
+import Organization from './Organization';
+import Publisher from './Publisher';
+import Empty from './Empty';
+import Category from './Category';
+import Feed from './Feed';
+import Item from './Item';
 
 export default {
-  name: "TabContext",
+  name: 'TabContext',
   components: {
     Organization,
     Publisher,
@@ -59,7 +59,7 @@ export default {
   methods: {
     // Méthode de redirection vers la page de détail d'une publication
     detailSubject(id) {
-      this.$router.push({ name: "ContentDetail", params: { id: id } });
+      this.$router.push({ name: 'ContentDetail', params: { id: id } });
     },
     // Url de fichier (local ou distant)
     getUrlEnclosure(enclosure) {

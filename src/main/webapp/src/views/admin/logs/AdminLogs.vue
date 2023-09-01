@@ -1,17 +1,17 @@
 <template>
   <div>
-    <h2>{{ $t("logs.title") }}</h2>
+    <h2>{{ $t('logs.title') }}</h2>
 
-    <p>{{ $t("logs.nbloggers", { total: loggers.length }) }}</p>
+    <p>{{ $t('logs.nbloggers', { total: loggers.length }) }}</p>
 
-    {{ $t("logs.filter") }}
+    {{ $t('logs.filter') }}
     <input type="text" v-model="filter" class="form-control" />
 
     <table class="table table-sm table-striped table-bordered table-responsive">
       <thead>
         <tr title="click to order">
-          <th @click="setSorting('name')">{{ $t("logs.table.name") }}</th>
-          <th @click="setSorting('level')">{{ $t("logs.table.level") }}</th>
+          <th @click="setSorting('name')">{{ $t('logs.table.name') }}</th>
+          <th @click="setSorting('level')">{{ $t('logs.table.level') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -78,11 +78,11 @@
 </template>
 
 <script>
-import LogsService from "@/services/admin/LogsService";
-import TruncateUtils from "@/services/util/TruncateUtils";
+import LogsService from '@/services/admin/LogsService';
+import TruncateUtils from '@/services/util/TruncateUtils';
 
 export default {
-  name: "AdminLogs",
+  name: 'AdminLogs',
   data() {
     return {
       // Liste des loggers
@@ -100,21 +100,13 @@ export default {
       var filterLoggers = this.loggers;
 
       // Filtre des loggers
-      if (this.filter !== null && this.filter !== "") {
-        filterLoggers = filterLoggers.filter(
-          (logger) =>
-            logger.name.includes(this.filter) ||
-            logger.level.includes(this.filter)
-        );
+      if (this.filter !== null && this.filter !== '') {
+        filterLoggers = filterLoggers.filter((logger) => logger.name.includes(this.filter) || logger.level.includes(this.filter));
       }
 
       // Tri des loggers
       if (this.predicate !== null) {
-        filterLoggers.sort(
-          (logger1, logger2) =>
-            logger1[this.predicate].localeCompare(logger2[this.predicate]) *
-            (this.reverse ? -1 : 1)
-        );
+        filterLoggers.sort((logger1, logger2) => logger1[this.predicate].localeCompare(logger2[this.predicate]) * (this.reverse ? -1 : 1));
       }
 
       return filterLoggers;

@@ -1,4 +1,4 @@
-import UserService from "@/services/user/UserService";
+import UserService from '@/services/user/UserService';
 
 // Directive en charge de déterminer si l'utilisateur a les
 // droits d'édition pour un contexte
@@ -11,19 +11,19 @@ const CanEditDirective = {
       if (el.canEditKeyId !== keyId || el.canEditKeyType !== keyType) {
         el.canEditKeyId = keyId;
         el.canEditKeyType = keyType;
-        el.classList.add("d-none");
+        el.classList.add('d-none');
         UserService.canEditCtx(keyId, keyType).then((response) => {
           if (!response.data.value) {
-            el.classList.add("d-none");
+            el.classList.add('d-none');
           } else {
-            el.classList.remove("d-none");
+            el.classList.remove('d-none');
           }
         });
       }
     } else {
       el.canEditKeyId = undefined;
       el.canEditKeyType = undefined;
-      el.classList.add("d-none");
+      el.classList.add('d-none');
     }
   },
   updated(el, { dir, value }) {

@@ -1,12 +1,12 @@
-import store from "@/store/index.js";
-import AccountService from "./AccountService";
+import store from '@/store/index.js';
+import AccountService from './AccountService';
 
 class PrincipalService {
   identify(force) {
     return new Promise((resolve, reject) => {
       var identity = store.getters.getIdentity;
       if (force === true) {
-        store.commit("setIdentity", undefined);
+        store.commit('setIdentity', undefined);
         identity = undefined;
       }
 
@@ -18,13 +18,13 @@ class PrincipalService {
         // retrieve the identity data from the server, update the identity object, and then resolve.
         AccountService.account()
           .then((response) => {
-            store.commit("setIdentity", response.data);
-            store.commit("setAuthenticated", true);
+            store.commit('setIdentity', response.data);
+            store.commit('setAuthenticated', true);
             resolve(identity);
           })
           .catch(() => {
-            store.commit("setIdentity", null);
-            store.commit("setAuthenticated", false);
+            store.commit('setIdentity', null);
+            store.commit('setAuthenticated', false);
             reject(identity);
           });
       }
@@ -32,22 +32,14 @@ class PrincipalService {
   }
 
   authenticate(identity) {
-    store.commit("setIdentity", identity);
-    store.commit(
-      "setAuthenticated",
-      identity !== null && identity !== undefined
-    );
+    store.commit('setIdentity', identity);
+    store.commit('setAuthenticated', identity !== null && identity !== undefined);
   }
 
   isInAnyRole(roles) {
     const identity = store.getters.getIdentity;
     const authenticated = store.getters.getAuthenticated;
-    if (
-      !authenticated ||
-      identity === undefined ||
-      identity === null ||
-      !identity.roles
-    ) {
+    if (!authenticated || identity === undefined || identity === null || !identity.roles) {
       return false;
     }
 
@@ -57,12 +49,7 @@ class PrincipalService {
   isInRole(role) {
     const identity = store.getters.getIdentity;
     const authenticated = store.getters.getAuthenticated;
-    if (
-      !authenticated ||
-      identity === undefined ||
-      identity === null ||
-      !identity.roles
-    ) {
+    if (!authenticated || identity === undefined || identity === null || !identity.roles) {
       return false;
     }
     return identity.roles.indexOf(role) !== -1;
@@ -73,7 +60,7 @@ class PrincipalService {
   }
 
   isIdentityResolved() {
-    return typeof store.getters.getIdentity !== "undefined";
+    return typeof store.getters.getIdentity !== 'undefined';
   }
 }
 

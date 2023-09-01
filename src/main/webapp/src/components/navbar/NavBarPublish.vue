@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "NavBarPublish",
+  name: 'NavBarPublish',
   components: {},
   data() {
     return {};

@@ -1,28 +1,19 @@
 <template>
   <div id="login-modal" v-if="toggleModal && logout">
-    <LoginModal
-      :showModal="toggleModal"
-      @relog="relog"
-      ref="modalRef"
-    ></LoginModal>
+    <LoginModal :showModal="toggleModal" @relog="relog" ref="modalRef"></LoginModal>
   </div>
   <div v-else class="row mx-0">
     <div class="col-lg-4 offset-lg-4">
-      <h1>{{ $t("login.title") }}</h1>
+      <h1>{{ $t('login.title') }}</h1>
       <div class="alert alert-danger">
-        {{ $t("login.messages.error.401") }}
+        {{ $t('login.messages.error.401') }}
       </div>
       <div class="alert alert-danger" v-if="authenticationError">
-        {{ $t("login.messages.error.authentication") }}
+        {{ $t('login.messages.error.authentication') }}
       </div>
       <form class="form" role="form">
-        <button
-          id="login-button"
-          type="button"
-          class="btn btn-primary"
-          @click="login()"
-        >
-          {{ $t("login.form.button") }}
+        <button id="login-button" type="button" class="btn btn-primary" @click="login()">
+          {{ $t('login.form.button') }}
         </button>
       </form>
     </div>
@@ -30,15 +21,15 @@
 </template>
 
 <script>
-import AuthenticationService from "@/services/auth/AuthenticationService";
-import PrincipalService from "@/services/auth/PrincipalService";
-import LoginModal from "./LoginModal.vue";
+import AuthenticationService from '@/services/auth/AuthenticationService';
+import PrincipalService from '@/services/auth/PrincipalService';
+import LoginModal from './LoginModal.vue';
 
 // Objet en charge de la redirection vers le serveur CAS
 const relogState = {};
 
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
     LoginModal,
   },
@@ -64,7 +55,7 @@ export default {
         .then(() => {
           this.authenticationError = false;
           if (!this.$store.getters.getReturnRoute) {
-            this.$router.push({ name: "Home" });
+            this.$router.push({ name: 'Home' });
           } else {
             this.$router.push({
               name: this.$store.getters.getReturnRoute.name,
@@ -84,13 +75,12 @@ export default {
     relog(closeLoginModal = true) {
       this.windowOpenCleanup(relogState, closeLoginModal);
       relogState.listener = this.onmessage;
-      window.addEventListener("message", this.onmessage);
+      window.addEventListener('message', this.onmessage);
 
       relogState.window = window.open(
-        process.env.NODE_ENV === "production"
-          ? process.env.VUE_APP_BACK_BASE_URL +
-              process.env.VUE_APP_CAS_LOGIN_URL
-          : process.env.VUE_APP_CAS_LOGIN_URL
+        process.env.NODE_ENV === 'production'
+          ? process.env.VUE_APP_BACK_BASE_URL + process.env.VUE_APP_CAS_LOGIN_URL
+          : process.env.VUE_APP_CAS_LOGIN_URL,
       );
     },
 
@@ -98,13 +88,13 @@ export default {
     windowOpenCleanup(state, closeLoginModal) {
       try {
         if (state.listener) {
-          window.removeEventListener("message", state.listener);
+          window.removeEventListener('message', state.listener);
         }
         if (state.window) {
           state.window.close();
         }
         if (closeLoginModal && this.$store.getters.getLoginModalOpened) {
-          this.$store.commit("setLoginModalOpened", false);
+          this.$store.commit('setLoginModalOpened', false);
         }
       } catch (e) {
         // eslint-disable-next-line
@@ -115,7 +105,7 @@ export default {
     // Méthode utilisé lors de la réception de la réponse
     // du serveur CAS puis redirige l'utilisateur
     onmessage(e) {
-      if (typeof e.data !== "string") {
+      if (typeof e.data !== 'string') {
         return;
       }
       const m = e.data.match(/^loggedUser=(.*)$/);
@@ -126,7 +116,7 @@ export default {
       this.windowOpenCleanup(relogState, true);
       PrincipalService.identify(true).then(() => {
         if (!this.$store.getters.getReturnRoute) {
-          this.$router.push({ name: "Home" });
+          this.$router.push({ name: 'Home' });
         } else {
           this.$router.push({
             name: this.$store.getters.getReturnRoute.name,

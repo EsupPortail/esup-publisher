@@ -1,8 +1,8 @@
-import FetchWrapper from "../util/FetchWrapper";
+import FetchWrapper from '../util/FetchWrapper';
 
 class ConfFileSizeService {
   query() {
-    return FetchWrapper.getJson("api/conf/uploadfilesize");
+    return FetchWrapper.getJson('api/conf/uploadfilesize');
   }
 }
 

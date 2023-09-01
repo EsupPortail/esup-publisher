@@ -2,45 +2,25 @@
   <div class="header">
     <ul class="nav nav-pills">
       <li class="nav-item" :class="{ active: activeNav === 'content' }">
-        <a
-          class="nav-link"
-          :class="{ active: activeNav === 'content' }"
-          @click.prevent="showNav('content')"
-          href=""
-          ><span>{{ $t("manager.contents.details.item") }}</span></a
+        <a class="nav-link" :class="{ active: activeNav === 'content' }" @click.prevent="showNav('content')" href=""
+          ><span>{{ $t('manager.contents.details.item') }}</span></a
         >
       </li>
       <li class="nav-item" :class="{ active: activeNav === 'publishers' }">
-        <a
-          class="nav-link"
-          :class="{ active: activeNav === 'publishers' }"
-          @click.prevent="showNav('publishers')"
-          href=""
-          ><span>{{ $t("manager.contents.details.publishers") }}</span></a
+        <a class="nav-link" :class="{ active: activeNav === 'publishers' }" @click.prevent="showNav('publishers')" href=""
+          ><span>{{ $t('manager.contents.details.publishers') }}</span></a
         >
       </li>
-      <li
-        class="nav-item"
-        v-if="item.redactor.writingMode !== 'STATIC'"
-        :class="{ active: activeNav === 'targets' }"
-      >
-        <a
-          class="nav-link"
-          :class="{ active: activeNav === 'targets' }"
-          @click.prevent="showNav('targets')"
-          href=""
-          ><span>{{ $t("manager.contents.details.targets") }}</span></a
+      <li class="nav-item" v-if="item.redactor.writingMode !== 'STATIC'" :class="{ active: activeNav === 'targets' }">
+        <a class="nav-link" :class="{ active: activeNav === 'targets' }" @click.prevent="showNav('targets')" href=""
+          ><span>{{ $t('manager.contents.details.targets') }}</span></a
         >
       </li>
     </ul>
   </div>
   <SubjectDetail ref="subjectDetail"></SubjectDetail>
   <div class="tab-content">
-    <div
-      id="content"
-      class="tab-pane fade show"
-      :class="{ active: activeNav === 'content' }"
-    >
+    <div id="content" class="tab-pane fade show" :class="{ active: activeNav === 'content' }">
       <div v-if="item.type === 'NEWS'">
         <ContentDetailNews></ContentDetailNews>
       </div>
@@ -57,12 +37,8 @@
         <ContentDetailAttachment></ContentDetailAttachment>
       </div>
     </div>
-    <div
-      id="publishers"
-      class="tab-pane fade show"
-      :class="{ active: activeNav === 'publishers' }"
-    >
-      <h3>{{ $t("manager.contents.details.publishers") }}</h3>
+    <div id="publishers" class="tab-pane fade show" :class="{ active: activeNav === 'publishers' }">
+      <h3>{{ $t('manager.contents.details.publishers') }}</h3>
       <div v-for="context in pubContexts" :key="context.id" class="card">
         <div class="card-header">
           <h4 class="card-title">
@@ -72,29 +48,21 @@
         </div>
         <div class="card-body">
           <p>
-            <span>{{ $t("manager.contents.details.publisher.reader") }}</span>
+            <span>{{ $t('manager.contents.details.publisher.reader') }}</span>
             {{ context.publisher.context.reader.description }}
           </p>
           <p>
-            <span>{{ $t("manager.contents.details.publisher.redactor") }}</span>
+            <span>{{ $t('manager.contents.details.publisher.redactor') }}</span>
             {{ context.publisher.context.redactor.description }}
           </p>
         </div>
         <div class="card-footer" v-if="context.classifications.length > 0">
-          <h4>{{ $t("manager.contents.details.classifications") }}</h4>
+          <h4>{{ $t('manager.contents.details.classifications') }}</h4>
           <ul class="list-group">
-            <li
-              v-for="classification in context.classifications"
-              :key="classification.id"
-              class="list-group-item"
-            >
+            <li v-for="classification in context.classifications" :key="classification.id" class="list-group-item">
               <figure :class="classification.type">
                 <img
-                  v-if="
-                    context.publisher.context.reader.classificationDecorations.includes(
-                      'ENCLOSURE'
-                    ) && classification.iconUrl
-                  "
+                  v-if="context.publisher.context.reader.classificationDecorations.includes('ENCLOSURE') && classification.iconUrl"
                   :src="classification.iconUrl"
                   :alt="classification.name"
                 />
@@ -102,18 +70,11 @@
                   <span
                     class="pastille me-1"
                     :style="{
-                      'background-color':
-                        context.publisher.context.reader.classificationDecorations.includes(
-                          'COLOR'
-                        )
-                          ? classification.color
-                          : null,
+                      'background-color': context.publisher.context.reader.classificationDecorations.includes('COLOR')
+                        ? classification.color
+                        : null,
                     }"
-                    v-if="
-                      context.publisher.context.reader.classificationDecorations.includes(
-                        'COLOR'
-                      )
-                    "
+                    v-if="context.publisher.context.reader.classificationDecorations.includes('COLOR')"
                   ></span>
                   <span class="text">{{ classification.name }}</span>
                 </figcaption>
@@ -123,21 +84,14 @@
         </div>
       </div>
     </div>
-    <div
-      id="targets"
-      class="tab-pane fade show"
-      :class="{ active: activeNav === 'targets' }"
-    >
-      <h3>{{ $t("manager.contents.details.targets") }}</h3>
-      <div
-        v-if="item.redactor.writingMode === 'STATIC'"
-        class="table-responsive table-responsive-to-flexbox"
-      >
+    <div id="targets" class="tab-pane fade show" :class="{ active: activeNav === 'targets' }">
+      <h3>{{ $t('manager.contents.details.targets') }}</h3>
+      <div v-if="item.redactor.writingMode === 'STATIC'" class="table-responsive table-responsive-to-flexbox">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>{{ $t("subscriber.subscribeType") }}</th>
-              <th>{{ $t("subscriber.subject") }}</th>
+              <th>{{ $t('subscriber.subscribeType') }}</th>
+              <th>{{ $t('subscriber.subject') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -156,11 +110,7 @@
       </div>
       <div v-else>
         <ul class="list-group">
-          <li
-            v-for="target in targets"
-            :key="target.id"
-            class="list-group-item"
-          >
+          <li v-for="target in targets" :key="target.id" class="list-group-item">
             <esup-subject-infos
               .subject="target.subject"
               .config="config"
@@ -173,30 +123,28 @@
   </div>
   <div class="card-footer">
     <button type="button" class="btn btn-info" @click="back()">
-      <span class="fas fa-arrow-left"></span>&nbsp;<span>
-        {{ $t("entity.action.back") }}</span
-      >
+      <span class="fas fa-arrow-left"></span>&nbsp;<span> {{ $t('entity.action.back') }}</span>
     </button>
   </div>
 </template>
 <script>
-import { computed, readonly } from "vue";
-import ContentService from "@/services/entities/content/ContentService";
-import ClassificationService from "@/services/entities/classification/ClassificationService";
-import EnumDatasService from "@/services/entities/enum/EnumDatasService";
-import DateUtils from "@/services/util/DateUtils";
-import UploadUtils from "@/services/util/UploadUtils";
-import SubjectService from "@/services/params/SubjectService";
-import store from "@/store/index.js";
-import ContentDetailAttachment from "@/views/manager/contents/details/templates/ContentDetailAttachment";
-import ContentDetailFlash from "@/views/manager/contents/details/templates/ContentDetailFlash";
-import ContentDetailNews from "@/views/manager/contents/details/templates/ContentDetailNews";
-import ContentDetailMedia from "@/views/manager/contents/details/templates/ContentDetailMedia";
-import ContentDetailRessource from "@/views/manager/contents/details/templates/ContentDetailRessource";
-import SubjectDetail from "@/views/entities/subject/SubjectDetail";
+import { computed, readonly } from 'vue';
+import ContentService from '@/services/entities/content/ContentService';
+import ClassificationService from '@/services/entities/classification/ClassificationService';
+import EnumDatasService from '@/services/entities/enum/EnumDatasService';
+import DateUtils from '@/services/util/DateUtils';
+import UploadUtils from '@/services/util/UploadUtils';
+import SubjectService from '@/services/params/SubjectService';
+import store from '@/store/index.js';
+import ContentDetailAttachment from '@/views/manager/contents/details/templates/ContentDetailAttachment';
+import ContentDetailFlash from '@/views/manager/contents/details/templates/ContentDetailFlash';
+import ContentDetailNews from '@/views/manager/contents/details/templates/ContentDetailNews';
+import ContentDetailMedia from '@/views/manager/contents/details/templates/ContentDetailMedia';
+import ContentDetailRessource from '@/views/manager/contents/details/templates/ContentDetailRessource';
+import SubjectDetail from '@/views/entities/subject/SubjectDetail';
 
 export default {
-  name: "ContentDetail",
+  name: 'ContentDetail',
   components: {
     ContentDetailAttachment,
     ContentDetailFlash,
@@ -207,13 +155,13 @@ export default {
   },
   data() {
     return {
-      activeNav: "content",
+      activeNav: 'content',
       contentData: [],
       item: {
-        type: "",
-        redactor: { writingMode: "" },
-        lastModifiedBy: { displayName: "" },
-        validatedBy: { displayName: "" },
+        type: '',
+        redactor: { writingMode: '' },
+        lastModifiedBy: { displayName: '' },
+        validatedBy: { displayName: '' },
       },
       classifications: null,
       targets: null,
@@ -307,11 +255,8 @@ export default {
             if (pubContext.id === classification.data.publisher.id) {
               if (
                 !(
-                  classification.data.publisher.context.redactor.writingMode ===
-                    "STATIC" &&
-                  classification.data.publisher.context.reader.authorizedTypes.includes(
-                    "FLASH"
-                  )
+                  classification.data.publisher.context.redactor.writingMode === 'STATIC' &&
+                  classification.data.publisher.context.reader.authorizedTypes.includes('FLASH')
                 )
               ) {
                 pubContext.classifications.push(classification.data);
@@ -323,11 +268,8 @@ export default {
             var classifs = [];
             if (
               !(
-                classification.data.publisher.context.redactor.writingMode ===
-                  "STATIC" &&
-                classification.data.publisher.context.reader.authorizedTypes.includes(
-                  "FLASH"
-                )
+                classification.data.publisher.context.redactor.writingMode === 'STATIC' &&
+                classification.data.publisher.context.reader.authorizedTypes.includes('FLASH')
               )
             ) {
               classifs.push(classification.data);
@@ -352,17 +294,11 @@ export default {
     },
     // Formatage d'une date au format 'DD MMMM YYYY, HH:mm:ss'
     formatDateTime(date) {
-      return DateUtils.formatDateTimeToLongIntString(
-        DateUtils.convertDateTimeFromServer(date),
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateTimeToLongIntString(DateUtils.convertDateTimeFromServer(date), store.getters.getLanguage);
     },
     // Formatage d'une date au format 'DD MMMM YYYY'
     formatDateDayMonthYear(date) {
-      return DateUtils.formatDateToLongIntString(
-        DateUtils.convertDateTimeFromServer(date),
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateToLongIntString(DateUtils.convertDateTimeFromServer(date), store.getters.getLanguage);
     },
     // Filtre sur les fichiers
     filterLinkedFiles(linkedFiles) {
@@ -391,7 +327,7 @@ export default {
           params: previousRoute.params,
         });
       } else {
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: 'Home' });
       }
     },
     // Gestion de la navigation sur la visualisation d'une publication

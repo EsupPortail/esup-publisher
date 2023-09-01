@@ -1,13 +1,13 @@
 // Directive permettant de désactiver le clic sur un élément
 const DisableClickDirective = {
   disableClick(el, disable) {
-    if (el.tagName === "A") {
-      el.style["pointer-events"] = disable ? "none" : "auto";
+    if (el.tagName === 'A') {
+      el.style['pointer-events'] = disable ? 'none' : 'auto';
     } else {
       if (disable) {
-        el.setAttribute("disabled", disable);
+        el.setAttribute('disabled', disable);
       } else {
-        el.removeAttribute("disabled");
+        el.removeAttribute('disabled');
       }
     }
   },

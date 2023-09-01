@@ -1,118 +1,79 @@
 <template>
   <div>
     <h2>
-      <span>{{ $t("redactor.detail.title") }}</span> {{ $route.params.id }}
+      <span>{{ $t('redactor.detail.title') }}</span> {{ $route.params.id }}
     </h2>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>{{ $t("entity.detail.field") }}</th>
-            <th>{{ $t("entity.detail.value") }}</th>
+            <th>{{ $t('entity.detail.field') }}</th>
+            <th>{{ $t('entity.detail.value') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              <span>{{ $t("redactor.name") }}</span>
+              <span>{{ $t('redactor.name') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.name"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.name" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.displayName") }}</span>
+              <span>{{ $t('redactor.displayName') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.displayName"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.displayName" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.description") }}</span>
+              <span>{{ $t('redactor.description') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.description"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.description" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.format") }}</span>
+              <span>{{ $t('redactor.format') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.format"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.format" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.writingMode") }}</span>
+              <span>{{ $t('redactor.writingMode') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="$t(getWritingModeLabel(redactor.writingMode))"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="$t(getWritingModeLabel(redactor.writingMode))" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.nbLevelsOfClassification") }}</span>
+              <span>{{ $t('redactor.nbLevelsOfClassification') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.nbLevelsOfClassification"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.nbLevelsOfClassification" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.optionalPublishTime") }}</span>
+              <span>{{ $t('redactor.optionalPublishTime') }}</span>
             </td>
             <td>
-              <input
-                type="checkbox"
-                v-model="redactor.optionalPublishTime"
-                disabled
-              />
+              <input type="checkbox" v-model="redactor.optionalPublishTime" disabled />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("redactor.nbDaysMaxDuration") }}</span>
+              <span>{{ $t('redactor.nbDaysMaxDuration') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                :value="redactor.nbDaysMaxDuration"
-                readonly
-              />
+              <input type="text" class="form-control form-control-sm" :value="redactor.nbDaysMaxDuration" readonly />
             </td>
           </tr>
         </tbody>
@@ -120,19 +81,17 @@
     </div>
 
     <button type="submit" @click="redactorPage" class="btn btn-info">
-      <span class="fas fa-arrow-left"></span>&nbsp;<span>
-        {{ $t("entity.action.back") }}</span
-      >
+      <span class="fas fa-arrow-left"></span>&nbsp;<span> {{ $t('entity.action.back') }}</span>
     </button>
   </div>
 </template>
 
 <script>
-import RedactorService from "@/services/entities/redactor/RedactorService";
-import EnumDatasService from "@/services/entities/enum/EnumDatasService";
+import RedactorService from '@/services/entities/redactor/RedactorService';
+import EnumDatasService from '@/services/entities/enum/EnumDatasService';
 
 export default {
-  name: "RedactorDetail",
+  name: 'RedactorDetail',
   data() {
     return {
       redactor: {
@@ -168,7 +127,7 @@ export default {
     },
     // Méthode de redirection sur la page listant les redacteurs
     redactorPage() {
-      this.$router.push({ name: "AdminEntityRedactor" });
+      this.$router.push({ name: 'AdminEntityRedactor' });
     },
     getWritingModeLabel(name) {
       if (name) {
@@ -176,7 +135,7 @@ export default {
           return val.name === name;
         })[0].label;
       } else {
-        return "";
+        return '';
       }
     },
   },

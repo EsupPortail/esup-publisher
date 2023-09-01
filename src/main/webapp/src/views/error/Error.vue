@@ -4,7 +4,7 @@
       <span class="hipster img-fluid rounded"></span>
     </div>
     <div class="col-lg-8">
-      <h1>{{ $t("errors.title") }}</h1>
+      <h1>{{ $t('errors.title') }}</h1>
       <div v-if="errorMessage">
         <div class="alert alert-danger">
           {{ $t(errorMessage) }}
@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "Error",
+  name: 'Error',
   data() {
     return {
       errorMessage: null,

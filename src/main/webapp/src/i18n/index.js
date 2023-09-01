@@ -1,12 +1,13 @@
-import { createI18n } from 'vue-i18n'
-import store from '../store'
+import { createI18n } from 'vue-i18n';
+import store from '../store';
 
 const i18n = createI18n({
   locale: store.getters.getLanguage,
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'fr',
   silentTranslationWarn: true,
   messages: {
-    en: Object.assign({},
+    en: Object.assign(
+      {},
       require('./en/activate.json'),
       require('./en/admin.json'),
       require('./en/attachment.json'),
@@ -44,8 +45,10 @@ const i18n = createI18n({
       require('./en/sessions.json'),
       require('./en/settings.json'),
       require('./en/subject.json'),
-      require('./en/subscriber.json')),
-    fr: Object.assign({},
+      require('./en/subscriber.json'),
+    ),
+    fr: Object.assign(
+      {},
       require('./fr/activate.json'),
       require('./fr/admin.json'),
       require('./fr/attachment.json'),
@@ -83,8 +86,9 @@ const i18n = createI18n({
       require('./fr/sessions.json'),
       require('./fr/settings.json'),
       require('./fr/subject.json'),
-      require('./fr/subscriber.json'))
-  }
-})
+      require('./fr/subscriber.json'),
+    ),
+  },
+});
 
-export default i18n
+export default i18n;

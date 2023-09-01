@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ $t("health.title") }}</h2>
+    <h2>{{ $t('health.title') }}</h2>
 
     <div
       class="modal fade"
@@ -16,36 +16,27 @@
           <form name="form" role="form" novalidate v-if="currentHealth">
             <div class="modal-header">
               <h4 class="modal-title" id="showHealthLabel">
-                {{ $t("health.indicator." + baseName(currentHealth.name)) }}
+                {{ $t('health.indicator.' + baseName(currentHealth.name)) }}
                 {{ subSystemName(currentHealth.name) }}
               </h4>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-hidden="true"
-                @click="clear()"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" @click="clear()"></button>
             </div>
             <div class="modal-body">
               <div v-if="currentHealth.details">
-                <h4>{{ $t("health.details.properties") }}</h4>
+                <h4>{{ $t('health.details.properties') }}</h4>
                 <table class="table table-striped">
                   <thead>
                     <tr>
                       <th class="text-start">
-                        {{ $t("health.details.name") }}
+                        {{ $t('health.details.name') }}
                       </th>
                       <th class="text-start">
-                        {{ $t("health.details.value") }}
+                        {{ $t('health.details.value') }}
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr
-                      v-for="(value, key) in currentHealth.details"
-                      :key="key"
-                    >
+                    <tr v-for="(value, key) in currentHealth.details" :key="key">
                       <td class="text-start">{{ key }}</td>
                       <td class="text-start">{{ value }}</td>
                     </tr>
@@ -53,7 +44,7 @@
                 </table>
               </div>
               <div v-if="currentHealth.error">
-                <h4>{{ $t("health.details.error") }}</h4>
+                <h4>{{ $t('health.details.error') }}</h4>
                 <pre>{{ currentHealth.error }}</pre>
               </div>
             </div>
@@ -64,38 +55,31 @@
 
     <p>
       <button type="button" class="btn btn-primary" @click="refresh()">
-        <span class="fas fa-sync"></span>&nbsp;{{ $t("health.refresh-button") }}
+        <span class="fas fa-sync"></span>&nbsp;{{ $t('health.refresh-button') }}
       </button>
     </p>
 
     <table id="healthCheck" class="table table-striped">
       <thead>
         <tr>
-          <th class="col-lg-7">{{ $t("health.table.service") }}</th>
-          <th class="col-lg-2 text-center">{{ $t("health.table.status") }}</th>
+          <th class="col-lg-7">{{ $t('health.table.service') }}</th>
+          <th class="col-lg-2 text-center">{{ $t('health.table.status') }}</th>
           <th class="col-lg-2 text-center">
-            {{ $t("health.details.details") }}
+            {{ $t('health.details.details') }}
           </th>
           <th class="col-lg-1 text-center"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="health in healths" :key="health.name">
-          <td>
-            {{ $t("health.indicator." + baseName(health.name))
-            }}{{ subSystemName(health.name) }}
-          </td>
+          <td>{{ $t('health.indicator.' + baseName(health.name)) }}{{ subSystemName(health.name) }}</td>
           <td class="text-center">
             <span class="badge" :class="getLabelClass(health.status)">
-              {{ $t("health.status." + health.status) }}
+              {{ $t('health.status.' + health.status) }}
             </span>
           </td>
           <td class="text-center">
-            <a
-              class="hand"
-              @click="showHealth(health)"
-              v-if="health.details || health.error"
-            >
+            <a class="hand" @click="showHealth(health)" v-if="health.details || health.error">
               <i class="fas fa-eye"></i>
             </a>
           </td>
@@ -107,11 +91,11 @@
 </template>
 
 <script>
-import MonitoringService from "@/services/admin/MonitoringService";
-import { Modal } from "bootstrap";
+import MonitoringService from '@/services/admin/MonitoringService';
+import { Modal } from 'bootstrap';
 
 export default {
-  name: "AdminHealth",
+  name: 'AdminHealth',
   data() {
     return {
       // Diagnostics
@@ -135,10 +119,10 @@ export default {
     // Retourne la classe correspondante au statut
     // du diagnostic
     getLabelClass(statusState) {
-      if (statusState === "UP") {
-        return "bg-success";
+      if (statusState === 'UP') {
+        return 'bg-success';
       } else {
-        return "bg-danger";
+        return 'bg-danger';
       }
     },
     // Rafraichissement de la liste des disgnostics
@@ -150,9 +134,7 @@ export default {
         .catch((error) => {
           error.text().then((text) => {
             if (text) {
-              this.healths = this.transformHealthData(
-                JSON.parse(text).components
-              );
+              this.healths = this.transformHealthData(JSON.parse(text).components);
             }
           });
         });
@@ -171,24 +153,10 @@ export default {
         const value = data[key];
         if (this.isHealthObject(value)) {
           if (this.hasSubSystem(value)) {
-            this.addHealthObject(
-              result,
-              false,
-              value,
-              this.getModuleName(path, key)
-            );
-            this.flattenHealthData(
-              result,
-              this.getModuleName(path, key),
-              value
-            );
+            this.addHealthObject(result, false, value, this.getModuleName(path, key));
+            this.flattenHealthData(result, this.getModuleName(path, key), value);
           } else {
-            this.addHealthObject(
-              result,
-              true,
-              value,
-              this.getModuleName(path, key)
-            );
+            this.addHealthObject(result, true, value, this.getModuleName(path, key));
           }
         }
       });
@@ -197,13 +165,13 @@ export default {
     getModuleName(path, name) {
       var result;
       if (path && name) {
-        result = path + "." + name;
+        result = path + '.' + name;
       } else if (path) {
         result = path;
       } else if (name) {
         result = name;
       } else {
-        result = "";
+        result = '';
       }
       return result;
     },
@@ -216,7 +184,7 @@ export default {
 
       Object.keys(healthObject).forEach((key) => {
         const value = healthObject[key];
-        if (key === "status" || key === "error") {
+        if (key === 'status' || key === 'error') {
           healthData[key] = value;
         } else {
           if (!this.isHealthObject(value)) {
@@ -249,7 +217,7 @@ export default {
     isHealthObject(healthObject) {
       var result = false;
       Object.keys(healthObject).forEach((key) => {
-        if (key === "status") {
+        if (key === 'status') {
           result = true;
         }
       });
@@ -257,16 +225,16 @@ export default {
     },
     baseName(healthName) {
       if (healthName) {
-        var split = healthName.split(".");
+        var split = healthName.split('.');
         return split[0];
       }
     },
     subSystemName(healthName) {
       if (healthName) {
-        var split = healthName.split(".");
+        var split = healthName.split('.');
         split.splice(0, 1);
-        var remainder = split.join(".");
-        return remainder ? " - " + remainder : "";
+        var remainder = split.join('.');
+        return remainder ? ' - ' + remainder : '';
       }
     },
   },

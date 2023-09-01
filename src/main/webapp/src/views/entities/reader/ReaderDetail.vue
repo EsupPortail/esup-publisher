@@ -1,59 +1,44 @@
 <template>
   <div>
     <h2>
-      <span>{{ $t("reader.detail.title") }}</span> {{ $route.params.id }}
+      <span>{{ $t('reader.detail.title') }}</span> {{ $route.params.id }}
     </h2>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>{{ $t("entity.detail.field") }}</th>
-            <th>{{ $t("entity.detail.value") }}</th>
+            <th>{{ $t('entity.detail.field') }}</th>
+            <th>{{ $t('entity.detail.value') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>
-              <span>{{ $t("reader.name") }}</span>
+              <span>{{ $t('reader.name') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="input-sm form-control"
-                :value="reader.name"
-                readonly
-              />
+              <input type="text" class="input-sm form-control" :value="reader.name" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("reader.displayName") }}</span>
+              <span>{{ $t('reader.displayName') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="input-sm form-control"
-                :value="reader.displayName"
-                readonly
-              />
+              <input type="text" class="input-sm form-control" :value="reader.displayName" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("reader.description") }}</span>
+              <span>{{ $t('reader.description') }}</span>
             </td>
             <td>
-              <input
-                type="text"
-                class="input-sm form-control"
-                :value="reader.description"
-                readonly
-              />
+              <input type="text" class="input-sm form-control" :value="reader.description" readonly />
             </td>
           </tr>
           <tr>
             <td>
-              <span>{{ $t("reader.authorizedTypes") }}</span>
+              <span>{{ $t('reader.authorizedTypes') }}</span>
             </td>
             <td>
               <input
@@ -68,7 +53,7 @@
           </tr>
           <tr>
             <td>
-              <span>{{ $t("reader.classificationDecorations") }}</span>
+              <span>{{ $t('reader.classificationDecorations') }}</span>
             </td>
             <td>
               <input
@@ -86,18 +71,16 @@
     </div>
 
     <button type="submit" @click="readerPage" class="btn btn-info">
-      <span class="fas fa-arrow-left"></span>&nbsp;<span>
-        {{ $t("entity.action.back") }}</span
-      >
+      <span class="fas fa-arrow-left"></span>&nbsp;<span> {{ $t('entity.action.back') }}</span>
     </button>
   </div>
 </template>
 
 <script>
-import ReaderService from "@/services/entities/reader/ReaderService";
+import ReaderService from '@/services/entities/reader/ReaderService';
 
 export default {
-  name: "ReaderDetail",
+  name: 'ReaderDetail',
   data() {
     return {
       reader: {
@@ -124,7 +107,7 @@ export default {
     },
     // Méthode de redirection sur la page listant les lecteurs
     readerPage() {
-      this.$router.push({ name: "AdminEntityReader" });
+      this.$router.push({ name: 'AdminEntityReader' });
     },
   },
   created() {

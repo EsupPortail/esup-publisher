@@ -1,16 +1,16 @@
-import FetchWrapper from "../util/FetchWrapper";
+import FetchWrapper from '../util/FetchWrapper';
 
 class MonitoringService {
   getMetrics() {
-    return FetchWrapper.getJson("management/jhimetrics");
+    return FetchWrapper.getJson('management/jhimetrics');
   }
 
   checkHealth() {
-    return FetchWrapper.getJson("management/health");
+    return FetchWrapper.getJson('management/health');
   }
 
   threadDump() {
-    return FetchWrapper.getJson("management/threaddump");
+    return FetchWrapper.getJson('management/threaddump');
   }
 }
 

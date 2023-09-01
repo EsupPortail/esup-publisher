@@ -1,36 +1,18 @@
 <template>
   <div class="publish-content">
-    <h3>{{ $t("manager.publish.content.title") }}</h3>
+    <h3>{{ $t('manager.publish.content.title') }}</h3>
 
     <div class="form-group row" v-if="itemTypeList.length > 1">
-      <label class="col-md-4 control-label">{{
-        $t("manager.publish.content.type")
-      }}</label>
-      <div
-        class="col-md-8"
-        v-if="
-          (item !== null && item !== undefined && item.id) ||
-          itemTypeList.length == 1
-        "
-      >
+      <label class="col-md-4 control-label">{{ $t('manager.publish.content.type') }}</label>
+      <div class="col-md-8" v-if="(item !== null && item !== undefined && item.id) || itemTypeList.length == 1">
         <div class="form-check form-check-inline">
           <label class="form-check-label"
-            ><span>{{ $t("enum.itemType." + content.type) }}</span></label
+            ><span>{{ $t('enum.itemType.' + content.type) }}</span></label
           >
         </div>
       </div>
-      <div
-        class="col-md-8"
-        v-if="
-          (item === null || item === undefined || !item.id) &&
-          itemTypeList.length > 1
-        "
-      >
-        <div
-          class="form-check form-check-inline"
-          v-for="itemType in itemTypeList"
-          :key="itemType"
-        >
+      <div class="col-md-8" v-if="(item === null || item === undefined || !item.id) && itemTypeList.length > 1">
+        <div class="form-check form-check-inline" v-for="itemType in itemTypeList" :key="itemType">
           <input
             class="form-check-input"
             type="radio"
@@ -41,7 +23,7 @@
             @change="changeContentType('{{content.type}}')"
           />
           <label class="form-check-label fw-normal" :for="'itemType' + itemType"
-            ><span>{{ $t("enum.itemType." + itemType) }}</span></label
+            ><span>{{ $t('enum.itemType.' + itemType) }}</span></label
           >
         </div>
       </div>
@@ -67,36 +49,14 @@
 
     <div class="text-center">
       <div class="btn-group" role="group">
-        <router-link
-          to="classification"
-          custom
-          v-slot="{ navigate }"
-          v-if="item === null || item.type !== 'FLASH'"
-        >
-          <button
-            type="button"
-            class="btn btn-default btn-outline-dark btn-nav"
-            @click="navigate"
-          >
-            <span class="fas fa-arrow-left"></span>&nbsp;<span>
-              {{ $t("entity.action.back") }}</span
-            >
+        <router-link to="classification" custom v-slot="{ navigate }" v-if="item === null || item.type !== 'FLASH'">
+          <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
+            <span class="fas fa-arrow-left"></span>&nbsp;<span> {{ $t('entity.action.back') }}</span>
           </button>
         </router-link>
-        <router-link
-          to="publisher"
-          custom
-          v-slot="{ navigate }"
-          v-if="item !== null && item.type === 'FLASH'"
-        >
-          <button
-            type="button"
-            class="btn btn-default btn-outline-dark btn-nav"
-            @click="navigate"
-          >
-            <span class="fas fa-arrow-left"></span>&nbsp;<span>
-              {{ $t("entity.action.back") }}</span
-            >
+        <router-link to="publisher" custom v-slot="{ navigate }" v-if="item !== null && item.type === 'FLASH'">
+          <button type="button" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
+            <span class="fas fa-arrow-left"></span>&nbsp;<span> {{ $t('entity.action.back') }}</span>
           </button>
         </router-link>
 
@@ -109,118 +69,62 @@
               navigate();
             "
           >
-            <span class="fas fa-times"></span>&nbsp;<span>{{
-              $t("entity.action.cancel")
-            }}</span>
+            <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
           </button>
         </router-link>
 
-        <router-link
-          to="targets"
-          custom
-          v-slot="{ navigate }"
-          v-if="goOnTargets()"
-        >
-          <button
-            type="button"
-            :disabled="!itemValidated"
-            class="btn btn-default btn-outline-dark btn-nav"
-            @click="navigate"
-          >
-            <span> {{ $t("manager.publish.nextStep") }} </span>&nbsp;<span
-              class="fas fa-arrow-right"
-            ></span>
+        <router-link to="targets" custom v-slot="{ navigate }" v-if="goOnTargets()">
+          <button type="button" :disabled="!itemValidated" class="btn btn-default btn-outline-dark btn-nav" @click="navigate">
+            <span> {{ $t('manager.publish.nextStep') }} </span>&nbsp;<span class="fas fa-arrow-right"></span>
           </button>
         </router-link>
       </div>
     </div>
 
-    <div
-      class="modal fade"
-      id="deleteEnclosureConfirmation"
-      ref="deleteEnclosureConfirmation"
-    >
+    <div class="modal fade" id="deleteEnclosureConfirmation" ref="deleteEnclosureConfirmation">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-hidden="true"
-            ></button>
+            <h4 class="modal-title">{{ $t('entity.delete.title') }}</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
           </div>
           <div class="modal-body">
-            <p>{{ $t("news.delete.enclosure") }}</p>
+            <p>{{ $t('news.delete.enclosure') }}</p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-default btn-outline-dark"
-              data-bs-dismiss="modal"
-            >
-              <span class="fas fa-times"></span>&nbsp;<span>{{
-                $t("entity.action.cancel")
-              }}</span>
+            <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+              <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
             </button>
-            <button
-              type="submit"
-              class="btn btn-danger"
-              @click="removeEnclosure()"
-            >
-              <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                $t("entity.action.delete")
-              }}</span>
+            <button type="submit" class="btn btn-danger" @click="removeEnclosure()">
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div
-      class="modal fade"
-      id="deleteAttachmentConfirmation"
-      ref="deleteAttachmentConfirmation"
-    >
+    <div class="modal fade" id="deleteAttachmentConfirmation" ref="deleteAttachmentConfirmation">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-hidden="true"
-            ></button>
+            <h4 class="modal-title">{{ $t('entity.delete.title') }}</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
           </div>
           <div class="modal-body">
             <p>
               {{
-                $t("attachment.delete.question", {
-                  id: attachmentToDel ? attachmentToDel.filename : "",
+                $t('attachment.delete.question', {
+                  id: attachmentToDel ? attachmentToDel.filename : '',
                 })
               }}
             </p>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-default btn-outline-dark"
-              data-bs-dismiss="modal"
-            >
-              <span class="fas fa-times"></span>&nbsp;<span>{{
-                $t("entity.action.cancel")
-              }}</span>
+            <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+              <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
             </button>
-            <button
-              type="submit"
-              class="btn btn-danger"
-              @click="confirmDeleteAttachment()"
-            >
-              <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                $t("entity.action.delete")
-              }}</span>
+            <button type="submit" class="btn btn-danger" @click="confirmDeleteAttachment()">
+              <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
             </button>
           </div>
         </div>
@@ -229,27 +133,27 @@
   </div>
 </template>
 <script>
-import { computed, readonly } from "vue";
-import FileManagerService from "@/services/entities/file/FileManagerService";
-import ConfigurationService from "@/services/params/ConfigurationService";
-import EnumDatasService from "@/services/entities/enum/EnumDatasService";
-import ItemService from "@/services/entities/item/ItemService";
-import Base64Utils from "@/services/util/Base64Utils";
-import CommonUtils from "@/services/util/CommonUtils";
-import DateUtils from "@/services/util/DateUtils";
-import UploadUtils from "@/services/util/UploadUtils";
-import ContentAttachment from "./ContentAttachment";
-import ContentFlash from "./ContentFlash";
-import ContentMedia from "./ContentMedia";
-import ContentNews from "./ContentNews";
-import ContentResource from "./ContentResource";
-import i18n from "@/i18n";
-import { Modal } from "bootstrap";
+import { computed, readonly } from 'vue';
+import FileManagerService from '@/services/entities/file/FileManagerService';
+import ConfigurationService from '@/services/params/ConfigurationService';
+import EnumDatasService from '@/services/entities/enum/EnumDatasService';
+import ItemService from '@/services/entities/item/ItemService';
+import Base64Utils from '@/services/util/Base64Utils';
+import CommonUtils from '@/services/util/CommonUtils';
+import DateUtils from '@/services/util/DateUtils';
+import UploadUtils from '@/services/util/UploadUtils';
+import ContentAttachment from './ContentAttachment';
+import ContentFlash from './ContentFlash';
+import ContentMedia from './ContentMedia';
+import ContentNews from './ContentNews';
+import ContentResource from './ContentResource';
+import i18n from '@/i18n';
+import { Modal } from 'bootstrap';
 
 const { t } = i18n.global;
 
 export default {
-  name: "Content",
+  name: 'Content',
   components: {
     ContentAttachment,
     ContentFlash,
@@ -260,7 +164,7 @@ export default {
   data() {
     return {
       itemTypeList: [],
-      content: { type: "", file: "", dataUrl: "", picUrl: "" },
+      content: { type: '', file: '', dataUrl: '', picUrl: '' },
       dtformats: [],
       dtformat: null,
       today: null,
@@ -273,12 +177,12 @@ export default {
       defaultCropperConf: {
         size: { w: 240, h: 240 },
         ratio: 1,
-        quality: "high",
-        format: "image/jpeg",
+        quality: 'high',
+        format: 'image/jpeg',
         viewMode: 1,
       },
       invalidFiles: [],
-      mediaType: "",
+      mediaType: '',
       progress: null,
       progressStatus: null,
       attachmentToDel: null,
@@ -329,16 +233,16 @@ export default {
     };
   },
   inject: [
-    "contentData",
-    "publisher",
-    "setPublisher",
-    "item",
-    "setItem",
-    "highlight",
-    "linkedFilesToContent",
-    "setLinkedFilesToContent",
-    "itemValidated",
-    "setItemValidated",
+    'contentData',
+    'publisher',
+    'setPublisher',
+    'item',
+    'setItem',
+    'highlight',
+    'linkedFilesToContent',
+    'setLinkedFilesToContent',
+    'itemValidated',
+    'setItemValidated',
   ],
   computed: {
     itemStatusList() {
@@ -372,9 +276,7 @@ export default {
       const item = {
         title: null,
         enclosure: null,
-        endDate: this.publisher.context.redactor.optionalPublishTime
-          ? null
-          : next4weeks,
+        endDate: this.publisher.context.redactor.optionalPublishTime ? null : next4weeks,
         startDate: tomorrow,
         validatedBy: null,
         validatedDate: null,
@@ -392,39 +294,37 @@ export default {
       };
 
       switch (this.content.type) {
-        case "NEWS":
-          item.type = "NEWS";
+        case 'NEWS':
+          item.type = 'NEWS';
           item.body = null;
           break;
-        case "MEDIA":
-          item.type = "MEDIA";
+        case 'MEDIA':
+          item.type = 'MEDIA';
           break;
-        case "RESOURCE":
-          item.type = "RESOURCE";
+        case 'RESOURCE':
+          item.type = 'RESOURCE';
           item.ressourceUrl = null;
           break;
-        case "FLASH":
-          item.type = "FLASH";
+        case 'FLASH':
+          item.type = 'FLASH';
           item.body = null;
-          item.endDate = this.publisher.context.redactor.optionalPublishTime
-            ? null
-            : DateUtils.addDaysToLocalDate(this.today, 14);
+          item.endDate = this.publisher.context.redactor.optionalPublishTime ? null : DateUtils.addDaysToLocalDate(this.today, 14);
           break;
-        case "ATTACHMENT":
-          item.type = "ATTACHMENT";
+        case 'ATTACHMENT':
+          item.type = 'ATTACHMENT';
           break;
         default:
-          throw new Error("Type not managed : " + this.content.type);
+          throw new Error('Type not managed : ' + this.content.type);
       }
       this.setItem(item);
     },
     initCropper() {
       switch (this.content.type) {
-        case "NEWS":
+        case 'NEWS':
           this.cropperConf.size = { w: 240, h: 240 };
           this.cropperConf.ratio = 1;
           break;
-        case "FLASH":
+        case 'FLASH':
           this.cropperConf.size = { w: 800, h: 240 };
           this.cropperConf.ratio = 3.3;
           break;
@@ -440,34 +340,19 @@ export default {
         CommonUtils.isDefined(item.id) &&
         item.id !== null &&
         CommonUtils.isDefined(item.startDate) &&
-        !(
-          CommonUtils.isDefined(item.endDate) &&
-          item.endDate !== null &&
-          DateUtils.getDateDifference(item.endDate, this.today) > 0
-        )
+        !(CommonUtils.isDefined(item.endDate) && item.endDate !== null && DateUtils.getDateDifference(item.endDate, this.today) > 0)
       ) {
         this.minDate = DateUtils.min(item.startDate, this.today);
       }
     },
     updateMaxDate(item) {
-      if (
-        CommonUtils.isDefined(item) &&
-        CommonUtils.isDefined(item.type) &&
-        CommonUtils.isDefined(item.startDate)
-      ) {
-        this.maxDate = DateUtils.addDaysToLocalDate(
-          item.startDate,
-          this.defaultMaxDuration
-        );
+      if (CommonUtils.isDefined(item) && CommonUtils.isDefined(item.type) && CommonUtils.isDefined(item.startDate)) {
+        this.maxDate = DateUtils.addDaysToLocalDate(item.startDate, this.defaultMaxDuration);
         this.endMinDate = item.startDate;
       }
     },
     changeContentType(oldValue) {
-      if (
-        !CommonUtils.equals(oldValue, this.content.type) ||
-        !CommonUtils.isDefined(this.item) ||
-        CommonUtils.equals({}, this.item)
-      ) {
+      if (!CommonUtils.equals(oldValue, this.content.type) || !CommonUtils.isDefined(this.item) || CommonUtils.equals({}, this.item)) {
         this.initItem();
       } else {
         this.initCropper();
@@ -486,15 +371,11 @@ export default {
       this.deleteEnclosure();
     },
     deleteEnclosure() {
-      FileManagerService.delete(
-        this.publisher.context.organization.id,
-        true,
-        Base64Utils.encode(this.item.enclosure)
-      ).then(() => {
+      FileManagerService.delete(this.publisher.context.organization.id, true, Base64Utils.encode(this.item.enclosure)).then(() => {
         if (this.item.id) {
           ItemService.patch({
             objectId: this.item.id,
-            attribute: "enclosure",
+            attribute: 'enclosure',
             value: null,
           }).then(() => {
             this.clearUpload();
@@ -517,20 +398,16 @@ export default {
       this.deleteAttachmentModal.show();
     },
     confirmDeleteAttachment() {
-      FileManagerService.delete(
-        this.publisher.context.organization.id,
-        false,
-        Base64Utils.encode(this.attachmentToDel.uri)
-      ).then(() => {
+      FileManagerService.delete(this.publisher.context.organization.id, false, Base64Utils.encode(this.attachmentToDel.uri)).then(() => {
         this.setLinkedFilesToContent(
           this.linkedFilesToContent.filter((val) => {
             return val.uri !== this.attachmentToDel.uri;
-          })
+          }),
         );
         if (this.item.id) {
           ItemService.patch({
             objectId: this.item.id,
-            attribute: "attachment",
+            attribute: 'attachment',
             value: this.attachmentToDel.uri,
           }).then(() => {
             this.deleteAttachmentModal.hide();
@@ -541,27 +418,23 @@ export default {
       });
     },
     clearUpload() {
-      this.content.file = "";
-      this.content.dataUrl = "";
-      this.content.picUrl = "";
+      this.content.file = '';
+      this.content.dataUrl = '';
+      this.content.picUrl = '';
       this.progress = null;
       document.querySelectorAll("input[type='file']").forEach((el) => {
         el.value = null;
       });
     },
     goOnTargets() {
-      return (
-        this.publisher !== null &&
-        this.publisher !== undefined &&
-        this.publisher.context.redactor.writingMode === "TARGETS_ON_ITEM"
-      );
+      return this.publisher !== null && this.publisher !== undefined && this.publisher.context.redactor.writingMode === 'TARGETS_ON_ITEM';
     },
     uploadLinkedFile(file, filename, isImage, isPublic, successCallBack) {
       var maxSize = isImage ? this.imageSizeMax : this.fileSizeMax;
       if (file.size <= maxSize) {
-        this.progressStatus = "success";
+        this.progressStatus = 'success';
         UploadUtils.upload(
-          "app/upload/",
+          'app/upload/',
           {
             file: file,
             isPublic: isPublic,
@@ -576,88 +449,61 @@ export default {
             this.manageUploadError(response);
           },
           (evt) => {
-            this.progress = Math.min(
-              100,
-              parseInt((100.0 * evt.loaded) / evt.total)
-            );
-          }
+            this.progress = Math.min(100, parseInt((100.0 * evt.loaded) / evt.total));
+          },
         );
         return true;
       }
       // FILE SIZE ISSUE - useless as the server control it, but avoid a useless request
       this.$toast.warning(
-        t("errors.upload.filesize", {
+        t('errors.upload.filesize', {
           size: CommonUtils.convertByteToDisplayedString(maxSize, 2),
-        })
+        }),
       );
       return true;
     },
     manageUploadError(response) {
       if (response.status > 0) {
-        this.progressStatus = "warning";
+        this.progressStatus = 'warning';
         if (response.message) {
           var params = {};
           if (response.params) {
             params = Object.assign({}, response.params);
             if (response.params.size) {
-              params.size = CommonUtils.convertByteToDisplayedString(
-                response.params.size,
-                2
-              );
+              params.size = CommonUtils.convertByteToDisplayedString(response.params.size, 2);
             }
           }
           params.code = response.status;
           this.$toast.warning(t(response.message, params));
         } else {
-          this.$toast.warning(
-            t("errors.upload.generic", { code: response.status })
-          );
+          this.$toast.warning(t('errors.upload.generic', { code: response.status }));
         }
       } else if (response.status === 0) {
-        this.progressStatus = "warning";
-        this.$toast.warning(t("errors.upload.ERR_INTERNET_DISCONNECTED"));
+        this.progressStatus = 'warning';
+        this.$toast.warning(t('errors.upload.ERR_INTERNET_DISCONNECTED'));
       }
       setTimeout(() => {
         this.progress = null;
       }, 3000);
     },
     removeEnclosure() {
-      if (
-        !CommonUtils.isDefined(this.item.enclosure) ||
-        this.item.enclosure == null
-      )
-        return;
+      if (!CommonUtils.isDefined(this.item.enclosure) || this.item.enclosure == null) return;
       this.deleteEnclosure();
     },
   },
   mounted() {
-    this.deleteEnclosureModal = new Modal(
-      this.$refs.deleteEnclosureConfirmation
-    );
-    this.deleteAttachmentModal = new Modal(
-      this.$refs.deleteAttachmentConfirmation
-    );
+    this.deleteEnclosureModal = new Modal(this.$refs.deleteEnclosureConfirmation);
+    this.deleteAttachmentModal = new Modal(this.$refs.deleteAttachmentConfirmation);
   },
   created() {
     // Si aucun publisher de saisie, on redirige vers la page Publisher
-    if (
-      this.publisher === null ||
-      this.publisher === undefined ||
-      !this.publisher.id
-    ) {
-      this.$router.push({ path: "publisher" });
+    if (this.publisher === null || this.publisher === undefined || !this.publisher.id) {
+      this.$router.push({ path: 'publisher' });
     } else {
       this.cropperConf = Object.assign({}, this.defaultCropperConf);
       this.itemTypeList = this.publisher.context.reader.authorizedTypes;
 
-      this.dtformats = [
-        "dd-MMMM-yyyy",
-        "yyyy/MM/dd",
-        "dd.MM.yyyy",
-        "dd/MM/yyyy",
-        "shortDate",
-        "yyyy-MM-dd",
-      ];
+      this.dtformats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM/yyyy', 'shortDate', 'yyyy-MM-dd'];
       this.dtformat = this.dtformats[6];
 
       this.today = DateUtils.addDaysToLocalDate(new Date(), 0);
@@ -665,20 +511,13 @@ export default {
       this.minDate = DateUtils.addDaysToLocalDate(this.today, 0);
       this.endMinDate = DateUtils.addDaysToLocalDate(this.today, 0);
       this.defaultMaxDuration =
-        this.publisher.context.redactor.nbDaysMaxDuration > 0
-          ? this.publisher.context.redactor.nbDaysMaxDuration
-          : 365;
-      this.maxDate = DateUtils.addDaysToLocalDate(
-        this.today,
-        this.defaultMaxDuration
-      );
+        this.publisher.context.redactor.nbDaysMaxDuration > 0 ? this.publisher.context.redactor.nbDaysMaxDuration : 365;
+      this.maxDate = DateUtils.addDaysToLocalDate(this.today, this.defaultMaxDuration);
       // Pas de limite supérieure à la date de début
       this.startMaxDate = null;
 
       if (
-        (this.item === null ||
-          this.item === undefined ||
-          CommonUtils.equals({}, this.item)) &&
+        (this.item === null || this.item === undefined || CommonUtils.equals({}, this.item)) &&
         this.contentData &&
         this.contentData.item
       ) {
@@ -687,10 +526,7 @@ export default {
         this.updateMaxDate(this.contentData.item);
         item.highlight = this.highlight;
         // update publisher information when modified
-        item.organization = Object.assign(
-          {},
-          this.publisher.context.organization
-        );
+        item.organization = Object.assign({}, this.publisher.context.organization);
         item.redactor = Object.assign({}, this.publisher.context.redactor);
         this.setItem(item);
       } else if (this.item) {
@@ -700,9 +536,7 @@ export default {
         this.setItem({});
       }
       if (
-        (this.linkedFilesToContent === null ||
-          this.linkedFilesToContent === undefined ||
-          this.linkedFilesToContent.length === 0) &&
+        (this.linkedFilesToContent === null || this.linkedFilesToContent === undefined || this.linkedFilesToContent.length === 0) &&
         this.contentData !== null &&
         this.contentData !== undefined &&
         this.contentData.linkedFiles

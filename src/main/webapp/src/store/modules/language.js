@@ -1,5 +1,5 @@
 const state = {
-  lang: "fr",
+  lang: 'fr',
 };
 
 const mutations = {

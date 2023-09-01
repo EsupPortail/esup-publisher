@@ -1,48 +1,31 @@
 <template>
   <h3 class="mt-3 mb-2">
-    {{ $t("manager.treeview.details.context.properties") }}
+    {{ $t('manager.treeview.details.context.properties') }}
   </h3>
   <div class="mb-3">
-    <button
-      type="button"
-      @click="detailSubject(context.id)"
-      class="btn btn-info btn-sm"
-    >
-      <span class="far fa-eye"></span>&nbsp;<span>{{
-        $t("entity.action.view")
-      }}</span>
+    <button type="button" @click="detailSubject(context.id)" class="btn btn-info btn-sm">
+      <span class="far fa-eye"></span>&nbsp;<span>{{ $t('entity.action.view') }}</span>
     </button>
   </div>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.title") }}</span>
+      <span>{{ $t('news.title') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.title }}</span>
     </dd>
   </dl>
-  <dl
-    class="row entity-details"
-    v-if="
-      context.enclosure &&
-      context.enclosure !== '' &&
-      context.enclosure !== 'http://'
-    "
-  >
+  <dl class="row entity-details" v-if="context.enclosure && context.enclosure !== '' && context.enclosure !== 'http://'">
     <dt class="col-sm-5">
-      <span>{{ $t("news.enclosure") }}</span>
+      <span>{{ $t('news.enclosure') }}</span>
     </dt>
     <dd class="col-sm-7">
-      <img
-        class="news-object img-fluid"
-        :src="getUrlEnclosure(context.enclosure)"
-        alt="image"
-      />
+      <img class="news-object img-fluid" :src="getUrlEnclosure(context.enclosure)" alt="image" />
     </dd>
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.status") }}</span>
+      <span>{{ $t('news.status') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ $t(getItemStatusLabel(context.status)) }}</span>
@@ -50,7 +33,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.summary") }}</span>
+      <span>{{ $t('news.summary') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.summary }}</span>
@@ -58,7 +41,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.body") }}</span>
+      <span>{{ $t('news.body') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.body }}</span>
@@ -66,7 +49,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.startDate") }}</span>
+      <span>{{ $t('news.startDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDate(context.startDate) }}</span>
@@ -74,7 +57,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.endDate") }}</span>
+      <span>{{ $t('news.endDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDate(context.endDate) }}</span>
@@ -82,17 +65,15 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.rssAllowed") }}</span>
+      <span>{{ $t('news.rssAllowed') }}</span>
     </dt>
     <dd class="col-sm-7">
-      <span
-        ><input type="checkbox" v-model="context.rssAllowed" disabled
-      /></span>
+      <span><input type="checkbox" v-model="context.rssAllowed" disabled /></span>
     </dd>
   </dl>
   <dl class="row entity-details" v-if="context.validatedBy">
     <dt class="col-sm-5">
-      <span>{{ $t("news.validatedBy") }}</span>
+      <span>{{ $t('news.validatedBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.validatedBy.displayName }}</span>
@@ -100,7 +81,7 @@
   </dl>
   <dl class="row entity-details" v-if="context.validatedDate">
     <dt class="col-sm-5">
-      <span>{{ $t("news.validatedDate") }}</span>
+      <span>{{ $t('news.validatedDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.validatedDate) }}</span>
@@ -108,7 +89,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.createdBy") }}</span>
+      <span>{{ $t('news.createdBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.createdBy.displayName }}</span>
@@ -116,7 +97,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.createdDate") }}</span>
+      <span>{{ $t('news.createdDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.createdDate) }}</span>
@@ -124,7 +105,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.lastModifiedBy") }}</span>
+      <span>{{ $t('news.lastModifiedBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.lastModifiedBy.displayName }}</span>
@@ -132,7 +113,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("news.lastModifiedDate") }}</span>
+      <span>{{ $t('news.lastModifiedDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.lastModifiedDate) }}</span>
@@ -141,27 +122,21 @@
 </template>
 
 <script>
-import DateUtils from "@/services/util/DateUtils";
-import store from "@/store/index.js";
+import DateUtils from '@/services/util/DateUtils';
+import store from '@/store/index.js';
 
 export default {
-  name: "News",
-  inject: ["context", "getEnumlabel", "detailSubject", "getUrlEnclosure"],
+  name: 'News',
+  inject: ['context', 'getEnumlabel', 'detailSubject', 'getUrlEnclosure'],
   methods: {
     formatDate(date) {
-      return DateUtils.formatDateToLongIntString(
-        date,
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateToLongIntString(date, store.getters.getLanguage);
     },
     formatDateAction(date) {
-      return DateUtils.formatDateTimeToLongIntString(
-        date,
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateTimeToLongIntString(date, store.getters.getLanguage);
     },
     getItemStatusLabel(name) {
-      return this.getEnumlabel("itemStatus", name) || "";
+      return this.getEnumlabel('itemStatus', name) || '';
     },
   },
 };

@@ -1,5 +1,5 @@
-import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
-import { toWidget } from "@ckeditor/ckeditor5-widget/src/utils";
+import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
 // Plugin pour gérer les icônes dans Ckeditor
 class IconEditingPlugin extends Plugin {
@@ -17,12 +17,12 @@ class IconEditingPlugin extends Plugin {
     // en :
     //
     // <icon-container iconClass="iconClass"></icon-container>
-    this.editor.model.schema.register("icon-container", {
-      allowWhere: "$text",
-      allowAttributesOf: "$text",
+    this.editor.model.schema.register('icon-container', {
+      allowWhere: '$text',
+      allowAttributesOf: '$text',
       isInline: true,
       isObject: true,
-      allowAttributes: ["iconClass"],
+      allowAttributes: ['iconClass'],
     });
   }
 
@@ -30,50 +30,46 @@ class IconEditingPlugin extends Plugin {
     const conversion = this.editor.conversion;
 
     // Conversion HTML vers objet icon-container
-    conversion.for("upcast").elementToElement({
+    conversion.for('upcast').elementToElement({
       view: {
-        name: "i",
+        name: 'i',
         classes: [{ key: /^(fa|fas|mdi)$/, value: true }],
       },
       model: (viewElement, { writer: modelWriter }) => {
         // Récupération de l'attribut 'class' de la balise i
-        const iconClass = viewElement.getAttribute("class");
-        return modelWriter.createElement("icon-container", { iconClass });
+        const iconClass = viewElement.getAttribute('class');
+        return modelWriter.createElement('icon-container', { iconClass });
       },
     });
 
     // Conversion icon-container vers HTML pour l'édition
-    conversion.for("editingDowncast").elementToElement({
-      model: "icon-container",
+    conversion.for('editingDowncast').elementToElement({
+      model: 'icon-container',
       view: (modelItem, { writer: viewWriter }) => {
-        const widgetElement = viewWriter.createContainerElement("span", {
-          class: "ck-icon-widget",
+        const widgetElement = viewWriter.createContainerElement('span', {
+          class: 'ck-icon-widget',
         });
         const faUIElement = createIconElement(modelItem, viewWriter);
-        viewWriter.insert(
-          viewWriter.createPositionAt(widgetElement, 0),
-          faUIElement
-        );
+        viewWriter.insert(viewWriter.createPositionAt(widgetElement, 0), faUIElement);
 
         return toWidget(widgetElement, viewWriter);
       },
     });
 
     // Conversion icon-container vers HTML pour le texte final
-    conversion.for("dataDowncast").elementToElement({
-      model: "icon-container",
-      view: (modelItem, { writer: viewWriter }) =>
-        createIconElement(modelItem, viewWriter),
+    conversion.for('dataDowncast').elementToElement({
+      model: 'icon-container',
+      view: (modelItem, { writer: viewWriter }) => createIconElement(modelItem, viewWriter),
     });
 
     // Méthode créant l'élément HTML à partir de l'objet icon-container
     function createIconElement(modelItem, viewWriter) {
-      const iconClass = modelItem.getAttribute("iconClass");
-      return viewWriter.createUIElement("icon", {}, function (domDocument) {
-        const iconDOMElement = domDocument.createElement("i");
-        iconDOMElement.setAttribute("class", iconClass);
-        iconDOMElement.setAttribute("aria-hidden", true);
-        iconDOMElement.innerHTML = "&nbsp;";
+      const iconClass = modelItem.getAttribute('iconClass');
+      return viewWriter.createUIElement('icon', {}, function (domDocument) {
+        const iconDOMElement = domDocument.createElement('i');
+        iconDOMElement.setAttribute('class', iconClass);
+        iconDOMElement.setAttribute('aria-hidden', true);
+        iconDOMElement.innerHTML = '&nbsp;';
 
         return iconDOMElement;
       });

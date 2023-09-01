@@ -1,5 +1,5 @@
-import UserService from "@/services/user/UserService";
-import GroupService from "@/services/entities/group/GroupService";
+import UserService from '@/services/user/UserService';
+import GroupService from '@/services/entities/group/GroupService';
 
 class SubjectService {
   userDisplayedAttrs = null;
@@ -7,16 +7,8 @@ class SubjectService {
   UserFonctionalAttrs = null;
 
   init() {
-    if (
-      !this.userDisplayedAttrs ||
-      !this.groupDisplayedAttrs ||
-      !this.UserFonctionalAttrs
-    ) {
-      return Promise.all([
-        UserService.attributes(),
-        GroupService.attributes(),
-        UserService.funtionalAttributes(),
-      ])
+    if (!this.userDisplayedAttrs || !this.groupDisplayedAttrs || !this.UserFonctionalAttrs) {
+      return Promise.all([UserService.attributes(), GroupService.attributes(), UserService.funtionalAttributes()])
         .then((results) => {
           if (results && results.length === 3) {
             this.userDisplayedAttrs = results[0].data;
@@ -64,9 +56,9 @@ class SubjectService {
 
   getSubjectInfos(type, id) {
     switch (type) {
-      case "PERSON":
+      case 'PERSON':
         return this.getUserInfos(id);
-      case "GROUP":
+      case 'GROUP':
         return this.getGroupInfos(id);
       default:
         return Promise.resolve({});

@@ -1,4 +1,4 @@
-import { Tooltip } from "bootstrap";
+import { Tooltip } from 'bootstrap';
 
 // Directive permettant d'afficher un tooltip
 // Utilisation :
@@ -14,23 +14,19 @@ import { Tooltip } from "bootstrap";
 const TooltipDirective = {
   createToolTip(el, binding) {
     let trigger;
-    if (
-      binding.modifiers.focus ||
-      binding.modifiers.hover ||
-      binding.modifiers.click
-    ) {
+    if (binding.modifiers.focus || binding.modifiers.hover || binding.modifiers.click) {
       const t = [];
-      if (binding.modifiers.focus) t.push("focus");
-      if (binding.modifiers.hover) t.push("hover");
-      if (binding.modifiers.click) t.push("click");
-      trigger = t.join(" ");
+      if (binding.modifiers.focus) t.push('focus');
+      if (binding.modifiers.hover) t.push('hover');
+      if (binding.modifiers.click) t.push('click');
+      trigger = t.join(' ');
     }
 
     /* eslint-disable-next-line no-new */
     new Tooltip(el, {
-      title: binding.value || "",
-      placement: binding.arg || "top",
-      trigger: trigger || "hover",
+      title: binding.value || '',
+      placement: binding.arg || 'top',
+      trigger: trigger || 'hover',
       html: binding.modifiers.html || false,
     });
   },

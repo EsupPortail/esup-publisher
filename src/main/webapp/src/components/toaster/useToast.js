@@ -1,11 +1,11 @@
-import { h, render } from "vue";
-import Toaster from "./Toaster.vue";
-import eventBus from "./Event.js";
+import { h, render } from 'vue';
+import Toaster from './Toaster.vue';
+import eventBus from './Event.js';
 
 function createComponent(component, props, parentContainer, slots = {}) {
   const vNode = h(component, props, slots);
-  const container = document.createElement("div");
-  container.classList.add("custom-toast-pending");
+  const container = document.createElement('div');
+  container.classList.add('custom-toast-pending');
   parentContainer.appendChild(container);
   render(vNode, container);
 
@@ -16,7 +16,7 @@ export const useToast = (globalProps = {}) => {
   return {
     open(options) {
       let message = null;
-      if (typeof options === "string") {
+      if (typeof options === 'string') {
         message = options;
       }
       const propsData = Object.assign({}, { message }, globalProps, options);
@@ -26,7 +26,7 @@ export const useToast = (globalProps = {}) => {
       };
     },
     clear() {
-      eventBus.$emit("toast-clear");
+      eventBus.$emit('toast-clear');
     },
     success(message, options = {}) {
       return this.open(
@@ -34,10 +34,10 @@ export const useToast = (globalProps = {}) => {
           {},
           {
             message,
-            type: "success",
+            type: 'success',
           },
-          options
-        )
+          options,
+        ),
       );
     },
     error(message, options = {}) {
@@ -46,10 +46,10 @@ export const useToast = (globalProps = {}) => {
           {},
           {
             message,
-            type: "error",
+            type: 'error',
           },
-          options
-        )
+          options,
+        ),
       );
     },
     info(message, options = {}) {
@@ -58,10 +58,10 @@ export const useToast = (globalProps = {}) => {
           {},
           {
             message,
-            type: "info",
+            type: 'info',
           },
-          options
-        )
+          options,
+        ),
       );
     },
     warning(message, options = {}) {
@@ -70,10 +70,10 @@ export const useToast = (globalProps = {}) => {
           {},
           {
             message,
-            type: "warning",
+            type: 'warning',
           },
-          options
-        )
+          options,
+        ),
       );
     },
     default(message, options = {}) {
@@ -82,10 +82,10 @@ export const useToast = (globalProps = {}) => {
           {},
           {
             message,
-            type: "default",
+            type: 'default',
           },
-          options
-        )
+          options,
+        ),
       );
     },
   };

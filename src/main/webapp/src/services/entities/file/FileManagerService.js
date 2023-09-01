@@ -1,10 +1,8 @@
-import FetchWrapper from "../../util/FetchWrapper";
+import FetchWrapper from '../../util/FetchWrapper';
 
 class FileManagerService {
   delete(entityId, isPublic, fileUri) {
-    return FetchWrapper.deleteJson(
-      "api/file/" + entityId + "/" + isPublic + "/" + fileUri
-    );
+    return FetchWrapper.deleteJson('api/file/' + entityId + '/' + isPublic + '/' + fileUri);
   }
 }
 

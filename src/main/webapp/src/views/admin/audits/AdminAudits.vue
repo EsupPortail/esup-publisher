@@ -1,27 +1,15 @@
 <template>
   <div>
-    <h2>{{ $t("audits.title") }}</h2>
+    <h2>{{ $t('audits.title') }}</h2>
 
     <div class="row">
       <div class="col-lg-7">
-        <h4>{{ $t("audits.filter.title") }}</h4>
+        <h4>{{ $t('audits.filter.title') }}</h4>
         <p class="input-group">
-          <span class="input-group-text">{{ $t("audits.filter.from") }}</span>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            name="start"
-            v-model="_fromDate"
-            required
-          />
-          <span class="input-group-text">{{ $t("audits.filter.to") }}</span>
-          <input
-            type="date"
-            class="form-control form-control-sm"
-            name="end"
-            v-model="_toDate"
-            required
-          />
+          <span class="input-group-text">{{ $t('audits.filter.from') }}</span>
+          <input type="date" class="form-control form-control-sm" name="start" v-model="_fromDate" required />
+          <span class="input-group-text">{{ $t('audits.filter.to') }}</span>
+          <input type="date" class="form-control form-control-sm" name="end" v-model="_toDate" required />
         </p>
       </div>
     </div>
@@ -30,16 +18,16 @@
       <thead>
         <tr>
           <th @click="setSorting('timestamp')">
-            {{ $t("audits.table.header.date") }}
+            {{ $t('audits.table.header.date') }}
           </th>
           <th @click="setSorting('principal')">
-            {{ $t("audits.table.header.principal") }}
+            {{ $t('audits.table.header.principal') }}
           </th>
           <th @click="setSorting('type')">
-            {{ $t("audits.table.header.status") }}
+            {{ $t('audits.table.header.status') }}
           </th>
           <th @click="setSorting('data.message')">
-            {{ $t("audits.table.header.data") }}
+            {{ $t('audits.table.header.data') }}
           </th>
         </tr>
       </thead>
@@ -55,10 +43,7 @@
           <td>{{ audit.type }}</td>
           <td>
             <span v-if="audit.data.message">{{ audit.data.message }}</span>
-            <span v-if="audit.data.remoteAddress"
-              >{{ $t("audits.table.data.remoteAddress") }}
-              {{ audit.data.remoteAddress }}</span
-            >
+            <span v-if="audit.data.remoteAddress">{{ $t('audits.table.data.remoteAddress') }} {{ audit.data.remoteAddress }}</span>
           </td>
         </tr>
       </tbody>
@@ -67,12 +52,12 @@
 </template>
 
 <script>
-import AuditsService from "@/services/admin/AuditsService";
-import DateUtils from "@/services/util/DateUtils";
-import store from "@/store/index.js";
+import AuditsService from '@/services/admin/AuditsService';
+import DateUtils from '@/services/util/DateUtils';
+import store from '@/store/index.js';
 
 export default {
-  name: "AdminAudits",
+  name: 'AdminAudits',
   data() {
     return {
       // Liste des audits
@@ -114,11 +99,7 @@ export default {
 
       // Tri des audits
       if (this.predicate !== null) {
-        filterAudits.sort(
-          (conf1, conf2) =>
-            conf1[this.predicate].localeCompare(conf2[this.predicate]) *
-            (this.reverse ? -1 : 1)
-        );
+        filterAudits.sort((conf1, conf2) => conf1[this.predicate].localeCompare(conf2[this.predicate]) * (this.reverse ? -1 : 1));
       }
 
       return filterAudits;
@@ -132,22 +113,14 @@ export default {
     today() {
       // Today + 1 day - needed if the current day must be included
       var today = new Date();
-      this.toDate = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() + 1
-      );
+      this.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     },
     previousMonth() {
       var fromDate = new Date();
       if (fromDate.getMonth() === 0) {
         fromDate = new Date(fromDate.getFullYear() - 1, 0, fromDate.getDate());
       } else {
-        fromDate = new Date(
-          fromDate.getFullYear(),
-          fromDate.getMonth() - 1,
-          fromDate.getDate()
-        );
+        fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
       }
 
       this.fromDate = fromDate;
@@ -158,10 +131,7 @@ export default {
       });
     },
     formatDate(date) {
-      return DateUtils.formatDateTimeToShortIntString(
-        DateUtils.convertDateTimeFromServer(date),
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateTimeToShortIntString(DateUtils.convertDateTimeFromServer(date), store.getters.getLanguage);
     },
   },
   created() {

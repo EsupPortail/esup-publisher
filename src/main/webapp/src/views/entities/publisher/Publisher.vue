@@ -1,6 +1,6 @@
 <template>
   <div class="publisher">
-    <h2>{{ $t("publisher.home.title") }}</h2>
+    <h2>{{ $t('publisher.home.title') }}</h2>
     <button
       class="btn btn-primary btn-lg"
       data-bs-toggle="modal"
@@ -11,7 +11,7 @@
       "
     >
       <span class="fas fa-bolt"></span>
-      <span>{{ $t("publisher.home.createLabel") }}</span>
+      <span>{{ $t('publisher.home.createLabel') }}</span>
     </button>
     <div
       class="modal fade"
@@ -27,7 +27,7 @@
           <form name="editForm" role="form" class="was-validated" novalidate show-validation>
             <div class="modal-header">
               <h4 class="modal-title" id="myPublisherLabel">
-                {{ $t("publisher.home.createOrEditLabel") }}
+                {{ $t('publisher.home.createOrEditLabel') }}
               </h4>
               <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal" @click="clear"></button>
             </div>
@@ -38,43 +38,43 @@
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="organization">{{ $t("publisher.context.organization") }}</label>
+                <label class="control-label" for="organization">{{ $t('publisher.context.organization') }}</label>
                 <select class="form-select" id="organization" name="organization" v-model="publisher.context.organization" required>
                   <option v-for="organization in organizations" :key="organization.id" :value="organization">
                     {{ organization.displayName }}
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('organization', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="reader">{{ $t("publisher.context.reader") }}</label>
+                <label class="control-label" for="reader">{{ $t('publisher.context.reader') }}</label>
                 <select class="form-select" id="reader" name="reader" v-model="publisher.context.reader" required>
                   <option v-for="reader in readers" :key="reader.id" :value="reader">
                     {{ reader.displayName }}
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('reader', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="redactor">{{ $t("publisher.context.redactor") }}</label>
+                <label class="control-label" for="redactor">{{ $t('publisher.context.redactor') }}</label>
                 <select class="form-select" id="redactor" name="redactor" v-model="publisher.context.redactor" required>
                   <option v-for="redactor in redactors" :key="redactor.id" :value="redactor">
                     {{ redactor.displayName }}
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('redactor', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="displayName" class="control-label">{{ $t("publisher.displayName") }}</label>
+                <label for="displayName" class="control-label">{{ $t('publisher.displayName') }}</label>
                 <input
                   type="text"
                   class="form-control"
@@ -86,30 +86,30 @@
                   maxlength="50"
                 />
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.MIN_LENGTH)">
-                  {{ $t("entity.validation.minlength", { min: "3" }) }}
+                  {{ $t('entity.validation.minlength', { min: '3' }) }}
                 </div>
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayName', formErrors.MAX_LENGTH)">
-                  {{ $t("entity.validation.maxlength", { max: "50" }) }}
+                  {{ $t('entity.validation.maxlength', { max: '50' }) }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="permissionType">{{ $t("publisher.permissionType") }}</label>
+                <label class="control-label" for="permissionType">{{ $t('publisher.permissionType') }}</label>
                 <select class="form-select" id="permissionType" name="permissionType" v-model="publisher.permissionType" required>
                   <option v-for="permissionClass in permissionClasses" :key="permissionClass.id" :value="permissionClass.name">
                     {{ $t(permissionClass.label) }}
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('permissionType', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="defaultDisplayOrder">{{ $t("publisher.defaultDisplayOrder") }}</label>
+                <label class="control-label" for="defaultDisplayOrder">{{ $t('publisher.defaultDisplayOrder') }}</label>
                 <select
                   class="form-select"
                   id="defaultDisplayOrder"
@@ -127,12 +127,12 @@
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('defaultDisplayOrder', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="used" class="control-label">{{ $t("publisher.used") }}</label>
+                <label for="used" class="control-label">{{ $t('publisher.used') }}</label>
                 <input
                   type="checkbox"
                   class="form-check-input d-block mx-auto"
@@ -144,7 +144,7 @@
               </div>
 
               <div class="form-group">
-                <label for="displayOrder" class="control-label">{{ $t("publisher.displayOrder") }}</label>
+                <label for="displayOrder" class="control-label">{{ $t('publisher.displayOrder') }}</label>
                 <input
                   type="number"
                   class="form-control"
@@ -157,18 +157,18 @@
                   :disabled="publisher.defaultDisplayOrder !== 'CUSTOM'"
                 />
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayOrder', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayOrder', formErrors.MIN_VALUE)">
-                  {{ $t("entity.validation.min", { min: "0" }) }}
+                  {{ $t('entity.validation.min', { min: '0' }) }}
                 </div>
                 <div class="invalid-feedback" v-if="formValidator.hasError('displayOrder', formErrors.MAX_VALUE)">
-                  {{ $t("entity.validation.max", { max: "9" }) }}
+                  {{ $t('entity.validation.max', { max: '9' }) }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="control-label" for="defaultItemsDisplayOrder">{{ $t("publisher.defaultItemsDisplayOrder") }}</label>
+                <label class="control-label" for="defaultItemsDisplayOrder">{{ $t('publisher.defaultItemsDisplayOrder') }}</label>
                 <select
                   class="form-select"
                   id="defaultItemsDisplayOrder"
@@ -186,12 +186,12 @@
                   </option>
                 </select>
                 <div class="invalid-feedback" v-if="formValidator.hasError('defaultItemsDisplayOrder', formErrors.REQUIRED)">
-                  {{ $t("entity.validation.required") }}
+                  {{ $t('entity.validation.required') }}
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="hasSubPermsManagement" class="control-label">{{ $t("publisher.hasSubPermsManagement") }}</label>
+                <label for="hasSubPermsManagement" class="control-label">{{ $t('publisher.hasSubPermsManagement') }}</label>
                 <input
                   type="checkbox"
                   class="form-check-input d-block mx-auto"
@@ -203,7 +203,7 @@
               </div>
 
               <div class="form-group">
-                <label for="doHighlight" class="control-label">{{ $t("publisher.doHighlight") }}</label>
+                <label for="doHighlight" class="control-label">{{ $t('publisher.doHighlight') }}</label>
                 <input
                   type="checkbox"
                   class="form-check-input d-block mx-auto"
@@ -217,10 +217,10 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
-                <span class="fas fa-times"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
               </button>
               <button type="button" class="btn btn-primary" :disabled="formValidator.hasError()" @click="createPublisher">
-                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{ $t("entity.action.save") }}</span>
+                <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{ $t('entity.action.save') }}</span>
               </button>
             </div>
           </form>
@@ -233,18 +233,18 @@
         <div class="modal-content">
           <form name="deleteForm">
             <div class="modal-header">
-              <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
+              <h4 class="modal-title">{{ $t('entity.delete.title') }}</h4>
               <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal" @click="clear"></button>
             </div>
             <div class="modal-body">
-              <p>{{ $t("publisher.delete.question", { id: publisher.id }) }}</p>
+              <p>{{ $t('publisher.delete.question', { id: publisher.id }) }}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clear">
-                <span class="fas fa-times"></span>&nbsp;<span>{{ $t("entity.action.cancel") }}</span>
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
               </button>
               <button type="button" class="btn btn-danger" @click="confirmDelete(publisher.id)">
-                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t("entity.action.delete") }}</span>
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
               </button>
             </div>
           </form>
@@ -256,14 +256,14 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>{{ $t("publisher.context.key") }}</th>
-            <th>{{ $t("publisher.displayName") }}</th>
-            <th>{{ $t("publisher.permissionType") }}</th>
-            <th>{{ $t("publisher.defaultDisplayOrder") }}</th>
-            <th>{{ $t("publisher.used") }}</th>
-            <th>{{ $t("publisher.displayOrder") }}</th>
-            <th>{{ $t("publisher.hasSubPermsManagement") }}</th>
-            <th>{{ $t("publisher.doHighlight") }}</th>
+            <th>{{ $t('publisher.context.key') }}</th>
+            <th>{{ $t('publisher.displayName') }}</th>
+            <th>{{ $t('publisher.permissionType') }}</th>
+            <th>{{ $t('publisher.defaultDisplayOrder') }}</th>
+            <th>{{ $t('publisher.used') }}</th>
+            <th>{{ $t('publisher.displayOrder') }}</th>
+            <th>{{ $t('publisher.hasSubPermsManagement') }}</th>
+            <th>{{ $t('publisher.doHighlight') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -298,13 +298,13 @@
             </td>
             <td>
               <button type="submit" @click="publisherDetail(publisher.id)" class="btn btn-info btn-sm me-1">
-                <span class="far fa-eye"></span>&nbsp;<span>{{ $t("entity.action.view") }}</span>
+                <span class="far fa-eye"></span>&nbsp;<span>{{ $t('entity.action.view') }}</span>
               </button>
               <button type="submit" @click="update(publisher.id)" class="btn btn-primary btn-sm me-1">
-                <span class="fas fa-pencil"></span>&nbsp;<span>{{ $t("entity.action.edit") }}</span>
+                <span class="fas fa-pencil"></span>&nbsp;<span>{{ $t('entity.action.edit') }}</span>
               </button>
               <button type="submit" @click="deletePublisher(publisher.id)" class="btn btn-danger btn-sm">
-                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t("entity.action.delete") }}</span>
+                <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
               </button>
             </td>
           </tr>
@@ -315,16 +315,16 @@
 </template>
 
 <script>
-import PublisherService from "@/services/entities/publisher/PublisherService";
-import RedactorService from "@/services/entities/redactor/RedactorService";
-import OrganizationService from "@/services/entities/organization/OrganizationService";
-import ReaderService from "@/services/entities/reader/ReaderService";
-import EnumDatasService from "@/services/entities/enum/EnumDatasService";
-import { FormValidationUtils, FormErrorType } from "@/services/util/FormValidationUtils";
-import { Modal } from "bootstrap";
+import PublisherService from '@/services/entities/publisher/PublisherService';
+import RedactorService from '@/services/entities/redactor/RedactorService';
+import OrganizationService from '@/services/entities/organization/OrganizationService';
+import ReaderService from '@/services/entities/reader/ReaderService';
+import EnumDatasService from '@/services/entities/enum/EnumDatasService';
+import { FormValidationUtils, FormErrorType } from '@/services/util/FormValidationUtils';
+import { Modal } from 'bootstrap';
 
 export default {
-  name: "Publisher",
+  name: 'Publisher',
   data() {
     return {
       publishers: [],
@@ -362,14 +362,14 @@ export default {
     filteredDisplayOrderTypeList() {
       // removing CUSTOM type until it is implemented
       return this.displayOrderTypeList.filter((element) => {
-        return element.name !== "START_DATE";
+        return element.name !== 'START_DATE';
       });
     },
     // Liste des types de Display Order filtrés
     filteredItemsDisplayOrderTypeList() {
       // removing CUSTOM type until it is implemented - Not granted for items !
       return this.displayOrderTypeList.filter((element) => {
-        return element.name !== "CUSTOM";
+        return element.name !== 'CUSTOM';
       });
     },
   },
@@ -388,13 +388,13 @@ export default {
     // Méthode permettant d'initialiser le FormValidator
     initFormValidator() {
       this.formValidator.clear();
-      this.formValidator.checkTextFieldValidity("organization", this.publisher.context.organization, null, null, true);
-      this.formValidator.checkTextFieldValidity("reader", this.publisher.context.reader, null, null, true);
-      this.formValidator.checkTextFieldValidity("redactor", this.publisher.context.redactor, null, null, true);
-      this.formValidator.checkTextFieldValidity("displayName", this.publisher.displayName, 3, 50, true);
-      this.formValidator.checkTextFieldValidity("permissionType", this.publisher.permissionType, null, null, true);
-      this.formValidator.checkTextFieldValidity("defaultDisplayOrder", this.publisher.defaultDisplayOrder, null, null, true);
-      this.formValidator.checkNumberFieldValidity("displayOrder", this.publisher.displayOrder, 0, 9, true);
+      this.formValidator.checkTextFieldValidity('organization', this.publisher.context.organization, null, null, true);
+      this.formValidator.checkTextFieldValidity('reader', this.publisher.context.reader, null, null, true);
+      this.formValidator.checkTextFieldValidity('redactor', this.publisher.context.redactor, null, null, true);
+      this.formValidator.checkTextFieldValidity('displayName', this.publisher.displayName, 3, 50, true);
+      this.formValidator.checkTextFieldValidity('permissionType', this.publisher.permissionType, null, null, true);
+      this.formValidator.checkTextFieldValidity('defaultDisplayOrder', this.publisher.defaultDisplayOrder, null, null, true);
+      this.formValidator.checkNumberFieldValidity('displayOrder', this.publisher.displayOrder, 0, 9, true);
     },
     reset() {
       this.publishers = [];
@@ -478,36 +478,36 @@ export default {
     },
     publisherDetail(publisherId) {
       this.$router.push({
-        name: "AdminEntityPublisherDetails",
+        name: 'AdminEntityPublisherDetails',
         params: { id: publisherId },
       });
     },
     getPermissionClassLabel(name) {
-      return this.getEnumlabel("permissionClass", name);
+      return this.getEnumlabel('permissionClass', name);
     },
     getDisplayOrderTypeLabel(name) {
-      return this.getEnumlabel("displayOrderType", name);
+      return this.getEnumlabel('displayOrderType', name);
     },
     getEnumlabel(type, name) {
       var data;
       switch (type) {
-        case "permissionClass":
+        case 'permissionClass':
           data = this.permissionClasses.find((val) => {
             return val.name === name;
           });
-          return data ? data.label : "";
-        case "displayOrderType":
+          return data ? data.label : '';
+        case 'displayOrderType':
           data = this.displayOrderTypeList.find((val) => {
             return val.name === name;
           });
-          return data ? data.label : "";
+          return data ? data.label : '';
       }
-      return "";
+      return '';
     },
     onChangeDefaultDisplayOrder() {
       // Au changement de type d'ordre d'affichage du contexte, si celui-ce est différent de CUSTOM
       // et que l'ordre d'affichage est invalide, on le passe à 0
-      if (this.publisher.defaultDisplayOrder !== "CUSTOM" && this.formValidator.hasError("displayOrder")) {
+      if (this.publisher.defaultDisplayOrder !== 'CUSTOM' && this.formValidator.hasError('displayOrder')) {
         this.publisher.displayOrder = 0;
       }
     },
@@ -548,26 +548,26 @@ export default {
   },
   // Listeners en charge de vérifier la validité des champs du formulaire
   watch: {
-    "publisher.context.organization"(newVal) {
-      this.formValidator.checkTextFieldValidity("organization", newVal, null, null, true);
+    'publisher.context.organization'(newVal) {
+      this.formValidator.checkTextFieldValidity('organization', newVal, null, null, true);
     },
-    "publisher.context.reader"(newVal) {
-      this.formValidator.checkTextFieldValidity("reader", newVal, null, null, true);
+    'publisher.context.reader'(newVal) {
+      this.formValidator.checkTextFieldValidity('reader', newVal, null, null, true);
     },
-    "publisher.context.redactor"(newVal) {
-      this.formValidator.checkTextFieldValidity("redactor", newVal, null, null, true);
+    'publisher.context.redactor'(newVal) {
+      this.formValidator.checkTextFieldValidity('redactor', newVal, null, null, true);
     },
-    "publisher.displayName"(newVal) {
-      this.formValidator.checkTextFieldValidity("displayName", newVal, 3, 50, true);
+    'publisher.displayName'(newVal) {
+      this.formValidator.checkTextFieldValidity('displayName', newVal, 3, 50, true);
     },
-    "publisher.permissionType"(newVal) {
-      this.formValidator.checkTextFieldValidity("permissionType", newVal, null, null, true);
+    'publisher.permissionType'(newVal) {
+      this.formValidator.checkTextFieldValidity('permissionType', newVal, null, null, true);
     },
-    "publisher.defaultDisplayOrder"(newVal) {
-      this.formValidator.checkTextFieldValidity("defaultDisplayOrder", newVal, null, null, true);
+    'publisher.defaultDisplayOrder'(newVal) {
+      this.formValidator.checkTextFieldValidity('defaultDisplayOrder', newVal, null, null, true);
     },
-    "publisher.displayOrder"(newVal) {
-      this.formValidator.checkNumberFieldValidity("displayOrder", newVal, 0, 9, true);
+    'publisher.displayOrder'(newVal) {
+      this.formValidator.checkNumberFieldValidity('displayOrder', newVal, 0, 9, true);
     },
   },
 };

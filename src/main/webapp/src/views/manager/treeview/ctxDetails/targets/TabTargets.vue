@@ -1,69 +1,35 @@
 <template>
   <div>
-    <h3
-      class="mt-3 mb-2"
-      v-if="
-        context.contextKey.keyType !== 'ORGANIZATION' &&
-        context.contextKey.keyType !== 'PUBLISHER'
-      "
-    >
-      {{ $t("manager.treeview.details.targets") }}
+    <h3 class="mt-3 mb-2" v-if="context.contextKey.keyType !== 'ORGANIZATION' && context.contextKey.keyType !== 'PUBLISHER'">
+      {{ $t('manager.treeview.details.targets') }}
     </h3>
-    <h3
-      class="mt-3 mb-2"
-      v-if="
-        context.contextKey.keyType === 'ORGANIZATION' ||
-        context.contextKey.keyType === 'PUBLISHER'
-      "
-    >
-      {{ $t("manager.treeview.details.defaultTargets") }}
+    <h3 class="mt-3 mb-2" v-if="context.contextKey.keyType === 'ORGANIZATION' || context.contextKey.keyType === 'PUBLISHER'">
+      {{ $t('manager.treeview.details.defaultTargets') }}
     </h3>
 
     <SubjectDetail ref="subjectDetail"></SubjectDetail>
 
-    <div
-      v-show="addSubs"
-      aria-labelledby="addSubscriberOnContext"
-      aria-hidden="true"
-    >
+    <div v-show="addSubs" aria-labelledby="addSubscriberOnContext" aria-hidden="true">
       <form name="editSubscriberForm" role="form" novalidate>
         <div class="header">
           <h4 id="mySubscriberLabel">
-            {{ $t("subscriber.home.createOrEditLabel") }}
+            {{ $t('subscriber.home.createOrEditLabel') }}
           </h4>
         </div>
         <div class="body">
           <div class="form-group" v-if="showSubscribeType()">
-            <label class="control-label" for="subscribeType">{{
-              $t("subscriber.subscribeType")
-            }}</label>
-            <select
-              class="form-select"
-              id="subscribeType"
-              name="subscribeType"
-              v-model="subscriber.subscribeType"
-            >
-              <option
-                v-for="subscribeType in subscribeTypeList"
-                :key="subscribeType.id"
-                :value="subscribeType.name"
-              >
+            <label class="control-label" for="subscribeType">{{ $t('subscriber.subscribeType') }}</label>
+            <select class="form-select" id="subscribeType" name="subscribeType" v-model="subscriber.subscribeType">
+              <option v-for="subscribeType in subscribeTypeList" :key="subscribeType.id" :value="subscribeType.name">
                 {{ $t(subscribeType.label) }}
               </option>
             </select>
-            <div
-              class="invalid-feedback d-block"
-              v-if="
-                !subscriber.subscribeType || subscriber.subscribeType === {}
-              "
-            >
-              {{ $t("entity.validation.required") }}
+            <div class="invalid-feedback d-block" v-if="!subscriber.subscribeType || subscriber.subscribeType === {}">
+              {{ $t('entity.validation.required') }}
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label">{{
-              $t("manager.publish.targets.search")
-            }}</label>
+            <label class="control-label">{{ $t('manager.publish.targets.search') }}</label>
             <esup-subject-search-button
               v-if="!isSubjectSelected() && isDatasLoad"
               .searchId="'targetSubject'"
@@ -78,153 +44,90 @@
                   .config="subjectInfosConfig"
                   .onSubjectClicked="() => targetDetail(selectedSubject)"
                 >
-                  <a
-                    @click.prevent="removeSelectedSubject()"
-                    v-tooltip="$t('manager.publish.targets.remove')"
-                    href=""
+                  <a @click.prevent="removeSelectedSubject()" v-tooltip="$t('manager.publish.targets.remove')" href=""
                     ><i class="far fa-trash-can text-danger"></i></a
                   >&nbsp;
                 </esup-subject-infos>
               </li>
             </ul>
             <div class="invalid-feedback d-block" v-if="!isSubjectSelected()">
-              {{ $t("entity.validation.required") }}
+              {{ $t('entity.validation.required') }}
             </div>
           </div>
         </div>
         <div class="footer">
-          <button
-            type="button"
-            class="btn btn-default btn-outline-dark me-1"
-            @click="clearSubscriber"
-          >
-            <span class="fas fa-times"></span>&nbsp;<span>{{
-              $t("entity.action.cancel")
-            }}</span>
+          <button type="button" class="btn btn-default btn-outline-dark me-1" @click="clearSubscriber">
+            <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
           </button>
           <button
             type="button"
-            :disabled="
-              !subscriber.subscribeType ||
-              subscriber.subscribeType === {} ||
-              !isSubjectSelected()
-            "
+            :disabled="!subscriber.subscribeType || subscriber.subscribeType === {} || !isSubjectSelected()"
             class="btn btn-primary"
             @click="createSubscriber()"
           >
-            <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
-              $t("entity.action.save")
-            }}</span>
+            <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{ $t('entity.action.save') }}</span>
           </button>
         </div>
       </form>
     </div>
 
     <div v-show="!addSubs">
-      <button
-        class="btn btn-primary"
-        @click="addSubscriber()"
-        v-if="canEditTargetCtx"
-      >
+      <button class="btn btn-primary" @click="addSubscriber()" v-if="canEditTargetCtx">
         <span class="fas fa-bolt"></span>
-        <span>{{ $t("subscriber.home.createLabel") }}</span>
+        <span>{{ $t('subscriber.home.createLabel') }}</span>
       </button>
 
-      <div
-        class="modal fade"
-        id="deleteTargetConfirmation"
-        ref="deleteTargetConfirmation"
-      >
+      <div class="modal fade" id="deleteTargetConfirmation" ref="deleteTargetConfirmation">
         <div class="modal-dialog">
           <div class="modal-content">
             <form name="deleteForm">
               <div class="modal-header">
-                <h4 class="modal-title">{{ $t("entity.delete.title") }}</h4>
-                <button
-                  type="button"
-                  class="btn-close"
-                  aria-hidden="true"
-                  data-bs-dismiss="modal"
-                ></button>
+                <h4 class="modal-title">{{ $t('entity.delete.title') }}</h4>
+                <button type="button" class="btn-close" aria-hidden="true" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <p>{{ $t("subscriber.delete.question") }}</p>
+                <p>{{ $t('subscriber.delete.question') }}</p>
               </div>
               <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-default btn-outline-dark"
-                  data-bs-dismiss="modal"
-                  @click="clearSubscriber"
-                >
-                  <span class="fas fa-times"></span>&nbsp;<span>{{
-                    $t("entity.action.cancel")
-                  }}</span>
+                <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal" @click="clearSubscriber">
+                  <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  @click="confirmDeleteSubscriber(subscriber)"
-                >
-                  <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                    $t("entity.action.delete")
-                  }}</span>
+                <button type="button" class="btn btn-danger" @click="confirmDeleteSubscriber(subscriber)">
+                  <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <div
-        class="table-responsive"
-        :class="{ 'table-responsive-to-cards': showSubscribeType() }"
-      >
+      <div class="table-responsive" :class="{ 'table-responsive-to-cards': showSubscribeType() }">
         <table class="table table-striped">
           <thead>
             <tr>
               <th v-if="showSubscribeType()">
-                {{ $t("subscriber.subscribeType") }}
+                {{ $t('subscriber.subscribeType') }}
               </th>
-              <th rowspan="2">{{ $t("subscriber.subject") }}</th>
+              <th rowspan="2">{{ $t('subscriber.subject') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="target in targets" :key="getTargetId(target)">
-              <td
-                :data-label="$t('subscriber.subscribeType')"
-                v-if="showSubscribeType()"
-              >
+              <td :data-label="$t('subscriber.subscribeType')" v-if="showSubscribeType()">
                 {{ $t(getSubscribeTypeLabel(target.subscribeType)) }}
               </td>
-              <td
-                :data-label="$t('subscriber.subject')"
-                v-if="target.subjectDTO"
-              >
+              <td :data-label="$t('subscriber.subject')" v-if="target.subjectDTO">
                 <esup-subject-infos
                   .subject="target.subjectDTO"
                   .config="subjectInfosConfig"
                   .onSubjectClicked="() => targetDetail(target)"
                 ></esup-subject-infos>
               </td>
-              <td
-                :data-label="$t('subscriber.subject')"
-                v-if="!target.subjectDTO"
-              >
-                <esup-subject-infos
-                  .subject="target.subjectKeyExtendedDTO"
-                  .config="subjectInfosConfig"
-                ></esup-subject-infos>
+              <td :data-label="$t('subscriber.subject')" v-if="!target.subjectDTO">
+                <esup-subject-infos .subject="target.subjectKeyExtendedDTO" .config="subjectInfosConfig"></esup-subject-infos>
               </td>
               <td class="action">
-                <button
-                  type="submit"
-                  v-if="canEditTargetCtx"
-                  @click="deleteSubscriber(target)"
-                  class="btn btn-danger"
-                >
-                  <span class="far fa-trash-can"></span>&nbsp;<span>{{
-                    $t("entity.action.delete")
-                  }}</span>
+                <button type="submit" v-if="canEditTargetCtx" @click="deleteSubscriber(target)" class="btn btn-danger">
+                  <span class="far fa-trash-can"></span>&nbsp;<span>{{ $t('entity.action.delete') }}</span>
                 </button>
               </td>
             </tr>
@@ -236,20 +139,20 @@
 </template>
 
 <script>
-import { Modal } from "bootstrap";
-import GroupService from "@/services/entities/group/GroupService";
-import SubjectService from "@/services/params/SubjectService";
-import SubscriberService from "@/services/entities/subscriber/SubscriberService";
-import Base64Utils from "@/services/util/Base64Utils";
-import UserService from "@/services/user/UserService";
-import SubjectDetail from "@/views/entities/subject/SubjectDetail";
-import CommonUtils from "@/services/util/CommonUtils";
-import i18n from "@/i18n";
+import { Modal } from 'bootstrap';
+import GroupService from '@/services/entities/group/GroupService';
+import SubjectService from '@/services/params/SubjectService';
+import SubscriberService from '@/services/entities/subscriber/SubscriberService';
+import Base64Utils from '@/services/util/Base64Utils';
+import UserService from '@/services/user/UserService';
+import SubjectDetail from '@/views/entities/subject/SubjectDetail';
+import CommonUtils from '@/services/util/CommonUtils';
+import i18n from '@/i18n';
 
 const { t } = i18n.global;
 
 export default {
-  name: "TabTargets",
+  name: 'TabTargets',
   components: {
     SubjectDetail,
   },
@@ -281,15 +184,15 @@ export default {
     };
   },
   inject: [
-    "context",
-    "targets",
-    "setTargets",
-    "ctxType",
-    "getEnumlabel",
-    "getHasTargetManagment",
-    "getSubjectTypeList",
-    "load",
-    "subjectInfosConfig",
+    'context',
+    'targets',
+    'setTargets',
+    'ctxType',
+    'getEnumlabel',
+    'getHasTargetManagment',
+    'getSubjectTypeList',
+    'load',
+    'subjectInfosConfig',
   ],
   computed: {
     userDisplayedAttrs() {
@@ -301,9 +204,7 @@ export default {
   },
   methods: {
     initDatas() {
-      this.subscribeTypeList = [
-        { name: "FORCED", id: 0, label: "enum.subscribe.forced.title" },
-      ];
+      this.subscribeTypeList = [{ name: 'FORCED', id: 0, label: 'enum.subscribe.forced.title' }];
       this.loadTreeDataSearchButton();
     },
     // Chargement du niveau 0 du treeview pour le webcomponent esup-subject-search-button
@@ -314,12 +215,9 @@ export default {
         subContexts: [],
       }).then((response) => {
         this.treeData = response.data;
-        this.treeData.forEach((element) =>
-          this.initTreeNodeProperties(element)
-        );
+        this.treeData.forEach((element) => this.initTreeNodeProperties(element));
         this.subjectSearchButtonConfig.treeGroupDatas = this.treeData;
-        this.subjectSearchButtonConfig.userDisplayedAttrs =
-          this.userDisplayedAttrs;
+        this.subjectSearchButtonConfig.userDisplayedAttrs = this.userDisplayedAttrs;
         this.subjectSearchButtonConfig.extendedAttrs = this.userFonctionalAttrs;
         this.subjectSearchButtonConfig.getGroupMembers = (id) =>
           GroupService.userMembers(id).then((res) => {
@@ -344,9 +242,7 @@ export default {
         search: id,
         subContexts: [],
       }).then((response) => {
-        response.data.forEach((element) =>
-          this.initTreeNodeProperties(element)
-        );
+        response.data.forEach((element) => this.initTreeNodeProperties(element));
         return response.data;
       });
     },
@@ -357,10 +253,7 @@ export default {
       }
     },
     initEditTarget() {
-      UserService.canEditCtxTargets(
-        this.context.contextKey.keyId,
-        this.context.contextKey.keyType
-      ).then((response) => {
+      UserService.canEditCtxTargets(this.context.contextKey.keyId, this.context.contextKey.keyType).then((response) => {
         this.canEditTargetCtx = response.data.value;
         this.isDatasLoad = true;
       });
@@ -380,24 +273,15 @@ export default {
     // Chargement des données d'une cible en vu de sa suppression
     deleteSubscriber(target) {
       if (target.subjectDTO && target.subjectDTO !== {}) {
-        this.subjectCtx.subject_id = Base64Utils.encode(
-          target.subjectDTO.modelId.keyId
-        );
-        this.subjectCtx.subject_type = this.getSubjectTypeList(
-          target.subjectDTO.modelId.keyType
-        );
-        this.subjectCtx.subject_attribute = "ID";
+        this.subjectCtx.subject_id = Base64Utils.encode(target.subjectDTO.modelId.keyId);
+        this.subjectCtx.subject_type = this.getSubjectTypeList(target.subjectDTO.modelId.keyType);
+        this.subjectCtx.subject_attribute = 'ID';
         this.subjectCtx.ctx_id = target.contextKeyDTO.keyId;
         this.subjectCtx.ctx_type = target.contextKeyDTO.keyType;
       } else {
-        this.subjectCtx.subject_id = Base64Utils.encode(
-          target.subjectKeyExtendedDTO.keyValue
-        );
-        this.subjectCtx.subject_type = this.getSubjectTypeList(
-          target.subjectKeyExtendedDTO.keyType
-        );
-        this.subjectCtx.subject_attribute =
-          target.subjectKeyExtendedDTO.keyAttribute;
+        this.subjectCtx.subject_id = Base64Utils.encode(target.subjectKeyExtendedDTO.keyValue);
+        this.subjectCtx.subject_type = this.getSubjectTypeList(target.subjectKeyExtendedDTO.keyType);
+        this.subjectCtx.subject_attribute = target.subjectKeyExtendedDTO.keyAttribute;
         this.subjectCtx.ctx_id = target.contextKeyDTO.keyId;
         this.subjectCtx.ctx_type = target.contextKeyDTO.keyType;
       }
@@ -408,14 +292,9 @@ export default {
     },
     // Suppression de la cible
     confirmDeleteSubscriber(target) {
-      this.subjectCtx.subject_id = Base64Utils.encode(
-        target.subjectCtxId.subject.keyValue
-      );
-      this.subjectCtx.subject_type = this.getSubjectTypeList(
-        target.subjectCtxId.subject.keyType
-      );
-      this.subjectCtx.subject_attribute =
-        target.subjectCtxId.subject.keyAttribute;
+      this.subjectCtx.subject_id = Base64Utils.encode(target.subjectCtxId.subject.keyValue);
+      this.subjectCtx.subject_type = this.getSubjectTypeList(target.subjectCtxId.subject.keyType);
+      this.subjectCtx.subject_attribute = target.subjectCtxId.subject.keyAttribute;
       this.subjectCtx.ctx_id = target.subjectCtxId.context.keyId;
       this.subjectCtx.ctx_type = target.subjectCtxId.context.keyType;
       SubscriberService.delete(this.subjectCtx).then(() => {
@@ -427,20 +306,10 @@ export default {
     // Mise à jour du sujet séléctionné
     updateSelectedSubject(datas) {
       var newVal = datas[0];
-      if (
-        CommonUtils.isDefined(newVal) &&
-        !CommonUtils.equals({}, newVal) &&
-        !CommonUtils.equals(newVal, this.selectedSubject)
-      ) {
+      if (CommonUtils.isDefined(newVal) && !CommonUtils.equals({}, newVal) && !CommonUtils.equals(newVal, this.selectedSubject)) {
         var found = false;
         for (var i = 0; i < this.targets.length; i++) {
-          if (
-            this.targets[i].subjectDTO &&
-            CommonUtils.equals(
-              newVal.modelId,
-              this.targets[i].subjectDTO.modelId
-            )
-          ) {
+          if (this.targets[i].subjectDTO && CommonUtils.equals(newVal.modelId, this.targets[i].subjectDTO.modelId)) {
             found = true;
             break;
           }
@@ -448,12 +317,12 @@ export default {
         if (!found) {
           this.selectedSubject = newVal;
         } else {
-          this.$toast.warning(t("subscriber.alreadySelected"));
+          this.$toast.warning(t('subscriber.alreadySelected'));
         }
       }
     },
     getSubscribeTypeLabel(name) {
-      return this.getEnumlabel("subscribeType", name);
+      return this.getEnumlabel('subscribeType', name);
     },
     getTargetId(target) {
       return target.subjectDTO !== null && target.subjectDTO.modelId
@@ -465,9 +334,9 @@ export default {
     },
     showSubscribeType() {
       switch (this.$route.params.ctxType) {
-        case "ORGANIZATION":
+        case 'ORGANIZATION':
           return false;
-        case "PUBLISHER":
+        case 'PUBLISHER':
           return false;
         default:
           return this.getHasTargetManagment(this.$route.params.ctxType);
@@ -488,12 +357,10 @@ export default {
     // Création d'un abonné suite à sa saisie via le webcomponent esup-subject-search-button
     createSubscriber() {
       var subject =
-        this.selectedSubject.modelId &&
-        this.selectedSubject &&
-        !CommonUtils.equals(this.selectedSubject.modelId)
+        this.selectedSubject.modelId && this.selectedSubject && !CommonUtils.equals(this.selectedSubject.modelId)
           ? {
               keyValue: this.selectedSubject.modelId.keyId,
-              keyAttribute: "ID",
+              keyAttribute: 'ID',
               keyType: this.selectedSubject.modelId.keyType,
             }
           : this.selectedSubject;
@@ -516,9 +383,7 @@ export default {
   },
   mounted() {
     this.subjectDetail = this.$refs.subjectDetail;
-    this.deleteTargetConfirmation = new Modal(
-      this.$refs.deleteTargetConfirmation
-    );
+    this.deleteTargetConfirmation = new Modal(this.$refs.deleteTargetConfirmation);
   },
   created() {
     this.initDatas();

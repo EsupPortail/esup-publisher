@@ -1,4 +1,4 @@
-import AllEnumsService from "./AllEnumsService";
+import AllEnumsService from './AllEnumsService';
 
 class EnumDatasService {
   AccessTypeList;
@@ -35,8 +35,7 @@ class EnumDatasService {
           this.SubscribeTypeList = response.data.SubscribeType;
           this.WritingModeList = response.data.WritingMode;
           this.WritingFormatList = response.data.WritingFormat;
-          this.ClassificationDecorTypeList =
-            response.data.ClassificationDecorType;
+          this.ClassificationDecorTypeList = response.data.ClassificationDecorType;
         }
       })
       .catch((error) => {

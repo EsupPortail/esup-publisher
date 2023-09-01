@@ -1,20 +1,17 @@
 <template>
   <div>
-    <h2>{{ $t("configuration.title") }}</h2>
+    <h2>{{ $t('configuration.title') }}</h2>
 
-    {{ $t("configuration.filter") }}
+    {{ $t('configuration.filter') }}
     <input type="text" v-model="filter" class="form-control" />
 
-    <table
-      class="table table-sm table-striped table-bordered table-responsive"
-      style="table-layout: fixed"
-    >
+    <table class="table table-sm table-striped table-bordered table-responsive" style="table-layout: fixed">
       <thead>
         <tr>
           <th @click="setSorting('prefix')">
-            {{ $t("configuration.table.prefix") }}
+            {{ $t('configuration.table.prefix') }}
           </th>
-          <th>{{ $t("configuration.table.properties") }}</th>
+          <th>{{ $t('configuration.table.properties') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -23,18 +20,10 @@
             <span>{{ entry.prefix }}</span>
           </td>
           <td>
-            <div
-              class="row"
-              v-for="(value, key) in entry.properties"
-              :key="key"
-            >
+            <div class="row" v-for="(value, key) in entry.properties" :key="key">
               <div class="col-md-6">{{ key }}</div>
               <div class="col-md-6">
-                <span
-                  class="float-end badge bg-info"
-                  style="white-space: normal; word-break: break-all"
-                  >{{ value }}</span
-                >
+                <span class="float-end badge bg-info" style="white-space: normal; word-break: break-all">{{ value }}</span>
               </div>
             </div>
           </td>
@@ -45,10 +34,10 @@
 </template>
 
 <script>
-import ConfigurationService from "@/services/admin/ConfigurationService";
+import ConfigurationService from '@/services/admin/ConfigurationService';
 
 export default {
-  name: "AdminConfiguration",
+  name: 'AdminConfiguration',
   data() {
     return {
       // Configuration
@@ -66,21 +55,15 @@ export default {
       var filterConfiguration = this.configuration;
 
       // Filtre des loggers
-      if (this.filter !== null && this.filter !== "") {
+      if (this.filter !== null && this.filter !== '') {
         filterConfiguration = filterConfiguration.filter(
-          (conf) =>
-            conf.prefix.includes(this.filter) ||
-            JSON.stringify(conf.properties).includes(this.filter)
+          (conf) => conf.prefix.includes(this.filter) || JSON.stringify(conf.properties).includes(this.filter),
         );
       }
 
       // Tri des loggers
       if (this.predicate !== null) {
-        filterConfiguration.sort(
-          (conf1, conf2) =>
-            conf1[this.predicate].localeCompare(conf2[this.predicate]) *
-            (this.reverse ? -1 : 1)
-        );
+        filterConfiguration.sort((conf1, conf2) => conf1[this.predicate].localeCompare(conf2[this.predicate]) * (this.reverse ? -1 : 1));
       }
 
       return filterConfiguration;

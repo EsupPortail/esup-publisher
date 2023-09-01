@@ -1,48 +1,31 @@
 <template>
   <h3 class="mt-3 mb-2">
-    {{ $t("manager.treeview.details.context.properties") }}
+    {{ $t('manager.treeview.details.context.properties') }}
   </h3>
   <div class="mb-3">
-    <button
-      type="button"
-      @click="detailSubject(context.id)"
-      class="btn btn-info btn-sm"
-    >
-      <span class="far fa-eye"></span>&nbsp;<span>{{
-        $t("entity.action.view")
-      }}</span>
+    <button type="button" @click="detailSubject(context.id)" class="btn btn-info btn-sm">
+      <span class="far fa-eye"></span>&nbsp;<span>{{ $t('entity.action.view') }}</span>
     </button>
   </div>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.title") }}</span>
+      <span>{{ $t('media.title') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.title }}</span>
     </dd>
   </dl>
-  <dl
-    class="row entity-details"
-    v-if="
-      context.enclosure &&
-      context.enclosure !== '' &&
-      context.enclosure !== 'http://'
-    "
-  >
+  <dl class="row entity-details" v-if="context.enclosure && context.enclosure !== '' && context.enclosure !== 'http://'">
     <dt class="col-sm-5">
-      <span>{{ $t("media.enclosure") }}</span>
+      <span>{{ $t('media.enclosure') }}</span>
     </dt>
     <dd class="col-sm-7">
-      <img
-        class="media-object img-fluid"
-        :src="getUrlEnclosure(context.enclosure)"
-        alt="image"
-      />
+      <img class="media-object img-fluid" :src="getUrlEnclosure(context.enclosure)" alt="image" />
     </dd>
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.status") }}</span>
+      <span>{{ $t('media.status') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ $t(getItemStatusLabel(context.status)) }}</span>
@@ -50,7 +33,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.summary") }}</span>
+      <span>{{ $t('media.summary') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.summary }}</span>
@@ -58,7 +41,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.startDate") }}</span>
+      <span>{{ $t('media.startDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDate(context.startDate) }}</span>
@@ -66,7 +49,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.endDate") }}</span>
+      <span>{{ $t('media.endDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDate(context.endDate) }}</span>
@@ -74,17 +57,15 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.rssAllowed") }}</span>
+      <span>{{ $t('media.rssAllowed') }}</span>
     </dt>
     <dd class="col-sm-7">
-      <span
-        ><input type="checkbox" v-model="context.rssAllowed" disabled
-      /></span>
+      <span><input type="checkbox" v-model="context.rssAllowed" disabled /></span>
     </dd>
   </dl>
   <dl class="row entity-details" v-if="context.validatedBy">
     <dt class="col-sm-5">
-      <span>{{ $t("media.validatedBy") }}</span>
+      <span>{{ $t('media.validatedBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.validatedBy.displayName }}</span>
@@ -92,7 +73,7 @@
   </dl>
   <dl class="row entity-details" v-if="context.validatedDate">
     <dt class="col-sm-5">
-      <span>{{ $t("media.validatedDate") }}</span>
+      <span>{{ $t('media.validatedDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.validatedDate) }}</span>
@@ -100,7 +81,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.createdBy") }}</span>
+      <span>{{ $t('media.createdBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.createdBy.displayName }}</span>
@@ -108,7 +89,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.createdDate") }}</span>
+      <span>{{ $t('media.createdDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.createdDate) }}</span>
@@ -116,7 +97,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.lastModifiedBy") }}</span>
+      <span>{{ $t('media.lastModifiedBy') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ context.lastModifiedBy.displayName }}</span>
@@ -124,7 +105,7 @@
   </dl>
   <dl class="row entity-details">
     <dt class="col-sm-5">
-      <span>{{ $t("media.lastModifiedDate") }}</span>
+      <span>{{ $t('media.lastModifiedDate') }}</span>
     </dt>
     <dd class="col-sm-7">
       <span>{{ formatDateAction(context.lastModifiedDate) }}</span>
@@ -133,27 +114,21 @@
 </template>
 
 <script>
-import DateUtils from "@/services/util/DateUtils";
-import store from "@/store/index.js";
+import DateUtils from '@/services/util/DateUtils';
+import store from '@/store/index.js';
 
 export default {
-  name: "Media",
-  inject: ["context", "getEnumlabel", "detailSubject", "getUrlEnclosure"],
+  name: 'Media',
+  inject: ['context', 'getEnumlabel', 'detailSubject', 'getUrlEnclosure'],
   methods: {
     formatDate(date) {
-      return DateUtils.formatDateToLongIntString(
-        date,
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateToLongIntString(date, store.getters.getLanguage);
     },
     formatDateAction(date) {
-      return DateUtils.formatDateTimeToLongIntString(
-        date,
-        store.getters.getLanguage
-      );
+      return DateUtils.formatDateTimeToLongIntString(date, store.getters.getLanguage);
     },
     getItemStatusLabel(name) {
-      return this.getEnumlabel("itemStatus", name) || "";
+      return this.getEnumlabel('itemStatus', name) || '';
     },
   },
 };

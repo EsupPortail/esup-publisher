@@ -1,15 +1,15 @@
-import CommonUtils from "./CommonUtils";
-import CookieUtils from "./CookieUtils";
+import CommonUtils from './CommonUtils';
+import CookieUtils from './CookieUtils';
 
 // Classe contenant des méthodes utilitaires pour l'upload de fichier
 class UploadUtils {
   // Convertis une url Base64 en Blob
   dataUrltoBlob(dataurl, name) {
     // Convert base64 to raw binary data held in a string
-    var byteString = window.atob(dataurl.split(",")[1]);
+    var byteString = window.atob(dataurl.split(',')[1]);
 
     // Separate out the mime component
-    var mimeString = dataurl.split(",")[0].split(":")[1].split(";")[0];
+    var mimeString = dataurl.split(',')[0].split(':')[1].split(';')[0];
 
     // Write the bytes of the string to an ArrayBuffer
     var ab = new ArrayBuffer(byteString.length);
@@ -34,23 +34,17 @@ class UploadUtils {
       var img = new Image();
       img.onload = () => {
         URL.revokeObjectURL(img.src);
-        var canvas = document.createElement("canvas");
-        var ctx = canvas.getContext("2d");
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
         canvas.toBlob(
           (blob) => {
-            resolve(
-              new File(
-                [blob],
-                file.name.substr(0, file.name.lastIndexOf(".")) + ".jpg",
-                { type: "image/jpeg" }
-              )
-            );
+            resolve(new File([blob], file.name.substr(0, file.name.lastIndexOf('.')) + '.jpg', { type: 'image/jpeg' }));
           },
-          "image/jpeg",
-          0.9
+          'image/jpeg',
+          0.9,
         );
       };
       img.src = URL.createObjectURL(file);
@@ -81,31 +75,19 @@ class UploadUtils {
         const imgWidth = img.width;
         const imgHeight = img.height;
 
-        const dimensions = calculateAspectRatioFit(
-          imgWidth,
-          imgHeight,
-          width,
-          height,
-          centerCrop
-        );
-        const canvas = document.createElement("canvas");
+        const dimensions = calculateAspectRatioFit(imgWidth, imgHeight, width, height, centerCrop);
+        const canvas = document.createElement('canvas');
         canvas.width = Math.min(dimensions.width, width);
         canvas.height = Math.min(dimensions.height, height);
 
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(
-          img,
-          Math.min(0, -dimensions.marginX / 2),
-          Math.min(0, -dimensions.marginY / 2),
-          dimensions.width,
-          dimensions.height
-        );
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, Math.min(0, -dimensions.marginX / 2), Math.min(0, -dimensions.marginY / 2), dimensions.width, dimensions.height);
         canvas.toBlob(
           (blob) => {
             resolve(new File([blob], file.name, { type: file.type }));
           },
           file.type,
-          0.9
+          0.9,
         );
       };
 
@@ -114,24 +96,14 @@ class UploadUtils {
   }
 
   // Upload un fichier avec gestion de la progression
-  upload(
-    url,
-    data,
-    callBackSuccess,
-    callBackError,
-    callBackProgress,
-    callBackAbord
-  ) {
+  upload(url, data, callBackSuccess, callBackError, callBackProgress, callBackAbord) {
     const req = new XMLHttpRequest();
-    req.addEventListener("load", () => {
+    req.addEventListener('load', () => {
       if (req.readyState === 4) {
         if (req.status === 200 || req.status === 201) {
           if (callBackSuccess) {
             const headers = getResponseHeaders(req);
-            callBackSuccess(
-              req.response ? JSON.parse(req.response) : null,
-              headers
-            );
+            callBackSuccess(req.response ? JSON.parse(req.response) : null, headers);
           }
         } else {
           if (callBackError) {
@@ -143,17 +115,17 @@ class UploadUtils {
       }
     });
     if (callBackError) {
-      req.addEventListener("error", () => {
+      req.addEventListener('error', () => {
         const json = req.response ? JSON.parse(req.response) : null;
         const resp = Object.assign({ status: req.status }, json);
         callBackError(resp);
       });
     }
     if (req.upload && callBackProgress) {
-      req.upload.addEventListener("progress", callBackProgress);
+      req.upload.addEventListener('progress', callBackProgress);
     }
     if (callBackAbord) {
-      req.addEventListener("abort", callBackProgress);
+      req.addEventListener('abort', callBackProgress);
     }
 
     const formData = new FormData();
@@ -165,8 +137,8 @@ class UploadUtils {
         formData.append(key, value);
       }
     });
-    req.open("POST", process.env.VUE_APP_BACK_BASE_URL + url);
-    req.setRequestHeader("X-CSRF-TOKEN", CookieUtils.getCookie("CSRF-TOKEN"));
+    req.open('POST', process.env.VUE_APP_BACK_BASE_URL + url);
+    req.setRequestHeader('X-CSRF-TOKEN', CookieUtils.getCookie('CSRF-TOKEN'));
     req.send(formData);
 
     return req;
@@ -174,82 +146,82 @@ class UploadUtils {
 
   // Retourne les classes CSS pour l'icône d'un fichier à partir de son nom
   getCssFileFromName(fileName) {
-    var cssClassType = "fas fa-file fa-lg";
+    var cssClassType = 'fas fa-file fa-lg';
     if (fileName) {
-      var fext = fileName.substr(fileName.lastIndexOf(".") + 1).trim();
+      var fext = fileName.substr(fileName.lastIndexOf('.') + 1).trim();
 
-      var imageExt = ["jpg", "jpeg", "png", "bmp", "tif", "svg", "gif"];
+      var imageExt = ['jpg', 'jpeg', 'png', 'bmp', 'tif', 'svg', 'gif'];
       var audioExt = [
-        "wav",
-        "mp3",
-        "fla",
-        "flac",
-        "ra",
-        "rma",
-        "aif",
-        "aiff",
-        "aa",
-        "aac",
-        "aax",
-        "ac3",
-        "au",
-        "ogg",
-        "avr",
-        "3ga",
-        "flac",
-        "mid",
-        "midi",
-        "m4a",
-        "mp4a",
-        "amz",
-        "mka",
-        "asx",
-        "pcm",
-        "m3u",
-        "wma",
-        "xwma",
+        'wav',
+        'mp3',
+        'fla',
+        'flac',
+        'ra',
+        'rma',
+        'aif',
+        'aiff',
+        'aa',
+        'aac',
+        'aax',
+        'ac3',
+        'au',
+        'ogg',
+        'avr',
+        '3ga',
+        'flac',
+        'mid',
+        'midi',
+        'm4a',
+        'mp4a',
+        'amz',
+        'mka',
+        'asx',
+        'pcm',
+        'm3u',
+        'wma',
+        'xwma',
       ];
       var videoExt = [
-        "avi",
-        "mpg",
-        "mp4",
-        "mkv",
-        "mov",
-        "wmv",
-        "vp6",
-        "264",
-        "vid",
-        "rv",
-        "webm",
-        "swf",
-        "h264",
-        "flv",
-        "mk3d",
-        "gifv",
-        "oggv",
-        "3gp",
-        "m4v",
-        "movie",
-        "divx",
+        'avi',
+        'mpg',
+        'mp4',
+        'mkv',
+        'mov',
+        'wmv',
+        'vp6',
+        '264',
+        'vid',
+        'rv',
+        'webm',
+        'swf',
+        'h264',
+        'flv',
+        'mk3d',
+        'gifv',
+        'oggv',
+        '3gp',
+        'm4v',
+        'movie',
+        'divx',
       ];
 
       if (fext && fext.length > 2) {
         if (imageExt.indexOf(fext) > -1) {
-          cssClassType = "fas fa-file-image fa-lg";
+          cssClassType = 'fas fa-file-image fa-lg';
         } else if (videoExt.indexOf(fext) > -1) {
-          cssClassType = "fas fa-file-video fa-lg";
+          cssClassType = 'fas fa-file-video fa-lg';
         } else if (audioExt.indexOf(fext) > -1) {
-          cssClassType = "fas fa-file-audio fa-lg";
-        } else if (fext === "pdf") {
-          cssClassType = "fas fa-file-pdf fa-lg";
-        } else if (fext === "odt" || fext === "doc" || fext === "docx") {
-          cssClassType = "fas fa-file-word fa-lg";
-        } else if (fext === "ods" || fext === "xls" || fext === "xlsx") {
-          cssClassType = "fas fa-file-excel fa-lg";
-        } else if (fext === "odp" || fext === "ppt" || fext === "pptx") {
-          cssClassType = "fas fa-file-powerpoint fa-lg";
-        } else if (fext === "txt") {
-          cssClassType = "fas fa-file-lines fa-lg";
+          cssClassType = 'fas fa-file-audio fa-lg';
+        } else if (fext === 'pdf') {
+          cssClassType = 'fas fa-file-pdf fa-lg';
+        } else if (fext === 'odt' || fext === 'doc' || fext === 'docx') {
+          cssClassType = 'fas fa-file-word fa-lg';
+        } else if (fext === 'ods' || fext === 'xls' || fext === 'xlsx') {
+          cssClassType = 'fas fa-file-excel fa-lg';
+        } else if (fext === 'odp' || fext === 'ppt' || fext === 'pptx') {
+          cssClassType = 'fas fa-file-powerpoint fa-lg';
+        } else if (fext === 'txt') {
+          cssClassType = 'fas fa-file-lines fa-lg';
         }
       }
     }
@@ -261,12 +233,12 @@ class UploadUtils {
     var cssClassType;
     if (fileType) {
       var subFiletype = fileType.substring(0, 5);
-      if (subFiletype === "image" || subFiletype === "video") {
-        cssClassType = "fas fa-file-" + subFiletype + " fa-lg";
-      } else if (subFiletype === "audio") {
-        cssClassType = "fas fa-file-audio fa-lg";
-      } else if (fileType === "application/pdf") {
-        cssClassType = "fas fa-file-pdf fa-lg";
+      if (subFiletype === 'image' || subFiletype === 'video') {
+        cssClassType = 'fas fa-file-' + subFiletype + ' fa-lg';
+      } else if (subFiletype === 'audio') {
+        cssClassType = 'fas fa-file-audio fa-lg';
+      } else if (fileType === 'application/pdf') {
+        cssClassType = 'fas fa-file-pdf fa-lg';
       }
     }
     if (!cssClassType) {
@@ -278,11 +250,7 @@ class UploadUtils {
   // Retourne l'url d'un fichier interne
   getInternalUrl(url) {
     if (url) {
-      return url.startsWith("https:") ||
-        url.startsWith("http:") ||
-        url.startsWith("ftp:")
-        ? url
-        : process.env.VUE_APP_BACK_BASE_URL + url;
+      return url.startsWith('https:') || url.startsWith('http:') || url.startsWith('ftp:') ? url : process.env.VUE_APP_BACK_BASE_URL + url;
     }
     return url;
   }
@@ -300,25 +268,17 @@ function getResponseHeaders(response) {
   // Create a map of header names to values
   var headerMap = {};
   arr.forEach((line) => {
-    var parts = line.split(": ");
+    var parts = line.split(': ');
     var header = parts.shift();
-    var value = parts.join(": ");
+    var value = parts.join(': ');
     headerMap[header] = value;
   });
   return headerMap;
 }
 
 // Calcul le ratio d'un cadre dans une image
-function calculateAspectRatioFit(
-  srcWidth,
-  srcHeight,
-  maxWidth,
-  maxHeight,
-  centerCrop
-) {
-  const ratio = centerCrop
-    ? Math.max(maxWidth / srcWidth, maxHeight / srcHeight)
-    : Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight, centerCrop) {
+  const ratio = centerCrop ? Math.max(maxWidth / srcWidth, maxHeight / srcHeight) : Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
   return {
     width: srcWidth * ratio,
     height: srcHeight * ratio,

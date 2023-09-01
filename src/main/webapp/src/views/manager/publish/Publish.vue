@@ -1,60 +1,34 @@
 <template>
   <div class="publish-form-container">
     <div class="publish-header">
-      <h2>{{ $t("manager.publish.title") }}</h2>
+      <h2>{{ $t('manager.publish.title') }}</h2>
 
       <div class="status-buttons">
         <div class="publish-form-views-steps" v-if="publishingType === 'NONE'">
           <router-link to="publisher"
-            ><span class="step-number">1</span
-            ><span class="step-label">
-              {{ $t("manager.publish.publisher.step") }}</span
-            ></router-link
+            ><span class="step-number">1</span><span class="step-label"> {{ $t('manager.publish.publisher.step') }}</span></router-link
           >
         </div>
-        <div
-          class="publish-form-views-steps"
-          v-else-if="publishingType === 'STATIC'"
-        >
+        <div class="publish-form-views-steps" v-else-if="publishingType === 'STATIC'">
           <router-link to="publisher"
-            ><span class="step-number">1</span
-            ><span class="step-label">
-              {{ $t("manager.publish.publisher.step") }}</span
-            ></router-link
+            ><span class="step-number">1</span><span class="step-label"> {{ $t('manager.publish.publisher.step') }}</span></router-link
           >
           <router-link to="content" v-disable-click="!isPublisherSelected"
-            ><span class="step-number">2</span
-            ><span class="step-label">
-              {{ $t("manager.publish.content.step") }}</span
-            ></router-link
+            ><span class="step-number">2</span><span class="step-label"> {{ $t('manager.publish.content.step') }}</span></router-link
           >
         </div>
         <div class="publish-form-views-steps" v-else>
           <router-link to="publisher"
-            ><span class="step-number">1</span
-            ><span class="step-label">
-              {{ $t("manager.publish.publisher.step") }}</span
-            ></router-link
+            ><span class="step-number">1</span><span class="step-label"> {{ $t('manager.publish.publisher.step') }}</span></router-link
           >
-          <router-link
-            to="classification"
-            v-disable-click="!isPublisherSelected"
-            ><span class="step-number">2</span
-            ><span class="step-label">
-              {{ $t("manager.publish.classification.step") }}</span
-            ></router-link
+          <router-link to="classification" v-disable-click="!isPublisherSelected"
+            ><span class="step-number">2</span><span class="step-label"> {{ $t('manager.publish.classification.step') }}</span></router-link
           >
           <router-link to="content" v-disable-click="!isClassificationsSelected"
-            ><span class="step-number">3</span
-            ><span class="step-label">
-              {{ $t("manager.publish.content.step") }}</span
-            ></router-link
+            ><span class="step-number">3</span><span class="step-label"> {{ $t('manager.publish.content.step') }}</span></router-link
           >
           <router-link to="targets" v-disable-click="!isItemValidated"
-            ><span class="step-number">4</span
-            ><span class="step-label">
-              {{ $t("manager.publish.targets.step") }}</span
-            ></router-link
+            ><span class="step-number">4</span><span class="step-label"> {{ $t('manager.publish.targets.step') }}</span></router-link
           >
         </div>
       </div>
@@ -70,48 +44,27 @@
           <form name="saveDraftForm">
             <div class="modal-header">
               <h4 class="modal-title">
-                {{ $t("item.action.confirmsave.title") }}
+                {{ $t('item.action.confirmsave.title') }}
               </h4>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-hidden="true"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-              <i18n-t
-                keypath="item.action.confirmsave.question"
-                tag="p"
-                scope="global"
-              >
+              <i18n-t keypath="item.action.confirmsave.question" tag="p" scope="global">
                 <template v-slot:warning>
                   <br />
                   <br />
                   <div class="alert alert-warning">
-                    {{ $t("item.action.confirmsave.warning") }}
+                    {{ $t('item.action.confirmsave.warning') }}
                   </div>
                 </template>
               </i18n-t>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-default btn-outline-dark"
-                data-bs-dismiss="modal"
-              >
-                <span class="fas fa-times"></span>&nbsp;<span>{{
-                  $t("entity.action.cancel")
-                }}</span>
+              <button type="button" class="btn btn-default btn-outline-dark" data-bs-dismiss="modal">
+                <span class="fas fa-times"></span>&nbsp;<span>{{ $t('entity.action.cancel') }}</span>
               </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                @click="publishItem('DRAFT')"
-              >
-                <span class="fas fa-check"></span>&nbsp;<span>{{
-                  $t("entity.action.validate")
-                }}</span>
+              <button type="button" class="btn btn-primary" @click="publishItem('DRAFT')">
+                <span class="fas fa-check"></span>&nbsp;<span>{{ $t('entity.action.validate') }}</span>
               </button>
             </div>
           </form>
@@ -122,31 +75,22 @@
     <div class="publish-footer text-end" v-if="canSave">
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-primary" @click="confirmSave()">
-          <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{
-            $t("item.action.save")
-          }}</span>
+          <span class="fas fa-floppy-disk"></span>&nbsp;<span>{{ $t('item.action.save') }}</span>
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          v-if="canSubmit"
-          @click="publishItem('PUBLISH')"
-        >
-          <span class="fas fa-paper-plane"></span>&nbsp;<span>{{
-            $t("item.action.publish")
-          }}</span>
+        <button type="button" class="btn btn-primary" v-if="canSubmit" @click="publishItem('PUBLISH')">
+          <span class="fas fa-paper-plane"></span>&nbsp;<span>{{ $t('item.action.publish') }}</span>
         </button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { computed, readonly } from "vue";
-import { Modal } from "bootstrap";
-import ContentService from "@/services/entities/content/ContentService";
+import { computed, readonly } from 'vue';
+import { Modal } from 'bootstrap';
+import ContentService from '@/services/entities/content/ContentService';
 
 export default {
-  name: "Publish",
+  name: 'Publish',
   data() {
     return {
       dataLoaded: false,
@@ -197,7 +141,7 @@ export default {
   computed: {
     publishingType() {
       if (!this.isPublisherSelected) {
-        return "NONE";
+        return 'NONE';
       }
       return this.publisher.context.redactor.writingMode;
     },
@@ -221,10 +165,7 @@ export default {
         this.item &&
         this.item.title &&
         this.itemValidated &&
-        (!this.contentData ||
-          this.publisher.context.redactor.writingMode === "STATIC" ||
-          this.targets ||
-          !this.contentData.targets)
+        (!this.contentData || this.publisher.context.redactor.writingMode === 'STATIC' || this.targets || !this.contentData.targets)
       );
     },
     canSubmit() {
@@ -234,8 +175,7 @@ export default {
         this.itemValidated &&
         this.classifications &&
         this.classifications.length > 0 &&
-        (this.publisher.context.redactor.writingMode === "STATIC" ||
-          (this.targets && this.targets.length > 0))
+        (this.publisher.context.redactor.writingMode === 'STATIC' || (this.targets && this.targets.length > 0))
       );
     },
   },
@@ -245,12 +185,12 @@ export default {
     },
     publishItem(status) {
       switch (status) {
-        case "PUBLISH":
-          this.item.status = "PUBLISHED";
+        case 'PUBLISH':
+          this.item.status = 'PUBLISHED';
           break;
         default:
           // DRAFT
-          this.item.status = "DRAFT";
+          this.item.status = 'DRAFT';
           break;
       }
       var tmpTargets = [];
@@ -263,7 +203,7 @@ export default {
               displayName: null,
               foundOnExternalSource: null,
             },
-            subscribeType: "FORCED",
+            subscribeType: 'FORCED',
           });
         });
       }
@@ -278,7 +218,7 @@ export default {
         ContentService.update(content).then((response) => {
           this.confirmSaveModal.hide();
           this.$router.push({
-            name: "ContentsOwned",
+            name: 'ContentsOwned',
             params: { itemState: response.data.value.name },
           });
         });
@@ -286,7 +226,7 @@ export default {
         ContentService.save(content).then((response) => {
           this.confirmSaveModal.hide();
           this.$router.push({
-            name: "ContentsOwned",
+            name: 'ContentsOwned',
             params: { itemState: response.data.value.name },
           });
         });
@@ -295,8 +235,8 @@ export default {
   },
   created() {
     // Si on essaye d'accéder à la page parente seulement, on redirige vers la page d'accueil
-    if (this.$router.currentRoute.value.path === "/publish") {
-      this.$router.push({ name: "Home" });
+    if (this.$router.currentRoute.value.path === '/publish') {
+      this.$router.push({ name: 'Home' });
     } else {
       if (this.$route.params.id) {
         ContentService.get(this.$route.params.id).then((response) => {

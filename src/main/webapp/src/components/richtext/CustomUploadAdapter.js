@@ -1,18 +1,9 @@
-import UploadUtils from "@/services/util/UploadUtils";
-import Compressor from "compressorjs";
+import UploadUtils from '@/services/util/UploadUtils';
+import Compressor from 'compressorjs';
 
 // Upload adpter utilisé pour l'upload de fichier
 class CustomUploadAdapter {
-  constructor(
-    loader,
-    entityId,
-    fileSizeMax,
-    errorFileSizeMsg,
-    callBackSuccess,
-    callBackError,
-    callBackProgress,
-    callBackAbord
-  ) {
+  constructor(loader, entityId, fileSizeMax, errorFileSizeMsg, callBackSuccess, callBackError, callBackProgress, callBackAbord) {
     this.loader = loader;
     this.entityId = entityId;
     this.fileSizeMax = fileSizeMax;
@@ -26,17 +17,13 @@ class CustomUploadAdapter {
   async upload() {
     const { entityId, fileSizeMax, isPublic } = this;
     return this.loader.file
-      .then(async (file) =>
-        file.type.match("image/*") !== null
-          ? await this.compressImage(file)
-          : file
-      )
+      .then(async (file) => (file.type.match('image/*') !== null ? await this.compressImage(file) : file))
       .then(
         (file) =>
           new Promise((resolve, reject) => {
             if (!fileSizeMax || file.size <= fileSizeMax) {
               this.xhr = UploadUtils.upload(
-                "app/upload/",
+                'app/upload/',
                 {
                   file: file,
                   isPublic: isPublic(file),
@@ -63,7 +50,7 @@ class CustomUploadAdapter {
                   if (this.callBackProgress) {
                     this.callBackProgress(evt);
                   }
-                }
+                },
               );
             } else {
               if (this.callBackError) {
@@ -72,16 +59,12 @@ class CustomUploadAdapter {
               /* eslint-disable-next-line prefer-promise-reject-errors */
               reject();
             }
-          })
+          }),
       );
   }
 
   isPublic(file) {
-    return (
-      file.type.match("image/*") !== null ||
-      file.type.match("audio/*") !== null ||
-      file.type.match("video/*") !== null
-    );
+    return file.type.match('image/*') !== null || file.type.match('audio/*') !== null || file.type.match('video/*') !== null;
   }
 
   compressImage(file) {
@@ -90,7 +73,7 @@ class CustomUploadAdapter {
         quality: 0.8,
         maxWidth: 800,
         maxHeight: 600,
-        convertTypes: "image/jpeg",
+        convertTypes: 'image/jpeg',
         async success(blob) {
           resolve(new File([blob], blob.name, { type: blob.type }));
         },

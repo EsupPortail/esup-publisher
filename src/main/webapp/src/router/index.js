@@ -1,12 +1,12 @@
-import { nextTick } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import AuthenticationService from '../services/auth/AuthenticationService'
-import PrincipalService from '../services/auth/PrincipalService'
-import store from '@/store/index.js'
-import i18n from '../i18n'
+import { nextTick } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import AuthenticationService from '../services/auth/AuthenticationService';
+import PrincipalService from '../services/auth/PrincipalService';
+import store from '@/store/index.js';
+import i18n from '../i18n';
 
-const { t } = i18n.global
-const DEFAULT_TITLE = 'global.title'
+const { t } = i18n.global;
+const DEFAULT_TITLE = 'global.title';
 
 const routes = [
   {
@@ -17,8 +17,8 @@ const routes = [
       titleKey: DEFAULT_TITLE,
       requireLogin: true,
       roles: ['ROLE_USER'],
-      cssClass: 'site'
-    }
+      cssClass: 'site',
+    },
   },
   {
     path: '/login',
@@ -26,8 +26,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/account/login/Login.vue'),
     meta: {
       titleKey: 'login.title',
-      requireLogin: false
-    }
+      requireLogin: false,
+    },
   },
   {
     path: '/error',
@@ -36,8 +36,8 @@ const routes = [
     meta: {
       titleKey: 'errors.title',
       requireLogin: true,
-      cssClass: 'site'
-    }
+      cssClass: 'site',
+    },
   },
   {
     path: '/accessdenied',
@@ -46,8 +46,8 @@ const routes = [
     meta: {
       titleKey: 'errors.title',
       requireLogin: true,
-      cssClass: 'site'
-    }
+      cssClass: 'site',
+    },
   },
   {
     path: '/manager',
@@ -58,7 +58,7 @@ const routes = [
       requireLogin: true,
       roles: ['ROLE_USER'],
       navBarView: 'navBarManager',
-      cssClass: 'site'
+      cssClass: 'site',
     },
     children: [
       {
@@ -69,7 +69,7 @@ const routes = [
           titleKey: 'manager.treeview.title',
           roles: ['ROLE_USER'],
           cssClass: 'manager',
-          managerCssClass: 'treeview'
+          managerCssClass: 'treeview',
         },
         children: [
           {
@@ -78,10 +78,10 @@ const routes = [
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/treeview/ctxDetails/CtxDetails.vue'),
             meta: {
               cssClass: 'treeview',
-              managerCssClass: 'treeview ctxDetails'
-            }
-          }
-        ]
+              managerCssClass: 'treeview ctxDetails',
+            },
+          },
+        ],
       },
       {
         path: '/publish/:id?',
@@ -90,7 +90,7 @@ const routes = [
         meta: {
           titleKey: 'manager.publish.title',
           navBarView: 'navBarPublish',
-          cssClass: 'publish'
+          cssClass: 'publish',
         },
         children: [
           {
@@ -98,34 +98,34 @@ const routes = [
             name: 'PublishPublisher',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/publisher/Publisher.vue'),
             meta: {
-              managerCssClass: 'publish.publisher'
-            }
+              managerCssClass: 'publish.publisher',
+            },
           },
           {
             path: 'classification',
             name: 'PublishClassification',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/classification/Classification.vue'),
             meta: {
-              managerCssClass: 'publish publish.classification'
-            }
+              managerCssClass: 'publish publish.classification',
+            },
           },
           {
             path: 'content',
             name: 'PublishContent',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/content/Content.vue'),
             meta: {
-              managerCssClass: 'publish publish.content'
-            }
+              managerCssClass: 'publish publish.content',
+            },
           },
           {
             path: 'targets',
             name: 'PublishTargets',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/publish/targets/Targets.vue'),
             meta: {
-              managerCssClass: 'publish publish.targets'
-            }
-          }
-        ]
+              managerCssClass: 'publish publish.targets',
+            },
+          },
+        ],
       },
       {
         path: '/contents',
@@ -133,7 +133,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/Contents.vue'),
         meta: {
           titleKey: 'manager.contents.title',
-          cssClass: 'contents'
+          cssClass: 'contents',
         },
         children: [
           {
@@ -141,24 +141,24 @@ const routes = [
             name: 'ContentsOwned',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/owned/Owned.vue'),
             meta: {
-              managerCssClass: 'contents owned'
-            }
+              managerCssClass: 'contents owned',
+            },
           },
           {
             path: 'managed/:itemState',
             name: 'ContentsManaged',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/managed/Managed.vue'),
             meta: {
-              managerCssClass: 'contents managed'
-            }
+              managerCssClass: 'contents managed',
+            },
           },
           {
             path: 'pending',
             name: 'ContentPending',
             component: () => import(/* webpackChunkName: "manager" */ '../views/manager/contents/pending/Pending.vue'),
             meta: {
-              managerCssClass: 'contents pending'
-            }
+              managerCssClass: 'contents pending',
+            },
           },
           {
             path: 'detail/:id',
@@ -167,12 +167,12 @@ const routes = [
             meta: {
               titleKey: 'manager.contents.details.title',
               roles: ['ROLE_USER'],
-              managerCssClass: 'contents details'
-            }
-          }
-        ]
-      }
-    ]
+              managerCssClass: 'contents details',
+            },
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/administration',
@@ -182,7 +182,7 @@ const routes = [
       requireLogin: true,
       roles: ['ROLE_ADMIN'],
       navBarView: 'navBarDefault',
-      cssClass: 'admin'
+      cssClass: 'admin',
     },
     children: [
       {
@@ -190,56 +190,56 @@ const routes = [
         name: 'AdminMain',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/main/AdminMain.vue'),
         meta: {
-          titleKey: 'admin.title'
-        }
+          titleKey: 'admin.title',
+        },
       },
       {
         path: '/docs',
         name: 'AdminDocs',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/docs/AdminDocs.vue'),
         meta: {
-          titleKey: 'global.menu.admin.apidocs'
-        }
+          titleKey: 'global.menu.admin.apidocs',
+        },
       },
       {
         path: '/logs',
         name: 'AdminLogs',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/logs/AdminLogs.vue'),
         meta: {
-          titleKey: 'logs.title'
-        }
+          titleKey: 'logs.title',
+        },
       },
       {
         path: '/configuration',
         name: 'AdminConfiguration',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/configuration/AdminConfiguration.vue'),
         meta: {
-          titleKey: 'configuration.title'
-        }
+          titleKey: 'configuration.title',
+        },
       },
       {
         path: '/health',
         name: 'AdminHealth',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/health/AdminHealth.vue'),
         meta: {
-          titleKey: 'health.title'
-        }
+          titleKey: 'health.title',
+        },
       },
       {
         path: '/metrics',
         name: 'AdminMetrics',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/metrics/AdminMetrics.vue'),
         meta: {
-          titleKey: 'metrics.title'
-        }
+          titleKey: 'metrics.title',
+        },
       },
       {
         path: '/audits',
         name: 'AdminAudits',
         component: () => import(/* webpackChunkName: "administration" */ '../views/admin/audits/AdminAudits.vue'),
         meta: {
-          titleKey: 'audits.title'
-        }
+          titleKey: 'audits.title',
+        },
       },
       {
         path: '/organization',
@@ -248,8 +248,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'organization.home.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/organization/:id',
@@ -258,8 +258,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'organization.detail.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/filter',
@@ -268,8 +268,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'filter.home.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/filter/:id',
@@ -278,8 +278,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'filter.detail.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/reader',
@@ -288,8 +288,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'reader.home.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/reader/:id',
@@ -298,8 +298,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'reader.detail.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/redactor',
@@ -308,8 +308,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'redactor.home.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/redactor/:id',
@@ -318,8 +318,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'redactor.detail.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/publisher',
@@ -328,8 +328,8 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'publisher.home.title',
-          cssClass: 'entity'
-        }
+          cssClass: 'entity',
+        },
       },
       {
         path: '/publisher/:id',
@@ -338,56 +338,58 @@ const routes = [
         meta: {
           roles: ['ROLE_USER'],
           titleKey: 'publisher.detail.title',
-          cssClass: 'entity'
-        }
-      }
-    ]
+          cssClass: 'entity',
+        },
+      },
+    ],
   },
   // Sinon redirection vers Home
-  { path: '/:pathMatch(.*)*', redirect: '/' }
-]
+  { path: '/:pathMatch(.*)*', redirect: '/' },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
   store.commit('setPreviousRoute', {
     name: from.name,
     params: from.params,
-    meta: from.meta
-  })
+    meta: from.meta,
+  });
   store.commit('setNextRoute', {
     name: to.name,
     params: to.params,
-    meta: to.meta
-  })
-  if (to.matched.some(record => record.meta.requireLogin)) {
+    meta: to.meta,
+  });
+  if (to.matched.some((record) => record.meta.requireLogin)) {
     if (!PrincipalService.isAuthenticated() && !store.getters.getLoginModalOpened) {
-      AuthenticationService.login().then(() => {
-        next()
-      }).catch(() => {
-        store.commit('setLoginModalOpened', true)
-        store.commit('setReturnRoute', store.getters.getNextRoute)
-        next({
-          path: '/login'
+      AuthenticationService.login()
+        .then(() => {
+          next();
         })
-      })
+        .catch(() => {
+          store.commit('setLoginModalOpened', true);
+          store.commit('setReturnRoute', store.getters.getNextRoute);
+          next({
+            path: '/login',
+          });
+        });
     } else {
       AuthenticationService.authorize().then(() => {
-        next()
-      })
+        next();
+      });
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
 router.afterEach((to) => {
   nextTick(() => {
-    document.title = t(to.meta.titleKey || DEFAULT_TITLE)
-  })
-})
+    document.title = t(to.meta.titleKey || DEFAULT_TITLE);
+  });
+});
 
-export default router
+export default router;

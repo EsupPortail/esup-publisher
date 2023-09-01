@@ -1,30 +1,18 @@
 <template>
   <div class="container-fluid justify-content-center">
     <div class="navbar-brand">
-      <button
-        class="navbar-toggler other-style h1"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbar-collapse"
-      >
-        <div
-          v-if="isPageNameIncludes('owned') || isPageNameIncludes('managed')"
-        >
+      <button class="navbar-toggler other-style h1" data-bs-toggle="collapse" data-bs-target="#navbar-collapse">
+        <div v-if="isPageNameIncludes('owned') || isPageNameIncludes('managed')">
           <span class="fas fa-file-lines fa-2x"></span>
-          <span class="dropdown-toggle">{{
-            $t("global.menu.manager.contents.main")
-          }}</span>
+          <span class="dropdown-toggle">{{ $t('global.menu.manager.contents.main') }}</span>
         </div>
         <div v-else-if="isPageNameIncludes('pending')">
           <span class="fas fa-gavel fa-2x"></span>
-          <span class="dropdown-toggle">{{
-            $t("global.menu.manager.contents.moderate")
-          }}</span>
+          <span class="dropdown-toggle">{{ $t('global.menu.manager.contents.moderate') }}</span>
         </div>
         <div v-else-if="isPageNameIncludes('treeview')">
           <span class="fas fa-gavel fa-2x"></span>
-          <span class="dropdown-toggle">{{
-            $t("global.menu.manager.contexts.main")
-          }}</span>
+          <span class="dropdown-toggle">{{ $t('global.menu.manager.contexts.main') }}</span>
         </div>
       </button>
     </div>
@@ -33,73 +21,57 @@
         <li class="nav-item">
           <router-link to="/home" class="nav-link">
             <span class="fas fa-home fa-2x"></span>
-            <span>{{ $t("global.menu.home") }}</span>
+            <span>{{ $t('global.menu.home') }}</span>
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/publish/publisher" class="nav-link">
             <span class="fas fa-pencil fa-2x"></span>
-            <span>{{ $t("global.menu.write") }}</span>
+            <span>{{ $t('global.menu.write') }}</span>
           </router-link>
         </li>
         <li v-if="!canModerate" class="nav-item">
           <a class="nav-link">
             <span class="fas fa-file-lines fa-2x"></span>
-            <span>{{ $t("global.menu.manager.contents.main") }}</span>
+            <span>{{ $t('global.menu.manager.contents.main') }}</span>
           </a>
         </li>
         <li
           v-else
           class="nav-item dropdown"
           :class="{
-            active:
-              isPageNameIncludes('owned') || isPageNameIncludes('managed'),
+            active: isPageNameIncludes('owned') || isPageNameIncludes('managed'),
           }"
         >
-          <a
-            class="nav-link dropdown-toggle"
-            role="button"
-            data-bs-toggle="dropdown"
-            href=""
-          >
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
             <span>
               <span class="fas fa-file-lines fa-2x"></span>
-              <span>{{ $t("global.menu.manager.contents.main") }}</span>
+              <span>{{ $t('global.menu.manager.contents.main') }}</span>
             </span>
           </a>
           <ul class="dropdown-menu">
             <li :class="{ active: isPageNameIncludes('owned') }">
               <router-link to="/contents/owned/DRAFT" class="dropdown-item"
-                ><span class="fas fa-asterisk"></span> &#xA0;<span>{{
-                  $t("global.menu.manager.contents.owned")
-                }}</span></router-link
+                ><span class="fas fa-asterisk"></span> &#xA0;<span>{{ $t('global.menu.manager.contents.owned') }}</span></router-link
               >
             </li>
             <li :class="{ active: isPageNameIncludes('managed') }">
               <router-link to="/contents/managed/PENDING" class="dropdown-item"
-                ><span class="fas fa-asterisk"></span> &#xA0;<span>{{
-                  $t("global.menu.manager.contents.managed")
-                }}</span></router-link
+                ><span class="fas fa-asterisk"></span> &#xA0;<span>{{ $t('global.menu.manager.contents.managed') }}</span></router-link
               >
             </li>
           </ul>
         </li>
-        <li
-          :class="{ active: isPageNameIncludes('pending') }"
-          v-if="canModerate"
-        >
+        <li :class="{ active: isPageNameIncludes('pending') }" v-if="canModerate">
           <router-link to="/contents/pending" class="nav-link">
             <span class="fas fa-gavel fa-2x"></span>
-            <span>{{ $t("global.menu.manager.contents.moderate") }}</span>
+            <span>{{ $t('global.menu.manager.contents.moderate') }}</span>
           </router-link>
         </li>
-        <li
-          :class="{ active: isPageNameIncludes('treeview') }"
-          v-if="canModerate"
-        >
+        <li :class="{ active: isPageNameIncludes('treeview') }" v-if="canModerate">
           <router-link to="/treeview" class="nav-link">
             <span class="fas fa-wrench fa-2x"></span>
-            <span>{{ $t("global.menu.manager.contexts.main") }}</span>
+            <span>{{ $t('global.menu.manager.contexts.main') }}</span>
           </router-link>
         </li>
       </ul>
@@ -108,11 +80,11 @@
 </template>
 
 <script>
-import UserService from "../../services/user/UserService";
+import UserService from '../../services/user/UserService';
 
 export default {
-  name: "NavBarManager",
-  props: ["pageName"],
+  name: 'NavBarManager',
+  props: ['pageName'],
   data() {
     return {
       canModerate: false,
