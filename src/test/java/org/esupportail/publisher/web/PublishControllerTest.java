@@ -321,7 +321,7 @@ public class PublishControllerTest {
                 .andExpect(jsonPath("$.[0].rubriques.[*]").isNotEmpty())
                 .andExpect(jsonPath("$.[0].rubriques.[0].name").isNotEmpty())
                 .andExpect(jsonPath("$.[0].rubriques.[0].color").isNotEmpty())
-                .andExpect(jsonPath("$.[0].rubriques.[0].hiddenIfEmpty").isBoolean())
+                .andExpect(jsonPath("$.[0].rubriques.[0].hiddenIfEmpty").doesNotExist())
                 .andExpect(jsonPath("$.[0].rubriques.[1]").doesNotExist())
                 .andExpect(jsonPath("$.[1].title").value(savedFlash1.getTitle()))
                 .andExpect(jsonPath("$.[1].mediaUrl").isNotEmpty())
@@ -330,7 +330,7 @@ public class PublishControllerTest {
                 .andExpect(jsonPath("$.[1].rubriques.[*]").isNotEmpty())
                 .andExpect(jsonPath("$.[1].rubriques.[0].name").isNotEmpty())
                 .andExpect(jsonPath("$.[1].rubriques.[0].color").isNotEmpty())
-                .andExpect(jsonPath("$.[1].rubriques.[0].hiddenIfEmpty").isBoolean())
+                .andExpect(jsonPath("$.[1].rubriques.[0].hiddenIfEmpty").doesNotExist())
                 .andExpect(jsonPath("$.[1].rubriques.[1]").doesNotExist());
     }
 
