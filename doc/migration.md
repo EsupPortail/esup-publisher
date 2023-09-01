@@ -10,6 +10,8 @@ Les commandes NPM pour manipuler le front-end sont (à exécuter à la racine du
 -   `npm run build` : Permet de construire les fichiers statiques du front-end pour la production (équivalent du `grunt build`). Les sources compilées sont générées dans le répertoire src/main/webapp/dist.
 -   `npm run lint` : Permet de lancer une analyse eslint sur le code source du front-end.
 -   `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/test/javascript/spec.
+-   `npm run format:check` : Permet de lancer le check du formattage avec prettier
+-   `npm run format` : Réalise le formattage avec prettier
 
 Les commandes liées au back-end restent inchangées (à exécuter à la racine du projet) :
 

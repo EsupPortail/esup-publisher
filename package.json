@@ -6,7 +6,9 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --no-module",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "format:check": "prettier --check src/main/webapp/src/**/*.{js,vue,css}",
+    "format": "prettier --write src/main/webapp/src/**/*.{js,vue,css}"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "36.0.1",
@@ -61,6 +63,7 @@
     "@vue/vue3-jest": "27.0.0",
     "eslint": "8.48.0",
     "eslint-plugin-vue": "9.17.0",
+    "prettier": "3.0.3",
     "sass": "1.66.1",
     "sass-loader": "13.2.2",
     "typescript": "5.0.4",

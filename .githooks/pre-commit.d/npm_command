@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "Run npm hook for Prettier checking"
+
+npm run format:check
+
+if [ $? -gt 0 ]
+then
+  echo "Prettier checking failed, run command `npm run format` to apply good format"
+  exit 1
+fi
+
+echo "Prettier checking executed successfully"
+exit 0
