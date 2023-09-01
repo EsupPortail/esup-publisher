@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Run npm hook for Commit Message checking"
+
+#npm run commit
+commitlint --edit
+
+if [ $? -gt 0 ]
+then
+  echo "Commitlint checking failed!\nFor a good commit message please read https://www.conventionalcommits.org/en/v1.0.0/ website."
+  exit 1
+fi
+
+echo "Commitlint validated your commit message."
+exit 0

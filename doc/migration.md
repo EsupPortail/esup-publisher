@@ -12,6 +12,7 @@ Les commandes NPM pour manipuler le front-end sont (à exécuter à la racine du
 -   `npm run test:unit` : Permet de lancer les tests unitaires du front-end. Ces tests se trouvent dans le répertoire src/test/javascript/spec.
 -   `npm run format:check` : Permet de lancer le check du formattage avec prettier
 -   `npm run format` : Réalise le formattage avec prettier
+-   `npm run commit` : Permet de vérifier le respect du `conventional-commit` lors des commit
 
 Les commandes liées au back-end restent inchangées (à exécuter à la racine du projet) :
 
