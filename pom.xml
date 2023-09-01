@@ -207,6 +207,16 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <exclusions>
+                <!-- Exclude SnakeYAML, as
+                     a) the currently used version is vulnerable, and
+                     b) it's only needed when YAML change log files are used
+                -->
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
