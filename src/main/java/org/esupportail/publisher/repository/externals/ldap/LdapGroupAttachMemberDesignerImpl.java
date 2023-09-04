@@ -59,15 +59,15 @@ public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
     public IExternalGroup designe(IExternalGroup group, final IExternalGroupDao externalGroupDao) {
         if (group == null) return null;
 
-        Matcher profMatcher = patternGroupIntoAttach.matcher(group.getId());
-        log.debug("Design for group id {} with matcher {}, and is matching {}", group.getId(), profMatcher.toString(), profMatcher.matches());
-        if (profMatcher.matches()) {
+        Matcher matcher = patternGroupIntoAttach.matcher(group.getId());
+        log.debug("Design for group id {} with matcher {}, and is matching {}", group.getId(), matcher.toString(), matcher.matches());
+        if (matcher.matches()) {
             StringBuilder filter = new StringBuilder("(|");
             for (String endPattern: groupToAttachEndPattern) {
                 filter.append("(").append(externalGroupHelper.getGroupSearchAttribute()).append("=").append(group.getId().replaceFirst(groupAttachEndMatch, endPattern)).append(")");
             }
             filter.append(")");
-            log.debug(" ldap filter that will be used : {}", filter.toString());
+            log.debug(" ldap filter that will be used : {}", filter);
             final List<IExternalGroup> members = externalGroupDao.getGroupsWithFilter(filter.toString(), null, false);
             if (members!=null) {
                 for (IExternalGroup externalGroup : members) {
@@ -89,6 +89,6 @@ public class LdapGroupAttachMemberDesignerImpl implements IGroupMemberDesigner {
 
     @PostConstruct
     public void debug() {
-        log.debug("Configuration du bean: {}", this.toString());
+        log.debug("Configuration du bean: {}", this);
     }
 }
