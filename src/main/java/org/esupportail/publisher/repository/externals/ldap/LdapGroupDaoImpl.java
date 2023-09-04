@@ -21,10 +21,6 @@ import java.util.regex.Pattern;
 
 import javax.validation.constraints.NotNull;
 
-import com.google.common.collect.Lists;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.externals.ExternalGroupHelper;
 import org.esupportail.publisher.domain.externals.IExternalGroup;
 import org.esupportail.publisher.domain.externals.IExternalGroupDisplayNameFormatter;
@@ -32,6 +28,11 @@ import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.externals.IGroupMemberDesigner;
+
+import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
@@ -85,7 +86,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         AndFilter filter = new AndFilter();
         filter.append(new EqualsFilter(externalGroupHelper.getGroupIdAttribute(), id));
         List<IExternalGroup> groups = this.searchWithFilter(filter, withMembers);
-        if (groups.isEmpty() || groups.size() > 1) {
+        if (groups.size() != 1) {
             log.error("The search with " + filter.encode()
                 + " returned a bad result, only one entry should be returned ! Result: " + groups.toString());
             return null;
@@ -303,10 +304,7 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
     private List<IExternalGroup> applyDesigners(List<IExternalGroup> groups) {
         List<IExternalGroup> tmp = Lists.newArrayList();
         for (IExternalGroup group : groups) {
-            for (IGroupMemberDesigner gpDesigner: groupMemberDesigners) {
-                group = applyDesigners(group);
-            }
-            tmp.add(group);
+            tmp.add(applyDesigners(group));
         }
        return tmp;
     }
@@ -317,18 +315,4 @@ public class LdapGroupDaoImpl implements IExternalGroupDao {
         }
         return group;
     }
-
-    /*private OrFilter orFilterOnIds(@NotNull final Iterable<String> ids) {
-        // needed since empty OrFilter() is true instead of false
-        // (https://jira.springsource.org/browse/LDAP-226)
-        if (Iterables.isEmpty(ids))
-            return null;
-
-        final OrFilter filter = new OrFilter();
-        for (String id : ids) {
-            filter.or(new EqualsFilter(externalGroupHelper.getGroupIdAttribute(),id));
-        }
-        return filter;
-    }*/
-
 }
