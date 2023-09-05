@@ -93,7 +93,7 @@
 ### Release process :
 
 *   put away local change `git stash`
-*   `./mvnw clean generate-sources release:prepare release:perform deploy -P prod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true"`
+*   `./mvnw clean generate-sources package release:prepare release:perform deploy -P prod -Dmaven.test.skip=true -Darguments="-DskipTests"`
 *   `git push origin master`
 *   `git stash apply`
 
