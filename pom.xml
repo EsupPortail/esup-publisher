@@ -677,14 +677,6 @@
                         src/,
                         public/,
                         tests/</warSourceExcludes>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp/public</directory>
-                            <includes>
-                                <include>favicon.ico</include>
-                            </includes>
-                        </resource>
-                    </webResources>
                 </configuration>
             </plugin>
             <plugin>
