@@ -360,15 +360,7 @@ export default {
     },
     cancel() {
       // on cancel we try to remove enclosure only on new item (without id)
-      if (
-        !CommonUtils.isDefined(this.item.enclosure) ||
-        this.item.enclosure === null ||
-        this.item.enclosure === undefined ||
-        !CommonUtils.isDefined(this.item.id)
-      ) {
-        return;
-      }
-      this.deleteEnclosure();
+      if (!this.item.id) this.deleteEnclosure();
     },
     deleteEnclosure() {
       FileManagerService.delete(this.publisher.context.organization.id, true, Base64Utils.encode(this.item.enclosure)).then(() => {
