@@ -219,7 +219,7 @@ export default {
       editorState: undefined,
     };
   },
-  inject: ['publisher'],
+  inject: ['publisher', 'linkedFilesToContent', 'setLinkedFilesToContent'],
   methods: {
     onReady(editor) {
       // Get already uploaded files
@@ -263,6 +263,10 @@ export default {
       files.forEach((fileURI) => {
         const isPublic = fileURI.startsWith('files/') ? true : false;
         FileManagerService.delete(this.publisher.context.organization.id, isPublic, Base64Utils.encode(fileURI));
+
+        let index = this.linkedFilesToContent.findIndex((element) => element.uri === fileURI);
+        let newValue = Array.from(this.linkedFilesToContent || []);
+        this.setLinkedFilesToContent(newValue.filter((element, i) => i != index));
       });
     },
     getUploadedFiles(editorData) {
