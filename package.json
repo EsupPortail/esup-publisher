@@ -34,7 +34,7 @@
     "@fortawesome/fontawesome-free": "6.4.2",
     "@gip-recia/color-palette-picker": "0.0.11",
     "@gip-recia/evaluator": "0.0.18",
-    "@gip-recia/js-tree": "0.0.15",
+    "@gip-recia/js-tree": "0.0.16",
     "@gip-recia/subject-infos": "0.0.14",
     "@gip-recia/subject-search-button": "0.0.18",
     "@popperjs/core": "2.11.8",
