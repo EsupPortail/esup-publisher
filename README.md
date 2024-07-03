@@ -3,6 +3,8 @@ esup-publisher-ui
 
 Application to publish content into several/different apps (uPortal portlet apps as example but not only!)
 
+[![Coverage](https://raw.githubusercontent.com/GIP-RECIA/esup-publisher/badges/jacoco.svg)](https://github.com/GIP-RECIA/esup-publisher/actions/workflows/maven.yml)
+[![Branches](https://raw.githubusercontent.com/GIP-RECIA/esup-publisher/badges/branches.svg)](https://github.com/GIP-RECIA/esup-publisher/actions/workflows/maven.yml)
 
 Database Initialization
 -----------------------

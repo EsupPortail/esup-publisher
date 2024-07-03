@@ -82,7 +82,6 @@ jobs:
     env:
       MARIADB_IMG: 'wodby/mariadb'
       JACOCO_JAVA: '11'
-      JACOCO_NODE: '16.17.0'
       JACOCO_MARIADB: '10.6'
 
     name: Java ${{ matrix.java }} & MariaDB ${{ matrix.mariadb }}
@@ -196,12 +195,6 @@ jobs:
       - name: Maven running API test
         run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
 
-      - name: Build with Maven
-        run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
-
-      - name: Stop containers
-        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
-
       - name: Generate JaCoCo badge
         id: jacoco
         uses: cicirello/jacoco-badge-generator@v2
@@ -246,3 +239,9 @@ jobs:
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build with Maven
+        run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
+
+      - name: Stop containers
+        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
