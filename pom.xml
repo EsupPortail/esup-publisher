@@ -5,7 +5,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.18</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>org.esupportail.publisher</groupId>
@@ -394,7 +394,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -407,7 +407,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -421,7 +421,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -434,7 +434,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -545,6 +545,9 @@
                             <!--<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>-->
                             <!--<processor>org.springframework.ldap.repository.support.LdapAnnotationProcessor</processor>-->
                             <logOnlyOnError>true</logOnlyOnError>
+                            <options>
+                                <querydsl.generatedAnnotationClass>com.querydsl.core.annotations.Generated</querydsl.generatedAnnotationClass>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
@@ -616,11 +619,13 @@
                             <regex>[\d.-_]*</regex>
                         </requireProperty>
                         <requireMavenVersion>
-                            <message>You are running an older version of Maven. ESUP-publisher requires at least Maven 3.0</message>
+                            <message>You are running an older version of Maven. ESUP-publisher requires at least Maven
+                                3.0</message>
                             <version>[3.0.0,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <message>You are running an older version of Java ${java.version}. ESUP-publisher requires at least JDK ${check.java.version}</message>
+                            <message>You are running an older version of Java ${java.version}. ESUP-publisher requires
+                                at least JDK ${check.java.version}</message>
                             <version>[${check.java.version}.0,)</version>
                         </requireJavaVersion>
                     </rules>
@@ -872,6 +877,25 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.12</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>generate-code-coverage-report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
@@ -902,6 +926,25 @@
             <!-- Same as dev expect for some properties to have less log, etc... all things required by travis -->
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.12</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>generate-code-coverage-report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>

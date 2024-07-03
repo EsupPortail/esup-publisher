@@ -6,127 +6,243 @@ name: Java CI with Maven
 on:
   push:
     branches: [ 'main' ]
+    paths: ['**.java', '**.js', '**.ts', '**.vue', '.github/workflows/**', 'pom.xml', 'package.json', 'package-lock.json']
   pull_request:
     branches: [ '**' ]
 
 env:
-  LANG: "fr_FR.UTF-8"
-  LC_ALL: "fr_FR.UTF-8"
-  LANGUAGE: "fr_FR.UTF-8"
-  LC_CTYPE: "fr_FR.UTF-8"
-  TZ: "Europe/Paris"
+  LANG: 'fr_FR.UTF-8'
+  LC_ALL: 'fr_FR.UTF-8'
+  LANGUAGE: 'fr_FR.UTF-8'
+  LC_CTYPE: 'fr_FR.UTF-8'
+  TZ: 'Europe/Paris'
 
 jobs:
-  build:
+  license-and-notice:
+    runs-on: ubuntu-latest
 
+    env:
+      JAVA_VERSION: '11'
+
+    name: Check license headers and notice
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Check license hearders
+        run: ./mvnw license:check
+
+      - name: Check NOTICE
+        run: ./mvnw notice:check
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: ['16.17.0', '16', '18', '20', 'latest']
+
+    name: Node ${{ matrix.node }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Tests frontend (unit tests)
+        run: npm run test:unit
+
+  backend:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         java: ['11', '17']
-        node: ['16.17.0','16', '18']
-        mariadb: ['10.6','latest']
+        mariadb: ['10.6', 'latest']
 
     env:
-      MARIADB_IMG: "wodby/mariadb"
-    name: Run MariaDB ${{ matrix.mariadb }} + java ${{ matrix.java }} + node ${{ matrix.node }}
+      MARIADB_IMG: 'wodby/mariadb'
+      JACOCO_JAVA: '11'
+      JACOCO_NODE: '16.17.0'
+      JACOCO_MARIADB: '10.6'
+
+    name: Java ${{ matrix.java }} & MariaDB ${{ matrix.mariadb }}
+
     steps:
-    - uses: szenius/set-timezone@v1.1
-      with:
-        timezoneLinux: "Europe/Paris"
-    - uses: actions/checkout@v3
-    - name: Set up locale ENV
-      run: |
-        sudo locale-gen $LANG
-        sudo update-locale LANG=$LANG
-        sudo apt install net-tools
-    - name: Set up variable ENV
-      if: startsWith(matrix.java, '8')
-      run: |
-        echo "MVN_PARAMS=-Dmaven.compiler.target=1.8" >> $GITHUB_ENV
-    - name: Check locales
-      run: locale -a
-    - name: Pull $MARIADB_IMG:${{ matrix.mariadb }} docker image
-      run: docker pull ${MARIADB_IMG}:${{ matrix.mariadb }}
-    - name: Run MariaDB container
-      run: |
-        docker run -t -d --name mariadb --rm -v \
-          --health-cmd="mysqladmin -uroot -proot ping" --health-interval=10s --health-timeout=10s --health-retries=10 \
-          -p 3306:3306/tcp \
-          -e "TZ=Europe/Paris" \
-          -e "MYSQL_USER=root" \
-          -e "MYSQL_ROOT_PASSWORD=root" \
-          -e "MYSQL_DATABASE=publisher_test" \
-          -e "MYSQL_DEFAULT_STORAGE_ENGINE=InnoDB" \
-          -e "MYSQL_CHARACTER_SET_SERVER=utf8mb4" \
-          -e "MYSQL_COLLATION_SERVER=utf8mb4_unicode_520_ci" \
-          -e "MYSQL_INNODB_BUFFER_POOL_SIZE=2G" \
-          -e "MYSQL_INNODB_DEFAULT_ROW_FORMAT=dynamic" \
-          -e "MYSQL_INNODB_DATA_FILE_PATH=ibdata1:100M:autoextend:max:10G" \
-          -e "MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT=1" \
-          -e "MYSQL_INNODB_LOG_BUFFER_SIZE=64M" \
-          -e "MYSQL_INNODB_LOG_FILE_SIZE=256M" \
-          -e "MYSQL_INNODB_STRICT_MODE=ON" \
-          -e "MYSQL_LOWER_CASE_TABLE_NAMES=1" \
-          -e "MYSQL_MAX_CONNECT_ERRORS=100" \
-          -e "MYSQL_MAX_CONNECTIONS=1000" \
-          -e "MYSQL_QUERY_CACHE_LIMIT=10M" \
-          -e "MYSQL_QUERY_CACHE_SIZE=0" \
-          -e "MYSQL_QUERY_CACHE_TYPE=OFF" \
-          ${MARIADB_IMG}:${{ matrix.mariadb }} &
-        sleep 30
-    - name: Test MariaDB
-      run: docker exec mariadb /bin/bash -c "mysql -h127.0.0.1 -uroot -proot -e \"show variables like '%time_zone'; select now();\""
-    - name: Check date
-      run: |
-        date
-        mysql -h127.0.0.1 -uroot -proot -e "show variables like '%time_zone'; select now();"
-    - name: Clone Openldap container
-      uses: actions/checkout@v3
-      with:
-        repository: 'GIP-RECIA/docker-openldap-test'
-        path: '.docker-openldap-test'
-    - name: Start Openldap Container
-      run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" up -d --build
-    - name: Set up JDK ${{ matrix.java }} version
-      uses: actions/setup-java@v3
-      with:
-        java-version: "${{ matrix.java }}"
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Set up Node ${{ matrix.node }} version
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node }}
-        cache: 'npm'
-    - name: DB connection test and conf checks
-      run: |
-        netstat -pnltu
-        mysql -h127.0.0.1 -uroot -proot -e "SHOW DATABASES;"
-        mysql -h127.0.0.1 -uroot -proot -e "show variables like 'char%'; show variables like 'collation%';show variables like 'innodb_default_row_format';"
-        mysql -h127.0.0.1 -uroot -proot -e "USE publisher_test;SHOW TABLES;"
-    - name: Project requirements
-      run: |
-        ./mvnw --version
-        ./mvnw clean generate-sources -Pci -B ${MVN_PARAMS}
-        ./mvnw compile liquibase:update -Pci -B ${MVN_PARAMS}
-        mkdir -p ${{ github.workspace }}/tmp
-        # install npm
-        npm ci
-        npm run test:unit
-    - name: DB final conf
-      run: |
-        # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
-        mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"
-    - name: Maven running API test agains DB/OS timezone
-      run: ./mvnw test -Pci -Dtest=org.esupportail.publisher.repository.ItemRepositoryTest#testRequestScheduledPublishedOptionalDate -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
-    - name: Maven notice:check
-      run: ./mvnw notice:check -B ${MVN_PARAMS}
-    - name: Maven license:check
-      run: ./mvnw license:check -B ${MVN_PARAMS}
-    - name: Maven running API test
-      run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
-    - name: Build with Maven
-      run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
-    - name: Stop containers
-      run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout badges branch to a badges directory nested inside first checkout
+        uses: actions/checkout@v4
+        with:
+          ref: badges
+          path: badges
+
+      - name: Set timezone
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: 'Europe/Paris'
+
+      - name: Set up locale ENV
+        run: |
+          sudo locale-gen $LANG
+          sudo update-locale LANG=$LANG
+          sudo apt install net-tools
+
+      - name: Check locales
+        run: locale -a
+
+      - name: Pull ${{ env.MARIADB_IMG }}:${{ matrix.mariadb }} image
+        run: docker pull ${{ env.MARIADB_IMG }}:${{ matrix.mariadb }}
+
+      - name: Run MariaDB container
+        run: |
+          docker run -t -d --name mariadb --rm -v \
+            --health-cmd="mysqladmin -uroot -proot ping" --health-interval=10s --health-timeout=10s --health-retries=10 \
+            -p 3306:3306/tcp \
+            -e "TZ=Europe/Paris" \
+            -e "MYSQL_USER=root" \
+            -e "MYSQL_ROOT_PASSWORD=root" \
+            -e "MYSQL_DATABASE=publisher_test" \
+            -e "MYSQL_DEFAULT_STORAGE_ENGINE=InnoDB" \
+            -e "MYSQL_CHARACTER_SET_SERVER=utf8mb4" \
+            -e "MYSQL_COLLATION_SERVER=utf8mb4_unicode_520_ci" \
+            -e "MYSQL_INNODB_BUFFER_POOL_SIZE=2G" \
+            -e "MYSQL_INNODB_DEFAULT_ROW_FORMAT=dynamic" \
+            -e "MYSQL_INNODB_DATA_FILE_PATH=ibdata1:100M:autoextend:max:10G" \
+            -e "MYSQL_INNODB_FLUSH_LOG_AT_TRX_COMMIT=1" \
+            -e "MYSQL_INNODB_LOG_BUFFER_SIZE=64M" \
+            -e "MYSQL_INNODB_LOG_FILE_SIZE=256M" \
+            -e "MYSQL_INNODB_STRICT_MODE=ON" \
+            -e "MYSQL_LOWER_CASE_TABLE_NAMES=1" \
+            -e "MYSQL_MAX_CONNECT_ERRORS=100" \
+            -e "MYSQL_MAX_CONNECTIONS=1000" \
+            -e "MYSQL_QUERY_CACHE_LIMIT=10M" \
+            -e "MYSQL_QUERY_CACHE_SIZE=0" \
+            -e "MYSQL_QUERY_CACHE_TYPE=OFF" \
+            ${{ env.MARIADB_IMG }}:${{ matrix.mariadb }} &
+          sleep 30
+
+      - name: Test MariaDB
+        run: docker exec mariadb /bin/bash -c "mysql -h127.0.0.1 -uroot -proot -e \"show variables like '%time_zone'; select now();\""
+
+      - name: Check date
+        run: |
+          date
+          mysql -h127.0.0.1 -uroot -proot -e "show variables like '%time_zone'; select now();"
+
+      - name: Clone Openldap container
+        uses: actions/checkout@v4
+        with:
+          repository: 'GIP-RECIA/docker-openldap-test'
+          path: '.docker-openldap-test'
+
+      - name: Start Openldap Container
+        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" up -d --build
+
+      - name: Set up variable ENV
+        if: startsWith(matrix.java, '8')
+        run: |
+          echo "MVN_PARAMS=-Dmaven.compiler.target=1.8" >> $GITHUB_ENV
+
+      - name: Set up JDK ${{ matrix.java }} version
+        uses: actions/setup-java@v4
+        with:
+          java-version: "${{ matrix.java }}"
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: DB connection test and conf checks
+        run: |
+          netstat -pnltu
+          mysql -h127.0.0.1 -uroot -proot -e "SHOW DATABASES;"
+          mysql -h127.0.0.1 -uroot -proot -e "show variables like 'char%'; show variables like 'collation%';show variables like 'innodb_default_row_format';"
+          mysql -h127.0.0.1 -uroot -proot -e "USE publisher_test;SHOW TABLES;"
+
+      - name: Project requirements
+        run: |
+          ./mvnw --version
+          ./mvnw clean generate-sources -Pci -B ${MVN_PARAMS}
+          ./mvnw compile liquibase:update -Pci -B ${MVN_PARAMS}
+          mkdir -p ${{ github.workspace }}/tmp
+
+      - name: DB final conf
+        run: |
+          # apply Database fix in waiting a management of "perm" not null and "perm" is null in abstract way
+          mysql -h127.0.0.1 -u root -proot -e "ALTER TABLE publisher_test.t_permission CHANGE perm perm VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL;"
+
+      - name: Maven running API test agains DB/OS timezone
+        run: ./mvnw test -Pci -Dtest=org.esupportail.publisher.repository.ItemRepositoryTest#testRequestScheduledPublishedOptionalDate -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
+
+      - name: Maven running API test
+        run: ./mvnw test -Pci -Dspring.profiles.active=test -Dapp.upload.path=${{ github.workspace }}/tmp -Dapp.upload.protectedPath=${{ github.workspace }}/tmp -Dspring.jpa.show-sql=false -Dlogging.config=classpath:logback-ci.xml -B ${MVN_PARAMS}
+
+      - name: Build with Maven
+        run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
+
+      - name: Stop containers
+        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
+
+      - name: Generate JaCoCo badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          badges-directory: badges
+          generate-branches-badge: true
+          generate-summary: true
+
+      - name: Log coverage percentages to workflow output
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branches = ${{ steps.jacoco.outputs.branches }}"
+
+      - name: Upload JaCoCo coverage report as a workflow artifact
+        if: ${{ matrix.mariadb == env.JACOCO_MARIADB }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report-java-${{ matrix.java }}
+          path: target/site/jacoco/
+
+      - name: Commit and push the coverage badges and summary file
+        if: ${{ github.event_name != 'pull_request' && matrix.java == env.JACOCO_JAVA && matrix.mariadb == env.JACOCO_MARIADB }}
+        run: |
+          cd badges
+          if [[ `git status --porcelain *.svg *.json` ]]; then
+            git config --global user.name 'github-actions'
+            git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add *.svg *.json
+            git commit -m "Autogenerated JaCoCo coverage badges" *.svg *.json
+            git push
+          fi
+
+      - name: Comment on PR with coverage percentages
+        if: ${{ github.event_name == 'pull_request' && matrix.java == env.JACOCO_JAVA && matrix.mariadb == env.JACOCO_MARIADB }}
+        run: |
+          REPORT=$(<badges/coverage-summary.json)
+          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
+          BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
+          NEWLINE=$'\n'
+          BODY="## JaCoCo Test Coverage Summary Statistics${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
+          gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

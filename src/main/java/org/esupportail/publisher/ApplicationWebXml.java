@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher;
 
+import org.esupportail.publisher.annotation.ExcludeFromJacocoGeneratedReport;
 import org.esupportail.publisher.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * This is an helper Java class that provides an alternative to creating a web.xml.
  */
+@ExcludeFromJacocoGeneratedReport
 public class ApplicationWebXml extends SpringBootServletInitializer {
 
 	private final Logger log = LoggerFactory.getLogger(ApplicationWebXml.class);

@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.esupportail.publisher.annotation.ExcludeFromJacocoGeneratedReport;
 import org.esupportail.publisher.config.Constants;
 
 import com.google.common.base.Joiner;
@@ -39,6 +40,7 @@ import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, MailProperties.class})
+@ExcludeFromJacocoGeneratedReport
 public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
