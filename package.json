@@ -35,7 +35,7 @@
     "@gip-recia/color-palette-picker": "0.0.12",
     "@gip-recia/evaluator": "0.0.20",
     "@gip-recia/js-tree": "0.0.17",
-    "@gip-recia/subject-infos": "0.0.15",
+    "@gip-recia/subject-infos": "0.0.16",
     "@gip-recia/subject-search-button": "0.0.20",
     "@popperjs/core": "2.11.8",
     "bootstrap": "5.2.3",
