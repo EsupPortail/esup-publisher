@@ -156,7 +156,7 @@ jobs:
           path: '.docker-openldap-test'
 
       - name: Start Openldap Container
-        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" up -d --build
+        run: docker compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" up -d --build
 
       - name: Set up variable ENV
         if: startsWith(matrix.java, '8')
@@ -244,4 +244,4 @@ jobs:
         run: ./mvnw clean package -Pprod -Dmaven.test.skip=true -Darguments="-DskipTests -Dmaven.deploy.skip=true" -B ${MVN_PARAMS}
 
       - name: Stop containers
-        run: docker-compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
+        run: docker compose -f "${{ github.workspace }}/.docker-openldap-test/docker-compose.yml" down
