@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.*;
 import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
@@ -20,6 +21,7 @@ import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
 import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
+import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
@@ -28,9 +30,6 @@ import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.esupportail.publisher.web.rest.vo.VisibilityRegular;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -94,7 +93,7 @@ public class NewsService {
         Long readerId,
         HttpServletRequest request){
 
-        List<PublisherStructureTree> publisherStructureTreeList = this.treeGenerationService.generateNewsTreeByReader(readerId, request);
+        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
 
         IExternalUser user = ldapUserDao.getUserByUid(payload.get("sub").toString());
         UserDTO userDTO = new UserDTO(user.getId(), user.getDisplayName(), user.getEmail(), user.getAttributes());
@@ -138,81 +137,36 @@ public class NewsService {
     }
 
 
+    public List<PublisherStructureTree> generateNewsTreeByReader(Long readerId, final HttpServletRequest request) {
+        BooleanBuilder readerBuilder = new BooleanBuilder();
 
+        readerRepository.findAll().stream().filter(reader -> reader.getAuthorizedTypes().contains(ItemType.NEWS))
+            .forEach(reader -> {
+                readerBuilder.or(PublisherPredicates.AllOfReader(reader.getId()));
+            });
 
-    public void getRubriques(List<Publisher> publishers, Actualite actualites) {
+        BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
+            .and(PublisherPredicates.AllOfReader(readerId));
+        //.and(PublisherPredicates.AllOfRedactor(redactorId));
+        final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
 
-        Set<AbstractClassification> rubriques = new HashSet<>();
+        List<PublisherStructureTree> publisherStructureTreeList = new ArrayList<>();
+
         publishers.forEach(publisher -> {
 
-            List<? extends AbstractClassification> categories = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
+            PublisherStructureTree publisherStructureTree = new PublisherStructureTree();
+            publisherStructureTree.setActualites(new ArrayList<>());
+            publisherStructureTree.setPublisher(publisher);
 
-            rubriques.addAll(categories);
+            Actualite actualite = this.getTreeGenerationService().getActualiteByPublisher(publisher, request);
 
+            publisherStructureTree.getActualites().add(actualite);
 
-            //TODO : Attention, demander comment gérer les highlight et si l'ordonnancement de la liste est bien utile ??
-//            if (publisher.isDoHighlight()) {
-//                final HighlightedClassification specialClassif = highlightedClassificationService.getClassification();
-//                // to get the order of HighlightedClassification as first
-//                actualites.getRubriques().addAll(Lists.newArrayList(rubriqueVOFactory.from(specialClassif)));
-//                actualites.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
-//            } else {
-//                actualites.getRubriques().addAll(rubriqueVOFactory.asVOList(rubriques));
-//            }
+            publisherStructureTreeList.add(publisherStructureTree);
 
         });
-        actualites.getRubriques().addAll(rubriqueVOFactory.asVOList(rubriques));
-    }
+        //Objects.requireNonNull(cacheManager.getCache("publisherStructureTreeList")).putIfAbsent(readerId, publisherStructureTreeList);
 
-
-    public void getItemsOnPublisherNewWay(List<Publisher> publishers, Actualite actualites, HttpServletRequest request) {
-
-        Set<ItemClassificationOrder> set = new HashSet<>();
-        actualites.setItems(new ArrayList<ItemVO>());
-        publishers.forEach(publisher -> {
-
-            BooleanBuilder builder = new BooleanBuilder();
-            //final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
-            builder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
-            builder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
-
-            set.addAll(Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder()))));
-
-            List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(builder, ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
-
-            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
-
-            for (ItemClassificationOrder ico : itemsClasss) {
-                final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-                //categories.add(classif);
-                final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
-                if (!itemsMap.containsKey(itemId)) {
-                    itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
-                } else {
-                    itemsMap.get(itemId).getSecond().add(classif);
-                }
-            }
-
-
-            for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
-                final AbstractItem item = entry.getValue().getFirst();
-                final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
-                actualites.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(), subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
-            }
-        });
-
-    }
-
-
-    private Set<String> getOrganizationsFromPayload(Map<String, Object> payload) throws JsonProcessingException {
-
-
-        String s = payload.get("ESCOSIREN").toString().substring(1, payload.get("ESCOSIREN").toString().length() - 1);
-
-        String[] rawValues = s.split(",\\s*");
-        Set<String> set = new HashSet<>(Arrays.asList(rawValues));
-        set.add(payload.get("ESCOSIRENCourant").toString());
-        System.out.println("list des organisations : " + set);
-        return set;
+        return publisherStructureTreeList;
     }
 }

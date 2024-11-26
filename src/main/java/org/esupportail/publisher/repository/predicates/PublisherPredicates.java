@@ -23,6 +23,7 @@ import org.esupportail.publisher.domain.QPublisher;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
+import org.esupportail.publisher.domain.Redactor;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 22 juil. 2014
@@ -30,6 +31,10 @@ import com.querydsl.core.types.Predicate;
 public final class PublisherPredicates {
 
 	private static final QPublisher qobj = QPublisher.publisher;
+
+    public static Predicate AllOfOrganizationAndRedactor(Organization organization, Redactor redactor){
+        return qobj.context.organization.id.eq(organization.getId()).and(qobj.context.redactor.id.eq(redactor.getId()));
+    }
 
 	public static Predicate AllOfOrganization(Organization org) {
 		return AllOfOrganization(org.getId());

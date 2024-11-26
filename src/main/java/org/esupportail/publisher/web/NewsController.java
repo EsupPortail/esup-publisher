@@ -32,7 +32,7 @@ public class NewsController {
 
     private static final Logger log = LoggerFactory.getLogger(NewsController.class);
 
-    private final int PAGE_SIZE = 10;
+    private final int PAGE_SIZE = 100;
 
     @Inject
     private NewsService newsService;
@@ -60,10 +60,6 @@ public class NewsController {
         try {
             Map<String, Object> payload = JWTDecoder.getPayloadJWT(token.substring(7));
             Actualite actualite = this.newsService.getNewsByUserOnContext(payload, readerId, request);
-            System.out.println();
-            System.out.println(source);
-            System.out.println(rubriques);
-            System.out.println();
             return this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques);
         } catch (Exception ex) {
             return "error";

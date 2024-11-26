@@ -59,77 +59,46 @@ public class TreeGenerationService {
     private final CacheManager cacheManager;
 
 
+    @Cacheable(value = "actualiteByPublisher", key = "#publisher")
+    public Actualite getActualiteByPublisher(Publisher publisher, final HttpServletRequest request) {
 
-    @Cacheable(value = "publisherStructureTreeList", key = "#readerId")
-    public List<PublisherStructureTree> generateNewsTreeByReader(Long readerId, final HttpServletRequest request) {
-        BooleanBuilder readerBuilder = new BooleanBuilder();
-
-        readerRepository.findAll().stream().filter(reader -> reader.getAuthorizedTypes().contains(ItemType.NEWS))
-            .forEach(reader -> {
-                readerBuilder.or(PublisherPredicates.AllOfReader(reader.getId()));
-            });
-
-        BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
-            .and(PublisherPredicates.AllOfReader(readerId));
-        //.and(PublisherPredicates.AllOfRedactor(redactorId));
-        final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
-
-        List<PublisherStructureTree> publisherStructureTreeList = new ArrayList<>();
-
-        publishers.forEach(publisher -> {
-
-            PublisherStructureTree publisherStructureTree = new PublisherStructureTree();
-            publisherStructureTree.setActualites(new ArrayList<>());
-
-            Actualite actualite = new Actualite();
-            publisherStructureTree.setPublisher(publisher);
-
-            List<? extends AbstractClassification> categories = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()),
-                ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
-
-            actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
-
-            BooleanBuilder itemBuilder = new BooleanBuilder();
-            //final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
-            itemBuilder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
-            itemBuilder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
-            //itemBuilder.and(ItemPredicates.excludeItemsWithEndDateBeforeNow());
-            //itemBuilder.and(ItemPredicates.ItemsToRemove());
+        Actualite actualite = new Actualite();
 
 
-            List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(itemBuilder,
-                ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
+        List<? extends AbstractClassification> categories = Lists.newArrayList(categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()), ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
 
-            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
+        actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
 
-            for (ItemClassificationOrder ico : itemsClasss) {
-                final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-                //categories.add(classif);
-                final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
-                if (!itemsMap.containsKey(itemId)) {
-                    itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
-                } else {
-                    itemsMap.get(itemId).getSecond().add(classif);
-                }
+        BooleanBuilder itemBuilder = new BooleanBuilder();
+        //final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
+        itemBuilder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
+        itemBuilder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
+        //itemBuilder.and(ItemPredicates.excludeItemsWithEndDateBeforeNow());
+        //itemBuilder.and(ItemPredicates.ItemsToRemove());
+
+        List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(itemClassificationOrderRepository.findAll(itemBuilder, ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
+
+        Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
+
+        for (ItemClassificationOrder ico : itemsClasss) {
+            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+            //categories.add(classif);
+            final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
+            if (!itemsMap.containsKey(itemId)) {
+                itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
+            } else {
+                itemsMap.get(itemId).getSecond().add(classif);
             }
+        }
 
-            for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
-                final AbstractItem item = entry.getValue().getFirst();
-                final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
-                actualite.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
-                    subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
-            }
+        for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
+            final AbstractItem item = entry.getValue().getFirst();
+            final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
+            actualite.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(), subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
+        }
 
-            publisherStructureTree.getActualites().add(actualite);
-
-            publisherStructureTreeList.add(publisherStructureTree);
-
-        });
-        Objects.requireNonNull(cacheManager.getCache("publisherStructureTreeList")).putIfAbsent(readerId, publisherStructureTreeList);
-
-        return publisherStructureTreeList;
+        return actualite;
     }
-
 
 
 }

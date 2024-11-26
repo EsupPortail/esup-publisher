@@ -16,9 +16,16 @@
 package org.esupportail.publisher.web.rest;
 
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
+import com.google.common.collect.Lists;
+import lombok.Data;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.ContentService;
 import org.esupportail.publisher.service.bean.UserSearchs;
@@ -27,6 +34,7 @@ import org.esupportail.publisher.service.factories.ContentDTOFactory;
 import org.esupportail.publisher.web.rest.dto.ContentDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for managing Evaluator.
  */
+@Data
 @RestController
 @RequestMapping("/api")
 public class ContentResource {
@@ -55,6 +64,11 @@ public class ContentResource {
     @Inject
     private UserSearchs userSearchResults;
 
+    @Inject
+    private PublisherRepository publisherRepository;
+
+    private final CacheManager cacheManager;
+
     /**
      * POST  /contents -> Create a new content.
      */
@@ -68,10 +82,11 @@ public class ContentResource {
         if (content.getItem().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
         }
-        System.out.println();
-        System.out.println("Content : " + content.toString());
-        System.out.println();
-        System.out.println(content.getItem());
+
+        final List<Publisher> publishers = Lists.newArrayList( this.publisherRepository.findAll(PublisherPredicates.AllOfOrganizationAndRedactor(content.getItem().getOrganization(), content.getItem().getRedactor())));
+
+        publishers.forEach(publisher -> Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher));
+
         return contentService.saveContent(content);
     }
 

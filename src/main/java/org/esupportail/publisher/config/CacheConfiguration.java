@@ -18,7 +18,6 @@ package org.esupportail.publisher.config;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.Data;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
@@ -80,7 +79,7 @@ public class CacheConfiguration {
             createCache(cm, org.esupportail.publisher.domain.Redactor.class.getName() + ".organizationReaderRedactors");
             createCache(cm, org.esupportail.publisher.domain.Subscriber.class.getName());
             createCache(cm, "feed");
-            createCache(cm, "publisherStructureTreeList");
+            createCache(cm, "actualiteByPublisher");
             //createCache(cm, org.esupportail.publisher.domain.AbstractClassification.class.getName() + ".books");
         };
     }
