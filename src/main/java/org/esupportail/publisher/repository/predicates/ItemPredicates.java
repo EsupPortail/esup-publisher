@@ -230,4 +230,8 @@ public final class ItemPredicates {
     public static Predicate itemsOwnedOfOrganizationWithoutClassif(final UserDTO user, final long orgId) {
         return qItem.organization.id.eq(orgId).and(qItem.createdBy.login.eq(user.getLogin()));
     }
+
+    public static Predicate excludeItemsWithEndDateBeforeNow() {
+        return qItem.endDate.isNull().or(qItem.endDate.after(LocalDate.now().minusMonths(1)));
+    }
 }

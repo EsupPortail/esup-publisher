@@ -17,6 +17,9 @@ package org.esupportail.publisher.repository;
 
 import org.esupportail.publisher.domain.SubjectContextKey;
 import org.esupportail.publisher.domain.Subscriber;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 /**
  *

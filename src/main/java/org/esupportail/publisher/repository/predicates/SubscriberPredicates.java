@@ -18,10 +18,18 @@
  */
 package org.esupportail.publisher.repository.predicates;
 
+import com.querydsl.core.types.dsl.Expressions;
 import org.esupportail.publisher.domain.ContextKey;
+import org.esupportail.publisher.domain.QSubjectContextKey;
 import org.esupportail.publisher.domain.QSubscriber;
 
 import com.querydsl.core.types.Predicate;
+import org.esupportail.publisher.domain.SubjectContextKey;
+import org.esupportail.publisher.domain.enums.ContextType;
+import org.esupportail.publisher.domain.enums.SubjectType;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 29 oct. 2014
@@ -33,4 +41,17 @@ public final class SubscriberPredicates {
 
 		return qsubscriber.subjectCtxId.context.eq(ctx);
 	}
+
+    public static Predicate inIdList(final List<Long> ids) {
+        final QSubscriber qsubscriber = QSubscriber.subscriber;
+
+        if (ids == null || ids.isEmpty()) {
+            return Expressions.FALSE; // Renvoie un prédicat toujours faux si la liste est vide ou nulle
+        }
+
+        return qsubscriber.subjectCtxId.context.keyId.in(ids).and(qsubscriber.subjectCtxId.context.keyType.eq(ContextType.ITEM)); // Vérifie que l'ID du Subscriber est dans la liste d'IDs
+    }
+
+
+
 }

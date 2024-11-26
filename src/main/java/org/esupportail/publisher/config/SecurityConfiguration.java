@@ -20,7 +20,10 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apereo.portal.soffit.security.SoffitApiAuthenticationManager;
+import org.apereo.portal.soffit.security.SoffitApiPreAuthenticatedProcessingFilter;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
 import org.esupportail.publisher.security.AjaxAuthenticationSuccessHandler;
 import org.esupportail.publisher.security.AjaxLogoutSuccessHandler;
@@ -38,20 +41,25 @@ import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -76,6 +84,9 @@ public class SecurityConfiguration {
     private static final String[] allowedHeaders = {"X-CSRF-TOKEN","Content-Type","Accept","Origin"};
 
     private final ESUPPublisherProperties esupPublisherProperties;
+
+    @Value("${soffit.jwt.signatureKey:Changeme}")
+    private String signatureKey;
 
     private Environment env;
     @Inject
@@ -243,6 +254,34 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public AuthenticationManager soffitAuthenticationManager() {
+        return new SoffitApiAuthenticationManager();
+    }
+
+    @Bean
+    @Order(1) // Priorité élevée pour les URLs liées à JWT
+    public SecurityFilterChain configureSoffit(HttpSecurity http) throws Exception {
+
+        final AbstractPreAuthenticatedProcessingFilter soffitFilter =
+            new SoffitApiPreAuthenticatedProcessingFilter(signatureKey);
+
+        soffitFilter.setAuthenticationManager(soffitAuthenticationManager());
+
+        http.antMatcher("/news/**")
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .cors().and().csrf().disable()
+            .addFilterBefore(soffitFilter, BasicAuthenticationFilter.class)
+            .authorizeRequests()
+            .antMatchers("/news/home").permitAll() // URLs publiques
+            .antMatchers("/news/**").authenticated() // URLs nécessitant une authentification JWT
+            .and().authenticationManager(soffitAuthenticationManager());
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.cors().and().addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
             .authenticationEntryPoint(casAuthenticationEntryPoint()).and()
@@ -309,7 +348,8 @@ public class SecurityConfiguration {
             .antMatchers("/public/**").permitAll()
             .antMatchers("/static/**").permitAll()
             .antMatchers("/ui/**").permitAll()
-            .anyRequest().denyAll();
+            .anyRequest().denyAll()
+            .and().authenticationManager(authenticationManager());
         http
             .logout()
             .logoutUrl("/api/logout")

@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 
 /**
  *
@@ -42,4 +44,7 @@ public interface PublisherRepository extends AbstractRepository<Publisher, Long>
     @Modifying(clearAutomatically = true)
     @Query("update #{#entityName} e set e.displayOrder = e.displayOrder - 1 where e.displayOrder > :from and e.displayOrder <= :to and e.context.organization.id = :orgId")
     Integer setLowerDisplayOrderOfRange(@Param("orgId") long organization, @Param("from") int from, @Param("to") int to);
+
+    //@Query("SELECT * FROM #{#entityName}")
+    List<Publisher> findAll();
 }

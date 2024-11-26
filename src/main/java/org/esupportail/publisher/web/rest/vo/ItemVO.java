@@ -61,5 +61,7 @@ public class ItemVO implements Serializable {
 
     private Visibility visibility;
 
+    private String source;
+
 
 }

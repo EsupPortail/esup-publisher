@@ -30,4 +30,6 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     //User findOneByEmail(String email);
 
+    User findByLogin(String id);
+
 }

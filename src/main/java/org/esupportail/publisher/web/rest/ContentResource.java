@@ -68,6 +68,10 @@ public class ContentResource {
         if (content.getItem().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new contents cannot already have an ID").build();
         }
+        System.out.println();
+        System.out.println("Content : " + content.toString());
+        System.out.println();
+        System.out.println(content.getItem());
         return contentService.saveContent(content);
     }
 

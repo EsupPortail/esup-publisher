@@ -15,11 +15,13 @@
  */
 package org.esupportail.publisher.repository;
 
+import java.security.Permission;
 import java.util.List;
 
 import org.esupportail.publisher.domain.AbstractPermission;
 
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  *
