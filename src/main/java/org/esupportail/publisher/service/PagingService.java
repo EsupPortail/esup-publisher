@@ -18,38 +18,18 @@ import java.util.stream.Collectors;
 public class PagingService {
 
 
+    public Actualite paginateActualite(Actualite actualite, int page, int size, String source, List<Long> rubriques) {
 
-    public Actualite paginateActualite(Actualite actualite, int page, int size) {
-        // Étape 1 : Pagination des items
+        if (source != null) {
+            actualite.setItems(actualite.getItems().stream().filter(itemVO -> itemVO.getSource().equals(source)).collect(Collectors.toList()));
+            if (rubriques != null) {
+                actualite.setItems(actualite.getItems().stream().filter(itemVO -> itemVO.getRubriques().stream().anyMatch(rubriques::contains)).collect(Collectors.toList()));
+            }
+        }
         int totalItems = actualite.getItems().size();
         int start = Math.min(page * size, totalItems);
         int end = Math.min(start + size, totalItems);
-
         actualite.setItems(actualite.getItems().subList(start, end));
-
-
-
-
-
-
-
-
-
-//        List<ItemVO> paginatedItems = actualite.getItems().subList(start, end);
-//
-//        // Étape 2 : Filtrer les rubriques associées aux items paginés
-//        Set<Long> rubriqueIds = paginatedItems.stream()
-//            .flatMap(item -> item.getRubriques().stream()) // Supposons une méthode getRubriqueIds() sur ItemVO
-//            .collect(Collectors.toSet());
-//
-//        List<RubriqueVO> filteredRubriques = actualite.getRubriques().stream()
-//            .filter(rubrique -> rubriqueIds.contains(rubrique.getUuid()))
-//            .collect(Collectors.toList());
-//
-//        // Étape 3 : Construire le résultat
-//        Map<String, Object> result = new HashMap<>();
-//        result.put("items", new PageImpl<>(paginatedItems, PageRequest.of(page, size), totalItems));
-//        result.put("rubriques", filteredRubriques);
 
         return actualite;
     }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,17 +51,20 @@ public class NewsController {
     @GetMapping(value = "/myHome/{reader_id}")
     public Object getUserNews(@RequestHeader(name = "Authorization") String token,
                               @PathVariable("reader_id") Long readerId,
-                              @RequestParam(value = "page", defaultValue = "0", required = false) Integer pageIndex,
+                              @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
                               @RequestParam(value = "source", required = false) String source,
-                              @RequestParam(value = "displayOrder", required = false) DisplayOrderType displayOrder,
+                              @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
 
                               HttpServletRequest request) {
 
         try {
             Map<String, Object> payload = JWTDecoder.getPayloadJWT(token.substring(7));
             Actualite actualite = this.newsService.getNewsByUserOnContext(payload, readerId, request);
-
-            return this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE);
+            System.out.println();
+            System.out.println(source);
+            System.out.println(rubriques);
+            System.out.println();
+            return this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques);
         } catch (Exception ex) {
             return "error";
         }

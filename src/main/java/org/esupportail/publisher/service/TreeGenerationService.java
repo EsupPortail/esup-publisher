@@ -74,8 +74,6 @@ public class TreeGenerationService {
         //.and(PublisherPredicates.AllOfRedactor(redactorId));
         final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
 
-        System.out.println("Nombre de publishers : " + publishers.size());
-
         List<PublisherStructureTree> publisherStructureTreeList = new ArrayList<>();
 
         publishers.forEach(publisher -> {
