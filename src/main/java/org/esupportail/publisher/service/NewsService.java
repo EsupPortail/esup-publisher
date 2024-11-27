@@ -1,17 +1,12 @@
 package org.esupportail.publisher.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mysema.commons.lang.Pair;
-
-
 import com.querydsl.core.BooleanBuilder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.esupportail.publisher.domain.*;
-import org.esupportail.publisher.domain.enums.ItemStatus;
+import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.domain.PublisherStructureTree;
 import org.esupportail.publisher.domain.enums.ItemType;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
@@ -19,8 +14,6 @@ import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEval
 import org.esupportail.publisher.domain.externals.IExternalUser;
 import org.esupportail.publisher.repository.*;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
-import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
-import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
@@ -47,9 +40,6 @@ public class NewsService {
 
     @Inject
     private OrganizationRepository organizationRepository;
-
-    @Inject
-    private ItemRepository itemRepository;
 
     @Inject
     private SubscriberRepository subscriberRepository;
@@ -88,15 +78,15 @@ public class NewsService {
     private IEvaluationFactory evalFactory;
 
 
-    public Actualite getNewsByUserOnContext(
-        Map<String, Object> payload,
-        Long readerId,
-        HttpServletRequest request){
+    public Actualite getNewsByUserOnContext(Map<String, Object> payload, Long readerId,
+        HttpServletRequest request) {
 
-        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
+        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(
+            readerId, request);
 
         IExternalUser user = ldapUserDao.getUserByUid(payload.get("sub").toString());
-        UserDTO userDTO = new UserDTO(user.getId(), user.getDisplayName(), user.getEmail(), user.getAttributes());
+        UserDTO userDTO = new UserDTO(user.getId(), user.getDisplayName(), user.getEmail(),
+            user.getAttributes());
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
@@ -107,7 +97,8 @@ public class NewsService {
 
                 actualite.getItems().forEach(itemVO -> {
 
-                    Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream().collect(Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
+                    Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream()
+                        .collect(Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
 
                     itemVO.getVisibility().getObliged().forEach(obliged -> {
 
@@ -115,14 +106,22 @@ public class NewsService {
 
                             VisibilityRegular visibilityRegular = (VisibilityRegular) obliged;
 
-                            UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator("isMemberOf", visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
+                            UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator(
+                                "isMemberOf", visibilityRegular.getValue(),
+                                StringEvaluationMode.CONTAINS);
 
-                            UserAttributesEvaluator uae = new UserAttributesEvaluator("uid", visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
+                            UserAttributesEvaluator uae = new UserAttributesEvaluator("uid",
+                                visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
 
-                            if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(uae).isApplicable(userDTO)) || ("isMemberOf".equals(visibilityRegular.getAttribute()) && evalFactory.from(umae).isApplicable(userDTO))) {
-                                itemVO.setSource(publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
+                            if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(
+                                uae).isApplicable(userDTO)) || (
+                                "isMemberOf".equals(visibilityRegular.getAttribute())
+                                    && evalFactory.from(umae).isApplicable(userDTO))) {
+                                itemVO.setSource(publisherStructureTree.getPublisher().getContext()
+                                    .getOrganization().getDisplayName());
                                 itemVOSet.add(itemVO);
-                                itemVO.getRubriques().forEach(r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
+                                itemVO.getRubriques().forEach(
+                                    r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                             }
                         }
                     });
@@ -137,16 +136,18 @@ public class NewsService {
     }
 
 
-    public List<PublisherStructureTree> generateNewsTreeByReader(Long readerId, final HttpServletRequest request) {
+    public List<PublisherStructureTree> generateNewsTreeByReader(Long readerId,
+        final HttpServletRequest request) {
         BooleanBuilder readerBuilder = new BooleanBuilder();
 
-        readerRepository.findAll().stream().filter(reader -> reader.getAuthorizedTypes().contains(ItemType.NEWS))
+        readerRepository.findAll().stream()
+            .filter(reader -> reader.getAuthorizedTypes().contains(ItemType.NEWS))
             .forEach(reader -> {
                 readerBuilder.or(PublisherPredicates.AllOfReader(reader.getId()));
             });
 
-        BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true))
-            .and(PublisherPredicates.AllOfReader(readerId));
+        BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true)).and(
+            PublisherPredicates.AllOfReader(readerId));
         //.and(PublisherPredicates.AllOfRedactor(redactorId));
         final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
 
@@ -158,7 +159,8 @@ public class NewsService {
             publisherStructureTree.setActualites(new ArrayList<>());
             publisherStructureTree.setPublisher(publisher);
 
-            Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher, request);
+            Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher,
+                request);
 
             publisherStructureTree.getActualites().add(actualite);
 
