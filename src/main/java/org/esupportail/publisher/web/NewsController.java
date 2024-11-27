@@ -54,7 +54,6 @@ public class NewsController {
                               @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
                               @RequestParam(value = "source", required = false) String source,
                               @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
-
                               HttpServletRequest request) {
 
         try {

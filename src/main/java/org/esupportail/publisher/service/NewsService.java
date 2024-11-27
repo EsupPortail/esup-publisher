@@ -117,7 +117,7 @@ public class NewsService {
 
                             UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator("isMemberOf", visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
 
-                            UserAttributesEvaluator uae = new UserAttributesEvaluator(visibilityRegular.getAttribute(), visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
+                            UserAttributesEvaluator uae = new UserAttributesEvaluator("uid", visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
 
                             if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(uae).isApplicable(userDTO)) || ("isMemberOf".equals(visibilityRegular.getAttribute()) && evalFactory.from(umae).isApplicable(userDTO))) {
                                 itemVO.setSource(publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
@@ -158,14 +158,13 @@ public class NewsService {
             publisherStructureTree.setActualites(new ArrayList<>());
             publisherStructureTree.setPublisher(publisher);
 
-            Actualite actualite = this.getTreeGenerationService().getActualiteByPublisher(publisher, request);
+            Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher, request);
 
             publisherStructureTree.getActualites().add(actualite);
 
             publisherStructureTreeList.add(publisherStructureTree);
 
         });
-        //Objects.requireNonNull(cacheManager.getCache("publisherStructureTreeList")).putIfAbsent(readerId, publisherStructureTreeList);
 
         return publisherStructureTreeList;
     }
