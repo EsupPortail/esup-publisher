@@ -1,15 +1,12 @@
 package org.esupportail.publisher.service;
 
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mysema.commons.lang.Pair;
-import com.querydsl.core.BooleanBuilder;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import lombok.Data;
+
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
@@ -29,6 +26,13 @@ import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mysema.commons.lang.Pair;
+import com.querydsl.core.BooleanBuilder;
+
+import lombok.Data;
 
 @Data
 @Service
@@ -63,16 +67,13 @@ public class TreeGenerationService {
 
 
     @Cacheable(value = "actualiteByPublisher", key = "#publisher")
-    public Actualite getActualiteByPublisher(Publisher publisher,
-        final HttpServletRequest request) {
+    public Actualite getActualiteByPublisher(Publisher publisher, final HttpServletRequest request) {
 
         Actualite actualite = new Actualite();
 
         List<? extends AbstractClassification> categories = Lists.newArrayList(
-            categoryRepository.findAll(
-                ClassificationPredicates.CategoryOfPublisher(publisher.getId()),
-                ClassificationPredicates.categoryOrderByDisplayOrderType(
-                    publisher.getDefaultDisplayOrder())));
+            categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()),
+                ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
 
         actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
 
@@ -90,8 +91,7 @@ public class TreeGenerationService {
         Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
 
         for (ItemClassificationOrder ico : itemsClasss) {
-            final AbstractClassification classif = ico.getItemClassificationId()
-                .getAbstractClassification();
+            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
             //categories.add(classif);
             final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
             if (!itemsMap.containsKey(itemId)) {
@@ -107,10 +107,8 @@ public class TreeGenerationService {
             final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(
                 item.getId(), false);
             actualite.getItems().add(itemVOFactory.from(item, entry.getValue().getSecond(),
-                subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles,
-                request));
+                subscriberService.getDefinedSubscribersOfContext(item.getContextKey()), linkedFiles, request));
         }
-
         return actualite;
     }
 

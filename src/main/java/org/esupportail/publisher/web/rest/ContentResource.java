@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for managing Evaluator.
  */
-@Data
+
 @RestController
 @RequestMapping("/api")
 public class ContentResource {
@@ -67,7 +67,8 @@ public class ContentResource {
     @Inject
     private PublisherRepository publisherRepository;
 
-    private final CacheManager cacheManager;
+    @Inject
+    private CacheManager cacheManager;
 
     /**
      * POST  /contents -> Create a new content.

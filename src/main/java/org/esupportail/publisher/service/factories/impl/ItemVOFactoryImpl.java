@@ -62,6 +62,7 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
     @SneakyThrows
     public ItemVO from(final AbstractItem item, final List<AbstractClassification> classifications, final List<Subscriber> subscribers,
                        final List<LinkedFileItem> linkedFiles, final HttpServletRequest request) {
+
         if (item != null) {
             ItemVO vo = new ItemVO();
             vo.setRubriques(new ArrayList<Long>());
@@ -84,10 +85,11 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
                 article.getCategories().add(classif.getDisplayName());
                 vo.getRubriques().add(classif.getId());
             }
-            if (item.isHighlight()) {
-                article.getCategories().add(highlightedClassificationService.getClassification().getName());
-                vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
-            }
+//            if (item.isHighlight()) {
+//                article.getCategories().add(highlightedClassificationService.getClassification().getName());
+//                vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
+//            }
+
             article.setCreator(item.getCreatedBy().getDisplayName());
             article.setDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setFiles(new ArrayList<LinkedFileVO>());
@@ -112,7 +114,6 @@ public class ItemVOFactoryImpl implements ItemVOFactory {
             } else {
                 vo.setVisibility(new Visibility());
             }
-
             return vo;
         }
         return null;
