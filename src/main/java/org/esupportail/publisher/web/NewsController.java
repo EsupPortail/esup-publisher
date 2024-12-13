@@ -3,22 +3,31 @@ package org.esupportail.publisher.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.View;
 
 import lombok.Data;
 
 import org.esupportail.publisher.service.NewsService;
 import org.esupportail.publisher.service.PagingService;
+import org.esupportail.publisher.service.ViewService;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.util.JWTDecoder;
 import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,6 +50,9 @@ public class NewsController {
     @Inject
     private PagingService pagingService;
 
+    @Inject
+    private ViewService viewService;
+
 
     @GetMapping(value = "/home")
     public Object getGuestNews(@PathVariable("reader_id") Long readerId,
@@ -48,6 +60,7 @@ public class NewsController {
 
         return 100;
     }
+
 
     @GetMapping(value = "/myHome/{reader_id}")
     public Object getUserNews(@RequestHeader(name = "Authorization") String token,
@@ -72,6 +85,18 @@ public class NewsController {
         catch (Exception ex) {
             return "error";
         }
+    }
+
+    @RequestMapping(value = "/item/" + "{item_id}")
+    public Object getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request){
+
+        return this.viewService.itemView(itemId, request);
+    }
+
+    @RequestMapping(value = "/files/" + "{item_id}")
+    public void getItemImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        this.viewService.downloadFile(request, response);
     }
 
 

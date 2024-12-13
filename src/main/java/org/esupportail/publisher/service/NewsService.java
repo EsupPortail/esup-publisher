@@ -31,6 +31,7 @@ import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.esupportail.publisher.web.rest.vo.VisibilityRegular;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -103,6 +104,9 @@ public class NewsService {
                             if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(uae).isApplicable(
                                 userDTO)) || ("isMemberOf".equals(visibilityRegular.getAttribute()) && evalFactory.from(
                                 umae).isApplicable(userDTO))) {
+
+                                itemVO.getArticle().setLink(itemVO.getArticle().getLink().substring(0, 9) + "news" + itemVO.getArticle().getLink().substring(13));
+
                                 itemVO.setSource(
                                     publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
                                 itemVOSet.add(itemVO);
