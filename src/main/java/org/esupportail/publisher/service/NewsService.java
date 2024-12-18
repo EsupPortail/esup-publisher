@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -105,7 +107,22 @@ public class NewsService {
                                 userDTO)) || ("isMemberOf".equals(visibilityRegular.getAttribute()) && evalFactory.from(
                                 umae).isApplicable(userDTO))) {
 
-                                itemVO.getArticle().setLink(itemVO.getArticle().getLink().substring(0, 9) + "news" + itemVO.getArticle().getLink().substring(13));
+
+                                itemVO.getArticle().setLink(
+                                    itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
+
+                                if (itemVO.getArticle().getEnclosure() != null) {
+
+                                    Pattern pattern = Pattern.compile(".*?(\\/files.*)");
+                                    Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
+                                    if (matcher.find()) {
+                                        itemVO.getArticle().setEnclosure(matcher.group(1));
+                                        ;
+                                    }
+
+
+                                }
+
 
                                 itemVO.setSource(
                                     publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
