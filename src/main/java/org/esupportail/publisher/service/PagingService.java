@@ -9,8 +9,6 @@ import lombok.Data;
 
 import org.esupportail.publisher.web.rest.dto.PaginatedResultDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 @Data
@@ -25,13 +23,7 @@ public class PagingService {
             actualite.setItems(
                 actualite.getItems().stream().filter(itemVO -> itemVO.getSource().equals(source)).collect(
                     Collectors.toList()));
-            if (rubriques != null) {
-                actualite.setItems(actualite.getItems().stream().filter(
-                    itemVO -> itemVO.getRubriques().stream().anyMatch(rubriques::contains)).collect(
-                    Collectors.toList()));
-            }
 
-            //
             // Étape 1 : Extraire les UUID des rubriques des items
             Set<Long> itemRubriqueUuids = actualite.getItems().stream().flatMap(
                     item -> item.getRubriques().stream()) // Obtenir tous les UUID des rubriques
@@ -41,6 +33,12 @@ public class PagingService {
             actualite.setRubriques(actualite.getRubriques().stream().filter(
                 rubrique -> itemRubriqueUuids.contains(Long.parseLong(rubrique.getUuid()))).collect(
                 Collectors.toList()));
+
+            if (rubriques != null && !rubriques.isEmpty()) {
+                actualite.setItems(actualite.getItems().stream().filter(
+                    itemVO -> itemVO.getRubriques().stream().anyMatch(rubriques::contains)).collect(
+                    Collectors.toList()));
+            }
         }
 
         int totalItems = actualite.getItems().size();

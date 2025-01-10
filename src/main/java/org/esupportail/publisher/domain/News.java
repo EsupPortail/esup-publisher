@@ -56,6 +56,8 @@ public class News extends AbstractItem implements Serializable {
     // @Column(nullable=false) can't apply as single table strategy
     private String body;
 
+
+
     /**
      * Empty constructor of News.
      */

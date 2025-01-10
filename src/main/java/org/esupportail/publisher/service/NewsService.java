@@ -3,6 +3,8 @@ package org.esupportail.publisher.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +32,7 @@ import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
+import org.esupportail.publisher.web.rest.vo.ActualiteExtended;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.esupportail.publisher.web.rest.vo.VisibilityRegular;
@@ -82,6 +85,7 @@ public class NewsService {
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
+        Set<String> sources = new HashSet<>();
 
         publisherStructureTreeList.forEach(publisherStructureTree -> {
 
@@ -117,15 +121,11 @@ public class NewsService {
                                     Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
                                     if (matcher.find()) {
                                         itemVO.getArticle().setEnclosure(matcher.group(1));
-                                        ;
                                     }
-
-
                                 }
-
-
                                 itemVO.setSource(
                                     publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
+                                sources.add(itemVO.getSource());
                                 itemVOSet.add(itemVO);
                                 itemVO.getRubriques().forEach(r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                             }
@@ -135,10 +135,12 @@ public class NewsService {
             });
         });
 
-        Actualite actualite = new Actualite();
+        ActualiteExtended actualite = new ActualiteExtended();
         actualite.getItems().addAll(itemVOSet);
         actualite.getItems().sort(Comparator.comparing(ItemVO::getCreatedDate).reversed());
         actualite.getRubriques().addAll(rubriqueVOSet);
+        actualite.getSources().addAll(sources);
+        Collections.sort(actualite.getSources());
         return actualite;
     }
 

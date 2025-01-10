@@ -67,7 +67,8 @@ public class NewsController {
         @PathVariable(value = "reader_id", required = true) Long readerId,
         @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
         @RequestParam(value = "source", required = false) String source,
-        @RequestParam(value = "rubriques", required = false) List<Long> rubriques, HttpServletRequest request) {
+        @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
+        HttpServletRequest request) {
 
         if (!(rubriques == null) && source == null){
             return ResponseEntity.badRequest().body("Veuillez renseigner une source avant de renseigner des rubriques.");
@@ -97,6 +98,12 @@ public class NewsController {
     public void getItemImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         this.viewService.downloadFile(request, response);
+    }
+
+    @RequestMapping(value = "/attachements/" + "{item_id}")
+    public Object getAttachementsById(@PathVariable("item_id") Long itemId, HttpServletRequest request){
+
+        return this.viewService.getItemAttachements(itemId, request);
     }
 
 

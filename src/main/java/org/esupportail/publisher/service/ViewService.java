@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.NewsExtended;
 import org.esupportail.publisher.domain.Resource;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
@@ -44,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,11 +83,10 @@ public class ViewService {
     public static final String FILE_VIEW = "/view/file/";
 
 
-    public Object itemView(Long itemId, HttpServletRequest request){
+    public Object itemView(Long itemId, HttpServletRequest request) {
 
         log.debug("Request to render in viewer, item with id {}", itemId);
-        if (itemId == null)
-            throw new IllegalArgumentException("No item identifier was provided to the request!");
+        if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
         Optional<AbstractItem> optionnalItem = itemRepository.findOne(
             ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED, null));
 
@@ -105,12 +107,10 @@ public class ViewService {
 
         final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
 
-        // all items has an enclosure but optional
-        item.setEnclosure(replaceRelativeUrl(item.getEnclosure(), baseUrl));
         // looking to replace img src with path of object with body attribute of for specific property
         if (item instanceof News) {
             ((News) item).setBody(replaceBodyUrl(((News) item).getBody(), baseUrl));
-            item.toString();
+
             return (News) item;
         } else if (item instanceof Flash) {
             ((Flash) item).setBody(replaceBodyUrl(((Flash) item).getBody(), baseUrl));
@@ -120,18 +120,40 @@ public class ViewService {
             log.error("Warning a new type of Item wasn't managed at this place, the item is :", item);
             throw new IllegalStateException("Warning missing type management of :" + item.toString());
         }
+
         return item;
     }
 
-    public void downloadFile(final HttpServletRequest request, HttpServletResponse response)
-        throws FileNotFoundException, IOException {
+    public Set<LinkedFileItem> getItemAttachements(Long itemId, HttpServletRequest request) {
+
+        log.debug("Request to render in viewer, item with id {}", itemId);
+        if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
+        Optional<AbstractItem> optionnalItem = itemRepository.findOne(
+            ItemPredicates.ItemWithStatus(itemId, ItemStatus.PUBLISHED, null));
+
+        AbstractItem item = optionnalItem.orElse(null);
+        if (item == null) {
+            throw new CustomAccessDeniedException("403");
+        }
+        log.debug("Item found {}", item);
+
+        Set<LinkedFileItem> attachments = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemIdAndInBody(
+            item.getId(), false));
+        System.out.println();
+        System.out.println("attachements : ");
+        System.out.println(attachments);
+
+        System.out.println();
+        return attachments;
+    }
+
+    public void downloadFile(final HttpServletRequest request,
+        HttpServletResponse response) throws FileNotFoundException, IOException {
         final String query = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         log.debug("Entering getting file with query {}", query);
         String filePath = query;
-        if (filePath == null || filePath.isEmpty())
-            throw new FileNotFoundException(filePath);
-        if (filePath.startsWith("/"))
-            filePath = filePath.substring(1);
+        if (filePath == null || filePath.isEmpty()) throw new FileNotFoundException(filePath);
+        if (filePath.startsWith("/")) filePath = filePath.substring(1);
         log.debug("Looking for file in database {}", filePath);
         List<LinkedFileItem> itemsFiles = Lists.newArrayList(linkedFileItemRepository.findByUri(filePath));
         if (itemsFiles.isEmpty()) {
@@ -141,8 +163,8 @@ public class ViewService {
         boolean canView = false;
         String filename = null;
         for (LinkedFileItem lfiles : itemsFiles) {
-            Optional<AbstractItem> optionalItem = itemRepository.findOne(ItemPredicates.ItemWithStatus(lfiles.getItemId(),
-                null, null));
+            Optional<AbstractItem> optionalItem = itemRepository.findOne(
+                ItemPredicates.ItemWithStatus(lfiles.getItemId(), null, null));
             AbstractItem item = optionalItem.orElse(null);
             // a user can see only when published expect if he can Edit the content
             if (item != null && item.getStatus().equals(ItemStatus.PUBLISHED)) {
@@ -154,19 +176,20 @@ public class ViewService {
                     }
                 } catch (AccessDeniedException ade) {
                     log.trace("Redirect to establish authentication !");
-                    response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?"
-                        + REDIRECT_PARAM + "=" + query);
+                    response.sendRedirect(
+                        request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?" + REDIRECT_PARAM + "=" + query);
                     return;
                 }
             } else if (item != null) {
                 if (SecurityUtils.getCurrentUserDetails() == null) {
                     log.trace("Redirect to establish authentication !");
-                    response.sendRedirect(request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?"
-                        + REDIRECT_PARAM + "=" + query);
+                    response.sendRedirect(
+                        request.getContextPath() + SecurityConfiguration.PROTECTED_PATH + "?" + REDIRECT_PARAM + "=" + query);
                     return;
                 }
 
-                if ( permissionService.canEditCtx(SecurityContextHolder.getContext().getAuthentication(), item.getContextKey())) {
+                if (permissionService.canEditCtx(SecurityContextHolder.getContext().getAuthentication(),
+                    item.getContextKey())) {
                     canView = true;
                     filename = lfiles.getFilename();
                     break;
@@ -174,16 +197,14 @@ public class ViewService {
             }
         }
 
-        if (!canView)
-            throw new AccessDeniedException("Impossible to get file '" + filePath + "'");
+        if (!canView) throw new AccessDeniedException("Impossible to get file '" + filePath + "'");
 
         if (query.startsWith(FILE_VIEW)) {
             filePath = query.substring(FILE_VIEW.length());
         }
 
         Path file = Paths.get(fileService.getProtectedFileUploadHelper().getUploadDirectoryPath(), filePath);
-        if (filename == null || filename.isEmpty())
-            filename = file.getFileName().toString();
+        if (filename == null || filename.isEmpty()) filename = file.getFileName().toString();
         log.debug("Retrieving file {} in path {}, contentType {}", filename, file, Files.probeContentType(file));
         if (Files.exists(file) && !Files.isDirectory(file)) {
             response.setContentType(Files.probeContentType(file));
@@ -202,31 +223,29 @@ public class ViewService {
                 log.info("Error writing file to output stream. Filename was '{}'", filePath, ex);
                 throw ex;
             }
-        } else
-            throw new FileNotFoundException(filePath);
+        } else throw new FileNotFoundException(filePath);
     }
-
 
 
     private boolean canView(final AbstractItem item) throws AccessDeniedException {
         // when RssAllowed is set then the content published is public
-        if (item.isRssAllowed())
-            return true;
-        List<Subscriber> subscribers = Lists.newArrayList(subscriberRepository.findAll(SubscriberPredicates.onCtx(item
-            .getContextKey())));
+        if (item.isRssAllowed()) return true;
+        List<Subscriber> subscribers = Lists.newArrayList(
+            subscriberRepository.findAll(SubscriberPredicates.onCtx(item.getContextKey())));
         // TODO we consider that all items have targets directly on
         // for targets defined only on classification a check will be needed
         if (subscribers.isEmpty()) {
             log.trace("Subscribers on item {} are empty -> true", item.getContextKey());
             return true;
         }
-        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         if (user == null) {
             log.trace("user is not authenticated -> throw an error to redirect on authentication");
             throw new AccessDeniedException("Access is denied to anonymous !");
-        } else if (user.getRoles().contains(AuthoritiesConstants.ADMIN)
-            || user.getUser().getLogin().equalsIgnoreCase(item.getCreatedBy().getLogin())
-            || user.getUser().getLogin().equalsIgnoreCase(item.getLastModifiedBy().getLogin())) {
+        } else if (user.getRoles().contains(AuthoritiesConstants.ADMIN) || user.getUser().getLogin().equalsIgnoreCase(
+            item.getCreatedBy().getLogin()) || user.getUser().getLogin().equalsIgnoreCase(
+            item.getLastModifiedBy().getLogin())) {
             return true;
         }
 
@@ -263,9 +282,9 @@ public class ViewService {
                         }
                         break;
                     case PERSON_ATTR:
-                        if (subject.getKeyAttribute() != null
-                            && userDTO.getAttributes().containsKey(subject.getKeyAttribute())
-                            && userDTO.getAttributes().get(subject.getKeyAttribute()).contains(subject.getKeyValue())) {
+                        if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
+                            subject.getKeyAttribute()) && userDTO.getAttributes().get(
+                            subject.getKeyAttribute()).contains(subject.getKeyValue())) {
                             log.trace("Check if the user attribute {} with values {} contains value {} -> true",
                                 subject.getKeyAttribute(), userDTO.getAttributes().get(subject.getKeyAttribute()),
                                 subject.getKeyValue());
@@ -273,8 +292,8 @@ public class ViewService {
                         }
                         break;
                     case PERSON_ATTR_REGEX:
-                        if (subject.getKeyAttribute() != null
-                            && userDTO.getAttributes().containsKey(subject.getKeyAttribute())) {
+                        if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
+                            subject.getKeyAttribute())) {
                             for (final String value : userDTO.getAttributes().get(subject.getKeyAttribute())) {
                                 if (value.matches(subject.getKeyValue())) {
                                     log.trace("Check if the user attribute {} with values {} match regex {} -> true",
@@ -286,8 +305,8 @@ public class ViewService {
                         }
                         break;
                     default:
-                        throw new IllegalStateException("Warning Subject Type '" + subject.getKeyType()
-                            + "' is not managed");
+                        throw new IllegalStateException(
+                            "Warning Subject Type '" + subject.getKeyType() + "' is not managed");
                 }
             }
         }
@@ -303,12 +322,14 @@ public class ViewService {
     }
 
     private String replaceBodyUrl(final String body, final String baseUrl) {
+        System.out.println();
+        System.out.println(body);
+        System.out.println(baseUrl);
+        System.out.println();
         if (body != null && !body.trim().isEmpty()) {
             String fileview = FILE_VIEW;
-            if (fileview.startsWith("/"))
-                fileview = fileview.substring(1);
-            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/").replaceAll("href=\"" + fileview,
-                "href=\"" + baseUrl + fileview);
+            if (fileview.startsWith("/")) fileview = fileview.substring(1);
+            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/").replaceAll("view/file/", "files/");
         }
         return body;
     }
