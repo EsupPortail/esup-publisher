@@ -1,0 +1,26 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="wulfran-lebrard (generated)" id="1737558570564-33">
+        <createTable tableName="T_READING_INDICATOR">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="T_READING_INDICATORPK"/>
+            </column>
+            <column name="isRead" type="VARCHAR(255)"/>
+            <column name="readingCounter" type="BIGINT"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="user_id" type="VARCHAR(50)"/>
+        </createTable>
+        <sql>
+            ALTER TABLE T_READING_INDICATOR CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+        </sql>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1737558570564-34">
+        <addUniqueConstraint columnNames="item_id, user_id" constraintName="UK3e7b54t8xehctaju39f99ujy8" tableName="T_READING_INDICATOR"/>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1737558570564-35">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="T_READING_INDICATOR" constraintName="FK396kc5fkgqb4vh7so9t23xki8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ITEM" validate="true" />
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1737558570564-36">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="T_READING_INDICATOR" constraintName="FK4v0a641nu88d6rm1e1ynrx1al" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_id" referencedTableName="T_USER" validate="true" />
+    </changeSet>
+</databaseChangeLog>

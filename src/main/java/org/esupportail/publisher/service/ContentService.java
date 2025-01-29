@@ -40,6 +40,7 @@ import org.esupportail.publisher.domain.Filter;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.ItemClassificationOrder;
 import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.ReadingIndincator;
 import org.esupportail.publisher.domain.Redactor;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
@@ -55,6 +56,7 @@ import org.esupportail.publisher.repository.FilterRepository;
 import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.LinkedFileItemRepository;
+import org.esupportail.publisher.repository.ReadingIndincatorRepository;
 import org.esupportail.publisher.repository.RedactorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
 import org.esupportail.publisher.repository.externals.IExternalGroupDao;
@@ -138,6 +140,9 @@ public class ContentService {
 
 	@Inject
 	private RedactorRepository redactorRepository;
+
+    @Inject
+    private ReadingIndincatorRepository readingIndincatorRepository;
 
 	public ResponseEntity<?> saveContent(final ContentDTO content) throws URISyntaxException {
 		Optional<Redactor> optionalRedactor = redactorRepository.findById(content.getItem().getRedactor().getId());
@@ -646,6 +651,8 @@ public class ContentService {
 		itemClassificationOrderRepository.deleteAll(classificationsLinksToDel);
 		final Iterable<LinkedFileItem> filesToDelete = linkedFileItemRepository.findByAbstractItemId(id);
 		linkedFileItemRepository.deleteAll(filesToDelete);
+        List<ReadingIndincator> readingIndincatorsToDelete = this.readingIndincatorRepository.findAllByItemId(id);
+        this.readingIndincatorRepository.deleteAll(readingIndincatorsToDelete);
 		for (LinkedFileItem lFile : filesToDelete) {
 			fileService.deletePrivateResource(lFile.getUri());
 		}

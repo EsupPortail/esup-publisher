@@ -18,12 +18,16 @@ package org.esupportail.publisher.web.rest;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
 import lombok.Data;
+
+import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Publisher;
+import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.security.SecurityConstants;
@@ -69,6 +73,9 @@ public class ContentResource {
 
     @Inject
     private CacheManager cacheManager;
+
+    @Inject
+    private ItemRepository itemRepository;
 
     /**
      * POST  /contents -> Create a new content.
@@ -138,6 +145,13 @@ public class ContentResource {
     //+ " && hasPermission(#id,  '" + SecurityConstants.CTX_ITEM + "', '" + SecurityConstants.PERM_EDITOR + "')")
     public void delete(@PathVariable Long id) {
         log.debug("REST request to delete Content : {}", id);
+
+        Optional<AbstractItem> i = itemRepository.findById(id);
+
+        final List<Publisher> publishers = Lists.newArrayList(this.publisherRepository.findAll(PublisherPredicates.AllOfOrganizationAndRedactor(i.get().getOrganization(), i.get().getRedactor())));
+
+        publishers.forEach(publisher -> Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher));
+
         contentService.deleteContent(id);
     }
 }

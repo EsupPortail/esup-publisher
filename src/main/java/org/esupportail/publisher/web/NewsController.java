@@ -64,10 +64,6 @@ public class NewsController {
         @RequestParam(value = "lecture", required = false) Boolean reading,
         HttpServletRequest request) {
 
-
-        System.out.println();
-        System.out.println("lecture : " + reading);
-        System.out.println();
         if (!(rubriques == null) && source == null) {
             return ResponseEntity.badRequest().body(
                 "Veuillez renseigner une source avant de renseigner des rubriques.");

@@ -12,6 +12,9 @@ public interface ReadingIndincatorRepository extends AbstractRepository<ReadingI
     @Query("SELECT r FROM #{#entityName} r WHERE r.user.id = :userId")
     List<ReadingIndincator> findAllByUserId(@Param("userId") String userId);
 
+    @Query("SELECT r FROM #{#entityName} r WHERE r.item.id = :itemId")
+    List<ReadingIndincator> findAllByItemId(@Param("itemId") Long itemId);
+
     @Query("SELECT COUNT(r) > 0 FROM #{#entityName} r WHERE r.item.id = :itemId AND r.user.id = :userId")
     boolean existsByItemIdAndUserId(@Param("itemId") Long itemId, @Param("userId") String userId);
 
@@ -23,5 +26,9 @@ public interface ReadingIndincatorRepository extends AbstractRepository<ReadingI
     @Modifying
     @Query("UPDATE #{#entityName} r SET r.readingCounter = r.readingCounter + 1 WHERE r.item.id = :itemId AND r.user.id = :userId")
     void incrementReadingCounter(@Param("itemId") Long itemId, @Param("userId") String userId);
+
+    @Modifying
+    @Query("DELETE FROM #{#entityName} r WHERE r.user.id = :userId")
+    void deleteAllByUserId(@Param("userId") String userId);
 
 }

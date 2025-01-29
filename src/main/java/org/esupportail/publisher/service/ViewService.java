@@ -50,6 +50,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -106,6 +107,7 @@ public class ViewService {
 
         // looking to replace img src with path of object with body attribute of for specific property
         if (item instanceof News) {
+            System.out.println(((News) item).getBody());
             ((News) item).setBody(replaceBodyUrl(((News) item).getBody(), baseUrl));
 
             return item;
@@ -322,7 +324,8 @@ public class ViewService {
         if (body != null && !body.trim().isEmpty()) {
             String fileview = FILE_VIEW;
             if (fileview.startsWith("/")) fileview = fileview.substring(1);
-            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/").replaceAll("view/file/", "files/");
+
+            return body.replaceAll("view/file/", "files/");
         }
         return body;
     }
