@@ -1,5 +1,6 @@
 import UploadUtils from '@/services/util/UploadUtils';
 import Compressor from 'compressorjs';
+import ConfigurationService from '@/services/params/ConfigurationService';
 
 // Upload adpter utilisé pour l'upload de fichier
 class CustomUploadAdapter {
@@ -17,7 +18,13 @@ class CustomUploadAdapter {
   async upload() {
     const { entityId, fileSizeMax, isPublic } = this;
     return this.loader.file
-      .then(async (file) => (file.type.match('image/*') !== null ? await this.compressImage(file) : file))
+      .then(
+        async (file) => (
+          file.type.match('image/*') !== null
+            ? await this.compressImage(file)
+            : file
+        )
+      )
       .then(
         (file) =>
           new Promise((resolve, reject) => {
@@ -67,21 +74,33 @@ class CustomUploadAdapter {
     return file.type.match('image/*') !== null || file.type.match('audio/*') !== null || file.type.match('video/*') !== null;
   }
 
-  compressImage(file) {
-    return new Promise((resolve, reject) => {
-      new Compressor(file, {
-        quality: 0.8,
-        maxWidth: 800,
-        maxHeight: 600,
-        convertTypes: 'image/jpeg',
-        async success(blob) {
-          resolve(new File([blob], blob.name, { type: blob.type }));
-        },
-        error(err) {
-          reject(err);
-        },
+  async compressImage(file) {
+    const imageMaxSize = ConfigurationService.getConfUploadImageSize();
+    if (file.size <= imageMaxSize)
+      return file;
+
+    const compress = (quality) =>
+      new Promise((resolve, reject) => {
+        new Compressor(file, {
+          quality,
+          maxWidth: 1280,
+          maxHeight: 720,
+          convertTypes: ['image/png', 'image/jpeg'],
+          convertSize: imageMaxSize,
+          success(blob) {
+            resolve(new File([blob], blob.name || file.name, { type: blob.type }));
+          },
+          error(err) {
+            reject(err);
+          },
+        });
       });
-    });
+
+    let compressed = await compress(1);
+    if (compressed.size <= imageMaxSize)
+      return compressed;
+
+    return await compress(0.8);
   }
 
   abort() {
