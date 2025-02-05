@@ -231,7 +231,7 @@ public class NewsService {
 
                 if (optionnalItem.isPresent()) {
                     this.readingIndincatorRepository.save(
-                        new ReadingIndincator(optionnalItem.get(), user.getInternalUser(), true, 1));
+                        new ReadingIndincator(optionnalItem.get(), user.getInternalUser().getLogin(), true, 1));
                 } else {
                     throw new ObjectNotFoundException(id, AbstractItem.class);
                 }

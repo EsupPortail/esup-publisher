@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-3">
+        <addColumn tableName="T_READING_INDICATOR">
+            <column name="user" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-4">
+        <addUniqueConstraint columnNames="item_id" constraintName="UKt98xcthya94k5ws1t5kd64vx7"
+                             tableName="T_READING_INDICATOR"/>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-5">
+        <dropForeignKeyConstraint baseTableName="t_reading_indicator" constraintName="FK4v0a641nu88d6rm1e1ynrx1al"/>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-6">
+        <dropUniqueConstraint constraintName="UK3e7b54t8xehctaju39f99ujy8" tableName="t_reading_indicator"/>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-7">
+        <dropColumn columnName="user_id" tableName="t_reading_indicator"/>
+    </changeSet>
+    <changeSet author="wulfran-lebrard (generated)" id="1738747629275-1">
+        <dropDefaultValue columnDataType="varchar(255)" columnName="isRead" tableName="T_READING_INDICATOR"/>
+    </changeSet>
+</databaseChangeLog>

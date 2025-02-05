@@ -1,7 +1,6 @@
 package org.esupportail.publisher.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.esupportail.publisher.domain.AbstractItem;
@@ -39,7 +37,6 @@ import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
-import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -53,7 +50,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.google.common.collect.Maps;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
@@ -196,9 +192,9 @@ class NewsServiceTest {
         ReadingIndincator readingIndincator2 = new ReadingIndincator();
         ReadingIndincator readingIndincator3 = new ReadingIndincator();
 
-        readingIndincator1.setUser(customUserDetails.getInternalUser());
-        readingIndincator2.setUser(customUserDetails.getInternalUser());
-        readingIndincator3.setUser(new User("FR2", "bob"));
+        readingIndincator1.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndincator2.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndincator3.setUser(new User("FR2", "bob").getLogin());
 
         readingIndincator1.setItem(item1);
         readingIndincator2.setItem(item2);
@@ -249,9 +245,9 @@ class NewsServiceTest {
         ReadingIndincator readingIndincator2 = new ReadingIndincator();
         ReadingIndincator readingIndincator3 = new ReadingIndincator();
 
-        readingIndincator1.setUser(customUserDetails.getInternalUser());
-        readingIndincator2.setUser(customUserDetails.getInternalUser());
-        readingIndincator3.setUser(new User("FR2", "bob"));
+        readingIndincator1.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndincator2.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndincator3.setUser(new User("FR2", "bob").getLogin());
 
         readingIndincator1.setItem(item1);
         readingIndincator2.setItem(item2);
