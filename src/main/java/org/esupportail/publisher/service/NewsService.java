@@ -86,10 +86,8 @@ public class NewsService {
     private ItemRepository<AbstractItem> itemRepository;
 
 
-    public Actualite getNewsByUserOnContext(Map<String, Object> payload, Long readerId, Boolean reading,
+    public Actualite getNewsByUserOnContext(Long readerId, Boolean reading,
         HttpServletRequest request) throws Exception {
-
-        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
 
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -97,6 +95,9 @@ public class NewsService {
         if (user == null) {
             throw new ObjectNotFoundException(user, CustomUserDetails.class);
         }
+
+        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
+
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
@@ -219,9 +220,7 @@ public class NewsService {
     }
 
     public void readingManagement(Long id, boolean isRead) throws ObjectNotFoundException {
-        System.out.println();
-        System.out.println("isRead : " + isRead);
-        System.out.println();
+
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         Optional<AbstractItem> optionnalItem = itemRepository.findOne(
@@ -245,8 +244,6 @@ public class NewsService {
                 this.readingIndincatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
             } else throw new ObjectNotFoundException(id, ReadingIndincator.class);
         }
-
-
     }
 
 }

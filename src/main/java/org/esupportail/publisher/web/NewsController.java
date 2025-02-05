@@ -47,16 +47,8 @@ public class NewsController {
     private ViewService viewService;
 
 
-    @GetMapping(value = "/home")
-    public Object getGuestNews(@PathVariable("reader_id") Long readerId,
-        @RequestParam(value = "pageIndex", required = true) String user) {
-
-        return 100;
-    }
-
-
-    @GetMapping(value = "/myHome/{reader_id}")
-    public Object getUserNews(@RequestHeader(name = "Authorization") String token,
+    @GetMapping(value = "/myNews/{reader_id}")
+    public ResponseEntity<Object> getUserNews(
         @PathVariable(value = "reader_id", required = true) Long readerId,
         @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
         @RequestParam(value = "source", required = false) String source,
@@ -70,53 +62,42 @@ public class NewsController {
         }
 
         try {
-
-            Map<String, Object> payload = JWTDecoder.getPayloadJWT(token.substring(7));
-            Actualite actualite = this.newsService.getNewsByUserOnContext(payload, readerId, reading, request);
-            return this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques);
+            Actualite actualite = this.newsService.getNewsByUserOnContext(readerId, reading, request);
+            return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
-            return "error";
+            return ResponseEntity.status(404).body(ex.getMessage());
         }
     }
 
     @RequestMapping(value = "/item/" + "{item_id}")
-    public Object getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
-
-        return this.viewService.itemView(itemId, request);
-    }
-
-    @RequestMapping(value = "/files/" + "{item_id}")
-    public void getItemImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        this.viewService.downloadFile(request, response);
-    }
-
-    @RequestMapping(value = "/attachements/" + "{item_id}")
-    public Object getAttachementsById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
-
-        return this.viewService.getItemAttachements(itemId, request);
+    public ResponseEntity<Object> getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
+        try {
+            return ResponseEntity.ok(this.viewService.itemView(itemId, request));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @RequestMapping(value = "/readingInfos")
-    public Map<String, Boolean> getNewsReadingInformations() {
+    public ResponseEntity<Object>  getNewsReadingInformations() {
 
         try {
-            return this.newsService.getAllReadindInfosForCurrentUser();
+            return ResponseEntity.ok(this.newsService.getAllReadindInfosForCurrentUser());
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.status(404).body(e.getMessage());
         }
 
     }
 
     @PatchMapping(value = "/setNewsReading/" + "{item_id}/" + "{isRead}")
-    public ResponseEntity setReading(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
+    public ResponseEntity<Object> setReading(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
         try {
             this.newsService.readingManagement(itemId, isRead);
-            return ResponseEntity.status(200).body("");
+            return ResponseEntity.ok("");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

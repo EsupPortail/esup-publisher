@@ -107,7 +107,7 @@ public class ViewService {
 
         // looking to replace img src with path of object with body attribute of for specific property
         if (item instanceof News) {
-            System.out.println(((News) item).getBody());
+
             ((News) item).setBody(replaceBodyUrl(((News) item).getBody(), baseUrl));
 
             return item;
