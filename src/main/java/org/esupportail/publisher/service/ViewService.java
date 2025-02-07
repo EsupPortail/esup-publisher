@@ -22,7 +22,6 @@ import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
-import org.esupportail.publisher.domain.NewsExtended;
 import org.esupportail.publisher.domain.Resource;
 import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
@@ -30,7 +29,9 @@ import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.LinkedFileItemRepository;
+import org.esupportail.publisher.repository.ReadingIndincatorRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
+import org.esupportail.publisher.repository.UserRepository;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.AuthoritiesConstants;
@@ -43,6 +44,7 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.google.common.collect.Lists;
@@ -53,35 +55,30 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Transactional
 public class ViewService {
-
-    @Inject
-    private ItemRepository<AbstractItem> itemRepository;
-
-    @Inject
-    private SubscriberRepository subscriberRepository;
-
-    @Inject
-    private ExternalUserHelper externalUserHelper;
-
-    @Inject
-    private UserDetailsService userDetailsService;
-
-    @Inject
-    private FileService fileService;
-
-    @Inject
-    private LinkedFileItemRepository linkedFileItemRepository;
-
-    @Inject
-    private IPermissionService permissionService;
-
-
-    private static final String REDIRECT_PARAM = "local-back-to";
 
     public static final String ITEM_VIEW = "/view/item/";
     public static final String FILE_VIEW = "/view/file/";
-
+    private static final String REDIRECT_PARAM = "local-back-to";
+    @Inject
+    private ItemRepository<AbstractItem> itemRepository;
+    @Inject
+    private SubscriberRepository subscriberRepository;
+    @Inject
+    private ExternalUserHelper externalUserHelper;
+    @Inject
+    private UserDetailsService userDetailsService;
+    @Inject
+    private UserRepository userRepository;
+    @Inject
+    private FileService fileService;
+    @Inject
+    private LinkedFileItemRepository linkedFileItemRepository;
+    @Inject
+    private IPermissionService permissionService;
+    @Inject
+    private ReadingIndincatorRepository readingIndincatorRepository;
 
     public Object itemView(Long itemId, HttpServletRequest request) {
 
@@ -111,14 +108,14 @@ public class ViewService {
         if (item instanceof News) {
             ((News) item).setBody(replaceBodyUrl(((News) item).getBody(), baseUrl));
 
-            return (News) item;
+            return item;
         } else if (item instanceof Flash) {
             ((Flash) item).setBody(replaceBodyUrl(((Flash) item).getBody(), baseUrl));
         } else if (item instanceof Resource) {
             ((Resource) item).setRessourceUrl(replaceRelativeUrl(((Resource) item).getRessourceUrl(), baseUrl));
         } else if (!(item instanceof Media) && !(item instanceof Attachment)) {
             log.error("Warning a new type of Item wasn't managed at this place, the item is :", item);
-            throw new IllegalStateException("Warning missing type management of :" + item.toString());
+            throw new IllegalStateException("Warning missing type management of :" + item);
         }
 
         return item;
@@ -137,18 +134,14 @@ public class ViewService {
         }
         log.debug("Item found {}", item);
 
-        Set<LinkedFileItem> attachments = Sets.newHashSet(linkedFileItemRepository.findByAbstractItemIdAndInBody(
-            item.getId(), false));
-        System.out.println();
-        System.out.println("attachements : ");
-        System.out.println(attachments);
+        Set<LinkedFileItem> attachments = Sets.newHashSet(
+            linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false));
 
-        System.out.println();
         return attachments;
     }
 
     public void downloadFile(final HttpServletRequest request,
-        HttpServletResponse response) throws FileNotFoundException, IOException {
+        HttpServletResponse response) throws IOException {
         final String query = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         log.debug("Entering getting file with query {}", query);
         String filePath = query;

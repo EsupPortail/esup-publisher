@@ -3,12 +3,12 @@ package org.esupportail.publisher.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,20 +17,26 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.PublisherStructureTree;
+import org.esupportail.publisher.domain.ReadingIndincator;
+import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
-import org.esupportail.publisher.domain.externals.IExternalUser;
+import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
+import org.esupportail.publisher.repository.ReadingIndincatorRepository;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
+import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
+import org.esupportail.publisher.security.CustomUserDetails;
+import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
-import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.esupportail.publisher.web.rest.vo.ActualiteExtended;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
@@ -38,6 +44,7 @@ import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.esupportail.publisher.web.rest.vo.VisibilityRegular;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
@@ -48,6 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 @Service
+@Transactional
 public class NewsService {
 
     @Inject
@@ -68,69 +76,93 @@ public class NewsService {
     @Inject
     private IEvaluationFactory evalFactory;
 
+    @Inject
+    private ReadingIndincatorRepository readingIndincatorRepository;
 
-    public Actualite getNewsByUserOnContext(Map<String, Object> payload, Long readerId,
+    @Inject
+    private UserDetailsService userDetailsService;
+
+    @Inject
+    private ItemRepository<AbstractItem> itemRepository;
+
+
+    public Actualite getNewsByUserOnContext(Map<String, Object> payload, Long readerId, Boolean reading,
         HttpServletRequest request) throws Exception {
 
         List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
 
-        // Récupération de l'utilisateur courant, accession à ses autorisations
-        IExternalUser user = ldapUserDao.getUserByUid(payload.get("sub").toString());
+        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
         if (user == null) {
-            throw new ObjectNotFoundException((Serializable) user, IExternalUser.class);
+            throw new ObjectNotFoundException(user, CustomUserDetails.class);
         }
-
-        UserDTO userDTO = new UserDTO(user.getId(), user.getDisplayName(), user.getEmail(), user.getAttributes());
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
         Set<String> sources = new HashSet<>();
+
+        Map<String, Boolean> readingIndincators = this.readingIndincatorRepository.findAllByUserId(
+            user.getUser().getLogin()).stream().collect(
+            Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
+                ReadingIndincator::isRead));
 
         publisherStructureTreeList.forEach(publisherStructureTree -> {
 
             publisherStructureTree.getActualites().forEach(actualite -> {
 
                 actualite.getItems().forEach(itemVO -> {
-                    Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream().collect(
-                        Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
 
-                    itemVO.getVisibility().getObliged().forEach(obliged -> {
+                    if (reading == null || (reading ?
+                        (readingIndincators.containsKey(itemVO.getUuid()) && readingIndincators.get(
+                            itemVO.getUuid()).equals(true)) :
+                        (!readingIndincators.containsKey(itemVO.getUuid()) || readingIndincators.get(
+                            itemVO.getUuid()).equals(false))
+                    )) {
 
-                        if (obliged instanceof VisibilityRegular) {
+                        Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream().collect(
+                            Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
 
-                            VisibilityRegular visibilityRegular = (VisibilityRegular) obliged;
+                        itemVO.getVisibility().getObliged().forEach(obliged -> {
 
-                            UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator(
-                                "isMemberOf", visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
+                            if (obliged instanceof VisibilityRegular) {
 
-                            UserAttributesEvaluator uae = new UserAttributesEvaluator("uid",
-                                visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
+                                VisibilityRegular visibilityRegular = (VisibilityRegular) obliged;
 
-                            if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(uae).isApplicable(
-                                userDTO)) || ("isMemberOf".equals(visibilityRegular.getAttribute()) && evalFactory.from(
-                                umae).isApplicable(userDTO))) {
+                                UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator(
+                                    "isMemberOf", visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
+
+                                UserAttributesEvaluator uae = new UserAttributesEvaluator("uid",
+                                    visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
+
+                                if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(
+                                    uae).isApplicable(
+                                    user.getUser())) || ("isMemberOf".equals(
+                                    visibilityRegular.getAttribute()) && evalFactory.from(
+                                    umae).isApplicable(user.getUser()))) {
 
 
-                                itemVO.getArticle().setLink(
-                                    itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
+                                    itemVO.getArticle().setLink(
+                                        itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
 
-                                if (itemVO.getArticle().getEnclosure() != null) {
+                                    if (itemVO.getArticle().getEnclosure() != null) {
 
-                                    Pattern pattern = Pattern.compile(".*?(\\/files.*)");
-                                    Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
-                                    if (matcher.find()) {
-                                        itemVO.getArticle().setEnclosure(matcher.group(1));
+                                        Pattern pattern = Pattern.compile(".*?(\\/files.*)");
+                                        Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
+                                        if (matcher.find()) {
+                                            itemVO.getArticle().setEnclosure(matcher.group(1));
+                                        }
                                     }
+                                    itemVO.setSource(
+                                        publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
+                                    sources.add(itemVO.getSource());
+                                    itemVOSet.add(itemVO);
+                                    itemVO.getRubriques().forEach(
+                                        r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                                 }
-                                itemVO.setSource(
-                                    publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
-                                sources.add(itemVO.getSource());
-                                itemVOSet.add(itemVO);
-                                itemVO.getRubriques().forEach(r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             });
         });
@@ -175,4 +207,46 @@ public class NewsService {
             throw new ObjectNotFoundException((Serializable) publishers, Publisher.class);
         }
     }
+
+    public Map<String, Boolean> getAllReadindInfosForCurrentUser() {
+
+        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+
+        return this.readingIndincatorRepository.findAllByUserId(user.getUser().getLogin()).stream().collect(
+            Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
+                ReadingIndincator::isRead));
+    }
+
+    public void readingManagement(Long id, boolean isRead) throws ObjectNotFoundException {
+        System.out.println();
+        System.out.println("isRead : " + isRead);
+        System.out.println();
+        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        Optional<AbstractItem> optionnalItem = itemRepository.findOne(
+            ItemPredicates.ItemWithStatus(id, ItemStatus.PUBLISHED, null));
+
+        if (isRead) {
+            if (!this.readingIndincatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+
+                if (optionnalItem.isPresent()) {
+                    this.readingIndincatorRepository.save(
+                        new ReadingIndincator(optionnalItem.get(), user.getInternalUser(), true, 1));
+                } else {
+                    throw new ObjectNotFoundException(id, AbstractItem.class);
+                }
+            } else {
+                this.readingIndincatorRepository.readingManagement(id, user.getInternalUser().getLogin(), true);
+                this.readingIndincatorRepository.incrementReadingCounter(id, user.getInternalUser().getLogin());
+            }
+        } else {
+            if (this.readingIndincatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+                this.readingIndincatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
+            } else throw new ObjectNotFoundException(id, ReadingIndincator.class);
+        }
+
+
+    }
+
 }

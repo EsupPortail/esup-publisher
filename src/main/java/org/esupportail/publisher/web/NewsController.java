@@ -1,8 +1,6 @@
 package org.esupportail.publisher.web;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +8,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.View;
-
-import lombok.Data;
 
 import org.esupportail.publisher.service.NewsService;
 import org.esupportail.publisher.service.PagingService;
@@ -22,18 +17,16 @@ import org.esupportail.publisher.service.util.JWTDecoder;
 import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.Data;
 
 @Data
 @RestController
@@ -68,28 +61,32 @@ public class NewsController {
         @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
         @RequestParam(value = "source", required = false) String source,
         @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
+        @RequestParam(value = "lecture", required = false) Boolean reading,
         HttpServletRequest request) {
 
-        if (!(rubriques == null) && source == null){
-            return ResponseEntity.badRequest().body("Veuillez renseigner une source avant de renseigner des rubriques.");
+
+        System.out.println();
+        System.out.println("lecture : " + reading);
+        System.out.println();
+        if (!(rubriques == null) && source == null) {
+            return ResponseEntity.badRequest().body(
+                "Veuillez renseigner une source avant de renseigner des rubriques.");
         }
 
         try {
 
             Map<String, Object> payload = JWTDecoder.getPayloadJWT(token.substring(7));
-            Actualite actualite = this.newsService.getNewsByUserOnContext(payload, readerId, request);
+            Actualite actualite = this.newsService.getNewsByUserOnContext(payload, readerId, reading, request);
             return this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques);
-        }
-        catch (ObjectNotFoundException exception){
+        } catch (ObjectNotFoundException exception) {
             return ResponseEntity.notFound().build();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return "error";
         }
     }
 
     @RequestMapping(value = "/item/" + "{item_id}")
-    public Object getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request){
+    public Object getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
 
         return this.viewService.itemView(itemId, request);
     }
@@ -101,10 +98,30 @@ public class NewsController {
     }
 
     @RequestMapping(value = "/attachements/" + "{item_id}")
-    public Object getAttachementsById(@PathVariable("item_id") Long itemId, HttpServletRequest request){
+    public Object getAttachementsById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
 
         return this.viewService.getItemAttachements(itemId, request);
     }
 
+    @RequestMapping(value = "/readingInfos")
+    public Map<String, Boolean> getNewsReadingInformations() {
+
+        try {
+            return this.newsService.getAllReadindInfosForCurrentUser();
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    @PatchMapping(value = "/setNewsReading/" + "{item_id}/" + "{isRead}")
+    public ResponseEntity setReading(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
+        try {
+            this.newsService.readingManagement(itemId, isRead);
+            return ResponseEntity.status(200).body("");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

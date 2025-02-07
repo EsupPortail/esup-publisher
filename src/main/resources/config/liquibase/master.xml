@@ -21,9 +21,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-<!--     <include file="classpath:config/liquibase/changelog/20141118120129_main_schema.xml" relativeToChangelogFile="false"/> -->
-<!--     <include file="classpath:config/liquibase/changelog/20141124120129_main_schema.xml" relativeToChangelogFile="false"/> -->
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <!--     <include file="classpath:config/liquibase/changelog/20141118120129_main_schema.xml" relativeToChangelogFile="false"/> -->
+    <!--     <include file="classpath:config/liquibase/changelog/20141124120129_main_schema.xml" relativeToChangelogFile="false"/> -->
     <!-- JHipster will add liquibase changelogs here -->
     <!--<include file="config/liquibase/changelog/20150326120008_main_schema.xml" relativeToChangelogFile="false"/>-->
     <!--<include file="config/liquibase/changelog/20160523135456_changelog.xml" relativeToChangelogFile="false"/>-->
@@ -38,8 +38,10 @@
     <!--<include file="config/liquibase/changelog/20170608100853_changelog.xml" relativeToChangelogFile="false"/>-->
     <!--<include file="config/liquibase/changelog/20170619134854_changelog.xml" relativeToChangelogFile="false"/>-->
     <!--<include file="config/liquibase/changelog/20171012132552_changelog.xml" relativeToChangelogFile="false"/>-->
-    <include file="config/liquibase/changelog/20180326145110_main_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200617203928_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20230830105314_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20221116103346_changelog.xml" relativeToChangelogFile="false"/>
+<!--    <include file="config/liquibase/changelog/20180326145110_main_schema.xml" relativeToChangelogFile="false"/>-->
+<!--    <include file="config/liquibase/changelog/20200617203928_changelog.xml" relativeToChangelogFile="false"/>-->
+<!--    <include file="config/liquibase/changelog/20230830105314_changelog.xml" relativeToChangelogFile="false"/>-->
+<!--    <include file="config/liquibase/changelog/20221116103346_changelog.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20250110151836_changelog.xml" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>
