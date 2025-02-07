@@ -90,10 +90,14 @@ Response:
 
 ## 4: Security and authentication
 
+#### Don't forget to add the private key used to sign the tokens to the configuration.
+
 Before the change, all security was handled by the CAS protocol. From now on, and in the context of replacing the
 portlet, the security of our new controller is ensured via the ‘Soffit’ protocol based on OIDC.
 
 1. Adding a new security string to SecurityConfiguration
+
+
 
 ```java
 
