@@ -78,24 +78,20 @@ public class TreeGenerationService {
         actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
 
         BooleanBuilder itemBuilder = new BooleanBuilder();
-        //final QItemClassificationOrder icoQ = QItemClassificationOrder.itemClassificationOrder;
         itemBuilder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
         itemBuilder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
-        //itemBuilder.and(ItemPredicates.excludeItemsWithEndDateBeforeNow());
-        //itemBuilder.and(ItemPredicates.ItemsToRemove());
 
-        List<ItemClassificationOrder> itemsClasss = Lists.newArrayList(
+        List<ItemClassificationOrder> itemsClass = Lists.newArrayList(
             itemClassificationOrderRepository.findAll(itemBuilder,
                 ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
 
         Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
 
-        for (ItemClassificationOrder ico : itemsClasss) {
+        for (ItemClassificationOrder ico : itemsClass) {
             final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-            //categories.add(classif);
             final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
             if (!itemsMap.containsKey(itemId)) {
-                itemsMap.put(itemId, new Pair<AbstractItem, List<AbstractClassification>>(
+                itemsMap.put(itemId, new Pair<>(
                     ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
             } else {
                 itemsMap.get(itemId).getSecond().add(classif);

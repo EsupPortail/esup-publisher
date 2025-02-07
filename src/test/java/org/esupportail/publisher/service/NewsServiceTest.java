@@ -208,7 +208,7 @@ class NewsServiceTest {
         Mockito.when(this.readingIndincatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList(readingIndincator1, readingIndincator2));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
-        Map<String, Boolean> result = this.service.getAllReadindInfosForCurrentUser();
+        Map<String, Boolean> result = this.service.getAllReadingInfosForCurrentUser();
 
         System.out.println(result);
 
@@ -261,7 +261,7 @@ class NewsServiceTest {
         Mockito.when(this.readingIndincatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList());
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
-        Map<String, Boolean> result = this.service.getAllReadindInfosForCurrentUser();
+        Map<String, Boolean> result = this.service.getAllReadingInfosForCurrentUser();
 
         System.out.println(result);
 

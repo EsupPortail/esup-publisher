@@ -1,6 +1,5 @@
 package org.esupportail.publisher.service;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,18 +85,18 @@ public class NewsService {
     private ItemRepository<AbstractItem> itemRepository;
 
 
+    /**
+     * Retourne les actualités d'un utilisateur sur un reader donné
+     * @param readerId ID du reader recherché
+     * @param reading Filtre de lecture (true = lues, false = non lues, null = tout)
+     */
     public Actualite getNewsByUserOnContext(Long readerId, Boolean reading,
         HttpServletRequest request) throws Exception {
 
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        if (user == null) {
-            throw new ObjectNotFoundException(user, CustomUserDetails.class);
-        }
-
         List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
-
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
@@ -114,11 +113,13 @@ public class NewsService {
 
                 actualite.getItems().forEach(itemVO -> {
 
+                    // Filtre lu = dans la liste des readingIndincators à true
+                    // Filtre non lu = pas dans la liste OU dans la liste des readingIndincators à false
                     if (reading == null || (reading ?
                         (readingIndincators.containsKey(itemVO.getUuid()) && readingIndincators.get(
-                            itemVO.getUuid()).equals(true)) :
-                        (!readingIndincators.containsKey(itemVO.getUuid()) || readingIndincators.get(
-                            itemVO.getUuid()).equals(false))
+                            itemVO.getUuid())) :
+                        (!readingIndincators.containsKey(itemVO.getUuid()) || !readingIndincators.get(
+                            itemVO.getUuid()))
                     )) {
 
                         Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream().collect(
@@ -142,12 +143,10 @@ public class NewsService {
                                     visibilityRegular.getAttribute()) && evalFactory.from(
                                     umae).isApplicable(user.getUser()))) {
 
-
                                     itemVO.getArticle().setLink(
                                         itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
 
                                     if (itemVO.getArticle().getEnclosure() != null) {
-
                                         Pattern pattern = Pattern.compile(".*?(\\/files.*)");
                                         Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
                                         if (matcher.find()) {
@@ -196,20 +195,20 @@ public class NewsService {
                 publisherStructureTree.setPublisher(publisher);
 
                 Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher, request);
-
                 publisherStructureTree.getActualites().add(actualite);
 
                 publisherStructureTreeList.add(publisherStructureTree);
             });
 
             return publisherStructureTreeList;
-        } else {
-            log.debug("Aucun publishers trouvé pour le reader {}", readerId);
-            throw new ObjectNotFoundException((Serializable) publishers, Publisher.class);
         }
+
+        log.debug("Aucun publisher trouvé pour le reader {}", readerId);
+        throw new ObjectNotFoundException((Serializable) publishers, Publisher.class);
+
     }
 
-    public Map<String, Boolean> getAllReadindInfosForCurrentUser() {
+    public Map<String, Boolean> getAllReadingInfosForCurrentUser() {
 
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
@@ -223,15 +222,14 @@ public class NewsService {
 
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-        Optional<AbstractItem> optionnalItem = itemRepository.findOne(
+        Optional<AbstractItem> optionalItem = itemRepository.findOne(
             ItemPredicates.ItemWithStatus(id, ItemStatus.PUBLISHED, null));
 
         if (isRead) {
             if (!this.readingIndincatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
-
-                if (optionnalItem.isPresent()) {
+                if (optionalItem.isPresent()) {
                     this.readingIndincatorRepository.save(
-                        new ReadingIndincator(optionnalItem.get(), user.getInternalUser().getLogin(), true, 1));
+                        new ReadingIndincator(optionalItem.get(), user.getInternalUser().getLogin(), true, 1));
                 } else {
                     throw new ObjectNotFoundException(id, AbstractItem.class);
                 }

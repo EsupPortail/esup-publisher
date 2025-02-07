@@ -41,9 +41,9 @@ public class PagingService {
             }
         }
 
-        int totalItems = actualite.getItems().size();
-        int start = Math.min(pageIndex * pageSize, totalItems);
-        int end = Math.min(start + pageSize, totalItems);
+        final int totalItems = actualite.getItems().size();
+        final int start = Math.min(pageIndex * pageSize, totalItems);
+        final int end = Math.min(start + pageSize, totalItems);
         actualite.setItems(actualite.getItems().subList(start, end));
 
         return new PaginatedResultDTO(actualite, pageIndex, pageSize, totalItems,

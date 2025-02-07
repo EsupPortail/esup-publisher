@@ -60,8 +60,10 @@ public class NewsController {
             Actualite actualite = this.newsService.getNewsByUserOnContext(readerId, reading, request);
             return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques));
         } catch (ObjectNotFoundException exception) {
+            log.error("Exception raised on /myNews", exception);
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
+            log.error("Exception raised on /myNews", ex);
             return ResponseEntity.status(404).body(ex.getMessage());
         }
     }
@@ -71,21 +73,19 @@ public class NewsController {
         try {
             return ResponseEntity.ok(this.viewService.itemView(itemId, request));
         } catch (Exception ex) {
+            log.error("Exception raised on /item", ex);
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
     @RequestMapping(value = "/readingInfos")
     public ResponseEntity<Object>  getNewsReadingInformations() {
-
         try {
-            return ResponseEntity.ok(this.newsService.getAllReadindInfosForCurrentUser());
+            return ResponseEntity.ok(this.newsService.getAllReadingInfosForCurrentUser());
         } catch (Exception e) {
-            log.error(e.getStackTrace().toString());
-            e.printStackTrace();
-            return ResponseEntity.status(404).body(e.getStackTrace());
+            log.error("Exception raised on /readingInfos", e);
+            return ResponseEntity.status(404).body(e.getMessage());
         }
-
     }
 
     @PatchMapping(value = "/setNewsReading/" + "{item_id}/" + "{isRead}")
@@ -94,6 +94,7 @@ public class NewsController {
             this.newsService.readingManagement(itemId, isRead);
             return ResponseEntity.ok("");
         } catch (Exception e) {
+            log.error("Exception raised on /setNewsReading", e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
