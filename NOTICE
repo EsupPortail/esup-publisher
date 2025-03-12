@@ -87,12 +87,14 @@ This project includes:
   Jakarta Persistence API under Eclipse Public License v. 2.0 or Eclipse Distribution License v. 1.0
   Jakarta XML Binding API under Eclipse Distribution License - v 1.0
   Jasig CAS Client for Java - Core under Apache License Version 2.0
+  JASYPT: Java Simplified Encryption under The Apache Software License, Version 2.0
   Java Annotation Indexer under Apache License, Version 2.0
   Java Native Access under LGPL-2.1-or-later or Apache-2.0
   Java Native Access Platform under LGPL-2.1-or-later or Apache-2.0
   Java Persistence API, Version 2.1 under Eclipse Public License (EPL), Version 1.0 or Eclipse Distribution License (EDL), Version 1.0
   Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
   JavaBeans Activation Framework API jar under CDDL/GPLv2+CE
+  javax.annotation API under CDDL + GPLv2 with classpath exception
   javax.inject under The Apache Software License, Version 2.0
   javax.persistence-api under Eclipse Public License v1.0 or Eclipse Distribution License v. 1.0
   javax.transaction API under CDDL + GPLv2 with classpath exception
@@ -101,6 +103,9 @@ This project includes:
   JBoss Logging 3 under Apache License, version 2.0
   JCL 1.2 implemented over SLF4J under Apache License, Version 2.0
   JDOM under Similar to Apache License but with the acknowledgment clause removed
+  JJWT :: API under Apache License, Version 2.0
+  JJWT :: Extensions :: Jackson under Apache License, Version 2.0
+  JJWT :: Impl under Apache License, Version 2.0
   JSON in Java under The JSON License
   JSON library from Android SDK under Apache License 2.0
   JSON Small and Fast Parser under The Apache Software License, Version 2.0
@@ -225,6 +230,7 @@ This project includes:
   tomcat-embed-websocket under Apache License, Version 2.0
   TXW2 Runtime under Eclipse Distribution License - v 1.0
   unbescape under The Apache Software License, Version 2.0
+  uPortal under The Apache License, Version 2.0
   waffle-jna under MIT
   webjars-locator-core under MIT
   Woodstox under The Apache Software License, Version 2.0
