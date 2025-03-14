@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="cailbourdin (generated)" id="1741774682964-33">
+        <createTable tableName="T_READING_INDICATOR">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="T_READING_INDICATORPK"/>
+            </column>
+            <column name="isRead" type="VARCHAR(255)"/>
+            <column name="readingCounter" type="BIGINT"/>
+            <column name="user" type="VARCHAR(255)"/>
+            <column name="item_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="cailbourdin (generated)" id="1741774682964-34">
+        <addUniqueConstraint columnNames="item_id" constraintName="UKt98xcthya94k5ws1t5kd64vx7" tableName="T_READING_INDICATOR"/>
+    </changeSet>
+    <changeSet author="cailbourdin (generated)" id="1741774682964-35">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="T_READING_INDICATOR" constraintName="FK396kc5fkgqb4vh7so9t23xki8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="T_ITEM" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
