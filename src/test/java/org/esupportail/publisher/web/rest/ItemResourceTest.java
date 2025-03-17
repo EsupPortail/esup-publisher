@@ -64,6 +64,7 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -168,7 +169,7 @@ public class ItemResourceTest {
         UserDTO userDTOPart = userDTOFactory.from(userPart);
         CustomUserDetails userDetails = new CustomUserDetails(userDTOPart, userPart, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         Authentication authentication = new TestingAuthenticationToken(userDetails, "password", Lists.newArrayList(userDetails.getAuthorities()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authentication);
     }
 
     @BeforeEach

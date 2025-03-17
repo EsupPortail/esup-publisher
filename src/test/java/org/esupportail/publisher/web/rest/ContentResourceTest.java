@@ -85,6 +85,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -195,6 +196,8 @@ public class ContentResourceTest {
         UserDTO userDTOPart3 = new UserDTO(USER, userPart3.getDisplayName(), true, true, userPart3.getEmail(), userAttrs3);
         userUserSubLevelEditorDetails = new CustomUserDetails(userDTOPart3, userPart3, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.USER)));
         authUserSubLevelEditor = new TestingAuthenticationToken(userUserSubLevelEditorDetails, "password", Lists.newArrayList(userUserSubLevelEditorDetails.getAuthorities()));
+
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserAdmin);
     }
 
     private Publisher publisher;
@@ -257,8 +260,6 @@ public class ContentResourceTest {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
 
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
-
         // Create the Item
         restContentMockMvc.perform(
             post("/api/contents").contentType(TestUtil.APPLICATION_JSON_UTF8).content(
@@ -303,8 +304,6 @@ public class ContentResourceTest {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
 
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
-
         content.getItem().setEndDate(null);
         content.getItem().setStartDate(LocalDate.now().minusDays(1));
 
@@ -330,8 +329,6 @@ public class ContentResourceTest {
     public void testOptionalDateScheduledInsert() throws Exception {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
-
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
         content.getItem().setStartDate(LocalDate.now().plusDays(1));
         content.getItem().setEndDate(null);
@@ -359,8 +356,6 @@ public class ContentResourceTest {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
 
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
-
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().plusDays(7));
         content.getItem().setStatus(ItemStatus.PUBLISHED);
@@ -378,8 +373,6 @@ public class ContentResourceTest {
     public void testOptionalDateDraftOnDateBeforeInsert() throws Exception {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
-
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().minusDays(1));
@@ -406,8 +399,6 @@ public class ContentResourceTest {
     public void testOptionalDateDraftOnNotCompleteInsert() throws Exception {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
-
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().plusDays(7));
@@ -437,8 +428,6 @@ public class ContentResourceTest {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
 
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
-
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().plusDays(7));
         content.getItem().setStatus(ItemStatus.DRAFT);
@@ -466,8 +455,6 @@ public class ContentResourceTest {
     public void testOptionalDateDraftOnSaveInsert() throws Exception {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
-
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().plusDays(7));
@@ -497,7 +484,7 @@ public class ContentResourceTest {
         // Validate the database is empty
         assertThat(itemRepository.findAll(), hasSize(0));
 
-        SecurityContextHolder.getContext().setAuthentication(authUserContributor);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserContributor);
 
         // Create the Item
         restContentMockMvc.perform(
@@ -526,7 +513,7 @@ public class ContentResourceTest {
             ObjTest.newGlobalEvaluatorOnGroup(OperatorType.OR, userUserSubLevelEditorDetails.getUser().getAttributes().get("isMemberOf").get(0)));
         permissionRepository.saveAndFlush(perm);
 
-        SecurityContextHolder.getContext().setAuthentication(authUserSubLevelEditor);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserSubLevelEditor);
 
         content.getItem().setStartDate(LocalDate.now().minusDays(7));
         content.getItem().setEndDate(LocalDate.now().plusDays(7));
@@ -562,7 +549,7 @@ public class ContentResourceTest {
     @Transactional
     public void testOptionalDateNotAuthorizedInsert() throws Exception {
 
-        SecurityContextHolder.getContext().setAuthentication(authUserSubLevelEditor);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserSubLevelEditor);
 
         // Create the Item
         restContentMockMvc.perform(
@@ -580,7 +567,7 @@ public class ContentResourceTest {
             ObjTest.newGlobalEvaluatorOnGroup(OperatorType.OR, userUserSubLevelEditorDetails.getUser().getAttributes().get("isMemberOf").get(0)));
         permissionRepository.saveAndFlush(perm);
 
-        SecurityContextHolder.getContext().setAuthentication(authUserSubLevelEditor);
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserSubLevelEditor);
 
         content.getClassifications().clear();
         content.getClassifications().add(category2.getContextKey());

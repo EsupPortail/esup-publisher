@@ -32,6 +32,7 @@ import org.esupportail.publisher.service.bean.UserContextTree;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -141,6 +142,8 @@ public class CategoryResourceTest {
         UserDTO userDTOPart1 = new UserDTO(USER_ADMIN, userPart1.getDisplayName(), true, true, userPart1.getEmail(), userAttrs1);
         userAdminDetails = new CustomUserDetails(userDTOPart1, userPart1, Lists.newArrayList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)));
         authUserAdmin = new TestingAuthenticationToken(userAdminDetails, "password", Lists.newArrayList(userAdminDetails.getAuthorities()));
+
+        Mockito.when(SecurityContextHolder.getContext().getAuthentication()).thenReturn(authUserAdmin);
 	}
 
 	@BeforeEach
@@ -173,8 +176,6 @@ public class CategoryResourceTest {
 	public void createCategory() throws Exception {
 		// Validate the database is empty
 		assertThat(categoryRepository.findAll(), hasSize(0));
-
-        SecurityContextHolder.getContext().setAuthentication(authUserAdmin);
 
 		// Create the Category
 		restCategoryMockMvc.perform(
