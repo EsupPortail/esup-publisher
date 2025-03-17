@@ -67,6 +67,7 @@ app:
       - http://192.168.1.1:8080
     protocol: http://
     id-key-provider: esco_cas_publisher
+    soffit-jwt-signing-key: changeme
   cas:
     url-prefix: https://my.univ.fr/cas/
     url-login: https://my.univ.fr/cas/login

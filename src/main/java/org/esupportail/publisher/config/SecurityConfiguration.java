@@ -15,12 +15,10 @@
  */
 package org.esupportail.publisher.config;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apereo.portal.soffit.security.SoffitApiAuthenticationManager;
 import org.apereo.portal.soffit.security.SoffitApiPreAuthenticatedProcessingFilter;
@@ -37,18 +35,13 @@ import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
-
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationManagerResolver;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
@@ -69,6 +62,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @EnableWebSecurity
 @Slf4j
@@ -84,9 +80,6 @@ public class SecurityConfiguration {
     private static final String[] allowedHeaders = {"X-CSRF-TOKEN","Content-Type","Accept","Origin"};
 
     private final ESUPPublisherProperties esupPublisherProperties;
-
-    @Value("${soffit.jwt.signatureKey:Changeme}")
-    private String signatureKey;
 
     private Environment env;
     @Inject
@@ -263,7 +256,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain configureSoffit(HttpSecurity http) throws Exception {
 
         final AbstractPreAuthenticatedProcessingFilter soffitFilter =
-            new SoffitApiPreAuthenticatedProcessingFilter(signatureKey);
+            new SoffitApiPreAuthenticatedProcessingFilter(esupPublisherProperties.getSecurity().getSoffitJwtSigningKey());
 
         soffitFilter.setAuthenticationManager(soffitAuthenticationManager());
 

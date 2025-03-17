@@ -92,6 +92,7 @@ app:
       - http://192.168.2.79:8080
     protocol: http://
     id-key-provider: esco_cas_publisher
+    soffit-jwt-signing-key: changeme
   cas:
     url-prefix: https://secure.giprecia.net/cas_old/
     url-login: https://secure.giprecia.net/cas_old/login

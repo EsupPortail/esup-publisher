@@ -15,14 +15,14 @@
  */
 package org.esupportail.publisher.config.bean;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
@@ -37,6 +37,8 @@ public class SecurityProperties {
     private String protocol = "https://";
     @NotBlank
     private String idKeyProvider;
+    @NotBlank
+    private String soffitJwtSigningKey;
 
     @Override
     public String toString() {
@@ -48,6 +50,7 @@ public class SecurityProperties {
                 .collect(Collectors.joining("\",\"", "[\"", "\"]"))
                 + ",\n \"protocol\":\"" + protocol + "\""
                 + ",\n \"idKeyProvider\":\"" + idKeyProvider + "\""
+                + ",\n \"soffitJwtSigningKey\":\"" + soffitJwtSigningKey + "\""
                 + "\n}\n}";
     }
 }
