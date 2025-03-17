@@ -3,7 +3,7 @@
 echo "Run npm hook for Commit Message checking"
 
 #npm run commit
-commitlint --edit
+npx commitlint --edit
 
 if [ $? -gt 0 ]
 then
