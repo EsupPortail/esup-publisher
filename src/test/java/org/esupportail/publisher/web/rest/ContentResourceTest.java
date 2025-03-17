@@ -86,6 +86,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -132,6 +133,8 @@ public class ContentResourceTest {
     @Inject
     private UserDTOFactory userDTOFactory;
     @Inject
+    private CacheManager cacheManager;
+    @Inject
     @Named("permissionRepository")
     private PermissionRepository<AbstractPermission> permissionRepository;
 
@@ -151,6 +154,9 @@ public class ContentResourceTest {
 
         ReflectionTestUtils.setField(contentResource, "contentService", this.contentService);
         ReflectionTestUtils.setField(contentResource, "contentDTOFactory", this.contentDTOFactory);
+        ReflectionTestUtils.setField(contentResource, "publisherRepository", this.publisherRepository);
+        ReflectionTestUtils.setField(contentResource, "itemRepository", this.itemRepository);
+        ReflectionTestUtils.setField(contentResource, "cacheManager", this.cacheManager);
 
         this.restContentMockMvc = MockMvcBuilders.standaloneSetup(contentResource).build();
 
