@@ -15,13 +15,14 @@
  */
 package org.esupportail.publisher.domain;
 
-import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -30,8 +31,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
 import org.esupportail.publisher.domain.enums.ItemStatus;
-import java.time.Instant;
-import java.time.LocalDate;
 
 /**
  * @author GIP RECIA - Julien Gribonvald 18 juin 2014
@@ -55,9 +54,7 @@ public class News extends AbstractItem implements Serializable {
     @Basic
     // @Column(nullable=false) can't apply as single table strategy
     private String body;
-
-
-
+    
     /**
      * Empty constructor of News.
      */
