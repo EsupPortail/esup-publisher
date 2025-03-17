@@ -104,13 +104,13 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
 		final String userAdmin = esupPublisherProperties.getAdmins().getUserName();
 		if (userAdmin != null && !userAdmin.isEmpty()) {
-			final UserAttributesEvaluation uae1 = new UserAttributesEvaluation("uid", userAdmin, StringEvaluationMode.EQUALS);
+			final UserAttributesEvaluation uae1 = new UserAttributesEvaluation(esupPublisherProperties.getLdap().getUserBranch().getIdAttribute(), userAdmin, StringEvaluationMode.EQUALS);
 			set.add(uae1);
 		}
 
 		final String groupAdmin = esupPublisherProperties.getAdmins().getGroupName();
 		if (groupAdmin != null && !groupAdmin.isEmpty()) {
-			final UserAttributesEvaluation uae2 = new UserMultivaluedAttributesEvaluation("isMemberOf", groupAdmin, StringEvaluationMode.EQUALS);
+			final UserAttributesEvaluation uae2 = new UserMultivaluedAttributesEvaluation(esupPublisherProperties.getLdap().getUserBranch().getGroupAttribute(), groupAdmin, StringEvaluationMode.EQUALS);
 			set.add(uae2);
 		}
 
@@ -122,7 +122,7 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 		defs.setAdmins(admins);
 
 		final String groupUsers = esupPublisherProperties.getUsers().getGroupName();
-		UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation("isMemberOf", groupUsers, StringEvaluationMode.MATCH);
+		UserMultivaluedAttributesEvaluation umae = new UserMultivaluedAttributesEvaluation(esupPublisherProperties.getLdap().getUserBranch().getGroupAttribute(), groupUsers, StringEvaluationMode.MATCH);
 		defs.setUsers(umae);
 
 		Assert.isTrue(!groupUsers.isEmpty(), "Properties that define users aren't set in properties, there are needed to define all access users" +
