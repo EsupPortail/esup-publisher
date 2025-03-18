@@ -84,7 +84,7 @@ public class NewsService {
     private ItemVOFactory itemVOFactory;
 
     @Inject
-    private TreeGenerationService treeGenerationService;
+    private NewsTreeGenerationService treeGenerationService;
 
     @Inject
     private IEvaluationFactory evalFactory;

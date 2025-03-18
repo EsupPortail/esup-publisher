@@ -51,7 +51,7 @@ import lombok.Data;
 
 @Data
 @Service
-public class TreeGenerationService {
+public class NewsTreeGenerationService {
 
 
     @Inject

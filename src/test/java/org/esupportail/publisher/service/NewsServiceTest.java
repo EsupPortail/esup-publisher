@@ -80,7 +80,7 @@ class NewsServiceTest {
     private PublisherRepository publisherRepository;
 
     @Mock
-    private TreeGenerationService treeGenerationService;
+    private NewsTreeGenerationService treeGenerationService;
 
     @Mock
     private ReaderRepository readerRepository;
