@@ -15,12 +15,11 @@
  */
 package org.esupportail.publisher.service;
 
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -30,10 +29,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
+import org.esupportail.publisher.config.bean.CustomLdapProperties;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.PublisherStructureTree;
 import org.esupportail.publisher.domain.ReadingIndincator;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
@@ -47,22 +47,21 @@ import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserDetailsService;
+import org.esupportail.publisher.service.bean.PublisherStructureTree;
 import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
 import org.esupportail.publisher.web.rest.vo.Actualite;
-import org.esupportail.publisher.web.rest.vo.ActualiteExtended;
+import org.esupportail.publisher.web.rest.vo.ActualiteWSource;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.esupportail.publisher.web.rest.vo.VisibilityRegular;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.querydsl.core.BooleanBuilder;
-
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,6 +98,8 @@ public class NewsService {
     @Inject
     private ItemRepository<AbstractItem> itemRepository;
 
+    @Inject
+    private CustomLdapProperties ldapProperties;
 
     /**
      * Retourne les actualités d'un utilisateur sur un reader donné
@@ -106,12 +107,12 @@ public class NewsService {
      * @param reading Filtre de lecture (true = lues, false = non lues, null = tout)
      */
     public Actualite getNewsByUserOnContext(Long readerId, Boolean reading,
-        HttpServletRequest request) throws Exception {
+                                            HttpServletRequest request) throws Exception {
 
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        List<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
+        Set<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
@@ -124,65 +125,62 @@ public class NewsService {
 
         publisherStructureTreeList.forEach(publisherStructureTree -> {
 
-            publisherStructureTree.getActualites().forEach(actualite -> {
+            publisherStructureTree.getActualite().getItems().forEach(itemVO -> {
 
-                actualite.getItems().forEach(itemVO -> {
+                // Filtre lu = dans la liste des readingIndincators à true
+                // Filtre non lu = pas dans la liste OU dans la liste des readingIndincators à false
+                if (reading == null || (reading ?
+                    (readingIndincators.containsKey(itemVO.getUuid()) && readingIndincators.get(
+                        itemVO.getUuid())) :
+                    (!readingIndincators.containsKey(itemVO.getUuid()) || !readingIndincators.get(
+                        itemVO.getUuid()))
+                )) {
 
-                    // Filtre lu = dans la liste des readingIndincators à true
-                    // Filtre non lu = pas dans la liste OU dans la liste des readingIndincators à false
-                    if (reading == null || (reading ?
-                        (readingIndincators.containsKey(itemVO.getUuid()) && readingIndincators.get(
-                            itemVO.getUuid())) :
-                        (!readingIndincators.containsKey(itemVO.getUuid()) || !readingIndincators.get(
-                            itemVO.getUuid()))
-                    )) {
+                    Map<String, RubriqueVO> rubriquesMap = publisherStructureTree.getActualite().getRubriques().stream().collect(
+                        Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
 
-                        Map<String, RubriqueVO> rubriquesMap = actualite.getRubriques().stream().collect(
-                            Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
+                    itemVO.getVisibility().getObliged().forEach(obliged -> {
 
-                        itemVO.getVisibility().getObliged().forEach(obliged -> {
+                        if (obliged instanceof VisibilityRegular) {
 
-                            if (obliged instanceof VisibilityRegular) {
+                            VisibilityRegular visibilityRegular = (VisibilityRegular) obliged;
 
-                                VisibilityRegular visibilityRegular = (VisibilityRegular) obliged;
+                            UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator(
+                                ldapProperties.getUserBranch().getGroupAttribute(), visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
 
-                                UserMultivaluedAttributesEvaluator umae = new UserMultivaluedAttributesEvaluator(
-                                    "isMemberOf", visibilityRegular.getValue(), StringEvaluationMode.CONTAINS);
+                            UserAttributesEvaluator uae = new UserAttributesEvaluator(ldapProperties.getUserBranch().getIdAttribute(),
+                                visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
 
-                                UserAttributesEvaluator uae = new UserAttributesEvaluator("uid",
-                                    visibilityRegular.getValue(), StringEvaluationMode.EQUALS);
+                            if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(
+                                uae).isApplicable(
+                                user.getUser())) || ("isMemberOf".equals(
+                                visibilityRegular.getAttribute()) && evalFactory.from(
+                                umae).isApplicable(user.getUser()))) {
 
-                                if (("uid".equals(visibilityRegular.getAttribute()) && evalFactory.from(
-                                    uae).isApplicable(
-                                    user.getUser())) || ("isMemberOf".equals(
-                                    visibilityRegular.getAttribute()) && evalFactory.from(
-                                    umae).isApplicable(user.getUser()))) {
+                                itemVO.getArticle().setLink(
+                                    itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
 
-                                    itemVO.getArticle().setLink(
-                                        itemVO.getArticle().getLink().replaceAll("\\/view", "/news"));
-
-                                    if (itemVO.getArticle().getEnclosure() != null) {
-                                        Pattern pattern = Pattern.compile(".*?(\\/files.*)");
-                                        Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
-                                        if (matcher.find()) {
-                                            itemVO.getArticle().setEnclosure(matcher.group(1));
-                                        }
+                                if (itemVO.getArticle().getEnclosure() != null) {
+                                    Pattern pattern = Pattern.compile(".*?(\\/files.*)");
+                                    Matcher matcher = pattern.matcher(itemVO.getArticle().getEnclosure());
+                                    if (matcher.find()) {
+                                        itemVO.getArticle().setEnclosure(matcher.group(1));
                                     }
-                                    itemVO.setSource(
-                                        publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
-                                    sources.add(itemVO.getSource());
-                                    itemVOSet.add(itemVO);
-                                    itemVO.getRubriques().forEach(
-                                        r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                                 }
+                                itemVO.setSource(
+                                    publisherStructureTree.getPublisher().getContext().getOrganization().getDisplayName());
+                                sources.add(itemVO.getSource());
+                                itemVOSet.add(itemVO);
+                                itemVO.getRubriques().forEach(
+                                    r -> rubriqueVOSet.add(rubriquesMap.get(r.toString())));
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
             });
         });
 
-        ActualiteExtended actualite = new ActualiteExtended();
+        ActualiteWSource actualite = new ActualiteWSource();
         actualite.getItems().addAll(itemVOSet);
         actualite.getItems().sort(Comparator.comparing(ItemVO::getCreatedDate).reversed());
         actualite.getRubriques().addAll(rubriqueVOSet);
@@ -192,25 +190,22 @@ public class NewsService {
     }
 
 
-    public List<PublisherStructureTree> generateNewsTreeByReader(Long readerId,
+    public Set<PublisherStructureTree> generateNewsTreeByReader(Long readerId,
         final HttpServletRequest request) throws Exception {
 
         BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true)).and(
             PublisherPredicates.AllOfReader(readerId));
 
-        final List<Publisher> publishers = Lists.newArrayList(publisherRepository.findAll(builder));
+        final Set<Publisher> publishers = Sets.newHashSet(publisherRepository.findAll(builder));
 
         if (!publishers.isEmpty()) {
-            List<PublisherStructureTree> publisherStructureTreeList = new ArrayList<>();
+            Set<PublisherStructureTree> publisherStructureTreeList = new HashSet<>();
 
             publishers.forEach(publisher -> {
 
-                PublisherStructureTree publisherStructureTree = new PublisherStructureTree();
-                publisherStructureTree.setActualites(new ArrayList<>());
-                publisherStructureTree.setPublisher(publisher);
+                final Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher, request);
 
-                Actualite actualite = this.treeGenerationService.getActualiteByPublisher(publisher, request);
-                publisherStructureTree.getActualites().add(actualite);
+                final PublisherStructureTree publisherStructureTree = new PublisherStructureTree(publisher, actualite);
 
                 publisherStructureTreeList.add(publisherStructureTree);
             });

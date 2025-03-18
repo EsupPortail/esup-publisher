@@ -13,22 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.domain;
+package org.esupportail.publisher.service.bean;
 
 
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.web.rest.vo.Actualite;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "publisher")
 public class PublisherStructureTree {
 
+    @NotNull
     private Publisher publisher;
 
-    private List<Actualite> actualites;
-
+    @NotNull
+    private Actualite actualite;
 }

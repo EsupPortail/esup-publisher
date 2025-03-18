@@ -29,18 +29,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.PublisherStructureTree;
 import org.esupportail.publisher.domain.ReadingIndincator;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.repository.ItemRepository;
@@ -49,6 +48,7 @@ import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.ReadingIndincatorRepository;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserDetailsService;
+import org.esupportail.publisher.service.bean.PublisherStructureTree;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
@@ -157,7 +157,7 @@ class NewsServiceTest {
         when(treeGenerationService.getActualiteByPublisher(any(Publisher.class), eq(request))).thenReturn(actualite);
 
         // Act
-        List<PublisherStructureTree> result = service.generateNewsTreeByReader(readerId, request);
+        Set<PublisherStructureTree> result = service.generateNewsTreeByReader(readerId, request);
 
         // Assert
         assertNotNull(result);
