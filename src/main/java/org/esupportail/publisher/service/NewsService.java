@@ -182,7 +182,7 @@ public class NewsService {
 
         ActualiteWSource actualite = new ActualiteWSource();
         actualite.getItems().addAll(itemVOSet);
-        actualite.getItems().sort(Comparator.comparing(ItemVO::getCreatedDate).reversed());
+        actualite.getItems().sort(Comparator.comparing(ItemVO::getPubDate).reversed());
         actualite.getRubriques().addAll(rubriqueVOSet);
         actualite.getSources().addAll(sources);
         Collections.sort(actualite.getSources());
