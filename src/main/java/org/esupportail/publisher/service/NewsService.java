@@ -118,7 +118,7 @@ public class NewsService {
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
         Set<String> sources = new HashSet<>();
 
-        Map<String, Boolean> readingIndincators = this.readingIndincatorRepository.findAllByUserId(
+        final Map<String, Boolean> readingIndincators = this.readingIndincatorRepository.findAllByUserId(
             user.getUser().getLogin()).stream().collect(
             Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
                 ReadingIndincator::isRead));
@@ -136,7 +136,7 @@ public class NewsService {
                         itemVO.getUuid()))
                 )) {
 
-                    Map<String, RubriqueVO> rubriquesMap = publisherStructureTree.getActualite().getRubriques().stream().collect(
+                    final Map<String, RubriqueVO> rubriquesMap = publisherStructureTree.getActualite().getRubriques().stream().collect(
                         Collectors.toMap(RubriqueVO::getUuid, rubriqueVO -> rubriqueVO));
 
                     itemVO.getVisibility().getObliged().forEach(obliged -> {

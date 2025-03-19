@@ -86,17 +86,16 @@ public class NewsTreeGenerationService {
 
         Actualite actualite = new Actualite();
 
-        List<? extends AbstractClassification> categories = Lists.newArrayList(
+        final List<? extends AbstractClassification> categories = Lists.newArrayList(
             categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getId()),
                 ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
 
         actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
 
-        BooleanBuilder itemBuilder = new BooleanBuilder();
-        itemBuilder.and(ItemPredicates.itemsClassOfPublisher(publisher.getId()));
-        itemBuilder.and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
+        BooleanBuilder itemBuilder = new BooleanBuilder(ItemPredicates.itemsClassOfPublisher(publisher.getId()))
+            .and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
 
-        List<ItemClassificationOrder> itemsClass = Lists.newArrayList(
+        final List<ItemClassificationOrder> itemsClass = Lists.newArrayList(
             itemClassificationOrderRepository.findAll(itemBuilder,
                 ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
 
