@@ -34,14 +34,15 @@ import javax.transaction.Transactional;
 import org.esupportail.publisher.config.bean.CustomLdapProperties;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.ReadingIndincator;
+import org.esupportail.publisher.domain.ReadingIndicator;
+import org.esupportail.publisher.domain.ReadingIndicator;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
 import org.esupportail.publisher.domain.evaluators.UserAttributesEvaluator;
 import org.esupportail.publisher.domain.evaluators.UserMultivaluedAttributesEvaluator;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
-import org.esupportail.publisher.repository.ReadingIndincatorRepository;
+import org.esupportail.publisher.repository.ReadingIndicatorRepository;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
@@ -90,7 +91,7 @@ public class NewsService {
     private IEvaluationFactory evalFactory;
 
     @Inject
-    private ReadingIndincatorRepository readingIndincatorRepository;
+    private ReadingIndicatorRepository readingIndicatorRepository;
 
     @Inject
     private UserDetailsService userDetailsService;
@@ -118,10 +119,10 @@ public class NewsService {
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
         Set<String> sources = new HashSet<>();
 
-        final Map<String, Boolean> readingIndincators = this.readingIndincatorRepository.findAllByUserId(
+        final Map<String, Boolean> readingIndincators = this.readingIndicatorRepository.findAll(
             user.getUser().getLogin()).stream().collect(
             Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
-                ReadingIndincator::isRead));
+                ReadingIndicator::isRead));
 
         publisherStructureTreeList.forEach(publisherStructureTree -> {
 
@@ -223,9 +224,9 @@ public class NewsService {
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        return this.readingIndincatorRepository.findAllByUserId(user.getUser().getLogin()).stream().collect(
+        return this.readingIndicatorRepository.findAllByUserId(user.getUser().getLogin()).stream().collect(
             Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
-                ReadingIndincator::isRead));
+                ReadingIndicator::isRead));
     }
 
     public void readingManagement(Long id, boolean isRead) throws ObjectNotFoundException {
@@ -236,21 +237,21 @@ public class NewsService {
             ItemPredicates.ItemWithStatus(id, ItemStatus.PUBLISHED, null));
 
         if (isRead) {
-            if (!this.readingIndincatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+            if (!this.readingIndicatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
                 if (optionalItem.isPresent()) {
-                    this.readingIndincatorRepository.save(
-                        new ReadingIndincator(optionalItem.get(), user.getInternalUser().getLogin(), true, 1));
+                    this.readingIndicatorRepository.save(
+                        new ReadingIndicator(optionalItem.get(), user.getInternalUser().getLogin(), true, 1));
                 } else {
                     throw new ObjectNotFoundException(id, AbstractItem.class);
                 }
             } else {
-                this.readingIndincatorRepository.readingManagement(id, user.getInternalUser().getLogin(), true);
-                this.readingIndincatorRepository.incrementReadingCounter(id, user.getInternalUser().getLogin());
+                this.readingIndicatorRepository.readingManagement(id, user.getInternalUser().getLogin(), true);
+                this.readingIndicatorRepository.incrementReadingCounter(id, user.getInternalUser().getLogin());
             }
         } else {
-            if (this.readingIndincatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
-                this.readingIndincatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
-            } else throw new ObjectNotFoundException(id, ReadingIndincator.class);
+            if (this.readingIndicatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+                this.readingIndicatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
+            } else throw new ObjectNotFoundException(id, ReadingIndicator.class);
         }
     }
 

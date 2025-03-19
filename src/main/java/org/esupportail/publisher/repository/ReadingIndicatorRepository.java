@@ -17,18 +17,18 @@ package org.esupportail.publisher.repository;
 
 import java.util.List;
 
-import org.esupportail.publisher.domain.ReadingIndincator;
+import org.esupportail.publisher.domain.ReadingIndicator;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ReadingIndincatorRepository extends AbstractRepository<ReadingIndincator, Long> {
+public interface ReadingIndicatorRepository extends AbstractRepository<ReadingIndicator, Long> {
 
     @Query("SELECT r FROM #{#entityName} r WHERE r.user = :userId")
-    List<ReadingIndincator> findAllByUserId(@Param("userId") String userId);
+    List<ReadingIndicator> findAllByUserId(@Param("userId") String userId);
 
     @Query("SELECT r FROM #{#entityName} r WHERE r.item.id = :itemId")
-    List<ReadingIndincator> findAllByItemId(@Param("itemId") Long itemId);
+    List<ReadingIndicator> findAllByItemId(@Param("itemId") Long itemId);
 
     @Query("SELECT COUNT(r) > 0 FROM #{#entityName} r WHERE r.item.id = :itemId AND r.user = :userId")
     boolean existsByItemIdAndUserId(@Param("itemId") Long itemId, @Param("userId") String userId);

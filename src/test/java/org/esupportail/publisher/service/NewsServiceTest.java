@@ -29,7 +29,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,15 +36,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.ReadingIndincator;
+import org.esupportail.publisher.domain.ReadingIndicator;
 import org.esupportail.publisher.domain.User;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.PublisherRepository;
 import org.esupportail.publisher.repository.ReaderRepository;
-import org.esupportail.publisher.repository.ReadingIndincatorRepository;
+import org.esupportail.publisher.repository.ReadingIndicatorRepository;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.bean.PublisherStructureTree;
@@ -64,9 +67,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 
 
 @ExtendWith(SpringExtension.class)
@@ -89,7 +89,7 @@ class NewsServiceTest {
     private UserDetailsService userDetailsService;
 
     @Mock
-    private ReadingIndincatorRepository readingIndincatorRepository;
+    private ReadingIndicatorRepository readingIndicatorRepository;
 
     @Mock
     private ItemRepository<AbstractItem> itemRepository;
@@ -203,24 +203,24 @@ class NewsServiceTest {
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
 
-        ReadingIndincator readingIndincator1 = new ReadingIndincator();
-        ReadingIndincator readingIndincator2 = new ReadingIndincator();
-        ReadingIndincator readingIndincator3 = new ReadingIndincator();
+        ReadingIndicator readingIndicator1 = new ReadingIndicator();
+        ReadingIndicator readingIndicator2 = new ReadingIndicator();
+        ReadingIndicator readingIndicator3 = new ReadingIndicator();
 
-        readingIndincator1.setUser(customUserDetails.getInternalUser().getLogin());
-        readingIndincator2.setUser(customUserDetails.getInternalUser().getLogin());
-        readingIndincator3.setUser(new User("FR2", "bob").getLogin());
+        readingIndicator1.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndicator2.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndicator3.setUser(new User("FR2", "bob").getLogin());
 
-        readingIndincator1.setItem(item1);
-        readingIndincator2.setItem(item2);
-        readingIndincator3.setItem(item1);
+        readingIndicator1.setItem(item1);
+        readingIndicator2.setItem(item2);
+        readingIndicator3.setItem(item1);
 
-        readingIndincator1.setRead(true);
-        readingIndincator2.setRead(false);
-        readingIndincator3.setRead(false);
+        readingIndicator1.setRead(true);
+        readingIndicator2.setRead(false);
+        readingIndicator3.setRead(false);
 
         Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
-        Mockito.when(this.readingIndincatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList(readingIndincator1, readingIndincator2));
+        Mockito.when(this.readingIndicatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList(readingIndicator1, readingIndicator2));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
         Map<String, Boolean> result = this.service.getAllReadingInfosForCurrentUser();
@@ -256,24 +256,24 @@ class NewsServiceTest {
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
 
-        ReadingIndincator readingIndincator1 = new ReadingIndincator();
-        ReadingIndincator readingIndincator2 = new ReadingIndincator();
-        ReadingIndincator readingIndincator3 = new ReadingIndincator();
+        ReadingIndicator readingIndicator1 = new ReadingIndicator();
+        ReadingIndicator readingIndicator2 = new ReadingIndicator();
+        ReadingIndicator readingIndicator3 = new ReadingIndicator();
 
-        readingIndincator1.setUser(customUserDetails.getInternalUser().getLogin());
-        readingIndincator2.setUser(customUserDetails.getInternalUser().getLogin());
-        readingIndincator3.setUser(new User("FR2", "bob").getLogin());
+        readingIndicator1.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndicator2.setUser(customUserDetails.getInternalUser().getLogin());
+        readingIndicator3.setUser(new User("FR2", "bob").getLogin());
 
-        readingIndincator1.setItem(item1);
-        readingIndincator2.setItem(item2);
-        readingIndincator3.setItem(item1);
+        readingIndicator1.setItem(item1);
+        readingIndicator2.setItem(item2);
+        readingIndicator3.setItem(item1);
 
-        readingIndincator1.setRead(true);
-        readingIndincator2.setRead(false);
-        readingIndincator3.setRead(false);
+        readingIndicator1.setRead(true);
+        readingIndicator2.setRead(false);
+        readingIndicator3.setRead(false);
 
         Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
-        Mockito.when(this.readingIndincatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList());
+        Mockito.when(this.readingIndicatorRepository.findAllByUserId(ArgumentMatchers.any())).thenReturn(Arrays.asList());
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
         Map<String, Boolean> result = this.service.getAllReadingInfosForCurrentUser();
@@ -305,13 +305,13 @@ class NewsServiceTest {
         Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
         Mockito.when(this.itemRepository.findOne((Predicate) any())).thenReturn(Optional.of(item1));
-        Mockito.when(this.readingIndincatorRepository.existsByItemIdAndUserId(any(), any())).thenReturn(false);
+        Mockito.when(this.readingIndicatorRepository.existsByItemIdAndUserId(any(), any())).thenReturn(false);
 
         // Act
         this.service.readingManagement(item1.getId(), true);
 
         // Assert
-        verify(readingIndincatorRepository, times(1)).save(any(ReadingIndincator.class));
+        verify(readingIndicatorRepository, times(1)).save(any(ReadingIndicator.class));
     }
 
     @Test
@@ -334,14 +334,14 @@ class NewsServiceTest {
 
         AbstractItem item = mock(News.class); // Item factice
         when(itemRepository.findOne((Example<AbstractItem>) any())).thenReturn(Optional.of(item));
-        when(readingIndincatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(true);
+        when(readingIndicatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(true);
 
         // Act
         service.readingManagement(itemId, isRead);
 
         // Assert
-        verify(readingIndincatorRepository, times(1)).readingManagement(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()), eq(true));
-        verify(readingIndincatorRepository, times(1)).incrementReadingCounter(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()));
+        verify(readingIndicatorRepository, times(1)).readingManagement(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()), eq(true));
+        verify(readingIndicatorRepository, times(1)).incrementReadingCounter(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()));
     }
 
     @Test
@@ -362,13 +362,13 @@ class NewsServiceTest {
         when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
-        when(readingIndincatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(true);
+        when(readingIndicatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(true);
 
         // Act
         service.readingManagement(itemId, isRead);
 
         // Assert
-        verify(readingIndincatorRepository, times(1)).readingManagement(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()), eq(false));
+        verify(readingIndicatorRepository, times(1)).readingManagement(eq(itemId), eq(customUserDetails.getInternalUser().getLogin()), eq(false));
     }
 
     @Test
@@ -389,7 +389,7 @@ class NewsServiceTest {
         when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
-        when(readingIndincatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(false);
+        when(readingIndicatorRepository.existsByItemIdAndUserId(itemId, customUserDetails.getUser().getLogin())).thenReturn(false);
 
         // Act & Assert
         ObjectNotFoundException exception = assertThrows(ObjectNotFoundException.class, () -> {
