@@ -10,4 +10,9 @@ public class ReadinIndicatorPredicates {
         final QReadingIndicator qobj = QReadingIndicator.readingIndicator;
         return qobj.user.eq(userDto.getLogin());
     }
+
+    public static Predicate readingIndicationOfItem(final long id) {
+        final QReadingIndicator qobj = QReadingIndicator.readingIndicator;
+        return qobj.item.id.eq(id);
+    }
 }
