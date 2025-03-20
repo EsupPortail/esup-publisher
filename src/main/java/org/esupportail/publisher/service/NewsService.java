@@ -26,15 +26,16 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 
 import org.esupportail.publisher.config.bean.CustomLdapProperties;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.domain.ReadingIndicator;
 import org.esupportail.publisher.domain.ReadingIndicator;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.enums.StringEvaluationMode;
@@ -46,6 +47,7 @@ import org.esupportail.publisher.repository.ReadingIndicatorRepository;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
+import org.esupportail.publisher.repository.predicates.ReadinIndicatorPredicates;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.bean.PublisherStructureTree;
@@ -53,6 +55,7 @@ import org.esupportail.publisher.service.evaluators.IEvaluationFactory;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
+import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.esupportail.publisher.web.rest.vo.ActualiteWSource;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
@@ -113,16 +116,13 @@ public class NewsService {
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        Set<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
+        final Set<PublisherStructureTree> publisherStructureTreeList = this.generateNewsTreeByReader(readerId, request);
 
         Set<ItemVO> itemVOSet = new HashSet<>();
         Set<RubriqueVO> rubriqueVOSet = new HashSet<>();
         Set<String> sources = new HashSet<>();
 
-        final Map<String, Boolean> readingIndincators = this.readingIndicatorRepository.findAll(
-            user.getUser().getLogin()).stream().collect(
-            Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
-                ReadingIndicator::isRead));
+        final Map<String, Boolean> readingIndicators = getAllReadingInfosForCurrentUser(user.getUser());
 
         publisherStructureTreeList.forEach(publisherStructureTree -> {
 
@@ -131,9 +131,9 @@ public class NewsService {
                 // Filtre lu = dans la liste des readingIndincators à true
                 // Filtre non lu = pas dans la liste OU dans la liste des readingIndincators à false
                 if (reading == null || (reading ?
-                    (readingIndincators.containsKey(itemVO.getUuid()) && readingIndincators.get(
+                    (readingIndicators.containsKey(itemVO.getUuid()) && readingIndicators.get(
                         itemVO.getUuid())) :
-                    (!readingIndincators.containsKey(itemVO.getUuid()) || !readingIndincators.get(
+                    (!readingIndicators.containsKey(itemVO.getUuid()) || !readingIndicators.get(
                         itemVO.getUuid()))
                 )) {
 
@@ -224,8 +224,13 @@ public class NewsService {
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 
-        return this.readingIndicatorRepository.findAllByUserId(user.getUser().getLogin()).stream().collect(
-            Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
+        return this.getAllReadingInfosForCurrentUser(user.getUser());
+    }
+
+    public Map<String, Boolean> getAllReadingInfosForCurrentUser(@NotNull final UserDTO userDto) {
+        return StreamSupport.stream(this.readingIndicatorRepository.findAll(
+                ReadinIndicatorPredicates.readingIndicationOfUser(userDto)).spliterator(), false)
+            .collect(Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
                 ReadingIndicator::isRead));
     }
 

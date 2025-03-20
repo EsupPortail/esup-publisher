@@ -24,9 +24,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReadingIndicatorRepository extends AbstractRepository<ReadingIndicator, Long> {
 
-    @Query("SELECT r FROM #{#entityName} r WHERE r.user = :userId")
-    List<ReadingIndicator> findAllByUserId(@Param("userId") String userId);
-
     @Query("SELECT r FROM #{#entityName} r WHERE r.item.id = :itemId")
     List<ReadingIndicator> findAllByItemId(@Param("itemId") Long itemId);
 
@@ -41,9 +38,5 @@ public interface ReadingIndicatorRepository extends AbstractRepository<ReadingIn
     @Modifying
     @Query("UPDATE #{#entityName} r SET r.readingCounter = r.readingCounter + 1 WHERE r.item.id = :itemId AND r.user = :userId")
     void incrementReadingCounter(@Param("itemId") Long itemId, @Param("userId") String userId);
-
-    @Modifying
-    @Query("DELETE FROM #{#entityName} r WHERE r.user = :userId")
-    void deleteAllByUserId(@Param("userId") String userId);
 
 }
