@@ -28,9 +28,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "T_READING_INDICATOR", uniqueConstraints = { @UniqueConstraint(columnNames = { "item_id", "user" }) })
