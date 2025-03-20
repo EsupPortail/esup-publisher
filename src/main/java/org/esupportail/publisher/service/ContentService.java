@@ -66,7 +66,7 @@ import org.esupportail.publisher.repository.externals.IExternalGroupDao;
 import org.esupportail.publisher.repository.externals.IExternalUserDao;
 import org.esupportail.publisher.repository.predicates.FilterPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
-import org.esupportail.publisher.repository.predicates.ReadinIndicatorPredicates;
+import org.esupportail.publisher.repository.predicates.ReadingIndicatorPredicates;
 import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
@@ -650,7 +650,7 @@ public class ContentService {
 		itemClassificationOrderRepository.deleteAll(classificationsLinksToDel);
 		final Iterable<LinkedFileItem> filesToDelete = linkedFileItemRepository.findByAbstractItemId(id);
 		linkedFileItemRepository.deleteAll(filesToDelete);
-        final Iterable<ReadingIndicator> readingIndicatorsToDelete = this.readingIndincatorRepository.findAll(ReadinIndicatorPredicates.readingIndicationOfItem(id));
+        final Iterable<ReadingIndicator> readingIndicatorsToDelete = this.readingIndincatorRepository.findAll(ReadingIndicatorPredicates.readingIndicationOfItem(id));
         readingIndincatorRepository.deleteAll(readingIndicatorsToDelete);
 		for (LinkedFileItem lFile : filesToDelete) {
 			fileService.deletePrivateResource(lFile.getUri());

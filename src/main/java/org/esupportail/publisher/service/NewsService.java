@@ -47,7 +47,7 @@ import org.esupportail.publisher.repository.ReadingIndicatorRepository;
 import org.esupportail.publisher.repository.externals.ldap.LdapUserDaoImpl;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.PublisherPredicates;
-import org.esupportail.publisher.repository.predicates.ReadinIndicatorPredicates;
+import org.esupportail.publisher.repository.predicates.ReadingIndicatorPredicates;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.bean.PublisherStructureTree;
@@ -229,7 +229,7 @@ public class NewsService {
 
     public Map<String, Boolean> getAllReadingInfosForCurrentUser(@NotNull final UserDTO userDto) {
         return StreamSupport.stream(this.readingIndicatorRepository.findAll(
-                ReadinIndicatorPredicates.readingIndicationOfUser(userDto)).spliterator(), false)
+                ReadingIndicatorPredicates.readingIndicationOfUser(userDto)).spliterator(), false)
             .collect(Collectors.toMap(indicator -> indicator.getItem().getId().toString(),
                 ReadingIndicator::isRead));
     }
