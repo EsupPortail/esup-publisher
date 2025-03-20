@@ -15,4 +15,9 @@ public class ReadingIndicatorPredicates {
         final QReadingIndicator qobj = QReadingIndicator.readingIndicator;
         return qobj.item.id.eq(id);
     }
+
+    public static Predicate readingIndicationOfItemAndUser(final long id, final UserDTO userDto) {
+        final QReadingIndicator qobj = QReadingIndicator.readingIndicator;
+        return qobj.item.id.eq(id).and(qobj.user.eq(userDto.getLogin()));
+    }
 }

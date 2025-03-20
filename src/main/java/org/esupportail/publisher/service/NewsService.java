@@ -242,7 +242,7 @@ public class NewsService {
             ItemPredicates.ItemWithStatus(id, ItemStatus.PUBLISHED, null));
 
         if (isRead) {
-            if (!this.readingIndicatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+            if (!this.readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()))) {
                 if (optionalItem.isPresent()) {
                     this.readingIndicatorRepository.save(
                         new ReadingIndicator(optionalItem.get(), user.getInternalUser().getLogin(), true, 1));
@@ -254,7 +254,7 @@ public class NewsService {
                 this.readingIndicatorRepository.incrementReadingCounter(id, user.getInternalUser().getLogin());
             }
         } else {
-            if (this.readingIndicatorRepository.existsByItemIdAndUserId(id, user.getUser().getLogin())) {
+            if (this.readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()))) {
                 this.readingIndicatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
             } else throw new ObjectNotFoundException(id, ReadingIndicator.class);
         }

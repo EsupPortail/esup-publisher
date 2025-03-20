@@ -22,9 +22,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReadingIndicatorRepository extends AbstractRepository<ReadingIndicator, Long> {
 
-    @Query("SELECT COUNT(r) > 0 FROM #{#entityName} r WHERE r.item.id = :itemId AND r.user = :userId")
-    boolean existsByItemIdAndUserId(@Param("itemId") Long itemId, @Param("userId") String userId);
-
     @Modifying
     @Query("UPDATE #{#entityName} r SET r.isRead = :isRead WHERE r.item.id = :itemId AND r.user = :userId")
     void readingManagement(@Param("itemId") Long itemId, @Param("userId") String userId,
