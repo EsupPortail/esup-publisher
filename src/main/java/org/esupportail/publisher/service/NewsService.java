@@ -250,12 +250,20 @@ public class NewsService {
                     throw new ObjectNotFoundException(id, AbstractItem.class);
                 }
             } else {
-                this.readingIndicatorRepository.readingManagement(id, user.getInternalUser().getLogin(), true);
-                this.readingIndicatorRepository.incrementReadingCounter(id, user.getInternalUser().getLogin());
+                Optional<ReadingIndicator> optional = this.readingIndicatorRepository.findOne(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()));
+                ReadingIndicator readingIndicator = optional.orElse(null);
+                if (optional.isPresent()) {
+                    readingIndicator.setRead(true);
+                    readingIndicator.setReadingCounter(readingIndicator.getReadingCounter() + 1);
+                    this.readingIndicatorRepository.save(readingIndicator);
+                }
             }
         } else {
-            if (this.readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()))) {
-                this.readingIndicatorRepository.readingManagement(id, user.getInternalUser().getLogin(), false);
+            Optional<ReadingIndicator> optional = this.readingIndicatorRepository.findOne(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()));
+            ReadingIndicator readingIndicator = optional.orElse(null);
+            if (readingIndicator != null) {
+                readingIndicator.setRead(true);
+                this.readingIndicatorRepository.save(readingIndicator);
             } else throw new ObjectNotFoundException(id, ReadingIndicator.class);
         }
     }

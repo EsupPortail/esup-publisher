@@ -16,19 +16,8 @@
 package org.esupportail.publisher.repository;
 
 import org.esupportail.publisher.domain.ReadingIndicator;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface ReadingIndicatorRepository extends AbstractRepository<ReadingIndicator, Long> {
 
-    @Modifying
-    @Query("UPDATE #{#entityName} r SET r.isRead = :isRead WHERE r.item.id = :itemId AND r.user = :userId")
-    void readingManagement(@Param("itemId") Long itemId, @Param("userId") String userId,
-        @Param("isRead") boolean isRead);
-
-    @Modifying
-    @Query("UPDATE #{#entityName} r SET r.readingCounter = r.readingCounter + 1 WHERE r.item.id = :itemId AND r.user = :userId")
-    void incrementReadingCounter(@Param("itemId") Long itemId, @Param("userId") String userId);
 
 }
