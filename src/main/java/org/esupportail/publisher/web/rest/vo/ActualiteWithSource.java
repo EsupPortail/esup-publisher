@@ -18,18 +18,29 @@ package org.esupportail.publisher.web.rest.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
-@EqualsAndHashCode(callSuper = true)
+/**
+ * Created by jgribonvald on 03/06/16.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ActualiteWSource extends Actualite {
+@XmlRootElement(name = "actualites")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class ActualiteWithSource extends Actualite{
 
+    @XmlElementWrapper(name = "sources")
+    @XmlElement(name = "source")
     private List<String> sources = new ArrayList<>();
 
 }

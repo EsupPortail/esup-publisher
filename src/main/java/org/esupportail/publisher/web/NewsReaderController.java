@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.NewsReaderService;
 import org.esupportail.publisher.service.PagingService;
 import org.esupportail.publisher.service.ViewService;
@@ -29,6 +30,7 @@ import org.esupportail.publisher.web.rest.vo.Actualite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,16 +61,16 @@ public class NewsReaderController {
 
     @GetMapping(value = "/myNews/{reader_id}")
     public ResponseEntity<Object> getNewsOfUser(
-        @PathVariable(value = "reader_id", required = true) Long readerId,
-        @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
-        @RequestParam(value = "source", required = false) String source,
-        @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
-        @RequestParam(value = "lecture", required = false) Boolean reading,
-        HttpServletRequest request) {
+            @PathVariable(value = "reader_id", required = true) Long readerId,
+            @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
+            @RequestParam(value = "source", required = false) String source,
+            @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
+            @RequestParam(value = "lecture", required = false) Boolean reading,
+            HttpServletRequest request) {
 
         if (!(rubriques == null) && source == null) {
             return ResponseEntity.badRequest().body(
-                "Veuillez renseigner une source avant de renseigner des rubriques.");
+                    "Veuillez renseigner une source avant de renseigner des rubriques.");
         }
 
         try {
@@ -83,7 +85,7 @@ public class NewsReaderController {
         }
     }
 
-    @RequestMapping(value = "/item/" + "{item_id}")
+    @GetMapping(value = "/item/{item_id}")
     public ResponseEntity<Object> getItemById(@PathVariable("item_id") Long itemId, HttpServletRequest request) {
         try {
             return ResponseEntity.ok(this.viewService.itemView(itemId, request));
@@ -93,7 +95,7 @@ public class NewsReaderController {
         }
     }
 
-    @RequestMapping(value = "/readingInfos")
+    @GetMapping(value = "/readingInfos")
     public ResponseEntity<Object>  getNewsReadingUserInformations() {
         try {
             return ResponseEntity.ok(this.newsReaderService.getAllReadingInfosForCurrentUser());
@@ -103,7 +105,7 @@ public class NewsReaderController {
         }
     }
 
-    @PatchMapping(value = "/setNewsReading/" + "{item_id}/" + "{isRead}")
+    @PatchMapping(value = "/setNewsReading/{item_id}/{isRead}")
     public ResponseEntity<Object> setUserReadingState(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
         try {
             this.newsReaderService.readingManagement(itemId, isRead);
@@ -112,6 +114,13 @@ public class NewsReaderController {
             log.error("Exception raised on /setNewsReading", e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping(value = "/reloadPublishersOf/{reader_id}")
+    @PreAuthorize(SecurityConstants.IS_ROLE_ADMIN)
+    public ResponseEntity<Void> reloadPublishersOfReader(@PathVariable(value = "reader_id", required = true) Long readerId) {
+        this.newsReaderService.reloadPublishersForReader(readerId);
+        return ResponseEntity.ok().build();
     }
 
 }

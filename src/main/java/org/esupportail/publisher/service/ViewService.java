@@ -20,14 +20,16 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Attachment;
 import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Resource;
-import org.esupportail.publisher.domain.SubjectKeyExtended;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
@@ -42,15 +44,14 @@ import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.UserDetailsService;
 import org.esupportail.publisher.service.exceptions.CustomAccessDeniedException;
+import org.esupportail.publisher.service.factories.SubscriberDTOFactory;
+import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.collect.Lists;
-
-import lombok.extern.slf4j.Slf4j;
 
 //TODO This class is a copy of ViewController and didn't factorise common code !!!
 @Slf4j
@@ -74,6 +75,8 @@ public class ViewService {
     private LinkedFileItemRepository linkedFileItemRepository;
     @Inject
     private IPermissionService permissionService;
+    @Inject
+    private SubscriberDTOFactory subscriberDTOFactory;
 
     public AbstractItem itemView(Long itemId, HttpServletRequest request) {
 
@@ -90,7 +93,7 @@ public class ViewService {
 
         // TODO rethink exception management ! There should be a common object that send error, use it ! a customAccessDeniedException isn't need.
         try {
-            if (!canView(item)) {
+            if (!isSubscriber(item)) {
                 throw new CustomAccessDeniedException("403");
             }
         } catch (AccessDeniedException ade) {
@@ -114,7 +117,7 @@ public class ViewService {
         return item;
     }
 
-    public boolean canView(final AbstractItem item) throws AccessDeniedException {
+    public boolean isSubscriber(final AbstractItem item) throws AccessDeniedException {
         // when RssAllowed is set then the content published is public
         if (item.isRssAllowed()) return true;
         List<Subscriber> subscribers = Lists.newArrayList(
@@ -138,67 +141,75 @@ public class ViewService {
         }
 
         final UserDTO userDTO = user.getUser();
-        if (userDTO != null) {
-            List<String> groups = null;
-            if (userDTO.getAttributes() != null) {
-                groups = userDTO.getAttributes().get(externalUserHelper.getUserGroupAttribute());
-            }
-            for (Subscriber subscriber : subscribers) {
-                log.trace("Check if {} is in {}", userDTO, subscriber);
-                final SubjectKeyExtended subject = subscriber.getSubjectCtxId().getSubject();
-                switch (subject.getKeyType()) {
-                    case GROUP:
-                        if (groups == null || groups.isEmpty()) {
-                            log.trace("The user doesn't have a group -> break loop");
-                            break;
+        if (userDTO != null && isSubscriber(userDTO, subscribers)) return true;
+        log.trace("End of all checks -> false");
+        return false;
+    }
+
+    public boolean isSubscriber(@NotNull UserDTO userDTO, @NotNull List<Subscriber> subscribers) {
+        return this.evalSubscribing(userDTO, subscriberDTOFactory.asDTOList(subscribers));
+    }
+
+    public boolean evalSubscribing(@NotNull UserDTO userDTO, @NotNull List<SubscriberDTO> subscribersDto) {
+        List<String> groups = null;
+        if (userDTO.getAttributes() != null) {
+            groups = userDTO.getAttributes().get(externalUserHelper.getUserGroupAttribute());
+        }
+        for (SubscriberDTO subscriber : subscribersDto) {
+            log.trace("Check if {} is in {}", userDTO, subscriber);
+            final SubjectKeyExtendedDTO subject = subscriber.getModelId().getSubjectKey();
+            switch (subject.getKeyType()) {
+                case GROUP:
+                    if (groups == null || groups.isEmpty()) {
+                        log.trace("The user doesn't have a group -> break loop");
+                        break;
+                    }
+                    // test on startWith as some groups in IsMemberOf has only a part the
+                    // real group name.
+                    for (String val : groups) {
+                        if (val.startsWith(subject.getKeyValue())) {
+                            log.trace("Check if the user group {} match subscriber group {} -> return true", val,
+                                subject.getKeyValue());
+                            return true;
                         }
-                        // test on startWith as some groups in IsMemberOf has only a part the
-                        // real group name.
-                        for (String val : groups) {
-                            if (val.startsWith(subject.getKeyValue())) {
-                                log.trace("Check if the user group {} match subscriber group {} -> return true", val,
-                                    subject.getKeyValue());
+                    }
+                    break;
+                case PERSON:
+                    if (subject.getKeyValue().equalsIgnoreCase(userDTO.getLogin())) {
+                        log.trace("Check if the user key {} match subscriber key {} -> true", userDTO.getLogin(),
+                            subject.getKeyValue());
+                        return true;
+                    }
+                    break;
+                case PERSON_ATTR:
+                    if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
+                        subject.getKeyAttribute()) && userDTO.getAttributes().get(
+                        subject.getKeyAttribute()).contains(subject.getKeyValue())) {
+                        log.trace("Check if the user attribute {} with values {} contains value {} -> true",
+                            subject.getKeyAttribute(), userDTO.getAttributes().get(subject.getKeyAttribute()),
+                            subject.getKeyValue());
+                        return true;
+                    }
+                    break;
+                case PERSON_ATTR_REGEX:
+                    if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
+                        subject.getKeyAttribute())) {
+                        for (final String value : userDTO.getAttributes().get(subject.getKeyAttribute())) {
+                            if (value.matches(subject.getKeyValue())) {
+                                log.trace("Check if the user attribute {} with values {} match regex {} -> true",
+                                    subject.getKeyAttribute(),
+                                    userDTO.getAttributes().get(subject.getKeyAttribute()), subject.getKeyValue());
                                 return true;
                             }
                         }
-                        break;
-                    case PERSON:
-                        if (subject.getKeyValue().equalsIgnoreCase(userDTO.getLogin())) {
-                            log.trace("Check if the user key {} match subscriber key {} -> true", userDTO.getLogin(),
-                                subject.getKeyValue());
-                            return true;
-                        }
-                        break;
-                    case PERSON_ATTR:
-                        if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
-                            subject.getKeyAttribute()) && userDTO.getAttributes().get(
-                            subject.getKeyAttribute()).contains(subject.getKeyValue())) {
-                            log.trace("Check if the user attribute {} with values {} contains value {} -> true",
-                                subject.getKeyAttribute(), userDTO.getAttributes().get(subject.getKeyAttribute()),
-                                subject.getKeyValue());
-                            return true;
-                        }
-                        break;
-                    case PERSON_ATTR_REGEX:
-                        if (subject.getKeyAttribute() != null && userDTO.getAttributes().containsKey(
-                            subject.getKeyAttribute())) {
-                            for (final String value : userDTO.getAttributes().get(subject.getKeyAttribute())) {
-                                if (value.matches(subject.getKeyValue())) {
-                                    log.trace("Check if the user attribute {} with values {} match regex {} -> true",
-                                        subject.getKeyAttribute(),
-                                        userDTO.getAttributes().get(subject.getKeyAttribute()), subject.getKeyValue());
-                                    return true;
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        throw new IllegalStateException(
-                            "Warning Subject Type '" + subject.getKeyType() + "' is not managed");
-                }
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException(
+                        "Warning Subject Type '" + subject.getKeyType() + "' is not managed");
             }
         }
-        log.trace("End of all checks -> false");
+
         return false;
     }
 

@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.esupportail.publisher.service.bean;
+package org.esupportail.publisher.web.rest.vo;
 
+
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
-
-import org.esupportail.publisher.domain.Publisher;
-import org.esupportail.publisher.web.rest.vo.Actualite;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.esupportail.publisher.web.rest.dto.PublisherDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "publisher")
-public class PublisherStructureTree {
+@EqualsAndHashCode(of = "publisherDTO")
+public class PublisherForRead {
 
     @NotNull
-    private Publisher publisher;
+    private PublisherDTO publisherDTO;
 
     @NotNull
-    private Actualite actualite;
+    private List<SubscriberDTO> subscribersDTO;
 }

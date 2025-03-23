@@ -127,7 +127,7 @@ public class ViewController {
 
 
 		try {
-			if (!viewService.canView(item)) {
+			if (!viewService.isSubscriber(item)) {
 				return "403";
 			}
 		} catch (AccessDeniedException ade) {
@@ -184,7 +184,7 @@ public class ViewController {
 			// a user can see only when published expect if he can Edit the content
 			if (item != null && item.getStatus().equals(ItemStatus.PUBLISHED)) {
 				try {
-					if (viewService.canView(item)) {
+					if (viewService.isSubscriber(item)) {
 						canView = true;
 						filename = lfiles.getFilename();
 						break;
