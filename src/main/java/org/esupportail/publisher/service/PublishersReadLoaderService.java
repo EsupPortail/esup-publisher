@@ -20,6 +20,7 @@ import org.esupportail.publisher.repository.predicates.PublisherPredicates;
 import org.esupportail.publisher.service.factories.PublisherDTOFactory;
 import org.esupportail.publisher.service.factories.SubscriberDTOFactory;
 import org.esupportail.publisher.web.rest.dto.PublisherDTO;
+import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.esupportail.publisher.web.rest.vo.PublisherForRead;
 import org.springframework.stereotype.Service;
@@ -68,8 +69,14 @@ public class PublishersReadLoaderService {
 
         if (!publishers.isEmpty()) {
             publishers.forEach(publisher -> {
-                publisherForReadList.add(new PublisherForRead(publisherDTOFactory.from(publisher),
-                    subscriberDTOFactory.asDTOList(subscriberService.getDefaultsSubscribersOfContext(publisher.getContextKey()))));
+                //TODO Temporary Patch To Remove
+                List<SubscriberDTO> subscribers = subscriberDTOFactory.asDTOList(subscriberService.getDefaultsSubscribersOfContext(publisher.getContextKey()));
+                subscribers.stream()
+                    .filter(subscriber -> Lists.newArrayList("ESCOUAICourant","ESCOSIRENCourant").contains(subscriber.getModelId().getSubjectKey().getKeyAttribute()))
+                    .forEach(subscriber -> {
+                        subscriber.getModelId().getSubjectKey().setKeyAttribute(subscriber.getModelId().getSubjectKey().getKeyAttribute().replace("ESCOUAICourant", "ESCOUAI").replace("ESCOSIRENCourant", "ESCOSIREN"));
+                    });
+                publisherForReadList.add(new PublisherForRead(publisherDTOFactory.from(publisher), subscribers));
             });
         }
         log.debug("Obtained publishers from readerId '{}' are : {}", readerId, publisherForReadList);
