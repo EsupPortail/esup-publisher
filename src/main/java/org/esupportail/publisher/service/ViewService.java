@@ -52,7 +52,7 @@ import com.google.common.collect.Lists;
 
 import lombok.extern.slf4j.Slf4j;
 
-
+//TODO This class is a copy of ViewController and didn't factorise common code !!!
 @Slf4j
 @Service
 @Transactional
@@ -88,7 +88,7 @@ public class ViewService {
         }
         log.debug("Item found {}", item);
 
-
+        // TODO rethink exception management ! There should be a common object that send error, use it ! a customAccessDeniedException isn't need.
         try {
             if (!canView(item)) {
                 throw new CustomAccessDeniedException("403");
@@ -114,7 +114,7 @@ public class ViewService {
         return item;
     }
 
-    private boolean canView(final AbstractItem item) throws AccessDeniedException {
+    public boolean canView(final AbstractItem item) throws AccessDeniedException {
         // when RssAllowed is set then the content published is public
         if (item.isRssAllowed()) return true;
         List<Subscriber> subscribers = Lists.newArrayList(
@@ -125,6 +125,7 @@ public class ViewService {
             log.trace("Subscribers on item {} are empty -> true", item.getContextKey());
             return true;
         }
+        //TODO: why this isn't using the securityUtils ?
         final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
         if (user == null) {
