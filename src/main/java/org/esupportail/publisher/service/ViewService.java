@@ -75,7 +75,7 @@ public class ViewService {
     @Inject
     private IPermissionService permissionService;
 
-    public Object itemView(Long itemId, HttpServletRequest request) {
+    public AbstractItem itemView(Long itemId, HttpServletRequest request) {
 
         log.debug("Request to render in viewer, item with id {}", itemId);
         if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
