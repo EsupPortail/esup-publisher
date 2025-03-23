@@ -96,7 +96,7 @@ public class NewsReaderController {
     }
 
     @GetMapping(value = "/readingInfos")
-    public ResponseEntity<Object>  getNewsReadingUserInformations() {
+    public ResponseEntity<Object> getNewsReadingUserInformations() {
         try {
             return ResponseEntity.ok(this.newsReaderService.getAllReadingInfosForCurrentUser());
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class NewsReaderController {
     public ResponseEntity<Object> setUserReadingState(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
         try {
             this.newsReaderService.readingManagement(itemId, isRead);
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error("Exception raised on /setNewsReading", e);
             return ResponseEntity.badRequest().body(e.getMessage());
