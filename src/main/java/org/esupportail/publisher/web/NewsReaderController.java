@@ -21,7 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.esupportail.publisher.service.NewsService;
+import org.esupportail.publisher.service.NewsReaderService;
 import org.esupportail.publisher.service.PagingService;
 import org.esupportail.publisher.service.ViewService;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
@@ -41,14 +41,14 @@ import lombok.Data;
 @Data
 @RestController
 @RequestMapping("/news")
-public class NewsController {
+public class NewsReaderController {
 
-    private static final Logger log = LoggerFactory.getLogger(NewsController.class);
+    private static final Logger log = LoggerFactory.getLogger(NewsReaderController.class);
 
     private final int PAGE_SIZE = 10;
 
     @Inject
-    private NewsService newsService;
+    private NewsReaderService newsReaderService;
 
     @Inject
     private PagingService pagingService;
@@ -58,7 +58,7 @@ public class NewsController {
 
 
     @GetMapping(value = "/myNews/{reader_id}")
-    public ResponseEntity<Object> getUserNews(
+    public ResponseEntity<Object> getNewsOfUser(
         @PathVariable(value = "reader_id", required = true) Long readerId,
         @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
         @RequestParam(value = "source", required = false) String source,
@@ -72,7 +72,7 @@ public class NewsController {
         }
 
         try {
-            Actualite actualite = this.newsService.getNewsByUserOnContext(readerId, reading, request);
+            Actualite actualite = this.newsReaderService.getNewsByUserOnContext(readerId, reading, request);
             return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques));
         } catch (ObjectNotFoundException exception) {
             log.error("Exception raised on /myNews", exception);
@@ -94,9 +94,9 @@ public class NewsController {
     }
 
     @RequestMapping(value = "/readingInfos")
-    public ResponseEntity<Object>  getNewsReadingInformations() {
+    public ResponseEntity<Object>  getNewsReadingUserInformations() {
         try {
-            return ResponseEntity.ok(this.newsService.getAllReadingInfosForCurrentUser());
+            return ResponseEntity.ok(this.newsReaderService.getAllReadingInfosForCurrentUser());
         } catch (Exception e) {
             log.error("Exception raised on /readingInfos", e);
             return ResponseEntity.status(404).body(e.getMessage());
@@ -104,9 +104,9 @@ public class NewsController {
     }
 
     @PatchMapping(value = "/setNewsReading/" + "{item_id}/" + "{isRead}")
-    public ResponseEntity<Object> setReading(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
+    public ResponseEntity<Object> setUserReadingState(@PathVariable("item_id") Long itemId, @PathVariable("isRead") boolean isRead) {
         try {
-            this.newsService.readingManagement(itemId, isRead);
+            this.newsReaderService.readingManagement(itemId, isRead);
             return ResponseEntity.ok("");
         } catch (Exception e) {
             log.error("Exception raised on /setNewsReading", e);

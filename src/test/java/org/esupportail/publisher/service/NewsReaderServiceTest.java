@@ -70,11 +70,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
 @ExtendWith(SpringExtension.class)
-class NewsServiceTest {
+class NewsReaderServiceTest {
 
     @Spy
     @InjectMocks
-    private NewsService service;
+    private NewsReaderService service;
 
     @Mock
     private PublisherRepository publisherRepository;

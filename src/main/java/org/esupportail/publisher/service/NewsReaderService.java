@@ -73,7 +73,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @Transactional
-public class NewsService {
+public class NewsReaderService {
 
     @Inject
     private LdapUserDaoImpl ldapUserDao;
