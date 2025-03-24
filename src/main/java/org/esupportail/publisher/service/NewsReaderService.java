@@ -234,7 +234,7 @@ public class NewsReaderService {
             Optional<ReadingIndicator> optional = this.readingIndicatorRepository.findOne(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()));
             ReadingIndicator readingIndicator = optional.orElse(null);
             if (readingIndicator != null) {
-                readingIndicator.setRead(true);
+                readingIndicator.setRead(false);
                 this.readingIndicatorRepository.save(readingIndicator);
             } else throw new ObjectNotFoundException(id, ReadingIndicator.class);
         }
