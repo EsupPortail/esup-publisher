@@ -69,7 +69,7 @@ import org.esupportail.publisher.web.rest.vo.ActualiteWithSource;
 import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.ItemsVOForRead;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +120,9 @@ public class NewsReaderService {
 
     @Inject
     private UserDetailsService userDetailsService;
+
+    @Inject
+    private CacheManager cacheManager;
 
     final Pattern filesPattern = Pattern.compile(".*?(\\/files.*)");
 
@@ -244,47 +247,55 @@ public class NewsReaderService {
         publishersReadLoader.reloadPublishersOfReader(readerId);
     }
 
-    @Cacheable(value = "actualiteByPublisher", key = "#publisher")
     public ActualiteForRead getActualiteByPublisher(final PublisherDTO publisher, final HttpServletRequest request) {
 
-        ActualiteForRead actualite = new ActualiteForRead();
+        // If not in cache, get news for this publisher
+        if(cacheManager.getCache("actualiteByPublisher").get(publisher.getModelId()) == null){
+            ActualiteForRead actualite = new ActualiteForRead();
 
-        final List<? extends AbstractClassification> categories = Lists.newArrayList(
-            categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getModelId()),
-                ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
+            final List<? extends AbstractClassification> categories = Lists.newArrayList(
+                    categoryRepository.findAll(ClassificationPredicates.CategoryOfPublisher(publisher.getModelId()),
+                            ClassificationPredicates.categoryOrderByDisplayOrderType(publisher.getDefaultDisplayOrder())));
 
-        actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
+            actualite.getRubriques().addAll(rubriqueVOFactory.asVOList(categories));
 
-        BooleanBuilder itemBuilder = new BooleanBuilder(ItemPredicates.itemsClassOfPublisher(publisher.getModelId()))
-            .and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
+            BooleanBuilder itemBuilder = new BooleanBuilder(ItemPredicates.itemsClassOfPublisher(publisher.getModelId()))
+                    .and(ItemPredicates.OwnedItemsClassOfStatus(null, ItemStatus.PUBLISHED));
 
-        final List<ItemClassificationOrder> itemsClass = Lists.newArrayList(
-            itemClassificationOrderRepository.findAll(itemBuilder,
-                ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
+            final List<ItemClassificationOrder> itemsClass = Lists.newArrayList(
+                    itemClassificationOrderRepository.findAll(itemBuilder,
+                            ItemPredicates.orderByClassifDefinition(publisher.getDefaultItemsDisplayOrder())));
 
-        Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
+            Map<Long, Pair<AbstractItem, List<AbstractClassification>>> itemsMap = Maps.newLinkedHashMap();
 
-        for (ItemClassificationOrder ico : itemsClass) {
-            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
-            final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
-            if (!itemsMap.containsKey(itemId)) {
-                itemsMap.put(itemId, new Pair<>(
-                    ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
-            } else {
-                itemsMap.get(itemId).getSecond().add(classif);
+            for (ItemClassificationOrder ico : itemsClass) {
+                final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+                final Long itemId = ico.getItemClassificationId().getAbstractItem().getId();
+                if (!itemsMap.containsKey(itemId)) {
+                    itemsMap.put(itemId, new Pair<>(
+                            ico.getItemClassificationId().getAbstractItem(), Lists.newArrayList(classif)));
+                } else {
+                    itemsMap.get(itemId).getSecond().add(classif);
+                }
             }
+
+            for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
+                final AbstractItem item = entry.getValue().getFirst();
+                final List<LinkedFileItem> linkedFiles =
+                        linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
+                final List<Subscriber> subscribers = subscriberService.getDefinedSubscribersOfContext(item.getContextKey());
+                actualite.getItems().add(new ItemsVOForRead(
+                        itemVOFactory.from(item, entry.getValue().getSecond(),subscribers, linkedFiles, request),
+                        subscriberDTOFactory.asDTOList(subscribers)));
+            }
+            cacheManager.getCache("actualiteByPublisher").put(publisher.getModelId(), actualite);
+            return actualite;
+        }
+        // If in cache, return directly the cached object
+        else{
+            return cacheManager.getCache("actualiteByPublisher").get(publisher.getModelId(), ActualiteForRead.class);
         }
 
-        for (Map.Entry<Long, Pair<AbstractItem, List<AbstractClassification>>> entry : itemsMap.entrySet()) {
-            final AbstractItem item = entry.getValue().getFirst();
-            final List<LinkedFileItem> linkedFiles =
-                linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
-            final List<Subscriber> subscribers = subscriberService.getDefinedSubscribersOfContext(item.getContextKey());
-            actualite.getItems().add(new ItemsVOForRead(
-                    itemVOFactory.from(item, entry.getValue().getSecond(),subscribers, linkedFiles, request),
-                    subscriberDTOFactory.asDTOList(subscribers)));
-        }
-        return actualite;
     }
 
 }

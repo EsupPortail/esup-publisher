@@ -96,7 +96,7 @@ public class ContentResource {
                 content.getItem().getRedactor())));
 
         publishers.forEach(publisher -> {
-            Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher);
+            Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher.getId());
         });
 
         return contentService.saveContent(content);
@@ -119,7 +119,7 @@ public class ContentResource {
                 content.getItem().getRedactor())));
 
         publishers.forEach(publisher -> {
-            Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher);
+            Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher.getId());
         });
         return contentService.saveContent(content);
     }
@@ -165,7 +165,7 @@ public class ContentResource {
             PublisherPredicates.AllOfOrganizationAndRedactor(i.get().getOrganization(), i.get().getRedactor())));
 
         publishers.forEach(
-            publisher -> Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher));
+            publisher -> Objects.requireNonNull(cacheManager.getCache("actualiteByPublisher")).evict(publisher.getId()));
 
         contentService.deleteContent(id);
     }
