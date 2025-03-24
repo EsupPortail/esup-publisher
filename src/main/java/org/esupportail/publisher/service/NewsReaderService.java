@@ -217,7 +217,7 @@ public class NewsReaderService {
             if (!this.readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(id, user.getUser()))) {
                 if (optionalItem.isPresent()) {
                     this.readingIndicatorRepository.save(
-                        new ReadingIndicator(optionalItem.get(), user.getInternalUser().getLogin(), true, 1));
+                        new ReadingIndicator(optionalItem.get(), user.getUser().getLogin(), true, 1));
                 } else {
                     throw new ObjectNotFoundException(id, AbstractItem.class);
                 }
