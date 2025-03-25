@@ -42,14 +42,13 @@ import org.esupportail.publisher.repository.predicates.SubscriberPredicates;
 import org.esupportail.publisher.security.AuthoritiesConstants;
 import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
-import org.esupportail.publisher.security.UserDetailsService;
+import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.exceptions.CustomAccessDeniedException;
 import org.esupportail.publisher.service.factories.SubscriberDTOFactory;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 //TODO This class is a copy of ViewController and didn't factorise common code !!!
@@ -63,8 +62,6 @@ public class ViewService {
     private SubscriberRepository subscriberRepository;
     @Inject
     private ExternalUserHelper externalUserHelper;
-    @Inject
-    private UserDetailsService userDetailsService;
     @Inject
     private UserRepository userRepository;
     @Inject
@@ -125,9 +122,7 @@ public class ViewService {
             log.trace("Subscribers on item {} are empty -> true", item.getContextKey());
             return true;
         }
-        //TODO: why this isn't using the securityUtils ?
-        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        final CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
         if (user == null) {
             log.trace("user is not authenticated -> throw an error to redirect on authentication");
             throw new AccessDeniedException("Access is denied to anonymous !");

@@ -15,12 +15,14 @@
  */
 package org.esupportail.publisher.config;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apereo.portal.soffit.security.SoffitApiAuthenticationManager;
+import javax.inject.Inject;
+
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apereo.portal.soffit.security.SoffitApiPreAuthenticatedProcessingFilter;
 import org.esupportail.publisher.security.AjaxAuthenticationFailureHandler;
 import org.esupportail.publisher.security.AjaxAuthenticationSuccessHandler;
@@ -32,6 +34,9 @@ import org.esupportail.publisher.security.HasIpRangeExpressionCreator;
 import org.esupportail.publisher.security.RememberCasAuthenticationEntryPoint;
 import org.esupportail.publisher.security.RememberCasAuthenticationProvider;
 import org.esupportail.publisher.security.RememberWebAuthenticationDetailsSource;
+import org.esupportail.publisher.security.SoffitApiAuthenticationManager;
+import org.esupportail.publisher.security.UserDetailsServiceFromCAS;
+import org.esupportail.publisher.security.UserDetailsServiceFromSoffit;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.FeedController;
 import org.esupportail.publisher.web.filter.CsrfCookieGeneratorFilter;
@@ -43,6 +48,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -61,9 +67,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
@@ -93,9 +96,6 @@ public class SecurityConfiguration {
 
     //    @Inject
     //    private Http401UnauthorizedEntryPoint authenticationEntryPoint;
-
-    @Inject
-    private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> userDetailsService;
 
     // @Inject
     // private RememberMeServices rememberMeServices;
@@ -157,9 +157,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public AuthenticationUserDetailsService<CasAssertionAuthenticationToken> userDetailsServiceCAS() {
+        return new UserDetailsServiceFromCAS();
+    }
+
+    @Bean
+    public AuthenticationUserDetailsService<UsernamePasswordAuthenticationToken> userDetailsServiceSoffit() {
+        return new UserDetailsServiceFromSoffit();
+    }
+
+    @Bean
     public RememberCasAuthenticationProvider casAuthenticationProvider() {
         RememberCasAuthenticationProvider casAuthenticationProvider = new RememberCasAuthenticationProvider();
-        casAuthenticationProvider.setAuthenticationUserDetailsService(userDetailsService);
+        casAuthenticationProvider.setAuthenticationUserDetailsService(userDetailsServiceCAS());
         casAuthenticationProvider.setServiceProperties(serviceProperties());
         casAuthenticationProvider.setTicketValidator(cas20ServiceTicketValidator());
         Assert.hasText(esupPublisherProperties.getSecurity().getIdKeyProvider(), "The CAS security Key should be set, see property 'app.security.idKeyProvider'");
@@ -248,7 +258,7 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationManager soffitAuthenticationManager() {
-        return new SoffitApiAuthenticationManager();
+        return new SoffitApiAuthenticationManager(userDetailsServiceSoffit());
     }
 
     @Bean

@@ -50,7 +50,7 @@ import org.esupportail.publisher.repository.ReaderRepository;
 import org.esupportail.publisher.repository.ReadingIndicatorRepository;
 import org.esupportail.publisher.repository.predicates.ReadingIndicatorPredicates;
 import org.esupportail.publisher.security.CustomUserDetails;
-import org.esupportail.publisher.security.UserDetailsService;
+import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.web.rest.dto.PublisherDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
@@ -85,9 +85,6 @@ class NewsReaderServiceTest {
     private ReaderRepository readerRepository;
 
     @Mock
-    private UserDetailsService userDetailsService;
-
-    @Mock
     private ReadingIndicatorRepository readingIndicatorRepository;
 
     @Mock
@@ -108,7 +105,7 @@ class NewsReaderServiceTest {
             Arrays.asList());
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
         // Given
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(null);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(null);
 
         // When & Then
         assertThrows(ObjectNotFoundException.class, () ->
@@ -127,7 +124,7 @@ class NewsReaderServiceTest {
         User user = new User("FR1", "alice");
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
         doReturn(Collections.emptyList()).when(newsReaderService).getPublishersReadLoader().getUserPublishersToReadOfReader(any(), anyLong());
@@ -218,7 +215,7 @@ class NewsReaderServiceTest {
         readingIndicator2.setRead(false);
         readingIndicator3.setRead(false);
 
-        Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
+        Mockito.when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         Mockito.when(this.readingIndicatorRepository.findAll(ReadingIndicatorPredicates.readingIndicationOfUser(ArgumentMatchers.any()))).thenReturn(Arrays.asList(readingIndicator1, readingIndicator2));
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
@@ -271,7 +268,7 @@ class NewsReaderServiceTest {
         readingIndicator2.setRead(false);
         readingIndicator3.setRead(false);
 
-        Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
+        Mockito.when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         Mockito.when(this.readingIndicatorRepository.findAll(ReadingIndicatorPredicates.readingIndicationOfUser(ArgumentMatchers.any()))).thenReturn(Arrays.asList());
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
 
@@ -301,7 +298,7 @@ class NewsReaderServiceTest {
         item1.setTitle("Item 1");
 
 
-        Mockito.when(this.userDetailsService.loadUserByUsername(ArgumentMatchers.any())).thenReturn(customUserDetails);
+        Mockito.when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         Mockito.when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(user);
         Mockito.when(this.itemRepository.findOne((Predicate) any())).thenReturn(Optional.of(item1));
         Mockito.when(this.readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(any(), any()))).thenReturn(false);
@@ -328,7 +325,7 @@ class NewsReaderServiceTest {
         User user = new User("FR1", "alice");
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
         AbstractItem item = mock(News.class); // Item factice
@@ -358,7 +355,7 @@ class NewsReaderServiceTest {
         User user = new User("FR1", "alice");
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
         when(readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(itemId, customUserDetails.getUser()))).thenReturn(true);
@@ -385,7 +382,7 @@ class NewsReaderServiceTest {
         User user = new User("FR1", "alice");
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
         when(readingIndicatorRepository.exists(ReadingIndicatorPredicates.readingIndicationOfItemAndUser(itemId, customUserDetails.getUser()))).thenReturn(false);
@@ -413,7 +410,7 @@ class NewsReaderServiceTest {
         User user = new User("FR1", "alice");
         CustomUserDetails customUserDetails = new CustomUserDetails(new UserDTO("FR1", "user", true, false), user,
             Arrays.asList());
-        when(userDetailsService.loadUserByUsername(any())).thenReturn(customUserDetails);
+        when(SecurityUtils.getCurrentUserDetails()).thenReturn(customUserDetails);
         when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(customUserDetails);
 
         when(itemRepository.findOne((Example<AbstractItem>) any())).thenReturn(Optional.empty());

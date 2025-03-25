@@ -57,7 +57,7 @@ import org.esupportail.publisher.repository.predicates.ClassificationPredicates;
 import org.esupportail.publisher.repository.predicates.ItemPredicates;
 import org.esupportail.publisher.repository.predicates.ReadingIndicatorPredicates;
 import org.esupportail.publisher.security.CustomUserDetails;
-import org.esupportail.publisher.security.UserDetailsService;
+import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.exceptions.ObjectNotFoundException;
 import org.esupportail.publisher.service.factories.ItemVOFactory;
 import org.esupportail.publisher.service.factories.RubriqueVOFactory;
@@ -70,7 +70,6 @@ import org.esupportail.publisher.web.rest.vo.ItemVO;
 import org.esupportail.publisher.web.rest.vo.ItemsVOForRead;
 import org.esupportail.publisher.web.rest.vo.RubriqueVO;
 import org.springframework.cache.CacheManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Data
@@ -119,9 +118,6 @@ public class NewsReaderService {
     private ViewService viewService;
 
     @Inject
-    private UserDetailsService userDetailsService;
-
-    @Inject
     private CacheManager cacheManager;
 
     final Pattern filesPattern = Pattern.compile(".*?(\\/files.*)");
@@ -134,8 +130,7 @@ public class NewsReaderService {
     public ActualiteWithSource getNewsByUserOnContext(Long readerId, Boolean reading,
                                             HttpServletRequest request) throws Exception {
 
-        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        final CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
 
         final List<PublisherDTO> publisherDTOList = publishersReadLoader.getUserPublishersToReadOfReader(user.getUser(), readerId);
 
@@ -196,8 +191,7 @@ public class NewsReaderService {
 
     public Map<String, Boolean> getAllReadingInfosForCurrentUser() {
 
-        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        final CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
 
         return this.getAllReadingInfosForCurrentUser(user.getUser());
     }
@@ -211,8 +205,7 @@ public class NewsReaderService {
 
     public void readingManagement(Long id, boolean isRead) throws ObjectNotFoundException {
 
-        final CustomUserDetails user = this.userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+        final CustomUserDetails user = SecurityUtils.getCurrentUserDetails();
         Optional<AbstractItem> optionalItem = itemRepository.findOne(
             ItemPredicates.ItemWithStatus(id, ItemStatus.PUBLISHED, null));
 
