@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.Publisher;
 import org.esupportail.publisher.domain.Reader;
@@ -62,8 +63,9 @@ public class PublishersReadLoaderService {
     }
 
     protected List<PublisherForRead> getPublisherStructureTreeOfReader(long readerId) {
+        final BooleanBuilder builder = new BooleanBuilder(PublisherPredicates.AllOfUsedState(true)).and(PublisherPredicates.AllOfReader(readerId));
         final List<Publisher> publishers = Lists.newArrayList(
-            publisherRepository.findAll(PublisherPredicates.AllOfUsedState(true), PublisherPredicates.orderByOrganizations(), PublisherPredicates.orderByDisplayOrder()));
+            publisherRepository.findAll(builder, PublisherPredicates.orderByOrganizations(), PublisherPredicates.orderByDisplayOrder()));
 
         List<PublisherForRead> publisherForReadList = new ArrayList<>();
 
