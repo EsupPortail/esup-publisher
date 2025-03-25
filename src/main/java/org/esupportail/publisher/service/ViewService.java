@@ -51,12 +51,10 @@ import org.esupportail.publisher.web.rest.dto.UserDTO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 //TODO This class is a copy of ViewController and didn't factorise common code !!!
 @Slf4j
 @Service
-@Transactional
 public class ViewService {
 
     @Inject
@@ -79,7 +77,6 @@ public class ViewService {
     private SubscriberDTOFactory subscriberDTOFactory;
 
     public AbstractItem itemView(Long itemId, HttpServletRequest request) {
-
         log.debug("Request to render in viewer, item with id {}", itemId);
         if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
         Optional<AbstractItem> optionnalItem = itemRepository.findOne(
