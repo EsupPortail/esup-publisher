@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -162,13 +161,6 @@ public class NewsReaderService {
                         itemsVOForRead.getItemVO().getArticle().setLink(
                             itemsVOForRead.getItemVO().getArticle().getLink().replaceAll("\\/view", "/news"));
 
-                        if (itemsVOForRead.getItemVO().getArticle().getEnclosure() != null) {
-
-                            Matcher matcher = filesPattern.matcher(itemsVOForRead.getItemVO().getArticle().getEnclosure());
-                            if (matcher.find()) {
-                                itemsVOForRead.getItemVO().getArticle().setEnclosure(matcher.group(1));
-                            }
-                        }
                         itemsVOForRead.getItemVO().setSource(publisherDto.getOrganization().getDisplayName());
                         sources.add(itemsVOForRead.getItemVO().getSource());
                         itemVOSet.add(itemsVOForRead.getItemVO());
