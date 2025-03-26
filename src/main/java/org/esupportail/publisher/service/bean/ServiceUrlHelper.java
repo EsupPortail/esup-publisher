@@ -51,6 +51,10 @@ public class ServiceUrlHelper {
     @NonNull
     private String itemUri;
 
+    @NotNull
+    @NonNull
+    private String myNewsUri;
+
     /** Used for conf display only */
     private String getItemUrl() {
         return protocol + authorizedDomainNames.get(0) + contextPath + itemUri + "ID";
@@ -74,6 +78,7 @@ public class ServiceUrlHelper {
             ", authorizedDomainNames='" + authorizedDomainNames.toString() + '\'' +
             ", protocol='" + protocol + '\'' +
             ", itemUri='" + itemUri + '\'' +
+            ", myNewsUri='" + myNewsUri + '\'' +
             ", example of itemUrl generated ='" + getItemUrl() + '\'' +
             '}';
     }
