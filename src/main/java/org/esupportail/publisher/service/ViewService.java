@@ -15,6 +15,7 @@
  */
 package org.esupportail.publisher.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,15 +25,14 @@ import javax.validation.constraints.NotNull;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
-import org.esupportail.publisher.domain.Attachment;
-import org.esupportail.publisher.domain.Flash;
-import org.esupportail.publisher.domain.Media;
-import org.esupportail.publisher.domain.News;
-import org.esupportail.publisher.domain.Resource;
+import org.esupportail.publisher.domain.ItemClassificationOrder;
+import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.domain.enums.ItemStatus;
 import org.esupportail.publisher.domain.externals.ExternalUserHelper;
+import org.esupportail.publisher.repository.ItemClassificationOrderRepository;
 import org.esupportail.publisher.repository.ItemRepository;
 import org.esupportail.publisher.repository.LinkedFileItemRepository;
 import org.esupportail.publisher.repository.SubscriberRepository;
@@ -44,10 +44,13 @@ import org.esupportail.publisher.security.CustomUserDetails;
 import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.exceptions.CustomAccessDeniedException;
+import org.esupportail.publisher.service.factories.ItemVOForReadFactory;
 import org.esupportail.publisher.service.factories.SubscriberDTOFactory;
 import org.esupportail.publisher.web.rest.dto.SubjectKeyExtendedDTO;
 import org.esupportail.publisher.web.rest.dto.SubscriberDTO;
 import org.esupportail.publisher.web.rest.dto.UserDTO;
+import org.esupportail.publisher.web.rest.vo.ItemVO;
+import org.esupportail.publisher.web.rest.vo.ItemVOForRead;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +64,10 @@ public class ViewService {
     @Inject
     private SubscriberRepository subscriberRepository;
     @Inject
+    private SubscriberService subscriberService;
+    @Inject
+    private ItemClassificationOrderRepository itemClassificationOrderRepository;
+    @Inject
     private ExternalUserHelper externalUserHelper;
     @Inject
     private UserRepository userRepository;
@@ -72,8 +79,10 @@ public class ViewService {
     private IPermissionService permissionService;
     @Inject
     private SubscriberDTOFactory subscriberDTOFactory;
+    @Inject
+    private ItemVOForReadFactory itemVOForReadFactory;
 
-    public AbstractItem itemView(Long itemId, HttpServletRequest request) {
+    public ItemVOForRead itemView(Long itemId, HttpServletRequest request) {
         log.debug("Request to render in viewer, item with id {}", itemId);
         if (itemId == null) throw new IllegalArgumentException("No item identifier was provided to the request!");
         Optional<AbstractItem> optionnalItem = itemRepository.findOne(
@@ -94,9 +103,18 @@ public class ViewService {
             throw new AccessDeniedException(ade.getMessage());
         }
 
-        final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+        final List<ItemClassificationOrder> itemsClass = Lists.newArrayList(itemClassificationOrderRepository.findAll(ItemPredicates.itemsClassOfItem(itemId)));
+        List<AbstractClassification> abstractClassifications = new ArrayList<>();
+        for (ItemClassificationOrder ico : itemsClass) {
+            final AbstractClassification classif = ico.getItemClassificationId().getAbstractClassification();
+            abstractClassifications.add(classif);
+        }
+        final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
+        final List<Subscriber> subscribers = subscriberService.getDefinedSubscribersOfContext(item.getContextKey());
+        ItemVOForRead itemVOForRead = itemVOForReadFactory.from(item, abstractClassifications, subscribers, linkedFiles, request);
 
         // looking to replace img src with path of object with body attribute of for specific property
+        /*
         if (item instanceof News) {
             ((News) item).setBody(replaceBodyUrl(((News) item).getBody()));
             return item;
@@ -108,7 +126,8 @@ public class ViewService {
             log.error("Warning a new type of Item wasn't managed at this place, the item is : {}", item);
             throw new IllegalStateException("Warning missing type management of :" + item);
         }
-        return item;
+         */
+        return itemVOForRead;
     }
 
     public boolean isSubscriber(final AbstractItem item) throws AccessDeniedException {

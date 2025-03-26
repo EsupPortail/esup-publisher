@@ -158,9 +158,6 @@ public class NewsReaderService {
 
                     if (viewService.evalSubscribing(user.getUser(), itemsVOForRead.getSubscribersDTO())) {
 
-                        itemsVOForRead.getItemVO().getArticle().setLink(
-                            itemsVOForRead.getItemVO().getArticle().getLink().replaceAll("\\/view", "/news"));
-
                         itemsVOForRead.getItemVO().setSource(publisherDto.getOrganization().getDisplayName());
                         sources.add(itemsVOForRead.getItemVO().getSource());
                         itemVOSet.add(itemsVOForRead.getItemVO());
