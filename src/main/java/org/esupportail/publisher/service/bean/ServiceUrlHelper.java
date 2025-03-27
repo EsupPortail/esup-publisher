@@ -55,6 +55,9 @@ public class ServiceUrlHelper {
     @NonNull
     private String myNewsUri;
 
+    public static final String ITEM_VIEW = "/view/item/";
+    public static final String FILE_VIEW = "/view/file/";
+
     /** Used for conf display only */
     private String getItemUrl() {
         return protocol + authorizedDomainNames.get(0) + contextPath + itemUri + "ID";
@@ -69,6 +72,25 @@ public class ServiceUrlHelper {
         final String url = request.getRequestURL().toString();
         final String uri = request.getRequestURI();
         return url.substring(0, url.length() - uri.length());
+    }
+
+    public String replaceBodyUrl(final String body, final HttpServletRequest request) {
+        final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+        if (body != null && !body.trim().isEmpty()) {
+            String fileview = FILE_VIEW;
+            fileview = fileview.substring(1);
+            return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/").replaceAll("href=\"" + fileview,
+                "href=\"" + baseUrl + fileview).replaceAll("href=\"files/", "href=\"" + baseUrl + "files/");
+        }
+        return body;
+    }
+
+    public String replaceRelativeUrl(final String localUrl, final HttpServletRequest request) {
+        final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
+        if (localUrl != null && !localUrl.trim().isEmpty() && !localUrl.matches("^https?://.*$")) {
+            return baseUrl + localUrl;
+        }
+        return localUrl;
     }
 
     @Override

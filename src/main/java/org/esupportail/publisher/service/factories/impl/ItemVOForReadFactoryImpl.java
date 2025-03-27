@@ -26,10 +26,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
+import org.esupportail.publisher.domain.Attachment;
+import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.LinkedFileItem;
+import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
+import org.esupportail.publisher.domain.Resource;
 import org.esupportail.publisher.domain.Subscriber;
 import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
@@ -38,11 +43,11 @@ import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.util.ISO8601LocalDateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.vo.ItemVOForRead;
 import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
-import org.esupportail.publisher.web.rest.vo.Visibility;
 import org.esupportail.publisher.web.rest.vo.ns.ArticleVO;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
 
     @Inject
@@ -62,7 +67,7 @@ public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
 
         if (item != null) {
             ItemVOForRead vo = new ItemVOForRead();
-            vo.setRubriques(new ArrayList<Long>());
+            vo.setRubriques(new ArrayList<>());
             vo.setType(item.getClass().getSimpleName());
             ArticleVO article = new ArticleVO();
             article.setTitle(item.getTitle());
@@ -71,25 +76,21 @@ public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
                 if (item.getEnclosure().matches("^https?://.*$")) {
                     article.setEnclosure(item.getEnclosure());
                 } else {
-                    article.setEnclosure(urlHelper.getRootAppUrl(request) + item.getEnclosure());
+                    article.setEnclosure(urlHelper.getContextPath() + "/" + item.getEnclosure());
                 }
             }
             article.setDescription(item.getSummary());
             article.setPubDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
             article.setGuid(item.getId().hashCode());
-            article.setCategories(new ArrayList<String>());
+            article.setCategories(new ArrayList<>());
             for (AbstractClassification classif: classifications) {
                 article.getCategories().add(classif.getDisplayName());
                 vo.getRubriques().add(classif.getId());
             }
-//            if (item.isHighlight()) {
-//                article.getCategories().add(highlightedClassificationService.getClassification().getName());
-//                vo.getRubriques().add(highlightedClassificationService.getClassification().getId());
-//            }
 
             article.setCreator(item.getCreatedBy().getDisplayName());
             article.setDate(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            article.setFiles(new ArrayList<LinkedFileVO>());
+            article.setFiles(new ArrayList<>());
             for (LinkedFileItem linkedFile: linkedFiles) {
                 if (linkedFile.getUri() != null && !linkedFile.getUri().isEmpty()) {
                     LinkedFileVO fileVO = new LinkedFileVO();
@@ -105,21 +106,18 @@ public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
             vo.setValidatedBy(item.getValidatedBy().getDisplayName());
             vo.setPubBy(item.getOrganization().getName());
             if (item instanceof News) {
-                vo.setBody(((News) item).getBody());
+                vo.setBody(urlHelper.replaceBodyUrl(((News) item).getBody(), request));
+            } else if (item instanceof Resource) {
+                vo.setRessourceUrl(urlHelper.replaceRelativeUrl(((Resource) item).getRessourceUrl(), request));
+            } else if (!(item instanceof Media) && !(item instanceof Attachment)) {
+                log.error("Warning a new type of Item wasn't managed at this place, the item is : {}", item);
+                throw new IllegalStateException("Warning missing type management of :" + item);
             }
-
             vo.setArticle(article);
-            vo.setCreator(item.getCreatedBy().getId().getKeyId());
             vo.setPubDate(ISO8601Adapter.marshal(item.getStartDate().atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime().toInstant()));
             vo.setCreatedDate(ISO8601Adapter.marshal(item.getCreatedDate()));
             if (item.getLastModifiedDate() != null)
                 vo.setModifiedDate(ISO8601Adapter.marshal(item.getLastModifiedDate().truncatedTo(ChronoUnit.MILLIS)));
-            vo.setUuid(item.getId().toString());
-            if (subscribers != null && !subscribers.isEmpty()) {
-                vo.setVisibility(visibilityFactory.from(subscribers));
-            } else {
-                vo.setVisibility(new Visibility());
-            }
             return vo;
         }
         return null;

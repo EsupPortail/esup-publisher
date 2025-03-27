@@ -53,6 +53,7 @@ import org.esupportail.publisher.security.IPermissionService;
 import org.esupportail.publisher.security.SecurityUtils;
 import org.esupportail.publisher.service.FileService;
 import org.esupportail.publisher.service.ViewService;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -86,6 +87,9 @@ public class ViewController {
 	@Inject
 	private FileService fileService;
 
+    @Inject
+    private ServiceUrlHelper urlHelper;
+
 	@Inject
 	private LinkedFileItemRepository linkedFileItemRepository;
 
@@ -96,9 +100,6 @@ public class ViewController {
     private ViewService viewService;
 
 	private static final String REDIRECT_PARAM = "local-back-to";
-
-	public static final String ITEM_VIEW = "/view/item/";
-	public static final String FILE_VIEW = "/view/file/";
 
 	@RequestMapping(value = SecurityConfiguration.PROTECTED_PATH, produces = MediaType.TEXT_HTML_VALUE)
 	public String itemView(HttpServletRequest request) {
@@ -111,7 +112,7 @@ public class ViewController {
 		}
 	}
 
-	@RequestMapping(value = ITEM_VIEW + "{item_id}", produces = MediaType.TEXT_HTML_VALUE)
+	@RequestMapping(value = ServiceUrlHelper.ITEM_VIEW + "{item_id}", produces = MediaType.TEXT_HTML_VALUE)
 	@Transactional(readOnly = true)
 	public String itemView(Map<String, Object> model, @PathVariable("item_id") Long itemId, HttpServletRequest request) {
 		log.debug("Request to render in viewer, item with id {}", itemId);
@@ -132,20 +133,18 @@ public class ViewController {
 			}
 		} catch (AccessDeniedException ade) {
 			log.trace("Redirect to establish authentication !");
-			return "redirect:" + SecurityConfiguration.PROTECTED_PATH + "?" + REDIRECT_PARAM + "=" + ITEM_VIEW + itemId;
+			return "redirect:" + SecurityConfiguration.PROTECTED_PATH + "?" + REDIRECT_PARAM + "=" + ServiceUrlHelper.ITEM_VIEW + itemId;
 		}
 
-		final String baseUrl = !request.getContextPath().isEmpty() ? request.getContextPath() + "/" : "/";
-
 		// all items has an enclosure but optional
-		item.setEnclosure(replaceRelativeUrl(item.getEnclosure(), baseUrl));
+		item.setEnclosure(urlHelper.replaceRelativeUrl(item.getEnclosure(), request));
 		// looking to replace img src with path of object with body attribute of for specific property
 		if (item instanceof News) {
-			((News) item).setBody(replaceBodyUrl(((News) item).getBody(), baseUrl));
+			((News) item).setBody(urlHelper.replaceBodyUrl(((News) item).getBody(), request));
 		} else if (item instanceof Flash) {
-			((Flash) item).setBody(replaceBodyUrl(((Flash) item).getBody(), baseUrl));
+			((Flash) item).setBody(urlHelper.replaceBodyUrl(((Flash) item).getBody(), request));
 		} else if (item instanceof Resource) {
-			((Resource) item).setRessourceUrl(replaceRelativeUrl(((Resource) item).getRessourceUrl(), baseUrl));
+			((Resource) item).setRessourceUrl(urlHelper.replaceRelativeUrl(((Resource) item).getRessourceUrl(), request));
 		} else if (!(item instanceof Media) && !(item instanceof Attachment)) {
 			log.error("Warning a new type of Item wasn't managed at this place, the item is :", item);
 			throw new IllegalStateException("Warning missing type management of :" + item.toString());
@@ -159,7 +158,7 @@ public class ViewController {
 		return "item";
 	}
 
-	@RequestMapping(value = FILE_VIEW + "**", method = RequestMethod.GET)
+	@RequestMapping(value = ServiceUrlHelper.FILE_VIEW + "**", method = RequestMethod.GET)
 	public void downloadFile(final HttpServletRequest request, HttpServletResponse response)
 			throws FileNotFoundException, IOException {
 		final String query = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
@@ -214,8 +213,8 @@ public class ViewController {
 		if (!canView)
 			throw new AccessDeniedException("Impossible to get file '" + filePath + "'");
 
-		if (query.startsWith(FILE_VIEW)) {
-			filePath = query.substring(FILE_VIEW.length());
+		if (query.startsWith(ServiceUrlHelper.FILE_VIEW)) {
+			filePath = query.substring(ServiceUrlHelper.FILE_VIEW.length());
 		}
 
 		Path file = Paths.get(fileService.getProtectedFileUploadHelper().getUploadDirectoryPath(), filePath);
@@ -250,30 +249,12 @@ public class ViewController {
 		return properties.getProperty("version");
 	}
 
-	private String replaceBodyUrl(final String body, final String baseUrl) {
-		if (body != null && !body.trim().isEmpty()) {
-			String fileview = FILE_VIEW;
-			if (fileview.startsWith("/"))
-				fileview = fileview.substring(1);
-			return body.replaceAll("src=\"files/", "src=\"" + baseUrl + "files/").replaceAll("href=\"" + fileview,
-					"href=\"" + baseUrl + fileview);
-		}
-		return body;
-	}
-
-	private String replaceRelativeUrl(final String localUrl, final String baseUrl) {
-		if (localUrl != null && !localUrl.trim().isEmpty() && !localUrl.matches("^https?://.*$")) {
-			return baseUrl + localUrl;
-		}
-		return localUrl;
-	}
-
 	private String getSecurePathRedirect(final HttpServletRequest request) throws AccessDeniedException {
 		String path = request.getQueryString();
 		final String param = REDIRECT_PARAM + "=";
 		if (path.startsWith(param)) {
 			path = request.getQueryString().substring(param.length());
-			if (path.startsWith(ITEM_VIEW) || path.startsWith(FILE_VIEW)) {
+			if (path.startsWith(ServiceUrlHelper.ITEM_VIEW) || path.startsWith(ServiceUrlHelper.FILE_VIEW)) {
 				return path;
 			}
 		}

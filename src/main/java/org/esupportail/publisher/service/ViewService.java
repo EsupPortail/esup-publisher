@@ -111,23 +111,7 @@ public class ViewService {
         }
         final List<LinkedFileItem> linkedFiles = linkedFileItemRepository.findByAbstractItemIdAndInBody(item.getId(), false);
         final List<Subscriber> subscribers = subscriberService.getDefinedSubscribersOfContext(item.getContextKey());
-        ItemVOForRead itemVOForRead = itemVOForReadFactory.from(item, abstractClassifications, subscribers, linkedFiles, request);
-
-        // looking to replace img src with path of object with body attribute of for specific property
-        /*
-        if (item instanceof News) {
-            ((News) item).setBody(replaceBodyUrl(((News) item).getBody()));
-            return item;
-        } else if (item instanceof Flash) {
-            ((Flash) item).setBody(replaceBodyUrl(((Flash) item).getBody()));
-        } else if (item instanceof Resource) {
-            ((Resource) item).setRessourceUrl(replaceRelativeUrl(((Resource) item).getRessourceUrl(), baseUrl));
-        } else if (!(item instanceof Media) && !(item instanceof Attachment)) {
-            log.error("Warning a new type of Item wasn't managed at this place, the item is : {}", item);
-            throw new IllegalStateException("Warning missing type management of :" + item);
-        }
-         */
-        return itemVOForRead;
+        return itemVOForReadFactory.from(item, abstractClassifications, subscribers, linkedFiles, request);
     }
 
     public boolean isSubscriber(final AbstractItem item) throws AccessDeniedException {
@@ -222,19 +206,5 @@ public class ViewService {
         }
 
         return false;
-    }
-
-    private String replaceRelativeUrl(final String localUrl, final String baseUrl) {
-        if (localUrl != null && !localUrl.trim().isEmpty() && !localUrl.matches("^https?://.*$")) {
-            return baseUrl + localUrl;
-        }
-        return localUrl;
-    }
-
-    private String replaceBodyUrl(final String body) {
-        if (body != null && !body.trim().isEmpty()) {
-            return body.replaceAll("view/file/", "files/");
-        }
-        return body;
     }
 }

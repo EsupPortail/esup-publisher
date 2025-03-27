@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.esupportail.publisher.config.bean.UploadProperties;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
+import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.web.ViewController;
 
 import com.google.common.collect.Sets;
@@ -83,7 +84,7 @@ public class FileUploadConfiguration {
 
         fuh.setUploadDirectoryPath(path);
         fuh.setResourceLocation("file:///" + path);
-        fuh.setUrlResourceMapping(ViewController.FILE_VIEW.replaceFirst("/", ""));
+        fuh.setUrlResourceMapping(ServiceUrlHelper.FILE_VIEW.replaceFirst("/", ""));
         fuh.setUseDefaultPath(false);
         fuh.setFileMaxSize(uploadProperties.getMaxFileSize() != null ? uploadProperties.getMaxFileSize() : defaultFileMaxSize);
         fuh.setUnremovablePaths(uploadProperties.getUnremovablePathPattern() != null ? uploadProperties.getUnremovablePathPattern() : Sets.newHashSet());
