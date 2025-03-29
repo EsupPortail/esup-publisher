@@ -62,7 +62,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <run.addResources>false</run.addResources>
         <shedlock.version>4.44.0</shedlock.version>
-        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.11.0.3922</sonar-maven-plugin.version>
         <springdoc-api.version>1.6.15</springdoc-api.version>
         <swagger-springmvc.version>1.0.2</swagger-springmvc.version>
     </properties>
