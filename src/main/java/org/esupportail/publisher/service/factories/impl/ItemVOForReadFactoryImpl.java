@@ -30,16 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.esupportail.publisher.domain.AbstractClassification;
 import org.esupportail.publisher.domain.AbstractItem;
 import org.esupportail.publisher.domain.Attachment;
-import org.esupportail.publisher.domain.Flash;
 import org.esupportail.publisher.domain.LinkedFileItem;
 import org.esupportail.publisher.domain.Media;
 import org.esupportail.publisher.domain.News;
 import org.esupportail.publisher.domain.Resource;
 import org.esupportail.publisher.domain.Subscriber;
-import org.esupportail.publisher.service.HighlightedClassificationService;
 import org.esupportail.publisher.service.bean.ServiceUrlHelper;
 import org.esupportail.publisher.service.factories.ItemVOForReadFactory;
-import org.esupportail.publisher.service.factories.VisibilityFactory;
 import org.esupportail.publisher.web.rest.util.ISO8601LocalDateTimeXmlAdapter;
 import org.esupportail.publisher.web.rest.vo.ItemVOForRead;
 import org.esupportail.publisher.web.rest.vo.LinkedFileVO;
@@ -52,12 +49,6 @@ public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
 
     @Inject
     private ServiceUrlHelper urlHelper;
-
-    @Inject
-    private VisibilityFactory visibilityFactory;
-
-    @Inject
-    private HighlightedClassificationService highlightedClassificationService;
 
     private XmlAdapter<String, Instant> ISO8601Adapter = new ISO8601LocalDateTimeXmlAdapter();
 
@@ -118,6 +109,10 @@ public class ItemVOForReadFactoryImpl implements ItemVOForReadFactory {
             vo.setCreatedDate(ISO8601Adapter.marshal(item.getCreatedDate()));
             if (item.getLastModifiedDate() != null)
                 vo.setModifiedDate(ISO8601Adapter.marshal(item.getLastModifiedDate().truncatedTo(ChronoUnit.MILLIS)));
+            vo.setValidatedDate(ISO8601Adapter.marshal(item.getValidatedDate()));
+
+            vo.setInternalViewLink(urlHelper.getContextPath() + urlHelper.getItemUri() + item.getId());
+
             return vo;
         }
         return null;

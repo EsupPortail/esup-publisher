@@ -138,7 +138,7 @@ public class SecurityConfiguration {
         Assert.isTrue(Lists.newArrayList("http://", "https://").contains(protocol), "Protocol param doesn't match required value, see property 'app.security.protocol'");
         final List<String> domainNames = Lists.newArrayList(esupPublisherProperties.getSecurity().getAuthorizedDomainNames());
         Assert.notEmpty(domainNames, "The list of the application Domain Names set shouldn't be empty, see property 'app.security.authorizedDomainNames'");
-        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, domainNames, protocol, "/view/item/", "/news/item");
+        ServiceUrlHelper serviceUrlHelper = new ServiceUrlHelper(ctxPath, domainNames, protocol, "/view/item/", "/news/item/");
         log.info("ServiceUrlHelper is configured with properties : {}", serviceUrlHelper.toString());
         return serviceUrlHelper;
     }

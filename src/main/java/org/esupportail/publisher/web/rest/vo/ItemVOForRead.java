@@ -46,13 +46,16 @@ public class ItemVOForRead implements Serializable {
     private String pubDate;
     private String createdDate;
     private String modifiedDate;
+    private String validatedDate;
 
     private String createdBy;
     private String pubBy;
     private String lastModifiedBy;
-
     private String validatedBy;
+
     private String body;
+
+    private String internalViewLink;
 
     private String ressourceUrl;
 
