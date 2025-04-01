@@ -10,7 +10,7 @@
 
     <groupId>org.esupportail.publisher</groupId>
     <artifactId>esup-publisher-ui</artifactId>
-    <version>3.2.4</version>
+    <version>3.2.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>esup-publisher-ui</name>
