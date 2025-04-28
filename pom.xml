@@ -342,7 +342,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>2.7.0</version>
+            <version>2.7.18</version>
             <!-- Remplace par la version de Spring Data que tu utilises -->
         </dependency>
         <dependency>
