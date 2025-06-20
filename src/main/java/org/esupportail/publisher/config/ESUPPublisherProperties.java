@@ -22,6 +22,7 @@ import org.esupportail.publisher.config.bean.ApiDocsProperties;
 import org.esupportail.publisher.config.bean.CASProperties;
 import org.esupportail.publisher.config.bean.CKEditorProperties;
 import org.esupportail.publisher.config.bean.CacheProperties;
+import org.esupportail.publisher.config.bean.NewsProperties;
 import org.esupportail.publisher.config.bean.CustomLdapProperties;
 import org.esupportail.publisher.config.bean.CustomMailProperties;
 import org.esupportail.publisher.config.bean.CustomMetricsProperties;
@@ -63,6 +64,7 @@ public class ESUPPublisherProperties {
     private CacheProperties cache = new CacheProperties();
     private CustomLdapProperties ldap = new CustomLdapProperties();
     private CKEditorProperties ckeditor = new CKEditorProperties();
+    private NewsProperties news = new NewsProperties();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
@@ -86,6 +88,7 @@ public class ESUPPublisherProperties {
                 + ",\n\t \"cache\":" + cache
                 + ",\n\t \"ldap\":" + ldap
                 + ",\n\t \"ckeditor\":" + ckeditor
+                + ",\n\t \"news\":" + news
                 + "\n\t}\n}";
     }
 }

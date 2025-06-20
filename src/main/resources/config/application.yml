@@ -158,6 +158,8 @@ info:
 #  licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
 
 app:
+  news:
+    overview-size: 3
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/**
     management-include-pattern: ${server.servlet.context-path:}/management/**
