@@ -21,6 +21,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.esupportail.publisher.config.ESUPPublisherProperties;
 import org.esupportail.publisher.security.SecurityConstants;
 import org.esupportail.publisher.service.NewsReaderService;
 import org.esupportail.publisher.service.PagingService;
@@ -58,6 +59,8 @@ public class NewsReaderController {
     @Inject
     private ViewService viewService;
 
+    @Inject
+    private ESUPPublisherProperties esupPublisherProperties;
 
     @GetMapping(value = "/myNews/{reader_id}")
     public ResponseEntity<Object> getNewsOfUser(
@@ -81,6 +84,31 @@ public class NewsReaderController {
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
             log.error("Exception raised on /myNews", ex);
+            return ResponseEntity.status(404).body(ex.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/myNews/{reader_id}/overview")
+    public ResponseEntity<Object> getNewsOfUserOverview(
+        @PathVariable(value = "reader_id", required = true) Long readerId,
+        @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
+        @RequestParam(value = "source", required = false) String source,
+        @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
+        @RequestParam(value = "lecture", required = false) Boolean reading,
+        HttpServletRequest request) {
+
+        if (!(rubriques == null) && source == null) {
+            return ResponseEntity.badRequest().body(
+                "Veuillez renseigner une source avant de renseigner des rubriques.");
+        }
+        try {
+            Actualite actualite = this.newsReaderService.getNewsByUserOnContext(readerId, reading, request);
+            return ResponseEntity.ok(actualite.getItems().subList(0, Math.min(actualite.getItems().size(), esupPublisherProperties.getNews().getOverviewSize())));
+        } catch (ObjectNotFoundException exception) {
+            log.error("Exception raised on /myNews overview", exception);
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            log.error("Exception raised on /myNews overview", ex);
             return ResponseEntity.status(404).body(ex.getMessage());
         }
     }
