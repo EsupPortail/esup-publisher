@@ -27,10 +27,14 @@ public class NewsProperties {
     @Min(1)
     private int overviewSize;
 
+    @Min(1)
+    private int pageSize;
+
     @Override
     public String toString(){
         return "{\n\"News properties\":{"
             + "\n \"overviewSize\":\"" + overviewSize + "\""
+            + "\n \"pageSize\":\"" + pageSize + "\""
             + "\n}\n}";
     }
 

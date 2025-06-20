@@ -48,8 +48,6 @@ public class NewsReaderController {
 
     private static final Logger log = LoggerFactory.getLogger(NewsReaderController.class);
 
-    private final int PAGE_SIZE = 10;
-
     @Inject
     private NewsReaderService newsReaderService;
 
@@ -78,7 +76,7 @@ public class NewsReaderController {
 
         try {
             Actualite actualite = this.newsReaderService.getNewsByUserOnContext(readerId, reading, request);
-            return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, PAGE_SIZE, source, rubriques));
+            return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, esupPublisherProperties.getNews().getPageSize(), source, rubriques));
         } catch (ObjectNotFoundException exception) {
             log.error("Exception raised on /myNews", exception);
             return ResponseEntity.notFound().build();
