@@ -67,6 +67,7 @@ public class NewsReaderController {
             @RequestParam(value = "source", required = false) String source,
             @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
             @RequestParam(value = "lecture", required = false) Boolean reading,
+            @RequestParam(value = "overview", required = false, defaultValue = "false") Boolean overview,
             HttpServletRequest request) {
 
         if (!(rubriques == null) && source == null) {
@@ -76,37 +77,15 @@ public class NewsReaderController {
 
         try {
             Actualite actualite = this.newsReaderService.getNewsByUserOnContext(readerId, reading, request);
+            if(overview){
+                return ResponseEntity.ok(actualite.getItems().subList(0, Math.min(actualite.getItems().size(), esupPublisherProperties.getNews().getOverviewSize())));
+            }
             return ResponseEntity.ok(this.pagingService.paginateActualite(actualite, pageIndex, esupPublisherProperties.getNews().getPageSize(), source, rubriques));
         } catch (ObjectNotFoundException exception) {
             log.error("Exception raised on /myNews", exception);
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
             log.error("Exception raised on /myNews", ex);
-            return ResponseEntity.status(404).body(ex.getMessage());
-        }
-    }
-
-    @GetMapping(value = "/myNews/{reader_id}/overview")
-    public ResponseEntity<Object> getNewsOfUserOverview(
-        @PathVariable(value = "reader_id", required = true) Long readerId,
-        @RequestParam(value = "pageIndex", defaultValue = "0", required = false) Integer pageIndex,
-        @RequestParam(value = "source", required = false) String source,
-        @RequestParam(value = "rubriques", required = false) List<Long> rubriques,
-        @RequestParam(value = "lecture", required = false) Boolean reading,
-        HttpServletRequest request) {
-
-        if (!(rubriques == null) && source == null) {
-            return ResponseEntity.badRequest().body(
-                "Veuillez renseigner une source avant de renseigner des rubriques.");
-        }
-        try {
-            Actualite actualite = this.newsReaderService.getNewsByUserOnContext(readerId, reading, request);
-            return ResponseEntity.ok(actualite.getItems().subList(0, Math.min(actualite.getItems().size(), esupPublisherProperties.getNews().getOverviewSize())));
-        } catch (ObjectNotFoundException exception) {
-            log.error("Exception raised on /myNews overview", exception);
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            log.error("Exception raised on /myNews overview", ex);
             return ResponseEntity.status(404).body(ex.getMessage());
         }
     }
