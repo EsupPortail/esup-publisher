@@ -107,16 +107,37 @@ export default {
         return true;
       }
     },
+    async injectWebComponents() {
+      const { webComponents } = await ConfigurationService.getConfInjected();
+
+      const injectWebComponent = (name, selector, data) => {
+        if (document.querySelector(`script[src="${data.componentPath}"]`)) return;
+
+        const script = document.createElement('script');
+        script.setAttribute('src', data.componentPath);
+        document.head.appendChild(script);
+
+        const component = document.createElement(name);
+        Object.entries(data.props).forEach(([key, value]) => {
+          component.setAttribute(key, value);
+        });
+        document.body.querySelector(selector).appendChild(component);
+      };
+
+      webComponents.forEach(({ name, selector, data }) => injectWebComponent(name, selector, data));
+    },
   },
   created() {
     // Ajout du script iframe-resizer si on est dans une iFrame
-    if (this.isIframe()) {
+    const isIframe = this.isIframe();
+    if (isIframe) {
       const iframeResizerScript = document.createElement('script');
       iframeResizerScript.setAttribute('src', '/commun/postMessage-resize-iframe-in-parent.js');
       document.head.appendChild(iframeResizerScript);
     }
     Promise.all([ConfigurationService.init(), EnumDatasService.init()]).finally(() => {
       this.initData = true;
+      if (!isIframe) this.injectWebComponents();
     });
   },
   beforeMount() {

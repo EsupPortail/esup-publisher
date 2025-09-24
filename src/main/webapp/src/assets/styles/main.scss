@@ -283,6 +283,41 @@
   }
 }
 
+html {
+  height: 100%;
+
+  > body {
+    > header,
+    > footer {
+      display: none;
+    }
+
+    > #app {
+      position: relative;
+    }
+
+    &:has(> #app > .not-in-iframe) {
+      margin-top: var(--recia-header-height, 0px);
+      height: calc(100% - var(--recia-header-height, 0px));
+      display: flex;
+      flex-direction: column;
+
+      > header,
+      > footer {
+        display: unset;
+      }
+
+      > #app {
+        flex-grow: 1;
+      }
+
+      > footer {
+        padding: 0;
+      }
+    }
+  }
+}
+
 body {
   font-family: "Roboto Condensed", sans-serif;
   font-weight: 400;

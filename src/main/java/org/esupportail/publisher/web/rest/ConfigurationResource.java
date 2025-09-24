@@ -17,6 +17,8 @@ package org.esupportail.publisher.web.rest;
 
 import javax.inject.Inject;
 
+import org.esupportail.publisher.config.ESUPPublisherProperties;
+import org.esupportail.publisher.config.bean.InjectedProperties;
 import org.esupportail.publisher.service.bean.CKEditorHelper;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
@@ -36,6 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConfigurationResource {
 
     //private final Logger log = LoggerFactory.getLogger(ConfigurationResource.class);
+
+    private final InjectedProperties injectedProperties;
+
+    public ConfigurationResource(ESUPPublisherProperties esupPublisherProperties) {
+        this.injectedProperties = esupPublisherProperties.getInjected();
+    }
 
     @Inject
     @Qualifier("publicFileUploadHelper")
@@ -73,4 +81,9 @@ public class ConfigurationResource {
         return new ResponseEntity<>(new ValueResource(ckeditorHelper), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/conf/injected",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<InjectedProperties> getInjectedWebComponents() {
+        return new ResponseEntity<>(injectedProperties, HttpStatus.OK);
+    }
 }
