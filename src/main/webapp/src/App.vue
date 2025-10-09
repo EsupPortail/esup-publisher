@@ -108,8 +108,8 @@ export default {
       }
     },
     async injectWebComponents() {
-      const injected = await ConfigurationService.getConfInjected();
-      if (!injected) return;
+      const injectedWebComponents = await ConfigurationService.getConfInjectedWebComponents();
+      if (!injectedWebComponents) return;
 
       const injectWebComponent = (name, selector, data) => {
         if (document.querySelector(`script[src="${data.componentPath}"]`)) return;
@@ -125,7 +125,7 @@ export default {
         document.body.querySelector(selector).appendChild(component);
       };
 
-      injected.webComponents.forEach(({ name, selector, data }) => injectWebComponent(name, selector, data));
+      injectedWebComponents.forEach(({ name, selector, data }) => injectWebComponent(name, selector, data));
     },
   },
   created() {

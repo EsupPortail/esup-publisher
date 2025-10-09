@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Validated
-public class InjectedProperties {
+public class InjectedWebComponentsProperties {
 
     private List<WebComponents> webComponents;
 

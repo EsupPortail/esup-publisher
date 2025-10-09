@@ -1,7 +1,7 @@
 import ConfCKEditorService from './ConfCKEditorService.js';
 import ConfFileSizeService from './ConfFileSizeService.js';
 import ConfImageSizeService from './ConfImageSizeService.js';
-import ConfInjectedService from './ConfInjectedService.js';
+import ConfInjectedWebComponentsService from './ConfInjectedWebComponentsService.js';
 import ConfMimeTypesService from './ConfMimeTypesService.js';
 
 class ConfigurationService {
@@ -9,7 +9,7 @@ class ConfigurationService {
   confFileSize;
   confMimeTypes;
   confCKEditor;
-  confInjected;
+  confInjectedWebComponents;
 
   init() {
     return Promise.all([
@@ -17,7 +17,7 @@ class ConfigurationService {
       ConfFileSizeService.query(),
       ConfMimeTypesService.query(),
       ConfCKEditorService.query(),
-      ConfInjectedService.query(),
+      ConfInjectedWebComponentsService.query(),
     ])
       .then((results) => {
         if (results && results.length === 5) {
@@ -25,7 +25,7 @@ class ConfigurationService {
           this.confFileSize = results[1].data.value;
           this.confMimeTypes = results[2].data.value;
           this.confCKEditor = results[3].data.value;
-          this.confInjected = results[4].data;
+          this.confInjectedWebComponents = results[4].data;
         }
       })
       .catch((error) => {
@@ -62,11 +62,11 @@ class ConfigurationService {
     return this.confCKEditor;
   }
 
-  getConfInjected() {
-    if (!this.confInjected) {
+  getConfInjectedWebComponents() {
+    if (!this.confInjectedWebComponents) {
       this.init();
     }
-    return this.confInjected;
+    return this.confInjectedWebComponents;
   }
 }
 

@@ -18,7 +18,7 @@ package org.esupportail.publisher.web.rest;
 import javax.inject.Inject;
 
 import org.esupportail.publisher.config.ESUPPublisherProperties;
-import org.esupportail.publisher.config.bean.InjectedProperties;
+import org.esupportail.publisher.config.bean.InjectedWebComponentsProperties;
 import org.esupportail.publisher.service.bean.CKEditorHelper;
 import org.esupportail.publisher.service.bean.FileUploadHelper;
 import org.esupportail.publisher.web.rest.dto.ValueResource;
@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * REST controller for managing Evaluator.
  */
@@ -39,10 +41,10 @@ public class ConfigurationResource {
 
     //private final Logger log = LoggerFactory.getLogger(ConfigurationResource.class);
 
-    private final InjectedProperties injectedProperties;
+    private final InjectedWebComponentsProperties injectedWebComponentsProperties;
 
     public ConfigurationResource(ESUPPublisherProperties esupPublisherProperties) {
-        this.injectedProperties = esupPublisherProperties.getInjected();
+        this.injectedWebComponentsProperties = esupPublisherProperties.getInjectedWebComponents();
     }
 
     @Inject
@@ -81,9 +83,9 @@ public class ConfigurationResource {
         return new ResponseEntity<>(new ValueResource(ckeditorHelper), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/conf/injected",
+    @GetMapping(value = "/conf/injectedWebComponents",
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InjectedProperties> getInjectedWebComponents() {
-        return new ResponseEntity<>(injectedProperties, HttpStatus.OK);
+    public ResponseEntity<List<InjectedWebComponentsProperties.WebComponents>> getInjectedWebComponents() {
+        return new ResponseEntity<>(injectedWebComponentsProperties.getWebComponents(), HttpStatus.OK);
     }
 }

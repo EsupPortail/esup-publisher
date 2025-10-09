@@ -22,7 +22,7 @@ import org.esupportail.publisher.config.bean.ApiDocsProperties;
 import org.esupportail.publisher.config.bean.CASProperties;
 import org.esupportail.publisher.config.bean.CKEditorProperties;
 import org.esupportail.publisher.config.bean.CacheProperties;
-import org.esupportail.publisher.config.bean.InjectedProperties;
+import org.esupportail.publisher.config.bean.InjectedWebComponentsProperties;
 import org.esupportail.publisher.config.bean.NewsProperties;
 import org.esupportail.publisher.config.bean.CustomLdapProperties;
 import org.esupportail.publisher.config.bean.CustomMailProperties;
@@ -66,7 +66,7 @@ public class ESUPPublisherProperties {
     private CustomLdapProperties ldap = new CustomLdapProperties();
     private CKEditorProperties ckeditor = new CKEditorProperties();
     private NewsProperties news = new NewsProperties();
-    private InjectedProperties injected = new InjectedProperties();
+    private InjectedWebComponentsProperties injectedWebComponents = new InjectedWebComponentsProperties();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
@@ -91,7 +91,7 @@ public class ESUPPublisherProperties {
                 + ",\n\t \"ldap\":" + ldap
                 + ",\n\t \"ckeditor\":" + ckeditor
                 + ",\n\t \"news\":" + news
-                + ",\n\t \"injected\":" + injected
+                + ",\n\t \"injectedWebComponents\":" + injectedWebComponents
                 + "\n\t}\n}";
     }
 }
