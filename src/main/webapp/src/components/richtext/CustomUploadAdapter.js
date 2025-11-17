@@ -18,13 +18,7 @@ class CustomUploadAdapter {
   async upload() {
     const { entityId, fileSizeMax, isPublic } = this;
     return this.loader.file
-      .then(
-        async (file) => (
-          file.type.match('image/*') !== null
-            ? await this.compressImage(file)
-            : file
-        )
-      )
+      .then(async (file) => (file.type.match('image/*') !== null ? await this.compressImage(file) : file))
       .then(
         (file) =>
           new Promise((resolve, reject) => {
@@ -76,8 +70,7 @@ class CustomUploadAdapter {
 
   async compressImage(file) {
     const imageMaxSize = ConfigurationService.getConfUploadImageSize();
-    if (file.size <= imageMaxSize)
-      return file;
+    if (file.size <= imageMaxSize) return file;
 
     const compress = (quality) =>
       new Promise((resolve, reject) => {
@@ -97,8 +90,7 @@ class CustomUploadAdapter {
       });
 
     let compressed = await compress(1);
-    if (compressed.size <= imageMaxSize)
-      return compressed;
+    if (compressed.size <= imageMaxSize) return compressed;
 
     return await compress(0.8);
   }
