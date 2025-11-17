@@ -84,7 +84,7 @@ class CustomUploadAdapter {
         new Compressor(file, {
           quality,
           maxWidth: 1280,
-          maxHeight: 720,
+          maxHeight: 1280,
           convertTypes: ['image/png', 'image/jpeg'],
           convertSize: imageMaxSize,
           success(blob) {
